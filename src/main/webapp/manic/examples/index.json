@@ -1,5 +1,5 @@
 {
-  "count": 177,
+  "count": 180,
   "categories": [
     {
       "slug": "algorithms",
@@ -136,6 +136,12 @@
           "file": "inverse-derivatives.manic",
           "title": "Inverse derivatives",
           "desc": "Why a function and its inverse have reciprocal slopes: e^x and ln x mirrored across y = x, with the slopes at matching points multiplying to 1."
+        },
+        {
+          "name": "derivative-of-ln-x",
+          "file": "derivative-of-ln-x.manic",
+          "title": "Derivative of ln x",
+          "desc": "A visual proof of (ln x)' = 1/x: one continuous 3D coordinate plane turns over, x/y exchange screen roles, and unchanged algebra terms retain their identity."
         },
         {
           "name": "spline",
@@ -364,6 +370,12 @@
           "file": "timing-v2-scene.manic",
           "title": "Timing v2 scene",
           "desc": "Generic Timing v2 controlling an ordinary physics scene: one named-phase clock schedules the intro, pendulum motion and finish independently from its native timer look."
+        },
+        {
+          "name": "zeroth-law-thermodynamics",
+          "file": "zeroth-law-thermodynamics.manic",
+          "title": "Zeroth law thermodynamics",
+          "desc": "The Zeroth Law told through three particle-filled bodies: thermal relations connect, the bodies settle onto one temperature axis, and equilibrium becomes visible."
         },
         {
           "name": "pendulum-damped",
@@ -928,6 +940,12 @@
           "file": "fractal_tree.manic",
           "title": "Fractal tree",
           "desc": "One recursive def, drawn to depth 12."
+        },
+        {
+          "name": "particles-flow",
+          "file": "particles-flow.manic",
+          "title": "Particles flow",
+          "desc": "Contained ambient motion and live curved connections in four generic words: particles, wander, link, and flow."
         },
         {
           "name": "hue_wave",

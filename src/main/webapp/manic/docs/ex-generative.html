@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6e795f84.js";
+            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9dd1d381.js"></script>
@@ -312,6 +312,72 @@ draw(tree, 1.8);
 wait(1.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/nYiPEEQEmIs" title="One Rule → a Fractal Tree — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="particles-flow"><a class="header" href="#particles-flow">particles-flow</a></h2>
+<p>Contained ambient motion and live curved connections in four generic words: <code>particles</code>,
+<code>wander</code>, <code>link</code>, and <code>flow</code>. The ids supply the domain meaning.</p>
+<pre><code class="language-manic">// Generic contained motion: the ids give the dots their meaning.
+// The same four words work for bubbles, dust, stars, data, or molecules.
+
+title("Three bodies, one relation");
+canvas("9:16");
+// No template call: mono is the polished black-and-white default.
+
+circle(A, (540, 390), 105);
+circle(B, (260, 760), 105);
+circle(C, (820, 760), 105);
+stroke(A, 5); stroke(B, 5); stroke(C, 5);
+
+particles(insideA, A, 24, 5, 7);
+particles(insideB, B, 24, 5, 17);
+particles(insideC, C, 24, 5, 27);
+
+equation(labelA, (540, 390), `A`, 64);
+equation(labelB, (260, 760), `B`, 64);
+equation(labelC, (820, 760), `C`, 64);
+
+link(ab, A, B, -48);
+link(bc, B, C, -56);
+link(ac, A, C, 48);
+stroke(ab, 5); stroke(bc, 5); stroke(ac, 5);
+untraced(ab); untraced(bc); untraced(ac);
+
+equation(relAB, (310, 445), `A\sim B`, 34);
+equation(relBC, (540, 690), `B\sim C`, 34);
+equation(relAC, (770, 445), `A\sim C`, 34);
+color(relAB, dim); color(relBC, dim); color(relAC, dim);
+
+hidden(A); hidden(B); hidden(C);
+hidden(labelA); hidden(labelB); hidden(labelC);
+hidden(insideA); hidden(insideB); hidden(insideC);
+hidden(relAB); hidden(relBC); hidden(relAC);
+
+par {
+  wander(insideA, 9);
+  wander(insideB, 9);
+  wander(insideC, 9);
+
+  seq {
+    par { show(A, 0.35); show(labelA, 0.35); show(insideA, 0.45); }
+    wait(0.25);
+    par { show(B, 0.35); show(labelB, 0.35); show(insideB, 0.45); }
+    show(relAB, 0.25);
+    par { draw(ab, 0.75); recolor(relAB, fg, 0.75); }
+    flow(ab, 0.9);
+
+    par { show(C, 0.35); show(labelC, 0.35); show(insideC, 0.45); }
+    show(relBC, 0.25);
+    par { draw(bc, 0.75); recolor(relBC, fg, 0.75); }
+    flow(bc, 0.9);
+
+    show(relAC, 0.25);
+    par { draw(ac, 0.75); recolor(relAC, fg, 0.75); }
+    par { flow(ab, 1.1); flow(bc, 1.1); flow(ac, 1.1); }
+    wait(0.55);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tBSEq6d9ZYg" title="Tiny Particles, Curved Links & Flow — Four Generic Words in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="hue_wave"><a class="header" href="#hue_wave">hue_wave</a></h2>
 <p>An animated hue wave across a grid.</p>

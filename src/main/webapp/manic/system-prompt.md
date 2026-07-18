@@ -97,6 +97,9 @@ Constructors and timeline may be written in any order.
    contains a `"`). Same for every `$…$` — it lives in a normal string. Prefer this
    over ASCII math on screen. (`equation` is an image: `show`/`fade`/`move`/`scale`
    animate it; `draw`/trace does not.)
+   To emphasize individual terms, use standard LaTeX with Manic palette names:
+   `` `\textcolor{magenta}{\mathrm{slope}}=\textcolor{cyan}{x}` ``. These semantic
+   colors follow the active template; uncolored terms use its foreground.
    **Inline `$…$` in ANY text is auto-typeset — whole OR mixed.** Use a backtick
    raw string and wrap math in `$…$`; it works in `text`/`caption`/`say` and every
    kit label (geo points, quiz options, …), takes the entity colour, no `equation`
@@ -175,7 +178,7 @@ caption; or animate with `karaoke(id,[delay],[color])` = highlight in sequence,
 or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` · `circle(id,(x,y),r)` · `rect(id,(x,y),w,h)` ·
 `image(id,(x,y),"path",[w],[h])` a raster image (PNG/JPG) from a file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing file → placeholder box (engine-only, no browser preview) ·
-`equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work); `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
+`equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work), while `\textcolor{cyan}{...}` colors individual terms semantically; `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
 `line(id,(x1,y1),(x2,y2))` · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts) · `arrow(id,(x1,y1),(x2,y2))` · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
 `brace(id,(x1,y1),(x2,y2),[depth])` · `bracelabel(id,(x1,y1),(x2,y2),"s",[depth])`
 · booleans `union/intersect/difference/exclusion(id, a, b)`.
@@ -197,6 +200,9 @@ or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `transform(id,(ox,oy),a,b,c,d,[d],[ease])` (apply 2×2 matrix about origin;
 broadcast over a tag to shear/rotate a grid+vectors — ApplyMatrix) ·
 `swap(a,b,[d],[ease])` (two entities; array form `swap(arr,i,j)` slides slot values) ·
+`cycle(a,b,c,…,[d],[arc],[ease])` (CyclicReplace: each entity moves to the next
+position and the last returns to the first; `arc` is degrees, default 90; use 0
+for straight paths; repeated calls compose) ·
 `to(id, prop, value,[d],[ease])` (alias `set`) where prop ∈
 `x y opacity scale angle trace color hue value morph`.
 (For a `tangent`, `to(id, x, target, dur)` slides the touch point along its curve — the slope follows.)
@@ -424,7 +430,10 @@ final card; reveal it with `show(profile.endcard)`. Example:
 `creator(me,"@anish2good name=Science_Lab yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=cyan"); quiz(q,"Which?","studio labels=letters layout=media-first pace=calm"); timerstyle(q,"look=segments position=media finish=pulse"); ...; socials(me); run(q,12);`.
 
 ### Brand kit
-`banner(id,(cx,cy),[scale])` · `watermark(id,(x,y),["text"])`.
+`banner(id,(cx,cy),[scale])` · `watermark(id,[(x,y)],["text"])`. A watermark
+without a point uses the responsive bottom-right default and the text
+`Made With Manic`; pass a point only when the composition or platform UI needs
+a safer location.
 **Don't add manic branding yourself** — no intro card, "Made With Manic", or
 `https://8gwifi.org/manic`. The engine injects a branded intro + watermark
 automatically on export (branded presets); branding is not part of the DSL.

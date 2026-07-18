@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6e795f84.js";
+            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9dd1d381.js"></script>
@@ -202,8 +202,30 @@ declare shapes once; the name is how you address them later in the script.</p>
 <code>bracelabel</code>, <code>caption</code> (a row of words), and <code>support(id, (cx,cy), [len], ["dir"])</code>
 — the hatched wall / ceiling / floor for mechanics &amp; textbook diagrams (<code>"dir"</code> is
 the open side: <code>"down"</code> ceiling, <code>"up"</code> floor, <code>"left"</code>/<code>"right"</code> walls).</p>
+<p>Two more helpers cover scenes that would otherwise need dozens of manual dots
+and endpoints:</p>
+<pre><code class="language-manic">circle(glass, (400,300), 100);
+particles(bubbles, glass, 24, 5, 7); // id, container, count, radius, seed
+
+rect(tank, (750,300), 180, 160);
+link(pipe, glass, tank, 35);         // 35 px of curve; 0 is straight
+</code></pre>
+<p><code>particles</code> works inside circles and rectangles. Its bare id addresses every
+child dot, so <code>hidden(bubbles)</code> and <code>recolor(bubbles, fg)</code> affect the whole
+group. <code>link</code> meets those shapes at their boundaries and stays attached when
+either endpoint moves.</p>
 <p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
 <code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
+<p>For display mathematics, <code>equation</code> accepts LaTeX in backticks. Standard
+<code>\textcolor</code> can emphasize individual terms with Manic’s semantic palette; the
+colors automatically follow the selected template:</p>
+<pre><code class="language-manic">equation(step, (cx, 620),
+  `\textcolor{magenta}{\mathrm{slope}}=
+   \frac{\textcolor{cyan}{\mathrm{rise}}}
+        {\textcolor{gold}{\mathrm{run}}}`, 40);
+</code></pre>
+<p>Leave a term uncolored to use the template foreground. A single-color equation
+can still be styled as one entity with <code>color</code> and animated with <code>recolor</code>.</p>
 <pre><code class="language-manic">// the six primitive shapes, drawn on together.
 title("Shapes");
 canvas("16:9");

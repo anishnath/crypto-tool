@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6e795f84.js";
+            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9dd1d381.js"></script>
@@ -260,6 +260,7 @@ rounded <strong>tube</strong> (arrows grow a solid head):</p>
 <pre><code class="language-manic">par {
   rotate3(box, (0, 0, 360), 4, linear);   // spin the box
   orbit3(70, 25, 12, 4, smooth);          // orbit the camera around it
+  roll3(-20, 4, smooth);                   // bank around the view direction
 }
 </code></pre>
 <ul>
@@ -267,6 +268,8 @@ rounded <strong>tube</strong> (arrows grow a solid head):</p>
 <li><strong><code>rotate3</code></strong> — turn it (degrees around x, y, z)</li>
 <li><strong><code>grow3</code></strong> — stretch a line or arrow’s tip to a new point</li>
 <li><strong><code>orbit3</code></strong> — swing the camera (angle around, angle up, distance)</li>
+<li><strong><code>roll3</code></strong> — bank the camera around its viewing direction; it can run beside
+<code>orbit3</code> in <code>par</code>, including through stable overhead/underside views</li>
 <li><strong><code>look3</code></strong> — aim the camera at a new point</li>
 </ul>
 <h2 id="morphing-one-shape-into-another"><a class="header" href="#morphing-one-shape-into-another">Morphing one shape into another</a></h2>

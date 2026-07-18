@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6e795f84.js";
+            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-9dd1d381.js"></script>
@@ -893,6 +893,206 @@ stagger(0.4) {
 }
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/-HEjdSVXdXc" title="Why Inverse Functions Have Reciprocal Slopes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="derivative-of-ln-x"><a class="header" href="#derivative-of-ln-x">derivative-of-ln-x</a></h2>
+<p>A visual proof of <code>(ln x)' = 1/x</code>: one continuous 3D coordinate plane turns over,
+x/y exchange screen roles, and unchanged algebra terms retain their identity.</p>
+<pre><code class="language-manic">// ============================================================================
+// derivative-of-ln-x.manic — inverse-function derivatives on a turning plane
+// ----------------------------------------------------------------------------
+// The curve is first read as y=e^x. A true 3-D camera turn exchanges the screen
+// roles of world x/y, so the same relationship reads x=e^y. While the graph is
+// hidden for the first plane turn, morph3 exchanges its coordinates; the same
+// geometry can then remain visible through the return turn into y=ln(x).
+// ============================================================================
+
+title("Why the derivative of ln x is 1/x");
+canvas("16:9");
+template("plain");
+// Landscape proof: the upper-right stays clear while the algebra owns the
+// bottom and the vertical axis label owns the top-centre.
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+// Orthographic overhead camera: the continuous pole-safe orbit frame keeps the
+// whole turn smooth, and roll3 controls which world direction is screen-up.
+camera3((0, 0.5, 12), (0, 0.5, 0), 8.5, orthographic);
+
+// ---------------------------------------------------------------------------
+// ONE WORLD PLANE · axes, grid, exponential, tangent and exact slope triangle
+// ---------------------------------------------------------------------------
+
+grid3(grid, (0, 0, 0), 4, 1);
+color(grid, dim); opacity(grid, 0.30); tag(grid, world);
+
+arrow3(xaxis, (-4.05, 0, 0), (4.05, 0, 0));
+arrow3(yaxis, (0, -3.4, 0), (0, 4.05, 0));
+color(xaxis, fg); color(yaxis, fg); thick(xaxis, 0.012); thick(yaxis, 0.012);
+tag(xaxis, world); tag(yaxis, world);
+
+for i in -4..5 {
+  if i != 0 {
+    line3(xtick{i}, (i, -0.07, 0), (i, 0.07, 0));
+    line3(ytick{i}, (-0.07, i, 0), (0.07, i, 0));
+    color(xtick{i}, dim); color(ytick{i}, dim);
+    tag(xtick{i}, world); tag(ytick{i}, world);
+  }
+}
+
+equation(xlab, (0,0), `x`, 31); pin3(xlab, (4.10, -0.18, 0)); tag(xlab, world);
+equation(ylab, (0,0), `y`, 31); pin3(ylab, (-0.18, 4.10, 0)); tag(ylab, world);
+hidden(world);
+
+// Source curve γ(t)=(t,e^t), and its inverse parameterisation γ⁻¹(t)=(e^t,t).
+curve3(curve, "t", "exp(t)", "0", (-3.6, 1.42));
+curve3(curveTarget, "exp(t)", "t", "0", (-3.6, 1.42));
+color(curve, lime); color(curveTarget, lime); thick(curve, 0.024); thick(curveTarget, 0.024);
+untraced(curve); hidden(curveTarget); morph3(curve, curveTarget);
+
+equation(expName, (0,0), `y=e^x`, 31); color(expName, lime); pin3(expName, (-1.45, 2.20, 0)); hidden(expName);
+equation(swappedName, (0,0), `x=e^y`, 31); color(swappedName, lime); pin3(swappedName, (2.65, -1.20, 0)); hidden(swappedName);
+equation(logName, (0,0), `y=\ln(x)`, 31); color(logName, lime); pin3(logName, (2.65, 0.90, 0)); hidden(logName);
+
+// At t=0.6: P=(0.6,e^0.6), and e^0.6 ≈ 1.822. The tangent reaches y=0
+// exactly one unit of run before P, so its slope triangle is rise/run = y/1.
+curve3(tangent, "-0.65+2*t", "-0.455529+3.644238*t", "0", (0,1));
+curve3(tangentTarget, "-0.455529+3.644238*t", "-0.65+2*t", "0", (0,1));
+color(tangent, magenta); color(tangentTarget, magenta); thick(tangent, 0.018); thick(tangentTarget, 0.018);
+untraced(tangent); hidden(tangentTarget); morph3(tangent, tangentTarget);
+
+curve3(runSide, "-0.4+t", "0", "0", (0,1));
+curve3(runTarget, "0", "-0.4+t", "0", (0,1));
+color(runSide, gold); color(runTarget, gold); thick(runSide, 0.024); thick(runTarget, 0.024);
+untraced(runSide); hidden(runTarget); morph3(runSide, runTarget);
+
+curve3(riseSide, "0.6", "1.822119*t", "0", (0,1));
+curve3(riseTarget, "1.822119*t", "0.6", "0", (0,1));
+color(riseSide, cyan); color(riseTarget, cyan); thick(riseSide, 0.024); thick(riseTarget, 0.024);
+untraced(riseSide); hidden(riseTarget); morph3(riseSide, riseTarget);
+
+point3(contact, (0.6, 1.822119, 0), 0.075); color(contact, fg); hidden(contact);
+point3(contactTarget, (1.822119, 0.6, 0), 0.075); color(contactTarget, fg); hidden(contactTarget);
+
+equation(riseY, (0,0), `y`, 28); color(riseY, cyan); pin3(riseY, (0.82, 0.91, 0)); hidden(riseY);
+equation(runOne, (0,0), `1`, 28); color(runOne, gold); pin3(runOne, (0.10, -0.22, 0)); hidden(runOne);
+equation(targetX, (0,0), `x`, 28); color(targetX, cyan); pin3(targetX, (0.91, 0.82, 0)); hidden(targetX);
+equation(targetOne, (0,0), `1`, 28); color(targetOne, gold); pin3(targetOne, (-0.22, 0.10, 0)); hidden(targetOne);
+
+// The diagonal is the hinge / mirror relation during the plane turns.
+for i in -9..10 {
+  line3(diag{i}, (i*0.42, i*0.42, 0.02), (i*0.42+0.24, i*0.42+0.24, 0.02));
+  color(diag{i}, magenta); thick(diag{i}, 0.018); untraced(diag{i}); tag(diag{i}, mirror);
+}
+equation(diagName, (0,0), `y=x`, 27); color(diagName, magenta); pin3(diagName, (2.55, 2.55, 0.02)); hidden(diagName);
+
+// Screen-space algebra. Separate equations keep the camera/geometry generic.
+equation(slopeExp, (cx, 655), `\textcolor{magenta}{\mathrm{slope}}=\textcolor{cyan}{e^x}`, 40); hidden(slopeExp);
+equation(slopeY, (cx, 655), `\textcolor{magenta}{\mathrm{slope}}=\textcolor{cyan}{y}`, 40); hidden(slopeY);
+equation(slopeFracY, (cx, 655), `\textcolor{magenta}{\mathrm{slope}}=\frac{\textcolor{cyan}{y}}{\textcolor{gold}{1}}=\frac{\textcolor{cyan}{\mathrm{rise}}}{\textcolor{gold}{\mathrm{run}}}`, 40); hidden(slopeFracY);
+// Persistent algebra pieces. The unchanged prefix/equality never disappear:
+// only the term being justified moves, fades, or arrives. This is the same
+// object-continuity principle used by matching-transform systems, expressed
+// with ordinary Manic entities rather than replacing a whole equation image.
+equation(slopeWord, (500, 655), `\textcolor{magenta}{\mathrm{slope}}`, 40); hidden(slopeWord); tag(slopeWord, inverseAlgebra);
+equation(mainEquals, (575, 655), `=`, 40); hidden(mainEquals); tag(mainEquals, inverseAlgebra);
+equation(heightTerm, (630, 655), `\textcolor{cyan}{\mathrm{height}}`, 40); hidden(heightTerm); tag(heightTerm, inverseAlgebra);
+equation(xTerm, (630, 655), `\textcolor{cyan}{x}`, 40); hidden(xTerm); tag(xTerm, inverseAlgebra);
+equation(oneTerm, (630, 674), `\textcolor{gold}{1}`, 36); hidden(oneTerm); tag(oneTerm, inverseAlgebra);
+line(termBar, (616, 657), (644, 657)); color(termBar, fg); stroke(termBar, 2); untraced(termBar); tag(termBar, inverseAlgebra);
+equation(ratioEquals, (685, 655), `=`, 40); hidden(ratioEquals); tag(ratioEquals, inverseAlgebra);
+equation(ratioTerm, (780, 655), `\frac{\textcolor{cyan}{\mathrm{rise}}}{\textcolor{gold}{\mathrm{run}}}`, 40); hidden(ratioTerm); tag(ratioTerm, inverseAlgebra);
+equation(derivativeTerm, (475, 655), `\frac{d}{dx}\ln(x)`, 41); hidden(derivativeTerm); tag(derivativeTerm, inverseAlgebra);
+
+// Split glyphs let generic `cycle` retain their identity through xy → yx.
+equation(planeX, (550, 640), `x`, 54); hidden(planeX); tag(planeX, planeLabel);
+equation(planeY, (575, 640), `y`, 54); hidden(planeY); tag(planeY, planeLabel);
+equation(planeWord, (685, 640), `\mathrm{plane}`, 54); hidden(planeWord); tag(planeWord, planeLabel);
+
+// ---------------------------------------------------------------------------
+// TIMELINE · 75.49 seconds including manic's final one-second tail
+// ---------------------------------------------------------------------------
+
+show(world, 1.20);
+draw(curve, 2.40);
+show(expName, 0.60);
+wait(2.50);
+
+show(slopeExp, 0.70);
+wait(2.20);
+par { draw(riseSide, 1.20); show(riseY, 0.45); show(contact, 0.30); }
+par { fade(slopeExp, 0.55); show(slopeY, 0.55); }
+wait(2.00);
+
+par { draw(tangent, 1.20); draw(runSide, 1.00); show(runOne, 0.40); }
+par { fade(slopeY, 0.60); show(slopeFracY, 0.60); }
+wait(7.90);
+
+// First turn: remove the measurement clutter, reveal the mirror hinge, and
+// move from the top of the plane to its underside. Below + -90° roll makes
+// screen-horizontal follow world y and screen-vertical follow world x.
+par {
+  fade(curve, 0.70); fade(expName, 0.70); fade(tangent, 0.70);
+  fade(runSide, 0.70); fade(riseSide, 0.70); fade(contact, 0.70);
+  fade(riseY, 0.70); fade(runOne, 0.70); fade(slopeFracY, 0.70);
+}
+par { draw(mirror, 0.70); show(diagName, 0.50); show(planeLabel, 0.50); }
+par {
+  orbit3(-90, -90, 12, 7.00, smooth);
+  roll3(90, 7.00, smooth);
+  // The graph is hidden here, so exchange its coordinates before it returns.
+  to(curve, morph, 1, 7.00, smooth);
+  to(tangent, morph, 1, 7.00, smooth);
+  to(runSide, morph, 1, 7.00, smooth);
+  to(riseSide, morph, 1, 7.00, smooth);
+  seq { wait(2.80); cycle(planeX, planeY, 1.40, 70, smooth); }
+}
+
+// Same world geometry, now read with exchanged screen axes.
+par {
+  show(curve, 0.70); show(tangent, 0.70); show(runSide, 0.70); show(riseSide, 0.70);
+  show(contactTarget, 0.50); show(swappedName, 0.55); show(targetX, 0.45); show(targetOne, 0.45);
+  fade(diagName, 0.45); erase(mirror, 0.70); fade(planeLabel, 0.45);
+}
+par { show(slopeWord, 0.65); show(mainEquals, 0.65); show(heightTerm, 0.65); }
+wait(3.00);
+par { fade(heightTerm, 0.60); show(xTerm, 0.60); }
+wait(3.00);
+par { show(ratioEquals, 0.60); show(ratioTerm, 0.60); }
+wait(3.00);
+// x becomes x/1 in place: x lifts, the denominator arrives, and the rest of
+// the displayed identity remains untouched.
+par { move(xTerm, (630, 640), 0.60, smooth); show(oneTerm, 0.60); draw(termBar, 0.60); }
+wait(6.20);
+
+// Second turn: return the camera overhead while keeping the transformed curve
+// and triangle visible. The same objects land as an ordinary y=ln(x) graph.
+par {
+  draw(mirror, 0.60); show(diagName, 0.45); show(planeLabel, 0.45);
+  fade(slopeWord, 0.60); fade(mainEquals, 0.60); fade(xTerm, 0.60);
+  fade(oneTerm, 0.60); erase(termBar, 0.60); fade(ratioEquals, 0.60); fade(ratioTerm, 0.60);
+}
+par {
+  orbit3(-90, 90, 12, 7.00, smooth);
+  roll3(0, 7.00, smooth);
+  fade(swappedName, 3.00); show(logName, 3.00);
+  // Prepare the next algebra state invisibly while the plane is turning.
+  move(ratioTerm, (630, 655), 1.20, smooth);
+  move(oneTerm, (630, 640), 1.20, smooth);
+  move(xTerm, (630, 674), 1.20, smooth);
+  seq { wait(2.80); cycle(planeX, planeY, 1.40, -70, smooth); }
+}
+par {
+  fade(planeLabel, 0.45); fade(diagName, 0.45); erase(mirror, 0.70);
+  show(slopeWord, 0.65); show(mainEquals, 0.65); show(ratioTerm, 0.65);
+}
+wait(2.20);
+// Only the right-hand term changes: rise/run becomes 1/x.
+par { fade(ratioTerm, 0.60); show(oneTerm, 0.60); show(xTerm, 0.60); draw(termBar, 0.60); }
+wait(3.00);
+// The proven reciprocal stays; only the name on the left becomes d/dx ln(x).
+par { fade(slopeWord, 0.70); show(derivativeTerm, 0.70); pulse(curve, 0.70); }
+wait(9.89);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kFUnbvkE4m4" title="Why d/dx ln(x) = 1/x — Turn the Coordinate Plane Over — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="spline"><a class="header" href="#spline">spline</a></h2>
 <p>Interpolation: one smooth curve drawn through a scattered set of points — it
