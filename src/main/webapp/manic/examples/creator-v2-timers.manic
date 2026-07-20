@@ -3,6 +3,7 @@
 title("Creator Timing v2 — Native Looks");
 canvas("16:9");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 text(head, (cx, 70), "TIMING V2 — CHOOSE THE LOOK");
 size(head, 34); bold(head); color(head, fg);

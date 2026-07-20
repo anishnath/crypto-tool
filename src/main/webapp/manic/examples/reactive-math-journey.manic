@@ -1,0 +1,185 @@
+// ============================================================================
+// reactive-math-journey.manic — from Class 1 counting to PhD curiosity
+// ----------------------------------------------------------------------------
+// One equation id grows with the learner. `rewrite` keeps the journey continuous
+// while a progress marker climbs through school, university and research.
+// The ending returns to 1+1: advanced mathematics keeps the original curiosity.
+// ============================================================================
+
+title("From 1 + 1 to a PhD in Mathematics");
+canvas("9:16");
+template("shorts");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
+
+creator(me, "@anish2good name=Math_Journey tagline=Stay_curious yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Keep_learning safe=reels");
+socials(me);
+
+text(kicker, (540, 135), "THE JOURNEY OF MATHEMATICS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 225), "From 1 + 1 to a PhD");
+size(headline, 47); color(headline, fg); bold(headline); hidden(headline);
+
+text(subhead, (540, 292), "Same curiosity. Bigger questions.");
+size(subhead, 25); color(subhead, cyan); bold(subhead); hidden(subhead);
+
+// The learning stage leaves a slim left lane for the climbing progress marker.
+rect(stage, (610, 790), 820, 760);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.78);
+
+line(rail, (135, 1135), (135, 535));
+color(rail, cyan); stroke(rail, 3); dashed(rail, 13, 10); opacity(rail, 0.35);
+untraced(rail);
+
+for i in 0..13 {
+  dot(milestone{i}, (135, 1135 - i*50), 5);
+  color(milestone{i}, dim); opacity(milestone{i}, 0.55);
+}
+
+dot(learner, (135, 1135), 12);
+color(learner, cyan); glow(learner, 2.2); hidden(learner);
+
+text(level, (610, 495), "CLASS 1 · COUNTING");
+size(level, 25); color(level, cyan); bold(level); hidden(level);
+
+equation(work, (610, 775), `1+1=2`, 58);
+hidden(work);
+
+text(note, (610, 1035), "Two apples. One idea. A lifetime of questions begins.");
+size(note, 27); color(note, dim); wrap(note, 700); hidden(note);
+
+text(altitude, (540, 1265), "SCHOOL  →  UNIVERSITY  →  RESEARCH");
+size(altitude, 22); color(altitude, dim); bold(altitude); hidden(altitude);
+
+// ---------------------------------------------------------------------------
+// TIMELINE
+// ---------------------------------------------------------------------------
+
+par {
+  show(kicker, 0.40); show(headline, 0.55); show(subhead, 0.55);
+  show(level, 0.45); show(note, 0.45); show(altitude, 0.45);
+  draw(rail, 0.90); show(learner, 0.45);
+}
+show(work, 0.55);
+wait(0.85);
+
+// Class 2 — repeated addition discovers multiplication.
+par {
+  say(level, "CLASS 2 · MULTIPLICATION", 0.35);
+  say(note, "Addition gets impatient and invents a shortcut.", 0.35);
+  move(learner, (135, 1085), 0.45, smooth);
+}
+rewrite(work, `3+3+3+3=12`, 0.80, smooth);
+wait(0.35);
+rewrite(work, `4\times3=\textcolor{lime}{12}`, 0.80, smooth);
+wait(0.65);
+
+// Class 5 — pieces become numbers too.
+par {
+  say(level, "CLASS 5 · FRACTIONS", 0.35);
+  say(note, "Now even pieces of a whole can be added exactly.", 0.35);
+  move(learner, (135, 1035), 0.45, smooth);
+}
+rewrite(work, `\frac{1}{2}+\frac{1}{3}=\textcolor{lime}{\frac{5}{6}}`, 0.90, smooth);
+wait(0.70);
+
+// Class 7 — the mystery number gets a name.
+par {
+  say(level, "CLASS 7 · ALGEBRA", 0.35);
+  say(note, "A blank box becomes x — and arithmetic starts telling stories.", 0.35);
+  move(learner, (135, 985), 0.45, smooth);
+}
+rewrite(work, `x+3=7`, 0.80, smooth);
+wait(0.30);
+rewrite(work, `x=\textcolor{lime}{4}`, 0.75, smooth);
+wait(0.65);
+
+// Class 8 — shapes reveal equations hidden inside them.
+par {
+  say(level, "CLASS 8 · GEOMETRY", 0.35);
+  say(note, "A right triangle quietly connects three squares.", 0.35);
+  move(learner, (135, 935), 0.45, smooth);
+}
+rewrite(work, `a^2+b^2=\textcolor{cyan}{c^2}`, 0.85, smooth);
+wait(0.70);
+
+// Class 10 — one formula solves every quadratic.
+par {
+  say(level, "CLASS 10 · QUADRATICS", 0.35);
+  say(note, "The unknown now has two possible futures.", 0.35);
+  move(learner, (135, 885), 0.45, smooth);
+}
+rewrite(work, `ax^2+bx+c=0`, 0.85, smooth);
+wait(0.30);
+rewrite(work, `x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`, 1.00, smooth);
+wait(0.75);
+
+// Class 11 — circles turn into identities.
+par {
+  say(level, "CLASS 11 · TRIGONOMETRY", 0.35);
+  say(note, "Sine and cosine travel differently, but always return to one.", 0.35);
+  move(learner, (135, 835), 0.45, smooth);
+}
+rewrite(work, `\sin^2\theta+\cos^2\theta=\textcolor{lime}{1}`, 0.90, smooth);
+wait(0.70);
+
+// Class 12 — mathematics learns to describe change itself.
+par {
+  say(level, "CLASS 12 · CALCULUS", 0.35);
+  say(note, "Not just where things are — how fast they are changing.", 0.35);
+  move(learner, (135, 785), 0.45, smooth);
+}
+rewrite(work, `\frac{d}{dx}x^n=\textcolor{cyan}{nx^{n-1}}`, 0.95, smooth);
+wait(0.75);
+
+// University — numbers become transformations and uncertain beliefs.
+par {
+  say(level, "UNIVERSITY · LINEAR ALGEBRA", 0.35);
+  say(note, "Some directions do not turn — they only stretch.", 0.35);
+  move(learner, (135, 735), 0.45, smooth);
+}
+rewrite(work, `A\vec v=\textcolor{magenta}{\lambda}\vec v`, 0.90, smooth);
+wait(0.70);
+
+par {
+  say(level, "UNIVERSITY · PROBABILITY", 0.35);
+  say(note, "Evidence arrives, and a belief learns how to update.", 0.35);
+  move(learner, (135, 685), 0.45, smooth);
+}
+rewrite(work, `P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}`, 0.95, smooth);
+wait(0.75);
+
+// Graduate study — equations evolve, then decompose into waves.
+par {
+  say(level, "GRADUATE · DIFFERENTIAL EQUATIONS", 0.35);
+  say(note, "A tiny law of change predicts an entire future.", 0.35);
+  move(learner, (135, 635), 0.45, smooth);
+}
+rewrite(work, `\frac{dy}{dt}=ky`, 0.85, smooth);
+wait(0.30);
+rewrite(work, `y(t)=y_0e^{kt}`, 0.85, smooth);
+wait(0.70);
+
+par {
+  say(level, "GRADUATE · FOURIER ANALYSIS", 0.35);
+  say(note, "A complicated signal turns out to be a choir of simple waves.", 0.35);
+  move(learner, (135, 585), 0.45, smooth);
+}
+rewrite(work, `f(x)=\sum_{n=-\infty}^{\infty}c_ne^{inx}`, 0.95, smooth);
+wait(0.75);
+
+// PhD — the symbols are advanced; the habit is still “what if?”
+par {
+  say(level, "PhD · THE EDGE OF WHAT WE KNOW", 0.40);
+  say(note, "The integral now ranges over every possible field configuration.", 0.40);
+  move(learner, (135, 535), 0.55, overshoot);
+}
+rewrite(work, `\mathcal{Z}=\int\mathcal{D}\phi\,e^{-S[\phi]}`, 1.05, smooth);
+wait(1.00);
+
+// A loopable ending: the notation grew, but the first question never left.
+say(level, "THE REAL DEGREE · STAYING CURIOUS", 0.40);
+say(note, "After all that mathematics, the best researchers still ask: why?", 0.40);
+rewrite(work, `1+1=\textcolor{lime}{2}`, 1.00, smooth);
+pulse(learner, 0.65);
+wait(1.80);

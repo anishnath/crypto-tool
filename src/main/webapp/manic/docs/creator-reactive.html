@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Text &amp; UI - manic — the manual</title>
+        <title>Reactive stories — change the idea, not the scene - manic — the manual</title>
 
 
         <!-- Custom HTML head -->
@@ -178,304 +178,192 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="text--ui"><a class="header" href="#text--ui">Text &amp; UI</a></h1>
-<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
-<h2 id="typewriter"><a class="header" href="#typewriter">typewriter</a></h2>
-<p>Text revealed character by character.</p>
-<pre><code class="language-manic">// Typewriter — text revealed letter by letter (Manim's AddTextLetterByLetter),
-// then removed letter by letter (RemoveTextLetterByLetter). `type` animates the
-// text's `trace` 0-&gt;1 (a fraction of characters shown); `erase` runs it back.
-// Declare the text `untraced` so it starts hidden, then `type` reveals it.
-//
-//   manic examples/typewriter.manic
-
-title("Typewriter");
-canvas("16:9");
-
-text(head, (cx, 150), "text, one letter at a time");
-display(head);  color(head, cyan);  size(head, 26);  hidden(head);
-
-// untraced = trace 0 = no characters shown yet
-text(line1, (cx, 320), "the quick brown fox");   color(line1, lime);  size(line1, 44);  untraced(line1);
-text(line2, (cx, 400), "jumps over the lazy dog"); color(line2, cyan); size(line2, 44);  untraced(line2);
-cursor(line2);   // this line types with a trailing cursor
-
-// --- script ---
-show(head, 0.5);
-type(line1, 1.6);     // AddTextLetterByLetter
-type(line2, 1.6);     // AddTextLetterByLetter, with a cursor
-wait(1.0);
-
-section("...and back");
-erase(line2, 1.0);    // RemoveTextLetterByLetter
-erase(line1, 1.0);
-wait(0.8);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/mdlHwoCvv-U" title="Typewriter Text in manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="captions"><a class="header" href="#captions">captions</a></h2>
-<p>Karaoke / word-pop caption modes.</p>
-<pre><code class="language-manic">// Captions — karaoke word highlighting and TikTok-style word pop-in. `caption`
-// lays out a phrase's words in a centred row (as {id}.w0, {id}.w1, ... tagged
-// {id}.words); `karaoke` highlights them in sequence; `wordpop` pops them in one
-// at a time.
-//
-//   manic examples/captions.manic
-//   manic examples/captions.manic --record out --fps 60
-
-title("Captions");
-canvas("16:9");
-
-text(head, (cx, 110), "word-by-word: karaoke + pop-in");
-display(head);  color(head, cyan);  size(head, 26);  hidden(head);
-
-// karaoke: starts dim, words light up in sequence
-caption(kara, "follow the bouncing highlight", (cx, 280), 46, dim);
-
-// word-pop: hidden first, then each word pops in
-caption(pop, "each word pops right in", (cx, 440), 50, lime);
-hidden(pop.words);
-
-// --- script ---
-show(head, 0.5);
-
-section("Karaoke");
-karaoke(kara, 0.34, cyan);
-wait(0.8);
-
-section("Word pop");
-wordpop(pop, 0.14);
-wait(1.6);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/oM2Fw-H3lNg" title="Karaoke & Word-Pop Captions — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="terminal_boot"><a class="header" href="#terminal_boot">terminal_boot</a></h2>
-<p>The neon terminal template booting up.</p>
-<pre><code class="language-manic">// Terminal Boot — a fake boot sequence typed out line by line, ending at a live
-// prompt with a blinking-style cursor. Shows off the `cursor` modifier, `type`
-// typewriter reveal, an author-set `masthead`, and the `terminal` template.
-//
-//   manic examples/terminal_boot.manic
-//   manic examples/terminal_boot.manic --record out --fps 60
-
-title("manic");
-canvas("16:9");
-template("terminal");
-masthead("manic ~ %", "READY");     // your own header text (no engine branding)
-
-text(l1, (cx, 210), "");   color(l1, lime);     size(l1, 24);
-text(l2, (cx, 260), "");   color(l2, cyan);     size(l2, 24);   hidden(l2);
-text(l3, (cx, 310), "");   color(l3, cyan);     size(l3, 24);   hidden(l3);
-text(l4, (cx, 360), "");   color(l4, lime);     size(l4, 24);   hidden(l4);
-text(prompt, (cx, 440), "");  color(prompt, fg);  size(prompt, 28);  display(prompt);
-hidden(prompt);  cursor(prompt);    // only the live prompt gets the cursor
-
-// --- boot log ---
-say(l1, "&gt; initializing manic engine", 0.1);
-type(l1, 1.0);
-
-show(l2, 0.2);
-say(l2, "  loaded kits: std math geo algo brand", 0.1);
-type(l2, 1.3);
-
-show(l3, 0.2);
-say(l3, "  timeline: deterministic @ 60fps", 0.1);
-type(l3, 1.0);
-
-show(l4, 0.2);
-say(l4, "  ready.", 0.1);
-type(l4, 0.5);
-
-// --- the prompt, awaiting input ---
-show(prompt, 0.2);
-say(prompt, "manic ~ % render my_idea", 0.1);
-type(prompt, 1.2);
-wait(1.6);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/JDdcN2toYoo" title="A Neon Terminal Boots Up — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="brace"><a class="header" href="#brace">brace</a></h2>
-<p>The curly-brace family.</p>
-<pre><code class="language-manic">// Braces — label spans and parts with curly braces, manic's Brace / BraceLabel
-// / BraceBetweenPoints. A length is split into two parts a and b; a brace under
-// each names it, and a brace over the whole names the sum. Every brace here is
-// a BraceBetweenPoints (two points + a depth); bracelabel adds the text.
-//
-//   manic examples/brace.manic
-//   manic examples/brace.manic --record out --fps 60
-
-title("Braces");
-canvas(1280, 720);
-
-text(head, (640, 120), "label a span, or its parts");
-display(head);  color(head, cyan);  size(head, 28);  hidden(head);
-text(cap, (640, 620), "");  color(cap, dim);  size(cap, 24);
-
-// the length, split at x = 680
-line(seg, (300, 360), (980, 360));  color(seg, fg);  stroke(seg, 3);  untraced(seg);
-dot(dl, (300, 360));   dot(dm, (680, 360));   dot(dr, (980, 360));
-color(dl, magenta);  color(dm, lime);  color(dr, cyan);
-hidden(dl);  hidden(dm);  hidden(dr);
-
-// braces under the two parts, and over the whole (bulges up: points go R-&gt;L)
-bracelabel(ba, (300, 392), (680, 392), "a", 30);        color(ba, magenta);
-bracelabel(bb, (680, 392), (980, 392), "b", 30);        color(bb, cyan);
-bracelabel(bt, (980, 320), (300, 320), "a + b", 34);    color(bt, lime);
-hidden(ba);  hidden(bb);  hidden(bt);
-
-// --- reveal ---
-show(head, 0.5);
-say(cap, "here is a length");
-draw(seg, 0.7);
-par { show(dl, 0.3);  show(dr, 0.3); }
-wait(0.3);
-
-section("Two parts");
-say(cap, "split it at a point into parts a and b");
-show(dm, 0.3);
-show(ba, 0.5);
-show(bb, 0.5);
-wait(0.5);
-
-section("The whole");
-say(cap, "the whole span is a + b");
-show(bt, 0.6);
-par { pulse(ba.label);  pulse(bb.label);  pulse(bt.label); }
-wait(1.4);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/ftbN0Xh2u1E" title="Curly Braces, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="banner"><a class="header" href="#banner">banner</a></h2>
-<p>The manic logo / banner reveal.</p>
-<pre><code class="language-manic">// The manic banner &amp; watermark (à la ManimBanner). "create" draws the icon
-// trio on; "expand" reveals the wordmark; the watermark persists in the corner.
-//
-//   manic examples/banner.manic
-//   manic examples/banner.manic --record out --fps 60
-
-title("manic");
-canvas(1280, 720);
-
-banner(logo, (600, 360), 1.1);
-untraced(logo.icon);     // icon shapes drawn on
-hidden(logo.word);       // wordmark revealed on "expand"
-
-// a persistent, screen-fixed watermark, bottom-right
-watermark(wm, (1120, 690), "manic // synthwave");
-
-text(cap, (640, 560), "");  color(cap, dim);  size(cap, 22);
-
-// --- create: trace the icon trio on (staggered) ---
-say(cap, "create");
-stagger(0.2) {
-  draw(logo.dot, 0.6);
-  draw(logo.sq, 0.6);
-  draw(logo.tri, 0.6);
+                        <h1 id="reactive-stories--change-the-idea-not-the-scene"><a class="header" href="#reactive-stories--change-the-idea-not-the-scene">Reactive stories — change the idea, not the scene</a></h1>
+<p>A polished Reel feels continuous: the equation changes, the point moves, the
+graph responds, and the caption explains the same idea without cutting to a
+blank screen. In Manic, build that as <strong>one persistent visual world</strong> and move it
+forward with named <code>step</code> blocks.</p>
+<p>This is the creator mental model:</p>
+<ol>
+<li>Declare the cast once — equation, plot, diagram, labels, caption, profile.</li>
+<li>Give each story beat a short, meaningful name.</li>
+<li>Inside that step, describe only what changes.</li>
+<li>Leave everything else alone; it remains on screen automatically.</li>
+</ol>
+<p>The result is easier to write, easier to revise, and easier for a viewer’s eye
+to follow.</p>
+<h2 id="one-story-three-layers"><a class="header" href="#one-story-three-layers">One story, three layers</a></h2>
+<p>Think of a reactive video as three simple layers:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>layer</th><th>Manic vocabulary</th><th>creator decision</th></tr>
+</thead>
+<tbody>
+<tr><td>World</td><td>shapes, equations, plots, text, Creator profile</td><td>What should remain recognisable throughout?</td></tr>
+<tr><td>Story</td><td><code>step("question")</code>, <code>step("explain")</code>, <code>step("result")</code></td><td>What changes in the viewer’s understanding?</td></tr>
+<tr><td>Motion</td><td><code>rewrite</code>, <code>to</code>, <code>draw</code>, <code>say</code>, <code>show</code>, <code>fade</code></td><td>How should that change become visible?</td></tr>
+</tbody>
+</table>
+</div>
+<p><code>step</code> does not introduce a new kind of animation. It gives ordinary Manic
+verbs a named conceptual boundary. Its children begin together, its duration is
+the longest child, and any entity not mentioned persists.</p>
+<pre><code class="language-manic">step("measure-slope") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  to(tangent, x, 2.8, 3.20, smooth);
+  to(rate, x, 2.8, 3.20, smooth);
+  say(caption, "The tangent and its slope update together.", 0.40);
 }
-par { pulse(logo.dot);  pulse(logo.sq);  pulse(logo.tri); }
-wait(0.4);
-
-// --- expand: reveal the wordmark ---
-say(cap, "expand");
-show(logo.word, 0.6);
-wait(1.2);
-
-// --- unwrite: fade the whole banner ---
-say(cap, "");
-par { fade(logo.icon, 0.5);  fade(logo.word, 0.5); }
-wait(0.8);
+wait(0.60);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/FhoIX7kKQXU" title="The manic Logo Reveal" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="equation"><a class="header" href="#equation">equation</a></h2>
-<p>Display-quality LaTeX for fractions, roots, sums, powers and integrals, with semantic
-colour and template tinting.</p>
-<pre><code class="language-manic">// LaTeX math typesetting via `equation(...)`. Put the LaTeX in BACKTICKS so the
-// backslashes survive. Rendered white-on-transparent and tinted by the entity
-// colour, so `color(...)` and `template(...)` both work.
-title("Equations");
-canvas("16:9");
-
-equation(quad, (cx, 150), `x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`, 68);
-color(quad, cyan);
-
-equation(sum, (cx, 340), `\sum_{k=1}^{n} k = \frac{n(n+1)}{2}`, 60);
-
-equation(euler, (cx, 500), `e^{i\pi} + 1 = 0`, 64);
-color(euler, gold);
-
-equation(intg, (cx, 640), `\int_0^1 x^2\,dx = \tfrac{1}{3}`, 56);
-color(intg, lime);
+<p>Here the formula, tangent, live value, and explanation share one beat. The
+curve and every other unmentioned object remain exactly where they were.</p>
+<h2 id="a-creator-first-workflow"><a class="header" href="#a-creator-first-workflow">A creator-first workflow</a></h2>
+<h3 id="1-start-with-the-promise"><a class="header" href="#1-start-with-the-promise">1. Start with the promise</a></h3>
+<p>Before writing motion, write the story as four or five beat names:</p>
+<pre><code class="language-text">question → measure-slope → find-the-flat-point → see-the-derivative → takeaway
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/2r9pZUjMVbE" title="Beautiful LaTeX Equations From Plain Text — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="inline-math"><a class="header" href="#inline-math">inline-math</a></h2>
-<p>Inline LaTeX mixed with ordinary prose, including wrapped explanatory text and a
-standalone display equation.</p>
-<pre><code class="language-manic">// Inline LaTeX everywhere: wrap math in `$…$` (backtick raw string) inside ANY
-// text/caption/kit label. Plain text (no `$`) is unchanged. Mixed lines wrap.
-title("Inline math");
-canvas("16:9");
-
-text(t1, (cx, 110), `The area of a circle is $A = \pi r^2$`);
-color(t1, cyan);
-
-// mixed text + math that WRAPS across lines
-text(t2, (cx, 300), `By the Pythagorean theorem, if $a^2 + b^2 = c^2$ then the triangle with sides a, b, c is right-angled`);
-wrap(t2, 760);
-color(t2, lime);
-
-// a whole-formula label (auto-typeset, centred)
-equation(eq, (cx, 470), `\int_0^{1} x^2 \, dx = \tfrac{1}{3}`, 60);
-color(eq, gold);
+<p>Use names that describe understanding, not implementation. <code>show-blue-line</code> is
+fragile; <code>see-the-derivative</code> still makes sense after the design changes.</p>
+<p>For a short educational Reel, a reliable shape is:</p>
+<ul>
+<li><strong>Hook:</strong> pose one visual question in the first two seconds.</li>
+<li><strong>Explore:</strong> change one or two connected representations.</li>
+<li><strong>Payoff:</strong> make the important relationship visible.</li>
+<li><strong>Takeaway:</strong> hold one memorable sentence or result.</li>
+</ul>
+<p>The same structure works for geometry proofs, physics simulations, chemistry
+reactions, data stories, algorithms, and product explainers. Reactive is a
+story pattern, not a mathematics-only feature.</p>
+<h3 id="2-declare-the-world-once"><a class="header" href="#2-declare-the-world-once">2. Declare the world once</a></h3>
+<p>Give every continuing visual a stable id. Do not create <code>equation1</code>,
+<code>equation2</code>, and <code>equation3</code> when the viewer should perceive one evolving
+equation. Keep <code>work</code> and rewrite it.</p>
+<pre><code class="language-manic">equation(work, (cx, 390), `f(x)=0.35x^2`, 51);
+plot(curve, (cx, 1050), 115, 62, "0.35*x*x", (-3.5, 3.5));
+text(caption, (cx, 1450), "How steep is this curve?");
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/I0Bl6rCHH5M" title="Mix LaTeX Math Inside Any Sentence — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="image"><a class="header" href="#image">image</a></h2>
-<p>Embed a raster image (PNG/JPG) with <code>image(id, (x,y), "path", w, h)</code> — a real file drawn
-into the scene and animated like any entity (shown, spun, pulsed, moved). Unlocks logos,
-avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
-<pre><code class="language-manic">// ============================================================================
-//  image.manic  —  embed a raster image (PNG/JPG) in a scene
-// ----------------------------------------------------------------------------
-//  `image(id, (x,y), "path", [w], [h])` loads a real image file and draws it
-//  centred at (x,y), w×h px — and it's an ordinary entity, so every verb
-//  (`show`/`move`/`fade`/`pulse`/`spin`/…) animates it. Here a bundled logo
-//  slides + fades in, pulses, then a caption types beside it. A missing path
-//  draws a crossed placeholder box instead of failing.
-//
-//  (This unlocks real logos, avatars and photo backdrops for creator templates —
-//  a creator drops their brand image into a slot.)
-// ============================================================================
-
-title("Raster Images");
-canvas("16:9");
-
-image(logo, (cx, 340), "assets/manic-logo.png", 300, 300); hidden(logo);
-text(cap, (cx, 600), "any PNG/JPG — and it animates like anything else");
-color(cap, fg); size(cap, 34); bold(cap); untraced(cap);
-
-// ================= THE SCENE =================
-show(logo, 0.6); pulse(logo);
-wait(0.4);
-spin(logo, 1.0);
-type(cap, 2.0);
-wait(0.6);
-par { move(logo, (cx, 320), 0.8, smooth); pulse(logo); }
-wait(1.0);
+<p>Stable identity is what makes continuity possible. It also means a later style
+change, position adjustment, or wording fix happens in one place.</p>
+<h3 id="3-change-only-what-matters"><a class="header" href="#3-change-only-what-matters">3. Change only what matters</a></h3>
+<p>Inside a step, pair the representations that explain one another:</p>
+<pre><code class="language-manic">step("find-the-flat-point") {
+  rewrite(work, `f'(0)=\textcolor{lime}{0}`, 0.85, smooth);
+  to(tangent, x, 0, 1.80, smooth);
+  to(rate, x, 0, 1.80, smooth);
+  show(vertex, 0.40);
+  say(caption, "At the vertex the tangent is flat.", 0.40);
+}
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/3h0wTYGzHTU" title="Embed Any Image in manic — Logos, Avatars & Photos, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
-
+<p>Do not fade and rebuild the whole screen for every sentence. Preserve context,
+move the smallest meaningful parts, and let the viewer compare before and
+after. For equations, <code>rewrite</code> retains safely matched LaTeX pieces and brings
+only the changed pieces in or out.</p>
+<p>Manic animates the states you author; it does not solve or verify the maths.
+Write each intermediate LaTeX state exactly as it should appear.</p>
+<h3 id="4-give-the-result-room-to-land"><a class="header" href="#4-give-the-result-room-to-land">4. Give the result room to land</a></h3>
+<p>A step ends when its longest animation ends. Add a short <code>wait</code> after an
+important step so the viewer can read the settled frame:</p>
+<pre><code class="language-manic">step("result") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(curve, 0.70);
+  pulse(derivative, 0.70);
+  say(caption, "The derivative is the curve of all local slopes.", 0.40);
+}
+wait(1.80);
+</code></pre>
+<p>Use <code>seq { ... }</code> inside a step only when that conceptual beat genuinely needs
+an internal order. Use <code>par</code> for anonymous choreography; use <code>step</code> when the
+beat should have a name and meaning.</p>
+<h2 id="creator-polish-that-matters"><a class="header" href="#creator-polish-that-matters">Creator polish that matters</a></h2>
+<ul>
+<li>Keep one focal change per step. Several synchronized views are fine when they
+all explain that one change.</li>
+<li>Reuse semantic colours: for example, cyan for the original function,
+magenta for its derivative, and lime for the key result.</li>
+<li>Put captions in a stable safe region. Let the words change with <code>say</code> instead
+of making the viewer search for a new text block.</li>
+<li>Prefer smooth movement and local equation rewrites over full-screen fades.</li>
+<li>Write for the final phone size. Short captions and one- or two-line equations
+beat dense slides.</li>
+<li>Keep the Creator profile and social footer consistent across a series, but do
+not let branding compete with the explanatory stage.</li>
+<li>Preview the hook, busiest transition, result, and end hold as still frames
+before recording the full video.</li>
+</ul>
+<h2 id="named-steps-are-editing-markers"><a class="header" href="#named-steps-are-editing-markers">Named steps are editing markers</a></h2>
+<p>Every step name is automatically exported at the step’s start in
+<code>markers.json</code>. Those semantic timestamps make it easier to:</p>
+<ul>
+<li>align narration, music, captions, and sound effects;</li>
+<li>review or seek directly to a conceptual beat;</li>
+<li>identify a clean hook, explanation, result, or takeaway;</li>
+<li>prepare the same story for future multi-format publishing tools.</li>
+</ul>
+<p>Names must be non-empty, unique, and top-level. If you only need a timestamp
+without a reactive state change, use <code>mark("name")</code> instead.</p>
+<h2 id="publish-one-story-in-four-formats"><a class="header" href="#publish-one-story-in-four-formats">Publish one story in four formats</a></h2>
+<p>A named-step story can now be reframed at render time without editing its
+source. Use <code>--canvas</code> to override the logical canvas before Manic calculates
+<code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>, macros, and build-time layout branches:</p>
+<pre><code class="language-sh">manic examples/reactive-multiformat.manic --canvas portrait --record out-reel --preset reel
+manic examples/reactive-multiformat.manic --canvas 4:5     --record out-feed
+manic examples/reactive-multiformat.manic --canvas square  --record out-square
+manic examples/reactive-multiformat.manic --canvas 16:9    --record out-lesson
+</code></pre>
+<p>The story’s named steps, equation continuity, timing, and identity remain the
+same. Only the logical layout changes. <code>--canvas</code> is separate from <code>--preset</code>:
+the canvas controls composition; the preset controls recording quality, frame
+rate, container, and engine branding.</p>
+<p>Creator Kit regions already read the active canvas. For a hand-composed scene,
+prefer <code>w</code>, <code>h</code>, <code>cx</code>, and <code>cy</code>, then use a small build-time branch when the
+composition should genuinely change shape:</p>
+<pre><code class="language-manic">if h &gt; 1.45*w {
+  // vertical stack for a Reel or Short
+}
+else if w &gt; 1.25*h {
+  // explanation left, visual stage right
+}
+else {
+  // compact square / 4:5 feed composition
+}
+</code></pre>
+<p>An override cannot make hard-coded coordinates responsive by itself. The
+author still decides the useful composition for each shape of screen; Manic
+ensures every branch receives the correct dimensions before construction and
+keeps the semantic story unchanged.</p>
+<h2 id="complete-examples-to-learn-from"><a class="header" href="#complete-examples-to-learn-from">Complete examples to learn from</a></h2>
+<ul>
+<li><a href="ex-calculus.html#reactive-world">Reactive world</a> — the best compact starting
+point: one curve, one equation, one tangent, and five named steps.</li>
+<li><a href="ex-creator.html#reactive-multiformat">Reactive multi-format</a> — one source and
+one named timeline, with vertical, feed, square, and landscape compositions.</li>
+<li><a href="ex-creator.html#parameter-journeys">Parameter journeys</a> — one visible value
+drives a plot, analysis views, geometry, and a live readout without rebuilding
+the world.</li>
+<li><a href="ex-calculus.html#reactive-integral">Reactive integral</a> — an equation, integrand,
+antiderivative, and visual verification in one continuous world.</li>
+<li><a href="ex-transforms.html#reactive-math-notation">Reactive notation</a> — mathematics,
+physics, chemistry, biology, logic, and custom LaTeX notation.</li>
+<li><a href="ex-transforms.html#reactive-math-journey">Math journey</a> — a playful long-form
+progression from Class 1 arithmetic to PhD-level notation.</li>
+<li><a href="ex-transforms.html#quadratic-formula-continuity">Quadratic continuity</a> — a
+focused benchmark for retaining unchanged equation pieces.</li>
+</ul>
+<p>Start by copying <code>reactive-world.manic</code>, rename its steps around your idea, and
+replace one representation at a time. Keep the world; change the understanding.</p>
+<p>Next: <a href="creator-visual-checks.html">Review every format before publishing →</a></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="ex-transforms.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="creator-reels.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="ex-generative.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="creator-visual-checks.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -485,11 +373,11 @@ wait(1.0);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="ex-transforms.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="creator-reels.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="ex-generative.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="creator-visual-checks.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

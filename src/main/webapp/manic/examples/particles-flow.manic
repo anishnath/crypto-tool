@@ -3,6 +3,7 @@
 
 title("Three bodies, one relation");
 canvas("9:16");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 // No template call: mono is the polished black-and-white default.
 
 circle(A, (540, 390), 105);

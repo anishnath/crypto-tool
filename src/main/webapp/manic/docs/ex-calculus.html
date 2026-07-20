@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -315,6 +315,303 @@ fade(capi, 0.4);
 show(endcap, 0.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/UrOdi_iLt_k" title="Calculus in One Scene: the Derivative & the Integral — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reactive-integral"><a class="header" href="#reactive-integral">reactive-integral</a></h2>
+<p>The reactive-math gold example: integration by parts stays one continuous equation,
+then a plot verifies that the antiderivative’s slope is the integrand and <code>+C</code> is a
+family of vertical translations. Uses <code>rewrite</code>, not hand-positioned formula pieces.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-integral.manic — one calculation, one continuous visual world
+// ----------------------------------------------------------------------------
+// Integration by parts uses one structured equation. `rewrite` keeps unchanged
+// RaTeX parts alive while only the mathematical difference moves or enters.
+// The graph then verifies the result: the slope of F is the height of f, and
+// +C becomes a visible family of vertical translations.
+// ============================================================================
+
+title("A Reactive Integral");
+canvas("16:9");
+template("plain");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+// Shared colour roles follow the same mathematical objects through every act.
+// x / u is magenta; cos, sin and their antiderivative relation are cyan.
+text(kicker, (285, 38), "ONE INTEGRAL · ONE CONTINUOUS STORY");
+size(kicker, 18); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (430, 72), "Watch only the mathematics that changes");
+size(headline, 28); color(headline, fg); bold(headline); hidden(headline);
+
+// ---------------------------------------------------------------------------
+// ONE PERSISTENT EQUATION
+// ---------------------------------------------------------------------------
+
+equation(
+  work,
+  (cx, 145),
+  `\int \textcolor{magenta}{x}\,\textcolor{cyan}{\cos(x)}\,dx`,
+  46
+);
+hidden(work);
+
+// The by-parts roles remain visible while the expression changes above them.
+equation(uChoice, (330, 225), `u=x`, 28); color(uChoice, magenta); hidden(uChoice);
+equation(dvChoice, (525, 225), `dv=\cos(x)\,dx`, 28); color(dvChoice, cyan); hidden(dvChoice);
+equation(duChoice, (760, 225), `du=dx`, 28); color(duChoice, magenta); hidden(duChoice);
+equation(vChoice, (950, 225), `v=\sin(x)`, 28); color(vChoice, cyan); hidden(vChoice);
+
+text(method, (cx, 278), "INTEGRATION BY PARTS");
+size(method, 16); color(method, dim); bold(method); hidden(method);
+
+// ---------------------------------------------------------------------------
+// ONE GRAPH, ASKED THREE CONNECTED QUESTIONS
+// ---------------------------------------------------------------------------
+
+let ox = cx;
+let oy = 515;
+let sx = 108;
+let sy = 28;
+
+axes(ax, (ox, oy), 550, 165, 1);
+color(ax, dim); opacity(ax, 0.50); untraced(ax);
+
+// Integrand and one representative antiderivative (C=0).
+plot(f, (ox, oy), sx, sy, "x*cos(x)", (-5, 5));
+color(f, cyan); stroke(f, 5); glow(f, 0.8); untraced(f);
+
+plot(bigF, (ox, oy), sx, sy, "x*sin(x)+cos(x)", (-5, 5));
+color(bigF, lime); stroke(bigF, 5); dashed(bigF, 18, 11);
+glow(bigF, 0.8); untraced(bigF);
+
+// Numerical derivative of F: drawing it lands directly on f.
+deriv(dF, bigF);
+color(dF, gold); stroke(dF, 3); glow(dF, 0.5); untraced(dF);
+
+// A moving tangent makes “F' = f” a local statement at every x.
+tangent(tan, bigF, -3.8, 180); color(tan, gold); hidden(tan);
+slope(slopeValue, bigF, -3.8, (18, -24)); color(slopeValue, gold); hidden(slopeValue);
+
+equation(fLabel, (250, 338), `f(x)=x\cos(x)`, 28); color(fLabel, cyan); hidden(fLabel);
+equation(FLabel, (1010, 338), `F(x)=x\sin(x)+\cos(x)`, 28); color(FLabel, lime); hidden(FLabel);
+equation(proofLabel, (cx, 280), `F'(x)=f(x)=x\cos(x)`, 34); color(proofLabel, gold); hidden(proofLabel);
+
+// +C does not change the derivative: it translates the same curve vertically.
+plot(Fup, (ox, oy), sx, sy, "x*sin(x)+cos(x)+1.5", (-5, 5));
+plot(Fdown, (ox, oy), sx, sy, "x*sin(x)+cos(x)-1.5", (-5, 5));
+color(Fup, magenta); color(Fdown, magenta);
+stroke(Fup, 3); stroke(Fdown, 3); opacity(Fup, 0.55); opacity(Fdown, 0.55);
+dashed(Fup, 14, 9); dashed(Fdown, 14, 9);
+untraced(Fup); untraced(Fdown);
+
+equation(familyLabel, (cx, 280), `F(x)+C\quad\text{changes height, not slope}`, 32);
+color(familyLabel, magenta); hidden(familyLabel);
+
+text(caption, (cx, 690), "");
+size(caption, 19); color(caption, dim); bold(caption);
+
+// Axes and curves are `untraced`, so their draw progress starts at zero without
+// also zeroing opacity. That lets `draw(...)` reveal their geometry later.
+
+// ---------------------------------------------------------------------------
+// TIMELINE
+// ---------------------------------------------------------------------------
+
+show(kicker, 0.45);
+show(headline, 0.55);
+say(caption, "Start with the question. Keep the stage — change only its state.");
+show(work, 0.65);
+wait(1.60);
+
+// Choose u and dv by reusing the same semantic colours.
+show(method, 0.35);
+say(caption, "Choose the two roles. Colour preserves their identity.");
+par { show(uChoice, 0.50); show(dvChoice, 0.65); }
+wait(1.20);
+par { show(duChoice, 0.50); show(vChoice, 0.50); }
+wait(1.50);
+
+// Build x sin(x) - integral sin(x) dx. Reusable glyphs travel to their new
+// jobs while the obsolete cosine is the only original factor that leaves.
+say(caption, "Apply integration by parts: persistent pieces move; new pieces arrive.");
+rewrite(
+  work,
+  `\textcolor{magenta}{x}\textcolor{cyan}{\sin(x)}-\int\textcolor{cyan}{\sin(x)}\,dx`,
+  1.05,
+  smooth
+);
+wait(2.00);
+
+// Only the remaining integral changes. x sin(x) stays untouched.
+say(caption, "Resolve the remaining integral. The stable product never blinks.");
+rewrite(
+  work,
+  `\textcolor{magenta}{x}\textcolor{cyan}{\sin(x)}+\textcolor{cyan}{\cos(x)}+\textcolor{gold}{C}`,
+  1.00,
+  smooth
+);
+wait(2.00);
+
+// Move attention from symbolic manipulation into the same idea as geometry.
+say(caption, "Now verify the answer visually — without leaving the scene.");
+par {
+  fade(method, 0.40);
+  fade(uChoice, 0.40); fade(dvChoice, 0.40);
+  fade(duChoice, 0.40); fade(vChoice, 0.40);
+  draw(ax, 0.85);
+}
+draw(f, 1.80);
+show(fLabel, 0.45);
+wait(1.00);
+
+draw(bigF, 1.80);
+show(FLabel, 0.45);
+wait(1.00);
+
+// The tangent and its numeric slope glide continuously across F.
+say(caption, "At every x, the slope of the green curve equals the blue height.");
+par { show(tan, 0.45); show(slopeValue, 0.45); }
+par {
+  to(tan, x, 3.8, 4.80, smooth);
+  to(slopeValue, x, 3.8, 4.80, smooth);
+}
+wait(0.60);
+
+// The derivative trace lands directly over the original integrand.
+show(proofLabel, 0.50);
+draw(dF, 2.20);
+flash(f, cyan);
+wait(1.40);
+
+// Finish with the geometric meaning of the integration constant.
+say(caption, "+C creates a family of answers — same shape, same slope.");
+par {
+  fade(tan, 0.45); fade(slopeValue, 0.45); fade(dF, 0.45);
+  fade(proofLabel, 0.45); fade(fLabel, 0.45); fade(FLabel, 0.45);
+  show(familyLabel, 0.55);
+  pulse(work, 0.70);
+}
+par { draw(Fup, 1.50); draw(Fdown, 1.50); }
+wait(2.80);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/MRq5QHnHQxI" title="Integration by Parts as One Continuous Equation — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reactive-world"><a class="header" href="#reactive-world">reactive-world</a></h2>
+<p>The foundation for creator-reactive stories: five named <code>step</code> blocks keep one curve,
+equation, tangent, live slope, derivative plot and caption synchronized. Each step is
+also exported as a marker for seeking and future multi-format publishing.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-world.manic — one world, named state transitions
+// ----------------------------------------------------------------------------
+// Each `step` changes several existing representations together. The equation,
+// tangent, live slope, derivative curve, caption and camera share one continuous
+// stage; anything a step does not mention simply persists.
+// ============================================================================
+
+title("Reactive World — The Derivative Lives on the Curve");
+canvas("9:16");
+template("terminal");
+watermark(manicMark, (865, 165), "Made With Manic");
+
+creator(me, "@anish2good name=Calculus_World tagline=One_idea_many_views yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=See_the_change safe=reels");
+socials(me);
+
+text(kicker, (540, 130), "ONE WORLD · FIVE NAMED STEPS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 215), "The derivative lives on the curve");
+size(headline, 39); color(headline, fg); bold(headline); hidden(headline);
+
+rect(stage, (540, 855), 930, 1050);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72);
+
+equation(work, (540, 390), `f(x)=0.35x^2`, 51);
+color(work, cyan); hidden(work);
+
+let ox = 540;
+let oy = 1050;
+let sx = 115;
+let sy = 62;
+
+axes(ax, (ox, oy), 410, 420, 1);
+color(ax, dim); opacity(ax, 0.55); untraced(ax);
+
+plot(f, (ox, oy), sx, sy, "0.35*x*x", (-3.5, 3.5));
+color(f, cyan); stroke(f, 6); glow(f, 0.8); untraced(f);
+
+deriv(df, f);
+color(df, magenta); stroke(df, 5); dashed(df, 18, 11); untraced(df);
+
+tangent(tan, f, -2.8, 235);
+color(tan, gold); stroke(tan, 4); hidden(tan);
+
+slope(rate, f, -2.8, (24, -30));
+color(rate, gold); hidden(rate);
+
+dot(vertex, (ox, oy), 10);
+color(vertex, lime); glow(vertex, 1.8); hidden(vertex);
+
+equation(curveLabel, (790, 650), `f(x)`, 31);
+color(curveLabel, cyan); hidden(curveLabel);
+
+equation(derivLabel, (790, 1320), `f'(x)`, 31);
+color(derivLabel, magenta); hidden(derivLabel);
+
+text(caption, (540, 1450), "Start with one curve and one moving question: how steep is it?");
+size(caption, 26); color(caption, dim); wrap(caption, 820); hidden(caption);
+
+// ---------------------------------------------------------------------------
+// NAMED REACTIVE STEPS
+// ---------------------------------------------------------------------------
+
+step("question") {
+  show(kicker, 0.40);
+  show(headline, 0.50);
+  show(work, 0.55);
+  draw(ax, 0.85);
+  draw(f, 1.40);
+  show(curveLabel, 0.45);
+  show(caption, 0.45);
+}
+wait(0.75);
+
+step("measure-slope") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  show(tan, 0.45);
+  show(rate, 0.45);
+  to(tan, x, 2.8, 3.20, smooth);
+  to(rate, x, 2.8, 3.20, smooth);
+  say(caption, "Move the point: the tangent and its slope update together.", 0.40);
+}
+wait(0.60);
+
+step("find-the-flat-point") {
+  rewrite(work, `f'(0)=\textcolor{lime}{0}`, 0.85, smooth);
+  to(tan, x, 0, 1.80, smooth);
+  to(rate, x, 0, 1.80, smooth);
+  show(vertex, 0.40);
+  say(caption, "At the vertex the tangent becomes flat, so the derivative is zero.", 0.40);
+}
+wait(0.65);
+
+step("see-the-derivative") {
+  rewrite(work, `f'(x)=\textcolor{magenta}{0.70x}`, 0.90, smooth);
+  fade(tan, 0.40);
+  fade(rate, 0.40);
+  draw(df, 1.70);
+  show(derivLabel, 0.45);
+  say(caption, "Collect every local slope and a second curve appears: the derivative.", 0.40);
+}
+wait(0.70);
+
+step("takeaway") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(f, 0.70);
+  pulse(df, 0.70);
+  say(caption, "One idea, synchronized across symbols, geometry and motion.", 0.40);
+}
+wait(1.80);
+</code></pre>
+<div class="manic-video" data-video="ex-reactive-world"></div>
 
 <h2 id="sine_wave"><a class="header" href="#sine_wave">sine_wave</a></h2>
 <p><code>axes</code> + <code>plot</code>, a curve traced on, then vectors.</p>

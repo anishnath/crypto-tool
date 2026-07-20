@@ -440,8 +440,27 @@
       },
       setCode: function (code) {
         if (!activeName || !models[activeName]) return;
-        models[activeName].setValue(String(code == null ? '' : code));
+        var src = String(code == null ? '' : code);
+        // Auto-correct the AI's mechanical slips (glued `*`, nearest name) before
+        // it lands in the editor — the model needn't get every char right.
+        var res = (ME.autofix ? ME.autofix(src) : { code: src, fixed: 0 });
+        // Always apply — auto-fix is best-effort, not a gate. Whatever it can't
+        // mechanically repair lands in the editor and shows as live diagnostics
+        // for the user (or the AI assistant) to fix the normal way.
+        models[activeName].setValue(res.code);
         persistFiles();
+        var remaining = 0;
+        try {
+          remaining = (JSON.parse(ME.wasm.check(res.code)) || [])
+            .filter(function (e) { return e.severity !== 'warning'; }).length;
+        } catch (e) { /* check unavailable — leave the editor's own markers to speak */ }
+        if (res.fixed > 0 && remaining > 0) {
+          toast('auto-corrected ' + res.fixed + ', ' + remaining + ' left to fix');
+        } else if (res.fixed > 0) {
+          toast('auto-corrected ' + res.fixed + ' issue' + (res.fixed > 1 ? 's' : ''));
+        } else if (remaining > 0) {
+          toast(remaining + ' issue' + (remaining > 1 ? 's' : '') + ' to fix — see the editor');
+        }
         if (editor) editor.focus();
       },
       fileName: function () { return activeName || ''; },

@@ -1,0 +1,172 @@
+// ============================================================================
+// reactive-integral.manic — one calculation, one continuous visual world
+// ----------------------------------------------------------------------------
+// Integration by parts uses one structured equation. `rewrite` keeps unchanged
+// RaTeX parts alive while only the mathematical difference moves or enters.
+// The graph then verifies the result: the slope of F is the height of f, and
+// +C becomes a visible family of vertical translations.
+// ============================================================================
+
+title("A Reactive Integral");
+canvas("16:9");
+template("plain");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+// Shared colour roles follow the same mathematical objects through every act.
+// x / u is magenta; cos, sin and their antiderivative relation are cyan.
+text(kicker, (285, 38), "ONE INTEGRAL · ONE CONTINUOUS STORY");
+size(kicker, 18); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (430, 72), "Watch only the mathematics that changes");
+size(headline, 28); color(headline, fg); bold(headline); hidden(headline);
+
+// ---------------------------------------------------------------------------
+// ONE PERSISTENT EQUATION
+// ---------------------------------------------------------------------------
+
+equation(
+  work,
+  (cx, 145),
+  `\int \textcolor{magenta}{x}\,\textcolor{cyan}{\cos(x)}\,dx`,
+  46
+);
+hidden(work);
+
+// The by-parts roles remain visible while the expression changes above them.
+equation(uChoice, (330, 225), `u=x`, 28); color(uChoice, magenta); hidden(uChoice);
+equation(dvChoice, (525, 225), `dv=\cos(x)\,dx`, 28); color(dvChoice, cyan); hidden(dvChoice);
+equation(duChoice, (760, 225), `du=dx`, 28); color(duChoice, magenta); hidden(duChoice);
+equation(vChoice, (950, 225), `v=\sin(x)`, 28); color(vChoice, cyan); hidden(vChoice);
+
+text(method, (cx, 278), "INTEGRATION BY PARTS");
+size(method, 16); color(method, dim); bold(method); hidden(method);
+
+// ---------------------------------------------------------------------------
+// ONE GRAPH, ASKED THREE CONNECTED QUESTIONS
+// ---------------------------------------------------------------------------
+
+let ox = cx;
+let oy = 515;
+let sx = 108;
+let sy = 28;
+
+axes(ax, (ox, oy), 550, 165, 1);
+color(ax, dim); opacity(ax, 0.50); untraced(ax);
+
+// Integrand and one representative antiderivative (C=0).
+plot(f, (ox, oy), sx, sy, "x*cos(x)", (-5, 5));
+color(f, cyan); stroke(f, 5); glow(f, 0.8); untraced(f);
+
+plot(bigF, (ox, oy), sx, sy, "x*sin(x)+cos(x)", (-5, 5));
+color(bigF, lime); stroke(bigF, 5); dashed(bigF, 18, 11);
+glow(bigF, 0.8); untraced(bigF);
+
+// Numerical derivative of F: drawing it lands directly on f.
+deriv(dF, bigF);
+color(dF, gold); stroke(dF, 3); glow(dF, 0.5); untraced(dF);
+
+// A moving tangent makes “F' = f” a local statement at every x.
+tangent(tan, bigF, -3.8, 180); color(tan, gold); hidden(tan);
+slope(slopeValue, bigF, -3.8, (18, -24)); color(slopeValue, gold); hidden(slopeValue);
+
+equation(fLabel, (250, 338), `f(x)=x\cos(x)`, 28); color(fLabel, cyan); hidden(fLabel);
+equation(FLabel, (1010, 338), `F(x)=x\sin(x)+\cos(x)`, 28); color(FLabel, lime); hidden(FLabel);
+equation(proofLabel, (cx, 280), `F'(x)=f(x)=x\cos(x)`, 34); color(proofLabel, gold); hidden(proofLabel);
+
+// +C does not change the derivative: it translates the same curve vertically.
+plot(Fup, (ox, oy), sx, sy, "x*sin(x)+cos(x)+1.5", (-5, 5));
+plot(Fdown, (ox, oy), sx, sy, "x*sin(x)+cos(x)-1.5", (-5, 5));
+color(Fup, magenta); color(Fdown, magenta);
+stroke(Fup, 3); stroke(Fdown, 3); opacity(Fup, 0.55); opacity(Fdown, 0.55);
+dashed(Fup, 14, 9); dashed(Fdown, 14, 9);
+untraced(Fup); untraced(Fdown);
+
+equation(familyLabel, (cx, 280), `F(x)+C\quad\text{changes height, not slope}`, 32);
+color(familyLabel, magenta); hidden(familyLabel);
+
+text(caption, (cx, 690), "");
+size(caption, 19); color(caption, dim); bold(caption);
+
+// Axes and curves are `untraced`, so their draw progress starts at zero without
+// also zeroing opacity. That lets `draw(...)` reveal their geometry later.
+
+// ---------------------------------------------------------------------------
+// TIMELINE
+// ---------------------------------------------------------------------------
+
+show(kicker, 0.45);
+show(headline, 0.55);
+say(caption, "Start with the question. Keep the stage — change only its state.");
+show(work, 0.65);
+wait(1.60);
+
+// Choose u and dv by reusing the same semantic colours.
+show(method, 0.35);
+say(caption, "Choose the two roles. Colour preserves their identity.");
+par { show(uChoice, 0.50); show(dvChoice, 0.65); }
+wait(1.20);
+par { show(duChoice, 0.50); show(vChoice, 0.50); }
+wait(1.50);
+
+// Build x sin(x) - integral sin(x) dx. Reusable glyphs travel to their new
+// jobs while the obsolete cosine is the only original factor that leaves.
+say(caption, "Apply integration by parts: persistent pieces move; new pieces arrive.");
+rewrite(
+  work,
+  `\textcolor{magenta}{x}\textcolor{cyan}{\sin(x)}-\int\textcolor{cyan}{\sin(x)}\,dx`,
+  1.05,
+  smooth
+);
+wait(2.00);
+
+// Only the remaining integral changes. x sin(x) stays untouched.
+say(caption, "Resolve the remaining integral. The stable product never blinks.");
+rewrite(
+  work,
+  `\textcolor{magenta}{x}\textcolor{cyan}{\sin(x)}+\textcolor{cyan}{\cos(x)}+\textcolor{gold}{C}`,
+  1.00,
+  smooth
+);
+wait(2.00);
+
+// Move attention from symbolic manipulation into the same idea as geometry.
+say(caption, "Now verify the answer visually — without leaving the scene.");
+par {
+  fade(method, 0.40);
+  fade(uChoice, 0.40); fade(dvChoice, 0.40);
+  fade(duChoice, 0.40); fade(vChoice, 0.40);
+  draw(ax, 0.85);
+}
+draw(f, 1.80);
+show(fLabel, 0.45);
+wait(1.00);
+
+draw(bigF, 1.80);
+show(FLabel, 0.45);
+wait(1.00);
+
+// The tangent and its numeric slope glide continuously across F.
+say(caption, "At every x, the slope of the green curve equals the blue height.");
+par { show(tan, 0.45); show(slopeValue, 0.45); }
+par {
+  to(tan, x, 3.8, 4.80, smooth);
+  to(slopeValue, x, 3.8, 4.80, smooth);
+}
+wait(0.60);
+
+// The derivative trace lands directly over the original integrand.
+show(proofLabel, 0.50);
+draw(dF, 2.20);
+flash(f, cyan);
+wait(1.40);
+
+// Finish with the geometric meaning of the integration constant.
+say(caption, "+C creates a family of answers — same shape, same slope.");
+par {
+  fade(tan, 0.45); fade(slopeValue, 0.45); fade(dF, 0.45);
+  fade(proofLabel, 0.45); fade(fLabel, 0.45); fade(FLabel, 0.45);
+  show(familyLabel, 0.55);
+  pulse(work, 0.70);
+}
+par { draw(Fup, 1.50); draw(Fdown, 1.50); }
+wait(2.80);

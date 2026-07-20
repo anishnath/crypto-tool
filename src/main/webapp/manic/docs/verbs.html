@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -239,10 +239,31 @@ duration you give it, so run it in <code>par</code> with the story it should acc
 <code>flow</code> sends a temporary luminous pulse over any line, arrow, curve, spline,
 arc, or tracked <code>link</code>; it is useful for a signal, energy, traffic, or simply
 directing attention.</p>
+<p>For a persistent comparison style, use <code>dashed(id, [dash], [gap])</code> before the
+timeline. It is a base Manic modifier—not a calculus feature—so the same
+16/10-pixel default pattern works on a plot, guide line, link, arrow, curve,
+spline, coil, or plain arc. Increase both values for a calmer large-format dash;
+keep the gap smaller than the dash when the curve must remain easy to follow.</p>
 <h2 id="content--colour"><a class="header" href="#content--colour">Content &amp; colour</a></h2>
 <pre><code class="language-manic">say(cap, "next step");     // -&gt; crossfade a text entity to new words
 recolor(sun, lime, 0.5);   // -&gt; permanently animate the colour
 </code></pre>
+<h3 id="rewrite-an-equation-without-rebuilding-it"><a class="header" href="#rewrite-an-equation-without-rebuilding-it">Rewrite an equation without rebuilding it</a></h3>
+<p>Declare one real LaTeX equation, then supply each mathematically correct state:</p>
+<pre><code class="language-manic">equation(work, (cx, 300), `x^2+2x=3`, 54);
+rewrite(work, `x^2+2x+1=4`, 0.9, smooth);
+rewrite(work, `(x+1)^2=4`, 0.9, smooth);
+rewrite(work, `x=-1\pm2`, 0.9, smooth);
+</code></pre>
+<p><code>rewrite</code> is visual, not a computer-algebra system: it never invents or verifies
+a step. Equal RaTeX parts retain identity and travel smoothly; only additions and
+removals fade locally. Repeated symbols are paired deterministically, semantic
+<code>\textcolor</code> roles follow the template, and the final frame is always the exact
+target LaTeX. Keep one <code>equation</code> id for the whole derivation, write readable
+steps, and use <code>wait</code> between them when the viewer needs time to absorb a result.</p>
+<p>For a plot or diagram that changes with the same step, place <code>rewrite</code> and the
+related motion in <code>par</code>. Existing equations are unaffected unless this verb is
+used.</p>
 <div class="watch">▶ Watch: text</div>
 
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/_MLrC93RqsU" title="Animated Text + Typewriter — manic" allowfullscreen loading="lazy"></iframe></div>

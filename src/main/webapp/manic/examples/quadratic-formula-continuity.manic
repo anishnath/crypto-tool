@@ -1,0 +1,110 @@
+// quadratic-formula-continuity.manic — structured LaTeX rewrite benchmark
+//
+// The author supplies correct mathematical states. `rewrite` does not solve
+// algebra: it keeps equal RaTeX parts alive, moves them to their new roles,
+// introduces only new notation, and settles on the exact target formula.
+
+title("The Quadratic Formula by Completing the Square");
+canvas("16:9");
+template("plain");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+text(kicker, (cx, 72), "COMPLETING THE SQUARE · ONE CONTINUOUS EQUATION");
+size(kicker, 18); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(guide, (cx, 620), "Stable symbols stay. Only the mathematical change moves.");
+size(guide, 19); color(guide, dim); hidden(guide);
+
+equation(
+  work,
+  (cx, 330),
+  `\textcolor{orange}{a}x^2+\textcolor{cyan}{b}x+\textcolor{lime}{c}=0`,
+  48
+);
+hidden(work);
+
+show(kicker, 0.45);
+show(guide, 0.45);
+show(work, 0.65);
+wait(1.20);
+
+// Divide through by a.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{\textcolor{orange}{a}}x+\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}=0`,
+  1.00,
+  smooth
+);
+wait(1.00);
+
+// Move c/a across the equality.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{\textcolor{orange}{a}}x=-\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}`,
+  0.95,
+  smooth
+);
+wait(0.95);
+
+// Split the middle coefficient into two equal halves.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x=-\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}`,
+  1.05,
+  smooth
+);
+wait(0.95);
+
+// Add the completing-square term to both sides.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\left(\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2=\left(\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2-\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}`,
+  1.10,
+  smooth
+);
+wait(1.05);
+
+// Simplify the right side locally.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\left(\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2=\frac{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}{4\textcolor{orange}{a}^2}`,
+  1.00,
+  smooth
+);
+wait(1.00);
+
+// Expose the repeated factor, then contract it into a square.
+rewrite(
+  work,
+  `x\left(x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\left(x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)=\frac{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}{4\textcolor{orange}{a}^2}`,
+  1.05,
+  smooth
+);
+wait(0.90);
+
+rewrite(
+  work,
+  `\left(x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2=\frac{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}{4\textcolor{orange}{a}^2}`,
+  0.95,
+  smooth
+);
+wait(1.00);
+
+// Take square roots.
+rewrite(
+  work,
+  `x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}=\pm\frac{\sqrt{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}}{2\textcolor{orange}{a}}`,
+  1.05,
+  smooth
+);
+wait(1.10);
+
+// Isolate x. The fraction moves across; the discriminant remains itself.
+rewrite(
+  work,
+  `x=\frac{-\textcolor{cyan}{b}\pm\sqrt{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}}{2\textcolor{orange}{a}}`,
+  1.10,
+  smooth
+);
+pulse(work, 0.65);
+wait(2.50);

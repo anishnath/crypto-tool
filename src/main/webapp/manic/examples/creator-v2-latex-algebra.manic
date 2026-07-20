@@ -4,6 +4,7 @@
 title("Creator v2 — LaTeX Algebra");
 canvas("square");
 template("paper");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Algebra_Studio tagline=Patterns_before_procedures yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=compact cta=Try_it_first safe=clean");
 

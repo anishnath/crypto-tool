@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -224,7 +224,9 @@ manic yourfile.manic --record out # render to out/out.mp4
 and it pulses once.</p>
 <blockquote>
 <p>Here primarily for vertical social video? Jump to
-<a href="#create-a-polished-reel">Create a polished Reel</a>, the complete Creator Kit workflow.</p>
+<a href="#create-a-polished-reel">Create a polished Reel</a>, the complete Creator Kit workflow.
+Then use <a href="#reactive-stories--change-the-idea-not-the-scene">Reactive stories</a> to keep equations, plots,
+diagrams, and captions synchronized across each explanation beat.</p>
 </blockquote>
 <pre><code class="language-manic">// getting started — one shape, drawn on, then a pulse.
 title("Hello, manic");
@@ -315,7 +317,10 @@ how restrained or energetic it should feel.</p>
 </div>
 <p>For Shorts or TikTok, change both safe-area declarations to <code>safe=shorts</code> or
 <code>safe=tiktok</code>. The same source can also be reframed for <code>4:5</code>, <code>square</code>, or
-<code>16:9</code>; the Creator regions reflow automatically.</p>
+<code>16:9</code>; the Creator regions reflow automatically. Use <code>--canvas 4:5</code>,
+<code>--canvas square</code>, or <code>--canvas 16:9</code> at preview/record time so the file stays
+unchanged. The <a href="#publish-one-story-in-four-formats">Reactive stories</a>
+chapter shows the full workflow and the responsive manual-layout pattern.</p>
 <h2 id="1-write-for-a-phone-not-a-slide"><a class="header" href="#1-write-for-a-phone-not-a-slide">1. Write for a phone, not a slide</a></h2>
 <p>A strong first Reel usually has:</p>
 <ul>
@@ -328,6 +333,19 @@ how restrained or energetic it should feel.</p>
 <p>Prefer direct wording. Move supporting context into <code>explain</code>; do not make the
 viewer read a paragraph before the timer starts. Use LaTeX for mathematical
 notation so formulas stay crisp and compact.</p>
+<h3 id="gold-pattern-let-one-equation-evolve"><a class="header" href="#gold-pattern-let-one-equation-evolve">Gold pattern: let one equation evolve</a></h3>
+<p>For a solution Reel, do not stack five complete formulas or cut to a blank
+screen between steps. Declare one equation and rewrite it in place:</p>
+<pre><code class="language-manic">equation(work, (cx, 520), `x^2+2x=3`, 54);
+rewrite(work, `x^2+2x+1=4`, 0.85, smooth);
+wait(0.8);
+rewrite(work, `(x+1)^2=4`, 0.85, smooth);
+</code></pre>
+<p>The viewer’s eye can follow the terms that move while unchanged symbols stay
+put. Manic matches the rendered LaTeX; you still supply and own every correct
+step. For phone video, use one meaningful rewrite per narration beat, keep the
+equation in the media safe region, pause after the important result, and place
+any related plot or diagram motion beside the rewrite in <code>par</code>.</p>
 <h2 id="2-let-the-format-own-layout"><a class="header" href="#2-let-the-format-own-layout">2. Let the format own layout</a></h2>
 <pre><code class="language-manic">canvas("9:16");
 template("mono"); // optional: mono is the DSL default
@@ -384,6 +402,7 @@ native timer, a signature footer, timeline markers, and a final end card:</p>
 title("Perfect Reel — Angle Ratio");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
 
@@ -422,10 +441,11 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/-AcCbVbv7qI" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_FAxmFXPEbU" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="preview-and-export"><a class="header" href="#preview-and-export">Preview and export</a></h2>
 <pre><code class="language-sh">manic check examples/perfect-reel.manic
+manic check examples/perfect-reel.manic --canvas all
 manic examples/perfect-reel.manic
 
 # Inspect representative phone frames: hook, countdown, and answer hold.
@@ -442,6 +462,8 @@ or captions in an editor.</p>
 <h2 id="final-phone-size-review"><a class="header" href="#final-phone-size-review">Final phone-size review</a></h2>
 <p>Before publishing, check:</p>
 <ul>
+<li>Does <code>manic check your-file.manic --canvas all</code> pass portrait, feed, square,
+and landscape? See <a href="#visual-checks--review-every-format-before-publishing">Visual checks</a> for fixes.</li>
 <li>Can the hook be understood during the first beat?</li>
 <li>Is every important word and the CTA inside the selected safe area?</li>
 <li>Is there one obvious focal point, with no competing motion?</li>
@@ -454,7 +476,387 @@ or captions in an editor.</p>
 <p>Once those pass, keep the same profile, motion, colour, and closing pattern
 across the series. Consistency will make the next Reel both faster to produce
 and easier to recognise.</p>
-<p>Next: <a href="#creator-formats--responsive-social-video">Explore every Creator control and format variant →</a></p>
+<p>Next: <a href="#reactive-stories--change-the-idea-not-the-scene">Turn one polished scene into a reactive story →</a></p>
+<p>Reference: <a href="#creator-formats--responsive-social-video">Explore every Creator control and format variant</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="reactive-stories--change-the-idea-not-the-scene"><a class="header" href="#reactive-stories--change-the-idea-not-the-scene">Reactive stories — change the idea, not the scene</a></h1>
+<p>A polished Reel feels continuous: the equation changes, the point moves, the
+graph responds, and the caption explains the same idea without cutting to a
+blank screen. In Manic, build that as <strong>one persistent visual world</strong> and move it
+forward with named <code>step</code> blocks.</p>
+<p>This is the creator mental model:</p>
+<ol>
+<li>Declare the cast once — equation, plot, diagram, labels, caption, profile.</li>
+<li>Give each story beat a short, meaningful name.</li>
+<li>Inside that step, describe only what changes.</li>
+<li>Leave everything else alone; it remains on screen automatically.</li>
+</ol>
+<p>The result is easier to write, easier to revise, and easier for a viewer’s eye
+to follow.</p>
+<h2 id="one-story-three-layers"><a class="header" href="#one-story-three-layers">One story, three layers</a></h2>
+<p>Think of a reactive video as three simple layers:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>layer</th><th>Manic vocabulary</th><th>creator decision</th></tr>
+</thead>
+<tbody>
+<tr><td>World</td><td>shapes, equations, plots, text, Creator profile</td><td>What should remain recognisable throughout?</td></tr>
+<tr><td>Story</td><td><code>step("question")</code>, <code>step("explain")</code>, <code>step("result")</code></td><td>What changes in the viewer’s understanding?</td></tr>
+<tr><td>Motion</td><td><code>rewrite</code>, <code>to</code>, <code>draw</code>, <code>say</code>, <code>show</code>, <code>fade</code></td><td>How should that change become visible?</td></tr>
+</tbody>
+</table>
+</div>
+<p><code>step</code> does not introduce a new kind of animation. It gives ordinary Manic
+verbs a named conceptual boundary. Its children begin together, its duration is
+the longest child, and any entity not mentioned persists.</p>
+<pre><code class="language-manic">step("measure-slope") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  to(tangent, x, 2.8, 3.20, smooth);
+  to(rate, x, 2.8, 3.20, smooth);
+  say(caption, "The tangent and its slope update together.", 0.40);
+}
+wait(0.60);
+</code></pre>
+<p>Here the formula, tangent, live value, and explanation share one beat. The
+curve and every other unmentioned object remain exactly where they were.</p>
+<h2 id="a-creator-first-workflow"><a class="header" href="#a-creator-first-workflow">A creator-first workflow</a></h2>
+<h3 id="1-start-with-the-promise"><a class="header" href="#1-start-with-the-promise">1. Start with the promise</a></h3>
+<p>Before writing motion, write the story as four or five beat names:</p>
+<pre><code class="language-text">question → measure-slope → find-the-flat-point → see-the-derivative → takeaway
+</code></pre>
+<p>Use names that describe understanding, not implementation. <code>show-blue-line</code> is
+fragile; <code>see-the-derivative</code> still makes sense after the design changes.</p>
+<p>For a short educational Reel, a reliable shape is:</p>
+<ul>
+<li><strong>Hook:</strong> pose one visual question in the first two seconds.</li>
+<li><strong>Explore:</strong> change one or two connected representations.</li>
+<li><strong>Payoff:</strong> make the important relationship visible.</li>
+<li><strong>Takeaway:</strong> hold one memorable sentence or result.</li>
+</ul>
+<p>The same structure works for geometry proofs, physics simulations, chemistry
+reactions, data stories, algorithms, and product explainers. Reactive is a
+story pattern, not a mathematics-only feature.</p>
+<h3 id="2-declare-the-world-once"><a class="header" href="#2-declare-the-world-once">2. Declare the world once</a></h3>
+<p>Give every continuing visual a stable id. Do not create <code>equation1</code>,
+<code>equation2</code>, and <code>equation3</code> when the viewer should perceive one evolving
+equation. Keep <code>work</code> and rewrite it.</p>
+<pre><code class="language-manic">equation(work, (cx, 390), `f(x)=0.35x^2`, 51);
+plot(curve, (cx, 1050), 115, 62, "0.35*x*x", (-3.5, 3.5));
+text(caption, (cx, 1450), "How steep is this curve?");
+</code></pre>
+<p>Stable identity is what makes continuity possible. It also means a later style
+change, position adjustment, or wording fix happens in one place.</p>
+<h3 id="3-change-only-what-matters"><a class="header" href="#3-change-only-what-matters">3. Change only what matters</a></h3>
+<p>Inside a step, pair the representations that explain one another:</p>
+<pre><code class="language-manic">step("find-the-flat-point") {
+  rewrite(work, `f'(0)=\textcolor{lime}{0}`, 0.85, smooth);
+  to(tangent, x, 0, 1.80, smooth);
+  to(rate, x, 0, 1.80, smooth);
+  show(vertex, 0.40);
+  say(caption, "At the vertex the tangent is flat.", 0.40);
+}
+</code></pre>
+<p>Do not fade and rebuild the whole screen for every sentence. Preserve context,
+move the smallest meaningful parts, and let the viewer compare before and
+after. For equations, <code>rewrite</code> retains safely matched LaTeX pieces and brings
+only the changed pieces in or out.</p>
+<p>Manic animates the states you author; it does not solve or verify the maths.
+Write each intermediate LaTeX state exactly as it should appear.</p>
+<h3 id="4-give-the-result-room-to-land"><a class="header" href="#4-give-the-result-room-to-land">4. Give the result room to land</a></h3>
+<p>A step ends when its longest animation ends. Add a short <code>wait</code> after an
+important step so the viewer can read the settled frame:</p>
+<pre><code class="language-manic">step("result") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(curve, 0.70);
+  pulse(derivative, 0.70);
+  say(caption, "The derivative is the curve of all local slopes.", 0.40);
+}
+wait(1.80);
+</code></pre>
+<p>Use <code>seq { ... }</code> inside a step only when that conceptual beat genuinely needs
+an internal order. Use <code>par</code> for anonymous choreography; use <code>step</code> when the
+beat should have a name and meaning.</p>
+<h2 id="creator-polish-that-matters"><a class="header" href="#creator-polish-that-matters">Creator polish that matters</a></h2>
+<ul>
+<li>Keep one focal change per step. Several synchronized views are fine when they
+all explain that one change.</li>
+<li>Reuse semantic colours: for example, cyan for the original function,
+magenta for its derivative, and lime for the key result.</li>
+<li>Put captions in a stable safe region. Let the words change with <code>say</code> instead
+of making the viewer search for a new text block.</li>
+<li>Prefer smooth movement and local equation rewrites over full-screen fades.</li>
+<li>Write for the final phone size. Short captions and one- or two-line equations
+beat dense slides.</li>
+<li>Keep the Creator profile and social footer consistent across a series, but do
+not let branding compete with the explanatory stage.</li>
+<li>Preview the hook, busiest transition, result, and end hold as still frames
+before recording the full video.</li>
+</ul>
+<h2 id="named-steps-are-editing-markers"><a class="header" href="#named-steps-are-editing-markers">Named steps are editing markers</a></h2>
+<p>Every step name is automatically exported at the step’s start in
+<code>markers.json</code>. Those semantic timestamps make it easier to:</p>
+<ul>
+<li>align narration, music, captions, and sound effects;</li>
+<li>review or seek directly to a conceptual beat;</li>
+<li>identify a clean hook, explanation, result, or takeaway;</li>
+<li>prepare the same story for future multi-format publishing tools.</li>
+</ul>
+<p>Names must be non-empty, unique, and top-level. If you only need a timestamp
+without a reactive state change, use <code>mark("name")</code> instead.</p>
+<h2 id="publish-one-story-in-four-formats"><a class="header" href="#publish-one-story-in-four-formats">Publish one story in four formats</a></h2>
+<p>A named-step story can now be reframed at render time without editing its
+source. Use <code>--canvas</code> to override the logical canvas before Manic calculates
+<code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>, macros, and build-time layout branches:</p>
+<pre><code class="language-sh">manic examples/reactive-multiformat.manic --canvas portrait --record out-reel --preset reel
+manic examples/reactive-multiformat.manic --canvas 4:5     --record out-feed
+manic examples/reactive-multiformat.manic --canvas square  --record out-square
+manic examples/reactive-multiformat.manic --canvas 16:9    --record out-lesson
+</code></pre>
+<p>The story’s named steps, equation continuity, timing, and identity remain the
+same. Only the logical layout changes. <code>--canvas</code> is separate from <code>--preset</code>:
+the canvas controls composition; the preset controls recording quality, frame
+rate, container, and engine branding.</p>
+<p>Creator Kit regions already read the active canvas. For a hand-composed scene,
+prefer <code>w</code>, <code>h</code>, <code>cx</code>, and <code>cy</code>, then use a small build-time branch when the
+composition should genuinely change shape:</p>
+<pre><code class="language-manic">if h &gt; 1.45*w {
+  // vertical stack for a Reel or Short
+}
+else if w &gt; 1.25*h {
+  // explanation left, visual stage right
+}
+else {
+  // compact square / 4:5 feed composition
+}
+</code></pre>
+<p>An override cannot make hard-coded coordinates responsive by itself. The
+author still decides the useful composition for each shape of screen; Manic
+ensures every branch receives the correct dimensions before construction and
+keeps the semantic story unchanged.</p>
+<h2 id="complete-examples-to-learn-from"><a class="header" href="#complete-examples-to-learn-from">Complete examples to learn from</a></h2>
+<ul>
+<li><a href="#reactive-world">Reactive world</a> — the best compact starting
+point: one curve, one equation, one tangent, and five named steps.</li>
+<li><a href="#reactive-multiformat">Reactive multi-format</a> — one source and
+one named timeline, with vertical, feed, square, and landscape compositions.</li>
+<li><a href="#parameter-journeys">Parameter journeys</a> — one visible value
+drives a plot, analysis views, geometry, and a live readout without rebuilding
+the world.</li>
+<li><a href="#reactive-integral">Reactive integral</a> — an equation, integrand,
+antiderivative, and visual verification in one continuous world.</li>
+<li><a href="#reactive-math-notation">Reactive notation</a> — mathematics,
+physics, chemistry, biology, logic, and custom LaTeX notation.</li>
+<li><a href="#reactive-math-journey">Math journey</a> — a playful long-form
+progression from Class 1 arithmetic to PhD-level notation.</li>
+<li><a href="#quadratic-formula-continuity">Quadratic continuity</a> — a
+focused benchmark for retaining unchanged equation pieces.</li>
+</ul>
+<p>Start by copying <code>reactive-world.manic</code>, rename its steps around your idea, and
+replace one representation at a time. Keep the world; change the understanding.</p>
+<p>Next: <a href="#visual-checks--review-every-format-before-publishing">Review every format before publishing →</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="visual-checks--review-every-format-before-publishing"><a class="header" href="#visual-checks--review-every-format-before-publishing">Visual checks — review every format before publishing</a></h1>
+<p>A responsive Manic story can share its content and timing across a Reel, feed
+post, square video, and landscape lesson. Before recording those versions, run
+one publishing audit:</p>
+<pre><code class="language-sh">manic check examples/reactive-multiformat.manic --canvas all
+</code></pre>
+<p>Manic rebuilds the source at four logical canvases—portrait, 4:5 feed, square,
+and 16:9 landscape—then checks the settled frame of every named story stage.
+A clean result looks like this:</p>
+<pre><code class="language-text">ok — examples/reactive-multiformat.manic [portrait]: visual checks passed
+ok — examples/reactive-multiformat.manic [feed]: visual checks passed
+ok — examples/reactive-multiformat.manic [square]: visual checks passed
+ok — examples/reactive-multiformat.manic [landscape]: visual checks passed
+ok — examples/reactive-multiformat.manic: visual audit passed all 4 formats
+</code></pre>
+<p>Use this after the story and layout feel right, but before spending time on the
+final render.</p>
+<h2 id="what-the-first-audit-catches"><a class="header" href="#what-the-first-audit-catches">What the first audit catches</a></h2>
+<p>Visual-check v1 reports four common publishing problems:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>check</th><th>what it protects</th></tr>
+</thead>
+<tbody>
+<tr><td>Canvas bounds</td><td>text, equations, images, or primary objects outside the frame</td></tr>
+<tr><td>Creator safe area</td><td>content underneath platform controls or too close to a protected edge</td></tr>
+<tr><td>Content overlap</td><td>two substantial text, equation, or image boxes competing for the same space</td></tr>
+<tr><td>Readability</td><td>text or rendered notation that is too small for the selected format</td></tr>
+</tbody>
+</table>
+</div>
+<p>Each message names the <strong>format</strong>, <strong>story stage</strong>, <strong>time</strong>, and responsible
+<strong>entity</strong>, then suggests a practical fix:</p>
+<pre><code class="language-text">warning [square · takeaway @ 8.45s]: `caption` overlaps `result`
+  entities: `caption` and `result`
+  suggestion: separate the entities, shorten/wrap the text, or reflow this format
+</code></pre>
+<p>The command exits unsuccessfully when it finds either an error or warning, so
+it can guard a publishing script or CI job. Ordinary <code>manic check file.manic</code>
+remains the fast parse-and-validation check. To validate only one responsive
+layout, keep using <code>manic check file.manic --canvas square</code>.</p>
+<h2 id="why-named-steps-improve-the-result"><a class="header" href="#why-named-steps-improve-the-result">Why named steps improve the result</a></h2>
+<p>The audit reviews the settled state at the end of each <code>step("name")</code> (or
+marker-defined stage), not every frame of a transition. That avoids treating a
+deliberate entrance, exit, or equation rewrite crossfade as a layout failure.
+It also makes a diagnosis useful: <code>takeaway</code> tells you which idea needs fixing,
+not merely that something happened at 8.45 seconds.</p>
+<p>If a file has no named stage, Manic checks its final authored frame. For a
+creator story, prefer meaningful names such as <code>question</code>, <code>experiment</code>,
+<code>proof</code>, and <code>takeaway</code>; they help editing, seeking, publishing, and review.</p>
+<h2 id="fixes-that-stay-reusable"><a class="header" href="#fixes-that-stay-reusable">Fixes that stay reusable</a></h2>
+<p>When the audit finds a problem, preserve one responsive source:</p>
+<ul>
+<li>Position with <code>w</code>, <code>h</code>, <code>cx</code>, and <code>cy</code> instead of copying pixel coordinates
+between files.</li>
+<li>Give continuing content stable ids so a message points to the same entity in
+every stage.</li>
+<li>Shorten copy or use <code>wrap(id, width)</code> before reducing the type size.</li>
+<li>Use one small <code>if h &gt; 1.45*w { ... } else if w &gt; 1.25*h { ... } else { ... }</code>
+layout branch when the composition genuinely needs to reflow.</li>
+<li>Choose the correct Creator <code>safe=shorts|reels|tiktok|clean</code> profile. Use
+<code>safezone(...)</code> while previewing the protected area; it is a design guide,
+not content for the finished video.</li>
+<li>Leave enough room for the busiest settled stage, not only the opening frame.</li>
+</ul>
+<p>The gold reference is
+<a href="#reactive-multiformat"><code>reactive-multiformat.manic</code></a>. It uses one
+timeline and passes the audit in all four formats.</p>
+<h2 id="what-still-needs-human-review"><a class="header" href="#what-still-needs-human-review">What still needs human review</a></h2>
+<p>Visual-check v1 is intentionally conservative. It does not yet judge collision
+paths during transitions, camera-transformed world or 3D bounds, detached
+labels and links, reading speed, or whether an equation agrees mathematically
+with a plot. It also cannot decide whether the hierarchy is beautiful or the
+hook is compelling.</p>
+<p>After the automated audit passes, preview the hook, busiest transition, result,
+and end hold at phone size. The command catches mechanical layout mistakes;
+the creator still owns clarity, rhythm, and taste.</p>
+<p>Next: <a href="#parameter-journeys--one-value-many-connected-views">Animate one value through many connected views →</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="parameter-journeys--one-value-many-connected-views"><a class="header" href="#parameter-journeys--one-value-many-connected-views">Parameter journeys — one value, many connected views</a></h1>
+<p>A parameter journey shows how an idea behaves across a family of cases. Instead
+of rebuilding the scene for “negative”, “zero”, and “positive”, declare one
+visible value, connect it to the existing world once, and animate only that
+value.</p>
+<pre><code class="language-manic">parameter(a, (cx, 140), -1.2, -1.5, 1.5, "a", 2);
+
+plot(curve, (cx, 720), 110, 58, "x*x", (-3.3,3.3));
+circle(point, (cx, 1200), 22);
+counter(magnitude, (cx, 1360), 0, 2, "a² = ", "");
+
+bind(a, curve, formula, "0.22*p*x*x");
+bind(a, point, x, w*0.18, w*0.82);
+bind(a, point, scale, "0.78+0.22*abs(p)");
+bind(a, magnitude, value, "p*p");
+
+step("flatten") {
+  to(a, value, 0, 2.2, smooth);
+}
+step("opens-up") {
+  to(a, value, 1.25, 2.4, smooth);
+}
+</code></pre>
+<p>The plot, point, scale, number, and native parameter control move on the same
+continuous clock. Nothing is replaced and no scene construction is duplicated.</p>
+<h2 id="the-three-part-mental-model"><a class="header" href="#the-three-part-mental-model">The three-part mental model</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>part</th><th>vocabulary</th><th>creator decision</th></tr>
+</thead>
+<tbody>
+<tr><td>Expose</td><td><code>parameter</code></td><td>Which value should the viewer follow?</td></tr>
+<tr><td>Connect</td><td><code>bind</code></td><td>Which representations explain that value?</td></tr>
+<tr><td>Travel</td><td><code>step</code> + <code>to(parameter,value,…)</code></td><td>Which cases tell the clearest story?</td></tr>
+</tbody>
+</table>
+</div>
+<p>This pattern is domain-neutral. The parameter can be a quadratic coefficient,
+damping factor in a formula plot, probability, sample-size readout, geometric
+position, opacity comparison, colour phase, or any other scalar that makes the
+idea easier to see.</p>
+<h2 id="declare-the-visible-parameter"><a class="header" href="#declare-the-visible-parameter">Declare the visible parameter</a></h2>
+<pre><code class="language-manic">parameter(id, (x,y), initial, min, max, ["label"], [decimals]);
+</code></pre>
+<p><code>parameter</code> produces a typeset numeric readout and a compact track/dot widget.
+The initial value must be inside a finite <code>min..max</code> range. Animated values are
+clamped to that range, which prevents an accidental journey from leaving the
+meaningful domain.</p>
+<p>The whole widget is tagged <code>id.widget</code>, so it can enter with the rest of the
+story:</p>
+<pre><code class="language-manic">hidden(a.widget);
+show(a.widget, 0.4);
+</code></pre>
+<p>It is an authored animation control, not an interactive slider in the exported
+video. Use ordinary <code>to</code> to move it; stateless evaluation keeps preview seeking
+and recording deterministic.</p>
+<h2 id="connect-with-a-responsive-range"><a class="header" href="#connect-with-a-responsive-range">Connect with a responsive range</a></h2>
+<p>The simplest binding maps the parameter’s declared minimum and maximum onto two
+output values:</p>
+<pre><code class="language-manic">bind(a, point, x, w*0.18, w*0.82);
+bind(a, label, opacity, 0.25, 1);
+bind(a, arrow, angle, -25, 25);
+</code></pre>
+<p>This form is especially useful for positions because the endpoints are normal
+Manic expressions. <code>w</code>, <code>h</code>, <code>cx</code>, and <code>cy</code> are evaluated before the binding is
+created, so the same source can give each output format an appropriate range.</p>
+<h2 id="connect-with-a-formula"><a class="header" href="#connect-with-a-formula">Connect with a formula</a></h2>
+<p>Use a string formula for a nonlinear relationship:</p>
+<pre><code class="language-manic">bind(a, point, scale, "0.8+0.2*abs(p)");
+bind(a, result, value, "p*p");
+bind(damping, wave, formula, "exp(-p*abs(x))*cos(4*x)");
+</code></pre>
+<p>Inside a binding formula, <code>p</code> is the live parameter. A plot-formula binding also
+provides <code>x</code> as the plot coordinate. The usual arithmetic, constants, and
+functions—<code>sin</code>, <code>cos</code>, <code>exp</code>, <code>sqrt</code>, <code>abs</code>, <code>round</code>, and others—work here.</p>
+<p>Bindable properties are <code>x</code>, <code>y</code>, <code>opacity</code>, <code>scale</code>, <code>angle</code>, <code>hue</code>, <code>value</code>,
+<code>trace</code>, and a plot’s <code>formula</code>. A <code>value</code> target must be a <code>counter</code>. A formula
+target must be a <code>plot</code>.</p>
+<p>When a plot formula changes, its existing <code>tangent</code>, <code>normal</code>, <code>slope</code>, <code>area</code>,
+<code>integral</code>, and moving mark views receive the new function before they recompute.
+That is the important reactive promise: the analysis stays mathematically tied
+to the curve the viewer sees.</p>
+<h2 id="choose-cases-not-frames"><a class="header" href="#choose-cases-not-frames">Choose cases, not frames</a></h2>
+<p>Use named steps to describe meaningful cases:</p>
+<pre><code class="language-manic">step("underdamped") {
+  to(damping, value, 0.12, 2.0, smooth);
+  say(caption, "The oscillation survives for longer.", 0.35);
+}
+step("strong-damping") {
+  to(damping, value, 0.85, 2.0, smooth);
+  say(caption, "The same response now settles quickly.", 0.35);
+}
+</code></pre>
+<p>The stage names should explain the cases to a human. The parameter supplies the
+continuous motion between them; <code>bind</code> keeps every connected view synchronized.</p>
+<h2 id="creator-design-tips"><a class="header" href="#creator-design-tips">Creator design tips</a></h2>
+<ul>
+<li>Follow one primary parameter per short scene. Several controls are possible,
+but the audience should know which value is changing.</li>
+<li>Connect two or three complementary representations—a formula and plot, a
+geometry and measurement, or a simulation curve and readout.</li>
+<li>Give the parameter a meaningful range. Avoid travelling through singular or
+irrelevant values merely because the engine allows them.</li>
+<li>Use responsive range bindings for positions and formula bindings for meaning.</li>
+<li>Hold the important cases briefly. Smooth motion reveals the trend; the hold
+lets the viewer name it.</li>
+<li>Keep stable ids. Parameter journeys are an extension of the persistent-world
+model, not a reason to create replacement scenes.</li>
+<li>Run <code>manic check FILE.manic --canvas all</code> after the journey is complete.</li>
+</ul>
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete example</a></h2>
+<p><a href="#parameter-journeys">Parameter journeys</a> is the polished reference:
+one coefficient drives a quadratic, live tangent and slope, moving point,
+changing scale, and <code>a²</code> readout across portrait, feed, square, and landscape.</p>
+<p>Current bindings target 2D entity properties and formula plots. Constructors
+that perform expensive build-time work—such as re-simulating a full physics
+system or changing the number of generated objects—remain build-time choices;
+represent those journeys with a formula/readout today rather than implying that
+Manic silently recomputed the model.</p>
+<p>Next: <a href="#shapes--the-cast">Meet the shapes that make up the persistent world →</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="shapes--the-cast"><a class="header" href="#shapes--the-cast">Shapes — the cast</a></h1>
 <p>Everything on screen is an <strong>entity</strong> with a <strong>name</strong> (its first argument). You
@@ -504,6 +906,13 @@ colors automatically follow the selected template:</p>
 </code></pre>
 <p>Leave a term uncolored to use the template foreground. A single-color equation
 can still be styled as one entity with <code>color</code> and animated with <code>recolor</code>.</p>
+<p>For a derivation, keep that same equation id and animate only the change:</p>
+<pre><code class="language-manic">rewrite(step, `\mathrm{slope}=\frac{\mathrm{rise}}{\mathrm{run}}`, 0.9, smooth);
+rewrite(step, `\mathrm{slope}=\frac{x}{1}`, 0.9, smooth);
+</code></pre>
+<p>Manic matches the rendered LaTeX parts; it does not perform algebra. This makes
+the verb generic across algebra, calculus, physics, sums, fractions, radicals,
+and creator scenes while keeping each settled formula exact.</p>
 <pre><code class="language-manic">// the six primitive shapes, drawn on together.
 title("Shapes");
 canvas("16:9");
@@ -537,6 +946,7 @@ begins. They take the entity name first, then a value:</p>
 <tbody>
 <tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
 <tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
+<tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path (defaults 16/10 px)</td><td><code>dashed(curve, 18, 10);</code></td></tr>
 <tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
 <tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
 <tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
@@ -634,10 +1044,31 @@ duration you give it, so run it in <code>par</code> with the story it should acc
 <code>flow</code> sends a temporary luminous pulse over any line, arrow, curve, spline,
 arc, or tracked <code>link</code>; it is useful for a signal, energy, traffic, or simply
 directing attention.</p>
+<p>For a persistent comparison style, use <code>dashed(id, [dash], [gap])</code> before the
+timeline. It is a base Manic modifier—not a calculus feature—so the same
+16/10-pixel default pattern works on a plot, guide line, link, arrow, curve,
+spline, coil, or plain arc. Increase both values for a calmer large-format dash;
+keep the gap smaller than the dash when the curve must remain easy to follow.</p>
 <h2 id="content--colour"><a class="header" href="#content--colour">Content &amp; colour</a></h2>
 <pre><code class="language-manic">say(cap, "next step");     // -&gt; crossfade a text entity to new words
 recolor(sun, lime, 0.5);   // -&gt; permanently animate the colour
 </code></pre>
+<h3 id="rewrite-an-equation-without-rebuilding-it"><a class="header" href="#rewrite-an-equation-without-rebuilding-it">Rewrite an equation without rebuilding it</a></h3>
+<p>Declare one real LaTeX equation, then supply each mathematically correct state:</p>
+<pre><code class="language-manic">equation(work, (cx, 300), `x^2+2x=3`, 54);
+rewrite(work, `x^2+2x+1=4`, 0.9, smooth);
+rewrite(work, `(x+1)^2=4`, 0.9, smooth);
+rewrite(work, `x=-1\pm2`, 0.9, smooth);
+</code></pre>
+<p><code>rewrite</code> is visual, not a computer-algebra system: it never invents or verifies
+a step. Equal RaTeX parts retain identity and travel smoothly; only additions and
+removals fade locally. Repeated symbols are paired deterministically, semantic
+<code>\textcolor</code> roles follow the template, and the final frame is always the exact
+target LaTeX. Keep one <code>equation</code> id for the whole derivation, write readable
+steps, and use <code>wait</code> between them when the viewer needs time to absorb a result.</p>
+<p>For a plot or diagram that changes with the same step, place <code>rewrite</code> and the
+related motion in <code>par</code>. Existing equations are unaffected unless this verb is
+used.</p>
 <div class="watch">▶ Watch: text</div>
 
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/_MLrC93RqsU" title="Animated Text + Typewriter — manic" allowfullscreen loading="lazy"></iframe></div>
@@ -679,6 +1110,7 @@ turn “then, then, then” into “together” or “cascading”.</p>
 <tr><td><code>par { … }</code></td><td>all at the same instant</td><td>reveal a group at once</td></tr>
 <tr><td><code>seq { … }</code></td><td>one after another (explicit)</td><td>grouping inside a <code>par</code></td></tr>
 <tr><td><code>stagger(d) { … }</code></td><td>each one <code>d</code> seconds after the last</td><td>cascades / waves</td></tr>
+<tr><td><code>step("name") { … }</code></td><td>all at once, with a named exported start</td><td>change one reactive world across representations</td></tr>
 </tbody>
 </table>
 </div>
@@ -720,6 +1152,21 @@ mark("beat-3");         // a named timestamp for your editor
 </code></pre>
 <p><code>wait</code> is your friend for pacing — a beat of stillness after something lands
 reads far better than rushing to the next move.</p>
+<h2 id="named-reactive-steps"><a class="header" href="#named-reactive-steps">Named reactive steps</a></h2>
+<p>Use <code>step</code> when a beat represents the world’s <strong>next conceptual state</strong>, not
+just anonymous timing. Its children start together like <code>par</code>; its duration is
+the longest child; anything not mentioned remains exactly as it was. The unique
+name is written to <code>markers.json</code>, which makes the story seekable today and
+gives future format/export tools semantic chapter boundaries.</p>
+<pre><code class="language-manic">step("explain") {
+  rewrite(work, `f'(x)=2x`, 0.9, smooth);
+  to(tangent, x, 2.5, 2.0, smooth);
+  to(slopeValue, x, 2.5, 2.0, smooth);
+  say(caption, "Every representation changes together.");
+}
+</code></pre>
+<p>Steps are top-level and names must be non-empty and unique. Put <code>seq { … }</code>
+inside a step when a small part needs ordered choreography.</p>
 <h2 id="generic-timing-v2--one-clock-for-any-scene"><a class="header" href="#generic-timing-v2--one-clock-for-any-scene">Generic Timing v2 — one clock for any scene</a></h2>
 <p>Use a generic timing controller when several parts of a scene must share one
 exact schedule. It is format-neutral: the same controller can coordinate a
@@ -881,6 +1328,7 @@ clock:</p>
 title("Generic Timing v2 — Pendulum");
 canvas("16:9");
 template("mono");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
 size(head, 30); bold(head); color(head, fg); hidden(head);
@@ -922,7 +1370,7 @@ timed(showclock) {
   }
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/oihH-HyPOSI" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qM3LzG82fIE" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
 
 <p>Next: the palette, glow, and easings → <a href="#colour--style">Colour &amp; style</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -1095,11 +1543,14 @@ move(p, (900, 400), 0.8, smooth);   // usually what you want
 </code></pre>
 <h2 id="canvas--size"><a class="header" href="#canvas--size">Canvas &amp; size</a></h2>
 <p><code>canvas(...)</code> sets the frame. Give it a preset or explicit pixels:</p>
-<pre><code class="language-manic">canvas("16:9");        // 1280x720  (also: 1080p, 4k, square, portrait/9:16, 4:3)
+<pre><code class="language-manic">canvas("16:9");        // 1280x720  (also: 4:5, square, portrait/9:16, 4:3, 1080p, 4k)
 canvas(1280, 720);     // explicit
 </code></pre>
 <p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
 vertical / social clips.</p>
+<p>Use <code>--canvas portrait|4:5|square|16:9|WIDTHxHEIGHT</code> to reframe one responsive
+source without changing its <code>canvas(...)</code> line. The override is applied before
+<code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>, and build-time layout branches are evaluated.</p>
 <h2 id="templates--the-whole-look"><a class="header" href="#templates--the-whole-look">Templates — the whole look</a></h2>
 <p>For the complete selection guide, CLI override rules, mono tips and a runnable
 black-and-white example, see <a href="#templates--choose-the-whole-visual-system">Templates — choose the whole visual system</a>.</p>
@@ -1582,18 +2033,18 @@ shape (with a message that names the 3D replacement):</p>
 <p>Every animation in <code>examples/</code>, by topic — <strong>the code and the clip for each</strong>. Run any of them with <code>manic examples/&lt;name&gt;.manic</code>. Project: <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>.</p>
 <ul>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
-<li><a href="#graphs">Graphs</a> — 4 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 19 examples</li>
+<li><a href="#graphs">Graphs</a> — 5 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 21 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 12 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
 <li><a href="#physics--simulations">Physics — simulations</a> — 53 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
-<li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 3 examples</li>
+<li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 6 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
 <li><a href="#generative--recursive">Generative &amp; recursive</a> — 10 examples</li>
-<li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 14 examples</li>
+<li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 16 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
 <li><a href="#3d-scenes">3D scenes</a> — 12 examples</li>
 </ul>
@@ -2067,6 +2518,447 @@ wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/UOjIHugt4o8" title="Dijkstra's Algorithm, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="cubic-graphs"><a class="header" href="#cubic-graphs">cubic-graphs</a></h2>
+<p>A hand-composed graph-theory plate: five 3-connected simple cubic graphs
+(including the 6-spoke wheel from a <code>for</code> loop) drawn on in sequence, with
+LaTeX node labels ($u_i$, $v_i$) and typeset names $G_1..G_5$ — a paper-style
+figure straight from a theorem statement.</p>
+<pre><code class="language-manic">title("Five Exceptional Cubic Graphs");
+canvas("16:9");
+template("paper");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+text(titleA, (cx, 34), "Five 3-connected simple cubic graphs");
+text(titleB, (cx, 68), "cycle-cover exceptions: at most $\lceil n/6\rceil$ cycles is not guaranteed");
+display(titleA);
+bold(titleA);
+size(titleA, 30);
+size(titleB, 22);
+color(titleB, dim);
+hidden(titleA);
+hidden(titleB);
+
+line(frameTop, (42, 104), (w - 42, 104));
+line(frameBottom, (42, h - 26), (w - 42, h - 26));
+line(frameLeft, (42, 104), (42, h - 26));
+line(frameRight, (w - 42, 104), (w - 42, h - 26));
+tag(frameTop, frame);
+tag(frameBottom, frame);
+tag(frameLeft, frame);
+tag(frameRight, frame);
+stroke(frame, 3);
+color(frame, dim);
+opacity(frame, 0.45);
+untraced(frame);
+
+dot(g1u1, (180, 310), 5);
+dot(g1u2, (320, 310), 5);
+dot(g1u3, (370, 210), 5);
+dot(g1u4, (250, 125), 5);
+dot(g1u5, (130, 210), 5);
+dot(g1v1, (220, 265), 5);
+dot(g1v2, (280, 265), 5);
+dot(g1v3, (305, 225), 5);
+dot(g1v4, (250, 185), 5);
+dot(g1v5, (195, 225), 5);
+tag(g1u1, g1Nodes);
+tag(g1u2, g1Nodes);
+tag(g1u3, g1Nodes);
+tag(g1u4, g1Nodes);
+tag(g1u5, g1Nodes);
+tag(g1v1, g1Nodes);
+tag(g1v2, g1Nodes);
+tag(g1v3, g1Nodes);
+tag(g1v4, g1Nodes);
+tag(g1v5, g1Nodes);
+
+line(g1e1, (180, 310), (320, 310));
+line(g1e2, (320, 310), (370, 210));
+line(g1e3, (370, 210), (250, 125));
+line(g1e4, (250, 125), (130, 210));
+line(g1e5, (130, 210), (180, 310));
+line(g1e6, (220, 265), (280, 265));
+line(g1e7, (280, 265), (305, 225));
+line(g1e8, (305, 225), (250, 185));
+line(g1e9, (250, 185), (195, 225));
+line(g1e10, (195, 225), (220, 265));
+line(g1e11, (180, 310), (220, 265));
+line(g1e12, (320, 310), (280, 265));
+line(g1e13, (370, 210), (305, 225));
+line(g1e14, (250, 125), (250, 185));
+line(g1e15, (130, 210), (195, 225));
+tag(g1e1, g1Edges);
+tag(g1e2, g1Edges);
+tag(g1e3, g1Edges);
+tag(g1e4, g1Edges);
+tag(g1e5, g1Edges);
+tag(g1e6, g1Edges);
+tag(g1e7, g1Edges);
+tag(g1e8, g1Edges);
+tag(g1e9, g1Edges);
+tag(g1e10, g1Edges);
+tag(g1e11, g1Edges);
+tag(g1e12, g1Edges);
+tag(g1e13, g1Edges);
+tag(g1e14, g1Edges);
+tag(g1e15, g1Edges);
+
+text(g1lu1, (165, 336), "$u_1$");
+text(g1lu2, (333, 336), "$u_2$");
+text(g1lu3, (393, 214), "$u_3$");
+text(g1lu4, (270, 124), "$u_4$");
+text(g1lu5, (105, 215), "$u_5$");
+text(g1lv1, (198, 262), "$v_1$");
+text(g1lv2, (301, 262), "$v_2$");
+text(g1lv3, (326, 228), "$v_3$");
+text(g1lv4, (272, 181), "$v_4$");
+text(g1lv5, (174, 227), "$v_5$");
+tag(g1lu1, nodeLabels);
+tag(g1lu2, nodeLabels);
+tag(g1lu3, nodeLabels);
+tag(g1lu4, nodeLabels);
+tag(g1lu5, nodeLabels);
+tag(g1lv1, nodeLabels);
+tag(g1lv2, nodeLabels);
+tag(g1lv3, nodeLabels);
+tag(g1lv4, nodeLabels);
+tag(g1lv5, nodeLabels);
+equation(g1Name, (250, 366), "G_1", 30);
+tag(g1Name, graphNames);
+
+dot(g2u1, (1030, 120), 5);
+dot(g2u2, (1160, 210), 5);
+dot(g2u3, (1120, 320), 5);
+dot(g2u4, (940, 320), 5);
+dot(g2u5, (900, 210), 5);
+dot(g2u6, (1030, 185), 5);
+dot(g2u7, (1095, 225), 5);
+dot(g2u8, (1075, 275), 5);
+dot(g2u9, (985, 275), 5);
+dot(g2u10, (965, 225), 5);
+tag(g2u1, g2Nodes);
+tag(g2u2, g2Nodes);
+tag(g2u3, g2Nodes);
+tag(g2u4, g2Nodes);
+tag(g2u5, g2Nodes);
+tag(g2u6, g2Nodes);
+tag(g2u7, g2Nodes);
+tag(g2u8, g2Nodes);
+tag(g2u9, g2Nodes);
+tag(g2u10, g2Nodes);
+
+line(g2e1, (1030, 120), (1160, 210));
+line(g2e2, (1160, 210), (1120, 320));
+line(g2e3, (1120, 320), (940, 320));
+line(g2e4, (940, 320), (900, 210));
+line(g2e5, (900, 210), (1030, 120));
+line(g2e6, (1030, 120), (1030, 185));
+line(g2e7, (1160, 210), (1095, 225));
+line(g2e8, (1120, 320), (1075, 275));
+line(g2e9, (940, 320), (985, 275));
+line(g2e10, (900, 210), (965, 225));
+line(g2e11, (1030, 185), (1075, 275));
+line(g2e12, (1075, 275), (965, 225));
+line(g2e13, (965, 225), (1095, 225));
+line(g2e14, (1095, 225), (985, 275));
+line(g2e15, (985, 275), (1030, 185));
+tag(g2e1, g2Edges);
+tag(g2e2, g2Edges);
+tag(g2e3, g2Edges);
+tag(g2e4, g2Edges);
+tag(g2e5, g2Edges);
+tag(g2e6, g2Edges);
+tag(g2e7, g2Edges);
+tag(g2e8, g2Edges);
+tag(g2e9, g2Edges);
+tag(g2e10, g2Edges);
+tag(g2e11, g2Edges);
+tag(g2e12, g2Edges);
+tag(g2e13, g2Edges);
+tag(g2e14, g2Edges);
+tag(g2e15, g2Edges);
+
+text(g2lu1, (1010, 114), "$u_1$");
+text(g2lu2, (1184, 214), "$u_2$");
+text(g2lu3, (1138, 344), "$u_3$");
+text(g2lu4, (918, 344), "$u_4$");
+text(g2lu5, (874, 214), "$u_5$");
+text(g2lu6, (1051, 181), "$u_6$");
+text(g2lu7, (1122, 224), "$u_7$");
+text(g2lu8, (1095, 280), "$u_8$");
+text(g2lu9, (959, 280), "$u_9$");
+text(g2lu10, (934, 224), "$u_{10}$");
+tag(g2lu1, nodeLabels);
+tag(g2lu2, nodeLabels);
+tag(g2lu3, nodeLabels);
+tag(g2lu4, nodeLabels);
+tag(g2lu5, nodeLabels);
+tag(g2lu6, nodeLabels);
+tag(g2lu7, nodeLabels);
+tag(g2lu8, nodeLabels);
+tag(g2lu9, nodeLabels);
+tag(g2lu10, nodeLabels);
+equation(g2Name, (1030, 366), "G_2", 30);
+tag(g2Name, graphNames);
+
+let g3cx = cx;
+let g3cy = 398;
+let g3r = 105;
+dot(g3c, (g3cx, g3cy), 5);
+tag(g3c, g3Nodes);
+for i in 0..12 {
+line(g3rim{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), (g3cx + g3rcos(-pi/2 + tau(i + 1)/12), g3cy + g3rsin(-pi/2 + tau(i + 1)/12)));
+line(g3spoke{i}, (g3cx, g3cy), (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)));
+dot(g3u{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), 5);
+tag(g3rim{i}, g3Edges);
+tag(g3spoke{i}, g3Edges);
+tag(g3u{i}, g3Nodes);
+}
+text(g3l1, (640, 264), "$u_1$");
+text(g3l2, (710, 284), "$u_2$");
+text(g3l3, (762, 334), "$u_3$");
+text(g3l4, (778, 402), "$u_4$");
+text(g3l5, (762, 470), "$u_5$");
+text(g3l6, (710, 520), "$u_6$");
+text(g3l7, (640, 540), "$u_7$");
+text(g3l8, (570, 520), "$u_8$");
+text(g3l9, (518, 470), "$u_9$");
+text(g3l10, (500, 402), "$u_{10}$");
+text(g3l11, (518, 334), "$u_{11}$");
+text(g3l12, (570, 284), "$u_{12}$");
+tag(g3l1, nodeLabels);
+tag(g3l2, nodeLabels);
+tag(g3l3, nodeLabels);
+tag(g3l4, nodeLabels);
+tag(g3l5, nodeLabels);
+tag(g3l6, nodeLabels);
+tag(g3l7, nodeLabels);
+tag(g3l8, nodeLabels);
+tag(g3l9, nodeLabels);
+tag(g3l10, nodeLabels);
+tag(g3l11, nodeLabels);
+tag(g3l12, nodeLabels);
+equation(g3Name, (640, 612), "G_3", 30);
+tag(g3Name, graphNames);
+
+dot(g4u1, (210, 625), 5);
+dot(g4u2, (350, 625), 5);
+dot(g4u3, (410, 510), 5);
+dot(g4u4, (290, 435), 5);
+dot(g4v1, (255, 560), 5);
+dot(g4v2, (320, 560), 5);
+dot(g4v3, (340, 510), 5);
+dot(g4v4, (290, 485), 5);
+dot(g4v5, (220, 520), 5);
+dot(g4w1, (170, 500), 5);
+dot(g4w2, (145, 450), 5);
+dot(g4w3, (95, 565), 5);
+tag(g4u1, g4Nodes);
+tag(g4u2, g4Nodes);
+tag(g4u3, g4Nodes);
+tag(g4u4, g4Nodes);
+tag(g4v1, g4Nodes);
+tag(g4v2, g4Nodes);
+tag(g4v3, g4Nodes);
+tag(g4v4, g4Nodes);
+tag(g4v5, g4Nodes);
+tag(g4w1, g4Nodes);
+tag(g4w2, g4Nodes);
+tag(g4w3, g4Nodes);
+
+line(g4e1, (95, 565), (210, 625));
+line(g4e2, (210, 625), (350, 625));
+line(g4e3, (350, 625), (410, 510));
+line(g4e4, (410, 510), (290, 435));
+line(g4e5, (290, 435), (145, 450));
+line(g4e6, (145, 450), (95, 565));
+line(g4e7, (145, 450), (170, 500));
+line(g4e8, (95, 565), (170, 500));
+line(g4e9, (170, 500), (220, 520));
+line(g4e10, (255, 560), (320, 560));
+line(g4e11, (320, 560), (340, 510));
+line(g4e12, (340, 510), (290, 485));
+line(g4e13, (290, 485), (220, 520));
+line(g4e14, (220, 520), (255, 560));
+line(g4e15, (210, 625), (255, 560));
+line(g4e16, (350, 625), (320, 560));
+line(g4e17, (410, 510), (340, 510));
+line(g4e18, (290, 435), (290, 485));
+tag(g4e1, g4Edges);
+tag(g4e2, g4Edges);
+tag(g4e3, g4Edges);
+tag(g4e4, g4Edges);
+tag(g4e5, g4Edges);
+tag(g4e6, g4Edges);
+tag(g4e7, g4Edges);
+tag(g4e8, g4Edges);
+tag(g4e9, g4Edges);
+tag(g4e10, g4Edges);
+tag(g4e11, g4Edges);
+tag(g4e12, g4Edges);
+tag(g4e13, g4Edges);
+tag(g4e14, g4Edges);
+tag(g4e15, g4Edges);
+tag(g4e16, g4Edges);
+tag(g4e17, g4Edges);
+tag(g4e18, g4Edges);
+
+text(g4lu1, (190, 650), "$u_1$");
+text(g4lu2, (365, 650), "$u_2$");
+text(g4lu3, (435, 514), "$u_3$");
+text(g4lu4, (294, 414), "$u_4$");
+text(g4lv1, (255, 540), "$v_1$");
+text(g4lv2, (335, 544), "$v_2$");
+text(g4lv3, (360, 505), "$v_3$");
+text(g4lv4, (312, 485), "$v_4$");
+text(g4lv5, (224, 500), "$v_5$");
+text(g4lw1, (176, 480), "$w_1$");
+text(g4lw2, (123, 444), "$w_2$");
+text(g4lw3, (72, 568), "$w_3$");
+tag(g4lu1, nodeLabels);
+tag(g4lu2, nodeLabels);
+tag(g4lu3, nodeLabels);
+tag(g4lu4, nodeLabels);
+tag(g4lv1, nodeLabels);
+tag(g4lv2, nodeLabels);
+tag(g4lv3, nodeLabels);
+tag(g4lv4, nodeLabels);
+tag(g4lv5, nodeLabels);
+tag(g4lw1, nodeLabels);
+tag(g4lw2, nodeLabels);
+tag(g4lw3, nodeLabels);
+equation(g4Name, (275, 690), "G_4", 30);
+tag(g4Name, graphNames);
+
+dot(g5a, (1020, 440), 5);
+dot(g5b, (1160, 470), 5);
+dot(g5c, (1135, 535), 5);
+dot(g5d, (1195, 575), 5);
+dot(g5e, (1080, 635), 5);
+dot(g5f, (915, 625), 5);
+dot(g5g, (880, 525), 5);
+dot(g5h, (1020, 505), 5);
+dot(g5i, (960, 535), 5);
+dot(g5j, (1080, 535), 5);
+dot(g5k, (980, 590), 5);
+dot(g5l, (1060, 590), 5);
+tag(g5a, g5Nodes);
+tag(g5b, g5Nodes);
+tag(g5c, g5Nodes);
+tag(g5d, g5Nodes);
+tag(g5e, g5Nodes);
+tag(g5f, g5Nodes);
+tag(g5g, g5Nodes);
+tag(g5h, g5Nodes);
+tag(g5i, g5Nodes);
+tag(g5j, g5Nodes);
+tag(g5k, g5Nodes);
+tag(g5l, g5Nodes);
+
+line(g5e1, (1020, 440), (1160, 470));
+line(g5e2, (1160, 470), (1195, 575));
+line(g5e3, (1195, 575), (1080, 635));
+line(g5e4, (1080, 635), (915, 625));
+line(g5e5, (915, 625), (880, 525));
+line(g5e6, (880, 525), (1020, 440));
+line(g5e7, (1160, 470), (1135, 535));
+line(g5e8, (1135, 535), (1195, 575));
+line(g5e9, (1135, 535), (1080, 535));
+line(g5e10, (1020, 440), (1020, 505));
+line(g5e11, (880, 525), (960, 535));
+line(g5e12, (915, 625), (980, 590));
+line(g5e13, (1080, 635), (1060, 590));
+line(g5e14, (1020, 505), (980, 590));
+line(g5e15, (1020, 505), (1060, 590));
+line(g5e16, (960, 535), (1080, 535));
+line(g5e17, (960, 535), (1060, 590));
+line(g5e18, (1080, 535), (980, 590));
+tag(g5e1, g5Edges);
+tag(g5e2, g5Edges);
+tag(g5e3, g5Edges);
+tag(g5e4, g5Edges);
+tag(g5e5, g5Edges);
+tag(g5e6, g5Edges);
+tag(g5e7, g5Edges);
+tag(g5e8, g5Edges);
+tag(g5e9, g5Edges);
+tag(g5e10, g5Edges);
+tag(g5e11, g5Edges);
+tag(g5e12, g5Edges);
+tag(g5e13, g5Edges);
+tag(g5e14, g5Edges);
+tag(g5e15, g5Edges);
+tag(g5e16, g5Edges);
+tag(g5e17, g5Edges);
+tag(g5e18, g5Edges);
+
+equation(g5Name, (1020, 690), "G_5", 30);
+tag(g5Name, graphNames);
+
+tag(g1Edges, allEdges);
+tag(g2Edges, allEdges);
+tag(g3Edges, allEdges);
+tag(g4Edges, allEdges);
+tag(g5Edges, allEdges);
+tag(g1Nodes, allNodes);
+tag(g2Nodes, allNodes);
+tag(g3Nodes, allNodes);
+tag(g4Nodes, allNodes);
+tag(g5Nodes, allNodes);
+
+stroke(allEdges, 3);
+color(allEdges, fg);
+untraced(allEdges);
+color(allNodes, fg);
+hidden(allNodes);
+size(nodeLabels, 19);
+color(nodeLabels, dim);
+hidden(nodeLabels);
+hidden(graphNames);
+
+show(titleA, 0.5);
+show(titleB, 0.5);
+draw(frame, 0.7);
+
+par {
+seq {
+draw(g1Edges, 1.0);
+show(g1Nodes, 0.25);
+show(g1Name, 0.25);
+}
+seq {
+wait(0.25);
+draw(g2Edges, 1.0);
+show(g2Nodes, 0.25);
+show(g2Name, 0.25);
+}
+seq {
+wait(0.5);
+draw(g3Edges, 1.2);
+show(g3Nodes, 0.25);
+show(g3Name, 0.25);
+}
+seq {
+wait(0.75);
+draw(g4Edges, 1.1);
+show(g4Nodes, 0.25);
+show(g4Name, 0.25);
+}
+seq {
+wait(1.0);
+draw(g5Edges, 1.0);
+show(g5Nodes, 0.25);
+show(g5Name, 0.25);
+}
+}
+
+show(nodeLabels, 0.7);
+recolor(graphNames, gold, 0.5);
+pulse(graphNames, 0.8);
+wait(1.0);
+</code></pre>
+<div class="manic-video" data-video="ex-cubic-graphs"></div>
+
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="calculus--functions"><a class="header" href="#calculus--functions">Calculus &amp; functions</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
@@ -2205,6 +3097,303 @@ fade(capi, 0.4);
 show(endcap, 0.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/UrOdi_iLt_k" title="Calculus in One Scene: the Derivative & the Integral — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reactive-integral"><a class="header" href="#reactive-integral">reactive-integral</a></h2>
+<p>The reactive-math gold example: integration by parts stays one continuous equation,
+then a plot verifies that the antiderivative’s slope is the integrand and <code>+C</code> is a
+family of vertical translations. Uses <code>rewrite</code>, not hand-positioned formula pieces.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-integral.manic — one calculation, one continuous visual world
+// ----------------------------------------------------------------------------
+// Integration by parts uses one structured equation. `rewrite` keeps unchanged
+// RaTeX parts alive while only the mathematical difference moves or enters.
+// The graph then verifies the result: the slope of F is the height of f, and
+// +C becomes a visible family of vertical translations.
+// ============================================================================
+
+title("A Reactive Integral");
+canvas("16:9");
+template("plain");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+// Shared colour roles follow the same mathematical objects through every act.
+// x / u is magenta; cos, sin and their antiderivative relation are cyan.
+text(kicker, (285, 38), "ONE INTEGRAL · ONE CONTINUOUS STORY");
+size(kicker, 18); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (430, 72), "Watch only the mathematics that changes");
+size(headline, 28); color(headline, fg); bold(headline); hidden(headline);
+
+// ---------------------------------------------------------------------------
+// ONE PERSISTENT EQUATION
+// ---------------------------------------------------------------------------
+
+equation(
+  work,
+  (cx, 145),
+  `\int \textcolor{magenta}{x}\,\textcolor{cyan}{\cos(x)}\,dx`,
+  46
+);
+hidden(work);
+
+// The by-parts roles remain visible while the expression changes above them.
+equation(uChoice, (330, 225), `u=x`, 28); color(uChoice, magenta); hidden(uChoice);
+equation(dvChoice, (525, 225), `dv=\cos(x)\,dx`, 28); color(dvChoice, cyan); hidden(dvChoice);
+equation(duChoice, (760, 225), `du=dx`, 28); color(duChoice, magenta); hidden(duChoice);
+equation(vChoice, (950, 225), `v=\sin(x)`, 28); color(vChoice, cyan); hidden(vChoice);
+
+text(method, (cx, 278), "INTEGRATION BY PARTS");
+size(method, 16); color(method, dim); bold(method); hidden(method);
+
+// ---------------------------------------------------------------------------
+// ONE GRAPH, ASKED THREE CONNECTED QUESTIONS
+// ---------------------------------------------------------------------------
+
+let ox = cx;
+let oy = 515;
+let sx = 108;
+let sy = 28;
+
+axes(ax, (ox, oy), 550, 165, 1);
+color(ax, dim); opacity(ax, 0.50); untraced(ax);
+
+// Integrand and one representative antiderivative (C=0).
+plot(f, (ox, oy), sx, sy, "x*cos(x)", (-5, 5));
+color(f, cyan); stroke(f, 5); glow(f, 0.8); untraced(f);
+
+plot(bigF, (ox, oy), sx, sy, "x*sin(x)+cos(x)", (-5, 5));
+color(bigF, lime); stroke(bigF, 5); dashed(bigF, 18, 11);
+glow(bigF, 0.8); untraced(bigF);
+
+// Numerical derivative of F: drawing it lands directly on f.
+deriv(dF, bigF);
+color(dF, gold); stroke(dF, 3); glow(dF, 0.5); untraced(dF);
+
+// A moving tangent makes “F' = f” a local statement at every x.
+tangent(tan, bigF, -3.8, 180); color(tan, gold); hidden(tan);
+slope(slopeValue, bigF, -3.8, (18, -24)); color(slopeValue, gold); hidden(slopeValue);
+
+equation(fLabel, (250, 338), `f(x)=x\cos(x)`, 28); color(fLabel, cyan); hidden(fLabel);
+equation(FLabel, (1010, 338), `F(x)=x\sin(x)+\cos(x)`, 28); color(FLabel, lime); hidden(FLabel);
+equation(proofLabel, (cx, 280), `F'(x)=f(x)=x\cos(x)`, 34); color(proofLabel, gold); hidden(proofLabel);
+
+// +C does not change the derivative: it translates the same curve vertically.
+plot(Fup, (ox, oy), sx, sy, "x*sin(x)+cos(x)+1.5", (-5, 5));
+plot(Fdown, (ox, oy), sx, sy, "x*sin(x)+cos(x)-1.5", (-5, 5));
+color(Fup, magenta); color(Fdown, magenta);
+stroke(Fup, 3); stroke(Fdown, 3); opacity(Fup, 0.55); opacity(Fdown, 0.55);
+dashed(Fup, 14, 9); dashed(Fdown, 14, 9);
+untraced(Fup); untraced(Fdown);
+
+equation(familyLabel, (cx, 280), `F(x)+C\quad\text{changes height, not slope}`, 32);
+color(familyLabel, magenta); hidden(familyLabel);
+
+text(caption, (cx, 690), "");
+size(caption, 19); color(caption, dim); bold(caption);
+
+// Axes and curves are `untraced`, so their draw progress starts at zero without
+// also zeroing opacity. That lets `draw(...)` reveal their geometry later.
+
+// ---------------------------------------------------------------------------
+// TIMELINE
+// ---------------------------------------------------------------------------
+
+show(kicker, 0.45);
+show(headline, 0.55);
+say(caption, "Start with the question. Keep the stage — change only its state.");
+show(work, 0.65);
+wait(1.60);
+
+// Choose u and dv by reusing the same semantic colours.
+show(method, 0.35);
+say(caption, "Choose the two roles. Colour preserves their identity.");
+par { show(uChoice, 0.50); show(dvChoice, 0.65); }
+wait(1.20);
+par { show(duChoice, 0.50); show(vChoice, 0.50); }
+wait(1.50);
+
+// Build x sin(x) - integral sin(x) dx. Reusable glyphs travel to their new
+// jobs while the obsolete cosine is the only original factor that leaves.
+say(caption, "Apply integration by parts: persistent pieces move; new pieces arrive.");
+rewrite(
+  work,
+  `\textcolor{magenta}{x}\textcolor{cyan}{\sin(x)}-\int\textcolor{cyan}{\sin(x)}\,dx`,
+  1.05,
+  smooth
+);
+wait(2.00);
+
+// Only the remaining integral changes. x sin(x) stays untouched.
+say(caption, "Resolve the remaining integral. The stable product never blinks.");
+rewrite(
+  work,
+  `\textcolor{magenta}{x}\textcolor{cyan}{\sin(x)}+\textcolor{cyan}{\cos(x)}+\textcolor{gold}{C}`,
+  1.00,
+  smooth
+);
+wait(2.00);
+
+// Move attention from symbolic manipulation into the same idea as geometry.
+say(caption, "Now verify the answer visually — without leaving the scene.");
+par {
+  fade(method, 0.40);
+  fade(uChoice, 0.40); fade(dvChoice, 0.40);
+  fade(duChoice, 0.40); fade(vChoice, 0.40);
+  draw(ax, 0.85);
+}
+draw(f, 1.80);
+show(fLabel, 0.45);
+wait(1.00);
+
+draw(bigF, 1.80);
+show(FLabel, 0.45);
+wait(1.00);
+
+// The tangent and its numeric slope glide continuously across F.
+say(caption, "At every x, the slope of the green curve equals the blue height.");
+par { show(tan, 0.45); show(slopeValue, 0.45); }
+par {
+  to(tan, x, 3.8, 4.80, smooth);
+  to(slopeValue, x, 3.8, 4.80, smooth);
+}
+wait(0.60);
+
+// The derivative trace lands directly over the original integrand.
+show(proofLabel, 0.50);
+draw(dF, 2.20);
+flash(f, cyan);
+wait(1.40);
+
+// Finish with the geometric meaning of the integration constant.
+say(caption, "+C creates a family of answers — same shape, same slope.");
+par {
+  fade(tan, 0.45); fade(slopeValue, 0.45); fade(dF, 0.45);
+  fade(proofLabel, 0.45); fade(fLabel, 0.45); fade(FLabel, 0.45);
+  show(familyLabel, 0.55);
+  pulse(work, 0.70);
+}
+par { draw(Fup, 1.50); draw(Fdown, 1.50); }
+wait(2.80);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/MRq5QHnHQxI" title="Integration by Parts as One Continuous Equation — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reactive-world"><a class="header" href="#reactive-world">reactive-world</a></h2>
+<p>The foundation for creator-reactive stories: five named <code>step</code> blocks keep one curve,
+equation, tangent, live slope, derivative plot and caption synchronized. Each step is
+also exported as a marker for seeking and future multi-format publishing.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-world.manic — one world, named state transitions
+// ----------------------------------------------------------------------------
+// Each `step` changes several existing representations together. The equation,
+// tangent, live slope, derivative curve, caption and camera share one continuous
+// stage; anything a step does not mention simply persists.
+// ============================================================================
+
+title("Reactive World — The Derivative Lives on the Curve");
+canvas("9:16");
+template("terminal");
+watermark(manicMark, (865, 165), "Made With Manic");
+
+creator(me, "@anish2good name=Calculus_World tagline=One_idea_many_views yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=See_the_change safe=reels");
+socials(me);
+
+text(kicker, (540, 130), "ONE WORLD · FIVE NAMED STEPS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 215), "The derivative lives on the curve");
+size(headline, 39); color(headline, fg); bold(headline); hidden(headline);
+
+rect(stage, (540, 855), 930, 1050);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72);
+
+equation(work, (540, 390), `f(x)=0.35x^2`, 51);
+color(work, cyan); hidden(work);
+
+let ox = 540;
+let oy = 1050;
+let sx = 115;
+let sy = 62;
+
+axes(ax, (ox, oy), 410, 420, 1);
+color(ax, dim); opacity(ax, 0.55); untraced(ax);
+
+plot(f, (ox, oy), sx, sy, "0.35*x*x", (-3.5, 3.5));
+color(f, cyan); stroke(f, 6); glow(f, 0.8); untraced(f);
+
+deriv(df, f);
+color(df, magenta); stroke(df, 5); dashed(df, 18, 11); untraced(df);
+
+tangent(tan, f, -2.8, 235);
+color(tan, gold); stroke(tan, 4); hidden(tan);
+
+slope(rate, f, -2.8, (24, -30));
+color(rate, gold); hidden(rate);
+
+dot(vertex, (ox, oy), 10);
+color(vertex, lime); glow(vertex, 1.8); hidden(vertex);
+
+equation(curveLabel, (790, 650), `f(x)`, 31);
+color(curveLabel, cyan); hidden(curveLabel);
+
+equation(derivLabel, (790, 1320), `f'(x)`, 31);
+color(derivLabel, magenta); hidden(derivLabel);
+
+text(caption, (540, 1450), "Start with one curve and one moving question: how steep is it?");
+size(caption, 26); color(caption, dim); wrap(caption, 820); hidden(caption);
+
+// ---------------------------------------------------------------------------
+// NAMED REACTIVE STEPS
+// ---------------------------------------------------------------------------
+
+step("question") {
+  show(kicker, 0.40);
+  show(headline, 0.50);
+  show(work, 0.55);
+  draw(ax, 0.85);
+  draw(f, 1.40);
+  show(curveLabel, 0.45);
+  show(caption, 0.45);
+}
+wait(0.75);
+
+step("measure-slope") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  show(tan, 0.45);
+  show(rate, 0.45);
+  to(tan, x, 2.8, 3.20, smooth);
+  to(rate, x, 2.8, 3.20, smooth);
+  say(caption, "Move the point: the tangent and its slope update together.", 0.40);
+}
+wait(0.60);
+
+step("find-the-flat-point") {
+  rewrite(work, `f'(0)=\textcolor{lime}{0}`, 0.85, smooth);
+  to(tan, x, 0, 1.80, smooth);
+  to(rate, x, 0, 1.80, smooth);
+  show(vertex, 0.40);
+  say(caption, "At the vertex the tangent becomes flat, so the derivative is zero.", 0.40);
+}
+wait(0.65);
+
+step("see-the-derivative") {
+  rewrite(work, `f'(x)=\textcolor{magenta}{0.70x}`, 0.90, smooth);
+  fade(tan, 0.40);
+  fade(rate, 0.40);
+  draw(df, 1.70);
+  show(derivLabel, 0.45);
+  say(caption, "Collect every local slope and a second curve appears: the derivative.", 0.40);
+}
+wait(0.70);
+
+step("takeaway") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(f, 0.70);
+  pulse(df, 0.70);
+  say(caption, "One idea, synchronized across symbols, geometry and motion.", 0.40);
+}
+wait(1.80);
+</code></pre>
+<div class="manic-video" data-video="ex-reactive-world"></div>
 
 <h2 id="sine_wave"><a class="header" href="#sine_wave">sine_wave</a></h2>
 <p><code>axes</code> + <code>plot</code>, a curve traced on, then vectors.</p>
@@ -4822,6 +6011,7 @@ the intro, pendulum motion and finish independently from its native timer look.<
 title("Generic Timing v2 — Pendulum");
 canvas("16:9");
 template("mono");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
 size(head, 30); bold(head); color(head, fg); hidden(head);
@@ -4863,7 +6053,7 @@ timed(showclock) {
   }
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/oihH-HyPOSI" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qM3LzG82fIE" title="One Clock Controls an Entire Physics Scene — Timing v2" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="zeroth-law-thermodynamics"><a class="header" href="#zeroth-law-thermodynamics">zeroth-law-thermodynamics</a></h2>
 <p>The Zeroth Law told through three particle-filled bodies: thermal relations connect,
@@ -8050,6 +9240,472 @@ wait(1.4);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="transforms--morphing"><a class="header" href="#transforms--morphing">Transforms &amp; morphing</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="reactive-math-journey"><a class="header" href="#reactive-math-journey">reactive-math-journey</a></h2>
+<p>A playful vertical journey from <code>1+1</code> in Class 1 through fractions, algebra,
+geometry, calculus, linear algebra, probability and Fourier analysis to a PhD-level
+functional integral — then back to the curiosity that started it all.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-math-journey.manic — from Class 1 counting to PhD curiosity
+// ----------------------------------------------------------------------------
+// One equation id grows with the learner. `rewrite` keeps the journey continuous
+// while a progress marker climbs through school, university and research.
+// The ending returns to 1+1: advanced mathematics keeps the original curiosity.
+// ============================================================================
+
+title("From 1 + 1 to a PhD in Mathematics");
+canvas("9:16");
+template("shorts");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
+
+creator(me, "@anish2good name=Math_Journey tagline=Stay_curious yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Keep_learning safe=reels");
+socials(me);
+
+text(kicker, (540, 135), "THE JOURNEY OF MATHEMATICS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 225), "From 1 + 1 to a PhD");
+size(headline, 47); color(headline, fg); bold(headline); hidden(headline);
+
+text(subhead, (540, 292), "Same curiosity. Bigger questions.");
+size(subhead, 25); color(subhead, cyan); bold(subhead); hidden(subhead);
+
+// The learning stage leaves a slim left lane for the climbing progress marker.
+rect(stage, (610, 790), 820, 760);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.78);
+
+line(rail, (135, 1135), (135, 535));
+color(rail, cyan); stroke(rail, 3); dashed(rail, 13, 10); opacity(rail, 0.35);
+untraced(rail);
+
+for i in 0..13 {
+  dot(milestone{i}, (135, 1135 - i*50), 5);
+  color(milestone{i}, dim); opacity(milestone{i}, 0.55);
+}
+
+dot(learner, (135, 1135), 12);
+color(learner, cyan); glow(learner, 2.2); hidden(learner);
+
+text(level, (610, 495), "CLASS 1 · COUNTING");
+size(level, 25); color(level, cyan); bold(level); hidden(level);
+
+equation(work, (610, 775), `1+1=2`, 58);
+hidden(work);
+
+text(note, (610, 1035), "Two apples. One idea. A lifetime of questions begins.");
+size(note, 27); color(note, dim); wrap(note, 700); hidden(note);
+
+text(altitude, (540, 1265), "SCHOOL  →  UNIVERSITY  →  RESEARCH");
+size(altitude, 22); color(altitude, dim); bold(altitude); hidden(altitude);
+
+// ---------------------------------------------------------------------------
+// TIMELINE
+// ---------------------------------------------------------------------------
+
+par {
+  show(kicker, 0.40); show(headline, 0.55); show(subhead, 0.55);
+  show(level, 0.45); show(note, 0.45); show(altitude, 0.45);
+  draw(rail, 0.90); show(learner, 0.45);
+}
+show(work, 0.55);
+wait(0.85);
+
+// Class 2 — repeated addition discovers multiplication.
+par {
+  say(level, "CLASS 2 · MULTIPLICATION", 0.35);
+  say(note, "Addition gets impatient and invents a shortcut.", 0.35);
+  move(learner, (135, 1085), 0.45, smooth);
+}
+rewrite(work, `3+3+3+3=12`, 0.80, smooth);
+wait(0.35);
+rewrite(work, `4\times3=\textcolor{lime}{12}`, 0.80, smooth);
+wait(0.65);
+
+// Class 5 — pieces become numbers too.
+par {
+  say(level, "CLASS 5 · FRACTIONS", 0.35);
+  say(note, "Now even pieces of a whole can be added exactly.", 0.35);
+  move(learner, (135, 1035), 0.45, smooth);
+}
+rewrite(work, `\frac{1}{2}+\frac{1}{3}=\textcolor{lime}{\frac{5}{6}}`, 0.90, smooth);
+wait(0.70);
+
+// Class 7 — the mystery number gets a name.
+par {
+  say(level, "CLASS 7 · ALGEBRA", 0.35);
+  say(note, "A blank box becomes x — and arithmetic starts telling stories.", 0.35);
+  move(learner, (135, 985), 0.45, smooth);
+}
+rewrite(work, `x+3=7`, 0.80, smooth);
+wait(0.30);
+rewrite(work, `x=\textcolor{lime}{4}`, 0.75, smooth);
+wait(0.65);
+
+// Class 8 — shapes reveal equations hidden inside them.
+par {
+  say(level, "CLASS 8 · GEOMETRY", 0.35);
+  say(note, "A right triangle quietly connects three squares.", 0.35);
+  move(learner, (135, 935), 0.45, smooth);
+}
+rewrite(work, `a^2+b^2=\textcolor{cyan}{c^2}`, 0.85, smooth);
+wait(0.70);
+
+// Class 10 — one formula solves every quadratic.
+par {
+  say(level, "CLASS 10 · QUADRATICS", 0.35);
+  say(note, "The unknown now has two possible futures.", 0.35);
+  move(learner, (135, 885), 0.45, smooth);
+}
+rewrite(work, `ax^2+bx+c=0`, 0.85, smooth);
+wait(0.30);
+rewrite(work, `x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}`, 1.00, smooth);
+wait(0.75);
+
+// Class 11 — circles turn into identities.
+par {
+  say(level, "CLASS 11 · TRIGONOMETRY", 0.35);
+  say(note, "Sine and cosine travel differently, but always return to one.", 0.35);
+  move(learner, (135, 835), 0.45, smooth);
+}
+rewrite(work, `\sin^2\theta+\cos^2\theta=\textcolor{lime}{1}`, 0.90, smooth);
+wait(0.70);
+
+// Class 12 — mathematics learns to describe change itself.
+par {
+  say(level, "CLASS 12 · CALCULUS", 0.35);
+  say(note, "Not just where things are — how fast they are changing.", 0.35);
+  move(learner, (135, 785), 0.45, smooth);
+}
+rewrite(work, `\frac{d}{dx}x^n=\textcolor{cyan}{nx^{n-1}}`, 0.95, smooth);
+wait(0.75);
+
+// University — numbers become transformations and uncertain beliefs.
+par {
+  say(level, "UNIVERSITY · LINEAR ALGEBRA", 0.35);
+  say(note, "Some directions do not turn — they only stretch.", 0.35);
+  move(learner, (135, 735), 0.45, smooth);
+}
+rewrite(work, `A\vec v=\textcolor{magenta}{\lambda}\vec v`, 0.90, smooth);
+wait(0.70);
+
+par {
+  say(level, "UNIVERSITY · PROBABILITY", 0.35);
+  say(note, "Evidence arrives, and a belief learns how to update.", 0.35);
+  move(learner, (135, 685), 0.45, smooth);
+}
+rewrite(work, `P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}`, 0.95, smooth);
+wait(0.75);
+
+// Graduate study — equations evolve, then decompose into waves.
+par {
+  say(level, "GRADUATE · DIFFERENTIAL EQUATIONS", 0.35);
+  say(note, "A tiny law of change predicts an entire future.", 0.35);
+  move(learner, (135, 635), 0.45, smooth);
+}
+rewrite(work, `\frac{dy}{dt}=ky`, 0.85, smooth);
+wait(0.30);
+rewrite(work, `y(t)=y_0e^{kt}`, 0.85, smooth);
+wait(0.70);
+
+par {
+  say(level, "GRADUATE · FOURIER ANALYSIS", 0.35);
+  say(note, "A complicated signal turns out to be a choir of simple waves.", 0.35);
+  move(learner, (135, 585), 0.45, smooth);
+}
+rewrite(work, `f(x)=\sum_{n=-\infty}^{\infty}c_ne^{inx}`, 0.95, smooth);
+wait(0.75);
+
+// PhD — the symbols are advanced; the habit is still “what if?”
+par {
+  say(level, "PhD · THE EDGE OF WHAT WE KNOW", 0.40);
+  say(note, "The integral now ranges over every possible field configuration.", 0.40);
+  move(learner, (135, 535), 0.55, overshoot);
+}
+rewrite(work, `\mathcal{Z}=\int\mathcal{D}\phi\,e^{-S[\phi]}`, 1.05, smooth);
+wait(1.00);
+
+// A loopable ending: the notation grew, but the first question never left.
+say(level, "THE REAL DEGREE · STAYING CURIOUS", 0.40);
+say(note, "After all that mathematics, the best researchers still ask: why?", 0.40);
+rewrite(work, `1+1=\textcolor{lime}{2}`, 1.00, smooth);
+pulse(learner, 0.65);
+wait(1.80);
+</code></pre>
+<div class="manic-video" data-video="ex-reactive-math-journey"></div>
+
+<h2 id="reactive-math-notation"><a class="header" href="#reactive-math-notation">reactive-math-notation</a></h2>
+<p>One Reels-ready stage exercises structured LaTeX across thirteen notation worlds:
+algebra, calculus, limits, trigonometry, logic, sums/products, physics, chemistry,
+biology, probability, matrices/vectors, mixed prose/math, and creator notation.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-math-notation.manic — one Reels-ready stage, thirteen notation worlds
+// ----------------------------------------------------------------------------
+// `rewrite` is deliberately domain-neutral. The same persistent equation moves
+// through algebra, calculus, logic, physics, chemistry, biology, probability
+// and linear algebra;
+// only changed RaTeX parts leave or enter. Mixed prose + inline math uses normal
+// `text`, and the last scene proves creator-defined notation needs no new verb.
+// ============================================================================
+
+title("Reactive Mathematics — One Language, Every Notation");
+canvas("9:16");
+template("shorts");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
+
+creator(me, "@anish2good name=Notation_Lab tagline=Every_symbol_can_move yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_your_own safe=reels");
+socials(me);
+
+text(kicker, (540, 145), "ONE EQUATION · THIRTEEN SCIENTIFIC WORLDS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 235), "If LaTeX can say it, Manic can move it");
+size(headline, 39); color(headline, fg); bold(headline); hidden(headline);
+
+rect(stage, (540, 755), 940, 760);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72); hidden(stage);
+
+text(topic, (540, 445), "01 · ALGEBRAIC REARRANGEMENT");
+size(topic, 23); color(topic, cyan); bold(topic); hidden(topic);
+
+equation(work, (540, 730), `2(x+3)=14`, 52);
+hidden(work);
+
+text(note, (540, 1040), "Keep the structure. Move only the mathematical change.");
+size(note, 25); color(note, dim); wrap(note, 800); hidden(note);
+
+// A normal text entity may freely mix prose and several inline formulas.
+text(mixed, (540, 735), `Energy $E=mc^2$ uses mass $m$ and light speed $c$.`);
+size(mixed, 31); color(mixed, fg); wrap(mixed, 780); hidden(mixed);
+
+text(scope, (540, 1245), "RaTeX accuracy · local motion · one stable layout");
+size(scope, 22); color(scope, dim); bold(scope); hidden(scope);
+
+// A subtle dashed construction line also demonstrates that `dashed` belongs
+// to Manic itself — plots and all other path-like entities can use it.
+line(rule, (215, 1155), (865, 1155));
+color(rule, cyan); stroke(rule, 2); dashed(rule, 12, 9); opacity(rule, 0.35);
+untraced(rule);
+
+// ---------------------------------------------------------------------------
+// TIMELINE — every chapter reuses `work`; nothing is manually repositioned.
+// ---------------------------------------------------------------------------
+
+par {
+  show(kicker, 0.45); show(headline, 0.55); show(stage, 0.50);
+  show(topic, 0.45); show(note, 0.45); show(scope, 0.45); draw(rule, 0.85);
+}
+show(work, 0.55);
+wait(0.70);
+rewrite(work, `2x=8\quad\Rightarrow\quad \textcolor{lime}{x=4}`, 0.85, smooth);
+wait(0.75);
+
+say(topic, "02 · INTEGRALS &amp; DERIVATIVES", 0.35);
+say(note, "The Fundamental Theorem becomes a change of state, not a scene cut.", 0.35);
+rewrite(work, `F(x)=\int_0^x t^2\,dt`, 0.80, smooth);
+wait(0.45);
+rewrite(work, `F'(x)=\frac{d}{dx}\int_0^x t^2\,dt=\textcolor{cyan}{x^2}`, 0.95, smooth);
+wait(0.70);
+
+say(topic, "03 · FRACTIONS, ROOTS, POWERS &amp; LIMITS", 0.35);
+say(note, "Nested notation is still one screen-aware equation.", 0.35);
+rewrite(work, `x^2+\sqrt{x}+\frac{1}{x}`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\lim_{x\to0}\frac{\sqrt{1+x}-1}{x}=\frac{1}{2}`, 0.95, smooth);
+wait(0.70);
+
+say(topic, "04 · TRIGONOMETRIC IDENTITIES", 0.35);
+say(note, "The unchanged terms stay; only the conclusion arrives.", 0.35);
+rewrite(work, `\sin^2\theta+\cos^2\theta`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\sin^2\theta+\cos^2\theta=\textcolor{lime}{1}`, 0.85, smooth);
+wait(0.70);
+
+say(topic, "05 · SET NOTATION &amp; LOGIC", 0.35);
+say(note, "Membership, intersections and propositions share the same engine.", 0.35);
+rewrite(work, `x\in A\cap B`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `(x\in A)\land(x\in B)`, 0.85, smooth);
+wait(0.70);
+
+say(topic, "06 · SUMMATIONS &amp; PRODUCTS", 0.35);
+say(note, "Large operators retain their limits and baseline alignment.", 0.35);
+rewrite(work, `\sum_{k=1}^{n}k`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\prod_{k=1}^{n}k=\textcolor{magenta}{n!}`, 0.85, smooth);
+wait(0.70);
+
+say(topic, "07 · PHYSICS FORMULAS &amp; UNITS", 0.35);
+say(note, "Symbols and dimensional units can live in one exact expression.", 0.35);
+rewrite(work, `F=ma`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `[F]=\mathrm{kg}\cdot\mathrm{m}\cdot\mathrm{s}^{-2}`, 0.90, smooth);
+wait(0.70);
+
+say(topic, "08 · CHEMISTRY · BALANCED REACTIONS", 0.35);
+say(note, "Keep every molecule; introduce only the coefficients that balance atoms.", 0.35);
+rewrite(work, `H_2+O_2\rightarrow H_2O`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\textcolor{cyan}{2}H_2+O_2\rightarrow\textcolor{cyan}{2}H_2O`, 0.90, smooth);
+wait(0.70);
+
+say(topic, "09 · BIOLOGY · HARDY–WEINBERG", 0.35);
+say(note, "A population model grows from allele frequencies into genotype frequencies.", 0.35);
+rewrite(work, `p+q=1`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `p^2+2pq+q^2=\textcolor{lime}{1}`, 0.90, smooth);
+wait(0.70);
+
+say(topic, "10 · PROBABILITY EXPRESSIONS", 0.35);
+say(note, "Conditioning expands into Bayes' rule without replacing the stage.", 0.35);
+rewrite(work, `P(A\mid B)`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}`, 0.95, smooth);
+wait(0.70);
+
+say(topic, "11 · MATRICES &amp; VECTORS", 0.35);
+say(note, "Rows, columns, brackets and vector marks remain genuine LaTeX.", 0.35);
+rewrite(work, `\vec v=\begin{bmatrix}1\\2\end{bmatrix}`, 0.85, smooth);
+wait(0.40);
+rewrite(work, `A\vec v=\begin{bmatrix}a&amp;b\\c&amp;d\end{bmatrix}\begin{bmatrix}1\\2\end{bmatrix}`, 1.00, smooth);
+wait(0.75);
+
+say(topic, "12 · TEXT MIXED WITH MATHEMATICS", 0.35);
+say(note, "Ordinary prose can carry multiple inline formulas naturally.", 0.35);
+fade(work, 0.35);
+show(mixed, 0.55);
+wait(1.25);
+fade(mixed, 0.35);
+
+say(topic, "13 · YOUR OWN NOTATION", 0.35);
+say(note, "Define the meaning in your story; Manic preserves the supported notation.", 0.35);
+rewrite(work, `\mathcal{R}_{\star}(x)\equiv x^2+1`, 0.90, smooth);
+wait(0.45);
+rewrite(work, `\mathcal{R}_{\star}(2)=\textcolor{lime}{5}`, 0.85, smooth);
+wait(1.20);
+
+say(topic, "ONE REACTIVE LANGUAGE", 0.40);
+say(note, "Math, physics, logic — creators decide what comes next.", 0.40);
+pulse(work, 0.70);
+wait(1.80);
+</code></pre>
+<div class="manic-video" data-video="ex-reactive-math-notation"></div>
+
+<h2 id="quadratic-formula-continuity"><a class="header" href="#quadratic-formula-continuity">quadratic-formula-continuity</a></h2>
+<p>The quadratic formula by completing the square with one persistent LaTeX equation.
+Each authored <code>rewrite</code> retains unchanged symbols, moves reused terms, and introduces
+only the new notation — the acceptance benchmark for structured formula motion.</p>
+<pre><code class="language-manic">// quadratic-formula-continuity.manic — structured LaTeX rewrite benchmark
+//
+// The author supplies correct mathematical states. `rewrite` does not solve
+// algebra: it keeps equal RaTeX parts alive, moves them to their new roles,
+// introduces only new notation, and settles on the exact target formula.
+
+title("The Quadratic Formula by Completing the Square");
+canvas("16:9");
+template("plain");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+text(kicker, (cx, 72), "COMPLETING THE SQUARE · ONE CONTINUOUS EQUATION");
+size(kicker, 18); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(guide, (cx, 620), "Stable symbols stay. Only the mathematical change moves.");
+size(guide, 19); color(guide, dim); hidden(guide);
+
+equation(
+  work,
+  (cx, 330),
+  `\textcolor{orange}{a}x^2+\textcolor{cyan}{b}x+\textcolor{lime}{c}=0`,
+  48
+);
+hidden(work);
+
+show(kicker, 0.45);
+show(guide, 0.45);
+show(work, 0.65);
+wait(1.20);
+
+// Divide through by a.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{\textcolor{orange}{a}}x+\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}=0`,
+  1.00,
+  smooth
+);
+wait(1.00);
+
+// Move c/a across the equality.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{\textcolor{orange}{a}}x=-\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}`,
+  0.95,
+  smooth
+);
+wait(0.95);
+
+// Split the middle coefficient into two equal halves.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x=-\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}`,
+  1.05,
+  smooth
+);
+wait(0.95);
+
+// Add the completing-square term to both sides.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\left(\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2=\left(\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2-\frac{\textcolor{lime}{c}}{\textcolor{orange}{a}}`,
+  1.10,
+  smooth
+);
+wait(1.05);
+
+// Simplify the right side locally.
+rewrite(
+  work,
+  `x^2+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}x+\left(\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2=\frac{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}{4\textcolor{orange}{a}^2}`,
+  1.00,
+  smooth
+);
+wait(1.00);
+
+// Expose the repeated factor, then contract it into a square.
+rewrite(
+  work,
+  `x\left(x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\left(x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)=\frac{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}{4\textcolor{orange}{a}^2}`,
+  1.05,
+  smooth
+);
+wait(0.90);
+
+rewrite(
+  work,
+  `\left(x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}\right)^2=\frac{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}{4\textcolor{orange}{a}^2}`,
+  0.95,
+  smooth
+);
+wait(1.00);
+
+// Take square roots.
+rewrite(
+  work,
+  `x+\frac{\textcolor{cyan}{b}}{2\textcolor{orange}{a}}=\pm\frac{\sqrt{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}}{2\textcolor{orange}{a}}`,
+  1.05,
+  smooth
+);
+wait(1.10);
+
+// Isolate x. The fraction moves across; the discriminant remains itself.
+rewrite(
+  work,
+  `x=\frac{-\textcolor{cyan}{b}\pm\sqrt{\textcolor{cyan}{b}^2-4\textcolor{orange}{a}\textcolor{lime}{c}}}{2\textcolor{orange}{a}}`,
+  1.10,
+  smooth
+);
+pulse(work, 0.65);
+wait(2.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/sAsTXoN0OaQ" title="The Quadratic Formula, Rewritten Without Cuts — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="transforms"><a class="header" href="#transforms">transforms</a></h2>
 <p>Apply a 2x2 matrix (ApplyMatrix) to a group.</p>
 <pre><code class="language-manic">// Transforms — the "animate anything" showcase.
@@ -8616,6 +10272,7 @@ wait(1.6);
 
 title("Three bodies, one relation");
 canvas("9:16");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 // No template call: mono is the polished black-and-white default.
 
 circle(A, (540, 390), 105);
@@ -8672,7 +10329,7 @@ par {
   }
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/tBSEq6d9ZYg" title="Tiny Particles, Curved Links & Flow — Four Generic Words in manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kP9NDdzwoSA" title="Tiny Particles, Curved Links & Flow — Four Generic Words in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="hue_wave"><a class="header" href="#hue_wave">hue_wave</a></h2>
 <p>An animated hue wave across a grid.</p>
@@ -9526,6 +11183,7 @@ professional mono styling, creator identity, timeline markers and a focused end 
 title("Perfect Reel — Angle Ratio");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
 
@@ -9564,7 +11222,305 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/-AcCbVbv7qI" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_FAxmFXPEbU" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reactive-multiformat"><a class="header" href="#reactive-multiformat">reactive-multiformat</a></h2>
+<p>One named reactive story rendered as portrait, 4:5 feed, square, or landscape with the
+<code>--canvas</code> override. Responsive variables and layout branches reflow before construction,
+while the same steps, timing, equation continuity and creator identity remain intact.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-multiformat.manic — one semantic story, four output formats
+// ----------------------------------------------------------------------------
+// Keep this source unchanged and render it with:
+//   manic examples/reactive-multiformat.manic --canvas portrait
+//   manic examples/reactive-multiformat.manic --canvas 4:5
+//   manic examples/reactive-multiformat.manic --canvas square
+//   manic examples/reactive-multiformat.manic --canvas 16:9
+// The override is applied before w/h/cx/cy and the build-time layout branch.
+// Every format keeps the same named steps, continuity, duration and identity.
+// ============================================================================
+
+title("One Story, Every Screen");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Visual_Proofs tagline=One_idea_every_screen yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Keep_the_story safe=clean");
+
+let u = (w+h-abs(w-h)) / 2160; // min(w,h) / 1080 without a layout-specific constant
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// Portrait Reel / Short: story reads from top to bottom.
+if h &gt; 1.45*w {
+  text(kicker, (cx, 125*u), "ONE SOURCE · PORTRAIT");
+  text(headline, (cx, 215*u), "A derivative is a world of slopes");
+  equation(work, (cx, 355*u), `f(x)=0.35x^2`, 54*u);
+
+  rect(stage, (cx, 900*u), 930*u, 940*u);
+  axes(ax, (cx, 1030*u), 410*u, 350*u, 1);
+  plot(curve, (cx, 1030*u), 115*u, 62*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 235*u);
+  slope(rate, curve, -2.7, (24*u,-30*u));
+  equation(curveLabel, (cx+310*u, 690*u), `f(x)`, 31*u);
+  equation(derivativeLabel, (cx+300*u, 1290*u), `f'(x)`, 31*u);
+  text(caption, (cx, 1450*u), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.72);
+}
+
+// Landscape lesson: explanation on the left, visual stage on the right.
+else if w &gt; 1.25*h {
+  text(kicker, (w*0.25, h*0.13), "ONE SOURCE · LANDSCAPE");
+  text(headline, (w*0.25, h*0.24), "A derivative is a world of slopes");
+  equation(work, (w*0.25, h*0.38), `f(x)=0.35x^2`, 54*u);
+
+  rect(stage, (w*0.72, h*0.48), w*0.49, h*0.70);
+  axes(ax, (w*0.72, h*0.55), 350*u, 285*u, 1);
+  plot(curve, (w*0.72, h*0.55), 90*u, 48*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 190*u);
+  slope(rate, curve, -2.7, (20*u,-25*u));
+  equation(curveLabel, (w*0.88, h*0.27), `f(x)`, 29*u);
+  equation(derivativeLabel, (w*0.88, h*0.76), `f'(x)`, 29*u);
+  text(caption, (w*0.25, h*0.60), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.38);
+}
+
+// Square post / 4:5 feed: compact stacked composition.
+else {
+  text(kicker, (cx, h*0.09), "ONE SOURCE · FEED");
+  text(headline, (cx, h*0.17), "A derivative is a world of slopes");
+  equation(work, (cx, h*0.27), `f(x)=0.35x^2`, 52*u);
+
+  rect(stage, (cx, h*0.55), w*0.86, h*0.48);
+  axes(ax, (cx, h*0.59), 360*u, 270*u, 1);
+  plot(curve, (cx, h*0.59), 92*u, 48*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 195*u);
+  slope(rate, curve, -2.7, (20*u,-25*u));
+  equation(curveLabel, (cx+270*u, h*0.42), `f(x)`, 29*u);
+  equation(derivativeLabel, (cx+270*u, h*0.73), `f'(x)`, 29*u);
+  text(caption, (cx, h*0.84), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.72);
+}
+
+size(kicker, 22*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 39*u); color(headline, fg); bold(headline); hidden(headline);
+size(caption, 25*u); color(caption, dim); hidden(caption);
+
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72); hidden(stage);
+color(ax, dim); opacity(ax, 0.52); untraced(ax);
+color(curve, cyan); stroke(curve, 6*u); glow(curve, 0.75); untraced(curve);
+color(derivative, magenta); stroke(derivative, 5*u); dashed(derivative, 18*u, 11*u); untraced(derivative);
+color(tan, gold); stroke(tan, 4*u); hidden(tan);
+color(rate, gold); hidden(rate);
+color(work, cyan); hidden(work);
+color(curveLabel, cyan); hidden(curveLabel);
+color(derivativeLabel, magenta); hidden(derivativeLabel);
+
+socials(me);
+
+step("question") {
+  show(stage, 0.35);
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(work, 0.50);
+  draw(ax, 0.80);
+  draw(curve, 1.30);
+  show(curveLabel, 0.40);
+  show(caption, 0.45);
+}
+wait(0.65);
+
+step("measure") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  show(tan, 0.40);
+  show(rate, 0.40);
+  to(tan, x, 2.7, 2.80, smooth);
+  to(rate, x, 2.7, 2.80, smooth);
+  say(caption, "The tangent and its live slope move as one explanation.", 0.40);
+}
+wait(0.55);
+
+step("collect-the-slopes") {
+  rewrite(work, `\textcolor{magenta}{f'(x)}=0.70x`, 0.90, smooth);
+  fade(tan, 0.35);
+  fade(rate, 0.35);
+  draw(derivative, 1.55);
+  show(derivativeLabel, 0.40);
+  say(caption, "Collect those local slopes and the derivative curve appears.", 0.40);
+}
+wait(0.65);
+
+step("takeaway") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(curve, 0.70);
+  pulse(derivative, 0.70);
+  say(caption, "The layout can change. The idea, timing and identity stay together.", 0.40);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video" data-video="ex-reactive-multiformat"></div>
+
+<h2 id="parameter-journeys"><a class="header" href="#parameter-journeys">parameter-journeys</a></h2>
+<p>One visible parameter drives a quadratic plot, its live tangent and slope, a geometric
+position, scale and a derived numeric readout. Named steps animate only the value; <code>bind</code>
+keeps every representation continuous and the source reflows across all four formats.</p>
+<pre><code class="language-manic">// ============================================================================
+// parameter-journeys.manic — one value, several continuous representations
+// ----------------------------------------------------------------------------
+// `parameter` creates the visible control. `bind` connects it once to the
+// changing plot, tangent/slope, a geometric position, scale, and p² readout.
+// The named steps only animate the parameter; the visual world reacts smoothly.
+// Try every format with: manic check examples/parameter-journeys.manic --canvas all
+// ============================================================================
+
+title("Parameter Journeys");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Manic_Creator_Lab tagline=One_value_many_worlds yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=none accent=cyan safe=clean");
+
+let u = (w+h-abs(w-h)) / 2160;
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+if h &gt; 1.45*w {
+  text(kicker, (cx, 120*u), "PARAMETER JOURNEY");
+  text(headline, (cx, 200*u), "Change one idea. Keep the world.");
+  equation(rule, (cx, 315*u), `y=\textcolor{cyan}{a}x^2`, 58*u);
+
+  rect(stage, (cx, 770*u), 920*u, 720*u);
+  axes(ax, (cx, 790*u), 400*u, 270*u, 1);
+  plot(curve, (cx, 790*u), 112*u, 61*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 230*u);
+  slope(rate, curve, 1.15, (24*u,-34*u));
+
+  parameter(a, (cx, 1215*u), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (cx, 1365*u), "THE SAME VALUE ALSO MOVES A POINT");
+  line(path, (w*0.18, 1450*u), (w*0.82, 1450*u));
+  dot(leftEnd, (w*0.18, 1450*u), 5*u);
+  dot(rightEnd, (w*0.82, 1450*u), 5*u);
+  circle(mover, (cx, 1450*u), 22*u);
+  bind(a, mover, x, w*0.18, w*0.82);
+  counter(magnitude, (cx, 1570*u), 0, 2, "a² = ", "");
+  text(caption, (cx, 1690*u), "Negative, zero, positive — every connected view stays in sync.");
+  wrap(caption, w*0.76);
+}
+else if w &gt; 1.25*h {
+  text(kicker, (w*0.24, h*0.12), "PARAMETER JOURNEY");
+  text(headline, (w*0.25, h*0.22), "Change one idea. Keep the world.");
+  equation(rule, (w*0.25, h*0.34), `y=\textcolor{cyan}{a}x^2`, 55*u);
+
+  parameter(a, (w*0.25, h*0.49), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (w*0.25, h*0.64), "THE SAME VALUE MOVES A POINT");
+  line(path, (w*0.09, h*0.72), (w*0.41, h*0.72));
+  dot(leftEnd, (w*0.09, h*0.72), 5*u);
+  dot(rightEnd, (w*0.41, h*0.72), 5*u);
+  circle(mover, (w*0.25, h*0.72), 22*u);
+  bind(a, mover, x, w*0.09, w*0.41);
+  counter(magnitude, (w*0.25, h*0.82), 0, 2, "a² = ", "");
+
+  rect(stage, (w*0.72, h*0.48), w*0.49, h*0.72);
+  axes(ax, (w*0.72, h*0.53), 345*u, 250*u, 1);
+  plot(curve, (w*0.72, h*0.53), 92*u, 51*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 195*u);
+  slope(rate, curve, 1.15, (20*u,-28*u));
+  text(caption, (w*0.72, h*0.88), "Every connected view stays in sync.");
+  wrap(caption, w*0.42);
+}
+else {
+  text(kicker, (cx, h*0.08), "PARAMETER JOURNEY");
+  text(headline, (cx, h*0.15), "Change one idea. Keep the world.");
+  equation(rule, (cx, h*0.24), `y=\textcolor{cyan}{a}x^2`, 53*u);
+
+  rect(stage, (cx, h*0.50), w*0.86, h*0.40);
+  axes(ax, (cx, h*0.52), 350*u, 225*u, 1);
+  plot(curve, (cx, h*0.52), 94*u, 46*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 190*u);
+  slope(rate, curve, 1.15, (20*u,-26*u));
+
+  parameter(a, (cx, h*0.75), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (cx, h*0.80), "ONE VALUE · PLOT · POSITION · MAGNITUDE");
+  line(path, (w*0.20, h*0.85), (w*0.80, h*0.85));
+  dot(leftEnd, (w*0.20, h*0.85), 5*u);
+  dot(rightEnd, (w*0.80, h*0.85), 5*u);
+  circle(mover, (cx, h*0.85), 20*u);
+  bind(a, mover, x, w*0.20, w*0.80);
+  counter(magnitude, (cx, h*0.875), 0, 2, "a² = ", "");
+  text(caption, (cx, h*0.925), "Every view stays in sync.");
+  wrap(caption, w*0.78);
+}
+
+// One declaration per relationship. `p` is the live parameter and `x` is the
+// plot coordinate only inside a plot-formula binding.
+bind(a, curve, formula, "0.22*p*x*x");
+bind(a, mover, scale, "0.78+0.22*abs(p)");
+bind(a, magnitude, value, "p*p");
+
+size(kicker, 21*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 37*u); bold(headline); hidden(headline);
+size(positionLabel, 22*u); color(positionLabel, dim); bold(positionLabel); hidden(positionLabel);
+size(caption, 23*u); color(caption, dim); hidden(caption);
+color(rule, cyan); hidden(rule);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.68); hidden(stage);
+color(ax, dim); opacity(ax, 0.48); untraced(ax);
+color(curve, cyan); stroke(curve, 6*u); glow(curve, 0.75); untraced(curve);
+color(tan, gold); stroke(tan, 4*u); hidden(tan);
+color(rate, gold); hidden(rate);
+color(path, dim); stroke(path, 3*u); untraced(path);
+color(leftEnd, dim); color(rightEnd, dim); hidden(leftEnd); hidden(rightEnd);
+color(mover, cyan); outline(mover, fg); hidden(mover);
+color(magnitude, fg); bold(magnitude); hidden(magnitude);
+hidden(a.widget);
+
+socials(me);
+
+step("opens-down") {
+  show(kicker, 0.30);
+  show(headline, 0.40);
+  show(rule, 0.45);
+  show(stage, 0.35);
+  draw(ax, 0.70);
+  draw(curve, 1.10);
+  show(tan, 0.35);
+  show(rate, 0.35);
+  show(a.widget, 0.45);
+  show(positionLabel, 0.35);
+  draw(path, 0.55);
+  show(leftEnd, 0.25);
+  show(rightEnd, 0.25);
+  show(mover, 0.35);
+  show(magnitude, 0.35);
+  show(caption, 0.40);
+}
+wait(0.65);
+
+step("flatten") {
+  to(a, value, 0, 2.20, smooth);
+  say(caption, "At zero the quadratic, tangent slope, position and magnitude settle together.", 0.40);
+}
+wait(0.55);
+
+step("opens-up") {
+  to(a, value, 1.25, 2.40, smooth);
+  say(caption, "One authored parameter now carries the whole visual family upward.", 0.40);
+}
+wait(0.60);
+
+step("compare") {
+  to(a, value, -0.65, 2.10, smooth);
+  say(caption, "Try another case without rebuilding the plot, diagram or readouts.", 0.40);
+}
+wait(0.55);
+
+step("takeaway") {
+  to(a, value, 1.5, 2.30, smooth);
+  pulse(rule, 0.70);
+  pulse(mover, 0.70);
+  say(caption, "Declare the relationship once. Animate only what the idea means.", 0.40);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video" data-video="ex-parameter-journeys"></div>
 
 <h2 id="creator-v2-options-socials"><a class="header" href="#creator-v2-options-socials">creator-v2-options-socials</a></h2>
 <p>The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D
@@ -9574,6 +11530,7 @@ cards, uniform correct-state spacing, and native YouTube/X/web identity lockups.
 title("Creator v2.4 — Options + Socials");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Olympiad_Minute yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=cyan safe=reels");
 
@@ -9590,7 +11547,7 @@ timerstyle(q, "look=bar position=below number=outside direction=drain color=cyan
 socials(me);
 run(q);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/KHFV5y7NE5Q" title="Professional Quiz Options + Native Social Icons — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Q32jTgInMrk" title="Professional Quiz Options + Native Social Icons — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2"><a class="header" href="#creator-v2">creator-v2</a></h2>
 <p>The complete v2 core: responsive studio quiz, optics media, width-aware answer cards, a
@@ -9601,6 +11558,7 @@ signature creator footer, optional explanation and a branded final end card.</p>
 title("Creator Kit v2 — Optics Quiz");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Optics_Lab tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Follow_for_more safe=shorts");
 
@@ -9631,7 +11589,7 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/6DP_6tPfspA" title="Creator Kit v2 — One Responsive Quiz Across Every Social Format" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cmcE91c2O18" title="Creator Kit v2 — One Responsive Quiz Across Every Social Format" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-timing"><a class="header" href="#creator-v2-timing">creator-v2-timing</a></h2>
 <p>Timing v2 in a portrait quiz: exact ask/options/think/reveal/hold phases, LaTeX media, and a
@@ -9642,6 +11600,7 @@ segmented timer whose presentation can change without changing the choreography.
 title("Creator Timing v2");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Number_Lab tagline=Pause_predict_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=signature cta=Try_the_next_one safe=shorts");
 
@@ -9670,7 +11629,7 @@ par {
   show(eq, 0.55);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/JqLTda9s5-M" title="Control Every Beat of a Quiz Reel — Creator Timing v2" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Web996n1Dn4" title="Control Every Beat of a Quiz Reel — Creator Timing v2" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-timers"><a class="header" href="#creator-v2-timers">creator-v2-timers</a></h2>
 <p>All six native Timing v2 looks—ring, bar, number, segments, ticks and pulse—running side by
@@ -9680,6 +11639,7 @@ side. Native shapes keep every look scalable, theme-aware and progress-animatabl
 title("Creator Timing v2 — Native Looks");
 canvas("16:9");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 text(head, (cx, 70), "TIMING V2 — CHOOSE THE LOOK");
 size(head, 34); bold(head); color(head, fg);
@@ -9700,7 +11660,7 @@ par {
   run(pulse, 6);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/05c2EgQiM-Y" title="Six Professional Countdown Designs, One Timing System — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3fyL67oDgZA" title="Six Professional Countdown Designs, One Timing System — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-timing-square"><a class="header" href="#creator-v2-timing-square">creator-v2-timing-square</a></h2>
 <p>A square feed-card variant with a scaled dramatic preset and a filling tick timer, showing
@@ -9709,6 +11669,7 @@ that timing and timer placement reflow independently across formats.</p>
 title("Creator Timing v2 — Square");
 canvas("1:1");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Minute tagline=See_the_pattern yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=compact cta=Save_this safe=clean");
 
@@ -9730,7 +11691,7 @@ timerstyle(q, "look=ticks position=below number=inside direction=fill size=small
 socials(me);
 run(q, 8);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/LJ9MGGycSGc" title="One Quiz, Perfectly Reflowed for a Square Feed — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/G0oQ5tFbSuE" title="One Quiz, Perfectly Reflowed for a Square Feed — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-olympiad-geometry"><a class="header" href="#creator-v2-olympiad-geometry">creator-v2-olympiad-geometry</a></h2>
 <p>An olympiad-level geometry Reel built as pause → predict → prove, with a responsive
@@ -9745,6 +11706,7 @@ construction, authored explanation and reusable creator identity.</p>
 title("Creator v2 — Olympiad Geometry");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Geometry_Lab tagline=See_the_hidden_lemma yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Pause_then_prove safe=shorts");
 
@@ -9827,7 +11789,7 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/hOqmIKif6Zw" title="Olympiad Geometry Reel — Pause, Predict, Prove — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oHrtCNCl5gI" title="Olympiad Geometry Reel — Pause, Predict, Prove — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-latex-calculus"><a class="header" href="#creator-v2-latex-calculus">creator-v2-latex-calculus</a></h2>
 <p>Portrait Creator v2 with inline and display LaTeX: a calculus question, fitted formula
@@ -9838,6 +11800,7 @@ answers and crisp typesetting throughout the timed reveal.</p>
 title("Creator v2 — LaTeX Calculus");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Calculus_Lab tagline=One_integral_at_a_time yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_for_revision safe=shorts");
 
@@ -9869,7 +11832,7 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/5DvQz4-o2PE" title="A Calculus Reel With Real LaTeX — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0YZZjx5XSd4" title="A Calculus Reel With Real LaTeX — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-latex-algebra"><a class="header" href="#creator-v2-latex-algebra">creator-v2-latex-algebra</a></h2>
 <p>Square Creator v2 on a paper surface, checking that algebraic LaTeX and answer cards
@@ -9880,6 +11843,7 @@ remain balanced and readable outside the vertical format.</p>
 title("Creator v2 — LaTeX Algebra");
 canvas("square");
 template("paper");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Algebra_Studio tagline=Patterns_before_procedures yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=compact cta=Try_it_first safe=clean");
 
@@ -9903,7 +11867,7 @@ par {
   show(eq, 0.55);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/cAiE56lF6ho" title="A LaTeX Algebra Quiz, Perfectly Typeset — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/aX9akkjnZfA" title="A LaTeX Algebra Quiz, Perfectly Typeset — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-latex-physics"><a class="header" href="#creator-v2-latex-physics">creator-v2-latex-physics</a></h2>
 <p>Landscape Creator v2 with a physics equation, proving the same LaTeX quiz system
@@ -9914,6 +11878,7 @@ reflows cleanly for widescreen explainers.</p>
 title("Creator v2 — LaTeX Physics");
 canvas("16:9");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Physics_Notes tagline=Concepts_in_one_frame yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=gold secondary=cyan footer=signature cta=Follow_for_more safe=clean");
 
@@ -9937,7 +11902,7 @@ par {
   show(eq, 0.55);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/EMS6jlHhXk0" title="Physics Equations on a Responsive Creator Canvas — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/6Z-k1kg5KSo" title="Physics Equations on a Responsive Creator Canvas — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="quiz-skins"><a class="header" href="#quiz-skins">quiz-skins</a></h2>
 <p>The quiz Short in a dozen lines: <code>quiz</code>/<code>option</code>/<code>run</code> + a <code>creator</code>/<code>socials</code> footer.

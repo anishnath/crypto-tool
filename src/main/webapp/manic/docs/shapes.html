@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -226,6 +226,13 @@ colors automatically follow the selected template:</p>
 </code></pre>
 <p>Leave a term uncolored to use the template foreground. A single-color equation
 can still be styled as one entity with <code>color</code> and animated with <code>recolor</code>.</p>
+<p>For a derivation, keep that same equation id and animate only the change:</p>
+<pre><code class="language-manic">rewrite(step, `\mathrm{slope}=\frac{\mathrm{rise}}{\mathrm{run}}`, 0.9, smooth);
+rewrite(step, `\mathrm{slope}=\frac{x}{1}`, 0.9, smooth);
+</code></pre>
+<p>Manic matches the rendered LaTeX parts; it does not perform algebra. This makes
+the verb generic across algebra, calculus, physics, sums, fractions, radicals,
+and creator scenes while keeping each settled formula exact.</p>
 <pre><code class="language-manic">// the six primitive shapes, drawn on together.
 title("Shapes");
 canvas("16:9");
@@ -259,6 +266,7 @@ begins. They take the entity name first, then a value:</p>
 <tbody>
 <tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
 <tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
+<tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path (defaults 16/10 px)</td><td><code>dashed(curve, 18, 10);</code></td></tr>
 <tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
 <tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
 <tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
@@ -299,7 +307,7 @@ begins. They take the entity name first, then a value:</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="creator-reels.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="creator-parameters.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -313,7 +321,7 @@ begins. They take the entity name first, then a value:</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="creator-reels.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="creator-parameters.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

@@ -2,6 +2,7 @@
 title("Creator Timing v2 — Square");
 canvas("1:1");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Minute tagline=See_the_pattern yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=compact cta=Save_this safe=clean");
 

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -189,6 +189,7 @@ professional mono styling, creator identity, timeline markers and a focused end 
 title("Perfect Reel — Angle Ratio");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
 
@@ -227,7 +228,305 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/-AcCbVbv7qI" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_FAxmFXPEbU" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reactive-multiformat"><a class="header" href="#reactive-multiformat">reactive-multiformat</a></h2>
+<p>One named reactive story rendered as portrait, 4:5 feed, square, or landscape with the
+<code>--canvas</code> override. Responsive variables and layout branches reflow before construction,
+while the same steps, timing, equation continuity and creator identity remain intact.</p>
+<pre><code class="language-manic">// ============================================================================
+// reactive-multiformat.manic — one semantic story, four output formats
+// ----------------------------------------------------------------------------
+// Keep this source unchanged and render it with:
+//   manic examples/reactive-multiformat.manic --canvas portrait
+//   manic examples/reactive-multiformat.manic --canvas 4:5
+//   manic examples/reactive-multiformat.manic --canvas square
+//   manic examples/reactive-multiformat.manic --canvas 16:9
+// The override is applied before w/h/cx/cy and the build-time layout branch.
+// Every format keeps the same named steps, continuity, duration and identity.
+// ============================================================================
+
+title("One Story, Every Screen");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Visual_Proofs tagline=One_idea_every_screen yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Keep_the_story safe=clean");
+
+let u = (w+h-abs(w-h)) / 2160; // min(w,h) / 1080 without a layout-specific constant
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// Portrait Reel / Short: story reads from top to bottom.
+if h &gt; 1.45*w {
+  text(kicker, (cx, 125*u), "ONE SOURCE · PORTRAIT");
+  text(headline, (cx, 215*u), "A derivative is a world of slopes");
+  equation(work, (cx, 355*u), `f(x)=0.35x^2`, 54*u);
+
+  rect(stage, (cx, 900*u), 930*u, 940*u);
+  axes(ax, (cx, 1030*u), 410*u, 350*u, 1);
+  plot(curve, (cx, 1030*u), 115*u, 62*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 235*u);
+  slope(rate, curve, -2.7, (24*u,-30*u));
+  equation(curveLabel, (cx+310*u, 690*u), `f(x)`, 31*u);
+  equation(derivativeLabel, (cx+300*u, 1290*u), `f'(x)`, 31*u);
+  text(caption, (cx, 1450*u), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.72);
+}
+
+// Landscape lesson: explanation on the left, visual stage on the right.
+else if w &gt; 1.25*h {
+  text(kicker, (w*0.25, h*0.13), "ONE SOURCE · LANDSCAPE");
+  text(headline, (w*0.25, h*0.24), "A derivative is a world of slopes");
+  equation(work, (w*0.25, h*0.38), `f(x)=0.35x^2`, 54*u);
+
+  rect(stage, (w*0.72, h*0.48), w*0.49, h*0.70);
+  axes(ax, (w*0.72, h*0.55), 350*u, 285*u, 1);
+  plot(curve, (w*0.72, h*0.55), 90*u, 48*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 190*u);
+  slope(rate, curve, -2.7, (20*u,-25*u));
+  equation(curveLabel, (w*0.88, h*0.27), `f(x)`, 29*u);
+  equation(derivativeLabel, (w*0.88, h*0.76), `f'(x)`, 29*u);
+  text(caption, (w*0.25, h*0.60), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.38);
+}
+
+// Square post / 4:5 feed: compact stacked composition.
+else {
+  text(kicker, (cx, h*0.09), "ONE SOURCE · FEED");
+  text(headline, (cx, h*0.17), "A derivative is a world of slopes");
+  equation(work, (cx, h*0.27), `f(x)=0.35x^2`, 52*u);
+
+  rect(stage, (cx, h*0.55), w*0.86, h*0.48);
+  axes(ax, (cx, h*0.59), 360*u, 270*u, 1);
+  plot(curve, (cx, h*0.59), 92*u, 48*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 195*u);
+  slope(rate, curve, -2.7, (20*u,-25*u));
+  equation(curveLabel, (cx+270*u, h*0.42), `f(x)`, 29*u);
+  equation(derivativeLabel, (cx+270*u, h*0.73), `f'(x)`, 29*u);
+  text(caption, (cx, h*0.84), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.72);
+}
+
+size(kicker, 22*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 39*u); color(headline, fg); bold(headline); hidden(headline);
+size(caption, 25*u); color(caption, dim); hidden(caption);
+
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72); hidden(stage);
+color(ax, dim); opacity(ax, 0.52); untraced(ax);
+color(curve, cyan); stroke(curve, 6*u); glow(curve, 0.75); untraced(curve);
+color(derivative, magenta); stroke(derivative, 5*u); dashed(derivative, 18*u, 11*u); untraced(derivative);
+color(tan, gold); stroke(tan, 4*u); hidden(tan);
+color(rate, gold); hidden(rate);
+color(work, cyan); hidden(work);
+color(curveLabel, cyan); hidden(curveLabel);
+color(derivativeLabel, magenta); hidden(derivativeLabel);
+
+socials(me);
+
+step("question") {
+  show(stage, 0.35);
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(work, 0.50);
+  draw(ax, 0.80);
+  draw(curve, 1.30);
+  show(curveLabel, 0.40);
+  show(caption, 0.45);
+}
+wait(0.65);
+
+step("measure") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  show(tan, 0.40);
+  show(rate, 0.40);
+  to(tan, x, 2.7, 2.80, smooth);
+  to(rate, x, 2.7, 2.80, smooth);
+  say(caption, "The tangent and its live slope move as one explanation.", 0.40);
+}
+wait(0.55);
+
+step("collect-the-slopes") {
+  rewrite(work, `\textcolor{magenta}{f'(x)}=0.70x`, 0.90, smooth);
+  fade(tan, 0.35);
+  fade(rate, 0.35);
+  draw(derivative, 1.55);
+  show(derivativeLabel, 0.40);
+  say(caption, "Collect those local slopes and the derivative curve appears.", 0.40);
+}
+wait(0.65);
+
+step("takeaway") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(curve, 0.70);
+  pulse(derivative, 0.70);
+  say(caption, "The layout can change. The idea, timing and identity stay together.", 0.40);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video" data-video="ex-reactive-multiformat"></div>
+
+<h2 id="parameter-journeys"><a class="header" href="#parameter-journeys">parameter-journeys</a></h2>
+<p>One visible parameter drives a quadratic plot, its live tangent and slope, a geometric
+position, scale and a derived numeric readout. Named steps animate only the value; <code>bind</code>
+keeps every representation continuous and the source reflows across all four formats.</p>
+<pre><code class="language-manic">// ============================================================================
+// parameter-journeys.manic — one value, several continuous representations
+// ----------------------------------------------------------------------------
+// `parameter` creates the visible control. `bind` connects it once to the
+// changing plot, tangent/slope, a geometric position, scale, and p² readout.
+// The named steps only animate the parameter; the visual world reacts smoothly.
+// Try every format with: manic check examples/parameter-journeys.manic --canvas all
+// ============================================================================
+
+title("Parameter Journeys");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Manic_Creator_Lab tagline=One_value_many_worlds yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=none accent=cyan safe=clean");
+
+let u = (w+h-abs(w-h)) / 2160;
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+if h &gt; 1.45*w {
+  text(kicker, (cx, 120*u), "PARAMETER JOURNEY");
+  text(headline, (cx, 200*u), "Change one idea. Keep the world.");
+  equation(rule, (cx, 315*u), `y=\textcolor{cyan}{a}x^2`, 58*u);
+
+  rect(stage, (cx, 770*u), 920*u, 720*u);
+  axes(ax, (cx, 790*u), 400*u, 270*u, 1);
+  plot(curve, (cx, 790*u), 112*u, 61*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 230*u);
+  slope(rate, curve, 1.15, (24*u,-34*u));
+
+  parameter(a, (cx, 1215*u), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (cx, 1365*u), "THE SAME VALUE ALSO MOVES A POINT");
+  line(path, (w*0.18, 1450*u), (w*0.82, 1450*u));
+  dot(leftEnd, (w*0.18, 1450*u), 5*u);
+  dot(rightEnd, (w*0.82, 1450*u), 5*u);
+  circle(mover, (cx, 1450*u), 22*u);
+  bind(a, mover, x, w*0.18, w*0.82);
+  counter(magnitude, (cx, 1570*u), 0, 2, "a² = ", "");
+  text(caption, (cx, 1690*u), "Negative, zero, positive — every connected view stays in sync.");
+  wrap(caption, w*0.76);
+}
+else if w &gt; 1.25*h {
+  text(kicker, (w*0.24, h*0.12), "PARAMETER JOURNEY");
+  text(headline, (w*0.25, h*0.22), "Change one idea. Keep the world.");
+  equation(rule, (w*0.25, h*0.34), `y=\textcolor{cyan}{a}x^2`, 55*u);
+
+  parameter(a, (w*0.25, h*0.49), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (w*0.25, h*0.64), "THE SAME VALUE MOVES A POINT");
+  line(path, (w*0.09, h*0.72), (w*0.41, h*0.72));
+  dot(leftEnd, (w*0.09, h*0.72), 5*u);
+  dot(rightEnd, (w*0.41, h*0.72), 5*u);
+  circle(mover, (w*0.25, h*0.72), 22*u);
+  bind(a, mover, x, w*0.09, w*0.41);
+  counter(magnitude, (w*0.25, h*0.82), 0, 2, "a² = ", "");
+
+  rect(stage, (w*0.72, h*0.48), w*0.49, h*0.72);
+  axes(ax, (w*0.72, h*0.53), 345*u, 250*u, 1);
+  plot(curve, (w*0.72, h*0.53), 92*u, 51*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 195*u);
+  slope(rate, curve, 1.15, (20*u,-28*u));
+  text(caption, (w*0.72, h*0.88), "Every connected view stays in sync.");
+  wrap(caption, w*0.42);
+}
+else {
+  text(kicker, (cx, h*0.08), "PARAMETER JOURNEY");
+  text(headline, (cx, h*0.15), "Change one idea. Keep the world.");
+  equation(rule, (cx, h*0.24), `y=\textcolor{cyan}{a}x^2`, 53*u);
+
+  rect(stage, (cx, h*0.50), w*0.86, h*0.40);
+  axes(ax, (cx, h*0.52), 350*u, 225*u, 1);
+  plot(curve, (cx, h*0.52), 94*u, 46*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 190*u);
+  slope(rate, curve, 1.15, (20*u,-26*u));
+
+  parameter(a, (cx, h*0.75), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (cx, h*0.80), "ONE VALUE · PLOT · POSITION · MAGNITUDE");
+  line(path, (w*0.20, h*0.85), (w*0.80, h*0.85));
+  dot(leftEnd, (w*0.20, h*0.85), 5*u);
+  dot(rightEnd, (w*0.80, h*0.85), 5*u);
+  circle(mover, (cx, h*0.85), 20*u);
+  bind(a, mover, x, w*0.20, w*0.80);
+  counter(magnitude, (cx, h*0.875), 0, 2, "a² = ", "");
+  text(caption, (cx, h*0.925), "Every view stays in sync.");
+  wrap(caption, w*0.78);
+}
+
+// One declaration per relationship. `p` is the live parameter and `x` is the
+// plot coordinate only inside a plot-formula binding.
+bind(a, curve, formula, "0.22*p*x*x");
+bind(a, mover, scale, "0.78+0.22*abs(p)");
+bind(a, magnitude, value, "p*p");
+
+size(kicker, 21*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 37*u); bold(headline); hidden(headline);
+size(positionLabel, 22*u); color(positionLabel, dim); bold(positionLabel); hidden(positionLabel);
+size(caption, 23*u); color(caption, dim); hidden(caption);
+color(rule, cyan); hidden(rule);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.68); hidden(stage);
+color(ax, dim); opacity(ax, 0.48); untraced(ax);
+color(curve, cyan); stroke(curve, 6*u); glow(curve, 0.75); untraced(curve);
+color(tan, gold); stroke(tan, 4*u); hidden(tan);
+color(rate, gold); hidden(rate);
+color(path, dim); stroke(path, 3*u); untraced(path);
+color(leftEnd, dim); color(rightEnd, dim); hidden(leftEnd); hidden(rightEnd);
+color(mover, cyan); outline(mover, fg); hidden(mover);
+color(magnitude, fg); bold(magnitude); hidden(magnitude);
+hidden(a.widget);
+
+socials(me);
+
+step("opens-down") {
+  show(kicker, 0.30);
+  show(headline, 0.40);
+  show(rule, 0.45);
+  show(stage, 0.35);
+  draw(ax, 0.70);
+  draw(curve, 1.10);
+  show(tan, 0.35);
+  show(rate, 0.35);
+  show(a.widget, 0.45);
+  show(positionLabel, 0.35);
+  draw(path, 0.55);
+  show(leftEnd, 0.25);
+  show(rightEnd, 0.25);
+  show(mover, 0.35);
+  show(magnitude, 0.35);
+  show(caption, 0.40);
+}
+wait(0.65);
+
+step("flatten") {
+  to(a, value, 0, 2.20, smooth);
+  say(caption, "At zero the quadratic, tangent slope, position and magnitude settle together.", 0.40);
+}
+wait(0.55);
+
+step("opens-up") {
+  to(a, value, 1.25, 2.40, smooth);
+  say(caption, "One authored parameter now carries the whole visual family upward.", 0.40);
+}
+wait(0.60);
+
+step("compare") {
+  to(a, value, -0.65, 2.10, smooth);
+  say(caption, "Try another case without rebuilding the plot, diagram or readouts.", 0.40);
+}
+wait(0.55);
+
+step("takeaway") {
+  to(a, value, 1.5, 2.30, smooth);
+  pulse(rule, 0.70);
+  pulse(mover, 0.70);
+  say(caption, "Declare the relationship once. Animate only what the idea means.", 0.40);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video" data-video="ex-parameter-journeys"></div>
 
 <h2 id="creator-v2-options-socials"><a class="header" href="#creator-v2-options-socials">creator-v2-options-socials</a></h2>
 <p>The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D
@@ -237,6 +536,7 @@ cards, uniform correct-state spacing, and native YouTube/X/web identity lockups.
 title("Creator v2.4 — Options + Socials");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Olympiad_Minute yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=cyan safe=reels");
 
@@ -253,7 +553,7 @@ timerstyle(q, "look=bar position=below number=outside direction=drain color=cyan
 socials(me);
 run(q);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/KHFV5y7NE5Q" title="Professional Quiz Options + Native Social Icons — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Q32jTgInMrk" title="Professional Quiz Options + Native Social Icons — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2"><a class="header" href="#creator-v2">creator-v2</a></h2>
 <p>The complete v2 core: responsive studio quiz, optics media, width-aware answer cards, a
@@ -264,6 +564,7 @@ signature creator footer, optional explanation and a branded final end card.</p>
 title("Creator Kit v2 — Optics Quiz");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Optics_Lab tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Follow_for_more safe=shorts");
 
@@ -294,7 +595,7 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/6DP_6tPfspA" title="Creator Kit v2 — One Responsive Quiz Across Every Social Format" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cmcE91c2O18" title="Creator Kit v2 — One Responsive Quiz Across Every Social Format" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-timing"><a class="header" href="#creator-v2-timing">creator-v2-timing</a></h2>
 <p>Timing v2 in a portrait quiz: exact ask/options/think/reveal/hold phases, LaTeX media, and a
@@ -305,6 +606,7 @@ segmented timer whose presentation can change without changing the choreography.
 title("Creator Timing v2");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Number_Lab tagline=Pause_predict_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=signature cta=Try_the_next_one safe=shorts");
 
@@ -333,7 +635,7 @@ par {
   show(eq, 0.55);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/JqLTda9s5-M" title="Control Every Beat of a Quiz Reel — Creator Timing v2" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Web996n1Dn4" title="Control Every Beat of a Quiz Reel — Creator Timing v2" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-timers"><a class="header" href="#creator-v2-timers">creator-v2-timers</a></h2>
 <p>All six native Timing v2 looks—ring, bar, number, segments, ticks and pulse—running side by
@@ -343,6 +645,7 @@ side. Native shapes keep every look scalable, theme-aware and progress-animatabl
 title("Creator Timing v2 — Native Looks");
 canvas("16:9");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 text(head, (cx, 70), "TIMING V2 — CHOOSE THE LOOK");
 size(head, 34); bold(head); color(head, fg);
@@ -363,7 +666,7 @@ par {
   run(pulse, 6);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/05c2EgQiM-Y" title="Six Professional Countdown Designs, One Timing System — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3fyL67oDgZA" title="Six Professional Countdown Designs, One Timing System — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-timing-square"><a class="header" href="#creator-v2-timing-square">creator-v2-timing-square</a></h2>
 <p>A square feed-card variant with a scaled dramatic preset and a filling tick timer, showing
@@ -372,6 +675,7 @@ that timing and timer placement reflow independently across formats.</p>
 title("Creator Timing v2 — Square");
 canvas("1:1");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Minute tagline=See_the_pattern yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=compact cta=Save_this safe=clean");
 
@@ -393,7 +697,7 @@ timerstyle(q, "look=ticks position=below number=inside direction=fill size=small
 socials(me);
 run(q, 8);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/LJ9MGGycSGc" title="One Quiz, Perfectly Reflowed for a Square Feed — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/G0oQ5tFbSuE" title="One Quiz, Perfectly Reflowed for a Square Feed — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-olympiad-geometry"><a class="header" href="#creator-v2-olympiad-geometry">creator-v2-olympiad-geometry</a></h2>
 <p>An olympiad-level geometry Reel built as pause → predict → prove, with a responsive
@@ -408,6 +712,7 @@ construction, authored explanation and reusable creator identity.</p>
 title("Creator v2 — Olympiad Geometry");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Geometry_Lab tagline=See_the_hidden_lemma yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Pause_then_prove safe=shorts");
 
@@ -490,7 +795,7 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/hOqmIKif6Zw" title="Olympiad Geometry Reel — Pause, Predict, Prove — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oHrtCNCl5gI" title="Olympiad Geometry Reel — Pause, Predict, Prove — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-latex-calculus"><a class="header" href="#creator-v2-latex-calculus">creator-v2-latex-calculus</a></h2>
 <p>Portrait Creator v2 with inline and display LaTeX: a calculus question, fitted formula
@@ -501,6 +806,7 @@ answers and crisp typesetting throughout the timed reveal.</p>
 title("Creator v2 — LaTeX Calculus");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Calculus_Lab tagline=One_integral_at_a_time yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_for_revision safe=shorts");
 
@@ -532,7 +838,7 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/5DvQz4-o2PE" title="A Calculus Reel With Real LaTeX — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0YZZjx5XSd4" title="A Calculus Reel With Real LaTeX — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-latex-algebra"><a class="header" href="#creator-v2-latex-algebra">creator-v2-latex-algebra</a></h2>
 <p>Square Creator v2 on a paper surface, checking that algebraic LaTeX and answer cards
@@ -543,6 +849,7 @@ remain balanced and readable outside the vertical format.</p>
 title("Creator v2 — LaTeX Algebra");
 canvas("square");
 template("paper");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Algebra_Studio tagline=Patterns_before_procedures yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=compact cta=Try_it_first safe=clean");
 
@@ -566,7 +873,7 @@ par {
   show(eq, 0.55);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/cAiE56lF6ho" title="A LaTeX Algebra Quiz, Perfectly Typeset — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/aX9akkjnZfA" title="A LaTeX Algebra Quiz, Perfectly Typeset — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-latex-physics"><a class="header" href="#creator-v2-latex-physics">creator-v2-latex-physics</a></h2>
 <p>Landscape Creator v2 with a physics equation, proving the same LaTeX quiz system
@@ -577,6 +884,7 @@ reflows cleanly for widescreen explainers.</p>
 title("Creator v2 — LaTeX Physics");
 canvas("16:9");
 template("shorts");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 creator(me, "@anish2good name=Physics_Notes tagline=Concepts_in_one_frame yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=gold secondary=cyan footer=signature cta=Follow_for_more safe=clean");
 
@@ -600,7 +908,7 @@ par {
   show(eq, 0.55);
 }
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/EMS6jlHhXk0" title="Physics Equations on a Responsive Creator Canvas — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/6Z-k1kg5KSo" title="Physics Equations on a Responsive Creator Canvas — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="quiz-skins"><a class="header" href="#quiz-skins">quiz-skins</a></h2>
 <p>The quiz Short in a dozen lines: <code>quiz</code>/<code>option</code>/<code>run</code> + a <code>creator</code>/<code>socials</code> footer.

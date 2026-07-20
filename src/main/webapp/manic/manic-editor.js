@@ -259,6 +259,19 @@ window.ManicEditor = (function () {
     return { actions: actions, dispose: function () {} };
   }
 
+  /* ── auto-correct ──────────────────────────────────────────────── */
+  // Clean up an AI response before it lands in the editor: apply the checker's
+  // MECHANICAL fixes (glued vars → `*`, unknown builtin/colour → nearest name).
+  // The apply-loop lives in manic-autofix.js (shared + unit-tested); here we just
+  // feed it the WASM check. Returns { code, fixed }.
+  function autofix(src) {
+    var apply = (typeof ManicAutofix !== 'undefined') && ManicAutofix.applyFixes;
+    if (!apply) return { code: String(src == null ? '' : src), fixed: 0 };
+    return apply(src, function (code) {
+      try { return JSON.parse(wasm.check(code)); } catch (e) { return []; }
+    });
+  }
+
   /* ── autocomplete ──────────────────────────────────────────────── */
 
   var COMPLETION_KIND = null;
@@ -303,6 +316,7 @@ window.ManicEditor = (function () {
     setActiveModel: setActiveModel,
     onModelChanged: onModelChanged,
     refreshMarkers: refreshMarkers,
+    autofix: autofix,
     setDiagnosticsListener: function (fn) { diagListener = fn; },
     THEME_DARK: THEME_DARK,
     THEME_LIGHT: THEME_LIGHT

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -375,6 +375,447 @@ say(cap, "settled distances are final; the lime edges form the shortest-path tre
 wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/UOjIHugt4o8" title="Dijkstra's Algorithm, Visualized — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="cubic-graphs"><a class="header" href="#cubic-graphs">cubic-graphs</a></h2>
+<p>A hand-composed graph-theory plate: five 3-connected simple cubic graphs
+(including the 6-spoke wheel from a <code>for</code> loop) drawn on in sequence, with
+LaTeX node labels ($u_i$, $v_i$) and typeset names $G_1..G_5$ — a paper-style
+figure straight from a theorem statement.</p>
+<pre><code class="language-manic">title("Five Exceptional Cubic Graphs");
+canvas("16:9");
+template("paper");
+watermark(manicMark, (1135, 30), "Made With Manic");
+
+text(titleA, (cx, 34), "Five 3-connected simple cubic graphs");
+text(titleB, (cx, 68), "cycle-cover exceptions: at most $\lceil n/6\rceil$ cycles is not guaranteed");
+display(titleA);
+bold(titleA);
+size(titleA, 30);
+size(titleB, 22);
+color(titleB, dim);
+hidden(titleA);
+hidden(titleB);
+
+line(frameTop, (42, 104), (w - 42, 104));
+line(frameBottom, (42, h - 26), (w - 42, h - 26));
+line(frameLeft, (42, 104), (42, h - 26));
+line(frameRight, (w - 42, 104), (w - 42, h - 26));
+tag(frameTop, frame);
+tag(frameBottom, frame);
+tag(frameLeft, frame);
+tag(frameRight, frame);
+stroke(frame, 3);
+color(frame, dim);
+opacity(frame, 0.45);
+untraced(frame);
+
+dot(g1u1, (180, 310), 5);
+dot(g1u2, (320, 310), 5);
+dot(g1u3, (370, 210), 5);
+dot(g1u4, (250, 125), 5);
+dot(g1u5, (130, 210), 5);
+dot(g1v1, (220, 265), 5);
+dot(g1v2, (280, 265), 5);
+dot(g1v3, (305, 225), 5);
+dot(g1v4, (250, 185), 5);
+dot(g1v5, (195, 225), 5);
+tag(g1u1, g1Nodes);
+tag(g1u2, g1Nodes);
+tag(g1u3, g1Nodes);
+tag(g1u4, g1Nodes);
+tag(g1u5, g1Nodes);
+tag(g1v1, g1Nodes);
+tag(g1v2, g1Nodes);
+tag(g1v3, g1Nodes);
+tag(g1v4, g1Nodes);
+tag(g1v5, g1Nodes);
+
+line(g1e1, (180, 310), (320, 310));
+line(g1e2, (320, 310), (370, 210));
+line(g1e3, (370, 210), (250, 125));
+line(g1e4, (250, 125), (130, 210));
+line(g1e5, (130, 210), (180, 310));
+line(g1e6, (220, 265), (280, 265));
+line(g1e7, (280, 265), (305, 225));
+line(g1e8, (305, 225), (250, 185));
+line(g1e9, (250, 185), (195, 225));
+line(g1e10, (195, 225), (220, 265));
+line(g1e11, (180, 310), (220, 265));
+line(g1e12, (320, 310), (280, 265));
+line(g1e13, (370, 210), (305, 225));
+line(g1e14, (250, 125), (250, 185));
+line(g1e15, (130, 210), (195, 225));
+tag(g1e1, g1Edges);
+tag(g1e2, g1Edges);
+tag(g1e3, g1Edges);
+tag(g1e4, g1Edges);
+tag(g1e5, g1Edges);
+tag(g1e6, g1Edges);
+tag(g1e7, g1Edges);
+tag(g1e8, g1Edges);
+tag(g1e9, g1Edges);
+tag(g1e10, g1Edges);
+tag(g1e11, g1Edges);
+tag(g1e12, g1Edges);
+tag(g1e13, g1Edges);
+tag(g1e14, g1Edges);
+tag(g1e15, g1Edges);
+
+text(g1lu1, (165, 336), "$u_1$");
+text(g1lu2, (333, 336), "$u_2$");
+text(g1lu3, (393, 214), "$u_3$");
+text(g1lu4, (270, 124), "$u_4$");
+text(g1lu5, (105, 215), "$u_5$");
+text(g1lv1, (198, 262), "$v_1$");
+text(g1lv2, (301, 262), "$v_2$");
+text(g1lv3, (326, 228), "$v_3$");
+text(g1lv4, (272, 181), "$v_4$");
+text(g1lv5, (174, 227), "$v_5$");
+tag(g1lu1, nodeLabels);
+tag(g1lu2, nodeLabels);
+tag(g1lu3, nodeLabels);
+tag(g1lu4, nodeLabels);
+tag(g1lu5, nodeLabels);
+tag(g1lv1, nodeLabels);
+tag(g1lv2, nodeLabels);
+tag(g1lv3, nodeLabels);
+tag(g1lv4, nodeLabels);
+tag(g1lv5, nodeLabels);
+equation(g1Name, (250, 366), "G_1", 30);
+tag(g1Name, graphNames);
+
+dot(g2u1, (1030, 120), 5);
+dot(g2u2, (1160, 210), 5);
+dot(g2u3, (1120, 320), 5);
+dot(g2u4, (940, 320), 5);
+dot(g2u5, (900, 210), 5);
+dot(g2u6, (1030, 185), 5);
+dot(g2u7, (1095, 225), 5);
+dot(g2u8, (1075, 275), 5);
+dot(g2u9, (985, 275), 5);
+dot(g2u10, (965, 225), 5);
+tag(g2u1, g2Nodes);
+tag(g2u2, g2Nodes);
+tag(g2u3, g2Nodes);
+tag(g2u4, g2Nodes);
+tag(g2u5, g2Nodes);
+tag(g2u6, g2Nodes);
+tag(g2u7, g2Nodes);
+tag(g2u8, g2Nodes);
+tag(g2u9, g2Nodes);
+tag(g2u10, g2Nodes);
+
+line(g2e1, (1030, 120), (1160, 210));
+line(g2e2, (1160, 210), (1120, 320));
+line(g2e3, (1120, 320), (940, 320));
+line(g2e4, (940, 320), (900, 210));
+line(g2e5, (900, 210), (1030, 120));
+line(g2e6, (1030, 120), (1030, 185));
+line(g2e7, (1160, 210), (1095, 225));
+line(g2e8, (1120, 320), (1075, 275));
+line(g2e9, (940, 320), (985, 275));
+line(g2e10, (900, 210), (965, 225));
+line(g2e11, (1030, 185), (1075, 275));
+line(g2e12, (1075, 275), (965, 225));
+line(g2e13, (965, 225), (1095, 225));
+line(g2e14, (1095, 225), (985, 275));
+line(g2e15, (985, 275), (1030, 185));
+tag(g2e1, g2Edges);
+tag(g2e2, g2Edges);
+tag(g2e3, g2Edges);
+tag(g2e4, g2Edges);
+tag(g2e5, g2Edges);
+tag(g2e6, g2Edges);
+tag(g2e7, g2Edges);
+tag(g2e8, g2Edges);
+tag(g2e9, g2Edges);
+tag(g2e10, g2Edges);
+tag(g2e11, g2Edges);
+tag(g2e12, g2Edges);
+tag(g2e13, g2Edges);
+tag(g2e14, g2Edges);
+tag(g2e15, g2Edges);
+
+text(g2lu1, (1010, 114), "$u_1$");
+text(g2lu2, (1184, 214), "$u_2$");
+text(g2lu3, (1138, 344), "$u_3$");
+text(g2lu4, (918, 344), "$u_4$");
+text(g2lu5, (874, 214), "$u_5$");
+text(g2lu6, (1051, 181), "$u_6$");
+text(g2lu7, (1122, 224), "$u_7$");
+text(g2lu8, (1095, 280), "$u_8$");
+text(g2lu9, (959, 280), "$u_9$");
+text(g2lu10, (934, 224), "$u_{10}$");
+tag(g2lu1, nodeLabels);
+tag(g2lu2, nodeLabels);
+tag(g2lu3, nodeLabels);
+tag(g2lu4, nodeLabels);
+tag(g2lu5, nodeLabels);
+tag(g2lu6, nodeLabels);
+tag(g2lu7, nodeLabels);
+tag(g2lu8, nodeLabels);
+tag(g2lu9, nodeLabels);
+tag(g2lu10, nodeLabels);
+equation(g2Name, (1030, 366), "G_2", 30);
+tag(g2Name, graphNames);
+
+let g3cx = cx;
+let g3cy = 398;
+let g3r = 105;
+dot(g3c, (g3cx, g3cy), 5);
+tag(g3c, g3Nodes);
+for i in 0..12 {
+line(g3rim{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), (g3cx + g3rcos(-pi/2 + tau(i + 1)/12), g3cy + g3rsin(-pi/2 + tau(i + 1)/12)));
+line(g3spoke{i}, (g3cx, g3cy), (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)));
+dot(g3u{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), 5);
+tag(g3rim{i}, g3Edges);
+tag(g3spoke{i}, g3Edges);
+tag(g3u{i}, g3Nodes);
+}
+text(g3l1, (640, 264), "$u_1$");
+text(g3l2, (710, 284), "$u_2$");
+text(g3l3, (762, 334), "$u_3$");
+text(g3l4, (778, 402), "$u_4$");
+text(g3l5, (762, 470), "$u_5$");
+text(g3l6, (710, 520), "$u_6$");
+text(g3l7, (640, 540), "$u_7$");
+text(g3l8, (570, 520), "$u_8$");
+text(g3l9, (518, 470), "$u_9$");
+text(g3l10, (500, 402), "$u_{10}$");
+text(g3l11, (518, 334), "$u_{11}$");
+text(g3l12, (570, 284), "$u_{12}$");
+tag(g3l1, nodeLabels);
+tag(g3l2, nodeLabels);
+tag(g3l3, nodeLabels);
+tag(g3l4, nodeLabels);
+tag(g3l5, nodeLabels);
+tag(g3l6, nodeLabels);
+tag(g3l7, nodeLabels);
+tag(g3l8, nodeLabels);
+tag(g3l9, nodeLabels);
+tag(g3l10, nodeLabels);
+tag(g3l11, nodeLabels);
+tag(g3l12, nodeLabels);
+equation(g3Name, (640, 612), "G_3", 30);
+tag(g3Name, graphNames);
+
+dot(g4u1, (210, 625), 5);
+dot(g4u2, (350, 625), 5);
+dot(g4u3, (410, 510), 5);
+dot(g4u4, (290, 435), 5);
+dot(g4v1, (255, 560), 5);
+dot(g4v2, (320, 560), 5);
+dot(g4v3, (340, 510), 5);
+dot(g4v4, (290, 485), 5);
+dot(g4v5, (220, 520), 5);
+dot(g4w1, (170, 500), 5);
+dot(g4w2, (145, 450), 5);
+dot(g4w3, (95, 565), 5);
+tag(g4u1, g4Nodes);
+tag(g4u2, g4Nodes);
+tag(g4u3, g4Nodes);
+tag(g4u4, g4Nodes);
+tag(g4v1, g4Nodes);
+tag(g4v2, g4Nodes);
+tag(g4v3, g4Nodes);
+tag(g4v4, g4Nodes);
+tag(g4v5, g4Nodes);
+tag(g4w1, g4Nodes);
+tag(g4w2, g4Nodes);
+tag(g4w3, g4Nodes);
+
+line(g4e1, (95, 565), (210, 625));
+line(g4e2, (210, 625), (350, 625));
+line(g4e3, (350, 625), (410, 510));
+line(g4e4, (410, 510), (290, 435));
+line(g4e5, (290, 435), (145, 450));
+line(g4e6, (145, 450), (95, 565));
+line(g4e7, (145, 450), (170, 500));
+line(g4e8, (95, 565), (170, 500));
+line(g4e9, (170, 500), (220, 520));
+line(g4e10, (255, 560), (320, 560));
+line(g4e11, (320, 560), (340, 510));
+line(g4e12, (340, 510), (290, 485));
+line(g4e13, (290, 485), (220, 520));
+line(g4e14, (220, 520), (255, 560));
+line(g4e15, (210, 625), (255, 560));
+line(g4e16, (350, 625), (320, 560));
+line(g4e17, (410, 510), (340, 510));
+line(g4e18, (290, 435), (290, 485));
+tag(g4e1, g4Edges);
+tag(g4e2, g4Edges);
+tag(g4e3, g4Edges);
+tag(g4e4, g4Edges);
+tag(g4e5, g4Edges);
+tag(g4e6, g4Edges);
+tag(g4e7, g4Edges);
+tag(g4e8, g4Edges);
+tag(g4e9, g4Edges);
+tag(g4e10, g4Edges);
+tag(g4e11, g4Edges);
+tag(g4e12, g4Edges);
+tag(g4e13, g4Edges);
+tag(g4e14, g4Edges);
+tag(g4e15, g4Edges);
+tag(g4e16, g4Edges);
+tag(g4e17, g4Edges);
+tag(g4e18, g4Edges);
+
+text(g4lu1, (190, 650), "$u_1$");
+text(g4lu2, (365, 650), "$u_2$");
+text(g4lu3, (435, 514), "$u_3$");
+text(g4lu4, (294, 414), "$u_4$");
+text(g4lv1, (255, 540), "$v_1$");
+text(g4lv2, (335, 544), "$v_2$");
+text(g4lv3, (360, 505), "$v_3$");
+text(g4lv4, (312, 485), "$v_4$");
+text(g4lv5, (224, 500), "$v_5$");
+text(g4lw1, (176, 480), "$w_1$");
+text(g4lw2, (123, 444), "$w_2$");
+text(g4lw3, (72, 568), "$w_3$");
+tag(g4lu1, nodeLabels);
+tag(g4lu2, nodeLabels);
+tag(g4lu3, nodeLabels);
+tag(g4lu4, nodeLabels);
+tag(g4lv1, nodeLabels);
+tag(g4lv2, nodeLabels);
+tag(g4lv3, nodeLabels);
+tag(g4lv4, nodeLabels);
+tag(g4lv5, nodeLabels);
+tag(g4lw1, nodeLabels);
+tag(g4lw2, nodeLabels);
+tag(g4lw3, nodeLabels);
+equation(g4Name, (275, 690), "G_4", 30);
+tag(g4Name, graphNames);
+
+dot(g5a, (1020, 440), 5);
+dot(g5b, (1160, 470), 5);
+dot(g5c, (1135, 535), 5);
+dot(g5d, (1195, 575), 5);
+dot(g5e, (1080, 635), 5);
+dot(g5f, (915, 625), 5);
+dot(g5g, (880, 525), 5);
+dot(g5h, (1020, 505), 5);
+dot(g5i, (960, 535), 5);
+dot(g5j, (1080, 535), 5);
+dot(g5k, (980, 590), 5);
+dot(g5l, (1060, 590), 5);
+tag(g5a, g5Nodes);
+tag(g5b, g5Nodes);
+tag(g5c, g5Nodes);
+tag(g5d, g5Nodes);
+tag(g5e, g5Nodes);
+tag(g5f, g5Nodes);
+tag(g5g, g5Nodes);
+tag(g5h, g5Nodes);
+tag(g5i, g5Nodes);
+tag(g5j, g5Nodes);
+tag(g5k, g5Nodes);
+tag(g5l, g5Nodes);
+
+line(g5e1, (1020, 440), (1160, 470));
+line(g5e2, (1160, 470), (1195, 575));
+line(g5e3, (1195, 575), (1080, 635));
+line(g5e4, (1080, 635), (915, 625));
+line(g5e5, (915, 625), (880, 525));
+line(g5e6, (880, 525), (1020, 440));
+line(g5e7, (1160, 470), (1135, 535));
+line(g5e8, (1135, 535), (1195, 575));
+line(g5e9, (1135, 535), (1080, 535));
+line(g5e10, (1020, 440), (1020, 505));
+line(g5e11, (880, 525), (960, 535));
+line(g5e12, (915, 625), (980, 590));
+line(g5e13, (1080, 635), (1060, 590));
+line(g5e14, (1020, 505), (980, 590));
+line(g5e15, (1020, 505), (1060, 590));
+line(g5e16, (960, 535), (1080, 535));
+line(g5e17, (960, 535), (1060, 590));
+line(g5e18, (1080, 535), (980, 590));
+tag(g5e1, g5Edges);
+tag(g5e2, g5Edges);
+tag(g5e3, g5Edges);
+tag(g5e4, g5Edges);
+tag(g5e5, g5Edges);
+tag(g5e6, g5Edges);
+tag(g5e7, g5Edges);
+tag(g5e8, g5Edges);
+tag(g5e9, g5Edges);
+tag(g5e10, g5Edges);
+tag(g5e11, g5Edges);
+tag(g5e12, g5Edges);
+tag(g5e13, g5Edges);
+tag(g5e14, g5Edges);
+tag(g5e15, g5Edges);
+tag(g5e16, g5Edges);
+tag(g5e17, g5Edges);
+tag(g5e18, g5Edges);
+
+equation(g5Name, (1020, 690), "G_5", 30);
+tag(g5Name, graphNames);
+
+tag(g1Edges, allEdges);
+tag(g2Edges, allEdges);
+tag(g3Edges, allEdges);
+tag(g4Edges, allEdges);
+tag(g5Edges, allEdges);
+tag(g1Nodes, allNodes);
+tag(g2Nodes, allNodes);
+tag(g3Nodes, allNodes);
+tag(g4Nodes, allNodes);
+tag(g5Nodes, allNodes);
+
+stroke(allEdges, 3);
+color(allEdges, fg);
+untraced(allEdges);
+color(allNodes, fg);
+hidden(allNodes);
+size(nodeLabels, 19);
+color(nodeLabels, dim);
+hidden(nodeLabels);
+hidden(graphNames);
+
+show(titleA, 0.5);
+show(titleB, 0.5);
+draw(frame, 0.7);
+
+par {
+seq {
+draw(g1Edges, 1.0);
+show(g1Nodes, 0.25);
+show(g1Name, 0.25);
+}
+seq {
+wait(0.25);
+draw(g2Edges, 1.0);
+show(g2Nodes, 0.25);
+show(g2Name, 0.25);
+}
+seq {
+wait(0.5);
+draw(g3Edges, 1.2);
+show(g3Nodes, 0.25);
+show(g3Name, 0.25);
+}
+seq {
+wait(0.75);
+draw(g4Edges, 1.1);
+show(g4Nodes, 0.25);
+show(g4Name, 0.25);
+}
+seq {
+wait(1.0);
+draw(g5Edges, 1.0);
+show(g5Nodes, 0.25);
+show(g5Name, 0.25);
+}
+}
+
+show(nodeLabels, 0.7);
+recolor(graphNames, gold, 0.5);
+pulse(graphNames, 0.8);
+wait(1.0);
+</code></pre>
+<div class="manic-video" data-video="ex-cubic-graphs"></div>
 
 
                     </main>

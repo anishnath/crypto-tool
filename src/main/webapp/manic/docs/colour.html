@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -239,11 +239,14 @@ move(p, (900, 400), 0.8, smooth);   // usually what you want
 </code></pre>
 <h2 id="canvas--size"><a class="header" href="#canvas--size">Canvas &amp; size</a></h2>
 <p><code>canvas(...)</code> sets the frame. Give it a preset or explicit pixels:</p>
-<pre><code class="language-manic">canvas("16:9");        // 1280x720  (also: 1080p, 4k, square, portrait/9:16, 4:3)
+<pre><code class="language-manic">canvas("16:9");        // 1280x720  (also: 4:5, square, portrait/9:16, 4:3, 1080p, 4k)
 canvas(1280, 720);     // explicit
 </code></pre>
 <p><code>portrait</code> / <code>9:16</code> is 1080×1920 — pair it with the <code>reel</code> render preset for
 vertical / social clips.</p>
+<p>Use <code>--canvas portrait|4:5|square|16:9|WIDTHxHEIGHT</code> to reframe one responsive
+source without changing its <code>canvas(...)</code> line. The override is applied before
+<code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>, and build-time layout branches are evaluated.</p>
 <h2 id="templates--the-whole-look"><a class="header" href="#templates--the-whole-look">Templates — the whole look</a></h2>
 <p>For the complete selection guide, CLI override rules, mono tips and a runnable
 black-and-white example, see <a href="templates.html">Templates — choose the whole visual system</a>.</p>

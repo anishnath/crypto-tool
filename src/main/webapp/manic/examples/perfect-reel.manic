@@ -3,6 +3,7 @@
 title("Perfect Reel — Angle Ratio");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
 

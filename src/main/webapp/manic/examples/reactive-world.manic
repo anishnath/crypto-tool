@@ -1,0 +1,111 @@
+// ============================================================================
+// reactive-world.manic — one world, named state transitions
+// ----------------------------------------------------------------------------
+// Each `step` changes several existing representations together. The equation,
+// tangent, live slope, derivative curve, caption and camera share one continuous
+// stage; anything a step does not mention simply persists.
+// ============================================================================
+
+title("Reactive World — The Derivative Lives on the Curve");
+canvas("9:16");
+template("terminal");
+watermark(manicMark, (865, 165), "Made With Manic");
+
+creator(me, "@anish2good name=Calculus_World tagline=One_idea_many_views yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=See_the_change safe=reels");
+socials(me);
+
+text(kicker, (540, 130), "ONE WORLD · FIVE NAMED STEPS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 215), "The derivative lives on the curve");
+size(headline, 39); color(headline, fg); bold(headline); hidden(headline);
+
+rect(stage, (540, 855), 930, 1050);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72);
+
+equation(work, (540, 390), `f(x)=0.35x^2`, 51);
+color(work, cyan); hidden(work);
+
+let ox = 540;
+let oy = 1050;
+let sx = 115;
+let sy = 62;
+
+axes(ax, (ox, oy), 410, 420, 1);
+color(ax, dim); opacity(ax, 0.55); untraced(ax);
+
+plot(f, (ox, oy), sx, sy, "0.35*x*x", (-3.5, 3.5));
+color(f, cyan); stroke(f, 6); glow(f, 0.8); untraced(f);
+
+deriv(df, f);
+color(df, magenta); stroke(df, 5); dashed(df, 18, 11); untraced(df);
+
+tangent(tan, f, -2.8, 235);
+color(tan, gold); stroke(tan, 4); hidden(tan);
+
+slope(rate, f, -2.8, (24, -30));
+color(rate, gold); hidden(rate);
+
+dot(vertex, (ox, oy), 10);
+color(vertex, lime); glow(vertex, 1.8); hidden(vertex);
+
+equation(curveLabel, (790, 650), `f(x)`, 31);
+color(curveLabel, cyan); hidden(curveLabel);
+
+equation(derivLabel, (790, 1320), `f'(x)`, 31);
+color(derivLabel, magenta); hidden(derivLabel);
+
+text(caption, (540, 1450), "Start with one curve and one moving question: how steep is it?");
+size(caption, 26); color(caption, dim); wrap(caption, 820); hidden(caption);
+
+// ---------------------------------------------------------------------------
+// NAMED REACTIVE STEPS
+// ---------------------------------------------------------------------------
+
+step("question") {
+  show(kicker, 0.40);
+  show(headline, 0.50);
+  show(work, 0.55);
+  draw(ax, 0.85);
+  draw(f, 1.40);
+  show(curveLabel, 0.45);
+  show(caption, 0.45);
+}
+wait(0.75);
+
+step("measure-slope") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  show(tan, 0.45);
+  show(rate, 0.45);
+  to(tan, x, 2.8, 3.20, smooth);
+  to(rate, x, 2.8, 3.20, smooth);
+  say(caption, "Move the point: the tangent and its slope update together.", 0.40);
+}
+wait(0.60);
+
+step("find-the-flat-point") {
+  rewrite(work, `f'(0)=\textcolor{lime}{0}`, 0.85, smooth);
+  to(tan, x, 0, 1.80, smooth);
+  to(rate, x, 0, 1.80, smooth);
+  show(vertex, 0.40);
+  say(caption, "At the vertex the tangent becomes flat, so the derivative is zero.", 0.40);
+}
+wait(0.65);
+
+step("see-the-derivative") {
+  rewrite(work, `f'(x)=\textcolor{magenta}{0.70x}`, 0.90, smooth);
+  fade(tan, 0.40);
+  fade(rate, 0.40);
+  draw(df, 1.70);
+  show(derivLabel, 0.45);
+  say(caption, "Collect every local slope and a second curve appears: the derivative.", 0.40);
+}
+wait(0.70);
+
+step("takeaway") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(f, 0.70);
+  pulse(df, 0.70);
+  say(caption, "One idea, synchronized across symbols, geometry and motion.", 0.40);
+}
+wait(1.80);

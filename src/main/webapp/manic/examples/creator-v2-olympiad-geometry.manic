@@ -8,6 +8,7 @@
 title("Creator v2 — Olympiad Geometry");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Geometry_Lab tagline=See_the_hidden_lemma yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Pause_then_prove safe=shorts");
 

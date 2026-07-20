@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8c8664aa.js";
+            window.path_to_searchindex_js = "searchindex-e6371332.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9dd1d381.js"></script>
+        <script src="toc-83849da6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -204,7 +204,10 @@ how restrained or energetic it should feel.</p>
 </div>
 <p>For Shorts or TikTok, change both safe-area declarations to <code>safe=shorts</code> or
 <code>safe=tiktok</code>. The same source can also be reframed for <code>4:5</code>, <code>square</code>, or
-<code>16:9</code>; the Creator regions reflow automatically.</p>
+<code>16:9</code>; the Creator regions reflow automatically. Use <code>--canvas 4:5</code>,
+<code>--canvas square</code>, or <code>--canvas 16:9</code> at preview/record time so the file stays
+unchanged. The <a href="creator-reactive.html#publish-one-story-in-four-formats">Reactive stories</a>
+chapter shows the full workflow and the responsive manual-layout pattern.</p>
 <h2 id="1-write-for-a-phone-not-a-slide"><a class="header" href="#1-write-for-a-phone-not-a-slide">1. Write for a phone, not a slide</a></h2>
 <p>A strong first Reel usually has:</p>
 <ul>
@@ -217,6 +220,19 @@ how restrained or energetic it should feel.</p>
 <p>Prefer direct wording. Move supporting context into <code>explain</code>; do not make the
 viewer read a paragraph before the timer starts. Use LaTeX for mathematical
 notation so formulas stay crisp and compact.</p>
+<h3 id="gold-pattern-let-one-equation-evolve"><a class="header" href="#gold-pattern-let-one-equation-evolve">Gold pattern: let one equation evolve</a></h3>
+<p>For a solution Reel, do not stack five complete formulas or cut to a blank
+screen between steps. Declare one equation and rewrite it in place:</p>
+<pre><code class="language-manic">equation(work, (cx, 520), `x^2+2x=3`, 54);
+rewrite(work, `x^2+2x+1=4`, 0.85, smooth);
+wait(0.8);
+rewrite(work, `(x+1)^2=4`, 0.85, smooth);
+</code></pre>
+<p>The viewer’s eye can follow the terms that move while unchanged symbols stay
+put. Manic matches the rendered LaTeX; you still supply and own every correct
+step. For phone video, use one meaningful rewrite per narration beat, keep the
+equation in the media safe region, pause after the important result, and place
+any related plot or diagram motion beside the rewrite in <code>par</code>.</p>
 <h2 id="2-let-the-format-own-layout"><a class="header" href="#2-let-the-format-own-layout">2. Let the format own layout</a></h2>
 <pre><code class="language-manic">canvas("9:16");
 template("mono"); // optional: mono is the DSL default
@@ -273,6 +289,7 @@ native timer, a signature footer, timeline markers, and a final end card:</p>
 title("Perfect Reel — Angle Ratio");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
 
@@ -311,10 +328,11 @@ par {
 show(me.endcard, 0.6);
 wait(1.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/-AcCbVbv7qI" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_FAxmFXPEbU" title="Make a Perfect Math Reel From One Script — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="preview-and-export"><a class="header" href="#preview-and-export">Preview and export</a></h2>
 <pre><code class="language-sh">manic check examples/perfect-reel.manic
+manic check examples/perfect-reel.manic --canvas all
 manic examples/perfect-reel.manic
 
 # Inspect representative phone frames: hook, countdown, and answer hold.
@@ -331,6 +349,8 @@ or captions in an editor.</p>
 <h2 id="final-phone-size-review"><a class="header" href="#final-phone-size-review">Final phone-size review</a></h2>
 <p>Before publishing, check:</p>
 <ul>
+<li>Does <code>manic check your-file.manic --canvas all</code> pass portrait, feed, square,
+and landscape? See <a href="creator-visual-checks.html">Visual checks</a> for fixes.</li>
 <li>Can the hook be understood during the first beat?</li>
 <li>Is every important word and the CTA inside the selected safe area?</li>
 <li>Is there one obvious focal point, with no competing motion?</li>
@@ -343,7 +363,8 @@ or captions in an editor.</p>
 <p>Once those pass, keep the same profile, motion, colour, and closing pattern
 across the series. Consistency will make the next Reel both faster to produce
 and easier to recognise.</p>
-<p>Next: <a href="ex-creator.html">Explore every Creator control and format variant →</a></p>
+<p>Next: <a href="creator-reactive.html">Turn one polished scene into a reactive story →</a></p>
+<p>Reference: <a href="ex-creator.html">Explore every Creator control and format variant</a>.</p>
 
                     </main>
 
@@ -353,7 +374,7 @@ and easier to recognise.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="shapes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="creator-reactive.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -367,7 +388,7 @@ and easier to recognise.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="shapes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="creator-reactive.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

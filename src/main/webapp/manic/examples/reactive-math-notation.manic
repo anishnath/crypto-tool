@@ -1,0 +1,150 @@
+// ============================================================================
+// reactive-math-notation.manic — one Reels-ready stage, thirteen notation worlds
+// ----------------------------------------------------------------------------
+// `rewrite` is deliberately domain-neutral. The same persistent equation moves
+// through algebra, calculus, logic, physics, chemistry, biology, probability
+// and linear algebra;
+// only changed RaTeX parts leave or enter. Mixed prose + inline math uses normal
+// `text`, and the last scene proves creator-defined notation needs no new verb.
+// ============================================================================
+
+title("Reactive Mathematics — One Language, Every Notation");
+canvas("9:16");
+template("shorts");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
+
+creator(me, "@anish2good name=Notation_Lab tagline=Every_symbol_can_move yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_your_own safe=reels");
+socials(me);
+
+text(kicker, (540, 145), "ONE EQUATION · THIRTEEN SCIENTIFIC WORLDS");
+size(kicker, 23); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 235), "If LaTeX can say it, Manic can move it");
+size(headline, 39); color(headline, fg); bold(headline); hidden(headline);
+
+rect(stage, (540, 755), 940, 760);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72); hidden(stage);
+
+text(topic, (540, 445), "01 · ALGEBRAIC REARRANGEMENT");
+size(topic, 23); color(topic, cyan); bold(topic); hidden(topic);
+
+equation(work, (540, 730), `2(x+3)=14`, 52);
+hidden(work);
+
+text(note, (540, 1040), "Keep the structure. Move only the mathematical change.");
+size(note, 25); color(note, dim); wrap(note, 800); hidden(note);
+
+// A normal text entity may freely mix prose and several inline formulas.
+text(mixed, (540, 735), `Energy $E=mc^2$ uses mass $m$ and light speed $c$.`);
+size(mixed, 31); color(mixed, fg); wrap(mixed, 780); hidden(mixed);
+
+text(scope, (540, 1245), "RaTeX accuracy · local motion · one stable layout");
+size(scope, 22); color(scope, dim); bold(scope); hidden(scope);
+
+// A subtle dashed construction line also demonstrates that `dashed` belongs
+// to Manic itself — plots and all other path-like entities can use it.
+line(rule, (215, 1155), (865, 1155));
+color(rule, cyan); stroke(rule, 2); dashed(rule, 12, 9); opacity(rule, 0.35);
+untraced(rule);
+
+// ---------------------------------------------------------------------------
+// TIMELINE — every chapter reuses `work`; nothing is manually repositioned.
+// ---------------------------------------------------------------------------
+
+par {
+  show(kicker, 0.45); show(headline, 0.55); show(stage, 0.50);
+  show(topic, 0.45); show(note, 0.45); show(scope, 0.45); draw(rule, 0.85);
+}
+show(work, 0.55);
+wait(0.70);
+rewrite(work, `2x=8\quad\Rightarrow\quad \textcolor{lime}{x=4}`, 0.85, smooth);
+wait(0.75);
+
+say(topic, "02 · INTEGRALS & DERIVATIVES", 0.35);
+say(note, "The Fundamental Theorem becomes a change of state, not a scene cut.", 0.35);
+rewrite(work, `F(x)=\int_0^x t^2\,dt`, 0.80, smooth);
+wait(0.45);
+rewrite(work, `F'(x)=\frac{d}{dx}\int_0^x t^2\,dt=\textcolor{cyan}{x^2}`, 0.95, smooth);
+wait(0.70);
+
+say(topic, "03 · FRACTIONS, ROOTS, POWERS & LIMITS", 0.35);
+say(note, "Nested notation is still one screen-aware equation.", 0.35);
+rewrite(work, `x^2+\sqrt{x}+\frac{1}{x}`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\lim_{x\to0}\frac{\sqrt{1+x}-1}{x}=\frac{1}{2}`, 0.95, smooth);
+wait(0.70);
+
+say(topic, "04 · TRIGONOMETRIC IDENTITIES", 0.35);
+say(note, "The unchanged terms stay; only the conclusion arrives.", 0.35);
+rewrite(work, `\sin^2\theta+\cos^2\theta`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\sin^2\theta+\cos^2\theta=\textcolor{lime}{1}`, 0.85, smooth);
+wait(0.70);
+
+say(topic, "05 · SET NOTATION & LOGIC", 0.35);
+say(note, "Membership, intersections and propositions share the same engine.", 0.35);
+rewrite(work, `x\in A\cap B`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `(x\in A)\land(x\in B)`, 0.85, smooth);
+wait(0.70);
+
+say(topic, "06 · SUMMATIONS & PRODUCTS", 0.35);
+say(note, "Large operators retain their limits and baseline alignment.", 0.35);
+rewrite(work, `\sum_{k=1}^{n}k`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\prod_{k=1}^{n}k=\textcolor{magenta}{n!}`, 0.85, smooth);
+wait(0.70);
+
+say(topic, "07 · PHYSICS FORMULAS & UNITS", 0.35);
+say(note, "Symbols and dimensional units can live in one exact expression.", 0.35);
+rewrite(work, `F=ma`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `[F]=\mathrm{kg}\cdot\mathrm{m}\cdot\mathrm{s}^{-2}`, 0.90, smooth);
+wait(0.70);
+
+say(topic, "08 · CHEMISTRY · BALANCED REACTIONS", 0.35);
+say(note, "Keep every molecule; introduce only the coefficients that balance atoms.", 0.35);
+rewrite(work, `H_2+O_2\rightarrow H_2O`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `\textcolor{cyan}{2}H_2+O_2\rightarrow\textcolor{cyan}{2}H_2O`, 0.90, smooth);
+wait(0.70);
+
+say(topic, "09 · BIOLOGY · HARDY–WEINBERG", 0.35);
+say(note, "A population model grows from allele frequencies into genotype frequencies.", 0.35);
+rewrite(work, `p+q=1`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `p^2+2pq+q^2=\textcolor{lime}{1}`, 0.90, smooth);
+wait(0.70);
+
+say(topic, "10 · PROBABILITY EXPRESSIONS", 0.35);
+say(note, "Conditioning expands into Bayes' rule without replacing the stage.", 0.35);
+rewrite(work, `P(A\mid B)`, 0.80, smooth);
+wait(0.40);
+rewrite(work, `P(A\mid B)=\frac{P(B\mid A)P(A)}{P(B)}`, 0.95, smooth);
+wait(0.70);
+
+say(topic, "11 · MATRICES & VECTORS", 0.35);
+say(note, "Rows, columns, brackets and vector marks remain genuine LaTeX.", 0.35);
+rewrite(work, `\vec v=\begin{bmatrix}1\\2\end{bmatrix}`, 0.85, smooth);
+wait(0.40);
+rewrite(work, `A\vec v=\begin{bmatrix}a&b\\c&d\end{bmatrix}\begin{bmatrix}1\\2\end{bmatrix}`, 1.00, smooth);
+wait(0.75);
+
+say(topic, "12 · TEXT MIXED WITH MATHEMATICS", 0.35);
+say(note, "Ordinary prose can carry multiple inline formulas naturally.", 0.35);
+fade(work, 0.35);
+show(mixed, 0.55);
+wait(1.25);
+fade(mixed, 0.35);
+
+say(topic, "13 · YOUR OWN NOTATION", 0.35);
+say(note, "Define the meaning in your story; Manic preserves the supported notation.", 0.35);
+rewrite(work, `\mathcal{R}_{\star}(x)\equiv x^2+1`, 0.90, smooth);
+wait(0.45);
+rewrite(work, `\mathcal{R}_{\star}(2)=\textcolor{lime}{5}`, 0.85, smooth);
+wait(1.20);
+
+say(topic, "ONE REACTIVE LANGUAGE", 0.40);
+say(note, "Math, physics, logic — creators decide what comes next.", 0.40);
+pulse(work, 0.70);
+wait(1.80);

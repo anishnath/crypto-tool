@@ -1,0 +1,130 @@
+// ============================================================================
+// reactive-multiformat.manic — one semantic story, four output formats
+// ----------------------------------------------------------------------------
+// Keep this source unchanged and render it with:
+//   manic examples/reactive-multiformat.manic --canvas portrait
+//   manic examples/reactive-multiformat.manic --canvas 4:5
+//   manic examples/reactive-multiformat.manic --canvas square
+//   manic examples/reactive-multiformat.manic --canvas 16:9
+// The override is applied before w/h/cx/cy and the build-time layout branch.
+// Every format keeps the same named steps, continuity, duration and identity.
+// ============================================================================
+
+title("One Story, Every Screen");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Visual_Proofs tagline=One_idea_every_screen yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Keep_the_story safe=clean");
+
+let u = (w+h-abs(w-h)) / 2160; // min(w,h) / 1080 without a layout-specific constant
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// Portrait Reel / Short: story reads from top to bottom.
+if h > 1.45*w {
+  text(kicker, (cx, 125*u), "ONE SOURCE · PORTRAIT");
+  text(headline, (cx, 215*u), "A derivative is a world of slopes");
+  equation(work, (cx, 355*u), `f(x)=0.35x^2`, 54*u);
+
+  rect(stage, (cx, 900*u), 930*u, 940*u);
+  axes(ax, (cx, 1030*u), 410*u, 350*u, 1);
+  plot(curve, (cx, 1030*u), 115*u, 62*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 235*u);
+  slope(rate, curve, -2.7, (24*u,-30*u));
+  equation(curveLabel, (cx+310*u, 690*u), `f(x)`, 31*u);
+  equation(derivativeLabel, (cx+300*u, 1290*u), `f'(x)`, 31*u);
+  text(caption, (cx, 1450*u), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.72);
+}
+
+// Landscape lesson: explanation on the left, visual stage on the right.
+else if w > 1.25*h {
+  text(kicker, (w*0.25, h*0.13), "ONE SOURCE · LANDSCAPE");
+  text(headline, (w*0.25, h*0.24), "A derivative is a world of slopes");
+  equation(work, (w*0.25, h*0.38), `f(x)=0.35x^2`, 54*u);
+
+  rect(stage, (w*0.72, h*0.48), w*0.49, h*0.70);
+  axes(ax, (w*0.72, h*0.55), 350*u, 285*u, 1);
+  plot(curve, (w*0.72, h*0.55), 90*u, 48*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 190*u);
+  slope(rate, curve, -2.7, (20*u,-25*u));
+  equation(curveLabel, (w*0.88, h*0.27), `f(x)`, 29*u);
+  equation(derivativeLabel, (w*0.88, h*0.76), `f'(x)`, 29*u);
+  text(caption, (w*0.25, h*0.60), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.38);
+}
+
+// Square post / 4:5 feed: compact stacked composition.
+else {
+  text(kicker, (cx, h*0.09), "ONE SOURCE · FEED");
+  text(headline, (cx, h*0.17), "A derivative is a world of slopes");
+  equation(work, (cx, h*0.27), `f(x)=0.35x^2`, 52*u);
+
+  rect(stage, (cx, h*0.55), w*0.86, h*0.48);
+  axes(ax, (cx, h*0.59), 360*u, 270*u, 1);
+  plot(curve, (cx, h*0.59), 92*u, 48*u, "0.35*x*x", (-3.5,3.5));
+  deriv(derivative, curve);
+  tangent(tan, curve, -2.7, 195*u);
+  slope(rate, curve, -2.7, (20*u,-25*u));
+  equation(curveLabel, (cx+270*u, h*0.42), `f(x)`, 29*u);
+  equation(derivativeLabel, (cx+270*u, h*0.73), `f'(x)`, 29*u);
+  text(caption, (cx, h*0.84), "Move along the curve and every local slope tells part of a second story.");
+  wrap(caption, w*0.72);
+}
+
+size(kicker, 22*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 39*u); color(headline, fg); bold(headline); hidden(headline);
+size(caption, 25*u); color(caption, dim); hidden(caption);
+
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72); hidden(stage);
+color(ax, dim); opacity(ax, 0.52); untraced(ax);
+color(curve, cyan); stroke(curve, 6*u); glow(curve, 0.75); untraced(curve);
+color(derivative, magenta); stroke(derivative, 5*u); dashed(derivative, 18*u, 11*u); untraced(derivative);
+color(tan, gold); stroke(tan, 4*u); hidden(tan);
+color(rate, gold); hidden(rate);
+color(work, cyan); hidden(work);
+color(curveLabel, cyan); hidden(curveLabel);
+color(derivativeLabel, magenta); hidden(derivativeLabel);
+
+socials(me);
+
+step("question") {
+  show(stage, 0.35);
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(work, 0.50);
+  draw(ax, 0.80);
+  draw(curve, 1.30);
+  show(curveLabel, 0.40);
+  show(caption, 0.45);
+}
+wait(0.65);
+
+step("measure") {
+  rewrite(work, `f'(x)=0.70x`, 0.90, smooth);
+  show(tan, 0.40);
+  show(rate, 0.40);
+  to(tan, x, 2.7, 2.80, smooth);
+  to(rate, x, 2.7, 2.80, smooth);
+  say(caption, "The tangent and its live slope move as one explanation.", 0.40);
+}
+wait(0.55);
+
+step("collect-the-slopes") {
+  rewrite(work, `\textcolor{magenta}{f'(x)}=0.70x`, 0.90, smooth);
+  fade(tan, 0.35);
+  fade(rate, 0.35);
+  draw(derivative, 1.55);
+  show(derivativeLabel, 0.40);
+  say(caption, "Collect those local slopes and the derivative curve appears.", 0.40);
+}
+wait(0.65);
+
+step("takeaway") {
+  rewrite(work, `\text{slope of }f=\textcolor{magenta}{f'}`, 0.95, smooth);
+  pulse(curve, 0.70);
+  pulse(derivative, 0.70);
+  say(caption, "The layout can change. The idea, timing and identity stay together.", 0.40);
+}
+wait(1.60);

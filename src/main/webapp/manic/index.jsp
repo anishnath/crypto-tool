@@ -235,6 +235,7 @@
   };
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+<script src="<%=ctx%>/manic/manic-autofix.js"></script>
 <script src="<%=ctx%>/manic/manic-editor.js"></script>
 <script src="<%=ctx%>/manic/manic-playground.js"></script>
 

@@ -1,0 +1,154 @@
+// ============================================================================
+// parameter-journeys.manic — one value, several continuous representations
+// ----------------------------------------------------------------------------
+// `parameter` creates the visible control. `bind` connects it once to the
+// changing plot, tangent/slope, a geometric position, scale, and p² readout.
+// The named steps only animate the parameter; the visual world reacts smoothly.
+// Try every format with: manic check examples/parameter-journeys.manic --canvas all
+// ============================================================================
+
+title("Parameter Journeys");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Manic_Creator_Lab tagline=One_value_many_worlds yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=none accent=cyan safe=clean");
+
+let u = (w+h-abs(w-h)) / 2160;
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+if h > 1.45*w {
+  text(kicker, (cx, 120*u), "PARAMETER JOURNEY");
+  text(headline, (cx, 200*u), "Change one idea. Keep the world.");
+  equation(rule, (cx, 315*u), `y=\textcolor{cyan}{a}x^2`, 58*u);
+
+  rect(stage, (cx, 770*u), 920*u, 720*u);
+  axes(ax, (cx, 790*u), 400*u, 270*u, 1);
+  plot(curve, (cx, 790*u), 112*u, 61*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 230*u);
+  slope(rate, curve, 1.15, (24*u,-34*u));
+
+  parameter(a, (cx, 1215*u), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (cx, 1365*u), "THE SAME VALUE ALSO MOVES A POINT");
+  line(path, (w*0.18, 1450*u), (w*0.82, 1450*u));
+  dot(leftEnd, (w*0.18, 1450*u), 5*u);
+  dot(rightEnd, (w*0.82, 1450*u), 5*u);
+  circle(mover, (cx, 1450*u), 22*u);
+  bind(a, mover, x, w*0.18, w*0.82);
+  counter(magnitude, (cx, 1570*u), 0, 2, "a² = ", "");
+  text(caption, (cx, 1690*u), "Negative, zero, positive — every connected view stays in sync.");
+  wrap(caption, w*0.76);
+}
+else if w > 1.25*h {
+  text(kicker, (w*0.24, h*0.12), "PARAMETER JOURNEY");
+  text(headline, (w*0.25, h*0.22), "Change one idea. Keep the world.");
+  equation(rule, (w*0.25, h*0.34), `y=\textcolor{cyan}{a}x^2`, 55*u);
+
+  parameter(a, (w*0.25, h*0.49), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (w*0.25, h*0.64), "THE SAME VALUE MOVES A POINT");
+  line(path, (w*0.09, h*0.72), (w*0.41, h*0.72));
+  dot(leftEnd, (w*0.09, h*0.72), 5*u);
+  dot(rightEnd, (w*0.41, h*0.72), 5*u);
+  circle(mover, (w*0.25, h*0.72), 22*u);
+  bind(a, mover, x, w*0.09, w*0.41);
+  counter(magnitude, (w*0.25, h*0.82), 0, 2, "a² = ", "");
+
+  rect(stage, (w*0.72, h*0.48), w*0.49, h*0.72);
+  axes(ax, (w*0.72, h*0.53), 345*u, 250*u, 1);
+  plot(curve, (w*0.72, h*0.53), 92*u, 51*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 195*u);
+  slope(rate, curve, 1.15, (20*u,-28*u));
+  text(caption, (w*0.72, h*0.88), "Every connected view stays in sync.");
+  wrap(caption, w*0.42);
+}
+else {
+  text(kicker, (cx, h*0.08), "PARAMETER JOURNEY");
+  text(headline, (cx, h*0.15), "Change one idea. Keep the world.");
+  equation(rule, (cx, h*0.24), `y=\textcolor{cyan}{a}x^2`, 53*u);
+
+  rect(stage, (cx, h*0.50), w*0.86, h*0.40);
+  axes(ax, (cx, h*0.52), 350*u, 225*u, 1);
+  plot(curve, (cx, h*0.52), 94*u, 46*u, "0.22*x*x", (-3.3,3.3));
+  tangent(tan, curve, 1.15, 190*u);
+  slope(rate, curve, 1.15, (20*u,-26*u));
+
+  parameter(a, (cx, h*0.75), -1.2, -1.5, 1.5, "a", 2);
+  text(positionLabel, (cx, h*0.80), "ONE VALUE · PLOT · POSITION · MAGNITUDE");
+  line(path, (w*0.20, h*0.85), (w*0.80, h*0.85));
+  dot(leftEnd, (w*0.20, h*0.85), 5*u);
+  dot(rightEnd, (w*0.80, h*0.85), 5*u);
+  circle(mover, (cx, h*0.85), 20*u);
+  bind(a, mover, x, w*0.20, w*0.80);
+  counter(magnitude, (cx, h*0.875), 0, 2, "a² = ", "");
+  text(caption, (cx, h*0.925), "Every view stays in sync.");
+  wrap(caption, w*0.78);
+}
+
+// One declaration per relationship. `p` is the live parameter and `x` is the
+// plot coordinate only inside a plot-formula binding.
+bind(a, curve, formula, "0.22*p*x*x");
+bind(a, mover, scale, "0.78+0.22*abs(p)");
+bind(a, magnitude, value, "p*p");
+
+size(kicker, 21*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 37*u); bold(headline); hidden(headline);
+size(positionLabel, 22*u); color(positionLabel, dim); bold(positionLabel); hidden(positionLabel);
+size(caption, 23*u); color(caption, dim); hidden(caption);
+color(rule, cyan); hidden(rule);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.68); hidden(stage);
+color(ax, dim); opacity(ax, 0.48); untraced(ax);
+color(curve, cyan); stroke(curve, 6*u); glow(curve, 0.75); untraced(curve);
+color(tan, gold); stroke(tan, 4*u); hidden(tan);
+color(rate, gold); hidden(rate);
+color(path, dim); stroke(path, 3*u); untraced(path);
+color(leftEnd, dim); color(rightEnd, dim); hidden(leftEnd); hidden(rightEnd);
+color(mover, cyan); outline(mover, fg); hidden(mover);
+color(magnitude, fg); bold(magnitude); hidden(magnitude);
+hidden(a.widget);
+
+socials(me);
+
+step("opens-down") {
+  show(kicker, 0.30);
+  show(headline, 0.40);
+  show(rule, 0.45);
+  show(stage, 0.35);
+  draw(ax, 0.70);
+  draw(curve, 1.10);
+  show(tan, 0.35);
+  show(rate, 0.35);
+  show(a.widget, 0.45);
+  show(positionLabel, 0.35);
+  draw(path, 0.55);
+  show(leftEnd, 0.25);
+  show(rightEnd, 0.25);
+  show(mover, 0.35);
+  show(magnitude, 0.35);
+  show(caption, 0.40);
+}
+wait(0.65);
+
+step("flatten") {
+  to(a, value, 0, 2.20, smooth);
+  say(caption, "At zero the quadratic, tangent slope, position and magnitude settle together.", 0.40);
+}
+wait(0.55);
+
+step("opens-up") {
+  to(a, value, 1.25, 2.40, smooth);
+  say(caption, "One authored parameter now carries the whole visual family upward.", 0.40);
+}
+wait(0.60);
+
+step("compare") {
+  to(a, value, -0.65, 2.10, smooth);
+  say(caption, "Try another case without rebuilding the plot, diagram or readouts.", 0.40);
+}
+wait(0.55);
+
+step("takeaway") {
+  to(a, value, 1.5, 2.30, smooth);
+  pulse(rule, 0.70);
+  pulse(mover, 0.70);
+  say(caption, "Declare the relationship once. Animate only what the idea means.", 0.40);
+}
+wait(1.60);

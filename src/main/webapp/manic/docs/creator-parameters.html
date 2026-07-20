@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Text &amp; UI - manic — the manual</title>
+        <title>Parameter journeys — one value, many views - manic — the manual</title>
 
 
         <!-- Custom HTML head -->
@@ -178,304 +178,137 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="text--ui"><a class="header" href="#text--ui">Text &amp; UI</a></h1>
-<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
-<h2 id="typewriter"><a class="header" href="#typewriter">typewriter</a></h2>
-<p>Text revealed character by character.</p>
-<pre><code class="language-manic">// Typewriter — text revealed letter by letter (Manim's AddTextLetterByLetter),
-// then removed letter by letter (RemoveTextLetterByLetter). `type` animates the
-// text's `trace` 0-&gt;1 (a fraction of characters shown); `erase` runs it back.
-// Declare the text `untraced` so it starts hidden, then `type` reveals it.
-//
-//   manic examples/typewriter.manic
+                        <h1 id="parameter-journeys--one-value-many-connected-views"><a class="header" href="#parameter-journeys--one-value-many-connected-views">Parameter journeys — one value, many connected views</a></h1>
+<p>A parameter journey shows how an idea behaves across a family of cases. Instead
+of rebuilding the scene for “negative”, “zero”, and “positive”, declare one
+visible value, connect it to the existing world once, and animate only that
+value.</p>
+<pre><code class="language-manic">parameter(a, (cx, 140), -1.2, -1.5, 1.5, "a", 2);
 
-title("Typewriter");
-canvas("16:9");
+plot(curve, (cx, 720), 110, 58, "x*x", (-3.3,3.3));
+circle(point, (cx, 1200), 22);
+counter(magnitude, (cx, 1360), 0, 2, "a² = ", "");
 
-text(head, (cx, 150), "text, one letter at a time");
-display(head);  color(head, cyan);  size(head, 26);  hidden(head);
+bind(a, curve, formula, "0.22*p*x*x");
+bind(a, point, x, w*0.18, w*0.82);
+bind(a, point, scale, "0.78+0.22*abs(p)");
+bind(a, magnitude, value, "p*p");
 
-// untraced = trace 0 = no characters shown yet
-text(line1, (cx, 320), "the quick brown fox");   color(line1, lime);  size(line1, 44);  untraced(line1);
-text(line2, (cx, 400), "jumps over the lazy dog"); color(line2, cyan); size(line2, 44);  untraced(line2);
-cursor(line2);   // this line types with a trailing cursor
-
-// --- script ---
-show(head, 0.5);
-type(line1, 1.6);     // AddTextLetterByLetter
-type(line2, 1.6);     // AddTextLetterByLetter, with a cursor
-wait(1.0);
-
-section("...and back");
-erase(line2, 1.0);    // RemoveTextLetterByLetter
-erase(line1, 1.0);
-wait(0.8);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/mdlHwoCvv-U" title="Typewriter Text in manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="captions"><a class="header" href="#captions">captions</a></h2>
-<p>Karaoke / word-pop caption modes.</p>
-<pre><code class="language-manic">// Captions — karaoke word highlighting and TikTok-style word pop-in. `caption`
-// lays out a phrase's words in a centred row (as {id}.w0, {id}.w1, ... tagged
-// {id}.words); `karaoke` highlights them in sequence; `wordpop` pops them in one
-// at a time.
-//
-//   manic examples/captions.manic
-//   manic examples/captions.manic --record out --fps 60
-
-title("Captions");
-canvas("16:9");
-
-text(head, (cx, 110), "word-by-word: karaoke + pop-in");
-display(head);  color(head, cyan);  size(head, 26);  hidden(head);
-
-// karaoke: starts dim, words light up in sequence
-caption(kara, "follow the bouncing highlight", (cx, 280), 46, dim);
-
-// word-pop: hidden first, then each word pops in
-caption(pop, "each word pops right in", (cx, 440), 50, lime);
-hidden(pop.words);
-
-// --- script ---
-show(head, 0.5);
-
-section("Karaoke");
-karaoke(kara, 0.34, cyan);
-wait(0.8);
-
-section("Word pop");
-wordpop(pop, 0.14);
-wait(1.6);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/oM2Fw-H3lNg" title="Karaoke & Word-Pop Captions — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="terminal_boot"><a class="header" href="#terminal_boot">terminal_boot</a></h2>
-<p>The neon terminal template booting up.</p>
-<pre><code class="language-manic">// Terminal Boot — a fake boot sequence typed out line by line, ending at a live
-// prompt with a blinking-style cursor. Shows off the `cursor` modifier, `type`
-// typewriter reveal, an author-set `masthead`, and the `terminal` template.
-//
-//   manic examples/terminal_boot.manic
-//   manic examples/terminal_boot.manic --record out --fps 60
-
-title("manic");
-canvas("16:9");
-template("terminal");
-masthead("manic ~ %", "READY");     // your own header text (no engine branding)
-
-text(l1, (cx, 210), "");   color(l1, lime);     size(l1, 24);
-text(l2, (cx, 260), "");   color(l2, cyan);     size(l2, 24);   hidden(l2);
-text(l3, (cx, 310), "");   color(l3, cyan);     size(l3, 24);   hidden(l3);
-text(l4, (cx, 360), "");   color(l4, lime);     size(l4, 24);   hidden(l4);
-text(prompt, (cx, 440), "");  color(prompt, fg);  size(prompt, 28);  display(prompt);
-hidden(prompt);  cursor(prompt);    // only the live prompt gets the cursor
-
-// --- boot log ---
-say(l1, "&gt; initializing manic engine", 0.1);
-type(l1, 1.0);
-
-show(l2, 0.2);
-say(l2, "  loaded kits: std math geo algo brand", 0.1);
-type(l2, 1.3);
-
-show(l3, 0.2);
-say(l3, "  timeline: deterministic @ 60fps", 0.1);
-type(l3, 1.0);
-
-show(l4, 0.2);
-say(l4, "  ready.", 0.1);
-type(l4, 0.5);
-
-// --- the prompt, awaiting input ---
-show(prompt, 0.2);
-say(prompt, "manic ~ % render my_idea", 0.1);
-type(prompt, 1.2);
-wait(1.6);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/JDdcN2toYoo" title="A Neon Terminal Boots Up — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="brace"><a class="header" href="#brace">brace</a></h2>
-<p>The curly-brace family.</p>
-<pre><code class="language-manic">// Braces — label spans and parts with curly braces, manic's Brace / BraceLabel
-// / BraceBetweenPoints. A length is split into two parts a and b; a brace under
-// each names it, and a brace over the whole names the sum. Every brace here is
-// a BraceBetweenPoints (two points + a depth); bracelabel adds the text.
-//
-//   manic examples/brace.manic
-//   manic examples/brace.manic --record out --fps 60
-
-title("Braces");
-canvas(1280, 720);
-
-text(head, (640, 120), "label a span, or its parts");
-display(head);  color(head, cyan);  size(head, 28);  hidden(head);
-text(cap, (640, 620), "");  color(cap, dim);  size(cap, 24);
-
-// the length, split at x = 680
-line(seg, (300, 360), (980, 360));  color(seg, fg);  stroke(seg, 3);  untraced(seg);
-dot(dl, (300, 360));   dot(dm, (680, 360));   dot(dr, (980, 360));
-color(dl, magenta);  color(dm, lime);  color(dr, cyan);
-hidden(dl);  hidden(dm);  hidden(dr);
-
-// braces under the two parts, and over the whole (bulges up: points go R-&gt;L)
-bracelabel(ba, (300, 392), (680, 392), "a", 30);        color(ba, magenta);
-bracelabel(bb, (680, 392), (980, 392), "b", 30);        color(bb, cyan);
-bracelabel(bt, (980, 320), (300, 320), "a + b", 34);    color(bt, lime);
-hidden(ba);  hidden(bb);  hidden(bt);
-
-// --- reveal ---
-show(head, 0.5);
-say(cap, "here is a length");
-draw(seg, 0.7);
-par { show(dl, 0.3);  show(dr, 0.3); }
-wait(0.3);
-
-section("Two parts");
-say(cap, "split it at a point into parts a and b");
-show(dm, 0.3);
-show(ba, 0.5);
-show(bb, 0.5);
-wait(0.5);
-
-section("The whole");
-say(cap, "the whole span is a + b");
-show(bt, 0.6);
-par { pulse(ba.label);  pulse(bb.label);  pulse(bt.label); }
-wait(1.4);
-</code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/ftbN0Xh2u1E" title="Curly Braces, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="banner"><a class="header" href="#banner">banner</a></h2>
-<p>The manic logo / banner reveal.</p>
-<pre><code class="language-manic">// The manic banner &amp; watermark (à la ManimBanner). "create" draws the icon
-// trio on; "expand" reveals the wordmark; the watermark persists in the corner.
-//
-//   manic examples/banner.manic
-//   manic examples/banner.manic --record out --fps 60
-
-title("manic");
-canvas(1280, 720);
-
-banner(logo, (600, 360), 1.1);
-untraced(logo.icon);     // icon shapes drawn on
-hidden(logo.word);       // wordmark revealed on "expand"
-
-// a persistent, screen-fixed watermark, bottom-right
-watermark(wm, (1120, 690), "manic // synthwave");
-
-text(cap, (640, 560), "");  color(cap, dim);  size(cap, 22);
-
-// --- create: trace the icon trio on (staggered) ---
-say(cap, "create");
-stagger(0.2) {
-  draw(logo.dot, 0.6);
-  draw(logo.sq, 0.6);
-  draw(logo.tri, 0.6);
+step("flatten") {
+  to(a, value, 0, 2.2, smooth);
 }
-par { pulse(logo.dot);  pulse(logo.sq);  pulse(logo.tri); }
-wait(0.4);
-
-// --- expand: reveal the wordmark ---
-say(cap, "expand");
-show(logo.word, 0.6);
-wait(1.2);
-
-// --- unwrite: fade the whole banner ---
-say(cap, "");
-par { fade(logo.icon, 0.5);  fade(logo.word, 0.5); }
-wait(0.8);
+step("opens-up") {
+  to(a, value, 1.25, 2.4, smooth);
+}
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/FhoIX7kKQXU" title="The manic Logo Reveal" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="equation"><a class="header" href="#equation">equation</a></h2>
-<p>Display-quality LaTeX for fractions, roots, sums, powers and integrals, with semantic
-colour and template tinting.</p>
-<pre><code class="language-manic">// LaTeX math typesetting via `equation(...)`. Put the LaTeX in BACKTICKS so the
-// backslashes survive. Rendered white-on-transparent and tinted by the entity
-// colour, so `color(...)` and `template(...)` both work.
-title("Equations");
-canvas("16:9");
-
-equation(quad, (cx, 150), `x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`, 68);
-color(quad, cyan);
-
-equation(sum, (cx, 340), `\sum_{k=1}^{n} k = \frac{n(n+1)}{2}`, 60);
-
-equation(euler, (cx, 500), `e^{i\pi} + 1 = 0`, 64);
-color(euler, gold);
-
-equation(intg, (cx, 640), `\int_0^1 x^2\,dx = \tfrac{1}{3}`, 56);
-color(intg, lime);
+<p>The plot, point, scale, number, and native parameter control move on the same
+continuous clock. Nothing is replaced and no scene construction is duplicated.</p>
+<h2 id="the-three-part-mental-model"><a class="header" href="#the-three-part-mental-model">The three-part mental model</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>part</th><th>vocabulary</th><th>creator decision</th></tr>
+</thead>
+<tbody>
+<tr><td>Expose</td><td><code>parameter</code></td><td>Which value should the viewer follow?</td></tr>
+<tr><td>Connect</td><td><code>bind</code></td><td>Which representations explain that value?</td></tr>
+<tr><td>Travel</td><td><code>step</code> + <code>to(parameter,value,…)</code></td><td>Which cases tell the clearest story?</td></tr>
+</tbody>
+</table>
+</div>
+<p>This pattern is domain-neutral. The parameter can be a quadratic coefficient,
+damping factor in a formula plot, probability, sample-size readout, geometric
+position, opacity comparison, colour phase, or any other scalar that makes the
+idea easier to see.</p>
+<h2 id="declare-the-visible-parameter"><a class="header" href="#declare-the-visible-parameter">Declare the visible parameter</a></h2>
+<pre><code class="language-manic">parameter(id, (x,y), initial, min, max, ["label"], [decimals]);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/2r9pZUjMVbE" title="Beautiful LaTeX Equations From Plain Text — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="inline-math"><a class="header" href="#inline-math">inline-math</a></h2>
-<p>Inline LaTeX mixed with ordinary prose, including wrapped explanatory text and a
-standalone display equation.</p>
-<pre><code class="language-manic">// Inline LaTeX everywhere: wrap math in `$…$` (backtick raw string) inside ANY
-// text/caption/kit label. Plain text (no `$`) is unchanged. Mixed lines wrap.
-title("Inline math");
-canvas("16:9");
-
-text(t1, (cx, 110), `The area of a circle is $A = \pi r^2$`);
-color(t1, cyan);
-
-// mixed text + math that WRAPS across lines
-text(t2, (cx, 300), `By the Pythagorean theorem, if $a^2 + b^2 = c^2$ then the triangle with sides a, b, c is right-angled`);
-wrap(t2, 760);
-color(t2, lime);
-
-// a whole-formula label (auto-typeset, centred)
-equation(eq, (cx, 470), `\int_0^{1} x^2 \, dx = \tfrac{1}{3}`, 60);
-color(eq, gold);
+<p><code>parameter</code> produces a typeset numeric readout and a compact track/dot widget.
+The initial value must be inside a finite <code>min..max</code> range. Animated values are
+clamped to that range, which prevents an accidental journey from leaving the
+meaningful domain.</p>
+<p>The whole widget is tagged <code>id.widget</code>, so it can enter with the rest of the
+story:</p>
+<pre><code class="language-manic">hidden(a.widget);
+show(a.widget, 0.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/I0Bl6rCHH5M" title="Mix LaTeX Math Inside Any Sentence — manic" allowfullscreen loading="lazy"></iframe></div>
-
-<h2 id="image"><a class="header" href="#image">image</a></h2>
-<p>Embed a raster image (PNG/JPG) with <code>image(id, (x,y), "path", w, h)</code> — a real file drawn
-into the scene and animated like any entity (shown, spun, pulsed, moved). Unlocks logos,
-avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
-<pre><code class="language-manic">// ============================================================================
-//  image.manic  —  embed a raster image (PNG/JPG) in a scene
-// ----------------------------------------------------------------------------
-//  `image(id, (x,y), "path", [w], [h])` loads a real image file and draws it
-//  centred at (x,y), w×h px — and it's an ordinary entity, so every verb
-//  (`show`/`move`/`fade`/`pulse`/`spin`/…) animates it. Here a bundled logo
-//  slides + fades in, pulses, then a caption types beside it. A missing path
-//  draws a crossed placeholder box instead of failing.
-//
-//  (This unlocks real logos, avatars and photo backdrops for creator templates —
-//  a creator drops their brand image into a slot.)
-// ============================================================================
-
-title("Raster Images");
-canvas("16:9");
-
-image(logo, (cx, 340), "assets/manic-logo.png", 300, 300); hidden(logo);
-text(cap, (cx, 600), "any PNG/JPG — and it animates like anything else");
-color(cap, fg); size(cap, 34); bold(cap); untraced(cap);
-
-// ================= THE SCENE =================
-show(logo, 0.6); pulse(logo);
-wait(0.4);
-spin(logo, 1.0);
-type(cap, 2.0);
-wait(0.6);
-par { move(logo, (cx, 320), 0.8, smooth); pulse(logo); }
-wait(1.0);
+<p>It is an authored animation control, not an interactive slider in the exported
+video. Use ordinary <code>to</code> to move it; stateless evaluation keeps preview seeking
+and recording deterministic.</p>
+<h2 id="connect-with-a-responsive-range"><a class="header" href="#connect-with-a-responsive-range">Connect with a responsive range</a></h2>
+<p>The simplest binding maps the parameter’s declared minimum and maximum onto two
+output values:</p>
+<pre><code class="language-manic">bind(a, point, x, w*0.18, w*0.82);
+bind(a, label, opacity, 0.25, 1);
+bind(a, arrow, angle, -25, 25);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/3h0wTYGzHTU" title="Embed Any Image in manic — Logos, Avatars & Photos, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
-
+<p>This form is especially useful for positions because the endpoints are normal
+Manic expressions. <code>w</code>, <code>h</code>, <code>cx</code>, and <code>cy</code> are evaluated before the binding is
+created, so the same source can give each output format an appropriate range.</p>
+<h2 id="connect-with-a-formula"><a class="header" href="#connect-with-a-formula">Connect with a formula</a></h2>
+<p>Use a string formula for a nonlinear relationship:</p>
+<pre><code class="language-manic">bind(a, point, scale, "0.8+0.2*abs(p)");
+bind(a, result, value, "p*p");
+bind(damping, wave, formula, "exp(-p*abs(x))*cos(4*x)");
+</code></pre>
+<p>Inside a binding formula, <code>p</code> is the live parameter. A plot-formula binding also
+provides <code>x</code> as the plot coordinate. The usual arithmetic, constants, and
+functions—<code>sin</code>, <code>cos</code>, <code>exp</code>, <code>sqrt</code>, <code>abs</code>, <code>round</code>, and others—work here.</p>
+<p>Bindable properties are <code>x</code>, <code>y</code>, <code>opacity</code>, <code>scale</code>, <code>angle</code>, <code>hue</code>, <code>value</code>,
+<code>trace</code>, and a plot’s <code>formula</code>. A <code>value</code> target must be a <code>counter</code>. A formula
+target must be a <code>plot</code>.</p>
+<p>When a plot formula changes, its existing <code>tangent</code>, <code>normal</code>, <code>slope</code>, <code>area</code>,
+<code>integral</code>, and moving mark views receive the new function before they recompute.
+That is the important reactive promise: the analysis stays mathematically tied
+to the curve the viewer sees.</p>
+<h2 id="choose-cases-not-frames"><a class="header" href="#choose-cases-not-frames">Choose cases, not frames</a></h2>
+<p>Use named steps to describe meaningful cases:</p>
+<pre><code class="language-manic">step("underdamped") {
+  to(damping, value, 0.12, 2.0, smooth);
+  say(caption, "The oscillation survives for longer.", 0.35);
+}
+step("strong-damping") {
+  to(damping, value, 0.85, 2.0, smooth);
+  say(caption, "The same response now settles quickly.", 0.35);
+}
+</code></pre>
+<p>The stage names should explain the cases to a human. The parameter supplies the
+continuous motion between them; <code>bind</code> keeps every connected view synchronized.</p>
+<h2 id="creator-design-tips"><a class="header" href="#creator-design-tips">Creator design tips</a></h2>
+<ul>
+<li>Follow one primary parameter per short scene. Several controls are possible,
+but the audience should know which value is changing.</li>
+<li>Connect two or three complementary representations—a formula and plot, a
+geometry and measurement, or a simulation curve and readout.</li>
+<li>Give the parameter a meaningful range. Avoid travelling through singular or
+irrelevant values merely because the engine allows them.</li>
+<li>Use responsive range bindings for positions and formula bindings for meaning.</li>
+<li>Hold the important cases briefly. Smooth motion reveals the trend; the hold
+lets the viewer name it.</li>
+<li>Keep stable ids. Parameter journeys are an extension of the persistent-world
+model, not a reason to create replacement scenes.</li>
+<li>Run <code>manic check FILE.manic --canvas all</code> after the journey is complete.</li>
+</ul>
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete example</a></h2>
+<p><a href="ex-creator.html#parameter-journeys">Parameter journeys</a> is the polished reference:
+one coefficient drives a quadratic, live tangent and slope, moving point,
+changing scale, and <code>a²</code> readout across portrait, feed, square, and landscape.</p>
+<p>Current bindings target 2D entity properties and formula plots. Constructors
+that perform expensive build-time work—such as re-simulating a full physics
+system or changing the number of generated objects—remain build-time choices;
+represent those journeys with a formula/readout today rather than implying that
+Manic silently recomputed the model.</p>
+<p>Next: <a href="shapes.html">Meet the shapes that make up the persistent world →</a></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="ex-transforms.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="creator-visual-checks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="ex-generative.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="shapes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -485,11 +318,11 @@ wait(1.0);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="ex-transforms.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="creator-visual-checks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="ex-generative.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="shapes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

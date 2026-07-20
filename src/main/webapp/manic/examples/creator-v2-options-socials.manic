@@ -3,6 +3,7 @@
 title("Creator v2.4 — Options + Socials");
 canvas("9:16");
 template("mono");
+watermark(manicMark, (w*0.895-100, h*0.075+24), "Made With Manic");
 
 creator(me, "@anish2good name=Olympiad_Minute yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=cyan safe=reels");
 

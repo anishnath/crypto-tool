@@ -1,5 +1,5 @@
 {
-  "count": 180,
+  "count": 188,
   "categories": [
     {
       "slug": "algorithms",
@@ -70,6 +70,12 @@
           "file": "dijkstra.manic",
           "title": "Dijkstra",
           "desc": "Weighted edges, settling distances, a shortest-path tree."
+        },
+        {
+          "name": "cubic-graphs",
+          "file": "cubic-graphs.manic",
+          "title": "Cubic graphs",
+          "desc": "A hand-composed graph-theory plate: five 3-connected simple cubic graphs (including the 6-spoke wheel from a for loop) drawn on in sequence, with LaTeX node labels ($u_i$, $v_i$) and typeset names $G_1..G_5$ \u2014 a paper-style figure straight from a theorem statement."
         }
       ]
     },
@@ -82,6 +88,18 @@
           "file": "calculus-demo.manic",
           "title": "Calculus demo",
           "desc": "The flagship: two big ideas on one curve."
+        },
+        {
+          "name": "reactive-integral",
+          "file": "reactive-integral.manic",
+          "title": "Reactive integral",
+          "desc": "The reactive-math gold example: integration by parts stays one continuous equation, then a plot verifies that the antiderivative's slope is the integrand and +C is a family of vertical translations."
+        },
+        {
+          "name": "reactive-world",
+          "file": "reactive-world.manic",
+          "title": "Reactive world",
+          "desc": "The foundation for creator-reactive stories: five named step blocks keep one curve, equation, tangent, live slope, derivative plot and caption synchronized."
         },
         {
           "name": "sine_wave",
@@ -852,6 +870,24 @@
       "title": "Transforms & morphing",
       "examples": [
         {
+          "name": "reactive-math-journey",
+          "file": "reactive-math-journey.manic",
+          "title": "Reactive math journey",
+          "desc": "A playful vertical journey from 1+1 in Class 1 through fractions, algebra, geometry, calculus, linear algebra, probability and Fourier analysis to a PhD-level functional integral \u2014 then back to the curiosity that started it all."
+        },
+        {
+          "name": "reactive-math-notation",
+          "file": "reactive-math-notation.manic",
+          "title": "Reactive math notation",
+          "desc": "One Reels-ready stage exercises structured LaTeX across thirteen notation worlds: algebra, calculus, limits, trigonometry, logic, sums/products, physics, chemistry, biology, probability, matrices/vectors, mixed prose/math, and creator notation."
+        },
+        {
+          "name": "quadratic-formula-continuity",
+          "file": "quadratic-formula-continuity.manic",
+          "title": "Quadratic formula continuity",
+          "desc": "The quadratic formula by completing the square with one persistent LaTeX equation."
+        },
+        {
           "name": "transforms",
           "file": "transforms.manic",
           "title": "Transforms",
@@ -1000,6 +1036,18 @@
           "file": "perfect-reel.manic",
           "title": "Perfect reel",
           "desc": "The gold-path production starter: phone-safe composition, real LaTeX, exact pacing, professional mono styling, creator identity, timeline markers and a focused end card."
+        },
+        {
+          "name": "reactive-multiformat",
+          "file": "reactive-multiformat.manic",
+          "title": "Reactive multiformat",
+          "desc": "One named reactive story rendered as portrait, 4:5 feed, square, or landscape with the --canvas override."
+        },
+        {
+          "name": "parameter-journeys",
+          "file": "parameter-journeys.manic",
+          "title": "Parameter journeys",
+          "desc": "One visible parameter drives a quadratic plot, its live tangent and slope, a geometric position, scale and a derived numeric readout."
         },
         {
           "name": "creator-v2-options-socials",

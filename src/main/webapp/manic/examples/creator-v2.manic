@@ -4,6 +4,7 @@
 title("Creator Kit v2 — Optics Quiz");
 canvas("9:16");
 template("shorts");
+watermark(manicMark, (w*0.91-100, h*0.055+24), "Made With Manic");
 
 creator(me, "@anish2good name=Optics_Lab tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Follow_for_more safe=shorts");
 

@@ -4,6 +4,7 @@
 title("Generic Timing v2 — Pendulum");
 canvas("16:9");
 template("mono");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
 
 text(head, (315, 72), "ONE CLOCK. EVERY BEAT.");
 size(head, 30); bold(head); color(head, fg); hidden(head);
