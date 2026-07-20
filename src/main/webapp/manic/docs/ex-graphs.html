@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e6371332.js";
+            window.path_to_searchindex_js = "searchindex-c6bc9d88.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-83849da6.js"></script>
@@ -384,7 +384,6 @@ figure straight from a theorem statement.</p>
 <pre><code class="language-manic">title("Five Exceptional Cubic Graphs");
 canvas("16:9");
 template("paper");
-watermark(manicMark, (1135, 30), "Made With Manic");
 
 text(titleA, (cx, 34), "Five 3-connected simple cubic graphs");
 text(titleB, (cx, 68), "cycle-cover exceptions: at most $\lceil n/6\rceil$ cycles is not guaranteed");
@@ -565,9 +564,9 @@ let g3r = 105;
 dot(g3c, (g3cx, g3cy), 5);
 tag(g3c, g3Nodes);
 for i in 0..12 {
-line(g3rim{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), (g3cx + g3rcos(-pi/2 + tau(i + 1)/12), g3cy + g3rsin(-pi/2 + tau(i + 1)/12)));
-line(g3spoke{i}, (g3cx, g3cy), (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)));
-dot(g3u{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), 5);
+line(g3rim{i}, (g3cx + g3r * cos(-pi/2 + tau * i/12), g3cy + g3r * sin(-pi/2 + tau * i/12)), (g3cx + g3r * cos(-pi/2 + tau * (i + 1)/12), g3cy + g3r * sin(-pi/2 + tau * (i + 1)/12)));
+line(g3spoke{i}, (g3cx, g3cy), (g3cx + g3r * cos(-pi/2 + tau * i/12), g3cy + g3r * sin(-pi/2 + tau * i/12)));
+dot(g3u{i}, (g3cx + g3r * cos(-pi/2 + tau * i/12), g3cy + g3r * sin(-pi/2 + tau * i/12)), 5);
 tag(g3rim{i}, g3Edges);
 tag(g3spoke{i}, g3Edges);
 tag(g3u{i}, g3Nodes);
@@ -815,7 +814,7 @@ recolor(graphNames, gold, 0.5);
 pulse(graphNames, 0.8);
 wait(1.0);
 </code></pre>
-<div class="manic-video" data-video="ex-cubic-graphs"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Z2nD3nRSFDk" title="5 Cubic Graphs a Theorem Can't Cover — Animated in manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>

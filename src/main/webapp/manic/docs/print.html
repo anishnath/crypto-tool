@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e6371332.js";
+            window.path_to_searchindex_js = "searchindex-c6bc9d88.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-83849da6.js"></script>
@@ -2526,7 +2526,6 @@ figure straight from a theorem statement.</p>
 <pre><code class="language-manic">title("Five Exceptional Cubic Graphs");
 canvas("16:9");
 template("paper");
-watermark(manicMark, (1135, 30), "Made With Manic");
 
 text(titleA, (cx, 34), "Five 3-connected simple cubic graphs");
 text(titleB, (cx, 68), "cycle-cover exceptions: at most $\lceil n/6\rceil$ cycles is not guaranteed");
@@ -2707,9 +2706,9 @@ let g3r = 105;
 dot(g3c, (g3cx, g3cy), 5);
 tag(g3c, g3Nodes);
 for i in 0..12 {
-line(g3rim{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), (g3cx + g3rcos(-pi/2 + tau(i + 1)/12), g3cy + g3rsin(-pi/2 + tau(i + 1)/12)));
-line(g3spoke{i}, (g3cx, g3cy), (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)));
-dot(g3u{i}, (g3cx + g3rcos(-pi/2 + taui/12), g3cy + g3rsin(-pi/2 + taui/12)), 5);
+line(g3rim{i}, (g3cx + g3r * cos(-pi/2 + tau * i/12), g3cy + g3r * sin(-pi/2 + tau * i/12)), (g3cx + g3r * cos(-pi/2 + tau * (i + 1)/12), g3cy + g3r * sin(-pi/2 + tau * (i + 1)/12)));
+line(g3spoke{i}, (g3cx, g3cy), (g3cx + g3r * cos(-pi/2 + tau * i/12), g3cy + g3r * sin(-pi/2 + tau * i/12)));
+dot(g3u{i}, (g3cx + g3r * cos(-pi/2 + tau * i/12), g3cy + g3r * sin(-pi/2 + tau * i/12)), 5);
 tag(g3rim{i}, g3Edges);
 tag(g3spoke{i}, g3Edges);
 tag(g3u{i}, g3Nodes);
@@ -2957,7 +2956,7 @@ recolor(graphNames, gold, 0.5);
 pulse(graphNames, 0.8);
 wait(1.0);
 </code></pre>
-<div class="manic-video" data-video="ex-cubic-graphs"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Z2nD3nRSFDk" title="5 Cubic Graphs a Theorem Can't Cover — Animated in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="calculus--functions"><a class="header" href="#calculus--functions">Calculus &amp; functions</a></h1>
@@ -3393,7 +3392,7 @@ step("takeaway") {
 }
 wait(1.80);
 </code></pre>
-<div class="manic-video" data-video="ex-reactive-world"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2dkQBwy9wMU" title="One World, Five Reactive Steps — The Derivative Lives on the Curve — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="sine_wave"><a class="header" href="#sine_wave">sine_wave</a></h2>
 <p><code>axes</code> + <code>plot</code>, a curve traced on, then vectors.</p>
@@ -9430,7 +9429,7 @@ rewrite(work, `1+1=\textcolor{lime}{2}`, 1.00, smooth);
 pulse(learner, 0.65);
 wait(1.80);
 </code></pre>
-<div class="manic-video" data-video="ex-reactive-math-journey"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UQvB8Ev1mHY" title="From 1 + 1 to a PhD — The Journey of Mathematics — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="reactive-math-notation"><a class="header" href="#reactive-math-notation">reactive-math-notation</a></h2>
 <p>One Reels-ready stage exercises structured LaTeX across thirteen notation worlds:
@@ -9587,7 +9586,7 @@ say(note, "Math, physics, logic — creators decide what comes next.", 0.40);
 pulse(work, 0.70);
 wait(1.80);
 </code></pre>
-<div class="manic-video" data-video="ex-reactive-math-notation"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/D0a0IEm3T-w" title="13 Scientific Worlds, One Reactive Equation — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="quadratic-formula-continuity"><a class="header" href="#quadratic-formula-continuity">quadratic-formula-continuity</a></h2>
 <p>The quadratic formula by completing the square with one persistent LaTeX equation.
@@ -11359,7 +11358,7 @@ step("takeaway") {
 }
 wait(1.60);
 </code></pre>
-<div class="manic-video" data-video="ex-reactive-multiformat"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/U83NHmhLKpM" title="One Story, Four Formats — Reframe a Reactive Manic Video" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="parameter-journeys"><a class="header" href="#parameter-journeys">parameter-journeys</a></h2>
 <p>One visible parameter drives a quadratic plot, its live tangent and slope, a geometric
@@ -11520,7 +11519,7 @@ step("takeaway") {
 }
 wait(1.60);
 </code></pre>
-<div class="manic-video" data-video="ex-parameter-journeys"></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ui5eqJDyLtk" title="One Parameter, Many Worlds — Reactive Visual Journeys in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-options-socials"><a class="header" href="#creator-v2-options-socials">creator-v2-options-socials</a></h2>
 <p>The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D
