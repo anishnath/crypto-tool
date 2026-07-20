@@ -68,6 +68,7 @@
     <select id="quality-select" class="mp-select" title="Render quality (from your plan)"></select>
     <button id="run-btn" class="mp-btn primary" title="Render (⌘/Ctrl+Enter)">Render</button>
     <button type="button" id="btnManicAI" class="mp-btn ai" title="AI assistant — describe an animation (Ctrl+Shift+A)">✨ AI</button>
+    <button type="button" id="autofix-btn" class="mp-btn" title="Auto-fix — correct mechanical slips and remove stray tokens (undoable)">🔧 Auto-fix</button>
     <button type="button" id="btn-share" class="mp-btn" title="Copy a link to the file open in the editor">🔗 Share</button>
     <a id="docs-link" class="mp-link" href="<%=ctx%>/manic/docs/index.html" target="_blank" rel="noopener">Docs ↗</a>
     <button id="help-btn" class="mp-btn mp-icon-btn" title="What is manic? — show the welcome">?</button>

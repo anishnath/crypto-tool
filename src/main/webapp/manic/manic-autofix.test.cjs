@@ -76,5 +76,32 @@ const fix = (start, len, replacement) => ({ fix: { start, len, replacement } });
 // 8) null input
 eq('null input', applyFixes(null, () => []).code, '');
 
+// 9) ONE-ERROR-PER-PASS: the real check() bails on the first expand error, so a
+//    file with N glued names heals one fix per pass. This must survive well past
+//    the old 6-pass cap (regression: a loop body with 16 slips only got 6 fixed).
+{
+  // 16 markers 'P'; each pass fixes exactly the first one it sees -> 'Q'
+  let code = 'P P P P P P P P P P P P P P P P';
+  const check = (c) => { const i = c.indexOf('P'); return i < 0 ? [] : [fix(i, 1, 'Q')]; };
+  const r = applyFixes(code, check);
+  eq('one-per-pass count', r.fixed, 16);
+  ok('one-per-pass healed', r.code.indexOf('P') < 0, r.code);
+}
+
+// 10) includeRemovals: a DESTRUCTIVE fix (empty replacement) is skipped by default-
+//     off, applied when on. Mirrors stray-token removal: silent pass vs the button.
+{
+  const strayRemoval = (code) => code.indexOf('sadas') >= 0
+    ? [{ fix: { start: code.indexOf('sadas'), len: 5, replacement: '' } }] : [];
+  const silent = applyFixes('a\nsadas\nb', strayRemoval, { includeRemovals: false });
+  eq('removal skipped when off', silent.fixed, 0);
+  eq('removal leaves code intact', silent.code, 'a\nsadas\nb');
+  const manual = applyFixes('a\nsadas\nb', strayRemoval, { includeRemovals: true });
+  eq('removal applied when on', manual.fixed, 1);
+  eq('removal deletes the token', manual.code, 'a\n\nb');
+  // default (no opts) includes removals — matches the manual/button behaviour
+  eq('removal on by default', applyFixes('a\nsadas\nb', strayRemoval).fixed, 1);
+}
+
 console.log((fail ? 'FAILED ' : 'OK ') + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

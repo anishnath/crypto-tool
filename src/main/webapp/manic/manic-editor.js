@@ -256,6 +256,36 @@ window.ManicEditor = (function () {
         }
       });
     }
+    // "Fix all" — only compute (multi-pass, up to 40 checks) when there's at
+    // least one fixable problem, so clean files pay nothing. Includes removals,
+    // since a code action is an explicit user request; replaces the whole doc.
+    if (fixes.length) {
+      var apply = (typeof ManicAutofix !== 'undefined') && ManicAutofix.applyFixes;
+      if (apply) {
+        var src = model.getValue();
+        var res = apply(src, function (code) {
+          try { return JSON.parse(wasm.check(code)); } catch (e) { return []; }
+        }, { includeRemovals: true });
+        if (res.fixed > 0 && res.code !== src) {
+          var full = model.getFullModelRange();
+          actions.push({
+            title: 'Fix all auto-fixable problems (' + res.fixed + ')',
+            kind: 'source.fixAll',
+            edit: { edits: [{
+              resource: model.uri,
+              textEdit: {
+                range: {
+                  startLineNumber: full.startLineNumber, startColumn: full.startColumn,
+                  endLineNumber: full.endLineNumber, endColumn: full.endColumn
+                },
+                text: res.code
+              },
+              versionId: model.getVersionId()
+            }] }
+          });
+        }
+      }
+    }
     return { actions: actions, dispose: function () {} };
   }
 
@@ -264,12 +294,36 @@ window.ManicEditor = (function () {
   // MECHANICAL fixes (glued vars → `*`, unknown builtin/colour → nearest name).
   // The apply-loop lives in manic-autofix.js (shared + unit-tested); here we just
   // feed it the WASM check. Returns { code, fixed }.
-  function autofix(src) {
+  function autofix(src, opts) {
     var apply = (typeof ManicAutofix !== 'undefined') && ManicAutofix.applyFixes;
     if (!apply) return { code: String(src == null ? '' : src), fixed: 0 };
     return apply(src, function (code) {
       try { return JSON.parse(wasm.check(code)); } catch (e) { return []; }
-    });
+    }, opts);
+  }
+
+  function errorCount(code) {
+    try {
+      return (JSON.parse(wasm.check(code)) || [])
+        .filter(function (e) { return e.severity !== 'warning'; }).length;
+    } catch (e) { return 0; }
+  }
+
+  // User-triggered "Auto-fix" on the active model. Unlike the silent post-AI pass,
+  // this INCLUDES destructive fixes (stray-token removal) and applies the result
+  // as an undoable edit (Ctrl/Cmd+Z reverts it). Returns { fixed, remaining }.
+  function autofixActive() {
+    var model = activeModel;
+    if (!model || model.isDisposed()) return { fixed: 0, remaining: 0 };
+    var src = model.getValue();
+    var res = autofix(src, { includeRemovals: true });
+    if (res.code !== src) {
+      // pushEditOperations lands on the undo stack (unlike setValue, which resets it)
+      model.pushEditOperations([], [{ range: model.getFullModelRange(), text: res.code }],
+        function () { return null; });
+    }
+    refreshMarkers(model, true);
+    return { fixed: res.fixed, remaining: errorCount(res.code) };
   }
 
   /* ── autocomplete ──────────────────────────────────────────────── */
@@ -317,6 +371,7 @@ window.ManicEditor = (function () {
     onModelChanged: onModelChanged,
     refreshMarkers: refreshMarkers,
     autofix: autofix,
+    autofixActive: autofixActive,
     setDiagnosticsListener: function (fn) { diagListener = fn; },
     THEME_DARK: THEME_DARK,
     THEME_LIGHT: THEME_LIGHT

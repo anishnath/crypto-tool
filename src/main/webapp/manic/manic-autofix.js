@@ -16,8 +16,14 @@
 (function (root) {
   'use strict';
 
-  function applyFixes(code, check) {
+  // opts.includeRemovals (default true): when false, DESTRUCTIVE fixes — those
+  // whose replacement is empty, i.e. they delete code (a stray-token removal) —
+  // are skipped. The silent post-AI auto-apply passes false so it only ever does
+  // safe replacements (glued `*`, typos); the user-triggered "Auto-fix" leaves it
+  // true so an explicit click can also strip garbage.
+  function applyFixes(code, check, opts) {
     var src = String(code == null ? '' : code);
+    var includeRemovals = !opts || opts.includeRemovals !== false;
     var total = 0;
     for (var pass = 0; pass < 40; pass++) {
       var errs;
@@ -25,7 +31,9 @@
       var fixes = [];
       for (var i = 0; i < errs.length; i++) {
         var f = errs[i] && errs[i].fix;
-        if (f && f.replacement != null && typeof f.start === 'number') fixes.push(f);
+        if (!f || f.replacement == null || typeof f.start !== 'number') continue;
+        if (!includeRemovals && f.replacement === '') continue; // skip destructive removals
+        fixes.push(f);
       }
       if (!fixes.length) break;
       fixes.sort(function (a, b) { return b.start - a.start; }); // last → first

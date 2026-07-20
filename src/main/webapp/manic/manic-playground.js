@@ -72,11 +72,12 @@
       renderRemaining: $('render-remaining'), renderTip: $('render-tip'),
       renderHide: $('render-hide'),
       errPanel: $('editor-errors'), errCount: $('editor-errors-count'), errList: $('editor-errors-list'),
-      btnShare: $('btn-share'),
+      btnShare: $('btn-share'), autofixBtn: $('autofix-btn'),
       shareOverlay: $('share-overlay'), shareClose: $('share-close'),
       shareUrl: $('share-url'), shareCopy: $('share-copy'), shareSocial: $('share-social')
     };
     if (el.renderHide) el.renderHide.onclick = hideRenderModal;
+    if (el.autofixBtn) el.autofixBtn.onclick = runAutofix;
     if (el.btnShare) el.btnShare.onclick = shareCurrent;
     if (el.shareClose) el.shareClose.onclick = closeShareModal;
     if (el.shareOverlay) el.shareOverlay.addEventListener('click', function (e) {
@@ -342,6 +343,24 @@
   // ── share: store the open file as a snippet, get a ?s=<id> link ──
   // Reuses the OneCompiler snippet servlet (a generic { language, code, title }
   // store) — the same call code-playground uses. Shares only the active file.
+  // User-triggered whole-file auto-fix (toolbar button). Applies safe fixes AND
+  // stray-token removal, as an undoable edit; then reports what's left.
+  function runAutofix() {
+    if (!activeName || !models[activeName]) return;
+    if (!ME || !ME.autofixActive) { toast('auto-fix unavailable'); return; }
+    var res = ME.autofixActive();
+    persistFiles();
+    if (res.fixed > 0 && res.remaining > 0) {
+      toast('fixed ' + res.fixed + ', ' + res.remaining + ' left to fix');
+    } else if (res.fixed > 0) {
+      toast('fixed ' + res.fixed + ' issue' + (res.fixed > 1 ? 's' : ''));
+    } else if (res.remaining > 0) {
+      toast('nothing auto-fixable — ' + res.remaining + ' issue' + (res.remaining > 1 ? 's' : '') + ' need a manual fix');
+    } else {
+      toast('no issues 🎉');
+    }
+  }
+
   async function shareCurrent() {
     if (!activeName || !models[activeName]) return;
     var code = models[activeName].getValue();
@@ -443,7 +462,9 @@
         var src = String(code == null ? '' : code);
         // Auto-correct the AI's mechanical slips (glued `*`, nearest name) before
         // it lands in the editor — the model needn't get every char right.
-        var res = (ME.autofix ? ME.autofix(src) : { code: src, fixed: 0 });
+        // Silent pass: safe replacements only — never delete the model's lines
+        // behind the user's back. Destructive fixes wait for the Auto-fix button.
+        var res = (ME.autofix ? ME.autofix(src, { includeRemovals: false }) : { code: src, fixed: 0 });
         // Always apply — auto-fix is best-effort, not a gate. Whatever it can't
         // mechanically repair lands in the editor and shows as live diagnostics
         // for the user (or the AI assistant) to fix the normal way.
