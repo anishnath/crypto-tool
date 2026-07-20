@@ -1,0 +1,129 @@
+// ============================================================================
+// textbook-coordinate-worlds.manic — number line → coordinate plane → space
+// ============================================================================
+
+title("A Point Gets an Address — From 1D to 3D");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark, (220, 175), "Made With Manic");
+creator(me, "@anish2good name=Manic_Math tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"COORDINATE GEOMETRY"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"A point gains one coordinate at a time"); size(headline,32); bold(headline); hidden(headline);
+text(phase,(540,300),"1D · THE NUMBER LINE"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"One direction needs one number: move three units along x."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Every new perpendicular direction adds one coordinate."); size(principle,20); color(principle,dim); hidden(principle);
+equation(address,(540,1490),`P=\textcolor{cyan}{(3)}`,44); hidden(address);
+text(takeaway,(540,1572),"THE POINT STAYS THE SAME · ITS ADDRESS BECOMES MORE PRECISE"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+camera3((0,0,14),(0,0,0),38);
+
+// One persistent point begins at the origin, then gains y and z coordinates.
+point3(P,(0,0,0),0.18); color(P,gold); hidden(P);
+text(pLabel,(0,0),"P"); size(pLabel,34); bold(pLabel); color(pLabel,gold); hidden(pLabel); label3(pLabel,P,0.34);
+point3(origin,(0,0,0),0.10); color(origin,fg); hidden(origin);
+text(originLabel,(0,0),"O"); size(originLabel,34); color(originLabel,dim); hidden(originLabel); label3(originLabel,origin,0.36);
+
+line3(xAxis,(-4,0,0),(4,0,0)); color(xAxis,cyan); thick(xAxis,0.045); untraced(xAxis); hidden(xAxis); tag(xAxis,axes);
+line3(yAxis,(0,-3,0),(0,3,0)); color(yAxis,magenta); thick(yAxis,0.045); untraced(yAxis); hidden(yAxis); tag(yAxis,axes);
+line3(zAxis,(0,0,0),(0,0,4)); color(zAxis,lime); thick(zAxis,0.045); untraced(zAxis); hidden(zAxis); tag(zAxis,axes);
+
+point3(xEnd,(4,0,0),0.01); hidden(xEnd);
+point3(yEnd,(0,3,0),0.01); hidden(yEnd);
+point3(zEnd,(0,0,4),0.01); hidden(zEnd);
+text(xLabel,(0,0),"x"); size(xLabel,34); bold(xLabel); color(xLabel,cyan); hidden(xLabel); label3(xLabel,xEnd,0.38);
+text(yLabel,(0,0),"y"); size(yLabel,34); bold(yLabel); color(yLabel,magenta); hidden(yLabel); label3(yLabel,yEnd,0.38);
+text(zLabel,(0,0),"z"); size(zLabel,34); bold(zLabel); color(zLabel,lime); hidden(zLabel); label3(zLabel,zEnd,0.38);
+
+// Tick marks remain quiet so the address, rather than decoration, leads.
+for i in -4..5 {
+  line3(xTick{i},(i,-0.10,0),(i,0.10,0)); color(xTick{i},cyan); thick(xTick{i},0.025); untraced(xTick{i}); hidden(xTick{i}); tag(xTick{i},xTicks);
+}
+for i in -3..4 {
+  line3(yTick{i},(-0.10,i,0),(0.10,i,0)); color(yTick{i},magenta); thick(yTick{i},0.025); untraced(yTick{i}); hidden(yTick{i}); tag(yTick{i},yTicks);
+}
+for i in 1..5 {
+  line3(zTick{i},(-0.10,0,i),(0.10,0,i)); color(zTick{i},lime); thick(zTick{i},0.025); untraced(zTick{i}); hidden(zTick{i}); tag(zTick{i},zTicks);
+}
+
+grid3(plane,(0,0,0),4,1); color(plane,blue); opacity(plane,0.22); hidden(plane); tag(plane,world2d);
+cube3(space,(0,0,2),(8,6,4)); color(space,blue); hidden(space); tag(space,world3d);
+finish3(space,"material=glass shading=flat mesh=0.18 depth=0.22 shadow=0.10");
+
+// Guides expose how each coordinate is read from the axes.
+line3(xGuide,(0,0,0),(3,0,0)); color(xGuide,cyan); thick(xGuide,0.065); untraced(xGuide); hidden(xGuide); tag(xGuide,guides);
+line3(yGuide,(3,0,0),(3,2,0)); color(yGuide,magenta); thick(yGuide,0.065); untraced(yGuide); hidden(yGuide); tag(yGuide,guides);
+line3(zGuide,(3,2,0),(3,2,3)); color(zGuide,lime); thick(zGuide,0.065); untraced(zGuide); hidden(zGuide); tag(zGuide,guides);
+
+point3(xFoot,(3,0,0),0.11); color(xFoot,cyan); hidden(xFoot);
+point3(xyFoot,(3,2,0),0.11); color(xyFoot,magenta); hidden(xyFoot);
+project3(shadow,P,"xy"); color(shadow,magenta); hidden(shadow);
+link3(drop,P,shadow,0.12); color(drop,lime); thick(drop,0.025); hidden(drop);
+
+step("one number locates the point") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(address,0.50); view3(xAxis,"top",0.9,smooth,1.65); }
+    par { show(origin,0.20); show(originLabel,0.25); show(P,0.25); show(pLabel,0.25); draw(xAxis,1.10,smooth); show(xLabel,0.25); show(xTicks,0.35); }
+    par { shift3(P,(3,0,0),1.65,smooth); draw(xGuide,1.65,smooth); }
+    par { show(xFoot,0.25); pulse(P,0.65); pulse(address,0.65); }
+    wait(0.60);
+  }
+}
+
+step("the plane adds a second direction") {
+  seq {
+    par {
+      say(phase,"2D · THE COORDINATE PLANE",0.45,smooth);
+      say(narration,"Open a perpendicular y-direction, then move two units sideways.",0.55,smooth);
+      rewrite(address,`P=\textcolor{cyan}{(3},\textcolor{magenta}{2)}`,0.95,smooth);
+      show(plane,0.80); draw(yAxis,1.35,smooth); show(yLabel,0.30); show(yTicks,0.40);
+      view3(plane,"top",1.55,smooth,1.55);
+    }
+    par { shift3(P,(0,2,0),1.75,smooth); draw(yGuide,1.75,smooth); }
+    par { show(xyFoot,0.25); pulse(guides,0.80); pulse(address,0.80); }
+    wait(0.70);
+  }
+}
+
+step("read the ordered pair") {
+  seq {
+    say(narration,"First read x, then y. Order matters: (3,2) is not (2,3).",0.50,smooth);
+    par { pulse(xGuide,0.60); pulse(yGuide,0.60); }
+    wait(0.85);
+  }
+}
+
+step("space adds height") {
+  seq {
+    par {
+      say(phase,"3D · COORDINATE SPACE",0.45,smooth);
+      say(narration,"Raise a z-axis out of the plane and lift the point three units.",0.55,smooth);
+      rewrite(address,`P=\textcolor{cyan}{(3},\textcolor{magenta}{2},\textcolor{lime}{3)}`,1.05,smooth);
+      to(space,opacity,0.14,2.40,smooth);
+      draw(zAxis,1.55,smooth); show(zLabel,0.30); show(zTicks,0.40);
+      view3(space,"isometric",2.35,smooth,1.48);
+    }
+    par {
+      shift3(P,(0,0,3),2.15,smooth);
+      draw(zGuide,2.15,smooth);
+      show(shadow,0.30); show(drop,0.30);
+    }
+    par { pulse(P,0.70); pulse(address,0.70); }
+    wait(0.70);
+  }
+}
+
+step("one point three coordinates") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"ONE ADDRESS · THREE DIRECTIONS",0.50,smooth);
+      say(narration,"x says across, y says sideways, and z says how high.",0.55,smooth);
+      say(principle,"1D: (x) · 2D: (x,y) · 3D: (x,y,z)",0.55,smooth);
+      view3(space,"fit",1.70,smooth,1.55);
+    }
+    par { pulse(axes,0.90); pulse(P,0.90); roll3(3,1.55,smooth); }
+    wait(1.80);
+  }
+}

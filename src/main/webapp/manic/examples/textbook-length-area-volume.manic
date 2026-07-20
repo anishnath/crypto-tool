@@ -1,0 +1,137 @@
+// ============================================================================
+// textbook-length-area-volume.manic — centimetres, square centimetres, cubes
+// ============================================================================
+
+title("Length, Area, Volume — Why the Units Change");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark, (220, 175), "Made With Manic");
+creator(me, "@anish2good name=Manic_Math tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker, (540,164), "THE MEASUREMENT LADDER"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline, (540,228), "Why units become squared, then cubed"); size(headline,36); bold(headline); hidden(headline);
+text(phase, (540,300), "1D · MEASURE LENGTH"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration, (540,1328), "A ruler counts how many unit segments fit along one direction."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle, (540,1388), "One direction · centimetres"); size(principle,20); color(principle,dim); hidden(principle);
+equation(measure, (540,1480), `L=\textcolor{cyan}{6}\text{ cm}`, 40); hidden(measure);
+text(takeaway, (540,1560), "THE UNIT CHANGES BECAUSE THE NUMBER OF DIRECTIONS CHANGES"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+// This is the settled `view3(length,"front",...,1.65)` composition: the
+// opening line is already inside the Creator media region, so frame one moves
+// the mathematics rather than jolting the camera into place.
+camera3((0.26,-33.6,-4.14),(0.26,-2,-4.14),40);
+
+line3(length, (-3,-2,0), (3,-2,0)); color(length,cyan); thick(length,0.07); untraced(length); tag(length,areaSkin);
+point3(start, (-3,-2,0),0.15); color(start,fg); hidden(start);
+point3(finish, (3,-2,0),0.15); color(finish,fg); hidden(finish);
+point3(lengthMid, (0,-2,0),0.01); hidden(lengthMid);
+text(lengthLabel,(0,0),"6 cm"); size(lengthLabel,22); bold(lengthLabel); color(lengthLabel,cyan); hidden(lengthLabel); pin3(lengthLabel,lengthMid);
+
+// Six visible unit segments sit directly on the measured line.
+for i in 0..6 {
+  line3(unit{i}, (-3+i,-2,0.10), (-2+i,-2,0.10));
+  color(unit{i},gold); thick(unit{i},0.035); untraced(unit{i}); hidden(unit{i}); tag(unit{i},units1d); tag(unit{i},areaSkin);
+}
+
+// The measured line sweeps four centimetres sideways to create 24 unit squares.
+cube3(areaSheet, (0,0,0), (6,4,0.08)); color(areaSheet,blue); hidden(areaSheet); tag(areaSheet,areaSkin);
+finish3(areaSheet,"material=glass shading=flat mesh=0.20 depth=0.25 shadow=0.10");
+line3(areaBase,(-3,-2,0),(3,-2,0)); color(areaBase,cyan); thick(areaBase,0.05); hidden(areaBase); tag(areaBase,areaSkin);
+for i in 1..4 {
+  let yy=-2+i;
+  line3(areaRow{i},(-3,yy,0.05),(3,yy,0.05)); color(areaRow{i},magenta); thick(areaRow{i},0.025); untraced(areaRow{i}); hidden(areaRow{i}); tag(areaRow{i},areaGrid); tag(areaRow{i},areaSkin);
+}
+for i in 0..7 {
+  let xx=-3+i;
+  line3(areaCol{i},(xx,-2,0.05),(xx,2,0.05)); color(areaCol{i},cyan); thick(areaCol{i},0.025); untraced(areaCol{i}); hidden(areaCol{i}); tag(areaCol{i},areaGrid); tag(areaCol{i},areaSkin);
+}
+point3(widthMid,(-3,0,0),0.01); hidden(widthMid);
+text(widthLabel,(0,0),"4 cm"); size(widthLabel,22); bold(widthLabel); color(widthLabel,magenta); hidden(widthLabel); pin3(widthLabel,widthMid);
+
+// The complete square-unit sheet rises three centimetres and leaves 72 cubes.
+cube3(volumeBox,(0,0,1.5),(6,4,3)); color(volumeBox,blue); hidden(volumeBox);
+finish3(volumeBox,"material=glass shading=flat mesh=0.48 depth=0.34 shadow=0.16");
+line3(height0,(-3,-2,0),(-3,-2,3)); color(height0,lime); thick(height0,0.06); untraced(height0); hidden(height0); tag(height0,heightEdges);
+line3(height1,(3,-2,0),(3,-2,3)); color(height1,lime); thick(height1,0.06); untraced(height1); hidden(height1); tag(height1,heightEdges);
+line3(height2,(-3,2,0),(-3,2,3)); color(height2,lime); thick(height2,0.06); untraced(height2); hidden(height2); tag(height2,heightEdges);
+line3(height3,(3,2,0),(3,2,3)); color(height3,lime); thick(height3,0.06); untraced(height3); hidden(height3); tag(height3,heightEdges);
+point3(heightMid,(3,2,1.5),0.01); hidden(heightMid);
+text(heightLabel,(0,0),"3 cm"); size(heightLabel,22); bold(heightLabel); color(heightLabel,lime); hidden(heightLabel); pin3(heightLabel,heightMid);
+
+step("count one direction") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(measure,0.50); }
+    par { show(start,0.25); show(finish,0.25); draw(length,1.25,smooth); show(lengthLabel,0.35); }
+    par {
+      stagger(0.10) { for i in 0..6 { show(unit{i},0.10); } }
+      stagger(0.10) { for i in 0..6 { draw(unit{i},0.35,smooth); } }
+    }
+    wait(0.60);
+  }
+}
+
+step("sweep out area") {
+  seq {
+    par {
+      say(phase,"2D · COUNT UNIT SQUARES",0.45,smooth);
+      say(narration,"Move the six-centimetre length through four new centimetres.",0.55,smooth);
+      say(principle,"Two perpendicular directions · square centimetres",0.45,smooth);
+      rewrite(measure,`A=\textcolor{cyan}{6}\times\textcolor{magenta}{4}=\textcolor{gold}{24}\text{ cm}^2`,1.10,smooth);
+      fade(start,0.30); fade(finish,0.30);
+      view3(areaSheet,"isometric",1.25,smooth,1.48);
+    }
+    par {
+      shift3(units1d,(0,4,0),2.60,smooth);
+      shift3(length,(0,4,0),2.60,smooth);
+      show(areaBase,0.15);
+      to(areaSheet,opacity,0.15,2.60,smooth);
+      show(widthLabel,0.35);
+      stagger(0.07) { for i in 1..4 { show(areaRow{i},0.10); } for i in 0..7 { show(areaCol{i},0.10); } }
+      stagger(0.07) { for i in 1..4 { draw(areaRow{i},0.55,smooth); } for i in 0..7 { draw(areaCol{i},0.55,smooth); } }
+    }
+    wait(0.70);
+  }
+}
+
+step("see twenty four squares") {
+  seq {
+    say(narration,"Six columns by four rows: the floor contains 24 unit squares.",0.50,smooth);
+    par { pulse(areaGrid,0.75); pulse(areaSheet,0.75); }
+    wait(0.75);
+  }
+}
+
+step("stack into volume") {
+  seq {
+    par {
+      say(phase,"3D · STACK UNIT CUBES",0.45,smooth);
+      say(narration,"Lift the complete 24-square layer through three centimetres.",0.55,smooth);
+      say(principle,"Three perpendicular directions · cubic centimetres",0.45,smooth);
+      rewrite(measure,`V=\textcolor{gold}{24}\times\textcolor{lime}{3}=\textcolor{gold}{72}\text{ cm}^3`,1.10,smooth);
+      fade(lengthLabel,0.30); fade(widthLabel,0.30);
+    }
+    par {
+      shift3(areaSkin,(0,0,3),2.70,smooth);
+      to(volumeBox,opacity,0.17,2.70,smooth);
+      show(heightEdges,0.15); draw(heightEdges,2.55,smooth);
+      show(heightLabel,0.35);
+      view3(volumeBox,"isometric",2.70,smooth,1.50);
+    }
+    wait(0.70);
+  }
+}
+
+step("the measurement ladder") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"LENGTH → AREA → VOLUME",0.50,smooth);
+      say(narration,"The number is not merely larger. The kind of unit has changed.",0.55,smooth);
+      say(principle,"cm measures a path · cm² tiles a surface · cm³ fills space",0.55,smooth);
+      view3(volumeBox,"fit",1.80,smooth,1.58);
+    }
+    par { pulse(volumeBox,0.85); pulse(heightEdges,0.85); roll3(3,1.60,smooth); }
+    wait(2.10);
+  }
+}

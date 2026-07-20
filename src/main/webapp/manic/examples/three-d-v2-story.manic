@@ -1,0 +1,106 @@
+// three-d-v2-story.manic — a vertical creator story built on 3D V2
+
+title("From Signal to Satellite — A 3D Motion Story");
+canvas("9:16");
+template("shorts");
+watermark(manicMark, (164, 86), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Make_space_understandable yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_yours safe=reels");
+socials(me);
+
+text(kicker, (540, 164), "A 3D MOTION STORY");
+size(kicker, 22); bold(kicker); color(kicker, cyan); hidden(kicker);
+text(headline, (540, 226), "How a satellite finds its orbit");
+size(headline, 39); bold(headline); color(headline, fg); hidden(headline);
+text(chapter, (540, 300), "ACT 1 · BUILD ONE SYSTEM");
+size(chapter, 23); bold(chapter); color(chapter, gold); hidden(chapter);
+
+text(narration, (540, 1472), "Three parts. One mission.");
+size(narration, 30); bold(narration); color(narration, fg); hidden(narration);
+text(principle, (540, 1544), "Spatial motion stays readable when relationships survive the move.");
+size(principle, 22); color(principle, dim); wrap(principle, 820); hidden(principle);
+
+camera3((10, -14, 8), (0, 0, 1), 42);
+grid3(floor, (0, 0, 0), 7, 1); color(floor, dim); opacity(floor, 0.20);
+
+curve3(launchRoute, "-4 + 7*t", "-2 + 2.6*sin(pi*t)", "0.9 + 4.1*sin(pi*t)", (0, 1));
+color(launchRoute, cyan); thick(launchRoute, 0.045); untraced(launchRoute);
+
+cube3(core, (-4, -2, 0.9), (1.25, 0.95, 0.72)); color(core, gold); hidden(core);
+sphere3(lens, (-4, -2, 1.78), 0.34); color(lens, cyan); hidden(lens);
+cube3(panelA, (-4, -3.30, 0.9), (0.18, 2.1, 0.10)); color(panelA, magenta); hidden(panelA);
+cube3(panelB, (-4, -0.70, 0.9), (0.18, 2.1, 0.10)); color(panelB, magenta); hidden(panelB);
+
+tag(core, mission); tag(lens, mission); tag(panelA, mission); tag(panelB, mission);
+tag(panelA, solarArray); tag(panelB, solarArray);
+
+// The final observatory is only a blueprint. It never appears as a second object.
+sphere3(observatory, (3, -2, 1.05), 0.86); color(observatory, lime); hidden(observatory);
+
+text(lensLabel, (0, 0), "signal"); size(lensLabel, 21); color(lensLabel, cyan); hidden(lensLabel);
+pin3(lensLabel, lens);
+
+step("assemble") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.50);
+      show(chapter, 0.35);
+      show(narration, 0.40);
+      show(principle, 0.40);
+      view3(mission, "isometric", 1.0, smooth, 1.55);
+    }
+    stagger(0.12) {
+      show(core, 0.35);
+      show(lens, 0.35);
+      show(panelA, 0.35);
+      show(panelB, 0.35);
+    }
+    attach3(lens, core, (0, 0, 0.88));
+    attach3(panelA, core, (0, -1.30, 0));
+    attach3(panelB, core, (0, 1.30, 0));
+    show(lensLabel, 0.30);
+    wait(0.45);
+  }
+}
+
+step("launch") {
+  seq {
+    par {
+      say(chapter, "ACT 2 · MOVE THE RELATIONSHIP", 0.45, smooth);
+      say(narration, "The craft travels. Every attached part remembers where it belongs.", 0.55, smooth);
+      view3(launchRoute, "fit", 1.1, smooth, 1.48);
+    }
+    par {
+      draw(launchRoute, 3.2, smooth);
+      travel3(core, launchRoute, 3.2, smooth);
+      say(principle, "attach3 carries context · travel3 carries identity", 0.55, smooth);
+    }
+    wait(0.45);
+  }
+}
+
+step("deploy") {
+  seq {
+    attach3(lens, none);
+    attach3(panelA, none);
+    attach3(panelB, none);
+    par {
+      say(chapter, "ACT 3 · DEPLOY THE IDEA", 0.45, smooth);
+      say(narration, "At orbit, only the changing parts move.", 0.50, smooth);
+      turn3(solarArray, core, z, 90, 1.25, smooth);
+      become3(core, observatory, 1.25, smooth);
+    }
+    par {
+      view3(mission, "isometric", 1.4, smooth, 1.58);
+      say(principle, "turn3 preserves the rig · become3 preserves the subject", 0.55, smooth);
+      fade(launchRoute, 0.65);
+    }
+    par {
+      view3(mission, "front", 2.2, smooth, 1.24);
+      pulse(lens, 0.75);
+      say(narration, "One persistent object. One continuous story.", 0.55, smooth);
+    }
+    wait(1.8);
+  }
+}

@@ -205,7 +205,7 @@ or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` · `circle(id,(x,y),r)` · `rect(id,(x,y),w,h)` ·
 `particles(id,container,count,[radius],[seed],["random|grid|ring"])` creates persistent
 seeded dots inside a circle/rectangle (`grid` is rectangular; `ring` is circular) ·
-`image(id,(x,y),"path",[w],[h])` a raster image (PNG/JPG) from a file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing file → placeholder box (engine-only, no browser preview) ·
+`image(id,(x,y),"asset:manic-logo.png"|"path",[w],[h])` a raster image (PNG/JPG) from a documented bundled URI or provisioned file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing ordinary file → placeholder box, missing `asset:` → error (engine-only, no browser preview) ·
 `equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work), while `\textcolor{cyan}{...}` colors individual terms semantically; `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
 `line(id,(x1,y1),(x2,y2))` · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts) · `arrow(id,(x1,y1),(x2,y2))` · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
 `brace(id,(x1,y1),(x2,y2),[depth])` · `bracelabel(id,(x1,y1),(x2,y2),"s",[depth])`
@@ -280,6 +280,9 @@ Easings: `smooth linear in out overshoot bounce elastic`.
 `grid3(id,center,half,[spacing])` · `axes3(id,origin,length,[step])` (ticks +
 numbers) · `pin3(label,(x,y,z)|entity3)` (glue a 2D label to a 3D point) ·
 `follow3(id,target,[(dx,dy,dz)])` · `midpoint3(id,a,b)` ·
+`link3(id,a,b,[trim])` (live edge) · `project3(id,source,"xy|xz|yz")` (live
+orthogonal projection) · `contour3(id,surface,level)` ·
+`label3(label,target,[world_height])` (projected label; optional natural depth scaling) ·
 `curve3(id,"x(t)","y(t)","z(t)",[(t0,t1)])` (parametric 3D curve) ·
 `surface3(id,"z(x,y)",(x0,x1),(y0,y1),[res])` (z=f(x,y) filled, flat-shaded surface; formulas may use `x` and `y`) ·
 `param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) · **multivariable calculus on a `surface3`:** `gradient3(id,surface,x,y,[color])` steepest-ascent arrow · `tangentplane3(id,surface,x,y,[color])` the tangent plane patch · `volume3(id,surface,[res],[color])` the volume under it as a column grid (double integral) ·
@@ -288,11 +291,35 @@ numbers) · `pin3(label,(x,y,z)|entity3)` (glue a 2D label to a 3D point) ·
 `revolve3(id,(cx,cy,cz),"r(t)",(t0,t1),[sides])` (solid of revolution; `r(t)` = radius at height `t`) ·
 `extrude3(id,source,height,[(cx,cy,cz)])` (extrude a 2D shape/boolean-region into a solid; extruding a `union`/`difference`/`intersect`/`xor` region = CSG solids; auto-hides `source`) ·
 `morph3(a,b,[spin])` (set 3D entity `a` to morph into `b`; both must be the same family — two curves, two surfaces, or two solids; solids like cube3↔sphere3 reparameterise spherically; animate with `to(a,morph,1,dur)`) ·
-`thick(id,radius)` (give a 3D `curve3`/`line3`/`arrow3` real thickness — renders it as a shaded tube of that world radius, arrows get a solid cone head; `0` = thin line). Use `thick` for 3D line/arrow/curve width; `stroke` is 2D-only and errors on 3D entities.
+`thick(id,radius)` (constant-width tube; `0` = thin line) ·
+`tube3(id,path,"radius(t)",[sides])` (variable-radius tube) ·
+`model3(id,"asset:models/manic-pyramid.obj"|"file.obj",center,[scale])` (geometry-only OBJ, 16 MB + geometry limits; `asset:` is production-bundled, ordinary paths must be provisioned) ·
+`finish3(id,"shading=smooth material=metal texture=checker scale=4 mesh=0.2 depth=0.2 shadow=0.2")`
+(one bounded, opt-in render finish; defaults preserve the standard diagram look).
+For `model3`, prefer a documented bundled URI when it fits. The currently
+available bundled model is `asset:models/manic-pyramid.obj`; never invent an
+asset name or remote URL. Use an ordinary OBJ path only when the user/backend
+will provide that file.
+Use `thick` for 3D line/arrow/curve width; `stroke` is 2D-only and errors on 3D entities.
 On 3D entities `to(id,prop,target,[dur],[ease])` animates `morph`, `opacity`, `scale`, `trace`, or `color` (use move3/shift3/rotate3/grow3 for position, rotation, and size).
 Timeline: `move3(id,to,[d],[ease])` · `shift3(id,delta,[d],[ease])` ·
 `rotate3(id,(xdeg,ydeg,zdeg),[d],[ease])` · `grow3(id,to,[d],[ease])` ·
-`orbit3(azimuth,elevation,radius,[d],[ease])` · `look3(target,[d],[ease])`.
+`orbit3(azimuth,elevation,radius,[d],[ease])` · `roll3(degrees,[d],[ease])` ·
+`look3(target,[d],[ease])`. **Creator-first 3D V2:**
+`view3(id_or_tag,"front|side|top|isometric|fit",[d],[ease],[margin])` frames
+transformed object/group bounds for the active canvas (`fit` keeps the current
+direction; margin default 1.18, must be ≥1) ·
+`travel3(id,path,[d],[ease])` moves a persistent entity along a line3/arrow3/curve3
+to the exact endpoint and samples a simultaneously transformed path live ·
+`attach3(child,target,[(dx,dy,dz)],[position|rigid])` establishes a timed
+spatial relationship (`rigid` makes the offset local and inherits orientation)
+and `attach3(child,none)` releases without position/orientation snapping ·
+`become3(source,blueprint,[d],[ease])` keeps the source id and adopts the target
+geometry/transform/style (compatible families morph; other pairs use a local
+crossfade) · `turn3(id_or_tag,pivot,axis,degrees,[d],[ease])` rigidly turns a
+spatial group; pivot is a point or 3D entity and axis is x/y/z or a non-zero
+vector. Prefer these five words for creator choreography; keep orbit3/move3/
+rotate3 for shots where exact coordinates are themselves meaningful.
 **Which shared modifiers/verbs work on 3D entities (this list is exhaustive):**
 `color`, `opacity`, `hidden`, `untraced`, `tag`, `thick`; verbs `show`, `fade`,
 `draw`, `flash`, `pulse`, `recolor`, `scale`, and `to(id, morph|opacity|scale|trace|color, …)`.
@@ -300,9 +327,10 @@ Timeline: `move3(id,to,[d],[ease])` · `shift3(id,delta,[d],[ease])` ·
 use `color` with a palette name), `stroke` (use `thick`), `glow`, `z`, `size`,
 `bold`, `outlined`/`filled`/`outline`, `transform` (2D matrix), `morph` (use
 `morph3`), `rot`/`spin` (use `rotate3`), `cam`/`zoom` (use `camera3`/`orbit3`).
-3D draws below ordinary 2D text/chrome; for a label on a 3D point use a 2D
-`text` + `pin3`. Do not invent mesh/model loading, lights, materials, or 3D
-`to(x/y/z)`; those are not implemented.
+3D draws below ordinary 2D text/chrome; for a stable-size label use 2D `text` +
+`pin3`, or use `label3` when it should scale with depth. Do not invent arbitrary
+shader/light graphs, non-OBJ model formats, image textures, or 3D `to(x/y/z)`;
+use the bounded `finish3` surface and explicit movement verbs.
 For `camera3`, `fov` means vertical degrees in perspective mode and visible
 world height in orthographic mode.
 

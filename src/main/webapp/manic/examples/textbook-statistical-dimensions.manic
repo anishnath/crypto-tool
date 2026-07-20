@@ -1,0 +1,151 @@
+// ============================================================================
+// textbook-statistical-dimensions.manic
+// One variable → two variables → three variables, using the same 12 students.
+// Stats kit: summary + correlation. 3D primitives reveal the third variable.
+// ============================================================================
+
+title("Statistical Dimensions — From a List to a Data Cloud");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Stats tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"MULTIVARIATE STATISTICS"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"The same students, in more dimensions"); size(headline,33); bold(headline); hidden(headline);
+text(phase,(540,300),"1D · ONE VARIABLE"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"Record only height. Each student needs one number."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Centre and spread describe one-dimensional data."); size(principle,20); color(principle,dim); hidden(principle);
+equation(address,(540,1488),`\text{student}=\textcolor{cyan}{(\text{height})}`,39); hidden(address);
+text(takeaway,(540,1572),"MORE VARIABLES DO NOT ADD PEOPLE · THEY ADD STRUCTURE"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+let vx=518;
+let vy=610;
+
+// Twelve students, measured in centimetres.
+summary(one,(vx,vy),
+  "150 154 158 160 164 167 170 173 176 180 184 188",760,cyan);
+untraced(one.line); hidden(one.dots); hidden(one.band);
+hidden(one.meanmark); hidden(one.meanlbl);
+hidden(one.medianmark); hidden(one.medianlbl);
+hidden(one.readout); hidden(one.min); hidden(one.max);
+
+// The same students: height and arm span. Target points remain hidden because
+// the 1D dots will `become` these blueprints, preserving one identity per row.
+correlation(two,(vx,vy),10,
+  "150 151  154 153  158 160  160 159  164 165  167 168  170 169  173 175  176 174  180 181  184 185  188 187",cyan);
+hidden(two.points); untraced(two.line); hidden(two.r);
+
+// Front view: x = height, screen-up z = arm span. Depth y stores shoe size.
+// The camera begins in the exact 2D projection; its later isometric move is
+// what makes the third variable perceptible.
+camera3((0.53,-64.4,-5.34),(0.53,0,-5.34),40);
+
+cube3(dataRoom,(0,0,3.1),(7.2,5.6,6.2)); color(dataRoom,blue); hidden(dataRoom); tag(dataRoom,multivariate);
+finish3(dataRoom,"material=glass shading=flat mesh=0.17 depth=0.22 shadow=0.10");
+
+line3(heightAxis,(-3.6,-2.8,0),(3.6,-2.8,0)); color(heightAxis,cyan); thick(heightAxis,0.045); untraced(heightAxis); hidden(heightAxis); tag(heightAxis,multivariate); tag(heightAxis,axes3d);
+line3(shoeAxis,(-3.6,-2.8,0),(-3.6,2.8,0)); color(shoeAxis,magenta); thick(shoeAxis,0.045); untraced(shoeAxis); hidden(shoeAxis); tag(shoeAxis,multivariate); tag(shoeAxis,axes3d);
+line3(armAxis,(-3.6,-2.8,0),(-3.6,-2.8,6.2)); color(armAxis,lime); thick(armAxis,0.045); untraced(armAxis); hidden(armAxis); tag(armAxis,multivariate); tag(armAxis,axes3d);
+
+point3(heightEnd,(3.6,-2.8,0),0.01); hidden(heightEnd);
+point3(shoeEnd,(-3.6,2.8,0),0.01); hidden(shoeEnd);
+point3(armEnd,(-3.6,-2.8,6.2),0.01); hidden(armEnd);
+text(heightLabel,(0,0),"height"); size(heightLabel,25); bold(heightLabel); color(heightLabel,cyan); hidden(heightLabel); label3(heightLabel,heightEnd,0.40);
+text(shoeLabel,(0,0),"shoe size"); size(shoeLabel,25); bold(shoeLabel); color(shoeLabel,magenta); hidden(shoeLabel); label3(shoeLabel,shoeEnd,0.40);
+text(armLabel,(0,0),"arm span"); size(armLabel,25); bold(armLabel); color(armLabel,lime); hidden(armLabel); label3(armLabel,armEnd,0.40);
+
+// Normalised triples: (height, shoe-size depth, arm-span height).
+point3(p0,(-3.167,-2.4,0.000),0.13); color(p0,cyan); hidden(p0); tag(p0,cloud); tag(p0,multivariate);
+point3(p1,(-2.500,-1.6,0.333),0.13); color(p1,cyan); hidden(p1); tag(p1,cloud); tag(p1,multivariate);
+point3(p2,(-1.833,-1.6,1.500),0.13); color(p2,cyan); hidden(p2); tag(p2,cloud); tag(p2,multivariate);
+point3(p3,(-1.500,-0.8,1.333),0.13); color(p3,cyan); hidden(p3); tag(p3,cloud); tag(p3,multivariate);
+point3(p4,(-0.833,-0.8,2.333),0.13); color(p4,cyan); hidden(p4); tag(p4,cloud); tag(p4,multivariate);
+point3(p5,(-0.333, 0.0,2.833),0.13); color(p5,cyan); hidden(p5); tag(p5,cloud); tag(p5,multivariate);
+point3(p6,( 0.167, 0.0,3.000),0.13); color(p6,cyan); hidden(p6); tag(p6,cloud); tag(p6,multivariate);
+point3(p7,( 0.667, 0.8,4.000),0.16); color(p7,gold); hidden(p7); tag(p7,cloud); tag(p7,multivariate);
+point3(p8,( 1.167, 0.8,3.833),0.13); color(p8,cyan); hidden(p8); tag(p8,cloud); tag(p8,multivariate);
+point3(p9,( 1.833, 1.6,5.000),0.13); color(p9,cyan); hidden(p9); tag(p9,cloud); tag(p9,multivariate);
+point3(p10,(2.500, 1.6,5.667),0.13); color(p10,cyan); hidden(p10); tag(p10,cloud); tag(p10,multivariate);
+point3(p11,(3.167, 2.4,6.000),0.13); color(p11,cyan); hidden(p11); tag(p11,cloud); tag(p11,multivariate);
+
+project3(frontShadow,p7,"xz"); color(frontShadow,gold); hidden(frontShadow); tag(frontShadow,multivariate);
+link3(depthLink,p7,frontShadow,0.14); color(depthLink,magenta); thick(depthLink,0.025); hidden(depthLink); tag(depthLink,multivariate);
+text(depthNote,(0,0),"shoe size adds depth"); size(depthNote,24); bold(depthNote); color(depthNote,gold); hidden(depthNote); label3(depthNote,p7,0.42);
+
+step("one variable centre and spread") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(address,0.55); }
+    draw(one.line,0.75,smooth);
+    par { show(one.min,0.25); show(one.max,0.25); stagger(0.09) { for i in 0..12 { show(one.dot{i},0.18); } } }
+    par { to(one.band,opacity,0.12,0.65,smooth); show(one.meanmark,0.35); show(one.meanlbl,0.35); show(one.medianmark,0.35); show(one.medianlbl,0.35); }
+    par { show(one.readout,0.35); pulse(one.dots,0.75); }
+    wait(0.70);
+  }
+}
+
+step("a second variable reveals relationship") {
+  seq {
+    par {
+      say(phase,"2D · TWO VARIABLES",0.45,smooth);
+      say(narration,"Add arm span. Every student now becomes an ordered pair.",0.55,smooth);
+      say(principle,"The slope of the cloud reveals how two measurements move together.",0.50,smooth);
+      rewrite(address,`\text{student}=\textcolor{cyan}{(\text{height},\text{arm span})}`,1.00,smooth);
+      fade(one.band,0.45); fade(one.meanmark,0.45); fade(one.meanlbl,0.45);
+      fade(one.medianmark,0.45); fade(one.medianlbl,0.45); fade(one.readout,0.45);
+      fade(one.line,0.45); fade(one.min,0.35); fade(one.max,0.35);
+    }
+    par {
+      for i in 0..12 { become(one.dot{i},two.p{i},1.75,smooth); }
+    }
+    par { draw(two.line,1.05,smooth); show(two.r,0.45); }
+    par { pulse(one.dots,0.75); pulse(two.r,0.75); }
+    wait(0.70);
+  }
+}
+
+step("the front projection still looks two dimensional") {
+  seq {
+    say(narration,"A front view can hide depth: the 3D records still resemble the scatterplot.",0.55,smooth);
+    par {
+      fade(one.dots,0.80);
+      fade(two.line,0.80);
+      fade(two.r,0.80);
+      stagger(0.08) { for i in 0..12 { show(p{i},0.18); } }
+      show(heightAxis,0.35); show(armAxis,0.35);
+      draw(heightAxis,1.10,smooth); draw(armAxis,1.10,smooth);
+      show(heightLabel,0.30); show(armLabel,0.30);
+    }
+    wait(0.75);
+  }
+}
+
+step("rotate to reveal the third variable") {
+  seq {
+    par {
+      say(phase,"3D · THREE VARIABLES",0.45,smooth);
+      say(narration,"Rotate the view. Shoe size reveals variation the flat plot could not show.",0.55,smooth);
+      say(principle,"A third coordinate turns a scatterplot into a multivariate cloud.",0.50,smooth);
+      rewrite(address,`\text{student}=\textcolor{cyan}{(\text{height},\text{arm span},\text{shoe})}`,1.10,smooth);
+      to(dataRoom,opacity,0.13,2.50,smooth);
+      show(shoeAxis,0.30); draw(shoeAxis,1.20,smooth); show(shoeLabel,0.30);
+      view3(multivariate,"isometric",2.65,smooth,1.52);
+    }
+    par { show(frontShadow,0.30); show(depthLink,0.35); show(depthNote,0.35); pulse(p7,0.75); }
+    wait(0.75);
+  }
+}
+
+step("dimensions describe not duplicate") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"12 STUDENTS · 36 MEASUREMENTS",0.50,smooth);
+      say(narration,"The sample size stayed twelve; each observation simply gained context.",0.55,smooth);
+      say(principle,"1D describes · 2D relates · 3D separates hidden structure",0.55,smooth);
+      view3(multivariate,"fit",1.60,smooth,1.58);
+    }
+    par { pulse(cloud,0.90); pulse(address,0.90); roll3(3,1.50,smooth); }
+    wait(1.90);
+  }
+}

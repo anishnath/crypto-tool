@@ -1,0 +1,83 @@
+canvas(1080, 1920);
+template("neon");
+title("3D relationships, not keyframes");
+creator(me, "@anish2good name=Manic yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social safe=reels");
+socials(me);
+watermark(mark, (180, 88), "Made With Manic");
+
+camera3((8, -10, 7), (0, 0, 1), 42);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.28);
+
+text(kicker, (540, 174), "SPATIAL STORY"); size(kicker, 22); color(kicker, cyan);
+text(headline, (540, 242), "One point. Three relationships."); size(headline, 46);
+text(caption, (540, 1350), "Move the idea — the construction follows."); size(caption, 27); color(caption, dim);
+
+surface3(bowl, "0.16*(x^2+y^2)", (-3,3), (-3,3), 24);
+color(bowl, blue); opacity(bowl, 0.42);
+finish3(bowl, "shading=smooth mesh=0.18 depth=0.25 shadow=0.15");
+contour3(level, bowl, 0.7); color(level, gold); thick(level, 0.025);
+
+model3(beacon, "asset:models/manic-pyramid.obj", (-1.5, -0.4, 0.05), 0.8);
+color(beacon, magenta);
+finish3(beacon, "material=metal shading=flat mesh=0.20 depth=0.18 shadow=0.30");
+
+point3(probe, (0, 0, 0), 0.15); color(probe, lime);
+attach3(probe, beacon, (0, 0, 2.0), rigid);
+project3(shadow, probe, "xy"); color(shadow, cyan);
+link3(drop, probe, shadow, 0.12); color(drop, cyan); thick(drop, 0.018);
+
+text(probeLabel, (0,0), "live point"); size(probeLabel, 28); color(probeLabel, lime);
+label3(probeLabel, probe, 0.34);
+
+curve3(route, "3*cos(pi*t)", "2.4*sin(pi*t)", "0.8+1.4*t", (0,1));
+color(route, gold); untraced(route);
+curve3(spine, "-2.8+1.2*t", "-2.2", "0.15+1.8*t", (0,1)); hidden(spine);
+tube3(signal, spine, "0.025+0.075*t", 10); color(signal, gold); opacity(signal, 0.58);
+finish3(signal, "material=metal shading=smooth depth=0.20"); hidden(signal);
+
+tag(bowl, lab); tag(level, lab); tag(beacon, lab); tag(probe, lab);
+tag(shadow, lab); tag(drop, lab); tag(route, lab); tag(signal, lab);
+tag(spine, lab);
+
+step("frame the safe media area") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.55);
+    show(caption, 0.45);
+    view3(lab, "isometric", 1.1, smooth, 1.55);
+  }
+  wait(0.5);
+}
+
+step("rigid attachment") {
+  par {
+    turn3(beacon, beacon, z, 110, 1.5, smooth);
+    orbit3(42, 28, 10.8, 1.5, smooth);
+  }
+  wait(0.35);
+}
+
+step("live projection") {
+  par {
+    shift3(beacon, (2.4, 0.8, 0.3), 1.5, smooth);
+    look3((0.4, 0.2, 1.1), 1.5, smooth);
+  }
+  wait(0.35);
+}
+
+step("transformed path travel") {
+  attach3(probe, none);
+  par {
+    draw(route, 2.2, smooth);
+    travel3(probe, route, 2.2, smooth);
+    rotate3(route, (0, 0, 24), 2.2, smooth);
+    show(signal, 0.55);
+  }
+  wait(0.7);
+}
+
+step("one bounded finish") {
+  flash(level, gold);
+  view3(lab, "fit", 1.0, smooth, 1.55);
+  wait(1.0);
+}

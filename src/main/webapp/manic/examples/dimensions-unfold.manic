@@ -1,0 +1,211 @@
+// ============================================================================
+// dimensions-unfold.manic — how a point becomes a line, a plane, then a room
+// ----------------------------------------------------------------------------
+// The geometry never cuts to a replacement scene. One point grows two halves
+// of a wire; that same wire sweeps across y while a grid resolves behind it;
+// the completed sheet then lifts as one tagged roof while a transparent room
+// appears below. The animation is the explanation.
+// ============================================================================
+
+title("How Space Learned to Grow — 1D to 3D");
+canvas("9:16");
+template("neon");
+watermark(manicMark, (238, 108), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Dimensions_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker, (540, 164), "FROM A POINT TO A WORLD");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+text(headline, (540, 228), "How space learned to grow");
+size(headline, 42); bold(headline); color(headline, fg); hidden(headline);
+text(phase, (540, 300), "PROLOGUE · THE FIRST POINT");
+size(phase, 23); bold(phase); color(phase, gold); hidden(phase);
+
+text(narration, (540, 1330), "In the beginning, there was only one location.");
+size(narration, 27); bold(narration); color(narration, fg); wrap(narration, 860); hidden(narration);
+text(principle, (540, 1390), "No direction. No distance. Just here.");
+size(principle, 20); color(principle, dim); hidden(principle);
+text(progress, (540, 1492), "POINT");
+size(progress, 27); bold(progress); color(progress, cyan); hidden(progress);
+text(takeaway, (540, 1554), "DIMENSIONS ARE MOTIONS THAT LEAVE SPACE BEHIND");
+size(takeaway, 17); bold(takeaway); color(takeaway, gold); hidden(takeaway);
+
+// ---------------------------------------------------------------------------
+// 0D → 1D: one point extends left and right.
+// ---------------------------------------------------------------------------
+
+camera3((0, -11, 4.5), (0, -4, 0), 39);
+
+point3(seed, (0,-4,0), 0.12); color(seed, gold); hidden(seed);
+finish3(seed, "material=glass shading=smooth depth=0.40 shadow=0.25");
+
+line3(leftThread, (0,-4,0), (-0.02,-4,0)); color(leftThread, cyan); thick(leftThread, 0.065); hidden(leftThread); tag(leftThread, wire); tag(leftThread, sheetSkin);
+line3(rightThread, (0,-4,0), (0.02,-4,0)); color(rightThread, cyan); thick(rightThread, 0.065); hidden(rightThread); tag(rightThread, wire); tag(rightThread, sheetSkin);
+
+point3(leftEnd, (-4,-4,0), 0.14); color(leftEnd, fg); hidden(leftEnd);
+point3(rightEnd, (4,-4,0), 0.14); color(rightEnd, fg); hidden(rightEnd);
+point3(leftLabelAnchor, (-3.25,-4,0.58), 0.01); hidden(leftLabelAnchor);
+point3(rightLabelAnchor, (3.25,-4,0.58), 0.01); hidden(rightLabelAnchor);
+text(leftLabel, (0,0), "BACKWARD"); size(leftLabel, 19); bold(leftLabel); color(leftLabel, dim); hidden(leftLabel); pin3(leftLabel, leftLabelAnchor);
+text(rightLabel, (0,0), "FORWARD"); size(rightLabel, 19); bold(rightLabel); color(rightLabel, dim); hidden(rightLabel); pin3(rightLabel, rightLabelAnchor);
+
+arrow3(leftChoice, (0,-4,0.18), (-3.5,-4,0.18)); color(leftChoice, magenta); thick(leftChoice, 0.035); untraced(leftChoice); hidden(leftChoice);
+arrow3(rightChoice, (0,-4,0.18), (3.5,-4,0.18)); color(rightChoice, magenta); thick(rightChoice, 0.035); untraced(rightChoice); hidden(rightChoice);
+
+// ---------------------------------------------------------------------------
+// 2D: the wire sweeps from y=-4 to y=4 and leaves a sheet/grid behind.
+// Every visible grid member joins sheetSkin so the whole plane can later rise.
+// ---------------------------------------------------------------------------
+
+line3(baseEdge, (-4,-4,0), (4,-4,0)); color(baseEdge, cyan); thick(baseEdge, 0.050); hidden(baseEdge); tag(baseEdge, sheetSkin);
+cube3(sheet, (0,0,0), (8,8,0.08)); color(sheet, blue); hidden(sheet); tag(sheet, sheetSkin);
+finish3(sheet, "material=glass shading=flat mesh=0.18 depth=0.24 shadow=0.10");
+
+for i in 1..8 {
+  let p = -4+i;
+  line3(row{i}, (-4,p,0.05), (4,p,0.05));
+  color(row{i}, magenta); thick(row{i}, 0.022); untraced(row{i}); hidden(row{i}); tag(row{i}, sheetGrid); tag(row{i}, sheetSkin);
+  line3(col{i}, (p,-4,0.05), (p,4,0.05));
+  color(col{i}, cyan); thick(col{i}, 0.022); untraced(col{i}); hidden(col{i}); tag(col{i}, sheetGrid); tag(col{i}, sheetSkin);
+}
+
+// ---------------------------------------------------------------------------
+// 3D: the complete sheet becomes the roof. Four pillars and a restrained glass
+// volume make the hollow space below legible without a replacement cut.
+// ---------------------------------------------------------------------------
+
+cube3(room, (0,0,4), (8,8,8)); color(room, blue); hidden(room);
+finish3(room, "material=glass shading=flat mesh=0.42 depth=0.34 shadow=0.16");
+
+line3(pillar0, (-4,-4,0), (-4,-4,8)); color(pillar0, lime); thick(pillar0, 0.060); untraced(pillar0); hidden(pillar0); tag(pillar0, pillars);
+line3(pillar1, (4,-4,0), (4,-4,8)); color(pillar1, lime); thick(pillar1, 0.060); untraced(pillar1); hidden(pillar1); tag(pillar1, pillars);
+line3(pillar2, (-4,4,0), (-4,4,8)); color(pillar2, lime); thick(pillar2, 0.060); untraced(pillar2); hidden(pillar2); tag(pillar2, pillars);
+line3(pillar3, (4,4,0), (4,4,8)); color(pillar3, lime); thick(pillar3, 0.060); untraced(pillar3); hidden(pillar3); tag(pillar3, pillars);
+
+point3(nearCorner, (-4,-4,0), 0.18); color(nearCorner, gold); hidden(nearCorner);
+point3(farCorner, (4,4,8), 0.18); color(farCorner, gold); hidden(farCorner);
+text(nearLabel, (0,0), "NEAR · BOTTOM · LEFT"); size(nearLabel, 18); color(nearLabel, fg); hidden(nearLabel); pin3(nearLabel, nearCorner);
+text(farLabel, (0,0), "FAR · TOP · RIGHT"); size(farLabel, 18); color(farLabel, fg); hidden(farLabel); pin3(farLabel, farCorner);
+
+// ---------------------------------------------------------------------------
+// ONE CONTINUOUS TIMELINE
+// ---------------------------------------------------------------------------
+
+step("the first point") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.55);
+      show(phase, 0.40);
+      show(narration, 0.45);
+      show(principle, 0.45);
+      show(progress, 0.40);
+      show(seed, 0.45);
+    }
+    pulse(seed, 0.80);
+    wait(0.65);
+  }
+}
+
+step("the point extends") {
+  seq {
+    par {
+      say(phase, "1D · THE FIRST THREAD", 0.45, smooth);
+      say(narration, "The point stretches itself out and creates the first path.", 0.55, smooth);
+      say(principle, "Length appears — but the world is still trapped on one track.", 0.50, smooth);
+      say(progress, "POINT  →  LENGTH", 0.45, smooth);
+      show(leftThread, 0.15);
+      show(rightThread, 0.15);
+      grow3(leftThread, (-4,-4,0), 2.25, smooth);
+      grow3(rightThread, (4,-4,0), 2.25, smooth);
+      view3(wire, "front", 1.45, smooth, 1.70);
+    }
+    par {
+      fade(seed, 0.35);
+      show(leftEnd, 0.30); show(rightEnd, 0.30);
+      show(leftLabel, 0.35); show(rightLabel, 0.35);
+      show(leftChoice, 0.15); show(rightChoice, 0.15);
+      draw(leftChoice, 0.90, smooth); draw(rightChoice, 0.90, smooth);
+    }
+    wait(0.60);
+  }
+}
+
+step("left or right") {
+  seq {
+    say(narration, "Every journey has only two choices: backward or forward.", 0.50, smooth);
+    par { pulse(leftThread, 0.65); pulse(rightThread, 0.65); }
+    wait(0.80);
+  }
+}
+
+step("the sideways sweep") {
+  seq {
+    par {
+      fade(leftChoice, 0.35); fade(rightChoice, 0.35);
+      fade(leftLabel, 0.35); fade(rightLabel, 0.35);
+      say(phase, "2D · THE UNFOLDING SHEET", 0.45, smooth);
+      say(narration, "The wire shimmers, grabs its whole length, and moves sideways.", 0.55, smooth);
+      say(principle, "Its motion leaves a flat floor behind: width is born.", 0.50, smooth);
+      say(progress, "POINT  →  LENGTH  →  WIDTH", 0.45, smooth);
+    }
+    par {
+      show(baseEdge, 0.18);
+      shift3(wire, (0,8,0), 2.80, smooth);
+      to(sheet, opacity, 0.14, 2.80, smooth);
+      view3(sheet, "isometric", 2.10, smooth, 1.52);
+      stagger(0.075) { for i in 1..8 { show(row{i}, 0.12); show(col{i}, 0.12); } }
+      stagger(0.075) { for i in 1..8 { draw(row{i}, 0.70, smooth); draw(col{i}, 0.70, smooth); } }
+    }
+    wait(0.65);
+  }
+}
+
+step("the flat world") {
+  seq {
+    say(narration, "The old wire is now one edge of an entire plane.", 0.50, smooth);
+    say(principle, "Forward, backward, left, and right — still no above.", 0.45, smooth);
+    pulse(sheetGrid, 0.75);
+    wait(0.80);
+  }
+}
+
+step("the rising room") {
+  seq {
+    par {
+      say(phase, "3D · THE RISING ROOM", 0.45, smooth);
+      say(narration, "The complete sheet catches a breath and lifts straight upward.", 0.55, smooth);
+      say(principle, "The moving surface fills the hollow space below it.", 0.50, smooth);
+      say(progress, "POINT  →  LENGTH  →  WIDTH  →  HEIGHT", 0.50, smooth);
+    }
+    par {
+      shift3(sheetSkin, (0,0,8), 2.85, smooth);
+      to(room, opacity, 0.16, 2.85, smooth);
+      show(pillars, 0.15);
+      draw(pillars, 2.70, smooth);
+      view3(room, "isometric", 2.85, smooth, 1.52);
+    }
+    wait(0.65);
+  }
+}
+
+step("the space within") {
+  seq {
+    par {
+      show(nearCorner, 0.30); show(farCorner, 0.30);
+      show(nearLabel, 0.35); show(farLabel, 0.35);
+      show(takeaway, 0.45);
+      say(phase, "THE SPACE WITHIN", 0.45, smooth);
+      say(narration, "Depth rushes in. Near and far finally have meaning.", 0.55, smooth);
+      say(principle, "A dimension is an old world moving in a new perpendicular direction.", 0.55, smooth);
+      view3(room, "fit", 1.80, smooth, 1.62);
+    }
+    par {
+      pulse(sheetSkin, 0.85);
+      pulse(pillars, 0.85);
+      roll3(3, 1.80, smooth);
+    }
+    wait(2.20);
+  }
+}

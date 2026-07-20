@@ -1,0 +1,216 @@
+// ============================================================================
+// textbook-watermelon-sections.manic
+// Animated reconstruction of a textbook sketch: horizontal and vertical
+// sphere sections, then two perpendicular cuts producing 1/4 + 3/4.
+// ============================================================================
+
+title("Watermelon Sections — Slicing a Sphere");
+canvas("9:16");
+template("paper");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Geometry tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"SECTIONS OF A SPHERE"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"How a watermelon becomes ½, ¼, and ¾"); size(headline,36); bold(headline); hidden(headline);
+text(phase,(540,300),"THE TWO GREAT CIRCLES"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"A central plane cuts a sphere in a great circle."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Horizontal and vertical sections have the same radius."); size(principle,20); color(principle,dim); hidden(principle);
+equation(formula,(540,1488),`x^2+y^2+z^2=R^2`,43); hidden(formula);
+text(result,(540,1572),"ONE SPHERE · TWO PERPENDICULAR SECTION PLANES"); size(result,18); bold(result); color(result,gold); hidden(result);
+
+// Stable isometric framing in the portrait Creator media region.
+camera3((40.05,-39.35,23.41),(3.15,-2.45,-6.79),40);
+
+// Shared textbook guides: the horizontal ring lies in z=0 and the vertical
+// ring lies in y=0. Each chapter owns a duplicate so transitions stay simple.
+
+// --------------------------------------------------------------------------
+// Chapter 1 — horizontal cut, two hemispheres
+// --------------------------------------------------------------------------
+sphere3(hGuide,(0,0,0),3); color(hGuide,blue); hidden(hGuide); tag(hGuide,hScene);
+finish3(hGuide,"material=glass shading=smooth mesh=0.18 depth=0.28 shadow=0.12");
+curve3(hRing,"3*cos(t)","3*sin(t)","0",(0,6.2832)); color(hRing,cyan); thick(hRing,0.055); untraced(hRing); hidden(hRing); tag(hRing,hScene);
+curve3(hVerticalRing,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(hVerticalRing,dim); thick(hVerticalRing,0.035); untraced(hVerticalRing); hidden(hVerticalRing); tag(hVerticalRing,hScene);
+cube3(hPlane,(0,0,4.5),(7,7,0.08)); color(hPlane,cyan); hidden(hPlane); tag(hPlane,hScene);
+finish3(hPlane,"material=glass shading=flat mesh=0.08 depth=0.14 shadow=0.04");
+
+param3(hTopShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,1.5708),(0,6.2832),34);
+color(hTopShell,lime); hidden(hTopShell); tag(hTopShell,hTop); tag(hTopShell,hScene);
+finish3(hTopShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(hBottomShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (1.5708,3.1416),(0,6.2832),34);
+color(hBottomShell,lime); hidden(hBottomShell); tag(hBottomShell,hBottom); tag(hBottomShell,hScene);
+finish3(hBottomShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(hTopFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(0,6.2832),30);
+color(hTopFace,magenta); hidden(hTopFace); tag(hTopFace,hTop); tag(hTopFace,hScene);
+finish3(hTopFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+param3(hBottomFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(0,6.2832),30);
+color(hBottomFace,magenta); hidden(hBottomFace); tag(hBottomFace,hBottom); tag(hBottomFace,hScene);
+finish3(hBottomFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+
+// --------------------------------------------------------------------------
+// Chapter 2 — vertical cut, front and back hemispheres
+// --------------------------------------------------------------------------
+sphere3(vGuide,(0,0,0),3); color(vGuide,blue); hidden(vGuide); tag(vGuide,vScene);
+finish3(vGuide,"material=glass shading=smooth mesh=0.18 depth=0.28 shadow=0.12");
+curve3(vRing,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(vRing,lime); thick(vRing,0.055); untraced(vRing); hidden(vRing); tag(vRing,vScene);
+curve3(vHorizontalRing,"3*cos(t)","3*sin(t)","0",(0,6.2832)); color(vHorizontalRing,dim); thick(vHorizontalRing,0.035); untraced(vHorizontalRing); hidden(vHorizontalRing); tag(vHorizontalRing,vScene);
+cube3(vPlane,(0,-4.5,0),(7,0.08,7)); color(vPlane,lime); hidden(vPlane); tag(vPlane,vScene);
+finish3(vPlane,"material=glass shading=flat mesh=0.08 depth=0.14 shadow=0.04");
+
+param3(vFrontShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,3.1416),(3.1416,6.2832),34);
+color(vFrontShell,lime); hidden(vFrontShell); tag(vFrontShell,vFront); tag(vFrontShell,vScene);
+finish3(vFrontShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(vBackShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,3.1416),(0,3.1416),34);
+color(vBackShell,lime); hidden(vBackShell); tag(vBackShell,vBack); tag(vBackShell,vScene);
+finish3(vBackShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(vFrontFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,6.2832),30);
+color(vFrontFace,cyan); hidden(vFrontFace); tag(vFrontFace,vFront); tag(vFrontFace,vScene);
+finish3(vFrontFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+param3(vBackFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,6.2832),30);
+color(vBackFace,cyan); hidden(vBackFace); tag(vBackFace,vBack); tag(vBackFace,vScene);
+finish3(vBackFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+
+// --------------------------------------------------------------------------
+// Chapter 3 — perpendicular cuts, quarter removed and three quarters remain
+// --------------------------------------------------------------------------
+sphere3(qGuide,(0,0,0),3); color(qGuide,blue); hidden(qGuide); tag(qGuide,qScene);
+finish3(qGuide,"material=glass shading=smooth mesh=0.18 depth=0.28 shadow=0.12");
+curve3(qHRing,"3*cos(t)","3*sin(t)","0",(0,6.2832)); color(qHRing,cyan); thick(qHRing,0.045); untraced(qHRing); hidden(qHRing); tag(qHRing,qScene);
+curve3(qVRing,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(qVRing,lime); thick(qVRing,0.045); untraced(qVRing); hidden(qVRing); tag(qVRing,qScene);
+cube3(qHPlane,(0,0,4.5),(7,7,0.07)); color(qHPlane,cyan); hidden(qHPlane); tag(qHPlane,qScene);
+cube3(qVPlane,(0,-4.5,0),(7,0.07,7)); color(qVPlane,lime); hidden(qVPlane); tag(qVPlane,qScene);
+finish3(qHPlane,"material=glass shading=flat mesh=0.06 depth=0.12 shadow=0.03");
+finish3(qVPlane,"material=glass shading=flat mesh=0.06 depth=0.12 shadow=0.03");
+
+// Removed top-front quarter: one spherical patch plus two semicircular faces.
+param3(qShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,1.5708),(3.1416,6.2832),32);
+color(qShell,lime); hidden(qShell); tag(qShell,quarterPiece); tag(qShell,qScene);
+finish3(qShell,"material=glass shading=smooth mesh=0.14 depth=0.26 shadow=0.12");
+param3(qHFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(3.1416,6.2832),28);
+color(qHFace,gold); hidden(qHFace); tag(qHFace,quarterPiece); tag(qHFace,qScene);
+finish3(qHFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+param3(qVFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,3.1416),28);
+color(qVFace,gold); hidden(qVFace); tag(qVFace,quarterPiece); tag(qVFace,qScene);
+finish3(qVFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+
+// Remaining 3/4: top-back quarter plus the complete bottom hemisphere.
+param3(rTopBack,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,1.5708),(0,3.1416),32);
+color(rTopBack,lime); hidden(rTopBack); tag(rTopBack,remainder); tag(rTopBack,qScene);
+finish3(rTopBack,"material=glass shading=smooth mesh=0.14 depth=0.26 shadow=0.12");
+param3(rBottom,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (1.5708,3.1416),(0,6.2832),34);
+color(rBottom,lime); hidden(rBottom); tag(rBottom,remainder); tag(rBottom,qScene);
+finish3(rBottom,"material=glass shading=smooth mesh=0.14 depth=0.26 shadow=0.12");
+param3(rHFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(3.1416,6.2832),28);
+color(rHFace,gold); hidden(rHFace); tag(rHFace,remainder); tag(rHFace,qScene);
+finish3(rHFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+param3(rVFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,3.1416),28);
+color(rVFace,gold); hidden(rVFace); tag(rVFace,remainder); tag(rVFace,qScene);
+finish3(rVFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+
+step("read the two central sections") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(formula,0.55); show(result,0.45); }
+    to(hGuide,opacity,0.28,0.80,smooth);
+    par { show(hRing,0.25); draw(hRing,1.20,smooth); show(hVerticalRing,0.25); draw(hVerticalRing,1.20,smooth); }
+    par { pulse(hRing,0.70); pulse(hVerticalRing,0.70); roll3(3,1.30,smooth); }
+    wait(0.65);
+  }
+}
+
+step("horizontal cut makes two halves") {
+  seq {
+    par {
+      say(phase,"HORIZONTAL SECTION",0.45,smooth);
+      say(narration,"Slide a horizontal plane through the centre: z=0.",0.55,smooth);
+      say(principle,"The intersection is a horizontal great circle.",0.50,smooth);
+      rewrite(formula,`z=0\quad\Longrightarrow\quad x^2+y^2=R^2`,1.00,smooth);
+      say(result,"CUT → TWO ½-WATERMELONS",0.45,smooth);
+      show(hPlane,0.30);
+    }
+    par { shift3(hPlane,(0,0,-4.5),2.00,smooth); pulse(hRing,0.75); }
+    par {
+      fade(hGuide,0.55); fade(hPlane,0.45); fade(hRing,0.45); fade(hVerticalRing,0.45);
+      show(hTopShell,0.40); show(hBottomShell,0.40);
+      to(hTopFace,opacity,0.74,0.50,smooth); to(hBottomFace,opacity,0.74,0.50,smooth);
+    }
+    par { shift3(hTop,(-3.8,0,0.7),1.85,smooth); shift3(hBottom,(1.5,0,-0.2),1.85,smooth); }
+    par { pulse(hTopFace,0.80); pulse(hBottomFace,0.80); }
+    wait(0.75);
+  }
+}
+
+step("vertical cut makes two halves") {
+  seq {
+    par {
+      fade(hScene,0.65);
+      say(phase,"VERTICAL SECTION",0.45,smooth);
+      say(narration,"Turn the cutting plane upright and pass it through y=0.",0.55,smooth);
+      say(principle,"Its section is the same-size circle, seen vertically.",0.50,smooth);
+      rewrite(formula,`y=0\quad\Longrightarrow\quad x^2+z^2=R^2`,1.00,smooth);
+      say(result,"ANOTHER CUT → TWO ½-WATERMELONS",0.45,smooth);
+    }
+    par { to(vGuide,opacity,0.26,0.70,smooth); show(vHorizontalRing,0.25); draw(vHorizontalRing,0.90,smooth); show(vRing,0.25); draw(vRing,1.10,smooth); }
+    par { show(vPlane,0.30); shift3(vPlane,(0,4.5,0),2.00,smooth); pulse(vRing,0.75); }
+    par {
+      fade(vGuide,0.55); fade(vPlane,0.45); fade(vRing,0.45); fade(vHorizontalRing,0.45);
+      show(vFrontShell,0.40); show(vBackShell,0.40);
+      to(vFrontFace,opacity,0.74,0.50,smooth); to(vBackFace,opacity,0.74,0.50,smooth);
+    }
+    par { shift3(vFront,(-3.8,0,0.4),1.85,smooth); shift3(vBack,(1.5,0,-0.1),1.85,smooth); }
+    wait(0.75);
+  }
+}
+
+step("perpendicular cuts remove one quarter") {
+  seq {
+    par {
+      fade(vScene,0.65);
+      say(phase,"TWO PERPENDICULAR CUTS",0.45,smooth);
+      say(narration,"Now combine the horizontal and vertical central planes.",0.55,smooth);
+      say(principle,"Each cut halves one independent direction.",0.50,smooth);
+      rewrite(formula,`\frac12\times\frac12=\textcolor{gold}{\frac14}`,1.00,smooth);
+      say(result,"¼ CUT OUT · ¾ REMAINS",0.45,smooth);
+    }
+    par { to(qGuide,opacity,0.24,0.65,smooth); show(qHRing,0.25); draw(qHRing,0.90,smooth); show(qVRing,0.25); draw(qVRing,0.90,smooth); }
+    seq {
+      par { show(qHPlane,0.25); shift3(qHPlane,(0,0,-4.5),1.35,smooth); }
+      par { show(qVPlane,0.25); shift3(qVPlane,(0,4.5,0),1.35,smooth); }
+    }
+    par {
+      fade(qGuide,0.50); fade(qHPlane,0.40); fade(qVPlane,0.40); fade(qHRing,0.40); fade(qVRing,0.40);
+      show(qShell,0.35); to(qHFace,opacity,0.78,0.45,smooth); to(qVFace,opacity,0.78,0.45,smooth);
+      show(rTopBack,0.35); show(rBottom,0.35); to(rHFace,opacity,0.70,0.45,smooth); to(rVFace,opacity,0.70,0.45,smooth);
+    }
+    par { shift3(quarterPiece,(-3.8,0,0.8),1.90,smooth); shift3(remainder,(1.4,0,-0.15),1.90,smooth); }
+    wait(0.70);
+  }
+}
+
+step("compare the pieces") {
+  seq {
+    par {
+      say(phase,"FRACTIONS ARE GEOMETRY",0.50,smooth);
+      say(narration,"The removed corner is one quarter; the connected remainder is three quarters.",0.55,smooth);
+      say(principle,"Horizontal section · vertical section · quarter volume",0.55,smooth);
+      rewrite(formula,`1-\frac14=\textcolor{gold}{\frac34}`,1.00,smooth);
+      show(result,0.25); say(result,"¼ PIECE + ¾ WATERMELON = 1 WHOLE",0.50,smooth);
+    }
+    par { pulse(quarterPiece,0.90); pulse(remainder,0.90); roll3(3,1.50,smooth); }
+    wait(2.00);
+  }
+}

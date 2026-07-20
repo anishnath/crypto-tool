@@ -1,0 +1,129 @@
+// ============================================================================
+// textbook-geometry-dimension-reduction.manic
+// Sphere → central cross-section → circle → diameter (3D → 2D → 1D).
+// Geo kit: point, circle2, linecircle, segment, midpoint.
+// ============================================================================
+
+title("Dimension Reduction — From Sphere to Diameter");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Geometry tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"GEOMETRY BY DIMENSION"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"A sphere hides a circle — and a line"); size(headline,36); bold(headline); hidden(headline);
+text(phase,(540,300),"3D · BEGIN WITH A SPHERE"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"A sphere extends in three independent directions."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Its radius is 3 units in every direction."); size(principle,20); color(principle,dim); hidden(principle);
+equation(formula,(540,1488),`x^2+y^2+z^2=\textcolor{gold}{3^2}`,43); hidden(formula);
+text(takeaway,(540,1572),"FIX A COORDINATE · LOSE A DIMENSION · KEEP THE MEASURE"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+// Settled isometric composition of the complete sphere inside the Creator
+// media region. Starting here prevents an opening camera correction.
+camera3((40.05,-39.35,23.41),(3.15,-2.45,-6.79),40);
+
+sphere3(solid,(0,0,0),3); color(solid,blue); hidden(solid); tag(solid,spatial);
+finish3(solid,"material=glass shading=smooth mesh=0.25 depth=0.36 shadow=0.16");
+
+// A thin xz-plane begins outside the sphere and travels to y=0.
+cube3(slicePlane,(0,-5,0),(7,0.08,7)); color(slicePlane,magenta); hidden(slicePlane); tag(slicePlane,spatial);
+finish3(slicePlane,"material=glass shading=flat mesh=0.10 depth=0.18 shadow=0.06");
+curve3(greatCircle,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(greatCircle,magenta); thick(greatCircle,0.065); untraced(greatCircle); hidden(greatCircle); tag(greatCircle,spatial);
+
+// Screen-space geo construction aligned with the settled front projection.
+let gx=518;
+let gy=890;
+let gr=145;
+
+point(O,(gx,gy),"O"); hidden(O); hidden(O.label);
+point(A,(gx+gr,gy),"R"); hidden(A); hidden(A.label);
+circle2(section,O,A); color(section,magenta); stroke(section,4); untraced(section);
+segment(radius2d,O,A); color(radius2d,gold); stroke(radius2d,4); untraced(radius2d);
+
+// Two hidden points define a horizontal secant. The geo kit computes its exact
+// circle intersections `ends0` and `ends1`, then derives their midpoint M.
+point(lineLeft,(gx-gr-55,gy)); hidden(lineLeft);
+point(lineRight,(gx+gr+55,gy)); hidden(lineRight);
+linecircle(ends,lineLeft,lineRight,O,A);
+hidden(ends0); hidden(ends1);
+label(ends0,"A",(-18,-22)); hidden(ends0.label);
+label(ends1,"B",(18,-22)); hidden(ends1.label);
+segment(diameter,ends0,ends1); color(diameter,cyan); stroke(diameter,6); untraced(diameter);
+midpoint(M,ends0,ends1); color(M,lime); hidden(M);
+label(M,"M",(0,-24)); hidden(M.label);
+
+step("the full three dimensional object") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(formula,0.55); }
+    show(solid,0.85);
+    par { pulse(solid,0.85); roll3(4,1.45,smooth); }
+    wait(0.70);
+  }
+}
+
+step("fix one coordinate with a plane") {
+  seq {
+    par {
+      say(phase,"3D → 2D · TAKE A CENTRAL SLICE",0.45,smooth);
+      say(narration,"Move a plane to the centre and fix y=0.",0.55,smooth);
+      say(principle,"Only points shared by the sphere and plane survive.",0.50,smooth);
+      rewrite(formula,`y=0\quad\Longrightarrow\quad x^2+z^2=\textcolor{gold}{3^2}`,1.05,smooth);
+      show(slicePlane,0.35);
+    }
+    par {
+      shift3(slicePlane,(0,5,0),2.10,smooth);
+      show(greatCircle,0.25); draw(greatCircle,2.10,smooth);
+    }
+    par { pulse(greatCircle,0.75); to(solid,opacity,0.04,0.65,smooth); fade(slicePlane,0.65); }
+    // A generous margin makes the spatial circle settle at the same on-screen
+    // radius as the following geo-kit circle, avoiding a dimensional size jump.
+    view3(greatCircle,"front",1.65,smooth,3.10);
+    wait(0.60);
+  }
+}
+
+step("the cross section becomes a geo circle") {
+  seq {
+    par {
+      say(phase,"2D · THE GREAT CIRCLE",0.45,smooth);
+      say(narration,"The surviving cross-section is a circle of radius 3.",0.55,smooth);
+      say(principle,"The geo kit binds the circle to centre O and radius point R.",0.50,smooth);
+      rewrite(formula,`x^2+z^2=9\quad\Longleftrightarrow\quad r=\textcolor{gold}{3}`,1.00,smooth);
+      fade(greatCircle,0.85);
+      draw(section,1.30,smooth);
+    }
+    par { show(O,0.25); show(O.label,0.25); show(A,0.25); show(A.label,0.25); draw(radius2d,0.85,smooth); }
+    par { pulse(section,0.75); pulse(radius2d,0.75); }
+    wait(0.70);
+  }
+}
+
+step("a line finds the diameter") {
+  seq {
+    par {
+      say(phase,"2D → 1D · INTERSECT WITH A LINE",0.45,smooth);
+      say(narration,"A line through the centre meets the circle at exactly two points.",0.55,smooth);
+      say(principle,"The constructed segment AB is the circle's widest chord.",0.50,smooth);
+      rewrite(formula,`AB=2r=2(3)`,0.95,smooth);
+    }
+    par { show(ends0,0.25); show(ends1,0.25); show(ends0.label,0.25); show(ends1.label,0.25); draw(diameter,1.35,smooth); }
+    par { fade(radius2d,0.45); fade(A,0.35); fade(A.label,0.35); show(M,0.30); show(M.label,0.30); pulse(M,0.70); }
+    wait(0.70);
+  }
+}
+
+step("only one measurable direction remains") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"1D · THE DIAMETER",0.50,smooth);
+      say(narration,"Remove the surrounding circle. One segment—and one length—remains.",0.55,smooth);
+      say(principle,"3D sphere → 2D section → 1D diameter",0.55,smooth);
+      rewrite(formula,`\boxed{AB=\textcolor{gold}{6}\text{ units}}`,1.05,smooth);
+      fade(section,0.75); fade(O,0.40); fade(O.label,0.40);
+    }
+    par { pulse(diameter,0.90); pulse(formula,0.90); }
+    wait(2.00);
+  }
+}

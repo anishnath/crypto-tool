@@ -1,0 +1,126 @@
+// ============================================================================
+// textbook-function-to-solid.manic — interval → graph → solid of revolution
+// ============================================================================
+
+title("The Revolving Semicircle — From 1D to 3D");
+canvas("9:16");
+template("neon");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Math tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"SOLIDS OF REVOLUTION"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"A 1D domain grows into a 3D sphere"); size(headline,41); bold(headline); hidden(headline);
+text(phase,(540,300),"1D · CHOOSE THE DOMAIN"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"Begin with every x-value from −2 to 2 on a number line."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"The interval controls where the graph exists."); size(principle,20); color(principle,dim); hidden(principle);
+equation(formula,(540,1488),`x\in\textcolor{cyan}{[-2,2]}`,44); hidden(formula);
+text(takeaway,(540,1572),"DOMAIN → PROFILE → ROTATION → VOLUME"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+camera3((0,-14,1.8),(0,0,0.7),39);
+
+// The x-axis and interval are the 1D seed for the whole construction.
+line3(xAxis,(-2.6,0,0),(2.6,0,0)); color(xAxis,dim); thick(xAxis,0.035); untraced(xAxis); hidden(xAxis);
+line3(domain,(-2,0,0),(2,0,0)); color(domain,cyan); thick(domain,0.09); untraced(domain); hidden(domain); tag(domain,profile);
+point3(leftEnd,(-2,0,0),0.13); color(leftEnd,cyan); hidden(leftEnd);
+point3(rightEnd,(2,0,0),0.13); color(rightEnd,cyan); hidden(rightEnd);
+point3(origin,(0,0,0),0.09); color(origin,fg); hidden(origin);
+point3(xEnd,(2.6,0,0),0.01); hidden(xEnd);
+text(xLabel,(0,0),"x"); size(xLabel,23); bold(xLabel); color(xLabel,fg); hidden(xLabel); label3(xLabel,xEnd,0.30);
+
+// The upper semicircle is a textbook profile: y = sqrt(4 - x^2).
+curve3(semicircle,"-2+4*t","0","sqrt(4-(-2+4*t)^2)",(0,1)); color(semicircle,magenta); thick(semicircle,0.065); untraced(semicircle); hidden(semicircle); tag(semicircle,profile);
+param3(region,
+  "-2+4*u",
+  "0",
+  "v*sqrt(4-(-2+4*u)^2)",
+  (0,1),(0,1),32);
+color(region,magenta); hidden(region); tag(region,profile);
+finish3(region,"material=glass shading=flat mesh=0.18 depth=0.18 shadow=0.08");
+
+// Three sample heights explain how the graph rises from the domain.
+line3(heightA,(-1,0,0),(-1,0,1.732)); color(heightA,gold); thick(heightA,0.035); untraced(heightA); hidden(heightA); tag(heightA,samples); tag(heightA,profile);
+line3(heightB,(0,0,0),(0,0,2)); color(heightB,gold); thick(heightB,0.035); untraced(heightB); hidden(heightB); tag(heightB,samples); tag(heightB,profile);
+line3(heightC,(1,0,0),(1,0,1.732)); color(heightC,gold); thick(heightC,0.035); untraced(heightC); hidden(heightC); tag(heightC,samples); tag(heightC,profile);
+point3(apex,(0,0,2),0.10); color(apex,gold); hidden(apex); tag(apex,profile);
+
+// Rotating the filled profile around x generates a radius-2 sphere.
+param3(sphere,
+  "2*cos(u)",
+  "2*sin(u)*cos(v)",
+  "2*sin(u)*sin(v)",
+  (0,3.1416),(0,6.2832),38);
+color(sphere,blue); hidden(sphere); tag(sphere,solid);
+finish3(sphere,"material=glass shading=smooth mesh=0.24 depth=0.34 shadow=0.16");
+curve3(equator,"0","2*cos(t)","2*sin(t)",(0,6.2832)); color(equator,cyan); thick(equator,0.035); untraced(equator); hidden(equator); tag(equator,solid);
+curve3(meridian,"2*cos(t)","0","2*sin(t)",(0,6.2832)); color(meridian,magenta); thick(meridian,0.035); untraced(meridian); hidden(meridian); tag(meridian,solid);
+
+step("mark the one dimensional domain") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(formula,0.50); view3(domain,"front",0.9,smooth,1.72); }
+    par { draw(xAxis,0.90,smooth); draw(domain,1.35,smooth); show(leftEnd,0.25); show(rightEnd,0.25); show(origin,0.25); show(xLabel,0.25); }
+    par { pulse(domain,0.75); pulse(formula,0.75); }
+    wait(0.65);
+  }
+}
+
+step("the function supplies height") {
+  seq {
+    par {
+      say(phase,"2D · DRAW THE PROFILE",0.45,smooth);
+      say(narration,"At each x, the function supplies a height above the axis.",0.55,smooth);
+      say(principle,"The interval becomes the base of an upper semicircle.",0.45,smooth);
+      rewrite(formula,`y=\textcolor{magenta}{\sqrt{4-x^2}},\quad -2\le x\le2`,1.05,smooth);
+      draw(semicircle,2.10,smooth);
+      stagger(0.22) { show(heightA,0.20); show(heightB,0.20); show(heightC,0.20); }
+      stagger(0.22) { draw(heightA,0.65,smooth); draw(heightB,0.65,smooth); draw(heightC,0.65,smooth); }
+    }
+    par { show(apex,0.25); pulse(samples,0.75); }
+    wait(0.70);
+  }
+}
+
+step("fill the generating region") {
+  seq {
+    par {
+      say(narration,"The curve and the x-axis enclose the region that will rotate.",0.50,smooth);
+      to(region,opacity,0.26,1.65,smooth);
+      view3(region,"front",1.40,smooth,1.62);
+    }
+    par { pulse(region,0.75); pulse(semicircle,0.75); }
+    wait(0.75);
+  }
+}
+
+step("rotate the profile into space") {
+  seq {
+    par {
+      say(phase,"3D · ROTATE ABOUT THE x-AXIS",0.45,smooth);
+      say(narration,"Sweep the entire semicircle through 360° around its diameter.",0.55,smooth);
+      say(principle,"Every point traces a circle; together those circles form a sphere.",0.50,smooth);
+      rewrite(formula,`x^2+y^2+z^2=\textcolor{gold}{4}`,1.05,smooth);
+      turn3(profile,(0,0,0),x,360,3.10,smooth);
+      to(sphere,opacity,0.34,3.10,smooth);
+      show(equator,0.45); draw(equator,2.15,smooth);
+      show(meridian,0.45); draw(meridian,2.15,smooth);
+      view3(solid,"isometric",2.60,smooth,1.55);
+    }
+    par { pulse(solid,0.85); roll3(4,1.50,smooth); }
+    wait(0.75);
+  }
+}
+
+step("read the solid of revolution") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"THE SAME RADIUS · A NEW DIMENSION",0.50,smooth);
+      say(narration,"The 2D radius is still 2, but rotation has filled 3D volume.",0.55,smooth);
+      say(principle,"A semicircle rotated about its diameter generates a sphere.",0.50,smooth);
+      rewrite(formula,`V=\frac{4}{3}\pi(2)^3=\textcolor{gold}{\frac{32\pi}{3}}`,1.15,smooth);
+      view3(solid,"fit",1.65,smooth,1.58);
+    }
+    par { pulse(sphere,0.90); pulse(formula,0.90); roll3(3,1.50,smooth); }
+    wait(1.90);
+  }
+}

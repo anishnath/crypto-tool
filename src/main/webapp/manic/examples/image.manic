@@ -1,11 +1,12 @@
 // ============================================================================
 //  image.manic  —  embed a raster image (PNG/JPG) in a scene
 // ----------------------------------------------------------------------------
-//  `image(id, (x,y), "path", [w], [h])` loads a real image file and draws it
+//  `image(id, (x,y), "asset:name.png"|"path", [w], [h])` loads a bundled or
+//  user-provisioned image file and draws it
 //  centred at (x,y), w×h px — and it's an ordinary entity, so every verb
 //  (`show`/`move`/`fade`/`pulse`/`spin`/…) animates it. Here a bundled logo
-//  slides + fades in, pulses, then a caption types beside it. A missing path
-//  draws a crossed placeholder box instead of failing.
+//  slides + fades in, pulses, then a caption types beside it. A missing ordinary
+//  path draws a crossed placeholder; a missing bundled asset is an error.
 //
 //  (This unlocks real logos, avatars and photo backdrops for creator templates —
 //  a creator drops their brand image into a slot.)
@@ -14,7 +15,7 @@
 title("Raster Images");
 canvas("16:9");
 
-image(logo, (cx, 340), "assets/manic-logo.png", 300, 300); hidden(logo);
+image(logo, (cx, 340), "asset:manic-logo.png", 300, 300); hidden(logo);
 text(cap, (cx, 600), "any PNG/JPG — and it animates like anything else");
 color(cap, fg); size(cap, 34); bold(cap); untraced(cap);
 

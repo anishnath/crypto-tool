@@ -1,5 +1,5 @@
 {
-  "count": 192,
+  "count": 203,
   "categories": [
     {
       "slug": "algorithms",
@@ -981,7 +981,7 @@
           "name": "image",
           "file": "image.manic",
           "title": "Image",
-          "desc": "Embed a raster image (PNG/JPG) with image(id, (x,y), \"path\", w, h) \u2014 a real file drawn into the scene and animated like any entity (shown, spun, pulsed, moved)."
+          "desc": "Embed a raster image (PNG/JPG) with image(id, (x,y), \"asset:name.png\"|\"path\", w, h) \u2014 a bundled or user-provisioned file animated like any entity (shown, spun, pulsed, moved)."
         }
       ]
     },
@@ -1169,6 +1169,72 @@
       "slug": "threed",
       "title": "3D scenes",
       "examples": [
+        {
+          "name": "three-d-v2",
+          "file": "three-d-v2.manic",
+          "title": "Three d v2",
+          "desc": "The compact 3D V2 reference: frame a tagged craft, attach its parts, travel one persistent subject along a spatial route, deploy the rig with a rigid turn, and become the final blueprint \u2014 five creator words in one continuous scene."
+        },
+        {
+          "name": "three-d-v2-story",
+          "file": "three-d-v2-story.manic",
+          "title": "Three d v2 story",
+          "desc": "A vertical creator story about a satellite finding orbit."
+        },
+        {
+          "name": "three-d-v2-lab",
+          "file": "three-d-v2-lab.manic",
+          "title": "Three d v2 lab",
+          "desc": "A creator-first spatial lab: safe-aware framing, rigid assembly, a live projection and edge, a moving route, surface contour, depth-scaled label, bounded finishes, variable tube, and controlled OBJ geometry in one continuous story."
+        },
+        {
+          "name": "trapped-light-dimensions",
+          "file": "trapped-light-dimensions.manic",
+          "title": "Trapped light dimensions",
+          "desc": "A photon escapes one dimension at a time: first a 5-unit line, then the 5\u201312\u201313 diagonal of a plane, and finally the 13\u201384\u201385 diagonal through a volume."
+        },
+        {
+          "name": "dimensions-unfold",
+          "file": "dimensions-unfold.manic",
+          "title": "Dimensions unfold",
+          "desc": "A point stretches into a line, the line sweeps sideways into a plane, and the plane lifts into a room."
+        },
+        {
+          "name": "textbook-length-area-volume",
+          "file": "textbook-length-area-volume.manic",
+          "title": "Textbook length area volume",
+          "desc": "Why units become cm, cm\u00b2, and cm\u00b3: one measured segment sweeps out a rectangle, then the rectangle rises into a cuboid."
+        },
+        {
+          "name": "textbook-coordinate-worlds",
+          "file": "textbook-coordinate-worlds.manic",
+          "title": "Textbook coordinate worlds",
+          "desc": "A point earns a longer address as dimensions unlock: x on a line, (x,y) on a plane, then (x,y,z) in space."
+        },
+        {
+          "name": "textbook-function-to-solid",
+          "file": "textbook-function-to-solid.manic",
+          "title": "Textbook function to solid",
+          "desc": "A diameter becomes a semicircle and the semicircle revolves into a sphere."
+        },
+        {
+          "name": "textbook-statistical-dimensions",
+          "file": "textbook-statistical-dimensions.manic",
+          "title": "Textbook statistical dimensions",
+          "desc": "Data grows from a one-variable number line to a two-variable scatter plot and a three-variable point cloud."
+        },
+        {
+          "name": "textbook-geometry-dimension-reduction",
+          "file": "textbook-geometry-dimension-reduction.manic",
+          "title": "Textbook geometry dimension reduction",
+          "desc": "The reverse journey: a sphere reveals a great-circle section, then that circle collapses to its diameter."
+        },
+        {
+          "name": "textbook-watermelon-sections",
+          "file": "textbook-watermelon-sections.manic",
+          "title": "Textbook watermelon sections",
+          "desc": "A paper-style spatial lesson that turns sphere sections into a continuous story: horizontal and vertical great-circle cuts make two halves, then perpendicular cuts separate one quarter from the three-quarter remainder."
+        },
         {
           "name": "three_d",
           "file": "three_d.manic",

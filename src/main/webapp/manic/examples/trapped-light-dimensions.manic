@@ -1,0 +1,226 @@
+// ============================================================================
+// trapped-light-dimensions.manic — a continuous 1D → 2D → 3D journey
+// ----------------------------------------------------------------------------
+// One photon and one equation persist through the whole story. A fiber sweeps
+// sideways into a glass floor; that same floor rises into a transparent room.
+// The visual construction makes the distance formula grow one perpendicular
+// square at a time instead of presenting three unrelated formulas.
+// ============================================================================
+
+title("The Trapped Light Beam — From 1D to 3D");
+canvas("9:16");
+template("neon");
+watermark(manicMark, (238, 108), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Build_dimensions_visually yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker, (540, 164), "A JOURNEY THROUGH DIMENSIONS");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+text(headline, (540, 228), "The trapped light beam");
+size(headline, 43); bold(headline); color(headline, fg); hidden(headline);
+text(dimension, (540, 300), "1D · A THREAD IN THE DARK");
+size(dimension, 23); bold(dimension); color(dimension, gold); hidden(dimension);
+
+text(narration, (540, 1328), "No up. No down. Only backwards and forwards.");
+size(narration, 27); bold(narration); color(narration, fg); wrap(narration, 860); hidden(narration);
+text(insight, (540, 1386), "One permitted direction");
+size(insight, 20); color(insight, dim); hidden(insight);
+
+equation(distance, (540, 1482), `L=\left|x_2-x_1\right|`, 39);
+hidden(distance);
+
+// ---------------------------------------------------------------------------
+// THE SPATIAL CAST
+// ---------------------------------------------------------------------------
+
+camera3((9, -16, 8), (2.5, 0, 0), 38);
+
+// 1D: a five-unit fiber and one persistent photon.
+line3(fiber, (0,0,0), (5,0,0)); color(fiber, cyan); thick(fiber, 0.065); untraced(fiber);
+point3(A, (0,0,0), 0.16); color(A, fg); hidden(A);
+point3(B, (5,0,0), 0.16); color(B, fg); hidden(B);
+point3(photon, (0,0,0), 0.22); color(photon, gold); hidden(photon);
+finish3(photon, "material=glass shading=smooth depth=0.35 shadow=0.20");
+
+text(aLabel, (0,0), "A · x = 0"); size(aLabel, 21); color(aLabel, fg); hidden(aLabel); pin3(aLabel, A);
+text(bLabel, (0,0), "B · x = 5"); size(bLabel, 21); color(bLabel, fg); hidden(bLabel); pin3(bLabel, B);
+point3(xMid, (2.5,0,0), 0.01); hidden(xMid);
+text(xLabel, (0,0), "a = 5"); size(xLabel, 22); bold(xLabel); color(xLabel, cyan); hidden(xLabel); pin3(xLabel, xMid);
+
+// 2D: pull a copy of the fiber along y. The shallow cuboid is the glass floor.
+line3(sweepLine, (0,0,0), (5,0,0)); color(sweepLine, magenta); thick(sweepLine, 0.045); hidden(sweepLine);
+line3(yEdge, (0,0,0), (0,12,0)); color(yEdge, magenta); thick(yEdge, 0.045); untraced(yEdge); hidden(yEdge);
+point3(yMid, (0,6,0), 0.01); hidden(yMid);
+text(yLabel, (0,0), "b = 12"); size(yLabel, 22); bold(yLabel); color(yLabel, magenta); hidden(yLabel); pin3(yLabel, yMid);
+
+cube3(glassFloor, (2.5,6,0), (5,12,0.12)); color(glassFloor, blue); hidden(glassFloor);
+finish3(glassFloor, "material=glass shading=flat mesh=0.42 depth=0.30 shadow=0.12");
+line3(floorDiagonal, (0,0,0.08), (5,12,0.08)); color(floorDiagonal, gold); thick(floorDiagonal, 0.075); untraced(floorDiagonal); hidden(floorDiagonal);
+point3(floorTarget, (5,12,0.08), 0.19); color(floorTarget, fg); hidden(floorTarget);
+text(floorTargetLabel, (0,0), "(5, 12)"); size(floorTargetLabel, 20); color(floorTargetLabel, fg); hidden(floorTargetLabel); pin3(floorTargetLabel, floorTarget);
+point3(floorMid, (2.5,6,0.08), 0.01); hidden(floorMid);
+text(floorPathLabel, (0,0), "base = 13"); size(floorPathLabel, 21); bold(floorPathLabel); color(floorPathLabel, gold); hidden(floorPathLabel); pin3(floorPathLabel, floorMid);
+
+// 3D: the flat floor becomes a transparent room. The 84-unit height is
+// compressed to 18 visual units so the reused 13-unit floor diagonal remains
+// readable; labels and mathematics retain the real coordinates. Four persistent
+// roof edges rise as one tagged rig while the transparent volume resolves.
+cube3(room, (2.5,6,9), (5,12,18)); color(room, blue); hidden(room);
+finish3(room, "material=glass shading=flat mesh=0.50 depth=0.38 shadow=0.16");
+line3(roofFront, (0,0,0), (5,0,0)); color(roofFront, cyan); thick(roofFront, 0.055); hidden(roofFront); tag(roofFront, roof);
+line3(roofBack, (0,12,0), (5,12,0)); color(roofBack, cyan); thick(roofBack, 0.055); hidden(roofBack); tag(roofBack, roof);
+line3(roofLeft, (0,0,0), (0,12,0)); color(roofLeft, cyan); thick(roofLeft, 0.055); hidden(roofLeft); tag(roofLeft, roof);
+line3(roofRight, (5,0,0), (5,12,0)); color(roofRight, cyan); thick(roofRight, 0.055); hidden(roofRight); tag(roofRight, roof);
+line3(zEdge, (5,12,0), (5,12,18)); color(zEdge, lime); thick(zEdge, 0.08); untraced(zEdge); hidden(zEdge);
+point3(zMid, (5,12,9), 0.01); hidden(zMid);
+text(zLabel, (0,0), "c = 84"); size(zLabel, 22); bold(zLabel); color(zLabel, lime); hidden(zLabel); pin3(zLabel, zMid);
+
+line3(spaceDiagonal, (0,0,0), (5,12,18)); color(spaceDiagonal, gold); thick(spaceDiagonal, 0.10); untraced(spaceDiagonal); hidden(spaceDiagonal);
+point3(spaceTarget, (5,12,18), 0.24); color(spaceTarget, fg); hidden(spaceTarget);
+text(spaceTargetLabel, (0,0), "(5, 12, 84)"); size(spaceTargetLabel, 20); color(spaceTargetLabel, fg); hidden(spaceTargetLabel); pin3(spaceTargetLabel, spaceTarget);
+
+// ---------------------------------------------------------------------------
+// THE JOURNEY
+// ---------------------------------------------------------------------------
+
+step("one dimension") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.55);
+      show(dimension, 0.40);
+      show(narration, 0.45);
+      show(insight, 0.45);
+      show(distance, 0.55);
+      view3(fiber, "front", 1.0, smooth, 1.65);
+    }
+    stagger(0.12) {
+      show(A, 0.30);
+      show(aLabel, 0.30);
+      draw(fiber, 1.10, smooth);
+      show(B, 0.30);
+      show(bLabel, 0.30);
+      show(xLabel, 0.30);
+      show(photon, 0.35);
+    }
+    wait(0.45);
+  }
+}
+
+step("the bound beam") {
+  seq {
+    say(narration, "Fire one photon from A to B. There is nowhere else to go.", 0.50, smooth);
+    par {
+      travel3(photon, fiber, 2.25, smooth);
+      rewrite(distance, `L=\left|5-0\right|=\textcolor{gold}{5}`, 1.10, smooth);
+      say(insight, "Distance is the length of the only available track", 0.45, smooth);
+    }
+    pulse(photon, 0.70);
+    wait(0.55);
+  }
+}
+
+step("unlock the second direction") {
+  seq {
+    par {
+      move3(photon, (0,0,0), 0.80, smooth);
+      fade(aLabel, 0.35);
+      fade(bLabel, 0.35);
+      say(dimension, "2D · UNFOLDING THE FLOOR", 0.45, smooth);
+      say(narration, "Pull the fiber sideways. One line sweeps out a reflective surface.", 0.55, smooth);
+      say(insight, "A new perpendicular direction appears: y", 0.45, smooth);
+    }
+    par {
+      show(yEdge, 0.15);
+      draw(yEdge, 1.10, smooth);
+      show(yLabel, 0.35);
+      view3(glassFloor, "isometric", 1.35, smooth, 1.55);
+    }
+    par {
+      show(sweepLine, 0.25);
+      move3(sweepLine, (0,12,0), 1.90, smooth);
+      show(glassFloor, 1.90, smooth);
+    }
+    to(glassFloor, opacity, 0.22, 0.40, smooth);
+    wait(0.45);
+  }
+}
+
+step("cut across the floor") {
+  seq {
+    par {
+      show(floorTarget, 0.30);
+      show(floorTargetLabel, 0.35);
+      show(floorPathLabel, 0.35);
+      say(narration, "The photon can turn now — but the straight diagonal is shortest.", 0.55, smooth);
+      say(insight, "The old distance and the new sweep meet at 90 degrees", 0.45, smooth);
+    }
+    par {
+      show(floorDiagonal, 0.15);
+      draw(floorDiagonal, 2.35, smooth);
+      travel3(photon, floorDiagonal, 2.35, smooth);
+      rewrite(distance, `L=\sqrt{\textcolor{cyan}{5^2}+\textcolor{magenta}{12^2}}=\sqrt{169}=\textcolor{gold}{13}`, 1.35, smooth);
+    }
+    pulse(photon, 0.70);
+    wait(0.65);
+  }
+}
+
+step("raise the roof") {
+  seq {
+    par {
+      move3(photon, (0,0,0), 0.90, smooth);
+      fade(xLabel, 0.35);
+      fade(yLabel, 0.35);
+      fade(floorTargetLabel, 0.35);
+      say(dimension, "3D · FILLING THE VOID", 0.45, smooth);
+      say(narration, "Lift the entire floor upward. Surface becomes volume.", 0.55, smooth);
+      say(insight, "Height compressed visually · coordinates and geometry stay exact", 0.45, smooth);
+    }
+    par {
+      to(room, opacity, 0.22, 2.45, smooth);
+      show(roof, 0.20);
+      shift3(roof, (0,0,18), 2.45, smooth);
+      view3(room, "isometric", 2.45, smooth, 1.62);
+      show(zEdge, 0.15);
+      draw(zEdge, 2.30, smooth);
+      show(zLabel, 0.45);
+    }
+    par { show(spaceTarget, 0.40); show(spaceTargetLabel, 0.40); }
+    wait(0.55);
+  }
+}
+
+step("cut through space") {
+  seq {
+    say(narration, "The photon cuts through open space: floor diagonal against height.", 0.55, smooth);
+    par {
+      show(spaceDiagonal, 0.15);
+      draw(spaceDiagonal, 2.80, smooth);
+      travel3(photon, spaceDiagonal, 2.80, smooth);
+      rewrite(distance, `L=\sqrt{\textcolor{gold}{13^2}+\textcolor{lime}{84^2}}=\sqrt{7225}=\textcolor{gold}{85}`, 1.50, smooth);
+      say(insight, "13² + 84² = 85²", 0.45, smooth);
+    }
+    pulse(photon, 0.80);
+    wait(0.70);
+  }
+}
+
+step("one recursive idea") {
+  seq {
+    par {
+      say(dimension, "THE PATTERN · ONE RIGHT ANGLE AT A TIME", 0.50, smooth);
+      say(narration, "Do not memorize three formulas. Build one distance recursively.", 0.55, smooth);
+      say(insight, "Each previous diagonal becomes the next dimension's base", 0.50, smooth);
+      rewrite(distance, `L=\sqrt{\textcolor{cyan}{a^2}+\textcolor{magenta}{b^2}+\textcolor{lime}{c^2}}`, 1.65, smooth);
+      view3(room, "fit", 2.20, smooth, 1.70);
+    }
+    par {
+      pulse(photon, 0.80);
+      flash(spaceDiagonal, gold);
+      roll3(3, 1.60, smooth);
+    }
+    wait(2.20);
+  }
+}
