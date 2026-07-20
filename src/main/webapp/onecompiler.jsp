@@ -219,7 +219,7 @@
                     --oc-warning: #dcdcaa;
                     --toolbar-height: 40px;
                     --panel-height: 280px;
-                    --header-bar-height: 90px;
+                    --header-bar-height: 40px;
                 }
 
                 /* Light theme (nav toggle sets <html data-theme="light">).
@@ -326,7 +326,7 @@
                     align-items: center;
                     justify-content: space-between;
                     gap: 1rem;
-                    padding: 0.5rem 1rem;
+                    padding: 0.25rem 1rem;
                     background: var(--oc-bg-darker);
                     border-bottom: 1px solid var(--oc-border);
                     min-height: var(--header-bar-height);
@@ -334,24 +334,15 @@
 
                 .ide-header-bar h1 {
                     margin: 0;
-                    font-size: 1.125rem;
+                    font-size: 1rem;
                     font-weight: 600;
                     color: var(--oc-text-bright);
                     flex: 1;
-                    line-height: 1.3;
-                }
-
-                .ide-header-ad {
-                    flex-shrink: 0;
-                    min-width: 728px;
-                    height: 90px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .ide-header-ad-mobile {
-                    display: none;
+                    min-width: 0;
+                    line-height: 1.2;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
 
                 .ide-workspace {
@@ -359,7 +350,7 @@
                     flex-direction: column;
                     flex: 1;
                     min-width: 0;
-                    height: calc(100vh - var(--nav-height, 72px) - var(--header-bar-height, 90px));
+                    height: calc(100vh - var(--nav-height, 72px) - var(--header-bar-height, 40px));
                     min-height: 400px;
                 }
 
@@ -991,35 +982,22 @@
                     }
                 }
 
-                /* Tablet - hide leaderboard ad, show mobile ad */
+                /* Tablet */
                 @media (max-width: 991px) {
-                    .ide-header-ad {
-                        display: none;
-                    }
-
-                    .ide-header-ad-mobile {
-                        display: block;
-                        width: 100%;
-                        text-align: center;
-                        padding: 0.5rem 0;
-                    }
-
                     .ide-header-bar {
-                        flex-direction: column;
-                        align-items: flex-start;
-                        min-height: auto;
-                        --header-bar-height: 120px;
+                        --header-bar-height: 40px;
                     }
 
                     .ide-header-bar h1 {
-                        font-size: 1rem;
+                        font-size: 0.9375rem;
+                        width: 100%;
                     }
                 }
 
                 /* Mobile Responsive */
                 @media (max-width: 768px) {
                     :root {
-                        --header-bar-height: 140px;
+                        --header-bar-height: 40px;
                     }
 
                     .ide-container {
@@ -1027,7 +1005,7 @@
                     }
 
                     .ide-workspace {
-                        height: calc(100vh - var(--nav-height-mobile, 64px) - var(--header-bar-height, 140px));
+                        height: calc(100vh - var(--nav-height-mobile, 64px) - var(--header-bar-height, 40px));
                     }
 
                     .ide-header-bar h1 {
@@ -1594,17 +1572,9 @@
 
     <div class="ide-container">
 
-        <!-- Header Bar with H1 and Ad - Always visible above fold -->
+        <!-- Header Bar with H1 - Always visible above fold -->
         <div class="ide-header-bar">
             <h1><%= (request.getAttribute("h1Text") != null) ? request.getAttribute("h1Text") : "Online Compiler - Run Code in 60+ Languages" %></h1>
-            <!-- Desktop Leaderboard Ad (728x90) -->
-            <div class="ide-header-ad">
-                <%@ include file="/modern/ads/ad-leaderboard.jsp" %>
-            </div>
-            <!-- Mobile Ad (320x100 or 300x250) -->
-            <div class="ide-header-ad-mobile">
-                <%@ include file="/modern/ads/ad-mobile-banner.jsp" %>
-            </div>
         </div>
 
         <!-- IDE Body: workspace + right rail side-by-side -->
