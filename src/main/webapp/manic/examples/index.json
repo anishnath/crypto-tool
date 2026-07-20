@@ -1,5 +1,5 @@
 {
-  "count": 189,
+  "count": 190,
   "categories": [
     {
       "slug": "algorithms",
@@ -388,6 +388,12 @@
           "file": "pendulum.manic",
           "title": "Pendulum",
           "desc": "One pendulum shown four ways from a single deterministic swing: the motion (with a velocity arrow + KE/PE bars), the phase portrait (\u03b8 vs \u03c9), a time series, the potential-energy well, and energy over time (pendulum + phase/timegraph/ well/energygraph + swing)."
+        },
+        {
+          "name": "second-law-thermodynamics",
+          "file": "second-law-thermodynamics.manic",
+          "title": "Second law thermodynamics",
+          "desc": "Why entropy only grows, in five vignettes: gas particles mixing into far more microstates, heat flowing until two sides equalize, free expansion into new volume, a heat engine that must dump waste heat, and the reversible-vs-irreversible limit."
         },
         {
           "name": "timing-v2-scene",

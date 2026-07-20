@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c36be426.js";
+            window.path_to_searchindex_js = "searchindex-da71ba6a.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e7a81696.js"></script>
+        <script src="toc-4954d801.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -226,6 +226,398 @@ draw(p.path, 0.8);
 swing(p, 10);                      // every panel animates in lockstep
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/6ThI97u97cg" title="One Pendulum, Four Views — Motion, Phase, Well & Energy — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="second-law-thermodynamics"><a class="header" href="#second-law-thermodynamics">second-law-thermodynamics</a></h2>
+<p>Why entropy only grows, in five vignettes: gas particles mixing into far more
+microstates, heat flowing until two sides equalize, free expansion into new volume,
+a heat engine that must dump waste heat, and the reversible-vs-irreversible limit.</p>
+<pre><code class="language-manic">// ============================================================================
+// second-law-thermodynamics.manic — entropy, irreversibility, and time's arrow
+// ----------------------------------------------------------------------------
+// Engine-test recreation of engine-test-4.mp4. The subject is thermodynamics,
+// but the vocabulary stays generic: persistent particles, authored layouts,
+// plots, counters, arrows, LaTeX, and ordinary timeline composition.
+// ============================================================================
+
+title("Second Law of Thermodynamics");
+canvas("9:16");
+template("mono");
+watermark(manicMark, (150, 145), "Made With Manic");
+
+let cold = 194;
+let pink = 326;
+let hot = 40;
+let blue = 226;
+let green = 154;
+let red = 10;
+
+// ---------------------------------------------------------------------------
+// 1 · MIXING MULTIPLIES THE NUMBER OF POSSIBLE MICROSTATES
+// ---------------------------------------------------------------------------
+
+equation(law, (540, 175), `S=k_B\ln\Omega`, 58);
+rect(mixBox, (540, 520), 720, 280);
+outline(mixBox, dim); outlined(mixBox); stroke(mixBox, 3);
+rect(mixLeft, (360, 520), 350, 260); hidden(mixLeft);
+rect(mixRight, (720, 520), 350, 260); hidden(mixRight);
+line(mixDivider, (540, 390), (540, 650)); color(mixDivider, dim); stroke(mixDivider, 2);
+
+particles(mixCold, mixLeft, 36, 6, 17);
+particles(mixWarm, mixRight, 36, 6, 29);
+hue(mixCold, cold, 0.72, 0.68); hue(mixWarm, pink, 0.72, 0.68);
+glow(mixCold, 0.8); glow(mixWarm, 0.8);
+
+text(mixCaption, (540, 745), "Mixing creates overwhelmingly more possible states");
+size(mixCaption, 27); color(mixCaption, dim);
+line(mixX, (260, 1040), (570, 1040)); line(mixY, (260, 1040), (260, 840));
+color(mixX, dim); color(mixY, dim); stroke(mixX, 2); stroke(mixY, 2);
+plot(mixCurve, (260, 1040), 78, 175, "1-exp(-2*x)", (0, 3.6));
+hue(mixCurve, blue, 0.55, 0.68); stroke(mixCurve, 4); untraced(mixCurve);
+dot(mixMarker, (260, 1040), 7); color(mixMarker, fg); glow(mixMarker, 1.0);
+equation(mixDelta, (385, 815), `\Delta S/(Nk_B\ln 2)`, 27); color(mixDelta, dim);
+counter(mixCount, (735, 945), 0, 1, "log₁₀(Ω/Ω₀) = ", "");
+size(mixCount, 28); hue(mixCount, hot, 0.45, 0.72);
+
+tag(mixBox, s1); tag(mixDivider, s1);
+tag(mixCold, s1); tag(mixWarm, s1); tag(mixCaption, s1);
+tag(mixX, s1); tag(mixY, s1); tag(mixCurve, s1); tag(mixMarker, s1); tag(mixDelta, s1); tag(mixCount, s1);
+
+// ---------------------------------------------------------------------------
+// 2 · HEAT FLOW MAKES TOTAL ENTROPY INCREASE
+// ---------------------------------------------------------------------------
+
+rect(hotBox, (315, 500), 260, 240); rect(coldBox, (765, 500), 260, 240);
+outline(hotBox, dim); outline(coldBox, dim); outlined(hotBox); outlined(coldBox);
+stroke(hotBox, 3); stroke(coldBox, 3);
+particles(hotMatter, hotBox, 26, 6, 41); particles(coldMatter, coldBox, 26, 6, 73);
+hue(hotMatter, hot, 0.66, 0.68); hue(coldMatter, blue, 0.66, 0.68);
+link(heatLink, hotBox, coldBox); hue(heatLink, blue, 0.46, 0.62); stroke(heatLink, 4);
+hidden(heatLink);
+equation(hotLabel, (315, 325), `T_h`, 36); equation(coldLabel, (765, 325), `T_c`, 36);
+hue(hotLabel, hot, 0.58, 0.72); hue(coldLabel, blue, 0.58, 0.72);
+counter(hotTemp, (315, 680), 403, 0, "", " K");
+counter(coldTemp, (765, 680), 397, 0, "", " K");
+hue(hotTemp, hot, 0.55, 0.70); hue(coldTemp, blue, 0.55, 0.70);
+text(flowCaption, (540, 780), "Heat flows until both sides reach one temperature");
+size(flowCaption, 27); color(flowCaption, dim);
+line(flowX, (305, 1130), (650, 1130)); line(flowY, (305, 1130), (305, 880));
+color(flowX, dim); color(flowY, dim); stroke(flowX, 2); stroke(flowY, 2);
+plot(flowCurve, (305, 1130), 78, 215, "1-exp(-2.4*x)", (0, 3.6));
+hue(flowCurve, blue, 0.56, 0.70); stroke(flowCurve, 4); untraced(flowCurve);
+dot(flowMarker, (305, 1130), 7); color(flowMarker, fg); glow(flowMarker, 1.0);
+equation(flowS, (430, 855), `S_{\mathrm{tot}}`, 30); color(flowS, dim);
+
+tag(hotBox, s2); tag(coldBox, s2); tag(hotMatter, s2); tag(coldMatter, s2);
+tag(hotLabel, s2); tag(coldLabel, s2); tag(hotTemp, s2); tag(coldTemp, s2);
+tag(flowCaption, s2); tag(flowX, s2); tag(flowY, s2); tag(flowCurve, s2); tag(flowMarker, s2); tag(flowS, s2);
+hidden(s2);
+
+// ---------------------------------------------------------------------------
+// 3 · FREE EXPANSION: ONE GAS, TWICE THE VOLUME
+// ---------------------------------------------------------------------------
+
+rect(expandBox, (540, 520), 720, 280); outline(expandBox, dim); outlined(expandBox); stroke(expandBox, 3);
+rect(expandLeft, (360, 520), 350, 260); hidden(expandLeft);
+line(expandDivider, (540, 390), (540, 650)); color(expandDivider, dim); stroke(expandDivider, 2);
+hidden(expandDivider);
+particles(expandGas, expandLeft, 54, 6, 101);
+hue(expandGas, cold, 0.38, 0.76); glow(expandGas, 0.7);
+text(expandCaption, (540, 745), "More volume means exponentially more possible states");
+size(expandCaption, 27); color(expandCaption, dim);
+line(expandX, (250, 1040), (560, 1040)); line(expandY, (250, 1040), (250, 845));
+color(expandX, dim); color(expandY, dim); stroke(expandX, 2); stroke(expandY, 2);
+plot(expandCurve, (250, 1040), 85, 60, "x", (0, 2.6));
+hue(expandCurve, green, 0.52, 0.70); stroke(expandCurve, 4); untraced(expandCurve);
+dot(expandMarker, (250, 1040), 7); color(expandMarker, fg); glow(expandMarker, 1.0);
+equation(expandAxis, (390, 820), `\ln(V/V_0)/\ln 2`, 27); color(expandAxis, dim);
+equation(expandStates, (760, 905), `V^N\longrightarrow(2V)^N`, 37);
+hue(expandStates, hot, 0.52, 0.70);
+counter(expandCount, (760, 1010), 8.9, 1, "log₁₀(Ω/Ω₀) = ", "");
+size(expandCount, 26); color(expandCount, dim);
+
+tag(expandBox, s3); tag(expandGas, s3);
+tag(expandCaption, s3); tag(expandX, s3); tag(expandY, s3); tag(expandCurve, s3);
+tag(expandMarker, s3); tag(expandAxis, s3); tag(expandStates, s3); tag(expandCount, s3);
+hidden(s3);
+
+// ---------------------------------------------------------------------------
+// 4 · A HEAT ENGINE CANNOT TURN EVERY JOULE INTO WORK
+// ---------------------------------------------------------------------------
+
+line(hotRail, (230, 410), (850, 410)); hue(hotRail, hot, 0.72, 0.65); stroke(hotRail, 5);
+line(coldRail, (230, 1200), (850, 1200)); hue(coldRail, blue, 0.72, 0.65); stroke(coldRail, 5);
+equation(hotRailLabel, (540, 365), `T_h`, 31); equation(coldRailLabel, (540, 1250), `T_c`, 31);
+hue(hotRailLabel, hot, 0.56, 0.70); hue(coldRailLabel, blue, 0.56, 0.70);
+line(engineX, (265, 1010), (805, 1010)); line(engineY, (265, 1010), (265, 555));
+color(engineX, dim); color(engineY, dim); stroke(engineX, 2); stroke(engineY, 2);
+equation(engineP, (250, 520), `p`, 28); equation(engineV, (835, 1010), `V`, 28);
+color(engineP, dim); color(engineV, dim);
+// Two paths share the hot state, separate during the cycle, and reconverge.
+// Each visible path is split only to carry the warm/cool colour progression;
+// the hidden whole paths give `travel` one continuous geometric route.
+plot(engineHotPath, (285, 990), 112, 235, "1/(x+0.65)+0.14+0.05*x*(4.1-x)", (0, 4.1));
+plot(engineColdPath, (285, 990), 112, 235, "1/(x+0.65)+0.14-0.035*x*(4.1-x)", (0, 4.1));
+hidden(engineHotPath); hidden(engineColdPath);
+plot(engineHotA, (285, 990), 112, 235, "1/(x+0.65)+0.14+0.05*x*(4.1-x)", (0, 1.55));
+plot(engineHotB, (285, 990), 112, 235, "1/(x+0.65)+0.14+0.05*x*(4.1-x)", (1.55, 4.1));
+plot(engineColdA, (285, 990), 112, 235, "1/(x+0.65)+0.14-0.035*x*(4.1-x)", (0, 1.85));
+plot(engineColdB, (285, 990), 112, 235, "1/(x+0.65)+0.14-0.035*x*(4.1-x)", (1.85, 4.1));
+hue(engineHotA, hot, 0.68, 0.70); hue(engineHotB, red, 0.58, 0.69);
+hue(engineColdA, 260, 0.52, 0.72); hue(engineColdB, blue, 0.62, 0.70);
+stroke(engineHotA, 5); stroke(engineHotB, 5); stroke(engineColdA, 5); stroke(engineColdB, 5);
+untraced(engineHotA); untraced(engineHotB); untraced(engineColdA); untraced(engineColdB);
+dot(engineDot, (285, 596), 8); color(engineDot, fg); glow(engineDot, 1.1); hidden(engineDot);
+arrow(qHot, (330, 410), (330, 610)); hue(qHot, hot, 0.72, 0.68); stroke(qHot, 4); untraced(qHot);
+equation(qHotLabel, (360, 525), `Q_h`, 28); hue(qHotLabel, hot, 0.56, 0.70); hidden(qHotLabel);
+arrow(workArrow, (650, 850), (875, 700)); color(workArrow, dim); stroke(workArrow, 4); untraced(workArrow);
+equation(workLabel, (880, 660), `W`, 28); color(workLabel, dim); hidden(workLabel);
+arrow(qCold, (675, 1000), (675, 1170)); hue(qCold, blue, 0.72, 0.68); stroke(qCold, 4); untraced(qCold);
+equation(qColdLabel, (735, 1090), `|Q_c|`, 28); hue(qColdLabel, blue, 0.56, 0.70); hidden(qColdLabel);
+text(engineCaption, (540, 1345), "A heat engine must release some heat");
+size(engineCaption, 30); hue(engineCaption, hot, 0.38, 0.74);
+equation(engineEta, (540, 1490), `\eta_C=1-\frac{T_c}{T_h}&lt;1`, 47);
+
+// Persistent transition strokes preserve object identity between scenes:
+// entropy curve → heat connector → expansion divider, then the volume graph
+// seeds the heat-engine curve. All are ordinary generic `morph` paths.
+plot(mixToHeat, (260, 1040), 78, 175, "1-exp(-2*x)", (0, 3.6));
+hue(mixToHeat, blue, 0.55, 0.68); stroke(mixToHeat, 4);
+morph(mixToHeat, heatLink); hidden(mixToHeat);
+
+line(heatToExpand, (445, 500), (635, 500));
+hue(heatToExpand, blue, 0.46, 0.62); stroke(heatToExpand, 4);
+morph(heatToExpand, expandDivider); hidden(heatToExpand);
+
+line(engineSeed, (285, 596), (355, 790)); hidden(engineSeed);
+plot(expandToEngine, (250, 1040), 85, 60, "x", (0, 2.6));
+hue(expandToEngine, green, 0.52, 0.70); stroke(expandToEngine, 4);
+morph(expandToEngine, engineSeed); hidden(expandToEngine);
+
+tag(hotRail, s4); tag(coldRail, s4); tag(hotRailLabel, s4); tag(coldRailLabel, s4);
+tag(engineX, s4); tag(engineY, s4); tag(engineP, s4); tag(engineV, s4);
+tag(engineHotA, s4); tag(engineHotB, s4); tag(engineColdA, s4); tag(engineColdB, s4);
+tag(engineCaption, s4); tag(engineEta, s4);
+tag(engineDot, s4future); tag(qHot, s4future); tag(qHotLabel, s4future);
+tag(workArrow, s4future); tag(workLabel, s4future);
+tag(qCold, s4future); tag(qColdLabel, s4future);
+hidden(s4);
+
+// ---------------------------------------------------------------------------
+// 5 · SAME ENDPOINTS, DIFFERENT ENTROPY PRODUCTION
+// ---------------------------------------------------------------------------
+
+text(revHead, (300, 350), "REV. LIMIT"); text(irrHead, (780, 350), "IRREV");
+size(revHead, 28); size(irrHead, 28); hue(revHead, green, 0.45, 0.72); hue(irrHead, red, 0.55, 0.68);
+rect(revPanel, (300, 610), 330, 330); rect(irrPanel, (780, 610), 330, 330);
+outline(revPanel, dim); outline(irrPanel, dim); outlined(revPanel); outlined(irrPanel);
+stroke(revPanel, 3); stroke(irrPanel, 3);
+rect(revGasBox, (260, 610), 220, 210); rect(irrGasBox, (740, 610), 220, 210);
+hidden(revGasBox); hidden(irrGasBox);
+rect(revSmall, (215, 610), 120, 210); rect(irrSmall, (695, 610), 120, 210);
+hidden(revSmall); hidden(irrSmall);
+particles(revGas, revGasBox, 20, 5, 131, "grid");
+particles(irrGas, irrGasBox, 20, 5, 151, "grid");
+hue(revGas, green, 0.55, 0.72); hue(irrGas, red, 0.58, 0.68);
+line(revPiston, (405, 505), (405, 715)); line(irrPiston, (885, 505), (885, 715));
+color(revPiston, dim); color(irrPiston, dim); stroke(revPiston, 5); stroke(irrPiston, 5);
+text(compareCaption, (540, 865), "Same endpoints · different entropy production");
+size(compareCaption, 28); color(compareCaption, dim);
+rect(revMeter, (300, 1120), 70, 260); rect(irrMeter, (780, 1120), 70, 260);
+outline(revMeter, dim); outline(irrMeter, dim); outlined(revMeter); outlined(irrMeter);
+stroke(revMeter, 3); stroke(irrMeter, 3);
+line(irrBar, (780, 1235), (780, 1235)); hue(irrBar, red, 0.72, 0.67); stroke(irrBar, 28);
+line(revZero, (278, 1235), (322, 1235)); hue(revZero, green, 0.58, 0.70); stroke(revZero, 5);
+equation(revEq, (300, 1325), `S_{\mathrm{gen}}=0`, 31);
+equation(irrEq, (780, 1325), `S_{\mathrm{gen}}&gt;0`, 31);
+hue(revEq, green, 0.48, 0.70); hue(irrEq, red, 0.55, 0.68);
+
+tag(revHead, s5); tag(irrHead, s5); tag(revPanel, s5); tag(irrPanel, s5);
+tag(revGas, s5); tag(irrGas, s5); tag(revPiston, s5); tag(irrPiston, s5); tag(compareCaption, s5);
+tag(revMeter, s5); tag(irrMeter, s5); tag(irrBar, s5); tag(revZero, s5); tag(revEq, s5); tag(irrEq, s5);
+hidden(s5);
+
+// ---------------------------------------------------------------------------
+// 6 · THE ARROW OF TIME IS A STATISTICAL ARROW
+// ---------------------------------------------------------------------------
+
+rect(timeBox, (540, 610), 720, 310); outline(timeBox, dim); outlined(timeBox); stroke(timeBox, 3);
+particles(timeGas, timeBox, 63, 6, 211, "grid");
+hue(timeGas, hot, 0.48, 0.74); glow(timeGas, 0.7);
+arrow(timeForward, (300, 980), (780, 980)); hue(timeForward, red, 0.62, 0.69); stroke(timeForward, 5);
+equation(timeForwardLabel, (540, 1035), `t`, 28); color(timeForwardLabel, dim);
+arrow(timeReverse, (780, 980), (300, 980)); color(timeReverse, fg); stroke(timeReverse, 5); hidden(timeReverse);
+equation(timeReverseLabel, (540, 1035), `t`, 28); color(timeReverseLabel, dim); hidden(timeReverseLabel);
+text(timeCaption, (540, 1135), "A special state naturally spreads into a typical one");
+size(timeCaption, 29); hue(timeCaption, hot, 0.34, 0.74);
+equation(returnProb, (540, 285), `\Pr(\mathrm{return})=\frac{\Omega_{\mathrm{low}}}{\Omega_{\mathrm{eq}}}=e^{-\Delta S/k_B}`, 43);
+equation(returnOdds, (540, 365), `\Pr(\mathrm{ordered\ return})&lt;10^{-40}`, 34);
+hue(returnOdds, hot, 0.48, 0.72); hidden(returnProb); hidden(returnOdds);
+
+tag(timeBox, s6); tag(timeGas, s6gas); tag(timeForward, s6); tag(timeForwardLabel, s6);
+tag(timeCaption, s6);
+tag(timeReverse, s6future); tag(timeReverseLabel, s6future);
+tag(returnProb, s6future); tag(returnOdds, s6future);
+hidden(s6); hidden(s6gas);
+
+circle(finalOrbit, (540, 790), 270); hidden(finalOrbit);
+for i in 0..72 {
+  let a = tau*i/72;
+  dot(finalDot{i}, (540 + 270*cos(a), 790 + 270*sin(a)), 4);
+  hue(finalDot{i}, 10 + 300*i/72, 0.54, 0.62);
+  glow(finalDot{i}, 0.5);
+  tag(finalDot{i}, finalRing);
+}
+equation(finalLaw, (540, 765), `\Delta S_{\mathrm{universe}}=S_{\mathrm{gen}}\ge 0`, 48);
+text(finalCaption, (540, 875), "Irreversible change produces entropy");
+size(finalCaption, 31); color(finalCaption, dim);
+hidden(finalRing); hidden(finalLaw); hidden(finalCaption);
+
+// ---------------------------------------------------------------------------
+// TIMELINE · six continuous beats, approximately 39 seconds
+// ---------------------------------------------------------------------------
+
+step("mixing") {
+  wait(5.5);
+  par {
+    seq { wait(0.45); fade(mixDivider, 0.20); }
+    seq { wait(0.55); arrange(mixCold, mixBox, "random", 0.95, out); wander(mixCold, 4.0); }
+    seq { wait(0.55); arrange(mixWarm, mixBox, "random", 0.95, out); wander(mixWarm, 4.0); }
+    seq {
+      wait(0.55);
+      par {
+        draw(mixCurve, 2.20, out);
+        travel(mixMarker, mixCurve, 2.20, out);
+        to(mixCount, value, 25.3, 2.20, out);
+      }
+    }
+  }
+}
+
+step("heat-flow") {
+  seq {
+    par {
+      fade(s1, 0.65);
+      show(mixToHeat, 0.10);
+      to(mixToHeat, morph, 1, 0.65, smooth);
+      seq { wait(0.20); show(s2, 0.45); }
+      rewrite(law, `\dot S_{\mathrm{tot}}=K\frac{(T_h-T_c)^2}{T_hT_c}&gt;0`, 0.65, smooth);
+    }
+    par {
+      wander(hotMatter, 4.4);
+      wander(coldMatter, 4.4);
+      draw(flowCurve, 3.6, smooth);
+      travel(flowMarker, flowCurve, 3.6, smooth);
+      to(hotTemp, value, 400, 4.0, smooth);
+      to(coldTemp, value, 400, 4.0, smooth);
+      recolor(hotMatter, cyan, 4.0);
+      recolor(coldMatter, cyan, 4.0);
+      seq { flow(mixToHeat, 1.1); flow(mixToHeat, 1.1); flow(mixToHeat, 1.1); flow(mixToHeat, 1.1); }
+    }
+    wait(0.45);
+  }
+}
+
+step("free-expansion") {
+  seq {
+    par {
+      fade(s2, 0.65);
+      fade(mixToHeat, 0.25);
+      show(heatToExpand, 0.10);
+      to(heatToExpand, morph, 1, 0.65, smooth);
+      recolor(heatToExpand, dim, 0.65);
+      seq { wait(0.20); show(s3, 0.45); }
+      rewrite(law, `\Delta S=Nk_B\ln 2`, 0.65, smooth);
+    }
+    par {
+      seq { arrange(expandGas, expandBox, "random", 1.10, out); wander(expandGas, 1.45); }
+      fade(heatToExpand, 0.65);
+      draw(expandCurve, 2.45, smooth);
+      travel(expandMarker, expandCurve, 2.45, smooth);
+      to(expandCount, value, 20.9, 2.45, smooth);
+    }
+    wait(0.25);
+  }
+}
+
+step("heat-engine") {
+  seq {
+    par {
+      fade(s3, 0.65);
+      show(expandToEngine, 0.10);
+      to(expandToEngine, morph, 1, 0.65, smooth);
+      seq { wait(0.20); show(s4, 0.45); }
+      rewrite(law, `\frac{Q_h}{T_h}=\frac{|Q_c|}{T_c}`, 0.65, smooth);
+    }
+    par {
+      seq { draw(engineHotA, 1.85, smooth); draw(engineHotB, 3.35, smooth); }
+      seq { draw(engineColdA, 2.35, smooth); draw(engineColdB, 2.85, smooth); }
+      seq {
+        wait(0.15); show(engineDot, 0.15);
+        travel(engineDot, engineColdPath, 4.9, smooth);
+      }
+      fade(expandToEngine, 0.30);
+      seq { draw(qHot, 0.7); show(qHotLabel, 0.2); wait(1.0); }
+      seq { wait(1.3); draw(workArrow, 0.8); show(workLabel, 0.2); }
+      seq { wait(2.6); draw(qCold, 0.8); show(qColdLabel, 0.2); }
+    }
+    wait(2.15);
+  }
+}
+
+step("entropy-generation") {
+  seq {
+    par {
+      fade(s4, 0.50); fade(s4future, 0.50);
+      show(s5, 0.50);
+      rewrite(law, `\Delta S_{\mathrm{universe}}=S_{\mathrm{gen}}`, 0.50, smooth);
+    }
+    par {
+      arrange(revGas, revSmall, "grid", 2.4, smooth);
+      arrange(irrGas, irrSmall, "random", 2.4, smooth);
+      par { move(revPiston, (275, 505), 2.4, smooth); grow(revPiston, (275, 715), 2.4, smooth); }
+      par { move(irrPiston, (755, 505), 2.4, smooth); grow(irrPiston, (755, 715), 2.4, smooth); }
+      grow(irrBar, (780, 1025), 2.4, smooth);
+    }
+    wait(1.10);
+  }
+}
+
+step("time-arrow") {
+  seq {
+    par {
+      fade(s5, 0.50); fade(law, 0.50);
+      show(s6, 0.50); show(s6gas, 0.50);
+    }
+    par {
+      arrange(timeGas, timeBox, "random", 4.0, smooth);
+      seq { wait(3.0); pulse(timeForward, 0.8); }
+    }
+    wait(0.35);
+    par {
+      fade(timeForward, 0.30); fade(timeForwardLabel, 0.30);
+      show(timeReverse, 0.30); show(timeReverseLabel, 0.30);
+      say(timeCaption, "Exact reversal can reconstruct the past", 0.35);
+    }
+    arrange(timeGas, timeBox, "grid", 3.1, smooth);
+    par {
+      show(returnProb, 0.45); show(returnOdds, 0.45);
+      say(timeCaption, "But that reversal must be fantastically precise", 0.40);
+    }
+    wait(1.15);
+    par {
+      fade(s6, 0.90);
+      fade(s6future, 0.90);
+      arrange(timeGas, finalOrbit, "ring", 0.90, smooth);
+      seq { wait(0.55); fade(s6gas, 0.35); }
+      seq { wait(0.55); show(finalRing, 0.35); }
+      seq { wait(0.55); transform(finalRing, (540,790), 0.9511, -0.3090, 0.3090, 0.9511, 0.55, out); }
+      seq { wait(0.30); par { show(finalLaw, 0.60); show(finalCaption, 0.60); } }
+    }
+    wait(1.70);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/D_H_BevF7Vg" title="The Second Law of Thermodynamics — Why Entropy Only Grows — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="timing-v2-scene"><a class="header" href="#timing-v2-scene">timing-v2-scene</a></h2>
 <p>Generic Timing v2 controlling an ordinary physics scene: one named-phase clock schedules

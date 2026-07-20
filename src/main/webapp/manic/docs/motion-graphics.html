@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - manic — the manual</title>
+        <title>Motion graphics — move ideas, not layers - manic — the manual</title>
 
 
         <!-- Custom HTML head -->
@@ -178,52 +178,167 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="manic--the-manual"><a class="header" href="#manic--the-manual">manic — the manual</a></h1>
-<p><strong>manic is a tiny language for making animations.</strong> You write a short text file;
-manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by
-hand — you <em>describe</em> what’s on screen and <em>when things happen</em>, and the engine
-does the rest, deterministically.</p>
-<p>It’s built for <strong>explainer videos</strong> — math, algorithms, data structures, or
-anything you can draw — and it’s designed so a non-programmer can read and write
-it. It draws in <strong>2D</strong> and, when you want depth, in <strong><a href="3d.html">3D</a></strong> too.</p>
-<h2 id="the-whole-idea-in-30-seconds"><a class="header" href="#the-whole-idea-in-30-seconds">The whole idea in 30 seconds</a></h2>
-<p>A manic file has two parts:</p>
-<ol>
-<li><strong>The cast</strong> — the shapes on screen (a circle, a line, some text). You give
-each one a <strong>name</strong>.</li>
-<li><strong>The script</strong> — what happens over time, called out by name: <em>draw this</em>,
-<em>move that</em>, <em>flash it green</em>.</li>
-</ol>
-<pre><code class="language-manic">title("Hello");
-canvas("16:9");
+                        <h1 id="motion-graphics--move-ideas-not-layers"><a class="header" href="#motion-graphics--move-ideas-not-layers">Motion graphics — move ideas, not layers</a></h1>
+<p>Most explanatory animation is not a sequence of disconnected scenes. A dot
+becomes a data point, follows a curve, joins a ring, and then stops. Manic keeps
+that object identity visible, while its timeline stays deterministic and freely
+scrubbable.</p>
+<h2 id="the-small-vocabulary-that-covers-the-common-jobs"><a class="header" href="#the-small-vocabulary-that-covers-the-common-jobs">The small vocabulary that covers the common jobs</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Intent</th><th>Manic</th><th>What the viewer sees</th></tr>
+</thead>
+<tbody>
+<tr><td>Ambient life inside a region</td><td><code>wander(group, dur)</code></td><td>independent contained motion</td></tr>
+<tr><td>Reorganize the same particles</td><td>`arrange(group, region, “random</td><td>grid</td></tr>
+<tr><td>Move a real object along a path</td><td><code>travel(marker, path, dur, ease)</code></td><td>the marker arrives and remains at the endpoint</td></tr>
+<tr><td>Send temporary emphasis along a path</td><td><code>flow(path, dur)</code></td><td>a pulse passes; the authored objects do not move</td></tr>
+<tr><td>Preserve a path across ideas</td><td><code>morph(from, to)</code> + <code>to(from, morph, 1, dur)</code></td><td>one open path becomes another without a closing chord</td></tr>
+<tr><td>Rotate or shear a whole group</td><td><code>transform(tag, origin, a,b,c,d,dur,ease)</code></td><td>every tagged object moves as one system</td></tr>
+</tbody>
+</table>
+</div>
+<p><code>random</code> is seeded but not rigid. Each particle follows its own stable curved
+route, so preview and export match exactly without the “assigned target on a
+ruler” look. <code>grid</code> and <code>ring</code> remain direct, ordered layouts because their
+structure is the point.</p>
+<h2 id="choose-travel-or-flow-deliberately"><a class="header" href="#choose-travel-or-flow-deliberately">Choose <code>travel</code> or <code>flow</code> deliberately</a></h2>
+<pre><code class="language-manic">plot(curve, (180,620), 90, 140, "1-exp(-x)", (0,4));
+dot(marker, (180,620), 7);
 
-circle(sun, (640, 360), 90);   // the cast: a circle named `sun`
-color(sun, cyan);
+par {
+  draw(curve, 2, out);
+  travel(marker, curve, 2, out); // marker moves and stops at the end
+  flow(curve, 1);                // temporary highlight only
+}
+</code></pre>
+<p>Use <code>travel</code> when the moving thing has identity: a vehicle, probe, token,
+particle, or graph marker. Use <code>flow</code> for energy, attention, traffic, or a signal
+that should disappear after passing.</p>
+<h2 id="make-arrival-and-rest-both-readable"><a class="header" href="#make-arrival-and-rest-both-readable">Make arrival and rest both readable</a></h2>
+<p>Motion feels intentional when it has a settling frame. Arrange the objects,
+give the group a short final turn, then leave a hold:</p>
+<pre><code class="language-manic">circle(orbit, (540,700), 240); hidden(orbit);
 
-show(sun, 0.6);                 // the script: fade it in over 0.6s
-pulse(sun);                     // then give it a little pulse
+seq {
+  arrange(dots, orbit, "ring", 1.1, smooth);
+  transform(dots, (540,700), 0.966, -0.259, 0.259, 0.966, 0.5, out);
+  wait(1.2); // the audience gets time to read the finished state
+}
 </code></pre>
-<p>That’s the entire model. The rest of this guide walks through the vocabulary —
-one small, runnable example at a time — so by the end you can storyboard a video
-in your head and type it out.</p>
-<h2 id="how-to-read-this-book"><a class="header" href="#how-to-read-this-book">How to read this book</a></h2>
-<p>Every section has a <strong>runnable sample</strong> and a short <strong>video</strong> of it playing, so
-you see exactly what each word does. Copy any sample into a <code>.manic</code> file and:</p>
-<pre><code class="language-sh">manic yourfile.manic              # live preview window
-manic yourfile.manic --record out # render to out/out.mp4
+<p>The matrix above is a 15° rotation. Use a small angle and <code>out</code> for a quick
+decelerating settle; larger angles read as a spin rather than an arrival.</p>
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete example</a></h2>
+<p>This scene combines organic particles, a persistent path marker, topology-safe
+morphing, an ordered ring, and a brief final settle:</p>
+<pre><code class="language-manic">// motion-graphics.manic — persistent objects, paths, particles, and a clean settle
+
+title("Motion Graphics Essentials");
+canvas("9:16");
+template("mono");
+watermark(manicMark, (150, 145), "Made With Manic");
+
+let accent = 194;
+let warm = 38;
+
+text(kicker, (540, 170), "MOTION GRAPHICS");
+size(kicker, 24); color(kicker, dim);
+text(headline, (540, 245), "Keep the object. Change its state.");
+size(headline, 42);
+
+rect(chamber, (540, 535), 700, 300);
+outline(chamber, dim); outlined(chamber); stroke(chamber, 3);
+rect(startCell, (350, 535), 290, 270); hidden(startCell);
+particles(dots, startCell, 36, 6, 23);
+hue(dots, accent, 0.58, 0.72); glow(dots, 0.7);
+text(note, (540, 835), "random layout · organic deterministic routes");
+size(note, 25); color(note, dim);
+
+plot(path, (245, 1120), 145, 175, "1-exp(-1.4*x)", (0, 3.8));
+hue(path, warm, 0.60, 0.70); stroke(path, 5); untraced(path);
+dot(marker, (245, 1120), 9); color(marker, fg); glow(marker, 1.0);
+text(pathNote, (540, 1215), "travel moves the real marker — then it stays");
+size(pathNote, 25); color(pathNote, dim);
+
+line(connector, (245, 1120), (835, 850)); hidden(connector);
+plot(pathMorph, (245, 1120), 145, 175, "1-exp(-1.4*x)", (0, 3.8));
+hue(pathMorph, warm, 0.60, 0.70); stroke(pathMorph, 5);
+morph(pathMorph, connector); hidden(pathMorph);
+
+circle(orbit, (540, 535), 245); hidden(orbit);
+
+step("scatter") {
+  seq {
+    par {
+      seq { arrange(dots, chamber, "random", 1.25, out); wander(dots, 1.75); }
+      seq { wait(0.25); say(note, "same dots · natural motion · repeatable render", 0.45); }
+    }
+  }
+}
+
+step("follow-a-path") {
+  seq {
+    par {
+      draw(path, 2.4, smooth);
+      travel(marker, path, 2.4, smooth);
+    }
+    wait(0.45);
+  }
+}
+
+step("preserve-the-path") {
+  seq {
+    par {
+      fade(path, 0.20);
+      show(pathMorph, 0.10);
+      to(pathMorph, morph, 1, 0.90, smooth);
+      say(pathNote, "morph keeps an open path open", 0.45);
+    }
+    wait(0.45);
+  }
+}
+
+step("arrive-and-settle") {
+  seq {
+    par {
+      arrange(dots, orbit, "ring", 1.15, smooth);
+      fade(chamber, 0.35);
+      seq { wait(0.45); say(note, "ring arrival", 0.35); }
+    }
+    par {
+      transform(dots, (540,535), 0.9659, -0.2588, 0.2588, 0.9659, 0.50, out);
+      say(note, "brief motion → a deliberate stop", 0.35);
+    }
+    wait(1.20);
+  }
+}
 </code></pre>
-<p>Ready? <a href="getting-started.html">Start with your first animation →</a></p>
-<p>Making vertical social content? Take the production path directly:
-<a href="creator-reels.html">Create a polished Reel →</a></p>
-<p>Choosing the visual surface? Manic defaults to the professional black-and-white
-<code>mono</code> look; compare every option in <a href="templates.html">Templates →</a>.</p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/40ZtagTNqBw" title="Move Ideas, Not Layers — Motion Graphics in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>Run it with:</p>
+<pre><code class="language-bash">manic examples/motion-graphics.manic
+</code></pre>
+<h2 id="creator-tips"><a class="header" href="#creator-tips">Creator tips</a></h2>
+<ul>
+<li>Run ambient motion in <code>par</code> with the explanation so it adds life without
+delaying the story.</li>
+<li>Use one persistent id across a change. Recreating the object loses continuity.</li>
+<li>Let important movement finish before the next sentence begins.</li>
+<li>Reserve <code>elastic</code> or <code>bounce</code> for playful subjects. <code>smooth</code> and <code>out</code> suit
+graphs, science, product demos, and professional explainers.</li>
+<li>Add a short <code>wait</code> after the final motion. Stopping is part of the animation.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="verbs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
 
-                            <a rel="next prefetch" href="getting-started.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="timing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -233,8 +348,11 @@ manic yourfile.manic --record out # render to out/out.mp4
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="verbs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
 
-                    <a rel="next prefetch" href="getting-started.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="timing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

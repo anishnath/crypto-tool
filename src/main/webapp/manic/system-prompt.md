@@ -16,9 +16,13 @@ This document is the authoritative spec for generation; follow it exactly.
 - Arguments: **number** (`40`, `-5`, `2.5`), **string** (`"hi"`), **name**
   (`A`, `cyan`, `smooth` — bare word), **point** (`(x, y)`), or **3D point**
   (`(x, y, z)`).
-- Strings keep backslashes verbatim, so **LaTeX works in a normal `"..."` string**
-  (`"\frac"`, `"\theta"`, `"\neq"` all survive; `\"` escapes a quote, `\\` a
-  backslash). Backticks `` `...` `` are also raw and let the LaTeX contain a `"`.
+- **LaTeX → default to backticks `` `...` ``** (fully raw: EVERY backslash
+  survives, incl. `\\` line breaks). Double quotes `"..."` mostly work for LaTeX
+  (`"\frac"`, `"\theta"` survive) BUT treat `\"` and `\\` specially, so a LaTeX
+  line break `\\` (in `aligned`/`cases`/`matrix`/`array`, or `\\[4pt]`) COLLAPSES
+  to one backslash and breaks the math. So: any LaTeX with `\\` → backticks;
+  single-line LaTeX is fine in `"..."`. NEVER leave LaTeX bare — a stray `\` or
+  `$` outside a string is a parse error.
   **`\n` is a hard line break** in `text`/`caption` (and text auto-wraps to a
   width if you `wrap(id, w)`), so you rarely need it.
 - `//` starts a line comment.
@@ -98,12 +102,14 @@ Constructors and timeline may be written in any order.
    with fractions/roots/exponents/Greek/operators, use
    `equation(id, (x,y), `latex`, [size])` — it typesets real LaTeX (KaTeX-grade)
    and takes the template colour.
-   **⚠️ The LaTeX must be inside a STRING** (double quotes or backticks — both keep
-   backslashes verbatim). The one real mistake is leaving it BARE:
-   `equation(q,(x,y),\frac12)` won't parse. Both of these work:
-   `equation(f,(cx,320),"V = \pi r^2 h",60)` and
-   `` equation(f,(cx,320),`V = \pi r^2 h`,60) `` (use backticks if the LaTeX itself
-   contains a `"`). Same for every `$…$` — it lives in a normal string. Prefer this
+   **⚠️ The LaTeX must be inside a STRING — default to backticks `` `...` ``.**
+   The one real mistake is leaving it BARE: `equation(q,(x,y),\frac12)` won't
+   parse. Backticks are fully raw (all backslashes survive) so they ALWAYS work:
+   `` equation(f,(cx,320),`V = \pi r^2 h`,60) ``. Double quotes also work for
+   single-line LaTeX (`equation(f,(cx,320),"V = \pi r^2 h",60)`) but they eat a
+   `\\`, so **multi-line LaTeX MUST use backticks** — e.g.
+   `` rewrite(eq,`\begin{aligned}a&=b\\ c&=d\end{aligned}`,0.8) `` (in `"..."` the
+   `\\` line break collapses and the math breaks). Same for every `$…$`. Prefer this
    over ASCII math on screen. (`equation` is an image: `show`/`fade`/`move`/`scale`
    animate it; `draw`/trace does not.)
    To emphasize individual terms, use standard LaTeX with Manic palette names:
