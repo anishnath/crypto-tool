@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-da71ba6a.js";
+            window.path_to_searchindex_js = "searchindex-386cec9a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4954d801.js"></script>
@@ -219,6 +219,20 @@ cycle(x, y, z, 0.8, 90, smooth); // -&gt; x→y→z→x along arcs
 one’s position and the last into the first. The path arc is in degrees and
 defaults to 90; pass <code>0</code> for straight paths. Repeated calls compose, making it
 useful for symbol rearrangements, card carousels, and CyclicReplace-style moves.</p>
+<h3 id="relationship-motion"><a class="header" href="#relationship-motion">Relationship motion</a></h3>
+<p>Three verbs cover motion that would otherwise require many coordinated
+keyframes:</p>
+<pre><code class="language-manic">attach(label, marker, (0,-36));       // label follows marker
+travel(marker, route, 2, smooth);
+become(marker, nodeBlueprint, 0.8);   // same id, new visual state
+attach(label, none);                  // release at the settled position
+turn(nodeGroup, marker, 20, 0.6, out);// shared group pivot
+</code></pre>
+<p><code>attach</code> is persistent until released. <code>become</code> interpolates compatible shapes
+and safely crossfades other pairs, always settling on the exact declared
+blueprint. <code>turn</code> accepts one entity or a tag and rotates its members around a
+point or entity pivot. See <a href="motion-graphics.html">Motion graphics</a> for the full
+design rules and a copyable V2 Reel.</p>
 <div class="watch">▶ Watch: motion</div>
 
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/b20vwIjqbm8" title="Make It MOVE: manic Motion Verbs in 30s" allowfullscreen loading="lazy"></iframe></div>

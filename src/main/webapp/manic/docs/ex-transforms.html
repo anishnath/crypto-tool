@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-da71ba6a.js";
+            window.path_to_searchindex_js = "searchindex-386cec9a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-4954d801.js"></script>
@@ -180,6 +180,292 @@
                     <main>
                         <h1 id="transforms--morphing"><a class="header" href="#transforms--morphing">Transforms &amp; morphing</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="motion-graphics-v2"><a class="header" href="#motion-graphics-v2">motion-graphics-v2</a></h2>
+<p>The generic Motion Graphics V2 acceptance scene: one persistent marker carries an attached
+label along a path, becomes a declared visual blueprint, releases the label, gathers the
+same particles into a ring, and turns the whole arrangement around one shared pivot. Uses
+<code>attach</code>, <code>become</code>, and <code>turn</code> with no renderer flags or subject-specific vocabulary.</p>
+<pre><code class="language-manic">// motion-graphics-v2.manic — relationships, identity, and a deliberate settle
+
+title("Motion Graphics V2 — Follow, Become, Turn");
+canvas("9:16");
+template("mono");
+watermark(manicMark, (150, 132), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_Motion tagline=Describe_the_relationship yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_yours safe=reels");
+socials(me);
+
+text(kicker, (540, 155), "MOTION GRAPHICS V2");
+size(kicker, 23); color(kicker, dim); bold(kicker);
+text(headline, (540, 228), "Move the idea, not every coordinate");
+size(headline, 40); bold(headline);
+text(subhead, (540, 292), "attach · become · turn");
+size(subhead, 25); color(subhead, dim);
+
+rect(stage, (540, 865), 900, 1020);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.78);
+
+// One authored route and one persistent object.
+plot(route, (205, 1040), 172, 190, "0.55*sin(1.2*x)+0.18*x", (0, 4.25));
+color(route, cyan); stroke(route, 6); untraced(route);
+
+dot(marker, (205, 1040), 12);
+color(marker, gold); glow(marker, 1.6);
+text(markerLabel, (205, 994), "one persistent object");
+size(markerLabel, 24); color(markerLabel, fg); hidden(markerLabel);
+
+// A hidden target is a visual blueprint; it never appears as a second object.
+circle(nodeBlueprint, (935, 885), 56);
+color(nodeBlueprint, magenta); outlined(nodeBlueprint); stroke(nodeBlueprint, 7);
+glow(nodeBlueprint, 1.2); hidden(nodeBlueprint);
+
+// Supporting particles begin offstage, then arrive as an ordered ring.
+rect(seedBox, (540, 610), 260, 180); hidden(seedBox);
+particles(sparks, seedBox, 14, 7, 42, "random");
+color(sparks, cyan); hidden(sparks);
+circle(finalOrbit, (935, 885), 138); hidden(finalOrbit);
+
+text(explain, (540, 1325), "The label follows because the relationship is authored.");
+size(explain, 26); color(explain, dim); wrap(explain, 800); hidden(explain);
+
+step("attach-and-travel") {
+  seq {
+    attach(markerLabel, marker, (0,-46));
+    par {
+      show(markerLabel, 0.35);
+      show(explain, 0.40);
+      draw(route, 2.8, smooth);
+      travel(marker, route, 2.8, smooth);
+    }
+    wait(0.45);
+  }
+}
+
+step("become-the-next-idea") {
+  seq {
+    par {
+      become(marker, nodeBlueprint, 1.05, smooth);
+      say(markerLabel, "same id · new visual state", 0.45);
+      say(explain, "become preserves identity and settles on the exact blueprint.", 0.45);
+    }
+    wait(0.50);
+  }
+}
+
+step("release-arrange-turn") {
+  seq {
+    attach(markerLabel, none);
+    par {
+      fade(markerLabel, 0.35);
+      fade(route, 0.45);
+      show(sparks, 0.30);
+      arrange(sparks, finalOrbit, "ring", 1.15, smooth);
+      say(explain, "Release the label. Arrange a system. Turn it around one pivot.", 0.45);
+    }
+    turn(sparks, marker, 24, 0.65, out);
+    wait(1.40);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/uxFWySBtMzE" title="Attach, Become, Turn — Professional Motion Graphics With Three Words" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="motion-graphics-v2-story"><a class="header" href="#motion-graphics-v2-story">motion-graphics-v2-story</a></h2>
+<p>The advanced composition example: one question travels through a field of facts, its <code>WHY?</code>
+label follows, notation rewrites into a pattern, the question becomes a model, and the same
+facts arrange and turn as one knowledge system. Combines <code>attach</code>, <code>become</code>, and <code>turn</code> with
+<code>to</code>, <code>travel</code>, <code>flow</code>, <code>spin</code>, <code>arrange</code>, <code>wander</code>, <code>rewrite</code>, <code>seq</code>, <code>par</code>, and <code>stagger</code>.</p>
+<pre><code class="language-manic">// motion-graphics-v2-story.manic — one idea, one continuous motion story
+
+title("The Journey of an Idea — Motion Graphics V2 Story");
+canvas("9:16");
+template("mono");
+watermark(manicMark, (170, 178), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_Motion tagline=Move_the_idea yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_yours safe=reels");
+socials(me);
+
+// ---------------------------------------------------------------------------
+// ONE PERSISTENT STAGE
+// The scene never cuts away. Each act reuses what the previous act established.
+// ---------------------------------------------------------------------------
+
+text(kicker, (540, 184), "A MOTION GRAPHICS STORY");
+size(kicker, 22); color(kicker, dim); bold(kicker); hidden(kicker);
+
+text(headline, (540, 248), "How an idea learns to move");
+size(headline, 42); bold(headline); hidden(headline);
+
+text(chapter, (540, 316), "ACT 1 · FOLLOW ATTENTION");
+size(chapter, 24); color(chapter, cyan); bold(chapter); hidden(chapter);
+
+rect(stage, (540, 850), 900, 990);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.76);
+
+text(narration, (540, 1400), "A question appears before the answer does.");
+size(narration, 28); color(narration, fg); wrap(narration, 820); hidden(narration);
+
+text(principle, (540, 1495), "Motion should guide the eye, preserve meaning, then settle.");
+size(principle, 22); color(principle, dim); wrap(principle, 820); hidden(principle);
+
+// ---------------------------------------------------------------------------
+// ACT 1 — CURIOSITY TRAVELS; ITS CONTEXT FOLLOWS
+// ---------------------------------------------------------------------------
+
+spline(questionPath, (175, 1080), (290, 980), (385, 1060), (490, 900), (540, 790));
+color(questionPath, cyan); stroke(questionPath, 5); dashed(questionPath, 18, 15);
+glow(questionPath, 0.8); untraced(questionPath);
+
+dot(idea, (175, 1080), 12);
+color(idea, gold); glow(idea, 1.7); hidden(idea);
+
+text(focusLabel, (175, 1024), "WHY?");
+size(focusLabel, 29); color(focusLabel, gold); bold(focusLabel); hidden(focusLabel);
+
+// Facts begin as visual noise. They persist through every later arrangement.
+rect(noiseField, (540, 820), 690, 470); hidden(noiseField);
+particles(facts, noiseField, 16, 7, 29, "random");
+color(facts, cyan); glow(facts, 0.9); hidden(facts);
+
+for i in 0..16 {
+  tag(facts.p{i}, knowledgeSystem);
+}
+
+// ---------------------------------------------------------------------------
+// ACT 2 — THE SAME QUESTION BECOMES A MODEL
+// ---------------------------------------------------------------------------
+
+equation(work, (540, 1195), `1+2+\cdots+n=?`, 43);
+color(work, fg); hidden(work);
+
+// Hidden entities are visual blueprints. `idea` adopts this exact final state.
+rect(modelBlueprint, (540, 790), 116, 116);
+outlined(modelBlueprint); outline(modelBlueprint, magenta); stroke(modelBlueprint, 7);
+rot(modelBlueprint, 45); glow(modelBlueprint, 1.5); hidden(modelBlueprint);
+
+circle(knowledgeOrbit, (540, 790), 250); hidden(knowledgeOrbit);
+
+text(observe, (540, 492), "OBSERVE");
+text(connect, (842, 790), "CONNECT");
+text(testIdea, (540, 1088), "TEST");
+text(explain, (238, 790), "EXPLAIN");
+
+size(observe, 20); size(connect, 20); size(testIdea, 20); size(explain, 20);
+color(observe, dim); color(connect, dim); color(testIdea, dim); color(explain, dim);
+bold(observe); bold(connect); bold(testIdea); bold(explain);
+hidden(observe); hidden(connect); hidden(testIdea); hidden(explain);
+tag(observe, knowledgeSystem); tag(connect, knowledgeSystem);
+tag(testIdea, knowledgeSystem); tag(explain, knowledgeSystem);
+
+// ---------------------------------------------------------------------------
+// ACT 3 — THE MODEL BECOMES A COORDINATED SYSTEM
+// ---------------------------------------------------------------------------
+
+text(systemLabel, (540, 648), "ONE IDEA · MANY RELATIONSHIPS");
+size(systemLabel, 22); color(systemLabel, magenta); bold(systemLabel); hidden(systemLabel);
+
+text(finalLine, (540, 1320), "Don't animate layers. Animate the relationship.");
+size(finalLine, 30); color(finalLine, fg); bold(finalLine); wrap(finalLine, 820); hidden(finalLine);
+
+// ---------------------------------------------------------------------------
+// TIMELINE — seq tells the story; par and stagger control the viewing rhythm.
+// ---------------------------------------------------------------------------
+
+step("a-question-pulls-attention") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.55);
+      show(chapter, 0.40);
+      show(narration, 0.45);
+      show(principle, 0.45);
+      show(idea, 0.30);
+    }
+
+    // Stagger turns a cloud into a readable arrival instead of one visual shock.
+    stagger(0.035) {
+      for i in 0..16 {
+        show(facts.p{i}, 0.22);
+      }
+    }
+
+    attach(focusLabel, idea, (0,-56));
+    par {
+      show(focusLabel, 0.30);
+      draw(questionPath, 2.65, smooth);
+      travel(idea, questionPath, 2.65, smooth);
+      flow(questionPath, 1.45);
+      wander(facts, 2.65);
+    }
+
+    par {
+      to(idea, scale, 1.55, 0.45, out);
+      say(narration, "Attention follows the question while the background stays alive.", 0.45);
+    }
+    wait(0.55);
+  }
+}
+
+step("the-question-becomes-a-model") {
+  seq {
+    attach(focusLabel, none);
+    par {
+      fade(focusLabel, 0.30);
+      fade(questionPath, 0.45);
+      say(chapter, "ACT 2 · PRESERVE THE IDEA", 0.35);
+      say(narration, "The question changes form, but it never loses its identity.", 0.45);
+      show(work, 0.40);
+    }
+
+    // Existing notation moves only where the mathematical meaning changes.
+    rewrite(work, `1+2+\cdots+n=\frac{n(n+1)}{2}`, 1.00, smooth);
+
+    par {
+      become(idea, modelBlueprint, 1.05, smooth);
+      arrange(facts, knowledgeOrbit, "ring", 1.20, smooth);
+      say(principle, "become keeps one id · arrange keeps every particle", 0.45);
+    }
+
+    // spin is local: the new model turns around its own centre.
+    spin(idea, 90, 0.65, out);
+
+    stagger(0.10) {
+      show(observe, 0.30);
+      show(connect, 0.30);
+      show(testIdea, 0.30);
+      show(explain, 0.30);
+    }
+    wait(0.55);
+  }
+}
+
+step("relationships-move-as-one") {
+  seq {
+    attach(systemLabel, idea, (0,-142));
+    par {
+      show(systemLabel, 0.35);
+      say(chapter, "ACT 3 · MOVE THE SYSTEM", 0.35);
+      say(narration, "Now every part can move together without losing the structure.", 0.45);
+      show(finalLine, 0.45);
+    }
+
+    // turn is relational: particles and labels share one pivot and one motion.
+    par {
+      turn(knowledgeSystem, idea, 45, 1.20, smooth);
+      spin(idea, -135, 1.20, smooth);
+      to(facts, color, lime, 1.20, smooth);
+      rewrite(work, `\text{question}\;\longrightarrow\;\text{model}\;\longrightarrow\;\text{insight}`, 1.20, smooth);
+    }
+
+    par {
+      pulse(idea, 0.70);
+      say(principle, "FOLLOW · TRANSFORM · COORDINATE · SETTLE", 0.45);
+    }
+    wait(1.80);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pIUTnqTfyWo" title="The Journey of an Idea — Advanced Motion Graphics Story" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="reactive-math-journey"><a class="header" href="#reactive-math-journey">reactive-math-journey</a></h2>
 <p>A playful vertical journey from <code>1+1</code> in Class 1 through fractions, algebra,
 geometry, calculus, linear algebra, probability and Fourier analysis to a PhD-level

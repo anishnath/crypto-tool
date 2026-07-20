@@ -1,5 +1,5 @@
 {
-  "count": 190,
+  "count": 192,
   "categories": [
     {
       "slug": "algorithms",
@@ -881,6 +881,18 @@
       "slug": "transforms",
       "title": "Transforms & morphing",
       "examples": [
+        {
+          "name": "motion-graphics-v2",
+          "file": "motion-graphics-v2.manic",
+          "title": "Motion graphics v2",
+          "desc": "The generic Motion Graphics V2 acceptance scene: one persistent marker carries an attached label along a path, becomes a declared visual blueprint, releases the label, gathers the same particles into a ring, and turns the whole arrangement around one shared pivot."
+        },
+        {
+          "name": "motion-graphics-v2-story",
+          "file": "motion-graphics-v2-story.manic",
+          "title": "Motion graphics v2 story",
+          "desc": "The advanced composition example: one question travels through a field of facts, its WHY? label follows, notation rewrites into a pattern, the question becomes a model, and the same facts arrange and turn as one knowledge system."
+        },
         {
           "name": "reactive-math-journey",
           "file": "reactive-math-journey.manic",

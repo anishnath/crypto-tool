@@ -1,0 +1,81 @@
+// motion-graphics-v2.manic — relationships, identity, and a deliberate settle
+
+title("Motion Graphics V2 — Follow, Become, Turn");
+canvas("9:16");
+template("mono");
+watermark(manicMark, (150, 132), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_Motion tagline=Describe_the_relationship yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_yours safe=reels");
+socials(me);
+
+text(kicker, (540, 155), "MOTION GRAPHICS V2");
+size(kicker, 23); color(kicker, dim); bold(kicker);
+text(headline, (540, 228), "Move the idea, not every coordinate");
+size(headline, 40); bold(headline);
+text(subhead, (540, 292), "attach · become · turn");
+size(subhead, 25); color(subhead, dim);
+
+rect(stage, (540, 865), 900, 1020);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.78);
+
+// One authored route and one persistent object.
+plot(route, (205, 1040), 172, 190, "0.55*sin(1.2*x)+0.18*x", (0, 4.25));
+color(route, cyan); stroke(route, 6); untraced(route);
+
+dot(marker, (205, 1040), 12);
+color(marker, gold); glow(marker, 1.6);
+text(markerLabel, (205, 994), "one persistent object");
+size(markerLabel, 24); color(markerLabel, fg); hidden(markerLabel);
+
+// A hidden target is a visual blueprint; it never appears as a second object.
+circle(nodeBlueprint, (935, 885), 56);
+color(nodeBlueprint, magenta); outlined(nodeBlueprint); stroke(nodeBlueprint, 7);
+glow(nodeBlueprint, 1.2); hidden(nodeBlueprint);
+
+// Supporting particles begin offstage, then arrive as an ordered ring.
+rect(seedBox, (540, 610), 260, 180); hidden(seedBox);
+particles(sparks, seedBox, 14, 7, 42, "random");
+color(sparks, cyan); hidden(sparks);
+circle(finalOrbit, (935, 885), 138); hidden(finalOrbit);
+
+text(explain, (540, 1325), "The label follows because the relationship is authored.");
+size(explain, 26); color(explain, dim); wrap(explain, 800); hidden(explain);
+
+step("attach-and-travel") {
+  seq {
+    attach(markerLabel, marker, (0,-46));
+    par {
+      show(markerLabel, 0.35);
+      show(explain, 0.40);
+      draw(route, 2.8, smooth);
+      travel(marker, route, 2.8, smooth);
+    }
+    wait(0.45);
+  }
+}
+
+step("become-the-next-idea") {
+  seq {
+    par {
+      become(marker, nodeBlueprint, 1.05, smooth);
+      say(markerLabel, "same id · new visual state", 0.45);
+      say(explain, "become preserves identity and settles on the exact blueprint.", 0.45);
+    }
+    wait(0.50);
+  }
+}
+
+step("release-arrange-turn") {
+  seq {
+    attach(markerLabel, none);
+    par {
+      fade(markerLabel, 0.35);
+      fade(route, 0.45);
+      show(sparks, 0.30);
+      arrange(sparks, finalOrbit, "ring", 1.15, smooth);
+      say(explain, "Release the label. Arrange a system. Turn it around one pivot.", 0.45);
+    }
+    turn(sparks, marker, 24, 0.65, out);
+    wait(1.40);
+  }
+}

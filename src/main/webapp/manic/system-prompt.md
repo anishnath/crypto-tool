@@ -228,6 +228,15 @@ arrow, curve, plot, spline, or arc and holds it at the endpoint ·
 `arrange(particles,container,["random|grid|ring"],[d],[ease])` (preserve every dot id
 while expanding into a new container or moving among random, rectangular, and
 radial layouts; random transitions use independent seeded curved routes) ·
+`attach(child,target,[(dx,dy)])` keeps an existing 2-D child pinned to the
+target after all ordinary motion resolves; `attach(child,none)` releases it at
+the settled position ·
+`become(source,target,[d],[ease])` keeps the source id while adopting a declared
+2-D target blueprint; hide a blueprint that should not render separately,
+compatible geometry interpolates and other pairs use a safe local crossfade ·
+`turn(id_or_tag,pivot,degrees,[d],[ease])` rotates one entity or a tagged
+arrangement rigidly around a point/entity pivot; use `spin` for in-place
+rotation and `transform` when the matrix itself is the idea ·
 `flow(path,[d])` (travelling luminous emphasis) ·
 `erase(id,[d])` · `type(id,[d])` · `say(id,"s",[d])` · `recolor(id,name,[d])` ·
 `` rewrite(id, `latex`, [d], [ease]) `` (existing `equation` only: smoothly match
