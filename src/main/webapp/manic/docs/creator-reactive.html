@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c6bc9d88.js";
+            window.path_to_searchindex_js = "searchindex-c36be426.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-83849da6.js"></script>
+        <script src="toc-e7a81696.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -294,12 +294,17 @@ before recording the full video.</li>
 </ul>
 <h2 id="named-steps-are-editing-markers"><a class="header" href="#named-steps-are-editing-markers">Named steps are editing markers</a></h2>
 <p>Every step name is automatically exported at the step’s start in
-<code>markers.json</code>. Those semantic timestamps make it easier to:</p>
+<code>markers.json</code> and becomes a first-class preview/recording boundary. Inspect the
+story or open one beat directly:</p>
+<pre><code class="language-sh">manic stages examples/reactive-world.manic
+manic examples/reactive-world.manic --stage find-the-flat-point
+</code></pre>
+<p>Those semantic boundaries make it easier to:</p>
 <ul>
 <li>align narration, music, captions, and sound effects;</li>
 <li>review or seek directly to a conceptual beat;</li>
 <li>identify a clean hook, explanation, result, or takeaway;</li>
-<li>prepare the same story for future multi-format publishing tools.</li>
+<li>export one stage or an inclusive stage range without copying timestamps.</li>
 </ul>
 <p>Names must be non-empty, unique, and top-level. If you only need a timestamp
 without a reactive state change, use <code>mark("name")</code> instead.</p>
@@ -353,7 +358,7 @@ focused benchmark for retaining unchanged equation pieces.</li>
 </ul>
 <p>Start by copying <code>reactive-world.manic</code>, rename its steps around your idea, and
 replace one representation at a time. Keep the world; change the understanding.</p>
-<p>Next: <a href="creator-visual-checks.html">Review every format before publishing →</a></p>
+<p>Next: <a href="creator-stages.html">Navigate and export the story by stage →</a></p>
 
                     </main>
 
@@ -363,7 +368,7 @@ replace one representation at a time. Keep the world; change the understanding.<
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="creator-visual-checks.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="creator-stages.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -377,7 +382,7 @@ replace one representation at a time. Keep the world; change the understanding.<
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="creator-visual-checks.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="creator-stages.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

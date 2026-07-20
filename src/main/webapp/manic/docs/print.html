@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c6bc9d88.js";
+            window.path_to_searchindex_js = "searchindex-c36be426.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-83849da6.js"></script>
+        <script src="toc-e7a81696.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -595,12 +595,17 @@ before recording the full video.</li>
 </ul>
 <h2 id="named-steps-are-editing-markers"><a class="header" href="#named-steps-are-editing-markers">Named steps are editing markers</a></h2>
 <p>Every step name is automatically exported at the step’s start in
-<code>markers.json</code>. Those semantic timestamps make it easier to:</p>
+<code>markers.json</code> and becomes a first-class preview/recording boundary. Inspect the
+story or open one beat directly:</p>
+<pre><code class="language-sh">manic stages examples/reactive-world.manic
+manic examples/reactive-world.manic --stage find-the-flat-point
+</code></pre>
+<p>Those semantic boundaries make it easier to:</p>
 <ul>
 <li>align narration, music, captions, and sound effects;</li>
 <li>review or seek directly to a conceptual beat;</li>
 <li>identify a clean hook, explanation, result, or takeaway;</li>
-<li>prepare the same story for future multi-format publishing tools.</li>
+<li>export one stage or an inclusive stage range without copying timestamps.</li>
 </ul>
 <p>Names must be non-empty, unique, and top-level. If you only need a timestamp
 without a reactive state change, use <code>mark("name")</code> instead.</p>
@@ -654,6 +659,125 @@ focused benchmark for retaining unchanged equation pieces.</li>
 </ul>
 <p>Start by copying <code>reactive-world.manic</code>, rename its steps around your idea, and
 replace one representation at a time. Keep the world; change the understanding.</p>
+<p>Next: <a href="#story-stages--edit-the-idea-not-the-timestamp">Navigate and export the story by stage →</a></p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="story-stages--edit-the-idea-not-the-timestamp"><a class="header" href="#story-stages--edit-the-idea-not-the-timestamp">Story stages — edit the idea, not the timestamp</a></h1>
+<p>A creator usually thinks in beats—<strong>question</strong>, <strong>intuition</strong>, <strong>experiment</strong>,
+<strong>proof</strong>, <strong>takeaway</strong>—rather than <code>6.35 seconds</code>. Manic uses the names already
+written in <code>step(...)</code> as the editing and publishing structure for the movie.
+There is no second timeline file to maintain.</p>
+<pre><code class="language-manic">step("question") {
+  show(prompt, 0.4);
+  say(caption, "Where does the slope become zero?", 0.35);
+}
+wait(0.8);
+
+step("experiment") {
+  to(tangent, x, 0, 1.8, smooth);
+  to(rate, x, 0, 1.8, smooth);
+}
+wait(0.7);
+
+step("takeaway") {
+  rewrite(work, `f'(0)=0`, 0.8, smooth);
+}
+wait(1.5);
+</code></pre>
+<p>The wait after a step belongs to that stage. This makes a stage export include
+the transition <strong>and</strong> the time the viewer needs to absorb its settled result.
+The next stage begins exactly where its next <code>step</code> begins.</p>
+<h2 id="see-the-story-before-opening-a-window"><a class="header" href="#see-the-story-before-opening-a-window">See the story before opening a window</a></h2>
+<pre><code class="language-sh">manic stages examples/reactive-world.manic
+</code></pre>
+<p>The report lists every stage’s start, end, and complete duration:</p>
+<pre><code class="language-text">stages — examples/reactive-world.manic (5 stages, 13.55s authored)
+
+  #  stage                  start      end      duration
+  1  question                0.00s     2.15s      2.15s
+  2  measure-slope           2.15s     5.95s      3.80s
+  3  find-the-flat-point     5.95s     8.40s      2.45s
+  4  see-the-derivative      8.40s    10.80s      2.40s
+  5  takeaway               10.80s    13.55s      2.75s
+</code></pre>
+<p>Use this before recording to catch a rushed hook, an overlong setup, or a
+takeaway without enough reading time.</p>
+<h2 id="preview-one-stage"><a class="header" href="#preview-one-stage">Preview one stage</a></h2>
+<pre><code class="language-sh">manic examples/reactive-world.manic --stage find-the-flat-point
+</code></pre>
+<p>Manic evaluates the complete persistent world at the stage’s real start, then
+limits playback and scrubbing to that stage. Nothing is reconstructed as a
+separate scene, so incoming equation, plot, diagram, and parameter state remain
+correct.</p>
+<p>The live player adds a stage strip above the transport bar:</p>
+<ul>
+<li>click a stage segment to jump to it;</li>
+<li>use <code>1</code>–<code>9</code> to jump to visible stages;</li>
+<li>press <code>R</code> to restart at the selected range’s beginning;</li>
+<li>drag the progress bar to scrub only inside the selected range;</li>
+<li>read the current stage and selected range in the HUD.</li>
+</ul>
+<h2 id="record-a-single-stage"><a class="header" href="#record-a-single-stage">Record a single stage</a></h2>
+<p>The same flag selects the recording range:</p>
+<pre><code class="language-sh">manic examples/reactive-world.manic \
+  --stage see-the-derivative \
+  --record out-derivative \
+  --preset reel
+</code></pre>
+<p>For a clean editing clip without the preset’s branding intro/outro:</p>
+<pre><code class="language-sh">manic examples/reactive-world.manic \
+  --stage see-the-derivative \
+  --record out-derivative \
+  --preset test \
+  --no-brand
+</code></pre>
+<h2 id="export-several-stages"><a class="header" href="#export-several-stages">Export several stages</a></h2>
+<p>Use an inclusive named range when a clip should carry a short story arc:</p>
+<pre><code class="language-sh">manic examples/reactive-world.manic \
+  --from-stage measure-slope \
+  --to-stage takeaway \
+  --record out-slope-to-takeaway
+</code></pre>
+<p><code>--to-stage takeaway</code> includes the whole takeaway stage. With only
+<code>--from-stage</code>, recording continues through the authored ending. With only
+<code>--to-stage</code>, it begins at the start of the movie.</p>
+<p>Named ranges and numeric <code>--from</code>/<code>--to</code> are intentionally separate. Use stage
+names for story editing and numeric seconds only for a deliberately precise
+technical trim. Unknown names report the available stages and suggest a close
+match.</p>
+<h2 id="recording-metadata-stays-useful"><a class="header" href="#recording-metadata-stays-useful">Recording metadata stays useful</a></h2>
+<p><code>markers.json</code> now includes:</p>
+<ul>
+<li>the selected source range;</li>
+<li>clipped stage intervals with relative <code>t</code>, <code>end</code>, and <code>duration</code>;</li>
+<li>each stage’s original <code>source_t</code>;</li>
+<li>marks and sections filtered to the exported clip and shifted to clip time.</li>
+</ul>
+<p>That means narration, captions, music cues, and downstream editing tools can
+work from zero-based clip timing without losing the position in the source
+story.</p>
+<h2 id="combine-stages-with-output-formats"><a class="header" href="#combine-stages-with-output-formats">Combine stages with output formats</a></h2>
+<p>Stage selection and canvas selection are independent:</p>
+<pre><code class="language-sh">manic examples/parameter-journeys.manic --stage takeaway --canvas portrait  --record out-reel
+manic examples/parameter-journeys.manic --stage takeaway --canvas square    --record out-square
+manic examples/parameter-journeys.manic --stage takeaway --canvas landscape --record out-lesson
+</code></pre>
+<p>The named idea stays the same while the responsive layout changes. Before the
+batch render, run
+<code>manic check examples/parameter-journeys.manic --canvas all</code> to review every
+stage in every supported shape.</p>
+<h2 id="choosing-useful-names"><a class="header" href="#choosing-useful-names">Choosing useful names</a></h2>
+<ul>
+<li>Name the change in understanding: <code>see-the-derivative</code>, not <code>show-pink-line</code>.</li>
+<li>Keep a short video to roughly three to six stages.</li>
+<li>Put several synchronized changes inside one stage only when they explain the
+same idea.</li>
+<li>Add a deliberate <code>wait</code> after the important result.</li>
+<li>Use <code>mark("cue")</code> for an editor timestamp that is not a story stage.</li>
+<li>Use <code>section("Part Two")</code> when the video itself needs a visible chapter card.</li>
+</ul>
+<p>Start with <a href="#reactive-world">Reactive world</a>, run
+<code>manic stages examples/reactive-world.manic</code>, and preview its
+<code>find-the-flat-point</code> stage.</p>
 <p>Next: <a href="#visual-checks--review-every-format-before-publishing">Review every format before publishing →</a></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="visual-checks--review-every-format-before-publishing"><a class="header" href="#visual-checks--review-every-format-before-publishing">Visual checks — review every format before publishing</a></h1>
@@ -885,15 +1009,23 @@ the open side: <code>"down"</code> ceiling, <code>"up"</code> floor, <code>"left
 <p>Two more helpers cover scenes that would otherwise need dozens of manual dots
 and endpoints:</p>
 <pre><code class="language-manic">circle(glass, (400,300), 100);
-particles(bubbles, glass, 24, 5, 7); // id, container, count, radius, seed
+particles(bubbles, glass, 24, 5, 7); // default random layout
 
 rect(tank, (750,300), 180, 160);
+particles(samples, tank, 24, 4, 11, "grid");
 link(pipe, glass, tank, 35);         // 35 px of curve; 0 is straight
+
+circle(orbit, (980,300), 90);
+particles(ticks, orbit, 24, 4, 13, "ring");
 </code></pre>
 <p><code>particles</code> works inside circles and rectangles. Its bare id addresses every
 child dot, so <code>hidden(bubbles)</code> and <code>recolor(bubbles, fg)</code> affect the whole
-group. <code>link</code> meets those shapes at their boundaries and stays attached when
-either endpoint moves.</p>
+group. Use the optional <code>"grid"</code> layout for an ordered rectangular state, then
+<code>arrange(samples, tank, "random", 2, smooth)</code> to move the same dots into a
+typical random state. <code>arrange</code> may target a larger container for expansion and
+can return to <code>"grid"</code> exactly. A circle plus <code>"ring"</code> gives the particles an
+ordered radial endpoint. <code>link</code> meets shapes at their boundaries and stays
+attached when either endpoint moves.</p>
 <p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
 <code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
 <p>For display mathematics, <code>equation</code> accepts LaTeX in backticks. Standard
@@ -1044,6 +1176,32 @@ duration you give it, so run it in <code>par</code> with the story it should acc
 <code>flow</code> sends a temporary luminous pulse over any line, arrow, curve, spline,
 arc, or tracked <code>link</code>; it is useful for a signal, energy, traffic, or simply
 directing attention.</p>
+<p><code>travel(marker, path, dur, smooth)</code> moves the actual marker once along that
+same kind of path and leaves it at the endpoint. Use <code>flow</code> for temporary
+emphasis and <code>travel</code> when object identity and the stopping point matter:</p>
+<pre><code class="language-manic">plot(curve, (180,620), 90, 140, "1-exp(-x)", (0,4));
+dot(marker, (180,620), 7);
+par { draw(curve, 2, out); travel(marker, curve, 2, out); }
+</code></pre>
+<p>For a persistent layout change, keep the same particle ids:</p>
+<pre><code class="language-manic">rect(chamber, (540,500), 600, 260);
+particles(gas, chamber, 48, 5, 17, "grid");
+arrange(gas, chamber, "random", 2.5, smooth);
+arrange(gas, chamber, "grid", 2.5, smooth); // exact ordered return
+
+circle(orbit, (900,500), 150);
+arrange(gas, orbit, "ring", 1.2, smooth);    // move and stop radially
+</code></pre>
+<p><code>arrange</code> also accepts a different circle/rectangle container, which makes a
+free expansion readable without moving every dot by hand. A <code>random</code> layout
+uses independent seeded curved routes: the result is reproducible and
+scrubbable, but does not look like every particle followed the same ruler.</p>
+<p>For a complete creator-oriented treatment of persistent motion, arrival,
+settling, and the difference between <code>travel</code> and <code>flow</code>, see
+<a href="motion-graphics.html">Motion graphics — move ideas, not layers</a>.</p>
+<p>For shape continuity, <code>morph(a,b)</code> preserves topology: graph/line paths remain
+open, while circles and other closed outlines remain closed. This prevents an
+unwanted diagonal chord when a plot becomes a connector or guide line.</p>
 <p>For a persistent comparison style, use <code>dashed(id, [dash], [gap])</code> before the
 timeline. It is a base Manic modifier—not a calculus feature—so the same
 16/10-pixel default pattern works on a plot, guide line, link, arrow, curve,
@@ -1156,8 +1314,9 @@ reads far better than rushing to the next move.</p>
 <p>Use <code>step</code> when a beat represents the world’s <strong>next conceptual state</strong>, not
 just anonymous timing. Its children start together like <code>par</code>; its duration is
 the longest child; anything not mentioned remains exactly as it was. The unique
-name is written to <code>markers.json</code>, which makes the story seekable today and
-gives future format/export tools semantic chapter boundaries.</p>
+name is written to <code>markers.json</code> and becomes a first-class editing boundary:
+<code>manic stages FILE.manic</code> lists durations, <code>--stage NAME</code> previews or records
+one stage, and <code>--from-stage</code> / <code>--to-stage</code> export an inclusive arc.</p>
 <pre><code class="language-manic">step("explain") {
   rewrite(work, `f'(x)=2x`, 0.9, smooth);
   to(tangent, x, 2.5, 2.0, smooth);
@@ -1167,6 +1326,10 @@ gives future format/export tools semantic chapter boundaries.</p>
 </code></pre>
 <p>Steps are top-level and names must be non-empty and unique. Put <code>seq { … }</code>
 inside a step when a small part needs ordered choreography.</p>
+<p>An authored <code>wait</code> after a step remains part of that stage until the next step
+begins. This lets a stage-only export keep the reading hold after its motion.
+See <a href="#story-stages--edit-the-idea-not-the-timestamp">Story stages</a> for the live navigator and publishing
+workflow.</p>
 <h2 id="generic-timing-v2--one-clock-for-any-scene"><a class="header" href="#generic-timing-v2--one-clock-for-any-scene">Generic Timing v2 — one clock for any scene</a></h2>
 <p>Use a generic timing controller when several parts of a scene must share one
 exact schedule. It is format-neutral: the same controller can coordinate a
@@ -1854,7 +2017,9 @@ construction, or an algorithm trace.</p>
 <tr><td>Name the parts</td><td><code>text</code>, leader <code>arrow</code>, <code>bracelabel</code>, reference <code>line</code></td><td>say what each thing is</td></tr>
 <tr><td>Emphasize</td><td><code>flash(id,color)</code>, <code>pulse(id)</code>, <code>recolor(id,color,dur)</code>, <code>glow(id,amt)</code>, <code>shake(id)</code>, <code>spin(id,deg,dur)</code></td><td>move the eye to the part being discussed</td></tr>
 <tr><td>Add ambient life</td><td><code>particles(id, circle_or_rect, count, radius, seed)</code> + <code>wander(id,dur)</code></td><td>contained bubbles, dust, stars, data, or molecules without hand-animating dots</td></tr>
+<tr><td>Change a particle state</td><td><code>particles(...,"grid")</code> + `arrange(id,container,“random</td><td>grid</td></tr>
 <tr><td>Show a transfer</td><td><code>link(id,a,b,bend)</code> + <code>flow(id,dur)</code></td><td>a tracked curved connection and a travelling emphasis pulse for energy, signals, traffic, or attention</td></tr>
+<tr><td>Move a real object on a path</td><td><code>travel(marker,path,dur,ease)</code></td><td>a plot marker, vehicle, token, or probe follows the authored path once and stops at its endpoint</td></tr>
 <tr><td>Preserve identity</td><td><code>watermark(mark)</code> or <code>watermark(mark,(x,y),"text")</code></td><td>a persistent screen-fixed mark; use the responsive bottom-right default or move it away from platform UI / important content</td></tr>
 <tr><td>Broadcast</td><td><code>flash(id.parts, lime)</code></td><td>hit <strong>every</strong> part of the sim at once</td></tr>
 <tr><td>State the law</td><td>a <code>text</code> with the formula</td><td>tie the motion to the equation</td></tr>
@@ -2034,7 +2199,7 @@ shape (with a message that names the 3D replacement):</p>
 <ul>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
 <li><a href="#graphs">Graphs</a> — 5 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 21 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 22 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 12 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
 <li><a href="#physics--simulations">Physics — simulations</a> — 53 examples</li>
@@ -3275,6 +3440,212 @@ par { draw(Fup, 1.50); draw(Fdown, 1.50); }
 wait(2.80);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/MRq5QHnHQxI" title="Integration by Parts as One Continuous Equation — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="rewrite-integration"><a class="header" href="#rewrite-integration">rewrite-integration</a></h2>
+<p>A full manual-integration walkthrough, animated: one equation object is <code>rewrite</code>-morphed
+through all 21 steps — every substitution, partial-fraction split and back-substitution,
+each captioned with its rule — down to the closed form. Display-quality LaTeX throughout.</p>
+<pre><code class="language-manic">title("Rewrite Integration Steps");
+canvas("16:9");
+template("mono");
+
+text(head, (cx, 58), "Integrating by rewriting the denominator");
+display(head);
+bold(head);
+size(head, 32);
+hidden(head);
+
+text(sub, (cx, 94), "Manual integration — partial fractions by substitution");
+size(sub, 20);
+color(sub, dim);
+hidden(sub);
+
+rect(panelBox, (cx, cy + 14), w - 150, 380);
+outline(panelBox, dim);
+opacity(panelBox, 0.35);
+hidden(panelBox);
+
+text(stepTitle, (cx, 150), "");
+display(stepTitle);
+bold(stepTitle);
+size(stepTitle, 26);
+color(stepTitle, cyan);
+
+text(ruleTag, (cx, 182), "");
+size(ruleTag, 18);
+color(ruleTag, dim);
+
+text(watermark, (w - 96, h - 12), "Made with Manic");
+size(watermark, 15);
+color(watermark, dim);
+hidden(watermark);
+
+equation(work, (cx, cy + 20), `\int \frac{1}{(x - 1)(x + 2)}\,dx`, 34);
+hidden(work);
+
+equation(finalLine, (cx, h - 64), `\boxed{\,\frac{\log{\left(x - 1 \right)}}{3} - \frac{\log{\left(x + 2 \right)}}{3} + C\,}`, 34);
+color(finalLine, lime);
+hidden(finalLine);
+
+show(head, 0.45);
+show(sub, 0.45);
+show(panelBox, 0.45);
+show(watermark, 0.45);
+show(work, 0.5);
+wait(0.4);
+
+par {
+say(stepTitle, "1. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = x - 1,\quad \frac{du}{dx} = 1`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "2. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = u + \frac{3}{2},\quad \frac{du}{d_u} = 1`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "3. Rewrite", 0.25);
+say(ruleTag, "Rule: RewriteRule", 0.25);
+rewrite(work, `\int \frac{1}{3 u + \left(u - \frac{3}{2}\right)^{2} - \frac{9}{2}} \,d_u = \int - \frac{2}{3 \left(2 u + 3\right)} + \frac{2}{3 \left(2 u - 3\right)} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "4. Sum rule", 0.25);
+say(ruleTag, "Rule: AddRule", 0.25);
+rewrite(work, `\int (f+g)\,d_u = \int f\,d_u + \int g\,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "5. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int - \frac{2}{3 \left(2 u + 3\right)} \,d_u = - \frac{2}{3} \int \frac{1}{2 u + 3} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "6. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = 2 u + 3,\quad \frac{du}{d_u} = 2`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "7. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int \frac{1}{2 u} \,d_u = \frac{1}{2} \int \frac{1}{u} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "8. Reciprocal", 0.25);
+say(ruleTag, "Rule: ReciprocalRule", 0.25);
+rewrite(work, `\int \frac{1}{u} \,d_u = \ln|u| + C = \log{\left(u \right)}`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "9. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= \frac{\log{\left(u \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "10. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u + 3 \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "11. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= - \frac{\log{\left(2 u + 3 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "12. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int \frac{2}{3 \left(2 u - 3\right)} \,d_u = \frac{2}{3} \int \frac{1}{2 u - 3} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "13. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = 2 u - 3,\quad \frac{du}{d_u} = 2`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "14. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int \frac{1}{2 u} \,d_u = \frac{1}{2} \int \frac{1}{u} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "15. Reciprocal", 0.25);
+say(ruleTag, "Rule: ReciprocalRule", 0.25);
+rewrite(work, `\int \frac{1}{u} \,d_u = \ln|u| + C = \log{\left(u \right)}`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "16. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= \frac{\log{\left(u \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "17. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u - 3 \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "18. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u - 3 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "19. Combine", 0.25);
+say(ruleTag, "Rule: AddRule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u - 3 \right)}}{3} - \frac{\log{\left(2 u + 3 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "20. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u \right)}}{3} - \frac{\log{\left(2 u + 6 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "21. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 x - 2 \right)}}{3} - \frac{\log{\left(2 x + 4 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+show(finalLine, 0.8);
+pulse(finalLine, 0.8);
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/IDHB6_cYHDc" title="One Integral, 21 Rewrites — Partial Fractions Solved Step by Step — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="reactive-world"><a class="header" href="#reactive-world">reactive-world</a></h2>
 <p>The foundation for creator-reactive stories: five named <code>step</code> blocks keep one curve,

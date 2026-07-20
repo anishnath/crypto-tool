@@ -1,0 +1,199 @@
+title("Rewrite Integration Steps");
+canvas("16:9");
+template("mono");
+
+text(head, (cx, 58), "Integrating by rewriting the denominator");
+display(head);
+bold(head);
+size(head, 32);
+hidden(head);
+
+text(sub, (cx, 94), "Manual integration — partial fractions by substitution");
+size(sub, 20);
+color(sub, dim);
+hidden(sub);
+
+rect(panelBox, (cx, cy + 14), w - 150, 380);
+outline(panelBox, dim);
+opacity(panelBox, 0.35);
+hidden(panelBox);
+
+text(stepTitle, (cx, 150), "");
+display(stepTitle);
+bold(stepTitle);
+size(stepTitle, 26);
+color(stepTitle, cyan);
+
+text(ruleTag, (cx, 182), "");
+size(ruleTag, 18);
+color(ruleTag, dim);
+
+text(watermark, (w - 96, h - 12), "Made with Manic");
+size(watermark, 15);
+color(watermark, dim);
+hidden(watermark);
+
+equation(work, (cx, cy + 20), `\int \frac{1}{(x - 1)(x + 2)}\,dx`, 34);
+hidden(work);
+
+equation(finalLine, (cx, h - 64), `\boxed{\,\frac{\log{\left(x - 1 \right)}}{3} - \frac{\log{\left(x + 2 \right)}}{3} + C\,}`, 34);
+color(finalLine, lime);
+hidden(finalLine);
+
+show(head, 0.45);
+show(sub, 0.45);
+show(panelBox, 0.45);
+show(watermark, 0.45);
+show(work, 0.5);
+wait(0.4);
+
+par {
+say(stepTitle, "1. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = x - 1,\quad \frac{du}{dx} = 1`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "2. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = u + \frac{3}{2},\quad \frac{du}{d_u} = 1`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "3. Rewrite", 0.25);
+say(ruleTag, "Rule: RewriteRule", 0.25);
+rewrite(work, `\int \frac{1}{3 u + \left(u - \frac{3}{2}\right)^{2} - \frac{9}{2}} \,d_u = \int - \frac{2}{3 \left(2 u + 3\right)} + \frac{2}{3 \left(2 u - 3\right)} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "4. Sum rule", 0.25);
+say(ruleTag, "Rule: AddRule", 0.25);
+rewrite(work, `\int (f+g)\,d_u = \int f\,d_u + \int g\,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "5. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int - \frac{2}{3 \left(2 u + 3\right)} \,d_u = - \frac{2}{3} \int \frac{1}{2 u + 3} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "6. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = 2 u + 3,\quad \frac{du}{d_u} = 2`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "7. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int \frac{1}{2 u} \,d_u = \frac{1}{2} \int \frac{1}{u} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "8. Reciprocal", 0.25);
+say(ruleTag, "Rule: ReciprocalRule", 0.25);
+rewrite(work, `\int \frac{1}{u} \,d_u = \ln|u| + C = \log{\left(u \right)}`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "9. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= \frac{\log{\left(u \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "10. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u + 3 \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "11. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= - \frac{\log{\left(2 u + 3 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "12. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int \frac{2}{3 \left(2 u - 3\right)} \,d_u = \frac{2}{3} \int \frac{1}{2 u - 3} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "13. u-Substitution", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `Let\ u = 2 u - 3,\quad \frac{du}{d_u} = 2`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "14. Constant factor", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `\int \frac{1}{2 u} \,d_u = \frac{1}{2} \int \frac{1}{u} \,d_u`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "15. Reciprocal", 0.25);
+say(ruleTag, "Rule: ReciprocalRule", 0.25);
+rewrite(work, `\int \frac{1}{u} \,d_u = \ln|u| + C = \log{\left(u \right)}`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "16. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= \frac{\log{\left(u \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "17. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u - 3 \right)}}{2} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "18. Simplify", 0.25);
+say(ruleTag, "Rule: ConstantTimesRule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u - 3 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "19. Combine", 0.25);
+say(ruleTag, "Rule: AddRule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u - 3 \right)}}{3} - \frac{\log{\left(2 u + 3 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "20. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 u \right)}}{3} - \frac{\log{\left(2 u + 6 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+par {
+say(stepTitle, "21. Back substitute", 0.25);
+say(ruleTag, "Rule: URule", 0.25);
+rewrite(work, `= \frac{\log{\left(2 x - 2 \right)}}{3} - \frac{\log{\left(2 x + 4 \right)}}{3} + C`, 0.7, smooth);
+}
+wait(0.3);
+
+show(finalLine, 0.8);
+pulse(finalLine, 0.8);
+wait(1.0);

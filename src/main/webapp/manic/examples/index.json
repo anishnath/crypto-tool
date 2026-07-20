@@ -1,5 +1,5 @@
 {
-  "count": 188,
+  "count": 189,
   "categories": [
     {
       "slug": "algorithms",
@@ -94,6 +94,12 @@
           "file": "reactive-integral.manic",
           "title": "Reactive integral",
           "desc": "The reactive-math gold example: integration by parts stays one continuous equation, then a plot verifies that the antiderivative's slope is the integrand and +C is a family of vertical translations."
+        },
+        {
+          "name": "rewrite-integration",
+          "file": "rewrite-integration.manic",
+          "title": "Rewrite integration",
+          "desc": "A full manual-integration walkthrough, animated: one equation object is rewrite-morphed through all 21 steps \u2014 every substitution, partial-fraction split and back-substitution, each captioned with its rule \u2014 down to the closed form."
         },
         {
           "name": "reactive-world",

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c6bc9d88.js";
+            window.path_to_searchindex_js = "searchindex-c36be426.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-83849da6.js"></script>
+        <script src="toc-e7a81696.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -237,8 +237,9 @@ reads far better than rushing to the next move.</p>
 <p>Use <code>step</code> when a beat represents the world’s <strong>next conceptual state</strong>, not
 just anonymous timing. Its children start together like <code>par</code>; its duration is
 the longest child; anything not mentioned remains exactly as it was. The unique
-name is written to <code>markers.json</code>, which makes the story seekable today and
-gives future format/export tools semantic chapter boundaries.</p>
+name is written to <code>markers.json</code> and becomes a first-class editing boundary:
+<code>manic stages FILE.manic</code> lists durations, <code>--stage NAME</code> previews or records
+one stage, and <code>--from-stage</code> / <code>--to-stage</code> export an inclusive arc.</p>
 <pre><code class="language-manic">step("explain") {
   rewrite(work, `f'(x)=2x`, 0.9, smooth);
   to(tangent, x, 2.5, 2.0, smooth);
@@ -248,6 +249,10 @@ gives future format/export tools semantic chapter boundaries.</p>
 </code></pre>
 <p>Steps are top-level and names must be non-empty and unique. Put <code>seq { … }</code>
 inside a step when a small part needs ordered choreography.</p>
+<p>An authored <code>wait</code> after a step remains part of that stage until the next step
+begins. This lets a stage-only export keep the reading hold after its motion.
+See <a href="creator-stages.html">Story stages</a> for the live navigator and publishing
+workflow.</p>
 <h2 id="generic-timing-v2--one-clock-for-any-scene"><a class="header" href="#generic-timing-v2--one-clock-for-any-scene">Generic Timing v2 — one clock for any scene</a></h2>
 <p>Use a generic timing controller when several parts of a scene must share one
 exact schedule. It is format-neutral: the same controller can coordinate a

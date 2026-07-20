@@ -168,8 +168,10 @@ Constructors and timeline may be written in any order.
 `"shorts"` (dark creator studio) — each retints named colours ·
 `masthead("left",["right"])` (optional header text; empty by default) ·
 `section("Title")` · `wait(secs)` / `beat(secs)` · `mark("name")` ·
-`step("name") { ... }` (named reactive world transition: children run together,
-unmentioned entities persist, unique top-level name exported as a marker) ·
+`step("name") { ... }` (named reactive world transition and creator stage:
+children run together, unmentioned entities persist, and the unique top-level
+name drives stage listing, preview/range recording, the live navigator, and
+marker export) ·
 `par { }` (together) · `seq { }` (in order) · `stagger(d) { }` (each d s after previous)
 
 ### Generic Timing v2
@@ -195,6 +197,8 @@ endpoints (use responsive `w`/`h` expressions for positions) ·
 caption; or animate with `karaoke(id,[delay],[color])` = highlight in sequence,
 or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` · `circle(id,(x,y),r)` · `rect(id,(x,y),w,h)` ·
+`particles(id,container,count,[radius],[seed],["random|grid|ring"])` creates persistent
+seeded dots inside a circle/rectangle (`grid` is rectangular; `ring` is circular) ·
 `image(id,(x,y),"path",[w],[h])` a raster image (PNG/JPG) from a file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing file → placeholder box (engine-only, no browser preview) ·
 `equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work), while `\textcolor{cyan}{...}` colors individual terms semantically; `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
 `line(id,(x1,y1),(x2,y2))` · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts) · `arrow(id,(x1,y1),(x2,y2))` · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
@@ -212,6 +216,13 @@ entities; 16/10 px defaults) · `glow(id,n)` · `z(id,n)` · `rot(id,deg)`
 `show(id,[d])` (fade in) · `fade(id,[d])` (fade out) ·
 `move(id,target,[d],[ease])` · `shift(id,(dx,dy),[d],[ease])` ·
 `grow(id,target,[d],[ease])` (line/arrow endpoint) · `draw(id,[d])` ·
+`travel(id,path,[d],[ease])` moves one persistent entity once along a line,
+arrow, curve, plot, spline, or arc and holds it at the endpoint ·
+`wander(particles,[d])` (contained ambient motion) ·
+`arrange(particles,container,["random|grid|ring"],[d],[ease])` (preserve every dot id
+while expanding into a new container or moving among random, rectangular, and
+radial layouts; random transitions use independent seeded curved routes) ·
+`flow(path,[d])` (travelling luminous emphasis) ·
 `erase(id,[d])` · `type(id,[d])` · `say(id,"s",[d])` · `recolor(id,name,[d])` ·
 `` rewrite(id, `latex`, [d], [ease]) `` (existing `equation` only: smoothly match
 unchanged RaTeX parts into the next author-supplied formula; Manic animates the
@@ -230,7 +241,8 @@ for straight paths; repeated calls compose) ·
 (For a `tangent`, `to(id, x, target, dur)` slides the touch point along its curve — the slope follows.)
 Shape morph: `morph(a, b, [spin])` (constructor — sets `a` up to morph into `b`'s
 outline; `spin` degrees winds the blend) then `to(a, morph, 1, dur)` to animate
-(outline-only; `a` becomes a polyline). `copy(new, src)` duplicates an entity
+(open paths stay open; closed outlines stay closed; `a` becomes a polyline).
+`copy(new, src)` duplicates an entity
 (standalone) — copy then morph/move it while the original stays.
 Easings: `smooth linear in out overshoot bounce elastic`.
 

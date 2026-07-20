@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c6bc9d88.js";
+            window.path_to_searchindex_js = "searchindex-c36be426.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-83849da6.js"></script>
+        <script src="toc-e7a81696.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -205,15 +205,23 @@ the open side: <code>"down"</code> ceiling, <code>"up"</code> floor, <code>"left
 <p>Two more helpers cover scenes that would otherwise need dozens of manual dots
 and endpoints:</p>
 <pre><code class="language-manic">circle(glass, (400,300), 100);
-particles(bubbles, glass, 24, 5, 7); // id, container, count, radius, seed
+particles(bubbles, glass, 24, 5, 7); // default random layout
 
 rect(tank, (750,300), 180, 160);
+particles(samples, tank, 24, 4, 11, "grid");
 link(pipe, glass, tank, 35);         // 35 px of curve; 0 is straight
+
+circle(orbit, (980,300), 90);
+particles(ticks, orbit, 24, 4, 13, "ring");
 </code></pre>
 <p><code>particles</code> works inside circles and rectangles. Its bare id addresses every
 child dot, so <code>hidden(bubbles)</code> and <code>recolor(bubbles, fg)</code> affect the whole
-group. <code>link</code> meets those shapes at their boundaries and stays attached when
-either endpoint moves.</p>
+group. Use the optional <code>"grid"</code> layout for an ordered rectangular state, then
+<code>arrange(samples, tank, "random", 2, smooth)</code> to move the same dots into a
+typical random state. <code>arrange</code> may target a larger container for expansion and
+can return to <code>"grid"</code> exactly. A circle plus <code>"ring"</code> gives the particles an
+ordered radial endpoint. <code>link</code> meets shapes at their boundaries and stays
+attached when either endpoint moves.</p>
 <p>Points are <code>(x, y)</code> in pixels, <strong>origin top-left, y increasing downward</strong>. Use
 <code>cx</code>, <code>cy</code>, <code>w</code>, <code>h</code> to stay canvas-independent.</p>
 <p>For display mathematics, <code>equation</code> accepts LaTeX in backticks. Standard
