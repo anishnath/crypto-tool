@@ -266,8 +266,16 @@ export function mergePlanWithContext(plan, context) {
   if (isAiPlaceholderSecret(p.params.passphrase)) p.params.passphrase = '';
 
   if (!p.params.message && context.plainMessage) p.params.message = context.plainMessage;
-  if (!p.params.pgpMessage && context.pgpMessage) p.params.pgpMessage = context.pgpMessage;
-  if (!p.params.signedMaterial && context.pgpMessage) p.params.signedMaterial = context.pgpMessage;
+  if (!p.params.pgpMessage) {
+    p.params.pgpMessage = context.pgpMessage || context.historyPgpMessage || '';
+  }
+  if (!p.params.signedMaterial) {
+    p.params.signedMaterial = context.signedMaterial
+      || context.historySignedMaterial
+      || context.pgpMessage
+      || context.historyPgpMessage
+      || '';
+  }
 
   p.params.publicKey = pickPublicKey(p.params, context, preferSession);
   p.params.privateKey = pickPrivateKey(p.params, context, preferSession);

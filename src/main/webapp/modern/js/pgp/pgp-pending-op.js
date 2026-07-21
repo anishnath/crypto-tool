@@ -1,4 +1,12 @@
 /** Tracks an in-progress PGP operation awaiting user input (e.g. missing message). */
+import {
+  extractPgpMessage,
+  extractSignedMessage,
+  extractPublicKey,
+  extractPrivateKey,
+} from './pgp-armor.js';
+import { isAiPlaceholderSecret } from './pgp-redact.js';
+
 let pending = null;
 
 export function setPendingOperation(plan, missing) {
@@ -36,6 +44,23 @@ const FIELD_SETTERS = {
   fileBase64: (params, value) => { params.fileBase64 = value; },
 };
 
+function extractPendingFieldValue(field, text) {
+  if (field === 'pgpMessage') {
+    return extractPgpMessage(text) || extractSignedMessage(text) || '';
+  }
+  if (field === 'signedMaterial') {
+    return extractSignedMessage(text) || extractPgpMessage(text) || '';
+  }
+  if (field === 'dumpInput') {
+    return extractPgpMessage(text)
+      || extractSignedMessage(text)
+      || extractPublicKey(text)
+      || extractPrivateKey(text)
+      || '';
+  }
+  return text;
+}
+
 /** Safety net when the router misses a follow-up; prompt is primary. */
 export function applyPendingFallback(userText, pendingOp, plan) {
   if (!pendingOp?.intent || !pendingOp.missing?.length) return plan;
@@ -50,12 +75,18 @@ export function applyPendingFallback(userText, pendingOp, plan) {
   if (!needsHelp) return plan;
 
   const text = String(userText || '').trim();
-  if (!text || text.length > 8000 || /-----BEGIN PGP/.test(text)) return plan;
+  if (!text || text.length > 8000 || isAiPlaceholderSecret(text)) return plan;
+
+  const field = pendingOp.missing[0];
+  let value = text;
+  if (/-----BEGIN PGP/.test(text)) {
+    value = extractPendingFieldValue(field, text);
+    if (!value) return plan;
+  }
 
   const params = { ...pendingOp.params, ...(plan?.params || {}) };
-  const field = pendingOp.missing[0];
   const setter = FIELD_SETTERS[field];
-  if (setter && !params[field]) setter(params, text);
+  if (setter && !params[field]) setter(params, value);
 
   return {
     intent: pendingOp.intent,

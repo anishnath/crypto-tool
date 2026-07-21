@@ -18,7 +18,14 @@ import {
   requiredFieldsMissing,
   buildClarifyMessage,
 } from './pgp-intent-router.js';
-import { extractKeysFromHistory, extractPublicKey, extractPrivateKey } from './pgp-armor.js';
+import {
+  extractKeysFromHistory,
+  extractPublicKey,
+  extractPrivateKey,
+  extractPgpMessage,
+  extractSignedMessage,
+} from './pgp-armor.js';
+import { syncPgpResultToForm } from './pgp-form-sync.js';
 import { getPgpSession, savePgpSession } from './pgp-session-store.js';
 import { isAiPlaceholderSecret } from './pgp-redact.js';
 
@@ -101,14 +108,14 @@ async function signMessage(ctx, p) {
       privateKey: p.privateKey,
       passphrase: p.passphrase,
     });
-    return formatSignResult(data.signed);
+    return { markdown: formatSignResult(data.signed), signed: data.signed };
   } catch {
     const signed = await signCleartextClient({
       message: p.message,
       privateKey: p.privateKey,
       passphrase: p.passphrase,
     });
-    return formatSignResult(signed);
+    return { markdown: formatSignResult(signed), signed };
   }
 }
 
@@ -167,6 +174,12 @@ export async function executePgpPlan(ctx, plan, opContext, options = {}) {
         privateKey: data.privateKey,
         passphrase,
       });
+      syncPgpResultToForm('generate_keys', {
+        identity: data.identity,
+        publicKey: data.publicKey,
+        privateKey: data.privateKey,
+        passphrase,
+      });
       return {
         handled: true,
         markdown: formatKeyGenResult(data, {
@@ -181,6 +194,7 @@ export async function executePgpPlan(ctx, plan, opContext, options = {}) {
         message: p.message,
         publicKey: p.publicKey,
       });
+      syncPgpResultToForm('encrypt', { encrypted: data.encrypted });
       return { handled: true, markdown: formatEncryptResult(data) };
     }
     case 'decrypt': {
@@ -189,10 +203,12 @@ export async function executePgpPlan(ctx, plan, opContext, options = {}) {
         privateKey: p.privateKey,
         passphrase: p.passphrase,
       });
+      syncPgpResultToForm('decrypt', { plaintext: data.plaintext });
       return { handled: true, markdown: formatDecryptResult(data) };
     }
     case 'sign': {
-      const markdown = await signMessage(ctx, p);
+      const { markdown, signed } = await signMessage(ctx, p);
+      if (signed) syncPgpResultToForm('sign', { signed });
       return { handled: true, markdown };
     }
     case 'verify': {
@@ -213,6 +229,7 @@ export async function executePgpPlan(ctx, plan, opContext, options = {}) {
     }
     case 'dump': {
       const data = await pgpDump(ctx, { input: p.dumpInput });
+      syncPgpResultToForm('dump', { input: p.dumpInput });
       return { handled: true, markdown: formatDumpResult(data) };
     }
     default:
@@ -237,6 +254,7 @@ export function buildOperationContext(formContext, userText, history) {
     historyPublicKey: fromHistory.publicKey,
     historyPrivateKey: fromHistory.privateKey,
     historyPgpMessage: fromHistory.pgpMessage,
+    historySignedMaterial: fromHistory.signedMaterial,
   };
 }
 
@@ -295,13 +313,17 @@ export function buildPgpSeedContext() {
   return parts.join('\n\n');
 }
 
-/** Pull keys pasted directly in the user's message (overrides session when valid). */
+/** Pull armored blocks pasted in the user's message (overrides session when valid). */
 export function applyUserMessageKeys(plan, userText) {
   if (!plan?.params || !userText) return plan;
   const pastedPub = extractPublicKey(userText);
   const pastedPriv = extractPrivateKey(userText);
+  const pastedMsg = extractPgpMessage(userText);
+  const pastedSigned = extractSignedMessage(userText);
   const p = { ...plan, params: { ...plan.params } };
   if (pastedPub) p.params.publicKey = pastedPub;
   if (pastedPriv) p.params.privateKey = pastedPriv;
+  if (pastedMsg) p.params.pgpMessage = pastedMsg;
+  if (pastedSigned) p.params.signedMaterial = pastedSigned;
   return p;
 }

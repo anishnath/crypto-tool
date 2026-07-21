@@ -120,7 +120,8 @@ function emptyStateFor(mode) {
         + '</div></div>';
 }
 
-function switchToMode(mode) {
+/** Public entrypoint. */
+export function switchToMode(mode) {
     $('.tool-tab').removeClass('active');
     $('.tool-tab[data-mode="' + mode + '"]').addClass('active');
     $('.tool-form-section').removeClass('active');

@@ -1,11 +1,26 @@
+/** OpenPGP armor headers — not all block types use the " BLOCK" suffix (RFC 4880). */
+const ARMOR_HEADERS = {
+  'PUBLIC KEY': { begin: 'BEGIN PGP PUBLIC KEY BLOCK', end: 'END PGP PUBLIC KEY BLOCK' },
+  'PRIVATE KEY': { begin: 'BEGIN PGP PRIVATE KEY BLOCK', end: 'END PGP PRIVATE KEY BLOCK' },
+  MESSAGE: { begin: 'BEGIN PGP MESSAGE', end: 'END PGP MESSAGE' },
+  'SIGNED MESSAGE': { begin: 'BEGIN PGP SIGNED MESSAGE', end: 'END PGP SIGNED MESSAGE' },
+  SIGNATURE: { begin: 'BEGIN PGP SIGNATURE', end: 'END PGP SIGNATURE' },
+};
+
+function armorRegex(kind, flags = 'm') {
+  const h = ARMOR_HEADERS[kind];
+  if (!h) return null;
+  return new RegExp(
+    `-----${h.begin}-----[\\s\\S]*?-----${h.end}-----`,
+    flags,
+  );
+}
+
 /** Extract a full armored OpenPGP block from text (markdown fences OK). */
 export function extractArmoredBlock(text, kind) {
-  const raw = String(text || '');
-  const re = new RegExp(
-    `-----BEGIN PGP ${kind} BLOCK-----[\\s\\S]*?-----END PGP ${kind} BLOCK-----`,
-    'm',
-  );
-  const m = raw.match(re);
+  const re = armorRegex(kind);
+  if (!re) return '';
+  const m = String(text || '').match(re);
   return m ? m[0].trim() : '';
 }
 
@@ -51,20 +66,20 @@ export function prefersSessionKeys(userText) {
   );
 }
 
-/** Scan assistant history for the most recent full key blocks. */
+/** Scan chat history for the most recent armored blocks (assistant + user turns). */
 export function extractKeysFromHistory(history) {
   const out = { publicKey: '', privateKey: '', pgpMessage: '', signedMaterial: '' };
   if (!Array.isArray(history)) return out;
 
   for (let i = history.length - 1; i >= 0; i--) {
     const msg = history[i];
-    if (msg?.role !== 'assistant') continue;
+    if (msg?.role !== 'assistant' && msg?.role !== 'user') continue;
     const text = msg.content || '';
     if (!out.publicKey) out.publicKey = extractPublicKey(text);
     if (!out.privateKey) out.privateKey = extractPrivateKey(text);
     if (!out.pgpMessage) out.pgpMessage = extractPgpMessage(text);
     if (!out.signedMaterial) out.signedMaterial = extractSignedMessage(text);
-    if (out.publicKey && out.privateKey) break;
+    if (out.publicKey && out.privateKey && out.pgpMessage) break;
   }
   return out;
 }

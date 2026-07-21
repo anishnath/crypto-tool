@@ -28,7 +28,7 @@ import {
   getPendingOperation,
   setPendingOperation,
 } from '../../pgp/pgp-pending-op.js';
-import { redactPgpForAi } from '../../pgp/pgp-redact.js';
+import { redactPgpForAi, isAiPlaceholderSecret } from '../../pgp/pgp-redact.js';
 
 const EXPLAIN_PROMPT_SUFFIX = `
 You help with OpenPGP (RFC 4880) concepts on this page.
@@ -83,7 +83,7 @@ ${EXPLAIN_PROMPT_SUFFIX}`,
     getQuickActions: () => [
       { label: 'Generate keys', prompt: 'Generate a 2048-bit RSA PGP key pair for me@example.com with AES-256.', sendImmediately: true },
       { label: 'Encrypt message', prompt: 'Encrypt a message with my public key from this session.', sendImmediately: true },
-      { label: 'Decrypt message', prompt: 'Decrypt the PGP message in the form with my private key from this session.', sendImmediately: true },
+      { label: 'Decrypt message', prompt: 'Decrypt the PGP message using my session private key — use the form field or the last encrypted message from this chat.', sendImmediately: true },
       { label: 'Sign message', prompt: 'Sign a message with my private key from this session.', sendImmediately: true },
       { label: 'Inspect a key', prompt: 'Dump and analyze my PGP public key from this session — show packet tags, algorithm, key size, and fingerprint.', sendImmediately: true },
       { label: 'How PGP works', prompt: 'Explain how PGP hybrid encryption works in plain English.', sendImmediately: true },
@@ -126,6 +126,16 @@ export async function handlePgpChatSend(userText, ai, ctx) {
 
   plan = applyUserMessageKeys(plan, userText);
 
+  if (isAiPlaceholderSecret(String(userText || '').trim())) {
+    pushAssistantReply(
+      ai,
+      'That text is a **privacy placeholder** from chat — not real key material. '
+      + 'Session keys are already loaded in this browser. Paste the **PGP message** block here, '
+      + 'or run encryption first and use **Decrypt message** again.',
+    );
+    return true;
+  }
+
   if (plan.intent === 'explain') {
     clearPendingOperation();
     removeLastUserTurn(ai);
@@ -140,7 +150,7 @@ export async function handlePgpChatSend(userText, ai, ctx) {
       ? pendingOp.intent
       : merged.intent;
     setPendingOperation({ ...merged, intent: storeIntent }, missing);
-    pushAssistantReply(ai, buildClarifyMessage(merged, missing));
+    pushAssistantReply(ai, refineClarifyMessage(merged, missing, opContext));
     return true;
   }
 
@@ -154,13 +164,33 @@ export async function handlePgpChatSend(userText, ai, ctx) {
       pushAssistantReply(ai, result.markdown);
       return true;
     }
-    ai.history.pop();
+    removeLastUserTurn(ai);
     return false;
   } catch (err) {
     work.bubble.remove();
     pushAssistantReply(ai, `**Operation failed:** ${err.message || String(err)}`);
     return true;
   }
+}
+
+function refineClarifyMessage(plan, missing, opContext) {
+  if (
+    plan.intent === 'decrypt'
+    && opContext?.hasSessionKeys
+    && missing.length === 1
+    && missing[0] === 'pgpMessage'
+  ) {
+    return 'Paste the armored **PGP message** here, or encrypt a message first — the ciphertext will appear in the Decrypt tab automatically.';
+  }
+  if (
+    plan.intent === 'decrypt'
+    && opContext?.hasSessionKeys
+    && missing.every((m) => m === 'pgpMessage' || m === 'privateKey' || m === 'passphrase')
+    && !missing.includes('pgpMessage')
+  ) {
+    return buildClarifyMessage(plan, missing.filter((m) => m !== 'privateKey' && m !== 'passphrase'));
+  }
+  return buildClarifyMessage(plan, missing);
 }
 
 function removeLastUserTurn(ai) {

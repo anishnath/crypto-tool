@@ -19,11 +19,22 @@ const ARMOR_HINT = {
   SIGNATURE: '[PGP signature on file — not sent to AI]',
 };
 
+/** Must match extractArmoredBlock / pgp-armor.js (MESSAGE has no " BLOCK" suffix). */
+const ARMOR_HEADERS = {
+  'PUBLIC KEY': { begin: 'BEGIN PGP PUBLIC KEY BLOCK', end: 'END PGP PUBLIC KEY BLOCK' },
+  'PRIVATE KEY': { begin: 'BEGIN PGP PRIVATE KEY BLOCK', end: 'END PGP PRIVATE KEY BLOCK' },
+  MESSAGE: { begin: 'BEGIN PGP MESSAGE', end: 'END PGP MESSAGE' },
+  'SIGNED MESSAGE': { begin: 'BEGIN PGP SIGNED MESSAGE', end: 'END PGP SIGNED MESSAGE' },
+  SIGNATURE: { begin: 'BEGIN PGP SIGNATURE', end: 'END PGP SIGNATURE' },
+};
+
 function redactArmoredBlocks(text) {
   let s = String(text || '');
   for (const kind of ARMOR_KINDS) {
+    const h = ARMOR_HEADERS[kind];
+    if (!h) continue;
     const re = new RegExp(
-      `-----BEGIN PGP ${kind} BLOCK-----[\\s\\S]*?-----END PGP ${kind} BLOCK-----`,
+      `-----${h.begin}-----[\\s\\S]*?-----${h.end}-----`,
       'gim',
     );
     s = s.replace(re, ARMOR_HINT[kind] || '[PGP block redacted]');
