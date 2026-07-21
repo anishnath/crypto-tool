@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-386cec9a.js";
+            window.path_to_searchindex_js = "searchindex-97eb084f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4954d801.js"></script>
+        <script src="toc-fc30ace8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -432,17 +432,18 @@ color(eq, gold);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/I0Bl6rCHH5M" title="Mix LaTeX Math Inside Any Sentence — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="image"><a class="header" href="#image">image</a></h2>
-<p>Embed a raster image (PNG/JPG) with <code>image(id, (x,y), "path", w, h)</code> — a real file drawn
-into the scene and animated like any entity (shown, spun, pulsed, moved). Unlocks logos,
-avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
+<p>Embed a raster image (PNG/JPG) with <code>image(id, (x,y), "asset:name.png"|"path", w, h)</code> —
+a bundled or user-provisioned file animated like any entity (shown, spun, pulsed, moved).
+Unlocks logos, avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
 <pre><code class="language-manic">// ============================================================================
 //  image.manic  —  embed a raster image (PNG/JPG) in a scene
 // ----------------------------------------------------------------------------
-//  `image(id, (x,y), "path", [w], [h])` loads a real image file and draws it
+//  `image(id, (x,y), "asset:name.png"|"path", [w], [h])` loads a bundled or
+//  user-provisioned image file and draws it
 //  centred at (x,y), w×h px — and it's an ordinary entity, so every verb
 //  (`show`/`move`/`fade`/`pulse`/`spin`/…) animates it. Here a bundled logo
-//  slides + fades in, pulses, then a caption types beside it. A missing path
-//  draws a crossed placeholder box instead of failing.
+//  slides + fades in, pulses, then a caption types beside it. A missing ordinary
+//  path draws a crossed placeholder; a missing bundled asset is an error.
 //
 //  (This unlocks real logos, avatars and photo backdrops for creator templates —
 //  a creator drops their brand image into a slot.)
@@ -451,7 +452,7 @@ avatars and photo backdrops (e.g. a creator’s brand in a template).</p>
 title("Raster Images");
 canvas("16:9");
 
-image(logo, (cx, 340), "assets/manic-logo.png", 300, 300); hidden(logo);
+image(logo, (cx, 340), "asset:manic-logo.png", 300, 300); hidden(logo);
 text(cap, (cx, 600), "any PNG/JPG — and it animates like anything else");
 color(cap, fg); size(cap, 34); bold(cap); untraced(cap);
 
@@ -464,7 +465,7 @@ wait(0.6);
 par { move(logo, (cx, 320), 0.8, smooth); pulse(logo); }
 wait(1.0);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/3h0wTYGzHTU" title="Embed Any Image in manic — Logos, Avatars & Photos, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/yniFJ-gKFu4" title="Embed Any Image in manic — Logos, Avatars & Photos, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>

@@ -1,0 +1,172 @@
+// ============================================================================
+// textbook-matrix-inverses.manic
+// Two textbook inverse proofs, animated as structural shortcuts:
+//   (i) orthogonal columns give A^T A = I;
+//  (ii) a finite-order matrix gives A^3 = I.
+// ============================================================================
+
+title("Two Matrix Inverse Proofs — See the Structure");
+canvas("9:16");
+template("paper");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Algebra tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,150),"MATRICES · INVERSES · STRUCTURE");
+size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+
+text(headline,(540,218),"Two proofs without row reduction");
+size(headline,38); bold(headline); hidden(headline);
+
+text(part,(540,300),"(i)  TEST THE COLUMNS");
+size(part,23); bold(part); color(part,gold); hidden(part);
+
+rect(stage,(540,805),930,930);
+color(stage,panel); outline(stage,dim); opacity(stage,0.72); hidden(stage);
+
+equation(given,(540,500),
+  `A=\frac{1}{9}\begin{bmatrix}-8&1&4\\4&4&7\\1&-8&4\end{bmatrix}`,
+  40);
+hidden(given);
+
+equation(work,(540,800),`A^{-1}\stackrel{?}{=}A^{\mathsf T}`,48);
+hidden(work);
+
+text(reason,(540,1095),"The inverse appears when a product becomes the identity.");
+size(reason,24); wrap(reason,820); color(reason,dim); hidden(reason);
+
+line(rule,(170,1235),(910,1235));
+color(rule,cyan); stroke(rule,2); dashed(rule,12,9); opacity(rule,0.32);
+untraced(rule);
+
+equation(summary,(540,1435),
+  `\boxed{A^{\mathsf T}A=I\Rightarrow A^{-1}=A^{\mathsf T}}`,
+  39);
+hidden(summary);
+
+text(takeaway,(540,1540),"LOOK FOR A SHORT PRODUCT THAT RETURNS TO I");
+size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+step("read the two inverse claims") {
+  seq {
+    par {
+      show(kicker,0.35); show(headline,0.55); show(part,0.40);
+      show(stage,0.45); draw(rule,0.75); show(reason,0.40);
+    }
+    show(given,0.65);
+    show(work,0.55);
+    wait(0.85);
+  }
+}
+
+step("factor out the scale") {
+  seq {
+    say(reason,"Write A = M/9. Then ask whether M-transpose times M equals 81I.",0.50,smooth);
+    rewrite(work,
+      `M=\begin{bmatrix}-8&1&4\\4&4&7\\1&-8&4\end{bmatrix},\qquad A=\frac{1}{9}M`,
+      1.05,smooth);
+    wait(0.70);
+  }
+}
+
+step("recognize orthogonal columns") {
+  seq {
+    say(reason,"Every column has squared length 81, and distinct columns have dot product 0.",0.55,smooth);
+    rewrite(work,
+      `\begin{aligned}
+      \|c_1\|^2&=64+16+1=81\\
+      \|c_2\|^2&=1+16+64=81\\
+      \|c_3\|^2&=16+49+16=81
+      \end{aligned}`,
+      1.10,smooth);
+    wait(0.55);
+    rewrite(work,
+      `\begin{aligned}
+      c_1^{\mathsf T}c_2&=-8+16-8=0\\
+      c_1^{\mathsf T}c_3&=-32+28+4=0\\
+      c_2^{\mathsf T}c_3&=4+28-32=0
+      \end{aligned}`,
+      1.10,smooth);
+    wait(0.70);
+  }
+}
+
+step("the transpose is the inverse") {
+  seq {
+    say(reason,"Those six dot products are exactly the entries of M-transpose times M.",0.50,smooth);
+    rewrite(work,
+      `M^{\mathsf T}M=\begin{bmatrix}81&0&0\\0&81&0\\0&0&81\end{bmatrix}=81I`,
+      1.00,smooth);
+    wait(0.45);
+    rewrite(work,
+      `A^{\mathsf T}A=\frac{1}{81}M^{\mathsf T}M=I`,
+      0.90,smooth);
+    show(summary,0.55);
+    par { pulse(work,0.75); pulse(summary,0.75); }
+    wait(1.15);
+  }
+}
+
+step("begin the second matrix") {
+  seq {
+    par {
+      fade(summary,0.35);
+      say(part,"(ii)  FIND A POWER THAT RETURNS TO I",0.45,smooth);
+      say(reason,"For the second matrix, compute powers instead of augmenting [A | I].",0.55,smooth);
+      rewrite(given,
+        `A=\begin{bmatrix}1&-1&1\\2&-1&0\\1&0&0\end{bmatrix}`,
+        0.95,smooth);
+      rewrite(work,`A^{-1}\stackrel{?}{=}A^2`,0.80,smooth);
+    }
+    wait(0.85);
+  }
+}
+
+step("square the matrix") {
+  seq {
+    say(reason,"First multiply A by itself. Keep this result for one more multiplication.",0.55,smooth);
+    rewrite(work,
+      `A^2=\begin{bmatrix}0&0&1\\0&-1&2\\1&-1&1\end{bmatrix}`,
+      1.00,smooth);
+    wait(0.80);
+  }
+}
+
+step("the third power is identity") {
+  seq {
+    say(reason,"Now A squared times A returns exactly to the identity matrix.",0.50,smooth);
+    rewrite(work,
+      `A^3=A^2A=\begin{bmatrix}1&0&0\\0&1&0\\0&0&1\end{bmatrix}=I`,
+      1.10,smooth);
+    wait(0.65);
+    rewrite(work,`AA^2=A^3=I`,0.80,smooth);
+    rewrite(summary,
+      `\boxed{AA^2=I\Rightarrow A^{-1}=A^2}`,
+      0.85,smooth);
+    show(summary,0.50);
+    par { pulse(work,0.75); pulse(summary,0.75); }
+    wait(1.10);
+  }
+}
+
+step("compare the two shortcuts") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(part,"TWO STRUCTURES · ONE DEFINITION",0.45,smooth);
+      say(reason,"The inverse is whichever matrix multiplies A to give I.",0.50,smooth);
+      rewrite(given,
+        `\text{(i) orthogonality}\qquad\text{(ii) finite order}`,
+        0.90,smooth);
+      rewrite(work,
+        `\begin{aligned}
+        A^{\mathsf T}A=I&\Rightarrow A^{-1}=A^{\mathsf T}\\
+        AA^2=I&\Rightarrow A^{-1}=A^2
+        \end{aligned}`,
+        1.10,smooth);
+      fade(summary,0.45);
+    }
+    par { pulse(work,0.90); pulse(takeaway,0.90); }
+    wait(2.00);
+  }
+}

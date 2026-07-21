@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-386cec9a.js";
+            window.path_to_searchindex_js = "searchindex-97eb084f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4954d801.js"></script>
+        <script src="toc-fc30ace8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -192,6 +192,71 @@ sits and which point it looks at:</p>
 </code></pre>
 <p>Positions are <code>(x, y, z)</code>, and here <strong>z is up</strong> (x and y are the ground). You
 add one camera, and you can swing it around later.</p>
+<h2 id="the-creator-first-five"><a class="header" href="#the-creator-first-five">The creator-first five</a></h2>
+<p>For most explainers, start with the relationship you want rather than camera
+coordinates or intermediate positions. 3D V2 adds five composition words:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>word</th><th>creator intent</th></tr>
+</thead>
+<tbody>
+<tr><td><code>view3(subject, "isometric", 1, smooth, 1.3)</code></td><td>frame one object or tagged group, with margin</td></tr>
+<tr><td><code>travel3(subject, route, 2, smooth)</code></td><td>move along a <code>line3</code>, <code>arrow3</code>, or <code>curve3</code></td></tr>
+<tr><td><code>attach3(label, subject, (0,0,1))</code></td><td>position-only follow (compatible default); add <code>rigid</code> to inherit orientation; use <code>none</code> to release</td></tr>
+<tr><td><code>become3(subject, blueprint, 1, smooth)</code></td><td>keep the subject id while it adopts another shape and style</td></tr>
+<tr><td><code>turn3(group, pivot, z, 90, 1, smooth)</code></td><td>rigidly turn one object or tagged group around a pivot and axis</td></tr>
+</tbody>
+</table>
+</div>
+<p>Here is the core pattern. The sensor and wings travel with the ship, release
+without snapping, then the wings deploy and the ship becomes its final design:</p>
+<pre><code class="language-manic">attach3(sensor, ship, (0,0,0.8));
+attach3(leftWing, ship, (0,-1.2,0));
+attach3(rightWing, ship, (0,1.2,0));
+par { draw(route, 2.8, smooth); travel3(ship, route, 2.8, smooth); }
+
+attach3(sensor, none);
+attach3(leftWing, none);  attach3(rightWing, none);
+par {
+  turn3(wings, ship, z, 90, 1.1, smooth);
+  become3(ship, finalBlueprint, 1.1, smooth);
+}
+view3(spacecraft, "isometric", 1.2, smooth, 1.4);
+</code></pre>
+<p><strong>▶ Compact five-word reference:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0KszWIcjz0s" title="3D V2 — Five Words for Spatial Motion" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Vertical creator story:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/gK30w7RgvYg" title="How a Satellite Finds Its Orbit — A 3D Motion Story" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Production lab (relationships, contours, finishes, OBJ, and variable tube):</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qjfpKwnn7Go" title="3D Relationships, Not Keyframes — Manic Spatial Lab" allowfullscreen loading="lazy"></iframe></div>
+
+<h3 id="design-details-that-make-3d-feel-professional"><a class="header" href="#design-details-that-make-3d-feel-professional">Design details that make 3D feel professional</a></h3>
+<ul>
+<li>Give the main subject one persistent id. Declare alternate forms as hidden
+blueprints and use <code>become3</code>; do not swap the whole scene.</li>
+<li>Tag parts that should turn or frame together. <code>view3</code> and <code>turn3</code> both accept
+a tag, so one spatial rig remains one authoring concept.</li>
+<li>Attach before the shared move; release immediately before a part gets its own
+motion. Release preserves the resolved world position.</li>
+<li>Use <code>view3(...,"fit")</code> to preserve the current viewing direction, or choose
+<code>front</code>, <code>side</code>, <code>top</code>, or <code>isometric</code>. A margin around <code>1.15–1.35</code> is useful
+for landscape; start around <code>1.45–1.7</code> for vertical video with text above and
+a social footer below.</li>
+<li>Put shot changes at idea boundaries, then let object motion carry the middle
+of the explanation. Constant camera motion makes depth harder to read.</li>
+<li><code>view3</code> uses transformed group bounds and the active canvas aspect ratio, so
+the same intent works in landscape and portrait without a second 3D mode. In
+a creator/quiz scene it also fits the actual media rectangle, not the full
+canvas behind the heading and social footer.</li>
+<li><code>travel3</code> reads the route’s current transform every frame. A route may rotate
+or move in the same <code>par</code> block without pre-baking dozens of coordinates.</li>
+<li>Use <code>attach3(part, body, offset, rigid)</code> for a mechanical assembly. Its offset
+lives in the body’s local frame, it turns with the body, and release freezes
+both position and orientation exactly.</li>
+</ul>
 <p><strong>▶ See it play:</strong></p>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/SHzotXyfJVY" title="manic Goes 3D — Cubes, Spheres & a Spinning Camera" allowfullscreen loading="lazy"></iframe></div>
 
@@ -222,6 +287,50 @@ show(box, 0.6);
 <pre><code class="language-manic">text(tag, (0, 0), "origin");
 pin3(tag, (0, 0, 0));
 </code></pre>
+<p><code>pin3</code> deliberately stays the same screen size. When the label should feel as
+if it lives in the world, use <code>label3</code> and give its desired world height:</p>
+<pre><code class="language-manic">text(pName, (0,0), "P");
+label3(pName, pointP, 0.35);   // gets smaller as P moves away
+</code></pre>
+<h2 id="relationships-projections-and-contours"><a class="header" href="#relationships-projections-and-contours">Relationships, projections, and contours</a></h2>
+<p>These are live construction words, not snapshots:</p>
+<pre><code class="language-manic">point3(p, (2,1,3));
+project3(shadow, p, "xy");
+link3(drop, p, shadow, 0.06);
+
+surface3(bowl, "x^2+y^2", (-2,2), (-2,2), 24);
+contour3(levelOne, bowl, 1);
+</code></pre>
+<p>Move <code>p</code> and both <code>shadow</code> and <code>drop</code> recompute every frame. <code>contour3</code> accepts
+a <code>surface3</code> height field and extracts the requested <code>z</code> level. Use these words
+for geometry, vectors, optimization, fields, and engineering callouts—the
+engine owns the relationship while the author owns the story.</p>
+<h2 id="textbook-dimension-story-series"><a class="header" href="#textbook-dimension-story-series">Textbook dimension-story series</a></h2>
+<p>These portrait stories use the same 3D engine for a textbook-friendly purpose:
+start with one familiar object, preserve its identity, and let the next
+dimension arrive through motion. Each gallery page contains the complete source
+and its video card.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Story</th><th>Dimensional journey</th><th>Teaching idea</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="ex-3d.html#trapped-light-dimensions">The trapped light beam</a></td><td>1D → 2D → 3D</td><td>Distance grows from 5 to 13 to 85 through nested right triangles.</td></tr>
+<tr><td><a href="ex-3d.html#dimensions-unfold">How space learned to grow</a></td><td>point → line → plane → room</td><td>A line sweeps into a surface; the surface lifts into volume.</td></tr>
+<tr><td><a href="ex-3d.html#textbook-length-area-volume">Length, area, volume</a></td><td>1D → 2D → 3D</td><td>Why measured units become cm, cm², and cm³.</td></tr>
+<tr><td><a href="ex-3d.html#textbook-coordinate-worlds">A point gets an address</a></td><td>x → (x,y) → (x,y,z)</td><td>Each new axis adds one coordinate to the same point.</td></tr>
+<tr><td><a href="ex-3d.html#textbook-function-to-solid">The revolving semicircle</a></td><td>diameter → curve → sphere</td><td>A solid can be generated from a lower-dimensional rule.</td></tr>
+<tr><td><a href="ex-3d.html#textbook-statistical-dimensions">Statistical dimensions</a></td><td>list → scatter → cloud</td><td>More variables require a richer coordinate world.</td></tr>
+<tr><td><a href="ex-3d.html#textbook-geometry-dimension-reduction">Dimension reduction</a></td><td>3D → 2D → 1D</td><td>A sphere reveals a section, then the section reveals a diameter.</td></tr>
+<tr><td><a href="ex-3d.html#textbook-watermelon-sections">Watermelon sections</a></td><td>whole → halves → ¼ + ¾</td><td>Perpendicular great-circle cuts create meaningful pieces.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Creator pattern: keep the mathematical subject persistent, introduce one axis
+or section at a time, and hold the settled frame long enough to read the new
+formula. Use <code>view3(...,"fit")</code> at dimensional boundaries; use ordinary object
+motion inside each explanation.</p>
 <h2 id="curves-and-surfaces"><a class="header" href="#curves-and-surfaces">Curves and surfaces</a></h2>
 <p>Draw a wire through space from three formulas of <code>t</code> (a helix, here), or a
 surface from a height formula <code>z = f(x, y)</code>:</p>
@@ -237,6 +346,37 @@ use <code>param3</code>, which takes three formulas of <em>two</em> parameters, 
 <p><strong>One formula rule:</strong> always put <code>*</code> between names. Write <code>pi*t</code>, never <code>pit</code>
 (manic reads <code>pit</code> as one unknown word). Same for <code>v*v</code>, not <code>vv</code>.</p>
 </blockquote>
+<h3 id="textbook-sections-halves-quarters-and-the-remainder"><a class="header" href="#textbook-sections-halves-quarters-and-the-remainder">Textbook sections: halves, quarters, and the remainder</a></h3>
+<p><code>param3</code> is also the V2 route for an exact authored section of a curved solid.
+Bound one parameter to describe only the required half or quarter of the sphere,
+and add a second bounded surface for the exposed cut face. This keeps the lesson
+mathematical: the geometry is defined by the section, not hidden by a flat mask.</p>
+<p>The watermelon example uses that pattern to compare horizontal and vertical
+great-circle cuts, then makes two perpendicular cuts and separates a quarter
+from its three-quarter remainder:</p>
+<pre><code class="language-manic">// A sphere quarter: longitude u spans 90°, latitude v spans the full height.
+param3(quarter,
+  "3*cos(v)*cos(u)", "3*cos(v)*sin(u)", "3*sin(v)",
+  (0, pi/2), (-pi/2, pi/2));
+finish3(quarter, "shading=smooth material=matte depth=0.25 shadow=0.18");
+</code></pre>
+<p><strong>▶ Animated textbook reconstruction:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/F0EVT7FlxIE" title="Watermelon Sections — Halves, Quarters, and Great-Circle Cuts" allowfullscreen loading="lazy"></iframe></div>
+
+<p>Open the complete, copyable source in the
+<a href="ex-3d.html#textbook-watermelon-sections">3D scenes gallery</a>.</p>
+<p>Practical authoring tips:</p>
+<ul>
+<li>Keep the outside shell and each exposed section face as separate tagged
+entities. They can be revealed, shifted, and recoloured as one teaching unit.</li>
+<li>Use a light <code>paper</code> template and restrained face colours when the goal is a
+textbook diagram; depth should clarify the construction, not dominate it.</li>
+<li>Frame each new construction with <code>view3(tag,"fit",...)</code> after the cast changes.
+The camera then follows the mathematical subject instead of fixed coordinates.</li>
+<li>V2 supports exact authored sections through bounded <code>param3</code>. A generic verb
+that cuts any arbitrary solid and automatically creates the resulting pieces
+is intentionally deferred to V3.</li>
+</ul>
 <h2 id="solids"><a class="header" href="#solids">Solids</a></h2>
 <p>Build filled, shaded solids:</p>
 <ul>
@@ -255,6 +395,56 @@ revolve3(vase, (3, 0, 1.5), "0.7 + 0.4*sin(t*2)", (0, 3));
 rounded <strong>tube</strong> (arrows grow a solid head):</p>
 <pre><code class="language-manic">arrow3(v, (0, 0, 0), (2, 2, 2));   thick(v, 0.04);
 </code></pre>
+<p>For a horn, vessel, nerve, pipe, or any path whose radius changes, use a
+normalized radius profile (<code>t=0</code> start, <code>t=1</code> end):</p>
+<pre><code class="language-manic">curve3(spine, "4*t-2", "sin(6*t)*0.2", "0", (0,1));
+tube3(horn, spine, "0.06 + 0.28*t", 14);
+</code></pre>
+<h2 id="one-optional-render-finish"><a class="header" href="#one-optional-render-finish">One optional render finish</a></h2>
+<p>The default is still Manic’s restrained, template-aware diagram rendering.
+When an object needs a different surface treatment, <code>finish3</code> keeps the choice
+in one bounded string:</p>
+<pre><code class="language-manic">finish3(globe, "shading=smooth material=metal depth=0.2 shadow=0.2");
+finish3(terrain, "mesh=0.25 texture=checker scale=3");
+finish3(shell, "material=glass shading=smooth");
+</code></pre>
+<ul>
+<li>Start with <code>shading=smooth</code> for spheres/organic surfaces and leave boxes flat.</li>
+<li>A little <code>mesh</code> clarifies topology; <code>1</code> is intentionally strong.</li>
+<li><code>depth</code> and <code>shadow</code> are subtle readability controls from <code>0</code> to <code>1</code>, not a
+replacement for authored lighting.</li>
+<li><code>checker</code> and <code>stripes</code> are procedural and deterministic; Manic does not load
+texture scripts or arbitrary shaders.</li>
+</ul>
+<h2 id="controlled-obj-models"><a class="header" href="#controlled-obj-models">Controlled OBJ models</a></h2>
+<pre><code class="language-manic">model3(mark, "asset:models/manic-pyramid.obj", (0,0,1), 1.4);
+finish3(mark, "shading=smooth material=metal mesh=0.12");
+</code></pre>
+<p><code>model3</code> reads geometry only: OBJ vertices, polygon faces (triangulated), and
+lines. It ignores material/script features and enforces file/geometry limits.
+An <code>asset:</code> URI selects a file packaged with Manic, so it works from the CLI,
+Docker image, or production backend without a launch-directory assumption or
+extra flag. An ordinary path such as <code>uploads/my-model.obj</code> still works for a
+user-owned model, but the UI/backend must provision that file. Use built-in
+solids when they express the same idea—they remain the lightest option.</p>
+<h3 id="available-bundled-3d-assets"><a class="header" href="#available-bundled-3d-assets">Available bundled 3D assets</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Stable URI</th><th>What it is</th><th>Good for</th></tr>
+</thead>
+<tbody>
+<tr><td><code>asset:models/manic-pyramid.obj</code></td><td>Small generic pyramid OBJ</td><td>Learning <code>model3</code>, a beacon, marker, monument, or placeholder model</td></tr>
+</tbody>
+</table>
+</div>
+<p>Bundled names are intentionally few and predictable. See the full
+<a href="assets.html">Bundled assets</a> catalog and do not invent an <code>asset:</code> name that is
+not listed. To add one to Manic itself, place the
+geometry-only file under <code>assets/models/</code>, document its URI here and in
+<code>assets/README.md</code>, and add a checked example. The release, Docker, EC2, and
+playground pipelines copy the complete <code>assets/</code> directory automatically, so
+future catalog entries need no per-file deployment rule.</p>
 <h2 id="moving-in-3d"><a class="header" href="#moving-in-3d">Moving in 3D</a></h2>
 <p>Same rhythm as the 2D verbs, with the <code>3</code> on the end:</p>
 <pre><code class="language-manic">par {
@@ -272,6 +462,18 @@ rounded <strong>tube</strong> (arrows grow a solid head):</p>
 <code>orbit3</code> in <code>par</code>, including through stable overhead/underside views</li>
 <li><strong><code>look3</code></strong> — aim the camera at a new point</li>
 </ul>
+<p>These remain the precise controls. Use them when exact coordinates or a
+specific orbit are part of the explanation; use the creator-first five for
+camera composition and relationship choreography.</p>
+<h3 id="check-the-transitions-not-only-the-last-frame"><a class="header" href="#check-the-transitions-not-only-the-last-frame">Check the transitions, not only the last frame</a></h3>
+<pre><code class="language-bash">manic check examples/three-d-v2-lab.manic --canvas portrait
+</code></pre>
+<p>The publishing audit samples camera transitions between named <code>step</code>s. It warns
+when projected 3D bounds leave the creator media rectangle, an orbit/zoom reads
+as a shock, the eye enters geometry, or a live spatial relationship has lost
+its source. It also checks the settled frame of every step. The most useful
+repair is usually semantic: tag the shot’s subject and call <code>view3(tag,"fit")</code>
+after the cast changes, or give a camera beat more duration.</p>
 <h2 id="morphing-one-shape-into-another"><a class="header" href="#morphing-one-shape-into-another">Morphing one shape into another</a></h2>
 <p><code>morph3</code> sets a shape up to <em>become</em> another; then <code>to(..., morph, ...)</code> blends
 between them. It works for curves, surfaces, and solids — even a cube turning

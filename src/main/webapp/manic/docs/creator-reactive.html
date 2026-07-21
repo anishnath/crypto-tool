@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-386cec9a.js";
+            window.path_to_searchindex_js = "searchindex-97eb084f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4954d801.js"></script>
+        <script src="toc-fc30ace8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -259,9 +259,25 @@ change, position adjustment, or wording fix happens in one place.</p>
 <p>Do not fade and rebuild the whole screen for every sentence. Preserve context,
 move the smallest meaningful parts, and let the viewer compare before and
 after. For equations, <code>rewrite</code> retains safely matched LaTeX pieces and brings
-only the changed pieces in or out.</p>
+only the changed pieces in or out. Matching understands coarse mathematical
+layout roles and nested math-style depth, so the <code>2</code> in <code>x^2</code> cannot jump into
+the denominator of <code>\frac{b}{2a}</code>, and one level of an exponential tower cannot
+become another. The same rule protects logarithm bases, integral limits, and
+derivative orders. Repeated symbols keep their reading order, so matrices and
+formulas containing several zeros or variables do not send copies across one
+another. When one equation side gains a fraction, radical, or grouping
+structure, that side leaves before its replacement enters; the compatible
+side and equality stay visible. For a globally incompatible change, Manic uses
+a staged whole-equation dissolve with only a short, dim overlap. Ordinary glyph
+replacements follow the same reading rule—the old value leaves before its
+successor becomes clear—while pure additions can still enter immediately.
+There is no extra mode to choose.</p>
 <p>Manic animates the states you author; it does not solve or verify the maths.
 Write each intermediate LaTeX state exactly as it should appear.</p>
+<p>For the cleanest teaching motion, keep genuinely unchanged work unchanged in
+the next LaTeX string. A stable right-hand side, fraction, or matrix remains
+recognisable while the edited side changes. Large changes are still valid—the
+engine will favour a clean dissolve over a misleading glyph scramble.</p>
 <h3 id="4-give-the-result-room-to-land"><a class="header" href="#4-give-the-result-room-to-land">4. Give the result room to land</a></h3>
 <p>A step ends when its longest animation ends. Add a short <code>wait</code> after an
 important step so the viewer can read the settled frame:</p>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-386cec9a.js";
+            window.path_to_searchindex_js = "searchindex-97eb084f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4954d801.js"></script>
+        <script src="toc-fc30ace8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -229,10 +229,17 @@ wait(0.8);
 rewrite(work, `(x+1)^2=4`, 0.85, smooth);
 </code></pre>
 <p>The viewer’s eye can follow the terms that move while unchanged symbols stay
-put. Manic matches the rendered LaTeX; you still supply and own every correct
-step. For phone video, use one meaningful rewrite per narration beat, keep the
-equation in the media safe region, pause after the important result, and place
-any related plot or diagram motion beside the rewrite in <code>par</code>.</p>
+put. Manic matches rendered LaTeX by reading order, mathematical layout role,
+and nested math-style depth; an exponent therefore cannot become a denominator
+or a different level of an exponent tower merely because both use the same
+digit. When a fraction, radical, or grouping changes the structure of one
+side, that side cleanly leaves and reforms while the compatible side remains.
+Simple replacements such as <code>2 → 3</code> are staged as leave-then-enter, avoiding a
+temporary <code>23</code>; pure additions can appear immediately. You still supply and own
+every correct step. For phone video, use one meaningful
+rewrite per narration beat, keep the equation in the media safe region, pause
+after the important result, and place any related plot or diagram motion beside
+the rewrite in <code>par</code>.</p>
 <h2 id="2-let-the-format-own-layout"><a class="header" href="#2-let-the-format-own-layout">2. Let the format own layout</a></h2>
 <pre><code class="language-manic">canvas("9:16");
 template("mono"); // optional: mono is the DSL default

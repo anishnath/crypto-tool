@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-386cec9a.js";
+            window.path_to_searchindex_js = "searchindex-97eb084f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4954d801.js"></script>
+        <script src="toc-fc30ace8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -296,11 +296,22 @@ rewrite(work, `(x+1)^2=4`, 0.9, smooth);
 rewrite(work, `x=-1\pm2`, 0.9, smooth);
 </code></pre>
 <p><code>rewrite</code> is visual, not a computer-algebra system: it never invents or verifies
-a step. Equal RaTeX parts retain identity and travel smoothly; only additions and
-removals fade locally. Repeated symbols are paired deterministically, semantic
-<code>\textcolor</code> roles follow the template, and the final frame is always the exact
-target LaTeX. Keep one <code>equation</code> id for the whole derivation, write readable
-steps, and use <code>wait</code> between them when the viewer needs time to absorb a result.</p>
+a step. Equal RaTeX parts retain identity and travel smoothly. Matching respects
+reading order, coarse layout roles—main line, exponent, numerator, denominator,
+fraction rule, and other structure—and RaTeX math-style depth. An identical
+character therefore cannot change mathematical jobs or jump between levels of
+a nested exponent. This also protects logarithm bases, operator limits, and
+derivative orders. If one side gains or loses fraction, radical, or
+grouping structure, that side leaves before the replacement enters while the
+compatible side and equality remain continuous. Globally incompatible states,
+such as a matrix becoming a compact formula, use a staged whole-equation
+dissolve with only a short, dim overlap. When unmatched source and target glyphs
+are a replacement, the old glyph leaves before the new one becomes readable;
+pure additions still enter immediately.
+Semantic <code>\textcolor</code> roles follow the authored formula, and the final frame is
+always the exact target LaTeX. No flag or alternate verb is required. Keep one
+<code>equation</code> id for the whole derivation, write readable steps, and use <code>wait</code>
+between them when the viewer needs time to absorb a result.</p>
 <p>For a plot or diagram that changes with the same step, place <code>rewrite</code> and the
 related motion in <code>par</code>. Existing equations are unaffected unless this verb is
 used.</p>

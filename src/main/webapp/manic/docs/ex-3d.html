@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-386cec9a.js";
+            window.path_to_searchindex_js = "searchindex-97eb084f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-4954d801.js"></script>
+        <script src="toc-fc30ace8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -179,7 +179,1668 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="3d-scenes"><a class="header" href="#3d-scenes">3D scenes</a></h1>
-<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video). See the <a href="3d.html">Going 3D</a> chapter for the words used here.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video). See the <a href="3d.html">Going 3D</a> chapter for the words used here. <code>three-d-v2-lab</code> uses the bundled geometry-only asset <code>asset:models/manic-pyramid.obj</code>; production packages install it automatically, or you can replace its <code>model3</code> call with a built-in solid.</p>
+<h2 id="three-d-v2"><a class="header" href="#three-d-v2">three-d-v2</a></h2>
+<p>The compact 3D V2 reference: frame a tagged craft, attach its parts, travel one
+persistent subject along a spatial route, deploy the rig with a rigid turn, and
+become the final blueprint — five creator words in one continuous scene.</p>
+<pre><code class="language-manic">// three-d-v2.manic — the five creator-first spatial motion words
+
+title("3D V2 — Five Words for Spatial Stories");
+canvas("16:9");
+template("shorts");
+watermark(manicMark, (126, 64), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Spatial_stories yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_yours safe=clean");
+socials(me);
+
+camera3((10, -13, 8), (0, 0, 1), 42);
+grid3(floor, (0, 0, 0), 6, 1); color(floor, dim); opacity(floor, 0.24);
+
+// A route can be a line3, arrow3, or curve3.
+curve3(route, "-4 + 8*t", "-2 + 3*sin(pi*t)", "0.8 + 3.2*sin(pi*t)", (0, 1));
+color(route, cyan); thick(route, 0.035); untraced(route);
+
+cube3(ship, (-4, -2, 0.8), (1.4, 1.0, 0.65)); color(ship, gold);
+sphere3(sensor, (-4, -2, 1.65), 0.34); color(sensor, cyan);
+cube3(leftWing, (-4, -3.15, 0.8), (0.18, 1.8, 0.10)); color(leftWing, magenta);
+cube3(rightWing, (-4, -0.85, 0.8), (0.18, 1.8, 0.10)); color(rightWing, magenta);
+
+tag(ship, spacecraft); tag(sensor, spacecraft);
+tag(leftWing, spacecraft); tag(rightWing, spacecraft);
+tag(leftWing, wings); tag(rightWing, wings);
+
+// A hidden target is a blueprint. become3 keeps `ship` as the persistent id.
+sphere3(observatoryBlueprint, (4, -2, 0.95), 0.88);
+color(observatoryBlueprint, lime); hidden(observatoryBlueprint);
+
+text(caption, (640, 622), "FRAME · FOLLOW · TRAVEL · TRANSFORM · TURN");
+size(caption, 24); bold(caption); color(caption, fg); hidden(caption);
+
+step("frame-the-route") {
+  par {
+    view3(route, "fit", 1.0, smooth, 1.30);
+    show(caption, 0.45);
+  }
+}
+
+step("travel-as-one-system") {
+  attach3(sensor, ship, (0, 0, 0.85));
+  attach3(leftWing, ship, (0, -1.15, 0));
+  attach3(rightWing, ship, (0, 1.15, 0));
+  par {
+    draw(route, 2.8, smooth);
+    travel3(ship, route, 2.8, smooth);
+    say(caption, "attach3 + travel3", 0.55, smooth);
+  }
+}
+
+step("deploy-and-transform") {
+  seq {
+    attach3(sensor, none);
+    attach3(leftWing, none);
+    attach3(rightWing, none);
+    par {
+      turn3(wings, ship, z, 90, 1.1, smooth);
+      become3(ship, observatoryBlueprint, 1.1, smooth);
+      say(caption, "turn3 + become3", 0.55, smooth);
+    }
+    par {
+      view3(spacecraft, "isometric", 1.2, smooth, 1.35);
+      say(caption, "view3 settles the final composition", 0.55, smooth);
+      fade(route, 0.65);
+    }
+    wait(1.2);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0KszWIcjz0s" title="3D V2 — Five Words for Spatial Motion" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="three-d-v2-story"><a class="header" href="#three-d-v2-story">three-d-v2-story</a></h2>
+<p>A vertical creator story about a satellite finding orbit. The same mission survives
+assembly, launch, transformation, deployment, and screen-aware camera composition
+without a scene reset.</p>
+<pre><code class="language-manic">// three-d-v2-story.manic — a vertical creator story built on 3D V2
+
+title("From Signal to Satellite — A 3D Motion Story");
+canvas("9:16");
+template("shorts");
+watermark(manicMark, (164, 86), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Make_space_understandable yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social cta=Create_yours safe=reels");
+socials(me);
+
+text(kicker, (540, 164), "A 3D MOTION STORY");
+size(kicker, 22); bold(kicker); color(kicker, cyan); hidden(kicker);
+text(headline, (540, 226), "How a satellite finds its orbit");
+size(headline, 39); bold(headline); color(headline, fg); hidden(headline);
+text(chapter, (540, 300), "ACT 1 · BUILD ONE SYSTEM");
+size(chapter, 23); bold(chapter); color(chapter, gold); hidden(chapter);
+
+text(narration, (540, 1472), "Three parts. One mission.");
+size(narration, 30); bold(narration); color(narration, fg); hidden(narration);
+text(principle, (540, 1544), "Spatial motion stays readable when relationships survive the move.");
+size(principle, 22); color(principle, dim); wrap(principle, 820); hidden(principle);
+
+camera3((10, -14, 8), (0, 0, 1), 42);
+grid3(floor, (0, 0, 0), 7, 1); color(floor, dim); opacity(floor, 0.20);
+
+curve3(launchRoute, "-4 + 7*t", "-2 + 2.6*sin(pi*t)", "0.9 + 4.1*sin(pi*t)", (0, 1));
+color(launchRoute, cyan); thick(launchRoute, 0.045); untraced(launchRoute);
+
+cube3(core, (-4, -2, 0.9), (1.25, 0.95, 0.72)); color(core, gold); hidden(core);
+sphere3(lens, (-4, -2, 1.78), 0.34); color(lens, cyan); hidden(lens);
+cube3(panelA, (-4, -3.30, 0.9), (0.18, 2.1, 0.10)); color(panelA, magenta); hidden(panelA);
+cube3(panelB, (-4, -0.70, 0.9), (0.18, 2.1, 0.10)); color(panelB, magenta); hidden(panelB);
+
+tag(core, mission); tag(lens, mission); tag(panelA, mission); tag(panelB, mission);
+tag(panelA, solarArray); tag(panelB, solarArray);
+
+// The final observatory is only a blueprint. It never appears as a second object.
+sphere3(observatory, (3, -2, 1.05), 0.86); color(observatory, lime); hidden(observatory);
+
+text(lensLabel, (0, 0), "signal"); size(lensLabel, 21); color(lensLabel, cyan); hidden(lensLabel);
+pin3(lensLabel, lens);
+
+step("assemble") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.50);
+      show(chapter, 0.35);
+      show(narration, 0.40);
+      show(principle, 0.40);
+      view3(mission, "isometric", 1.0, smooth, 1.55);
+    }
+    stagger(0.12) {
+      show(core, 0.35);
+      show(lens, 0.35);
+      show(panelA, 0.35);
+      show(panelB, 0.35);
+    }
+    attach3(lens, core, (0, 0, 0.88));
+    attach3(panelA, core, (0, -1.30, 0));
+    attach3(panelB, core, (0, 1.30, 0));
+    show(lensLabel, 0.30);
+    wait(0.45);
+  }
+}
+
+step("launch") {
+  seq {
+    par {
+      say(chapter, "ACT 2 · MOVE THE RELATIONSHIP", 0.45, smooth);
+      say(narration, "The craft travels. Every attached part remembers where it belongs.", 0.55, smooth);
+      view3(launchRoute, "fit", 1.1, smooth, 1.48);
+    }
+    par {
+      draw(launchRoute, 3.2, smooth);
+      travel3(core, launchRoute, 3.2, smooth);
+      say(principle, "attach3 carries context · travel3 carries identity", 0.55, smooth);
+    }
+    wait(0.45);
+  }
+}
+
+step("deploy") {
+  seq {
+    attach3(lens, none);
+    attach3(panelA, none);
+    attach3(panelB, none);
+    par {
+      say(chapter, "ACT 3 · DEPLOY THE IDEA", 0.45, smooth);
+      say(narration, "At orbit, only the changing parts move.", 0.50, smooth);
+      turn3(solarArray, core, z, 90, 1.25, smooth);
+      become3(core, observatory, 1.25, smooth);
+    }
+    par {
+      view3(mission, "isometric", 1.4, smooth, 1.58);
+      say(principle, "turn3 preserves the rig · become3 preserves the subject", 0.55, smooth);
+      fade(launchRoute, 0.65);
+    }
+    par {
+      view3(mission, "front", 2.2, smooth, 1.24);
+      pulse(lens, 0.75);
+      say(narration, "One persistent object. One continuous story.", 0.55, smooth);
+    }
+    wait(1.8);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/gK30w7RgvYg" title="How a Satellite Finds Its Orbit — A 3D Motion Story" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="three-d-v2-lab"><a class="header" href="#three-d-v2-lab">three-d-v2-lab</a></h2>
+<p>A creator-first spatial lab: safe-aware framing, rigid assembly, a live projection
+and edge, a moving route, surface contour, depth-scaled label, bounded finishes,
+variable tube, and controlled OBJ geometry in one continuous story.</p>
+<pre><code class="language-manic">canvas(1080, 1920);
+template("neon");
+title("3D relationships, not keyframes");
+creator(me, "@anish2good name=Manic yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social safe=reels");
+socials(me);
+watermark(mark, (180, 88), "Made With Manic");
+
+camera3((8, -10, 7), (0, 0, 1), 42);
+grid3(floor, (0, 0, 0), 4, 1); color(floor, dim); opacity(floor, 0.28);
+
+text(kicker, (540, 174), "SPATIAL STORY"); size(kicker, 22); color(kicker, cyan);
+text(headline, (540, 242), "One point. Three relationships."); size(headline, 46);
+text(caption, (540, 1350), "Move the idea — the construction follows."); size(caption, 27); color(caption, dim);
+
+surface3(bowl, "0.16*(x^2+y^2)", (-3,3), (-3,3), 24);
+color(bowl, blue); opacity(bowl, 0.42);
+finish3(bowl, "shading=smooth mesh=0.18 depth=0.25 shadow=0.15");
+contour3(level, bowl, 0.7); color(level, gold); thick(level, 0.025);
+
+model3(beacon, "asset:models/manic-pyramid.obj", (-1.5, -0.4, 0.05), 0.8);
+color(beacon, magenta);
+finish3(beacon, "material=metal shading=flat mesh=0.20 depth=0.18 shadow=0.30");
+
+point3(probe, (0, 0, 0), 0.15); color(probe, lime);
+attach3(probe, beacon, (0, 0, 2.0), rigid);
+project3(shadow, probe, "xy"); color(shadow, cyan);
+link3(drop, probe, shadow, 0.12); color(drop, cyan); thick(drop, 0.018);
+
+text(probeLabel, (0,0), "live point"); size(probeLabel, 28); color(probeLabel, lime);
+label3(probeLabel, probe, 0.34);
+
+curve3(route, "3*cos(pi*t)", "2.4*sin(pi*t)", "0.8+1.4*t", (0,1));
+color(route, gold); untraced(route);
+curve3(spine, "-2.8+1.2*t", "-2.2", "0.15+1.8*t", (0,1)); hidden(spine);
+tube3(signal, spine, "0.025+0.075*t", 10); color(signal, gold); opacity(signal, 0.58);
+finish3(signal, "material=metal shading=smooth depth=0.20"); hidden(signal);
+
+tag(bowl, lab); tag(level, lab); tag(beacon, lab); tag(probe, lab);
+tag(shadow, lab); tag(drop, lab); tag(route, lab); tag(signal, lab);
+tag(spine, lab);
+
+step("frame the safe media area") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.55);
+    show(caption, 0.45);
+    view3(lab, "isometric", 1.1, smooth, 1.55);
+  }
+  wait(0.5);
+}
+
+step("rigid attachment") {
+  par {
+    turn3(beacon, beacon, z, 110, 1.5, smooth);
+    orbit3(42, 28, 10.8, 1.5, smooth);
+  }
+  wait(0.35);
+}
+
+step("live projection") {
+  par {
+    shift3(beacon, (2.4, 0.8, 0.3), 1.5, smooth);
+    look3((0.4, 0.2, 1.1), 1.5, smooth);
+  }
+  wait(0.35);
+}
+
+step("transformed path travel") {
+  attach3(probe, none);
+  par {
+    draw(route, 2.2, smooth);
+    travel3(probe, route, 2.2, smooth);
+    rotate3(route, (0, 0, 24), 2.2, smooth);
+    show(signal, 0.55);
+  }
+  wait(0.7);
+}
+
+step("one bounded finish") {
+  flash(level, gold);
+  view3(lab, "fit", 1.0, smooth, 1.55);
+  wait(1.0);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qjfpKwnn7Go" title="3D Relationships, Not Keyframes — Manic Spatial Lab" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="trapped-light-dimensions"><a class="header" href="#trapped-light-dimensions">trapped-light-dimensions</a></h2>
+<p>A photon escapes one dimension at a time: first a 5-unit line, then the 5–12–13
+diagonal of a plane, and finally the 13–84–85 diagonal through a volume. One
+persistent light beam makes the generalized Pythagorean idea visible.</p>
+<pre><code class="language-manic">// ============================================================================
+// trapped-light-dimensions.manic — a continuous 1D → 2D → 3D journey
+// ----------------------------------------------------------------------------
+// One photon and one equation persist through the whole story. A fiber sweeps
+// sideways into a glass floor; that same floor rises into a transparent room.
+// The visual construction makes the distance formula grow one perpendicular
+// square at a time instead of presenting three unrelated formulas.
+// ============================================================================
+
+title("The Trapped Light Beam — From 1D to 3D");
+canvas("9:16");
+template("neon");
+watermark(manicMark, (238, 108), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Build_dimensions_visually yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker, (540, 164), "A JOURNEY THROUGH DIMENSIONS");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+text(headline, (540, 228), "The trapped light beam");
+size(headline, 43); bold(headline); color(headline, fg); hidden(headline);
+text(dimension, (540, 300), "1D · A THREAD IN THE DARK");
+size(dimension, 23); bold(dimension); color(dimension, gold); hidden(dimension);
+
+text(narration, (540, 1328), "No up. No down. Only backwards and forwards.");
+size(narration, 27); bold(narration); color(narration, fg); wrap(narration, 860); hidden(narration);
+text(insight, (540, 1386), "One permitted direction");
+size(insight, 20); color(insight, dim); hidden(insight);
+
+equation(distance, (540, 1482), `L=\left|x_2-x_1\right|`, 39);
+hidden(distance);
+
+// ---------------------------------------------------------------------------
+// THE SPATIAL CAST
+// ---------------------------------------------------------------------------
+
+camera3((9, -16, 8), (2.5, 0, 0), 38);
+
+// 1D: a five-unit fiber and one persistent photon.
+line3(fiber, (0,0,0), (5,0,0)); color(fiber, cyan); thick(fiber, 0.065); untraced(fiber);
+point3(A, (0,0,0), 0.16); color(A, fg); hidden(A);
+point3(B, (5,0,0), 0.16); color(B, fg); hidden(B);
+point3(photon, (0,0,0), 0.22); color(photon, gold); hidden(photon);
+finish3(photon, "material=glass shading=smooth depth=0.35 shadow=0.20");
+
+text(aLabel, (0,0), "A · x = 0"); size(aLabel, 21); color(aLabel, fg); hidden(aLabel); pin3(aLabel, A);
+text(bLabel, (0,0), "B · x = 5"); size(bLabel, 21); color(bLabel, fg); hidden(bLabel); pin3(bLabel, B);
+point3(xMid, (2.5,0,0), 0.01); hidden(xMid);
+text(xLabel, (0,0), "a = 5"); size(xLabel, 22); bold(xLabel); color(xLabel, cyan); hidden(xLabel); pin3(xLabel, xMid);
+
+// 2D: pull a copy of the fiber along y. The shallow cuboid is the glass floor.
+line3(sweepLine, (0,0,0), (5,0,0)); color(sweepLine, magenta); thick(sweepLine, 0.045); hidden(sweepLine);
+line3(yEdge, (0,0,0), (0,12,0)); color(yEdge, magenta); thick(yEdge, 0.045); untraced(yEdge); hidden(yEdge);
+point3(yMid, (0,6,0), 0.01); hidden(yMid);
+text(yLabel, (0,0), "b = 12"); size(yLabel, 22); bold(yLabel); color(yLabel, magenta); hidden(yLabel); pin3(yLabel, yMid);
+
+cube3(glassFloor, (2.5,6,0), (5,12,0.12)); color(glassFloor, blue); hidden(glassFloor);
+finish3(glassFloor, "material=glass shading=flat mesh=0.42 depth=0.30 shadow=0.12");
+line3(floorDiagonal, (0,0,0.08), (5,12,0.08)); color(floorDiagonal, gold); thick(floorDiagonal, 0.075); untraced(floorDiagonal); hidden(floorDiagonal);
+point3(floorTarget, (5,12,0.08), 0.19); color(floorTarget, fg); hidden(floorTarget);
+text(floorTargetLabel, (0,0), "(5, 12)"); size(floorTargetLabel, 20); color(floorTargetLabel, fg); hidden(floorTargetLabel); pin3(floorTargetLabel, floorTarget);
+point3(floorMid, (2.5,6,0.08), 0.01); hidden(floorMid);
+text(floorPathLabel, (0,0), "base = 13"); size(floorPathLabel, 21); bold(floorPathLabel); color(floorPathLabel, gold); hidden(floorPathLabel); pin3(floorPathLabel, floorMid);
+
+// 3D: the flat floor becomes a transparent room. The 84-unit height is
+// compressed to 18 visual units so the reused 13-unit floor diagonal remains
+// readable; labels and mathematics retain the real coordinates. Four persistent
+// roof edges rise as one tagged rig while the transparent volume resolves.
+cube3(room, (2.5,6,9), (5,12,18)); color(room, blue); hidden(room);
+finish3(room, "material=glass shading=flat mesh=0.50 depth=0.38 shadow=0.16");
+line3(roofFront, (0,0,0), (5,0,0)); color(roofFront, cyan); thick(roofFront, 0.055); hidden(roofFront); tag(roofFront, roof);
+line3(roofBack, (0,12,0), (5,12,0)); color(roofBack, cyan); thick(roofBack, 0.055); hidden(roofBack); tag(roofBack, roof);
+line3(roofLeft, (0,0,0), (0,12,0)); color(roofLeft, cyan); thick(roofLeft, 0.055); hidden(roofLeft); tag(roofLeft, roof);
+line3(roofRight, (5,0,0), (5,12,0)); color(roofRight, cyan); thick(roofRight, 0.055); hidden(roofRight); tag(roofRight, roof);
+line3(zEdge, (5,12,0), (5,12,18)); color(zEdge, lime); thick(zEdge, 0.08); untraced(zEdge); hidden(zEdge);
+point3(zMid, (5,12,9), 0.01); hidden(zMid);
+text(zLabel, (0,0), "c = 84"); size(zLabel, 22); bold(zLabel); color(zLabel, lime); hidden(zLabel); pin3(zLabel, zMid);
+
+line3(spaceDiagonal, (0,0,0), (5,12,18)); color(spaceDiagonal, gold); thick(spaceDiagonal, 0.10); untraced(spaceDiagonal); hidden(spaceDiagonal);
+point3(spaceTarget, (5,12,18), 0.24); color(spaceTarget, fg); hidden(spaceTarget);
+text(spaceTargetLabel, (0,0), "(5, 12, 84)"); size(spaceTargetLabel, 20); color(spaceTargetLabel, fg); hidden(spaceTargetLabel); pin3(spaceTargetLabel, spaceTarget);
+
+// ---------------------------------------------------------------------------
+// THE JOURNEY
+// ---------------------------------------------------------------------------
+
+step("one dimension") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.55);
+      show(dimension, 0.40);
+      show(narration, 0.45);
+      show(insight, 0.45);
+      show(distance, 0.55);
+      view3(fiber, "front", 1.0, smooth, 1.65);
+    }
+    stagger(0.12) {
+      show(A, 0.30);
+      show(aLabel, 0.30);
+      draw(fiber, 1.10, smooth);
+      show(B, 0.30);
+      show(bLabel, 0.30);
+      show(xLabel, 0.30);
+      show(photon, 0.35);
+    }
+    wait(0.45);
+  }
+}
+
+step("the bound beam") {
+  seq {
+    say(narration, "Fire one photon from A to B. There is nowhere else to go.", 0.50, smooth);
+    par {
+      travel3(photon, fiber, 2.25, smooth);
+      rewrite(distance, `L=\left|5-0\right|=\textcolor{gold}{5}`, 1.10, smooth);
+      say(insight, "Distance is the length of the only available track", 0.45, smooth);
+    }
+    pulse(photon, 0.70);
+    wait(0.55);
+  }
+}
+
+step("unlock the second direction") {
+  seq {
+    par {
+      move3(photon, (0,0,0), 0.80, smooth);
+      fade(aLabel, 0.35);
+      fade(bLabel, 0.35);
+      say(dimension, "2D · UNFOLDING THE FLOOR", 0.45, smooth);
+      say(narration, "Pull the fiber sideways. One line sweeps out a reflective surface.", 0.55, smooth);
+      say(insight, "A new perpendicular direction appears: y", 0.45, smooth);
+    }
+    par {
+      show(yEdge, 0.15);
+      draw(yEdge, 1.10, smooth);
+      show(yLabel, 0.35);
+      view3(glassFloor, "isometric", 1.35, smooth, 1.55);
+    }
+    par {
+      show(sweepLine, 0.25);
+      move3(sweepLine, (0,12,0), 1.90, smooth);
+      show(glassFloor, 1.90, smooth);
+    }
+    to(glassFloor, opacity, 0.22, 0.40, smooth);
+    wait(0.45);
+  }
+}
+
+step("cut across the floor") {
+  seq {
+    par {
+      show(floorTarget, 0.30);
+      show(floorTargetLabel, 0.35);
+      show(floorPathLabel, 0.35);
+      say(narration, "The photon can turn now — but the straight diagonal is shortest.", 0.55, smooth);
+      say(insight, "The old distance and the new sweep meet at 90 degrees", 0.45, smooth);
+    }
+    par {
+      show(floorDiagonal, 0.15);
+      draw(floorDiagonal, 2.35, smooth);
+      travel3(photon, floorDiagonal, 2.35, smooth);
+      rewrite(distance, `L=\sqrt{\textcolor{cyan}{5^2}+\textcolor{magenta}{12^2}}=\sqrt{169}=\textcolor{gold}{13}`, 1.35, smooth);
+    }
+    pulse(photon, 0.70);
+    wait(0.65);
+  }
+}
+
+step("raise the roof") {
+  seq {
+    par {
+      move3(photon, (0,0,0), 0.90, smooth);
+      fade(xLabel, 0.35);
+      fade(yLabel, 0.35);
+      fade(floorTargetLabel, 0.35);
+      say(dimension, "3D · FILLING THE VOID", 0.45, smooth);
+      say(narration, "Lift the entire floor upward. Surface becomes volume.", 0.55, smooth);
+      say(insight, "Height compressed visually · coordinates and geometry stay exact", 0.45, smooth);
+    }
+    par {
+      to(room, opacity, 0.22, 2.45, smooth);
+      show(roof, 0.20);
+      shift3(roof, (0,0,18), 2.45, smooth);
+      view3(room, "isometric", 2.45, smooth, 1.62);
+      show(zEdge, 0.15);
+      draw(zEdge, 2.30, smooth);
+      show(zLabel, 0.45);
+    }
+    par { show(spaceTarget, 0.40); show(spaceTargetLabel, 0.40); }
+    wait(0.55);
+  }
+}
+
+step("cut through space") {
+  seq {
+    say(narration, "The photon cuts through open space: floor diagonal against height.", 0.55, smooth);
+    par {
+      show(spaceDiagonal, 0.15);
+      draw(spaceDiagonal, 2.80, smooth);
+      travel3(photon, spaceDiagonal, 2.80, smooth);
+      rewrite(distance, `L=\sqrt{\textcolor{gold}{13^2}+\textcolor{lime}{84^2}}=\sqrt{7225}=\textcolor{gold}{85}`, 1.50, smooth);
+      say(insight, "13² + 84² = 85²", 0.45, smooth);
+    }
+    pulse(photon, 0.80);
+    wait(0.70);
+  }
+}
+
+step("one recursive idea") {
+  seq {
+    par {
+      say(dimension, "THE PATTERN · ONE RIGHT ANGLE AT A TIME", 0.50, smooth);
+      say(narration, "Do not memorize three formulas. Build one distance recursively.", 0.55, smooth);
+      say(insight, "Each previous diagonal becomes the next dimension's base", 0.50, smooth);
+      rewrite(distance, `L=\sqrt{\textcolor{cyan}{a^2}+\textcolor{magenta}{b^2}+\textcolor{lime}{c^2}}`, 1.65, smooth);
+      view3(room, "fit", 2.20, smooth, 1.70);
+    }
+    par {
+      pulse(photon, 0.80);
+      flash(spaceDiagonal, gold);
+      roll3(3, 1.60, smooth);
+    }
+    wait(2.20);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/j3d11yhvw-o" title="The Trapped Light Beam — From 1D to 3D" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="dimensions-unfold"><a class="header" href="#dimensions-unfold">dimensions-unfold</a></h2>
+<p>A point stretches into a line, the line sweeps sideways into a plane, and the plane
+lifts into a room. The geometry grows continuously instead of resetting between
+1D, 2D, and 3D.</p>
+<pre><code class="language-manic">// ============================================================================
+// dimensions-unfold.manic — how a point becomes a line, a plane, then a room
+// ----------------------------------------------------------------------------
+// The geometry never cuts to a replacement scene. One point grows two halves
+// of a wire; that same wire sweeps across y while a grid resolves behind it;
+// the completed sheet then lifts as one tagged roof while a transparent room
+// appears below. The animation is the explanation.
+// ============================================================================
+
+title("How Space Learned to Grow — 1D to 3D");
+canvas("9:16");
+template("neon");
+watermark(manicMark, (238, 108), "Made With Manic");
+
+creator(me, "@anish2good name=Manic_3D tagline=Dimensions_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker, (540, 164), "FROM A POINT TO A WORLD");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+text(headline, (540, 228), "How space learned to grow");
+size(headline, 42); bold(headline); color(headline, fg); hidden(headline);
+text(phase, (540, 300), "PROLOGUE · THE FIRST POINT");
+size(phase, 23); bold(phase); color(phase, gold); hidden(phase);
+
+text(narration, (540, 1330), "In the beginning, there was only one location.");
+size(narration, 27); bold(narration); color(narration, fg); wrap(narration, 860); hidden(narration);
+text(principle, (540, 1390), "No direction. No distance. Just here.");
+size(principle, 20); color(principle, dim); hidden(principle);
+text(progress, (540, 1492), "POINT");
+size(progress, 27); bold(progress); color(progress, cyan); hidden(progress);
+text(takeaway, (540, 1554), "DIMENSIONS ARE MOTIONS THAT LEAVE SPACE BEHIND");
+size(takeaway, 17); bold(takeaway); color(takeaway, gold); hidden(takeaway);
+
+// ---------------------------------------------------------------------------
+// 0D → 1D: one point extends left and right.
+// ---------------------------------------------------------------------------
+
+camera3((0, -11, 4.5), (0, -4, 0), 39);
+
+point3(seed, (0,-4,0), 0.12); color(seed, gold); hidden(seed);
+finish3(seed, "material=glass shading=smooth depth=0.40 shadow=0.25");
+
+line3(leftThread, (0,-4,0), (-0.02,-4,0)); color(leftThread, cyan); thick(leftThread, 0.065); hidden(leftThread); tag(leftThread, wire); tag(leftThread, sheetSkin);
+line3(rightThread, (0,-4,0), (0.02,-4,0)); color(rightThread, cyan); thick(rightThread, 0.065); hidden(rightThread); tag(rightThread, wire); tag(rightThread, sheetSkin);
+
+point3(leftEnd, (-4,-4,0), 0.14); color(leftEnd, fg); hidden(leftEnd);
+point3(rightEnd, (4,-4,0), 0.14); color(rightEnd, fg); hidden(rightEnd);
+point3(leftLabelAnchor, (-3.25,-4,0.58), 0.01); hidden(leftLabelAnchor);
+point3(rightLabelAnchor, (3.25,-4,0.58), 0.01); hidden(rightLabelAnchor);
+text(leftLabel, (0,0), "BACKWARD"); size(leftLabel, 19); bold(leftLabel); color(leftLabel, dim); hidden(leftLabel); pin3(leftLabel, leftLabelAnchor);
+text(rightLabel, (0,0), "FORWARD"); size(rightLabel, 19); bold(rightLabel); color(rightLabel, dim); hidden(rightLabel); pin3(rightLabel, rightLabelAnchor);
+
+arrow3(leftChoice, (0,-4,0.18), (-3.5,-4,0.18)); color(leftChoice, magenta); thick(leftChoice, 0.035); untraced(leftChoice); hidden(leftChoice);
+arrow3(rightChoice, (0,-4,0.18), (3.5,-4,0.18)); color(rightChoice, magenta); thick(rightChoice, 0.035); untraced(rightChoice); hidden(rightChoice);
+
+// ---------------------------------------------------------------------------
+// 2D: the wire sweeps from y=-4 to y=4 and leaves a sheet/grid behind.
+// Every visible grid member joins sheetSkin so the whole plane can later rise.
+// ---------------------------------------------------------------------------
+
+line3(baseEdge, (-4,-4,0), (4,-4,0)); color(baseEdge, cyan); thick(baseEdge, 0.050); hidden(baseEdge); tag(baseEdge, sheetSkin);
+cube3(sheet, (0,0,0), (8,8,0.08)); color(sheet, blue); hidden(sheet); tag(sheet, sheetSkin);
+finish3(sheet, "material=glass shading=flat mesh=0.18 depth=0.24 shadow=0.10");
+
+for i in 1..8 {
+  let p = -4+i;
+  line3(row{i}, (-4,p,0.05), (4,p,0.05));
+  color(row{i}, magenta); thick(row{i}, 0.022); untraced(row{i}); hidden(row{i}); tag(row{i}, sheetGrid); tag(row{i}, sheetSkin);
+  line3(col{i}, (p,-4,0.05), (p,4,0.05));
+  color(col{i}, cyan); thick(col{i}, 0.022); untraced(col{i}); hidden(col{i}); tag(col{i}, sheetGrid); tag(col{i}, sheetSkin);
+}
+
+// ---------------------------------------------------------------------------
+// 3D: the complete sheet becomes the roof. Four pillars and a restrained glass
+// volume make the hollow space below legible without a replacement cut.
+// ---------------------------------------------------------------------------
+
+cube3(room, (0,0,4), (8,8,8)); color(room, blue); hidden(room);
+finish3(room, "material=glass shading=flat mesh=0.42 depth=0.34 shadow=0.16");
+
+line3(pillar0, (-4,-4,0), (-4,-4,8)); color(pillar0, lime); thick(pillar0, 0.060); untraced(pillar0); hidden(pillar0); tag(pillar0, pillars);
+line3(pillar1, (4,-4,0), (4,-4,8)); color(pillar1, lime); thick(pillar1, 0.060); untraced(pillar1); hidden(pillar1); tag(pillar1, pillars);
+line3(pillar2, (-4,4,0), (-4,4,8)); color(pillar2, lime); thick(pillar2, 0.060); untraced(pillar2); hidden(pillar2); tag(pillar2, pillars);
+line3(pillar3, (4,4,0), (4,4,8)); color(pillar3, lime); thick(pillar3, 0.060); untraced(pillar3); hidden(pillar3); tag(pillar3, pillars);
+
+point3(nearCorner, (-4,-4,0), 0.18); color(nearCorner, gold); hidden(nearCorner);
+point3(farCorner, (4,4,8), 0.18); color(farCorner, gold); hidden(farCorner);
+text(nearLabel, (0,0), "NEAR · BOTTOM · LEFT"); size(nearLabel, 18); color(nearLabel, fg); hidden(nearLabel); pin3(nearLabel, nearCorner);
+text(farLabel, (0,0), "FAR · TOP · RIGHT"); size(farLabel, 18); color(farLabel, fg); hidden(farLabel); pin3(farLabel, farCorner);
+
+// ---------------------------------------------------------------------------
+// ONE CONTINUOUS TIMELINE
+// ---------------------------------------------------------------------------
+
+step("the first point") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.55);
+      show(phase, 0.40);
+      show(narration, 0.45);
+      show(principle, 0.45);
+      show(progress, 0.40);
+      show(seed, 0.45);
+    }
+    pulse(seed, 0.80);
+    wait(0.65);
+  }
+}
+
+step("the point extends") {
+  seq {
+    par {
+      say(phase, "1D · THE FIRST THREAD", 0.45, smooth);
+      say(narration, "The point stretches itself out and creates the first path.", 0.55, smooth);
+      say(principle, "Length appears — but the world is still trapped on one track.", 0.50, smooth);
+      say(progress, "POINT  →  LENGTH", 0.45, smooth);
+      show(leftThread, 0.15);
+      show(rightThread, 0.15);
+      grow3(leftThread, (-4,-4,0), 2.25, smooth);
+      grow3(rightThread, (4,-4,0), 2.25, smooth);
+      view3(wire, "front", 1.45, smooth, 1.70);
+    }
+    par {
+      fade(seed, 0.35);
+      show(leftEnd, 0.30); show(rightEnd, 0.30);
+      show(leftLabel, 0.35); show(rightLabel, 0.35);
+      show(leftChoice, 0.15); show(rightChoice, 0.15);
+      draw(leftChoice, 0.90, smooth); draw(rightChoice, 0.90, smooth);
+    }
+    wait(0.60);
+  }
+}
+
+step("left or right") {
+  seq {
+    say(narration, "Every journey has only two choices: backward or forward.", 0.50, smooth);
+    par { pulse(leftThread, 0.65); pulse(rightThread, 0.65); }
+    wait(0.80);
+  }
+}
+
+step("the sideways sweep") {
+  seq {
+    par {
+      fade(leftChoice, 0.35); fade(rightChoice, 0.35);
+      fade(leftLabel, 0.35); fade(rightLabel, 0.35);
+      say(phase, "2D · THE UNFOLDING SHEET", 0.45, smooth);
+      say(narration, "The wire shimmers, grabs its whole length, and moves sideways.", 0.55, smooth);
+      say(principle, "Its motion leaves a flat floor behind: width is born.", 0.50, smooth);
+      say(progress, "POINT  →  LENGTH  →  WIDTH", 0.45, smooth);
+    }
+    par {
+      show(baseEdge, 0.18);
+      shift3(wire, (0,8,0), 2.80, smooth);
+      to(sheet, opacity, 0.14, 2.80, smooth);
+      view3(sheet, "isometric", 2.10, smooth, 1.52);
+      stagger(0.075) { for i in 1..8 { show(row{i}, 0.12); show(col{i}, 0.12); } }
+      stagger(0.075) { for i in 1..8 { draw(row{i}, 0.70, smooth); draw(col{i}, 0.70, smooth); } }
+    }
+    wait(0.65);
+  }
+}
+
+step("the flat world") {
+  seq {
+    say(narration, "The old wire is now one edge of an entire plane.", 0.50, smooth);
+    say(principle, "Forward, backward, left, and right — still no above.", 0.45, smooth);
+    pulse(sheetGrid, 0.75);
+    wait(0.80);
+  }
+}
+
+step("the rising room") {
+  seq {
+    par {
+      say(phase, "3D · THE RISING ROOM", 0.45, smooth);
+      say(narration, "The complete sheet catches a breath and lifts straight upward.", 0.55, smooth);
+      say(principle, "The moving surface fills the hollow space below it.", 0.50, smooth);
+      say(progress, "POINT  →  LENGTH  →  WIDTH  →  HEIGHT", 0.50, smooth);
+    }
+    par {
+      shift3(sheetSkin, (0,0,8), 2.85, smooth);
+      to(room, opacity, 0.16, 2.85, smooth);
+      show(pillars, 0.15);
+      draw(pillars, 2.70, smooth);
+      view3(room, "isometric", 2.85, smooth, 1.52);
+    }
+    wait(0.65);
+  }
+}
+
+step("the space within") {
+  seq {
+    par {
+      show(nearCorner, 0.30); show(farCorner, 0.30);
+      show(nearLabel, 0.35); show(farLabel, 0.35);
+      show(takeaway, 0.45);
+      say(phase, "THE SPACE WITHIN", 0.45, smooth);
+      say(narration, "Depth rushes in. Near and far finally have meaning.", 0.55, smooth);
+      say(principle, "A dimension is an old world moving in a new perpendicular direction.", 0.55, smooth);
+      view3(room, "fit", 1.80, smooth, 1.62);
+    }
+    par {
+      pulse(sheetSkin, 0.85);
+      pulse(pillars, 0.85);
+      roll3(3, 1.80, smooth);
+    }
+    wait(2.20);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/wlnoatVTnGg" title="How Space Learned to Grow — 1D to 3D" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-length-area-volume"><a class="header" href="#textbook-length-area-volume">textbook-length-area-volume</a></h2>
+<p>Why units become cm, cm², and cm³: one measured segment sweeps out a rectangle,
+then the rectangle rises into a cuboid. A textbook measurement story built from
+extrusion rather than three disconnected formulas.</p>
+<pre><code class="language-manic">// ============================================================================
+// textbook-length-area-volume.manic — centimetres, square centimetres, cubes
+// ============================================================================
+
+title("Length, Area, Volume — Why the Units Change");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark, (220, 175), "Made With Manic");
+creator(me, "@anish2good name=Manic_Math tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker, (540,164), "THE MEASUREMENT LADDER"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline, (540,228), "Why units become squared, then cubed"); size(headline,36); bold(headline); hidden(headline);
+text(phase, (540,300), "1D · MEASURE LENGTH"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration, (540,1328), "A ruler counts how many unit segments fit along one direction."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle, (540,1388), "One direction · centimetres"); size(principle,20); color(principle,dim); hidden(principle);
+equation(measure, (540,1480), `L=\textcolor{cyan}{6}\text{ cm}`, 40); hidden(measure);
+text(takeaway, (540,1560), "THE UNIT CHANGES BECAUSE THE NUMBER OF DIRECTIONS CHANGES"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+// This is the settled `view3(length,"front",...,1.65)` composition: the
+// opening line is already inside the Creator media region, so frame one moves
+// the mathematics rather than jolting the camera into place.
+camera3((0.26,-33.6,-4.14),(0.26,-2,-4.14),40);
+
+line3(length, (-3,-2,0), (3,-2,0)); color(length,cyan); thick(length,0.07); untraced(length); tag(length,areaSkin);
+point3(start, (-3,-2,0),0.15); color(start,fg); hidden(start);
+point3(finish, (3,-2,0),0.15); color(finish,fg); hidden(finish);
+point3(lengthMid, (0,-2,0),0.01); hidden(lengthMid);
+text(lengthLabel,(0,0),"6 cm"); size(lengthLabel,22); bold(lengthLabel); color(lengthLabel,cyan); hidden(lengthLabel); pin3(lengthLabel,lengthMid);
+
+// Six visible unit segments sit directly on the measured line.
+for i in 0..6 {
+  line3(unit{i}, (-3+i,-2,0.10), (-2+i,-2,0.10));
+  color(unit{i},gold); thick(unit{i},0.035); untraced(unit{i}); hidden(unit{i}); tag(unit{i},units1d); tag(unit{i},areaSkin);
+}
+
+// The measured line sweeps four centimetres sideways to create 24 unit squares.
+cube3(areaSheet, (0,0,0), (6,4,0.08)); color(areaSheet,blue); hidden(areaSheet); tag(areaSheet,areaSkin);
+finish3(areaSheet,"material=glass shading=flat mesh=0.20 depth=0.25 shadow=0.10");
+line3(areaBase,(-3,-2,0),(3,-2,0)); color(areaBase,cyan); thick(areaBase,0.05); hidden(areaBase); tag(areaBase,areaSkin);
+for i in 1..4 {
+  let yy=-2+i;
+  line3(areaRow{i},(-3,yy,0.05),(3,yy,0.05)); color(areaRow{i},magenta); thick(areaRow{i},0.025); untraced(areaRow{i}); hidden(areaRow{i}); tag(areaRow{i},areaGrid); tag(areaRow{i},areaSkin);
+}
+for i in 0..7 {
+  let xx=-3+i;
+  line3(areaCol{i},(xx,-2,0.05),(xx,2,0.05)); color(areaCol{i},cyan); thick(areaCol{i},0.025); untraced(areaCol{i}); hidden(areaCol{i}); tag(areaCol{i},areaGrid); tag(areaCol{i},areaSkin);
+}
+point3(widthMid,(-3,0,0),0.01); hidden(widthMid);
+text(widthLabel,(0,0),"4 cm"); size(widthLabel,22); bold(widthLabel); color(widthLabel,magenta); hidden(widthLabel); pin3(widthLabel,widthMid);
+
+// The complete square-unit sheet rises three centimetres and leaves 72 cubes.
+cube3(volumeBox,(0,0,1.5),(6,4,3)); color(volumeBox,blue); hidden(volumeBox);
+finish3(volumeBox,"material=glass shading=flat mesh=0.48 depth=0.34 shadow=0.16");
+line3(height0,(-3,-2,0),(-3,-2,3)); color(height0,lime); thick(height0,0.06); untraced(height0); hidden(height0); tag(height0,heightEdges);
+line3(height1,(3,-2,0),(3,-2,3)); color(height1,lime); thick(height1,0.06); untraced(height1); hidden(height1); tag(height1,heightEdges);
+line3(height2,(-3,2,0),(-3,2,3)); color(height2,lime); thick(height2,0.06); untraced(height2); hidden(height2); tag(height2,heightEdges);
+line3(height3,(3,2,0),(3,2,3)); color(height3,lime); thick(height3,0.06); untraced(height3); hidden(height3); tag(height3,heightEdges);
+point3(heightMid,(3,2,1.5),0.01); hidden(heightMid);
+text(heightLabel,(0,0),"3 cm"); size(heightLabel,22); bold(heightLabel); color(heightLabel,lime); hidden(heightLabel); pin3(heightLabel,heightMid);
+
+step("count one direction") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(measure,0.50); }
+    par { show(start,0.25); show(finish,0.25); draw(length,1.25,smooth); show(lengthLabel,0.35); }
+    par {
+      stagger(0.10) { for i in 0..6 { show(unit{i},0.10); } }
+      stagger(0.10) { for i in 0..6 { draw(unit{i},0.35,smooth); } }
+    }
+    wait(0.60);
+  }
+}
+
+step("sweep out area") {
+  seq {
+    par {
+      say(phase,"2D · COUNT UNIT SQUARES",0.45,smooth);
+      say(narration,"Move the six-centimetre length through four new centimetres.",0.55,smooth);
+      say(principle,"Two perpendicular directions · square centimetres",0.45,smooth);
+      rewrite(measure,`A=\textcolor{cyan}{6}\times\textcolor{magenta}{4}=\textcolor{gold}{24}\text{ cm}^2`,1.10,smooth);
+      fade(start,0.30); fade(finish,0.30);
+      view3(areaSheet,"isometric",1.25,smooth,1.48);
+    }
+    par {
+      shift3(units1d,(0,4,0),2.60,smooth);
+      shift3(length,(0,4,0),2.60,smooth);
+      show(areaBase,0.15);
+      to(areaSheet,opacity,0.15,2.60,smooth);
+      show(widthLabel,0.35);
+      stagger(0.07) { for i in 1..4 { show(areaRow{i},0.10); } for i in 0..7 { show(areaCol{i},0.10); } }
+      stagger(0.07) { for i in 1..4 { draw(areaRow{i},0.55,smooth); } for i in 0..7 { draw(areaCol{i},0.55,smooth); } }
+    }
+    wait(0.70);
+  }
+}
+
+step("see twenty four squares") {
+  seq {
+    say(narration,"Six columns by four rows: the floor contains 24 unit squares.",0.50,smooth);
+    par { pulse(areaGrid,0.75); pulse(areaSheet,0.75); }
+    wait(0.75);
+  }
+}
+
+step("stack into volume") {
+  seq {
+    par {
+      say(phase,"3D · STACK UNIT CUBES",0.45,smooth);
+      say(narration,"Lift the complete 24-square layer through three centimetres.",0.55,smooth);
+      say(principle,"Three perpendicular directions · cubic centimetres",0.45,smooth);
+      rewrite(measure,`V=\textcolor{gold}{24}\times\textcolor{lime}{3}=\textcolor{gold}{72}\text{ cm}^3`,1.10,smooth);
+      fade(lengthLabel,0.30); fade(widthLabel,0.30);
+    }
+    par {
+      shift3(areaSkin,(0,0,3),2.70,smooth);
+      to(volumeBox,opacity,0.17,2.70,smooth);
+      show(heightEdges,0.15); draw(heightEdges,2.55,smooth);
+      show(heightLabel,0.35);
+      view3(volumeBox,"isometric",2.70,smooth,1.50);
+    }
+    wait(0.70);
+  }
+}
+
+step("the measurement ladder") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"LENGTH → AREA → VOLUME",0.50,smooth);
+      say(narration,"The number is not merely larger. The kind of unit has changed.",0.55,smooth);
+      say(principle,"cm measures a path · cm² tiles a surface · cm³ fills space",0.55,smooth);
+      view3(volumeBox,"fit",1.80,smooth,1.58);
+    }
+    par { pulse(volumeBox,0.85); pulse(heightEdges,0.85); roll3(3,1.60,smooth); }
+    wait(2.10);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KQZgmp2YzbM" title="Length, Area, Volume — Why the Units Change" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-coordinate-worlds"><a class="header" href="#textbook-coordinate-worlds">textbook-coordinate-worlds</a></h2>
+<p>A point earns a longer address as dimensions unlock: x on a line, (x,y) on a
+plane, then (x,y,z) in space. Coordinates remain attached to the same idea while
+the world expands around it.</p>
+<pre><code class="language-manic">// ============================================================================
+// textbook-coordinate-worlds.manic — number line → coordinate plane → space
+// ============================================================================
+
+title("A Point Gets an Address — From 1D to 3D");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark, (220, 175), "Made With Manic");
+creator(me, "@anish2good name=Manic_Math tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"COORDINATE GEOMETRY"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"A point gains one coordinate at a time"); size(headline,32); bold(headline); hidden(headline);
+text(phase,(540,300),"1D · THE NUMBER LINE"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"One direction needs one number: move three units along x."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Every new perpendicular direction adds one coordinate."); size(principle,20); color(principle,dim); hidden(principle);
+equation(address,(540,1490),`P=\textcolor{cyan}{(3)}`,44); hidden(address);
+text(takeaway,(540,1572),"THE POINT STAYS THE SAME · ITS ADDRESS BECOMES MORE PRECISE"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+camera3((0,0,14),(0,0,0),38);
+
+// One persistent point begins at the origin, then gains y and z coordinates.
+point3(P,(0,0,0),0.18); color(P,gold); hidden(P);
+text(pLabel,(0,0),"P"); size(pLabel,34); bold(pLabel); color(pLabel,gold); hidden(pLabel); label3(pLabel,P,0.34);
+point3(origin,(0,0,0),0.10); color(origin,fg); hidden(origin);
+text(originLabel,(0,0),"O"); size(originLabel,34); color(originLabel,dim); hidden(originLabel); label3(originLabel,origin,0.36);
+
+line3(xAxis,(-4,0,0),(4,0,0)); color(xAxis,cyan); thick(xAxis,0.045); untraced(xAxis); hidden(xAxis); tag(xAxis,axes);
+line3(yAxis,(0,-3,0),(0,3,0)); color(yAxis,magenta); thick(yAxis,0.045); untraced(yAxis); hidden(yAxis); tag(yAxis,axes);
+line3(zAxis,(0,0,0),(0,0,4)); color(zAxis,lime); thick(zAxis,0.045); untraced(zAxis); hidden(zAxis); tag(zAxis,axes);
+
+point3(xEnd,(4,0,0),0.01); hidden(xEnd);
+point3(yEnd,(0,3,0),0.01); hidden(yEnd);
+point3(zEnd,(0,0,4),0.01); hidden(zEnd);
+text(xLabel,(0,0),"x"); size(xLabel,34); bold(xLabel); color(xLabel,cyan); hidden(xLabel); label3(xLabel,xEnd,0.38);
+text(yLabel,(0,0),"y"); size(yLabel,34); bold(yLabel); color(yLabel,magenta); hidden(yLabel); label3(yLabel,yEnd,0.38);
+text(zLabel,(0,0),"z"); size(zLabel,34); bold(zLabel); color(zLabel,lime); hidden(zLabel); label3(zLabel,zEnd,0.38);
+
+// Tick marks remain quiet so the address, rather than decoration, leads.
+for i in -4..5 {
+  line3(xTick{i},(i,-0.10,0),(i,0.10,0)); color(xTick{i},cyan); thick(xTick{i},0.025); untraced(xTick{i}); hidden(xTick{i}); tag(xTick{i},xTicks);
+}
+for i in -3..4 {
+  line3(yTick{i},(-0.10,i,0),(0.10,i,0)); color(yTick{i},magenta); thick(yTick{i},0.025); untraced(yTick{i}); hidden(yTick{i}); tag(yTick{i},yTicks);
+}
+for i in 1..5 {
+  line3(zTick{i},(-0.10,0,i),(0.10,0,i)); color(zTick{i},lime); thick(zTick{i},0.025); untraced(zTick{i}); hidden(zTick{i}); tag(zTick{i},zTicks);
+}
+
+grid3(plane,(0,0,0),4,1); color(plane,blue); opacity(plane,0.22); hidden(plane); tag(plane,world2d);
+cube3(space,(0,0,2),(8,6,4)); color(space,blue); hidden(space); tag(space,world3d);
+finish3(space,"material=glass shading=flat mesh=0.18 depth=0.22 shadow=0.10");
+
+// Guides expose how each coordinate is read from the axes.
+line3(xGuide,(0,0,0),(3,0,0)); color(xGuide,cyan); thick(xGuide,0.065); untraced(xGuide); hidden(xGuide); tag(xGuide,guides);
+line3(yGuide,(3,0,0),(3,2,0)); color(yGuide,magenta); thick(yGuide,0.065); untraced(yGuide); hidden(yGuide); tag(yGuide,guides);
+line3(zGuide,(3,2,0),(3,2,3)); color(zGuide,lime); thick(zGuide,0.065); untraced(zGuide); hidden(zGuide); tag(zGuide,guides);
+
+point3(xFoot,(3,0,0),0.11); color(xFoot,cyan); hidden(xFoot);
+point3(xyFoot,(3,2,0),0.11); color(xyFoot,magenta); hidden(xyFoot);
+project3(shadow,P,"xy"); color(shadow,magenta); hidden(shadow);
+link3(drop,P,shadow,0.12); color(drop,lime); thick(drop,0.025); hidden(drop);
+
+step("one number locates the point") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(address,0.50); view3(xAxis,"top",0.9,smooth,1.65); }
+    par { show(origin,0.20); show(originLabel,0.25); show(P,0.25); show(pLabel,0.25); draw(xAxis,1.10,smooth); show(xLabel,0.25); show(xTicks,0.35); }
+    par { shift3(P,(3,0,0),1.65,smooth); draw(xGuide,1.65,smooth); }
+    par { show(xFoot,0.25); pulse(P,0.65); pulse(address,0.65); }
+    wait(0.60);
+  }
+}
+
+step("the plane adds a second direction") {
+  seq {
+    par {
+      say(phase,"2D · THE COORDINATE PLANE",0.45,smooth);
+      say(narration,"Open a perpendicular y-direction, then move two units sideways.",0.55,smooth);
+      rewrite(address,`P=\textcolor{cyan}{(3},\textcolor{magenta}{2)}`,0.95,smooth);
+      show(plane,0.80); draw(yAxis,1.35,smooth); show(yLabel,0.30); show(yTicks,0.40);
+      view3(plane,"top",1.55,smooth,1.55);
+    }
+    par { shift3(P,(0,2,0),1.75,smooth); draw(yGuide,1.75,smooth); }
+    par { show(xyFoot,0.25); pulse(guides,0.80); pulse(address,0.80); }
+    wait(0.70);
+  }
+}
+
+step("read the ordered pair") {
+  seq {
+    say(narration,"First read x, then y. Order matters: (3,2) is not (2,3).",0.50,smooth);
+    par { pulse(xGuide,0.60); pulse(yGuide,0.60); }
+    wait(0.85);
+  }
+}
+
+step("space adds height") {
+  seq {
+    par {
+      say(phase,"3D · COORDINATE SPACE",0.45,smooth);
+      say(narration,"Raise a z-axis out of the plane and lift the point three units.",0.55,smooth);
+      rewrite(address,`P=\textcolor{cyan}{(3},\textcolor{magenta}{2},\textcolor{lime}{3)}`,1.05,smooth);
+      to(space,opacity,0.14,2.40,smooth);
+      draw(zAxis,1.55,smooth); show(zLabel,0.30); show(zTicks,0.40);
+      view3(space,"isometric",2.35,smooth,1.48);
+    }
+    par {
+      shift3(P,(0,0,3),2.15,smooth);
+      draw(zGuide,2.15,smooth);
+      show(shadow,0.30); show(drop,0.30);
+    }
+    par { pulse(P,0.70); pulse(address,0.70); }
+    wait(0.70);
+  }
+}
+
+step("one point three coordinates") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"ONE ADDRESS · THREE DIRECTIONS",0.50,smooth);
+      say(narration,"x says across, y says sideways, and z says how high.",0.55,smooth);
+      say(principle,"1D: (x) · 2D: (x,y) · 3D: (x,y,z)",0.55,smooth);
+      view3(space,"fit",1.70,smooth,1.55);
+    }
+    par { pulse(axes,0.90); pulse(P,0.90); roll3(3,1.55,smooth); }
+    wait(1.80);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4xu4WqyS4zs" title="A Point Gets an Address — From 1D to 3D" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-function-to-solid"><a class="header" href="#textbook-function-to-solid">textbook-function-to-solid</a></h2>
+<p>A diameter becomes a semicircle and the semicircle revolves into a sphere. The
+story links a 1D domain, a 2D graph, and a 3D solid through one continuous
+generating motion.</p>
+<pre><code class="language-manic">// ============================================================================
+// textbook-function-to-solid.manic — interval → graph → solid of revolution
+// ============================================================================
+
+title("The Revolving Semicircle — From 1D to 3D");
+canvas("9:16");
+template("neon");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Math tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"SOLIDS OF REVOLUTION"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"A 1D domain grows into a 3D sphere"); size(headline,41); bold(headline); hidden(headline);
+text(phase,(540,300),"1D · CHOOSE THE DOMAIN"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"Begin with every x-value from −2 to 2 on a number line."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"The interval controls where the graph exists."); size(principle,20); color(principle,dim); hidden(principle);
+equation(formula,(540,1488),`x\in\textcolor{cyan}{[-2,2]}`,44); hidden(formula);
+text(takeaway,(540,1572),"DOMAIN → PROFILE → ROTATION → VOLUME"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+camera3((0,-14,1.8),(0,0,0.7),39);
+
+// The x-axis and interval are the 1D seed for the whole construction.
+line3(xAxis,(-2.6,0,0),(2.6,0,0)); color(xAxis,dim); thick(xAxis,0.035); untraced(xAxis); hidden(xAxis);
+line3(domain,(-2,0,0),(2,0,0)); color(domain,cyan); thick(domain,0.09); untraced(domain); hidden(domain); tag(domain,profile);
+point3(leftEnd,(-2,0,0),0.13); color(leftEnd,cyan); hidden(leftEnd);
+point3(rightEnd,(2,0,0),0.13); color(rightEnd,cyan); hidden(rightEnd);
+point3(origin,(0,0,0),0.09); color(origin,fg); hidden(origin);
+point3(xEnd,(2.6,0,0),0.01); hidden(xEnd);
+text(xLabel,(0,0),"x"); size(xLabel,23); bold(xLabel); color(xLabel,fg); hidden(xLabel); label3(xLabel,xEnd,0.30);
+
+// The upper semicircle is a textbook profile: y = sqrt(4 - x^2).
+curve3(semicircle,"-2+4*t","0","sqrt(4-(-2+4*t)^2)",(0,1)); color(semicircle,magenta); thick(semicircle,0.065); untraced(semicircle); hidden(semicircle); tag(semicircle,profile);
+param3(region,
+  "-2+4*u",
+  "0",
+  "v*sqrt(4-(-2+4*u)^2)",
+  (0,1),(0,1),32);
+color(region,magenta); hidden(region); tag(region,profile);
+finish3(region,"material=glass shading=flat mesh=0.18 depth=0.18 shadow=0.08");
+
+// Three sample heights explain how the graph rises from the domain.
+line3(heightA,(-1,0,0),(-1,0,1.732)); color(heightA,gold); thick(heightA,0.035); untraced(heightA); hidden(heightA); tag(heightA,samples); tag(heightA,profile);
+line3(heightB,(0,0,0),(0,0,2)); color(heightB,gold); thick(heightB,0.035); untraced(heightB); hidden(heightB); tag(heightB,samples); tag(heightB,profile);
+line3(heightC,(1,0,0),(1,0,1.732)); color(heightC,gold); thick(heightC,0.035); untraced(heightC); hidden(heightC); tag(heightC,samples); tag(heightC,profile);
+point3(apex,(0,0,2),0.10); color(apex,gold); hidden(apex); tag(apex,profile);
+
+// Rotating the filled profile around x generates a radius-2 sphere.
+param3(sphere,
+  "2*cos(u)",
+  "2*sin(u)*cos(v)",
+  "2*sin(u)*sin(v)",
+  (0,3.1416),(0,6.2832),38);
+color(sphere,blue); hidden(sphere); tag(sphere,solid);
+finish3(sphere,"material=glass shading=smooth mesh=0.24 depth=0.34 shadow=0.16");
+curve3(equator,"0","2*cos(t)","2*sin(t)",(0,6.2832)); color(equator,cyan); thick(equator,0.035); untraced(equator); hidden(equator); tag(equator,solid);
+curve3(meridian,"2*cos(t)","0","2*sin(t)",(0,6.2832)); color(meridian,magenta); thick(meridian,0.035); untraced(meridian); hidden(meridian); tag(meridian,solid);
+
+step("mark the one dimensional domain") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(formula,0.50); view3(domain,"front",0.9,smooth,1.72); }
+    par { draw(xAxis,0.90,smooth); draw(domain,1.35,smooth); show(leftEnd,0.25); show(rightEnd,0.25); show(origin,0.25); show(xLabel,0.25); }
+    par { pulse(domain,0.75); pulse(formula,0.75); }
+    wait(0.65);
+  }
+}
+
+step("the function supplies height") {
+  seq {
+    par {
+      say(phase,"2D · DRAW THE PROFILE",0.45,smooth);
+      say(narration,"At each x, the function supplies a height above the axis.",0.55,smooth);
+      say(principle,"The interval becomes the base of an upper semicircle.",0.45,smooth);
+      rewrite(formula,`y=\textcolor{magenta}{\sqrt{4-x^2}},\quad -2\le x\le2`,1.05,smooth);
+      draw(semicircle,2.10,smooth);
+      stagger(0.22) { show(heightA,0.20); show(heightB,0.20); show(heightC,0.20); }
+      stagger(0.22) { draw(heightA,0.65,smooth); draw(heightB,0.65,smooth); draw(heightC,0.65,smooth); }
+    }
+    par { show(apex,0.25); pulse(samples,0.75); }
+    wait(0.70);
+  }
+}
+
+step("fill the generating region") {
+  seq {
+    par {
+      say(narration,"The curve and the x-axis enclose the region that will rotate.",0.50,smooth);
+      to(region,opacity,0.26,1.65,smooth);
+      view3(region,"front",1.40,smooth,1.62);
+    }
+    par { pulse(region,0.75); pulse(semicircle,0.75); }
+    wait(0.75);
+  }
+}
+
+step("rotate the profile into space") {
+  seq {
+    par {
+      say(phase,"3D · ROTATE ABOUT THE x-AXIS",0.45,smooth);
+      say(narration,"Sweep the entire semicircle through 360° around its diameter.",0.55,smooth);
+      say(principle,"Every point traces a circle; together those circles form a sphere.",0.50,smooth);
+      rewrite(formula,`x^2+y^2+z^2=\textcolor{gold}{4}`,1.05,smooth);
+      turn3(profile,(0,0,0),x,360,3.10,smooth);
+      to(sphere,opacity,0.34,3.10,smooth);
+      show(equator,0.45); draw(equator,2.15,smooth);
+      show(meridian,0.45); draw(meridian,2.15,smooth);
+      view3(solid,"isometric",2.60,smooth,1.55);
+    }
+    par { pulse(solid,0.85); roll3(4,1.50,smooth); }
+    wait(0.75);
+  }
+}
+
+step("read the solid of revolution") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"THE SAME RADIUS · A NEW DIMENSION",0.50,smooth);
+      say(narration,"The 2D radius is still 2, but rotation has filled 3D volume.",0.55,smooth);
+      say(principle,"A semicircle rotated about its diameter generates a sphere.",0.50,smooth);
+      rewrite(formula,`V=\frac{4}{3}\pi(2)^3=\textcolor{gold}{\frac{32\pi}{3}}`,1.15,smooth);
+      view3(solid,"fit",1.65,smooth,1.58);
+    }
+    par { pulse(sphere,0.90); pulse(formula,0.90); roll3(3,1.50,smooth); }
+    wait(1.90);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/MwgL9dO2jhs" title="The Revolving Semicircle — From 1D to 3D" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-statistical-dimensions"><a class="header" href="#textbook-statistical-dimensions">textbook-statistical-dimensions</a></h2>
+<p>Data grows from a one-variable number line to a two-variable scatter plot and a
+three-variable point cloud. The axes and observations evolve together so statistical
+dimension reads as information, not decoration.</p>
+<pre><code class="language-manic">// ============================================================================
+// textbook-statistical-dimensions.manic
+// One variable → two variables → three variables, using the same 12 students.
+// Stats kit: summary + correlation. 3D primitives reveal the third variable.
+// ============================================================================
+
+title("Statistical Dimensions — From a List to a Data Cloud");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Stats tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"MULTIVARIATE STATISTICS"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"The same students, in more dimensions"); size(headline,33); bold(headline); hidden(headline);
+text(phase,(540,300),"1D · ONE VARIABLE"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"Record only height. Each student needs one number."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Centre and spread describe one-dimensional data."); size(principle,20); color(principle,dim); hidden(principle);
+equation(address,(540,1488),`\text{student}=\textcolor{cyan}{(\text{height})}`,39); hidden(address);
+text(takeaway,(540,1572),"MORE VARIABLES DO NOT ADD PEOPLE · THEY ADD STRUCTURE"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+let vx=518;
+let vy=610;
+
+// Twelve students, measured in centimetres.
+summary(one,(vx,vy),
+  "150 154 158 160 164 167 170 173 176 180 184 188",760,cyan);
+untraced(one.line); hidden(one.dots); hidden(one.band);
+hidden(one.meanmark); hidden(one.meanlbl);
+hidden(one.medianmark); hidden(one.medianlbl);
+hidden(one.readout); hidden(one.min); hidden(one.max);
+
+// The same students: height and arm span. Target points remain hidden because
+// the 1D dots will `become` these blueprints, preserving one identity per row.
+correlation(two,(vx,vy),10,
+  "150 151  154 153  158 160  160 159  164 165  167 168  170 169  173 175  176 174  180 181  184 185  188 187",cyan);
+hidden(two.points); untraced(two.line); hidden(two.r);
+
+// Front view: x = height, screen-up z = arm span. Depth y stores shoe size.
+// The camera begins in the exact 2D projection; its later isometric move is
+// what makes the third variable perceptible.
+camera3((0.53,-64.4,-5.34),(0.53,0,-5.34),40);
+
+cube3(dataRoom,(0,0,3.1),(7.2,5.6,6.2)); color(dataRoom,blue); hidden(dataRoom); tag(dataRoom,multivariate);
+finish3(dataRoom,"material=glass shading=flat mesh=0.17 depth=0.22 shadow=0.10");
+
+line3(heightAxis,(-3.6,-2.8,0),(3.6,-2.8,0)); color(heightAxis,cyan); thick(heightAxis,0.045); untraced(heightAxis); hidden(heightAxis); tag(heightAxis,multivariate); tag(heightAxis,axes3d);
+line3(shoeAxis,(-3.6,-2.8,0),(-3.6,2.8,0)); color(shoeAxis,magenta); thick(shoeAxis,0.045); untraced(shoeAxis); hidden(shoeAxis); tag(shoeAxis,multivariate); tag(shoeAxis,axes3d);
+line3(armAxis,(-3.6,-2.8,0),(-3.6,-2.8,6.2)); color(armAxis,lime); thick(armAxis,0.045); untraced(armAxis); hidden(armAxis); tag(armAxis,multivariate); tag(armAxis,axes3d);
+
+point3(heightEnd,(3.6,-2.8,0),0.01); hidden(heightEnd);
+point3(shoeEnd,(-3.6,2.8,0),0.01); hidden(shoeEnd);
+point3(armEnd,(-3.6,-2.8,6.2),0.01); hidden(armEnd);
+text(heightLabel,(0,0),"height"); size(heightLabel,25); bold(heightLabel); color(heightLabel,cyan); hidden(heightLabel); label3(heightLabel,heightEnd,0.40);
+text(shoeLabel,(0,0),"shoe size"); size(shoeLabel,25); bold(shoeLabel); color(shoeLabel,magenta); hidden(shoeLabel); label3(shoeLabel,shoeEnd,0.40);
+text(armLabel,(0,0),"arm span"); size(armLabel,25); bold(armLabel); color(armLabel,lime); hidden(armLabel); label3(armLabel,armEnd,0.40);
+
+// Normalised triples: (height, shoe-size depth, arm-span height).
+point3(p0,(-3.167,-2.4,0.000),0.13); color(p0,cyan); hidden(p0); tag(p0,cloud); tag(p0,multivariate);
+point3(p1,(-2.500,-1.6,0.333),0.13); color(p1,cyan); hidden(p1); tag(p1,cloud); tag(p1,multivariate);
+point3(p2,(-1.833,-1.6,1.500),0.13); color(p2,cyan); hidden(p2); tag(p2,cloud); tag(p2,multivariate);
+point3(p3,(-1.500,-0.8,1.333),0.13); color(p3,cyan); hidden(p3); tag(p3,cloud); tag(p3,multivariate);
+point3(p4,(-0.833,-0.8,2.333),0.13); color(p4,cyan); hidden(p4); tag(p4,cloud); tag(p4,multivariate);
+point3(p5,(-0.333, 0.0,2.833),0.13); color(p5,cyan); hidden(p5); tag(p5,cloud); tag(p5,multivariate);
+point3(p6,( 0.167, 0.0,3.000),0.13); color(p6,cyan); hidden(p6); tag(p6,cloud); tag(p6,multivariate);
+point3(p7,( 0.667, 0.8,4.000),0.16); color(p7,gold); hidden(p7); tag(p7,cloud); tag(p7,multivariate);
+point3(p8,( 1.167, 0.8,3.833),0.13); color(p8,cyan); hidden(p8); tag(p8,cloud); tag(p8,multivariate);
+point3(p9,( 1.833, 1.6,5.000),0.13); color(p9,cyan); hidden(p9); tag(p9,cloud); tag(p9,multivariate);
+point3(p10,(2.500, 1.6,5.667),0.13); color(p10,cyan); hidden(p10); tag(p10,cloud); tag(p10,multivariate);
+point3(p11,(3.167, 2.4,6.000),0.13); color(p11,cyan); hidden(p11); tag(p11,cloud); tag(p11,multivariate);
+
+project3(frontShadow,p7,"xz"); color(frontShadow,gold); hidden(frontShadow); tag(frontShadow,multivariate);
+link3(depthLink,p7,frontShadow,0.14); color(depthLink,magenta); thick(depthLink,0.025); hidden(depthLink); tag(depthLink,multivariate);
+text(depthNote,(0,0),"shoe size adds depth"); size(depthNote,24); bold(depthNote); color(depthNote,gold); hidden(depthNote); label3(depthNote,p7,0.42);
+
+step("one variable centre and spread") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(address,0.55); }
+    draw(one.line,0.75,smooth);
+    par { show(one.min,0.25); show(one.max,0.25); stagger(0.09) { for i in 0..12 { show(one.dot{i},0.18); } } }
+    par { to(one.band,opacity,0.12,0.65,smooth); show(one.meanmark,0.35); show(one.meanlbl,0.35); show(one.medianmark,0.35); show(one.medianlbl,0.35); }
+    par { show(one.readout,0.35); pulse(one.dots,0.75); }
+    wait(0.70);
+  }
+}
+
+step("a second variable reveals relationship") {
+  seq {
+    par {
+      say(phase,"2D · TWO VARIABLES",0.45,smooth);
+      say(narration,"Add arm span. Every student now becomes an ordered pair.",0.55,smooth);
+      say(principle,"The slope of the cloud reveals how two measurements move together.",0.50,smooth);
+      rewrite(address,`\text{student}=\textcolor{cyan}{(\text{height},\text{arm span})}`,1.00,smooth);
+      fade(one.band,0.45); fade(one.meanmark,0.45); fade(one.meanlbl,0.45);
+      fade(one.medianmark,0.45); fade(one.medianlbl,0.45); fade(one.readout,0.45);
+      fade(one.line,0.45); fade(one.min,0.35); fade(one.max,0.35);
+    }
+    par {
+      for i in 0..12 { become(one.dot{i},two.p{i},1.75,smooth); }
+    }
+    par { draw(two.line,1.05,smooth); show(two.r,0.45); }
+    par { pulse(one.dots,0.75); pulse(two.r,0.75); }
+    wait(0.70);
+  }
+}
+
+step("the front projection still looks two dimensional") {
+  seq {
+    say(narration,"A front view can hide depth: the 3D records still resemble the scatterplot.",0.55,smooth);
+    par {
+      fade(one.dots,0.80);
+      fade(two.line,0.80);
+      fade(two.r,0.80);
+      stagger(0.08) { for i in 0..12 { show(p{i},0.18); } }
+      show(heightAxis,0.35); show(armAxis,0.35);
+      draw(heightAxis,1.10,smooth); draw(armAxis,1.10,smooth);
+      show(heightLabel,0.30); show(armLabel,0.30);
+    }
+    wait(0.75);
+  }
+}
+
+step("rotate to reveal the third variable") {
+  seq {
+    par {
+      say(phase,"3D · THREE VARIABLES",0.45,smooth);
+      say(narration,"Rotate the view. Shoe size reveals variation the flat plot could not show.",0.55,smooth);
+      say(principle,"A third coordinate turns a scatterplot into a multivariate cloud.",0.50,smooth);
+      rewrite(address,`\text{student}=\textcolor{cyan}{(\text{height},\text{arm span},\text{shoe})}`,1.10,smooth);
+      to(dataRoom,opacity,0.13,2.50,smooth);
+      show(shoeAxis,0.30); draw(shoeAxis,1.20,smooth); show(shoeLabel,0.30);
+      view3(multivariate,"isometric",2.65,smooth,1.52);
+    }
+    par { show(frontShadow,0.30); show(depthLink,0.35); show(depthNote,0.35); pulse(p7,0.75); }
+    wait(0.75);
+  }
+}
+
+step("dimensions describe not duplicate") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"12 STUDENTS · 36 MEASUREMENTS",0.50,smooth);
+      say(narration,"The sample size stayed twelve; each observation simply gained context.",0.55,smooth);
+      say(principle,"1D describes · 2D relates · 3D separates hidden structure",0.55,smooth);
+      view3(multivariate,"fit",1.60,smooth,1.58);
+    }
+    par { pulse(cloud,0.90); pulse(address,0.90); roll3(3,1.50,smooth); }
+    wait(1.90);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mT1K2GKB0ok" title="Statistical Dimensions — From a List to a Data Cloud" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-geometry-dimension-reduction"><a class="header" href="#textbook-geometry-dimension-reduction">textbook-geometry-dimension-reduction</a></h2>
+<p>The reverse journey: a sphere reveals a great-circle section, then that circle
+collapses to its diameter. A 3D→2D→1D geometry lesson that makes section and
+projection relationships explicit.</p>
+<pre><code class="language-manic">// ============================================================================
+// textbook-geometry-dimension-reduction.manic
+// Sphere → central cross-section → circle → diameter (3D → 2D → 1D).
+// Geo kit: point, circle2, linecircle, segment, midpoint.
+// ============================================================================
+
+title("Dimension Reduction — From Sphere to Diameter");
+canvas("9:16");
+template("blueprint");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Geometry tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"GEOMETRY BY DIMENSION"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"A sphere hides a circle — and a line"); size(headline,36); bold(headline); hidden(headline);
+text(phase,(540,300),"3D · BEGIN WITH A SPHERE"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"A sphere extends in three independent directions."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Its radius is 3 units in every direction."); size(principle,20); color(principle,dim); hidden(principle);
+equation(formula,(540,1488),`x^2+y^2+z^2=\textcolor{gold}{3^2}`,43); hidden(formula);
+text(takeaway,(540,1572),"FIX A COORDINATE · LOSE A DIMENSION · KEEP THE MEASURE"); size(takeaway,18); bold(takeaway); color(takeaway,gold); hidden(takeaway);
+
+// Settled isometric composition of the complete sphere inside the Creator
+// media region. Starting here prevents an opening camera correction.
+camera3((40.05,-39.35,23.41),(3.15,-2.45,-6.79),40);
+
+sphere3(solid,(0,0,0),3); color(solid,blue); hidden(solid); tag(solid,spatial);
+finish3(solid,"material=glass shading=smooth mesh=0.25 depth=0.36 shadow=0.16");
+
+// A thin xz-plane begins outside the sphere and travels to y=0.
+cube3(slicePlane,(0,-5,0),(7,0.08,7)); color(slicePlane,magenta); hidden(slicePlane); tag(slicePlane,spatial);
+finish3(slicePlane,"material=glass shading=flat mesh=0.10 depth=0.18 shadow=0.06");
+curve3(greatCircle,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(greatCircle,magenta); thick(greatCircle,0.065); untraced(greatCircle); hidden(greatCircle); tag(greatCircle,spatial);
+
+// Screen-space geo construction aligned with the settled front projection.
+let gx=518;
+let gy=890;
+let gr=145;
+
+point(O,(gx,gy),"O"); hidden(O); hidden(O.label);
+point(A,(gx+gr,gy),"R"); hidden(A); hidden(A.label);
+circle2(section,O,A); color(section,magenta); stroke(section,4); untraced(section);
+segment(radius2d,O,A); color(radius2d,gold); stroke(radius2d,4); untraced(radius2d);
+
+// Two hidden points define a horizontal secant. The geo kit computes its exact
+// circle intersections `ends0` and `ends1`, then derives their midpoint M.
+point(lineLeft,(gx-gr-55,gy)); hidden(lineLeft);
+point(lineRight,(gx+gr+55,gy)); hidden(lineRight);
+linecircle(ends,lineLeft,lineRight,O,A);
+hidden(ends0); hidden(ends1);
+label(ends0,"A",(-18,-22)); hidden(ends0.label);
+label(ends1,"B",(18,-22)); hidden(ends1.label);
+segment(diameter,ends0,ends1); color(diameter,cyan); stroke(diameter,6); untraced(diameter);
+midpoint(M,ends0,ends1); color(M,lime); hidden(M);
+label(M,"M",(0,-24)); hidden(M.label);
+
+step("the full three dimensional object") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(formula,0.55); }
+    show(solid,0.85);
+    par { pulse(solid,0.85); roll3(4,1.45,smooth); }
+    wait(0.70);
+  }
+}
+
+step("fix one coordinate with a plane") {
+  seq {
+    par {
+      say(phase,"3D → 2D · TAKE A CENTRAL SLICE",0.45,smooth);
+      say(narration,"Move a plane to the centre and fix y=0.",0.55,smooth);
+      say(principle,"Only points shared by the sphere and plane survive.",0.50,smooth);
+      rewrite(formula,`y=0\quad\Longrightarrow\quad x^2+z^2=\textcolor{gold}{3^2}`,1.05,smooth);
+      show(slicePlane,0.35);
+    }
+    par {
+      shift3(slicePlane,(0,5,0),2.10,smooth);
+      show(greatCircle,0.25); draw(greatCircle,2.10,smooth);
+    }
+    par { pulse(greatCircle,0.75); to(solid,opacity,0.04,0.65,smooth); fade(slicePlane,0.65); }
+    // A generous margin makes the spatial circle settle at the same on-screen
+    // radius as the following geo-kit circle, avoiding a dimensional size jump.
+    view3(greatCircle,"front",1.65,smooth,3.10);
+    wait(0.60);
+  }
+}
+
+step("the cross section becomes a geo circle") {
+  seq {
+    par {
+      say(phase,"2D · THE GREAT CIRCLE",0.45,smooth);
+      say(narration,"The surviving cross-section is a circle of radius 3.",0.55,smooth);
+      say(principle,"The geo kit binds the circle to centre O and radius point R.",0.50,smooth);
+      rewrite(formula,`x^2+z^2=9\quad\Longleftrightarrow\quad r=\textcolor{gold}{3}`,1.00,smooth);
+      fade(greatCircle,0.85);
+      draw(section,1.30,smooth);
+    }
+    par { show(O,0.25); show(O.label,0.25); show(A,0.25); show(A.label,0.25); draw(radius2d,0.85,smooth); }
+    par { pulse(section,0.75); pulse(radius2d,0.75); }
+    wait(0.70);
+  }
+}
+
+step("a line finds the diameter") {
+  seq {
+    par {
+      say(phase,"2D → 1D · INTERSECT WITH A LINE",0.45,smooth);
+      say(narration,"A line through the centre meets the circle at exactly two points.",0.55,smooth);
+      say(principle,"The constructed segment AB is the circle's widest chord.",0.50,smooth);
+      rewrite(formula,`AB=2r=2(3)`,0.95,smooth);
+    }
+    par { show(ends0,0.25); show(ends1,0.25); show(ends0.label,0.25); show(ends1.label,0.25); draw(diameter,1.35,smooth); }
+    par { fade(radius2d,0.45); fade(A,0.35); fade(A.label,0.35); show(M,0.30); show(M.label,0.30); pulse(M,0.70); }
+    wait(0.70);
+  }
+}
+
+step("only one measurable direction remains") {
+  seq {
+    par {
+      show(takeaway,0.45);
+      say(phase,"1D · THE DIAMETER",0.50,smooth);
+      say(narration,"Remove the surrounding circle. One segment—and one length—remains.",0.55,smooth);
+      say(principle,"3D sphere → 2D section → 1D diameter",0.55,smooth);
+      rewrite(formula,`\boxed{AB=\textcolor{gold}{6}\text{ units}}`,1.05,smooth);
+      fade(section,0.75); fade(O,0.40); fade(O.label,0.40);
+    }
+    par { pulse(diameter,0.90); pulse(formula,0.90); }
+    wait(2.00);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/-9BjTydHNIg" title="Dimension Reduction — From Sphere to Diameter" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="textbook-watermelon-sections"><a class="header" href="#textbook-watermelon-sections">textbook-watermelon-sections</a></h2>
+<p>A paper-style spatial lesson that turns sphere sections into a continuous story:
+horizontal and vertical great-circle cuts make two halves, then perpendicular cuts
+separate one quarter from the three-quarter remainder. The section faces are bounded
+parametric surfaces, so the authored geometry is exact rather than a flat overlay.</p>
+<pre><code class="language-manic">// ============================================================================
+// textbook-watermelon-sections.manic
+// Animated reconstruction of a textbook sketch: horizontal and vertical
+// sphere sections, then two perpendicular cuts producing 1/4 + 3/4.
+// ============================================================================
+
+title("Watermelon Sections — Slicing a Sphere");
+canvas("9:16");
+template("paper");
+watermark(manicMark,(220,175),"Made With Manic");
+creator(me,"@anish2good name=Manic_Geometry tagline=Textbooks_in_motion yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=social safe=reels");
+socials(me);
+
+text(kicker,(540,164),"SECTIONS OF A SPHERE"); size(kicker,21); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(540,228),"How a watermelon becomes ½, ¼, and ¾"); size(headline,36); bold(headline); hidden(headline);
+text(phase,(540,300),"THE TWO GREAT CIRCLES"); size(phase,23); bold(phase); color(phase,gold); hidden(phase);
+text(narration,(540,1328),"A central plane cuts a sphere in a great circle."); size(narration,26); bold(narration); wrap(narration,850); hidden(narration);
+text(principle,(540,1392),"Horizontal and vertical sections have the same radius."); size(principle,20); color(principle,dim); hidden(principle);
+equation(formula,(540,1488),`x^2+y^2+z^2=R^2`,43); hidden(formula);
+text(result,(540,1572),"ONE SPHERE · TWO PERPENDICULAR SECTION PLANES"); size(result,18); bold(result); color(result,gold); hidden(result);
+
+// Stable isometric framing in the portrait Creator media region.
+camera3((40.05,-39.35,23.41),(3.15,-2.45,-6.79),40);
+
+// Shared textbook guides: the horizontal ring lies in z=0 and the vertical
+// ring lies in y=0. Each chapter owns a duplicate so transitions stay simple.
+
+// --------------------------------------------------------------------------
+// Chapter 1 — horizontal cut, two hemispheres
+// --------------------------------------------------------------------------
+sphere3(hGuide,(0,0,0),3); color(hGuide,blue); hidden(hGuide); tag(hGuide,hScene);
+finish3(hGuide,"material=glass shading=smooth mesh=0.18 depth=0.28 shadow=0.12");
+curve3(hRing,"3*cos(t)","3*sin(t)","0",(0,6.2832)); color(hRing,cyan); thick(hRing,0.055); untraced(hRing); hidden(hRing); tag(hRing,hScene);
+curve3(hVerticalRing,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(hVerticalRing,dim); thick(hVerticalRing,0.035); untraced(hVerticalRing); hidden(hVerticalRing); tag(hVerticalRing,hScene);
+cube3(hPlane,(0,0,4.5),(7,7,0.08)); color(hPlane,cyan); hidden(hPlane); tag(hPlane,hScene);
+finish3(hPlane,"material=glass shading=flat mesh=0.08 depth=0.14 shadow=0.04");
+
+param3(hTopShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,1.5708),(0,6.2832),34);
+color(hTopShell,lime); hidden(hTopShell); tag(hTopShell,hTop); tag(hTopShell,hScene);
+finish3(hTopShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(hBottomShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (1.5708,3.1416),(0,6.2832),34);
+color(hBottomShell,lime); hidden(hBottomShell); tag(hBottomShell,hBottom); tag(hBottomShell,hScene);
+finish3(hBottomShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(hTopFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(0,6.2832),30);
+color(hTopFace,magenta); hidden(hTopFace); tag(hTopFace,hTop); tag(hTopFace,hScene);
+finish3(hTopFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+param3(hBottomFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(0,6.2832),30);
+color(hBottomFace,magenta); hidden(hBottomFace); tag(hBottomFace,hBottom); tag(hBottomFace,hScene);
+finish3(hBottomFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+
+// --------------------------------------------------------------------------
+// Chapter 2 — vertical cut, front and back hemispheres
+// --------------------------------------------------------------------------
+sphere3(vGuide,(0,0,0),3); color(vGuide,blue); hidden(vGuide); tag(vGuide,vScene);
+finish3(vGuide,"material=glass shading=smooth mesh=0.18 depth=0.28 shadow=0.12");
+curve3(vRing,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(vRing,lime); thick(vRing,0.055); untraced(vRing); hidden(vRing); tag(vRing,vScene);
+curve3(vHorizontalRing,"3*cos(t)","3*sin(t)","0",(0,6.2832)); color(vHorizontalRing,dim); thick(vHorizontalRing,0.035); untraced(vHorizontalRing); hidden(vHorizontalRing); tag(vHorizontalRing,vScene);
+cube3(vPlane,(0,-4.5,0),(7,0.08,7)); color(vPlane,lime); hidden(vPlane); tag(vPlane,vScene);
+finish3(vPlane,"material=glass shading=flat mesh=0.08 depth=0.14 shadow=0.04");
+
+param3(vFrontShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,3.1416),(3.1416,6.2832),34);
+color(vFrontShell,lime); hidden(vFrontShell); tag(vFrontShell,vFront); tag(vFrontShell,vScene);
+finish3(vFrontShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(vBackShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,3.1416),(0,3.1416),34);
+color(vBackShell,lime); hidden(vBackShell); tag(vBackShell,vBack); tag(vBackShell,vScene);
+finish3(vBackShell,"material=glass shading=smooth mesh=0.12 depth=0.24 shadow=0.10");
+param3(vFrontFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,6.2832),30);
+color(vFrontFace,cyan); hidden(vFrontFace); tag(vFrontFace,vFront); tag(vFrontFace,vScene);
+finish3(vFrontFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+param3(vBackFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,6.2832),30);
+color(vBackFace,cyan); hidden(vBackFace); tag(vBackFace,vBack); tag(vBackFace,vScene);
+finish3(vBackFace,"material=glass shading=flat mesh=0.30 depth=0.22 shadow=0.08");
+
+// --------------------------------------------------------------------------
+// Chapter 3 — perpendicular cuts, quarter removed and three quarters remain
+// --------------------------------------------------------------------------
+sphere3(qGuide,(0,0,0),3); color(qGuide,blue); hidden(qGuide); tag(qGuide,qScene);
+finish3(qGuide,"material=glass shading=smooth mesh=0.18 depth=0.28 shadow=0.12");
+curve3(qHRing,"3*cos(t)","3*sin(t)","0",(0,6.2832)); color(qHRing,cyan); thick(qHRing,0.045); untraced(qHRing); hidden(qHRing); tag(qHRing,qScene);
+curve3(qVRing,"3*cos(t)","0","3*sin(t)",(0,6.2832)); color(qVRing,lime); thick(qVRing,0.045); untraced(qVRing); hidden(qVRing); tag(qVRing,qScene);
+cube3(qHPlane,(0,0,4.5),(7,7,0.07)); color(qHPlane,cyan); hidden(qHPlane); tag(qHPlane,qScene);
+cube3(qVPlane,(0,-4.5,0),(7,0.07,7)); color(qVPlane,lime); hidden(qVPlane); tag(qVPlane,qScene);
+finish3(qHPlane,"material=glass shading=flat mesh=0.06 depth=0.12 shadow=0.03");
+finish3(qVPlane,"material=glass shading=flat mesh=0.06 depth=0.12 shadow=0.03");
+
+// Removed top-front quarter: one spherical patch plus two semicircular faces.
+param3(qShell,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,1.5708),(3.1416,6.2832),32);
+color(qShell,lime); hidden(qShell); tag(qShell,quarterPiece); tag(qShell,qScene);
+finish3(qShell,"material=glass shading=smooth mesh=0.14 depth=0.26 shadow=0.12");
+param3(qHFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(3.1416,6.2832),28);
+color(qHFace,gold); hidden(qHFace); tag(qHFace,quarterPiece); tag(qHFace,qScene);
+finish3(qHFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+param3(qVFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,3.1416),28);
+color(qVFace,gold); hidden(qVFace); tag(qVFace,quarterPiece); tag(qVFace,qScene);
+finish3(qVFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+
+// Remaining 3/4: top-back quarter plus the complete bottom hemisphere.
+param3(rTopBack,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (0,1.5708),(0,3.1416),32);
+color(rTopBack,lime); hidden(rTopBack); tag(rTopBack,remainder); tag(rTopBack,qScene);
+finish3(rTopBack,"material=glass shading=smooth mesh=0.14 depth=0.26 shadow=0.12");
+param3(rBottom,
+  "3*sin(u)*cos(v)","3*sin(u)*sin(v)","3*cos(u)",
+  (1.5708,3.1416),(0,6.2832),34);
+color(rBottom,lime); hidden(rBottom); tag(rBottom,remainder); tag(rBottom,qScene);
+finish3(rBottom,"material=glass shading=smooth mesh=0.14 depth=0.26 shadow=0.12");
+param3(rHFace,"3*u*cos(v)","3*u*sin(v)","0",(0,1),(3.1416,6.2832),28);
+color(rHFace,gold); hidden(rHFace); tag(rHFace,remainder); tag(rHFace,qScene);
+finish3(rHFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+param3(rVFace,"3*u*cos(v)","0","3*u*sin(v)",(0,1),(0,3.1416),28);
+color(rVFace,gold); hidden(rVFace); tag(rVFace,remainder); tag(rVFace,qScene);
+finish3(rVFace,"material=glass shading=flat mesh=0.28 depth=0.22 shadow=0.08");
+
+step("read the two central sections") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.55); show(phase,0.40); show(narration,0.45); show(principle,0.40); show(formula,0.55); show(result,0.45); }
+    to(hGuide,opacity,0.28,0.80,smooth);
+    par { show(hRing,0.25); draw(hRing,1.20,smooth); show(hVerticalRing,0.25); draw(hVerticalRing,1.20,smooth); }
+    par { pulse(hRing,0.70); pulse(hVerticalRing,0.70); roll3(3,1.30,smooth); }
+    wait(0.65);
+  }
+}
+
+step("horizontal cut makes two halves") {
+  seq {
+    par {
+      say(phase,"HORIZONTAL SECTION",0.45,smooth);
+      say(narration,"Slide a horizontal plane through the centre: z=0.",0.55,smooth);
+      say(principle,"The intersection is a horizontal great circle.",0.50,smooth);
+      rewrite(formula,`z=0\quad\Longrightarrow\quad x^2+y^2=R^2`,1.00,smooth);
+      say(result,"CUT → TWO ½-WATERMELONS",0.45,smooth);
+      show(hPlane,0.30);
+    }
+    par { shift3(hPlane,(0,0,-4.5),2.00,smooth); pulse(hRing,0.75); }
+    par {
+      fade(hGuide,0.55); fade(hPlane,0.45); fade(hRing,0.45); fade(hVerticalRing,0.45);
+      show(hTopShell,0.40); show(hBottomShell,0.40);
+      to(hTopFace,opacity,0.74,0.50,smooth); to(hBottomFace,opacity,0.74,0.50,smooth);
+    }
+    par { shift3(hTop,(-3.8,0,0.7),1.85,smooth); shift3(hBottom,(1.5,0,-0.2),1.85,smooth); }
+    par { pulse(hTopFace,0.80); pulse(hBottomFace,0.80); }
+    wait(0.75);
+  }
+}
+
+step("vertical cut makes two halves") {
+  seq {
+    par {
+      fade(hScene,0.65);
+      say(phase,"VERTICAL SECTION",0.45,smooth);
+      say(narration,"Turn the cutting plane upright and pass it through y=0.",0.55,smooth);
+      say(principle,"Its section is the same-size circle, seen vertically.",0.50,smooth);
+      rewrite(formula,`y=0\quad\Longrightarrow\quad x^2+z^2=R^2`,1.00,smooth);
+      say(result,"ANOTHER CUT → TWO ½-WATERMELONS",0.45,smooth);
+    }
+    par { to(vGuide,opacity,0.26,0.70,smooth); show(vHorizontalRing,0.25); draw(vHorizontalRing,0.90,smooth); show(vRing,0.25); draw(vRing,1.10,smooth); }
+    par { show(vPlane,0.30); shift3(vPlane,(0,4.5,0),2.00,smooth); pulse(vRing,0.75); }
+    par {
+      fade(vGuide,0.55); fade(vPlane,0.45); fade(vRing,0.45); fade(vHorizontalRing,0.45);
+      show(vFrontShell,0.40); show(vBackShell,0.40);
+      to(vFrontFace,opacity,0.74,0.50,smooth); to(vBackFace,opacity,0.74,0.50,smooth);
+    }
+    par { shift3(vFront,(-3.8,0,0.4),1.85,smooth); shift3(vBack,(1.5,0,-0.1),1.85,smooth); }
+    wait(0.75);
+  }
+}
+
+step("perpendicular cuts remove one quarter") {
+  seq {
+    par {
+      fade(vScene,0.65);
+      say(phase,"TWO PERPENDICULAR CUTS",0.45,smooth);
+      say(narration,"Now combine the horizontal and vertical central planes.",0.55,smooth);
+      say(principle,"Each cut halves one independent direction.",0.50,smooth);
+      rewrite(formula,`\frac12\times\frac12=\textcolor{gold}{\frac14}`,1.00,smooth);
+      say(result,"¼ CUT OUT · ¾ REMAINS",0.45,smooth);
+    }
+    par { to(qGuide,opacity,0.24,0.65,smooth); show(qHRing,0.25); draw(qHRing,0.90,smooth); show(qVRing,0.25); draw(qVRing,0.90,smooth); }
+    seq {
+      par { show(qHPlane,0.25); shift3(qHPlane,(0,0,-4.5),1.35,smooth); }
+      par { show(qVPlane,0.25); shift3(qVPlane,(0,4.5,0),1.35,smooth); }
+    }
+    par {
+      fade(qGuide,0.50); fade(qHPlane,0.40); fade(qVPlane,0.40); fade(qHRing,0.40); fade(qVRing,0.40);
+      show(qShell,0.35); to(qHFace,opacity,0.78,0.45,smooth); to(qVFace,opacity,0.78,0.45,smooth);
+      show(rTopBack,0.35); show(rBottom,0.35); to(rHFace,opacity,0.70,0.45,smooth); to(rVFace,opacity,0.70,0.45,smooth);
+    }
+    par { shift3(quarterPiece,(-3.8,0,0.8),1.90,smooth); shift3(remainder,(1.4,0,-0.15),1.90,smooth); }
+    wait(0.70);
+  }
+}
+
+step("compare the pieces") {
+  seq {
+    par {
+      say(phase,"FRACTIONS ARE GEOMETRY",0.50,smooth);
+      say(narration,"The removed corner is one quarter; the connected remainder is three quarters.",0.55,smooth);
+      say(principle,"Horizontal section · vertical section · quarter volume",0.55,smooth);
+      rewrite(formula,`1-\frac14=\textcolor{gold}{\frac34}`,1.00,smooth);
+      show(result,0.25); say(result,"¼ PIECE + ¾ WATERMELON = 1 WHOLE",0.50,smooth);
+    }
+    par { pulse(quarterPiece,0.90); pulse(remainder,0.90); roll3(3,1.50,smooth); }
+    wait(2.00);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/F0EVT7FlxIE" title="Watermelon Sections — Halves, Quarters, and Great-Circle Cuts" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="three_d"><a class="header" href="#three_d">three_d</a></h2>
 <p>Cubes, spheres, arrows, a curve, a surface and solids together — the 3D basics on one stage.</p>
 <pre><code class="language-manic">title("3D coordinate space");

@@ -1,5 +1,5 @@
 {
-  "count": 203,
+  "count": 204,
   "categories": [
     {
       "slug": "algorithms",
@@ -226,6 +226,12 @@
           "file": "linear-algebra.manic",
           "title": "Linear algebra",
           "desc": "A guided lesson, not a feature demo: five chapters that build linear algebra as one connected story."
+        },
+        {
+          "name": "textbook-matrix-inverses",
+          "file": "textbook-matrix-inverses.manic",
+          "title": "Textbook matrix inverses",
+          "desc": "Two exam-style inverse proofs animated through structure rather than row reduction."
         },
         {
           "name": "linear-map",
