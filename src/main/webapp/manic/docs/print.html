@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3d8310d6.js";
+            window.path_to_searchindex_js = "searchindex-715ee855.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d5f29a23.js"></script>
@@ -2505,6 +2505,7 @@ softmax. The output bars and percentages are derived from that result.</p>
 <pre><code class="language-manic">forward(net, "0.15 0.92 0.38", 3.2, smooth);
 loss(net, "1 0 0", crossentropy, 1.5, smooth);
 backward(net, 3.2, smooth);
+checkpoint(beforeUpdate, net);
 update(net, 0.18, 2.3, smooth);
 </code></pre>
 <p>These four beats deliberately remain visible:</p>
@@ -2523,6 +2524,22 @@ values.</li>
 otherwise. The default learning rate is <code>0.15</code>. A learning rate is not a visual
 speed: changing it changes the mathematics, and a large value can truthfully
 increase the loss.</p>
+<h2 id="undo-one-authored-update-exactly"><a class="header" href="#undo-one-authored-update-exactly">Undo one authored update exactly</a></h2>
+<p>Place a checkpoint after the prediction has been compared with its target and
+before the parameter update. It takes no timeline time:</p>
+<pre><code class="language-manic">backward(net, 3.2, smooth);
+checkpoint(beforeUpdate, net);
+update(net, 0.18, 2.3, smooth);
+restore(net, beforeUpdate, 2.3, smooth);
+</code></pre>
+<p><code>checkpoint</code> saves every weight and bias plus the current layer values,
+prediction, target, and loss. <code>restore</code> reverses the visible flow and returns
+all of them to that exact saved state. It also clears active gradients; call
+<code>backward</code> again before attempting another update.</p>
+<p>This is precise <strong>checkpoint rollback</strong>. It is useful for explaining what one
+gradient step changed, comparing before and after, or showing an undo action.
+It is not general machine unlearning: restoring a saved state does not prove
+that a data point’s influence was removed from an otherwise trained model.</p>
 <h2 id="from-pixels-to-feature-maps"><a class="header" href="#from-pixels-to-feature-maps">From pixels to feature maps</a></h2>
 <p>Rows use <code>;</code>, values use spaces or commas, and channels use <code>|</code> inside one
 quoted grid. This keeps small textbook tensors readable:</p>
@@ -2707,6 +2724,9 @@ object, ready for the update.</li>
 <li><code>update</code> shows the gradient direction first, then restores edge styling from
 the new weights and recomputes every node. Its final status preserves the old
 and new loss so the claimed learning outcome is inspectable.</li>
+<li><code>restore</code> sends one readable reverse pulse through the same graph, settles
+edge styling from the saved weights, and restores the saved output bars and
+loss without rebuilding the network.</li>
 </ul>
 <h2 id="compose-it-like-any-other-manic-scene"><a class="header" href="#compose-it-like-any-other-manic-scene">Compose it like any other Manic scene</a></h2>
 <p>Every part is an ordinary entity carrying useful tags:</p>
@@ -2761,13 +2781,16 @@ explain why the active operation matters.</p>
 <pre><code class="language-manic">step("predict") { forward(net, "0.15 0.92 0.38", 3.2); }
 step("compare") { loss(net, "1 0 0", crossentropy, 1.5); }
 step("credit")  { backward(net, 3.2); }
+checkpoint(beforeUpdate, net);
 step("learn")   { update(net, 0.18, 2.3); }
+step("unlearn") { restore(net, beforeUpdate, 2.3); }
 </code></pre>
 <p>Calling <code>forward</code> with a new input starts a fresh learning beat and clears the
 old target/gradient state. After <code>update</code>, another <code>backward</code> may compute fresh
 gradients for the updated parameters and the same retained target. Every
 <code>update</code> still requires a preceding <code>backward</code>; there is no invisible optimizer
-loop.</p>
+loop. Name a <code>restore</code> step “rollback” or explain its exact boundary if you use
+the playful label “unlearn”.</p>
 <h2 id="current-boundary"><a class="header" href="#current-boundary">Current boundary</a></h2>
 <p>The ML kit is intentionally for small educational models. It does not load
 arbitrary PyTorch or TensorFlow programs, run hidden training loops, expose an
@@ -3175,7 +3198,8 @@ wait(1.60);
 backward credit assignment, and a visibly recomputed gradient update:</p>
 <pre><code class="language-manic">// manic-ml-learning-step.manic — ML2 creator proof
 // One persistent network predicts, measures its mistake, sends exact gradients
-// backward, and changes its parameters. No layer is cleared and redrawn.
+// backward, changes its parameters, then rolls that one saved change back.
+// No layer is cleared and redrawn; rollback is not claimed as full unlearning.
 
 title("Manic ML — How One Mistake Becomes Learning");
 canvas("16:9");
@@ -3254,6 +3278,10 @@ step("send-credit-backward") {
 }
 wait(0.55);
 
+// A zero-duration authored checkpoint captures the exact pre-update weights,
+// prediction, target, and loss. It does not add a hidden runtime state.
+checkpoint(beforeUpdate, model);
+
 step("learn") {
   par {
     update(model, 0.18, 2.30, smooth);
@@ -3262,13 +3290,30 @@ step("learn") {
 }
 wait(0.70);
 
+step("unlearn") {
+  par {
+    restore(model, beforeUpdate, 2.30, smooth);
+    say(caption, "Exact rollback restores the saved parameters and their earlier prediction.", 0.40);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.76, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.70);
+
 step("takeaway") {
   pulse(model.output, 0.75);
-  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+  say(caption, "This undoes one saved update. Dataset-level unlearning is a different process.", 0.45);
 }
 wait(1.50);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/tdCuY1FKrXI" title="How One Mistake Teaches a Neural Network — Loss, Gradients and Learning in Manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/StmbW-VSHXM" title="How One Mistake Teaches a Neural Network — Learning and Exact Rollback in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <p>The ML3 story turns a small image into an edge-response feature map and then a
 pooled summary, with the same scanner serving both operators:</p>
@@ -3876,7 +3921,9 @@ come from the declared model rather than a staged effect:</p>
 forward(net, "0.15 0.92 0.38", 4.2, smooth);
 loss(net, "1 0 0", crossentropy, 1.5, smooth);
 backward(net, 3.2, smooth);
+checkpoint(beforeUpdate, net);
 update(net, 0.18, 2.3, smooth);
+restore(net, beforeUpdate, 2.3, smooth); // exact rollback, not general unlearning
 
 tensor(image, (260, 340), "0 0 1; 0 1 1; 0 0 1", 44);
 kernel(edge, (560, 340), "-1 0 1; -2 0 2; -1 0 1", 44);
@@ -9199,10 +9246,11 @@ wait(1.60);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/VjRF8VpjhR8" title="How a Neural Network Chooses — Follow One Real Forward Pass in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="manic-ml-learning-step"><a class="header" href="#manic-ml-learning-step">manic-ml-learning-step</a></h2>
-<p>One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then recompute the same input. <code>loss</code>, <code>backward</code>, and <code>update</code> expose the mathematics without turning the DSL into a training framework.</p>
+<p>One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then restore the exact pre-update checkpoint. <code>loss</code>, <code>backward</code>, <code>checkpoint</code>, <code>update</code>, and <code>restore</code> expose both learning and truthful rollback without pretending that rollback is general machine unlearning.</p>
 <pre><code class="language-manic">// manic-ml-learning-step.manic — ML2 creator proof
 // One persistent network predicts, measures its mistake, sends exact gradients
-// backward, and changes its parameters. No layer is cleared and redrawn.
+// backward, changes its parameters, then rolls that one saved change back.
+// No layer is cleared and redrawn; rollback is not claimed as full unlearning.
 
 title("Manic ML — How One Mistake Becomes Learning");
 canvas("16:9");
@@ -9281,6 +9329,10 @@ step("send-credit-backward") {
 }
 wait(0.55);
 
+// A zero-duration authored checkpoint captures the exact pre-update weights,
+// prediction, target, and loss. It does not add a hidden runtime state.
+checkpoint(beforeUpdate, model);
+
 step("learn") {
   par {
     update(model, 0.18, 2.30, smooth);
@@ -9289,13 +9341,30 @@ step("learn") {
 }
 wait(0.70);
 
+step("unlearn") {
+  par {
+    restore(model, beforeUpdate, 2.30, smooth);
+    say(caption, "Exact rollback restores the saved parameters and their earlier prediction.", 0.40);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.76, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.70);
+
 step("takeaway") {
   pulse(model.output, 0.75);
-  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+  say(caption, "This undoes one saved update. Dataset-level unlearning is a different process.", 0.45);
 }
 wait(1.50);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/tdCuY1FKrXI" title="How One Mistake Teaches a Neural Network — Loss, Gradients and Learning in Manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/StmbW-VSHXM" title="How One Mistake Teaches a Neural Network — Learning and Exact Rollback in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="manic-ml-cnn-edge-story"><a class="header" href="#manic-ml-cnn-edge-story">manic-ml-cnn-edge-story</a></h2>
 <p>A tiny image becomes an edge-response feature map and then a pooled summary. The shared <code>scan</code> choreography keeps each receptive field, kernel/operator, arithmetic line, and destination cell synchronized while <code>tensor</code>, <code>kernel</code>, <code>convolve</code>, and <code>pool</code> supply the exact values.</p>

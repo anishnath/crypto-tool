@@ -1,6 +1,7 @@
 // manic-ml-learning-step.manic — ML2 creator proof
 // One persistent network predicts, measures its mistake, sends exact gradients
-// backward, and changes its parameters. No layer is cleared and redrawn.
+// backward, changes its parameters, then rolls that one saved change back.
+// No layer is cleared and redrawn; rollback is not claimed as full unlearning.
 
 title("Manic ML — How One Mistake Becomes Learning");
 canvas("16:9");
@@ -79,6 +80,10 @@ step("send-credit-backward") {
 }
 wait(0.55);
 
+// A zero-duration authored checkpoint captures the exact pre-update weights,
+// prediction, target, and loss. It does not add a hidden runtime state.
+checkpoint(beforeUpdate, model);
+
 step("learn") {
   par {
     update(model, 0.18, 2.30, smooth);
@@ -87,8 +92,25 @@ step("learn") {
 }
 wait(0.70);
 
+step("unlearn") {
+  par {
+    restore(model, beforeUpdate, 2.30, smooth);
+    say(caption, "Exact rollback restores the saved parameters and their earlier prediction.", 0.40);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.76, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.70);
+
 step("takeaway") {
   pulse(model.output, 0.75);
-  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+  say(caption, "This undoes one saved update. Dataset-level unlearning is a different process.", 0.45);
 }
 wait(1.50);

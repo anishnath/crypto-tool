@@ -287,7 +287,9 @@ network(net, (cx,cy), "3 6 4 3", "relu tanh softmax", 820, 350, 21);
 forward(net, "0.15 0.92 0.38", 4.2, smooth);
 loss(net, "1 0 0", crossentropy, 1.5, smooth);
 backward(net, 3.2, smooth);
+checkpoint(beforeUpdate, net);
 update(net, 0.18, 2.3, smooth);
+restore(net, beforeUpdate, 2.3, smooth);
 ```
 
 For learning, preserve this order: `forward` → `loss` → `backward` → `update`.
@@ -299,6 +301,12 @@ focuses the same edges from output to input. `update(id,[learning_rate],
 same input, and shows the exact new outputs and loss. Never invent displayed
 losses, gradients, or improvements. A large learning rate may truthfully make
 loss worse; use a modest value when the story is meant to demonstrate progress.
+`checkpoint(name,id)` is a zero-time authored snapshot taken after `loss` (and
+usually after `backward`) but before `update`. `restore(id,name,[duration],
+[ease])` returns every weight, bias, prediction, target, and loss to that exact
+state and clears gradients. Describe this as **rollback of one saved state**.
+Never call it dataset-level machine unlearning or claim that it removes a
+training example from a generally trained model.
 
 `activation(id,(cx,cy),relu,[width],[height])` plots one truthful scalar
 activation (`linear`, `relu`, `sigmoid`, or `tanh`). Do not request a standalone

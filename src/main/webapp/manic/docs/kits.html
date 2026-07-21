@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3d8310d6.js";
+            window.path_to_searchindex_js = "searchindex-715ee855.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d5f29a23.js"></script>
@@ -214,7 +214,9 @@ come from the declared model rather than a staged effect:</p>
 forward(net, "0.15 0.92 0.38", 4.2, smooth);
 loss(net, "1 0 0", crossentropy, 1.5, smooth);
 backward(net, 3.2, smooth);
+checkpoint(beforeUpdate, net);
 update(net, 0.18, 2.3, smooth);
+restore(net, beforeUpdate, 2.3, smooth); // exact rollback, not general unlearning
 
 tensor(image, (260, 340), "0 0 1; 0 1 1; 0 0 1", 44);
 kernel(edge, (560, 340), "-1 0 1; -2 0 2; -1 0 1", 44);

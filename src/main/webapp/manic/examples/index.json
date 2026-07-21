@@ -411,7 +411,7 @@
           "name": "manic-ml-learning-step",
           "file": "manic-ml-learning-step.manic",
           "title": "Manic ml learning step",
-          "desc": "One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then recompute the same input."
+          "desc": "One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then restore the exact pre-update checkpoint."
         },
         {
           "name": "manic-ml-cnn-edge-story",

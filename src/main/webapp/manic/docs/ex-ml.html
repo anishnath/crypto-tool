@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3d8310d6.js";
+            window.path_to_searchindex_js = "searchindex-715ee855.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-d5f29a23.js"></script>
@@ -566,10 +566,11 @@ wait(1.60);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/VjRF8VpjhR8" title="How a Neural Network Chooses — Follow One Real Forward Pass in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="manic-ml-learning-step"><a class="header" href="#manic-ml-learning-step">manic-ml-learning-step</a></h2>
-<p>One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then recompute the same input. <code>loss</code>, <code>backward</code>, and <code>update</code> expose the mathematics without turning the DSL into a training framework.</p>
+<p>One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then restore the exact pre-update checkpoint. <code>loss</code>, <code>backward</code>, <code>checkpoint</code>, <code>update</code>, and <code>restore</code> expose both learning and truthful rollback without pretending that rollback is general machine unlearning.</p>
 <pre><code class="language-manic">// manic-ml-learning-step.manic — ML2 creator proof
 // One persistent network predicts, measures its mistake, sends exact gradients
-// backward, and changes its parameters. No layer is cleared and redrawn.
+// backward, changes its parameters, then rolls that one saved change back.
+// No layer is cleared and redrawn; rollback is not claimed as full unlearning.
 
 title("Manic ML — How One Mistake Becomes Learning");
 canvas("16:9");
@@ -648,6 +649,10 @@ step("send-credit-backward") {
 }
 wait(0.55);
 
+// A zero-duration authored checkpoint captures the exact pre-update weights,
+// prediction, target, and loss. It does not add a hidden runtime state.
+checkpoint(beforeUpdate, model);
+
 step("learn") {
   par {
     update(model, 0.18, 2.30, smooth);
@@ -656,13 +661,30 @@ step("learn") {
 }
 wait(0.70);
 
+step("unlearn") {
+  par {
+    restore(model, beforeUpdate, 2.30, smooth);
+    say(caption, "Exact rollback restores the saved parameters and their earlier prediction.", 0.40);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.76, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.70);
+
 step("takeaway") {
   pulse(model.output, 0.75);
-  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+  say(caption, "This undoes one saved update. Dataset-level unlearning is a different process.", 0.45);
 }
 wait(1.50);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/tdCuY1FKrXI" title="How One Mistake Teaches a Neural Network — Loss, Gradients and Learning in Manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/StmbW-VSHXM" title="How One Mistake Teaches a Neural Network — Learning and Exact Rollback in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="manic-ml-cnn-edge-story"><a class="header" href="#manic-ml-cnn-edge-story">manic-ml-cnn-edge-story</a></h2>
 <p>A tiny image becomes an edge-response feature map and then a pooled summary. The shared <code>scan</code> choreography keeps each receptive field, kernel/operator, arithmetic line, and destination cell synchronized while <code>tensor</code>, <code>kernel</code>, <code>convolve</code>, and <code>pool</code> supply the exact values.</p>
