@@ -1,0 +1,116 @@
+// manic-ml-transformer-block.manic — ML6 acceptance story
+// One persistent token lane passes through multi-head causal attention,
+// concatenation, two residual paths, pre-normalization, and a GELU MLP.
+
+title("Manic ML — Inside One Transformer Block");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.105), "Inside one transformer block");
+  text(caption, (cx, h*0.84), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.15), "the cat slept because it dreamed", word, w*0.82);
+  embedding(context, words, (cx, h*0.41), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+  transformer(block, context, (cx, h*0.49), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.56);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.14), "Inside one transformer block");
+  text(caption, (cx, h*0.82), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.22), "the cat slept because it dreamed", word, w*0.72);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.92, h*0.62);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.13), "Inside one transformer block");
+  text(caption, (cx, h*0.83), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.23), "the cat slept because it dreamed", word, w*0.78);
+  embedding(context, words, (cx, h*0.52), "seeded 6 37", sinusoidal, w*0.90, h*0.44);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.57);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86); hidden(headline);
+size(caption, 19*u); color(caption, dim); wrap(caption, w*0.84); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+
+step("tokens") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.30);
+    show(words.source, 0.36);
+    show(words.tokens, 0.70);
+    show(words.indices, 0.70);
+    show(caption, 0.32);
+    say(caption, "Six ordered tokens begin as one persistent lane.", 0.36);
+  }
+}
+wait(0.55);
+
+step("model-input") {
+  seq {
+    fade(words, 0.32);
+    par {
+      show(context.labels, 0.32);
+      show(context.tokens, 0.42);
+      show(context.vectors, 0.82);
+      say(caption, "Each identity receives a stable lookup vector.", 0.36);
+    }
+    par {
+      show(context.positions, 0.72);
+      show(context.operators, 0.34);
+      show(context.combined, 0.78);
+      say(caption, "Position is added exactly. These six vectors are the block input.", 0.38);
+    }
+  }
+}
+wait(0.60);
+
+step("encode") {
+  seq {
+    par {
+      fade(context, 0.34);
+      fade(caption, 0.24);
+    }
+    par {
+      encode(block, 6.2, smooth);
+      seq {
+        par { cam((cx - w*0.25, h*0.52), 0.75, smooth); zoom(1.08, 0.75, smooth); }
+        wait(1.35);
+        cam((cx + w*0.17, h*0.52), 1.15, smooth);
+        wait(1.50);
+        par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+      }
+    }
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  seq {
+    show(caption, 0.20);
+    par {
+      pulse(block.residual1, 0.72);
+      pulse(block.residual2, 0.72);
+      pulse(block.output, 0.72);
+      say(caption, "Attention shares context. The MLP reshapes each token. Residuals keep its identity continuous.", 0.42);
+    }
+  }
+}
+wait(1.35);

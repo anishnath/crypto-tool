@@ -1,0 +1,93 @@
+// manic-ml-forward-pass.manic — ML1 creator proof
+// A real deterministic network computes one prediction. The story keeps the
+// model persistent and reveals only the active computation instead of flashing
+// every connection at once.
+
+title("Manic ML — A Forward Pass You Can Follow");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+// One story reflows to portrait, feed, square, and landscape. The portrait
+// network narrows to reserve a clean probability lane at the right.
+if h > 1.45*w {
+  watermark(manicMark, (w*0.18, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.72), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.24);
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.14), "How does a network choose?");
+  text(caption, (cx, h*0.83), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.49), relu, w*0.42, h*0.36);
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.82), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.43), relu, w*0.68, h*0.30);
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 36*u); bold(headline); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+// A truthful ReLU curve introduces the operation used by the hidden layer.
+hidden(reluView);
+untraced(reluView.axes);
+untraced(reluView.curve);
+
+// 3 inputs → 6 ReLU units → 4 tanh units → 3 softmax probabilities.
+// Seed 21 makes the educational model reproducible across every render.
+hidden(model);
+
+step("activation") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(reluView, 0.55);
+  draw(reluView.axes, 0.70);
+  draw(reluView.curve, 1.20);
+}
+wait(0.75);
+
+step("meet-the-network") {
+  fade(reluView, 0.45);
+  show(model, 0.65);
+  say(caption, "The same operation now lives inside a small, deterministic network.", 0.45);
+}
+wait(0.65);
+
+step("forward-pass") {
+  par {
+    forward(model, "0.15 0.92 0.38", 4.20, smooth);
+    say(caption, "Follow the bright path: inputs become evidence, then probabilities.", 0.45);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.55, smooth); zoom(1.06, 0.55, smooth); }
+      wait(0.55);
+      cam((cx, h*0.47), 0.80, smooth);
+      wait(0.55);
+      cam((w*0.76, h*0.47), 0.80, smooth);
+      wait(0.40);
+      par { cam((cx, cy), 0.55, smooth); zoom(1.0, 0.55, smooth); }
+    }
+  }
+}
+wait(0.90);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "The picture is driven by the computed values—not a decorative animation.", 0.45);
+}
+wait(1.60);

@@ -1,0 +1,94 @@
+// manic-ml-learning-step.manic — ML2 creator proof
+// One persistent network predicts, measures its mistake, sends exact gradients
+// backward, and changes its parameters. No layer is cleared and redrawn.
+
+title("Manic ML — How One Mistake Becomes Learning");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_learning safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.72), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.14), "How does a model learn?");
+  text(caption, (cx, h*0.83), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.82), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(model);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(model, 0.65);
+}
+wait(0.55);
+
+step("predict") {
+  par {
+    forward(model, "0.15 0.92 0.38", 3.20, smooth);
+    say(caption, "A forward pass turns the input into three probabilities.", 0.40);
+  }
+}
+wait(0.55);
+
+step("measure-the-mistake") {
+  par {
+    loss(model, "1 0 0", crossentropy, 1.50, smooth);
+    say(caption, "The correct answer is class 1. Cross-entropy measures the mismatch.", 0.40);
+  }
+}
+wait(0.55);
+
+step("send-credit-backward") {
+  par {
+    backward(model, 3.20, smooth);
+    say(caption, "The gradient carries responsibility backward through the same connections.", 0.40);
+    seq {
+      par { cam((w*0.76, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.24, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.55);
+
+step("learn") {
+  par {
+    update(model, 0.18, 2.30, smooth);
+    say(caption, "Each parameter moves opposite its gradient; the same input is computed again.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+}
+wait(1.50);

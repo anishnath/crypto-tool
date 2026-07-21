@@ -1,5 +1,5 @@
 {
-  "count": 204,
+  "count": 213,
   "categories": [
     {
       "slug": "algorithms",
@@ -382,6 +382,66 @@
           "file": "probability.manic",
           "title": "Probability",
           "desc": "A probability & sampling playground in four chapters: named distributions (uniform / exponential / binomial / Poisson), a confidence interval, a Monte-Carlo estimate of \u03c0, and a random walk (distribution, confidence, montecarlo, randomwalk)."
+        }
+      ]
+    },
+    {
+      "slug": "ml",
+      "title": "Machine learning",
+      "examples": [
+        {
+          "name": "manic-ml-scalar-to-tensor",
+          "file": "manic-ml-scalar-to-tensor.manic",
+          "title": "Manic ml scalar to tensor",
+          "desc": "Start with one value, extend it into a vector, arrange values into a matrix, then stack channels into a rank-3 tensor."
+        },
+        {
+          "name": "manic-ml-activation-focus",
+          "file": "manic-ml-activation-focus.manic",
+          "title": "Manic ml activation focus",
+          "desc": "A focused ReLU lesson: draw the truthful activation curve, test one negative and one positive input, then connect the bend to nonlinearity."
+        },
+        {
+          "name": "manic-ml-forward-pass",
+          "file": "manic-ml-forward-pass.manic",
+          "title": "Manic ml forward pass",
+          "desc": "A creator-first neural-network story: introduce the ReLU activation, reveal a seeded 3\u21926\u21924\u21923 model, then follow one real forward pass into softmax probabilities."
+        },
+        {
+          "name": "manic-ml-learning-step",
+          "file": "manic-ml-learning-step.manic",
+          "title": "Manic ml learning step",
+          "desc": "One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then recompute the same input."
+        },
+        {
+          "name": "manic-ml-cnn-edge-story",
+          "file": "manic-ml-cnn-edge-story.manic",
+          "title": "Manic ml cnn edge story",
+          "desc": "A tiny image becomes an edge-response feature map and then a pooled summary."
+        },
+        {
+          "name": "manic-ml-token-embedding",
+          "file": "manic-ml-token-embedding.manic",
+          "title": "Manic ml token embedding",
+          "desc": "A sentence becomes honest word tokens, stable seeded educational lookup vectors, exact sinusoidal positions, and model-input vectors."
+        },
+        {
+          "name": "manic-ml-transformer-attention",
+          "file": "manic-ml-transformer-attention.manic",
+          "title": "Manic ml transformer attention",
+          "desc": "One token finds context through a real scaled dot-product self-attention head."
+        },
+        {
+          "name": "manic-ml-transformer-block",
+          "file": "manic-ml-transformer-block.manic",
+          "title": "Manic ml transformer block",
+          "desc": "One persistent token lane crosses a complete deterministic transformer block: two causal attention heads, concatenation and output projection, both residual/norm stages, a GELU MLP, and exact settled outputs."
+        },
+        {
+          "name": "manic-ml-logits-sampling",
+          "file": "manic-ml-logits-sampling.manic",
+          "title": "Manic ml logits sampling",
+          "desc": "The same educational LM projection is viewed at low and high temperature before greedy and top-p decoding make their support explicit."
         }
       ]
     },

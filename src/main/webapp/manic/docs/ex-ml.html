@@ -1,0 +1,1291 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Machine learning - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-3d8310d6.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-d5f29a23.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="machine-learning"><a class="header" href="#machine-learning">Machine learning</a></h1>
+<p>Small, deterministic models whose displayed values are computed rather than staged. The ML examples use progressive focus so forward values, supervised loss, reverse gradients, and parameter updates stay readable on one persistent network.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="manic-ml-scalar-to-tensor"><a class="header" href="#manic-ml-scalar-to-tensor">manic-ml-scalar-to-tensor</a></h2>
+<p>Start with one value, extend it into a vector, arrange values into a matrix, then stack channels into a rank-3 tensor. The only ML noun is <code>tensor</code>; ordinary Manic steps, arrows, reveals, and captions tell the complete dimensional story.</p>
+<pre><code class="language-manic">// manic-ml-scalar-to-tensor.manic — ML foundation story
+// One value gains an axis, then rows, then stacked channels. The ML-specific
+// surface is only tensor(...); ordinary Manic verbs own the explanation.
+
+title("Manic ML — From Scalar to Tensor");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Build_the_dimensions safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 38*u;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.105), "One value gains dimensions");
+  text(caption, (cx, h*0.84), "Begin with one measured value.");
+
+  tensor(scalar, (cx, h*0.20), "7", cell, gold);
+  tensor(vector, (cx, h*0.35), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (cx, h*0.53), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (cx, h*0.72), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (cx, h*0.155), "SCALAR · RANK 0");
+  text(vectorTitle, (cx, h*0.295), "VECTOR · RANK 1");
+  text(matrixTitle, (cx, h*0.445), "MATRIX · RANK 2");
+  text(volumeTitle, (cx, h*0.625), "TENSOR · RANK 3");
+
+  arrow(grow1, (cx, h*0.245), (cx, h*0.285));
+  arrow(grow2, (cx, h*0.395), (cx, h*0.435));
+  arrow(grow3, (cx, h*0.585), (cx, h*0.615));
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.14), "One value gains dimensions");
+  text(caption, (cx, h*0.82), "Begin with one measured value.");
+
+  tensor(scalar, (w*0.11, h*0.46), "7", cell, gold);
+  tensor(vector, (w*0.34, h*0.46), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (w*0.61, h*0.46), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (w*0.86, h*0.46), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (w*0.11, h*0.34), "SCALAR · RANK 0");
+  text(vectorTitle, (w*0.34, h*0.34), "VECTOR · RANK 1");
+  text(matrixTitle, (w*0.61, h*0.34), "MATRIX · RANK 2");
+  text(volumeTitle, (w*0.86, h*0.34), "TENSOR · RANK 3");
+
+  arrow(grow1, (w*0.17, h*0.46), (w*0.23, h*0.46));
+  arrow(grow2, (w*0.44, h*0.46), (w*0.51, h*0.46));
+  arrow(grow3, (w*0.70, h*0.46), (w*0.76, h*0.46));
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.17), "One value gains dimensions");
+  text(caption, (cx, h*0.84), "Begin with one measured value.");
+
+  tensor(scalar, (w*0.24, h*0.34), "7", cell, gold);
+  tensor(vector, (w*0.73, h*0.34), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (w*0.24, h*0.65), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (w*0.73, h*0.65), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (w*0.24, h*0.235), "SCALAR · RANK 0");
+  text(vectorTitle, (w*0.73, h*0.235), "VECTOR · RANK 1");
+  text(matrixTitle, (w*0.24, h*0.505), "MATRIX · RANK 2");
+  text(volumeTitle, (w*0.73, h*0.505), "TENSOR · RANK 3");
+
+  arrow(grow1, (w*0.34, h*0.34), (w*0.50, h*0.34));
+  arrow(grow2, (w*0.73, h*0.40), (w*0.36, h*0.56));
+  arrow(grow3, (w*0.35, h*0.65), (w*0.50, h*0.65));
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+size(scalarTitle, 17*u); bold(scalarTitle); color(scalarTitle, dim); hidden(scalarTitle);
+size(vectorTitle, 17*u); bold(vectorTitle); color(vectorTitle, dim); hidden(vectorTitle);
+size(matrixTitle, 17*u); bold(matrixTitle); color(matrixTitle, dim); hidden(matrixTitle);
+size(volumeTitle, 17*u); bold(volumeTitle); color(volumeTitle, dim); hidden(volumeTitle);
+
+color(grow1, dim); stroke(grow1, 2.5*u); hidden(grow1);
+color(grow2, dim); stroke(grow2, 2.5*u); hidden(grow2);
+color(grow3, dim); stroke(grow3, 2.5*u); hidden(grow3);
+
+hidden(scalar.cells); hidden(scalar.values); hidden(scalar.labels);
+hidden(vector.cells); hidden(vector.values); hidden(vector.labels);
+hidden(matrix.cells); hidden(matrix.values); hidden(matrix.labels);
+hidden(volume.cells); hidden(volume.values); hidden(volume.labels);
+
+step("scalar") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(scalarTitle, 0.30);
+  par {
+    show(scalar.cells, 0.55);
+    show(scalar.values, 0.55);
+  }
+}
+wait(0.55);
+
+step("vector") {
+  par {
+    show(grow1, 0.35);
+    show(vectorTitle, 0.30);
+    show(vector.cells, 0.60);
+    show(vector.values, 0.60);
+    say(caption, "Repeat the value along one ordered axis: position now matters.", 0.40);
+  }
+}
+wait(0.60);
+
+step("matrix") {
+  par {
+    show(grow2, 0.35);
+    show(matrixTitle, 0.30);
+    show(matrix.cells, 0.65);
+    show(matrix.values, 0.65);
+    say(caption, "Add rows to the columns: one axis becomes a two-dimensional matrix.", 0.40);
+  }
+}
+wait(0.65);
+
+step("tensor") {
+  par {
+    show(grow3, 0.35);
+    show(volumeTitle, 0.30);
+    show(volume.cells, 0.70);
+    show(volume.values, 0.70);
+    say(caption, "Stack matrices as channels: the same values now carry depth and context.", 0.40);
+  }
+}
+wait(0.75);
+
+step("one-family") {
+  pulse(volume.channel1, 0.75);
+  say(caption, "Scalar, vector, and matrix are all tensors—distinguished by their axes.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GkguFn1qB_k" title="Scalar, Vector, Matrix, Tensor — How Data Gains Dimensions in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-activation-focus"><a class="header" href="#manic-ml-activation-focus">manic-ml-activation-focus</a></h2>
+<p>A focused ReLU lesson: draw the truthful activation curve, test one negative and one positive input, then connect the bend to nonlinearity. <code>activation</code> supplies the mathematics while core Manic owns the probes, guides, equation, and pacing.</p>
+<pre><code class="language-manic">// manic-ml-activation-focus.manic — one ML noun, one complete lesson
+// `activation` supplies the truthful ReLU curve. Core Manic supplies the
+// question, equation, input probes, local emphasis, timing, and takeaway.
+
+title("Manic ML — Why ReLU Changes a Neuron");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_rule safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.11), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.79), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.60), `\operatorname{ReLU}(x)=\max(0,x)`, 35*u);
+
+  activation(reluView, (cx, h*0.38), relu, w*0.74, h*0.22);
+  line(negativePath, (w*0.13, h*0.466), (cx, h*0.466));
+  line(positivePath, (cx, h*0.466), (w*0.87, h*0.27));
+  line(positiveGuide, (w*0.685, h*0.466), (w*0.685, h*0.368));
+  circle(negativeProbe, (w*0.315, h*0.466), 8*u);
+  circle(positiveProbe, (w*0.685, h*0.368), 8*u);
+  text(negativeNote, (w*0.27, h*0.525), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.525), "x = 2  →  2");
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.14), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (w*0.79, h*0.36), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (w*0.38, h*0.49), relu, w*0.52, h*0.48);
+  line(negativePath, (w*0.12, h*0.677), (w*0.38, h*0.677));
+  line(positivePath, (w*0.38, h*0.677), (w*0.64, h*0.25));
+  line(positiveGuide, (w*0.51, h*0.677), (w*0.51, h*0.463));
+  circle(negativeProbe, (w*0.25, h*0.677), 8*u);
+  circle(positiveProbe, (w*0.51, h*0.463), 8*u);
+  text(negativeNote, (w*0.79, h*0.50), "x = −2  →  0");
+  text(positiveNote, (w*0.79, h*0.59), "x = 2  →  2");
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.145), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.67), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.28);
+  line(negativePath, (w*0.14, h*0.509), (cx, h*0.509));
+  line(positivePath, (cx, h*0.509), (w*0.86, h*0.26));
+  line(positiveGuide, (w*0.68, h*0.509), (w*0.68, h*0.384));
+  circle(negativeProbe, (w*0.32, h*0.509), 8*u);
+  circle(positiveProbe, (w*0.68, h*0.384), 8*u);
+  text(negativeNote, (w*0.27, h*0.58), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.58), "x = 2  →  2");
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(rule);
+
+color(negativePath, magenta); stroke(negativePath, 5*u); glow(negativePath, 0.35); untraced(negativePath);
+color(positivePath, cyan); stroke(positivePath, 5*u); glow(positivePath, 0.35); untraced(positivePath);
+color(positiveGuide, dim); stroke(positiveGuide, 2*u); dashed(positiveGuide, 9*u, 7*u); untraced(positiveGuide);
+
+color(negativeProbe, magenta); filled(negativeProbe); glow(negativeProbe, 0.55); hidden(negativeProbe);
+color(positiveProbe, cyan); filled(positiveProbe); glow(positiveProbe, 0.55); hidden(positiveProbe);
+size(negativeNote, 18*u); color(negativeNote, magenta); bold(negativeNote); hidden(negativeNote);
+size(positiveNote, 18*u); color(positiveNote, cyan); bold(positiveNote); hidden(positiveNote);
+
+untraced(reluView.axes);
+untraced(reluView.curve);
+hidden(reluView.label);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  draw(reluView.axes, 0.75);
+}
+wait(0.55);
+
+step("rule") {
+  show(rule, 0.55);
+  say(caption, "ReLU makes one transparent promise: return the larger of zero and x.", 0.40);
+}
+wait(0.55);
+
+step("negative-input") {
+  par {
+    draw(negativePath, 0.75);
+    show(negativeProbe, 0.35);
+    show(negativeNote, 0.35);
+    say(caption, "Negative input is muted at zero; it cannot send negative evidence onward.", 0.40);
+  }
+}
+wait(0.65);
+
+step("positive-input") {
+  par {
+    draw(positivePath, 0.85);
+    draw(positiveGuide, 0.55);
+    show(positiveProbe, 0.35);
+    show(positiveNote, 0.35);
+    say(caption, "Positive input passes through unchanged, preserving its strength.", 0.40);
+  }
+}
+wait(0.70);
+
+step("activation") {
+  par {
+    draw(reluView.curve, 1.10);
+    show(reluView.label, 0.35);
+    say(caption, "That small bend gives a network a nonlinear decision boundary.", 0.40);
+    par { cam((cx, h*0.47), 0.70, smooth); zoom(1.10, 0.70, smooth); }
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(reluView.curve, 0.75);
+    say(caption, "ReLU does not invent a signal: it gates what the neuron already computed.", 0.45);
+    par { cam((cx, cy), 0.70, smooth); zoom(1.0, 0.70, smooth); }
+  }
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zW0wHsaASl0" title="Why ReLU? — One Activation Function Explained Visually in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-forward-pass"><a class="header" href="#manic-ml-forward-pass">manic-ml-forward-pass</a></h2>
+<p>A creator-first neural-network story: introduce the ReLU activation, reveal a seeded 3→6→4→3 model, then follow one real forward pass into softmax probabilities. <code>network</code>, <code>activation</code>, and <code>forward</code> provide the truthful structure while ordinary named steps, captions, and Creator branding tell the lesson.</p>
+<pre><code class="language-manic">// manic-ml-forward-pass.manic — ML1 creator proof
+// A real deterministic network computes one prediction. The story keeps the
+// model persistent and reveals only the active computation instead of flashing
+// every connection at once.
+
+title("Manic ML — A Forward Pass You Can Follow");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+// One story reflows to portrait, feed, square, and landscape. The portrait
+// network narrows to reserve a clean probability lane at the right.
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.18, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.72), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.24);
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.14), "How does a network choose?");
+  text(caption, (cx, h*0.83), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.49), relu, w*0.42, h*0.36);
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.82), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.43), relu, w*0.68, h*0.30);
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 36*u); bold(headline); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+// A truthful ReLU curve introduces the operation used by the hidden layer.
+hidden(reluView);
+untraced(reluView.axes);
+untraced(reluView.curve);
+
+// 3 inputs → 6 ReLU units → 4 tanh units → 3 softmax probabilities.
+// Seed 21 makes the educational model reproducible across every render.
+hidden(model);
+
+step("activation") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(reluView, 0.55);
+  draw(reluView.axes, 0.70);
+  draw(reluView.curve, 1.20);
+}
+wait(0.75);
+
+step("meet-the-network") {
+  fade(reluView, 0.45);
+  show(model, 0.65);
+  say(caption, "The same operation now lives inside a small, deterministic network.", 0.45);
+}
+wait(0.65);
+
+step("forward-pass") {
+  par {
+    forward(model, "0.15 0.92 0.38", 4.20, smooth);
+    say(caption, "Follow the bright path: inputs become evidence, then probabilities.", 0.45);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.55, smooth); zoom(1.06, 0.55, smooth); }
+      wait(0.55);
+      cam((cx, h*0.47), 0.80, smooth);
+      wait(0.55);
+      cam((w*0.76, h*0.47), 0.80, smooth);
+      wait(0.40);
+      par { cam((cx, cy), 0.55, smooth); zoom(1.0, 0.55, smooth); }
+    }
+  }
+}
+wait(0.90);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "The picture is driven by the computed values—not a decorative animation.", 0.45);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VjRF8VpjhR8" title="How a Neural Network Chooses — Follow One Real Forward Pass in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-learning-step"><a class="header" href="#manic-ml-learning-step">manic-ml-learning-step</a></h2>
+<p>One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then recompute the same input. <code>loss</code>, <code>backward</code>, and <code>update</code> expose the mathematics without turning the DSL into a training framework.</p>
+<pre><code class="language-manic">// manic-ml-learning-step.manic — ML2 creator proof
+// One persistent network predicts, measures its mistake, sends exact gradients
+// backward, and changes its parameters. No layer is cleared and redrawn.
+
+title("Manic ML — How One Mistake Becomes Learning");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_learning safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.72), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.14), "How does a model learn?");
+  text(caption, (cx, h*0.83), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.82), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(model);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(model, 0.65);
+}
+wait(0.55);
+
+step("predict") {
+  par {
+    forward(model, "0.15 0.92 0.38", 3.20, smooth);
+    say(caption, "A forward pass turns the input into three probabilities.", 0.40);
+  }
+}
+wait(0.55);
+
+step("measure-the-mistake") {
+  par {
+    loss(model, "1 0 0", crossentropy, 1.50, smooth);
+    say(caption, "The correct answer is class 1. Cross-entropy measures the mismatch.", 0.40);
+  }
+}
+wait(0.55);
+
+step("send-credit-backward") {
+  par {
+    backward(model, 3.20, smooth);
+    say(caption, "The gradient carries responsibility backward through the same connections.", 0.40);
+    seq {
+      par { cam((w*0.76, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.24, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.55);
+
+step("learn") {
+  par {
+    update(model, 0.18, 2.30, smooth);
+    say(caption, "Each parameter moves opposite its gradient; the same input is computed again.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tdCuY1FKrXI" title="How One Mistake Teaches a Neural Network — Loss, Gradients and Learning in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-cnn-edge-story"><a class="header" href="#manic-ml-cnn-edge-story">manic-ml-cnn-edge-story</a></h2>
+<p>A tiny image becomes an edge-response feature map and then a pooled summary. The shared <code>scan</code> choreography keeps each receptive field, kernel/operator, arithmetic line, and destination cell synchronized while <code>tensor</code>, <code>kernel</code>, <code>convolve</code>, and <code>pool</code> supply the exact values.</p>
+<pre><code class="language-manic">// manic-ml-cnn-edge-story.manic — ML3 creator proof
+// A tiny image becomes a feature map and then a pooled summary. Every number is
+// computed by Manic; scan coordinates the receptive field and destination.
+
+title("Manic ML — How a CNN Finds an Edge");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_feature safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 48*u;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.72), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.28, h*0.35), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.72, h*0.35), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.34, h*0.54), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.72, h*0.54), max, 2, 1, 0, cell);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.14), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.17, h*0.47), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.42, h*0.47), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.68, h*0.47), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.47), max, 2, 1, 0, cell);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.18, h*0.44), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.45, h*0.44), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.70, h*0.44), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.44), max, 2, 1, 0, cell);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(image); hidden(edge); hidden(feature); hidden(pooled);
+
+step("pixels") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(image, 0.65);
+}
+wait(0.55);
+
+step("edge-detector") {
+  show(edge, 0.55);
+  say(caption, "This 3×3 kernel compares the left side of each patch with the right.", 0.40);
+}
+wait(0.55);
+
+step("feature-map") {
+  show(feature, 0.50);
+  say(caption, "The feature map begins quiet; each destination waits for one receptive field.", 0.40);
+}
+wait(0.35);
+
+step("convolution-scan") {
+  par {
+    scan(feature, 4.80, smooth);
+    say(caption, "The same kernel slides, multiplies, sums, applies ReLU, and writes one cell.", 0.40);
+    seq {
+      par { cam((w*0.38, h*0.45), 0.75, smooth); zoom(1.10, 0.75, smooth); }
+      wait(2.95);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.60);
+
+step("pooling-map") {
+  show(pooled, 0.50);
+  say(caption, "Max pooling asks a simpler question: where is the strongest local evidence?", 0.40);
+}
+wait(0.40);
+
+step("pooling-scan") {
+  par {
+    scan(pooled, 3.40, smooth);
+    say(caption, "Each 2×2 window keeps its first maximum; ties are deterministic.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(pooled.cells, 0.75);
+  say(caption, "A CNN builds meaning locally: pixels → feature responses → compact evidence.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hAbU0m_Qieg" title="How a CNN Finds Edges — Convolution and Max Pooling Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-token-embedding"><a class="header" href="#manic-ml-token-embedding">manic-ml-token-embedding</a></h2>
+<p>A sentence becomes honest word tokens, stable seeded educational lookup vectors, exact sinusoidal positions, and model-input vectors. Repeated words prove that token identity keeps one base embedding while position distinguishes each occurrence.</p>
+<pre><code class="language-manic">// manic-ml-token-embedding.manic — ML5 acceptance story
+// A repeated word keeps one seeded educational token embedding, while exact
+// sinusoidal position makes each occurrence a different model input.
+
+title("Manic ML — From Words to Positioned Embeddings");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_representation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.16, h*0.055), "Made With Manic");
+  text(kicker, (cx, h*0.055), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.095), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.19), "the cat chased the cat", word, w*0.80);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.16, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.125), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.23), "the cat chased the cat", word, w*0.68);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.17), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.83), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.30), "the cat chased the cat", word, w*0.76);
+  embedding(context, words, (cx, h*0.60), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.84); hidden(headline);
+size(caption, 20*u); color(caption, dim); wrap(caption, w*0.82); hidden(caption);
+hidden(words);
+hidden(context);
+
+step("sentence") {
+  show(kicker, 0.30);
+  show(headline, 0.42);
+  show(words.labels, 0.35);
+  show(words.source, 0.40);
+  show(caption, 0.35);
+}
+wait(0.55);
+
+step("tokens") {
+  par {
+    show(words.tokens, 0.75);
+    show(words.indices, 0.75);
+    say(caption, "Word tokenization turns the sentence into five ordered identities.", 0.38);
+  }
+}
+wait(0.60);
+
+step("lookup") {
+  fade(words, 0.35);
+  par {
+    show(context.labels, 0.40);
+    show(context.tokens, 0.55);
+    show(context.vectors, 0.95);
+    say(caption, "A seeded educational lookup gives each token identity one six-number vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("same-word") {
+  par {
+    pulse(context.row1, 0.70);
+    pulse(context.row4, 0.70);
+    say(caption, "Both copies of cat reuse the same base embedding. The lookup depends on the token—not its location.", 0.42);
+  }
+}
+wait(0.65);
+
+step("position") {
+  par {
+    show(context.positions, 1.00);
+    show(context.operators, 0.45);
+    say(caption, "Sinusoidal position adds a deterministic coordinate for places 0 through 4.", 0.42);
+  }
+}
+wait(0.65);
+
+step("model-input") {
+  par {
+    show(context.combined, 1.00);
+    say(caption, "Token vector plus position becomes the model input. The repeated word now carries two different locations.", 0.42);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  par {
+    pulse(context.row1, 0.72);
+    pulse(context.row4, 0.72);
+    say(caption, "Meaning says what the token is. Position says where this occurrence belongs.", 0.42);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0a5ePmj6GCU" title="How Words Gain Position — Tokenization and Embeddings Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-transformer-attention"><a class="header" href="#manic-ml-transformer-attention">manic-ml-transformer-attention</a></h2>
+<p>One token finds context through a real scaled dot-product self-attention head. Explicit embeddings become Q/K/V, one selected softmax row drives the weighted value mix and residual, and a deterministic educational output projection produces exact top-k probabilities without pretending to be a pretrained language model.</p>
+<pre><code class="language-manic">// manic-ml-transformer-attention.manic — ML4 acceptance story
+// Explicit token embeddings become Q/K/V, one query row becomes normalized
+// attention weights, values mix, a residual is added, and a real output
+// projection produces top-k probabilities.
+
+title("Manic ML — One Transformer Attention Head");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_attention safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.105), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.38), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.82, h*0.40, 23);
+  topk(next, head, 3, (cx, h*0.71), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.14), "One token finds context");
+  text(caption, (cx, h*0.83), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (w*0.40, h*0.48), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.68, h*0.58, 23);
+  topk(next, head, 3, (w*0.84, h*0.52), "business | work | world | industry | future | people", 4, w*0.26, h*0.34, 29);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.13), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.39), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.84, h*0.42, 23);
+  topk(next, head, 3, (cx, h*0.72), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(head); hidden(next);
+
+step("tokens") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(head.labels, 0.40);
+  show(head.tokens, 0.60);
+}
+wait(0.55);
+
+step("projections") {
+  par {
+    show(head.q, 0.55);
+    show(head.k, 0.55);
+    show(head.v, 0.55);
+    say(caption, "Each embedding is projected into a Query, Key, and Value vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("scores") {
+  show(head.matrix, 0.70);
+  say(caption, "Scaled dot products become one softmax row: every weight is positive and the row sums to 100%.", 0.45);
+}
+wait(0.65);
+
+step("attend") {
+  par {
+    attend(head, 3, 5.20, smooth);
+    say(caption, "Focus intelligence: Q asks, K measures relevance, and weighted V carries the context.", 0.45);
+    seq {
+      par { cam((cx, h*0.46), 0.75, smooth); zoom(1.07, 0.75, smooth); }
+      wait(3.45);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.75);
+
+step("prediction") {
+  show(next, 0.70);
+  say(caption, "The residual plus attention mix enters an output projection and a truthful softmax ranking.", 0.45);
+}
+wait(0.80);
+
+step("takeaway") {
+  pulse(next.rank0, 0.75);
+  say(caption, "Attention is selective information flow—not every connection shouting at once.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1qXzB4e0Ksg" title="How Self-Attention Finds Context — One Transformer Head Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-transformer-block"><a class="header" href="#manic-ml-transformer-block">manic-ml-transformer-block</a></h2>
+<p>One persistent token lane crosses a complete deterministic transformer block: two causal attention heads, concatenation and output projection, both residual/norm stages, a GELU MLP, and exact settled outputs. <code>transformer</code> owns the computation while <code>encode</code> provides a smooth directly seekable explanation.</p>
+<pre><code class="language-manic">// manic-ml-transformer-block.manic — ML6 acceptance story
+// One persistent token lane passes through multi-head causal attention,
+// concatenation, two residual paths, pre-normalization, and a GELU MLP.
+
+title("Manic ML — Inside One Transformer Block");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.105), "Inside one transformer block");
+  text(caption, (cx, h*0.84), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.15), "the cat slept because it dreamed", word, w*0.82);
+  embedding(context, words, (cx, h*0.41), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+  transformer(block, context, (cx, h*0.49), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.56);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.14), "Inside one transformer block");
+  text(caption, (cx, h*0.82), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.22), "the cat slept because it dreamed", word, w*0.72);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.92, h*0.62);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.13), "Inside one transformer block");
+  text(caption, (cx, h*0.83), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.23), "the cat slept because it dreamed", word, w*0.78);
+  embedding(context, words, (cx, h*0.52), "seeded 6 37", sinusoidal, w*0.90, h*0.44);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.57);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86); hidden(headline);
+size(caption, 19*u); color(caption, dim); wrap(caption, w*0.84); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+
+step("tokens") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.30);
+    show(words.source, 0.36);
+    show(words.tokens, 0.70);
+    show(words.indices, 0.70);
+    show(caption, 0.32);
+    say(caption, "Six ordered tokens begin as one persistent lane.", 0.36);
+  }
+}
+wait(0.55);
+
+step("model-input") {
+  seq {
+    fade(words, 0.32);
+    par {
+      show(context.labels, 0.32);
+      show(context.tokens, 0.42);
+      show(context.vectors, 0.82);
+      say(caption, "Each identity receives a stable lookup vector.", 0.36);
+    }
+    par {
+      show(context.positions, 0.72);
+      show(context.operators, 0.34);
+      show(context.combined, 0.78);
+      say(caption, "Position is added exactly. These six vectors are the block input.", 0.38);
+    }
+  }
+}
+wait(0.60);
+
+step("encode") {
+  seq {
+    par {
+      fade(context, 0.34);
+      fade(caption, 0.24);
+    }
+    par {
+      encode(block, 6.2, smooth);
+      seq {
+        par { cam((cx - w*0.25, h*0.52), 0.75, smooth); zoom(1.08, 0.75, smooth); }
+        wait(1.35);
+        cam((cx + w*0.17, h*0.52), 1.15, smooth);
+        wait(1.50);
+        par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+      }
+    }
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  seq {
+    show(caption, 0.20);
+    par {
+      pulse(block.residual1, 0.72);
+      pulse(block.residual2, 0.72);
+      pulse(block.output, 0.72);
+      say(caption, "Attention shares context. The MLP reshapes each token. Residuals keep its identity continuous.", 0.42);
+    }
+  }
+}
+wait(1.35);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Ev1tY_0MHmg" title="Inside One Transformer Block — Attention, Residuals and MLP Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-logits-sampling"><a class="header" href="#manic-ml-logits-sampling">manic-ml-logits-sampling</a></h2>
+<p>The same educational LM projection is viewed at low and high temperature before greedy and top-p decoding make their support explicit. <code>logits</code> computes every candidate from the final hidden row; <code>sample</code> filters, renormalizes, and selects one reproducible next token without pretending to run a pretrained model.</p>
+<pre><code class="language-manic">// manic-ml-logits-sampling.manic — ML7 acceptance story
+// The same LM projection is viewed at two temperatures, then top-p sampling
+// filters, renormalizes, and makes one reproducible next-token choice.
+
+title("Manic ML — How a Transformer Chooses the Next Token");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.115), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.83), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.17), "the model learned to", word, w*0.78);
+  embedding(context, words, (cx, h*0.42), "seeded 6 37", sinusoidal, w*0.88, h*0.34);
+  transformer(block, context, (cx, h*0.47), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.50);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.86, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.86, h*0.54, 73);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.13), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.64);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.42);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.58);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.78, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.78, h*0.54, 73);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.155), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.70);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.40);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.55);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.82, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.82, h*0.54, 73);
+}
+
+size(kicker, 17*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88); hidden(headline);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+hidden(cool);
+hidden(warm);
+
+step("prompt") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.28);
+    show(words.source, 0.34);
+    show(words.tokens, 0.62);
+    show(words.indices, 0.62);
+    show(caption, 0.28);
+    say(caption, "The prompt becomes an ordered token lane.", 0.34);
+  }
+}
+wait(0.45);
+
+step("hidden-state") {
+  seq {
+    fade(words, 0.28);
+    par {
+      show(block.output, 0.70);
+      show(block.labels, 0.26);
+      say(caption, "The transformer MLP ends at a hidden representation—not probabilities.", 0.40);
+    }
+    pulse(block.output, 0.72);
+  }
+}
+wait(0.45);
+
+step("cool-temperature") {
+  seq {
+    fade(block, 0.30);
+    sample(cool, "greedy", 3.4, smooth);
+    say(caption, "Low temperature sharpens every candidate. Greedy keeps only the maximum.", 0.42);
+  }
+}
+wait(0.65);
+
+step("warm-temperature") {
+  seq {
+    fade(cool, 0.30);
+    sample(warm, "top-p 0.90 seed=17", 3.8, smooth);
+    say(caption, "Higher temperature spreads the full softmax. Top-p keeps the smallest 90% nucleus, renormalizes it, then samples.", 0.46);
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(warm.temperature, 0.70);
+    pulse(warm.probabilities, 0.70);
+    say(caption, "Temperature reshapes probability. Sampling turns that distribution into one reproducible next token.", 0.44);
+  }
+}
+wait(1.30);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9LsIXokfnfc" title="How a Transformer Chooses Its Next Word — Temperature and Sampling Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-stats.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ex-physics.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-stats.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ex-physics.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

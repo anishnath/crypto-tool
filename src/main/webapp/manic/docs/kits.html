@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-97eb084f.js";
+            window.path_to_searchindex_js = "searchindex-3d8310d6.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-fc30ace8.js"></script>
+        <script src="toc-d5f29a23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -178,7 +178,7 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="kits--math-geometry-algorithms"><a class="header" href="#kits--math-geometry-algorithms">Kits — math, geometry, algorithms</a></h1>
+                        <h1 id="kits--domain-knowledge-ordinary-manic-composition"><a class="header" href="#kits--domain-knowledge-ordinary-manic-composition">Kits — domain knowledge, ordinary Manic composition</a></h1>
 <p>The words so far (<code>circle</code>, <code>move</code>, <code>flash</code>, <code>for</code>…) are the <strong>core</strong>. On top of
 that, manic ships <strong>kits</strong> — bundles of higher-level figures for a domain. You
 use them exactly like any other call.</p>
@@ -207,6 +207,49 @@ dijkstra(g, a);                 // animates shortest paths
 </code></pre>
 <p>Groups make these one-liners: a graph tags its nodes and edges, so
 <code>draw(g.edges)</code> or <code>flash(g.nodes, cyan)</code> animates the whole set.</p>
+<h2 id="ml"><a class="header" href="#ml">ml</a></h2>
+<p>Small neural-network explanations whose displayed activations and probabilities
+come from the declared model rather than a staged effect:</p>
+<pre><code class="language-manic">network(net, (cx, cy), "3 6 4 3", "relu tanh softmax", 820, 350, 21);
+forward(net, "0.15 0.92 0.38", 4.2, smooth);
+loss(net, "1 0 0", crossentropy, 1.5, smooth);
+backward(net, 3.2, smooth);
+update(net, 0.18, 2.3, smooth);
+
+tensor(image, (260, 340), "0 0 1; 0 1 1; 0 0 1", 44);
+kernel(edge, (560, 340), "-1 0 1; -2 0 2; -1 0 1", 44);
+convolve(feature, image, edge, (850, 340), 1, 1, 0, relu, 44);
+scan(feature, 4.0, smooth);
+
+tokenize(words, (650, 150), "the cat chased the cat", word, 900);
+embedding(context, words, (650, 470), "seeded 6 37", sinusoidal, 1080, 430);
+transformer(block, context, (650, 500),
+  "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41",
+  1120, 520);
+encode(block, 6.2, smooth);
+logits(next, block, 5, (650, 500),
+  "reason | predict | learn | adapt | explain | .", 0.8, 760, 440, 73);
+sample(next, "top-p 0.90 seed=17", 3.8, smooth);
+
+attention(head, (650, 360), "Art | ificial | intelligence | transforms | business",
+  "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+  980, 420, 23);
+attend(head, 3, 5.2, smooth);
+</code></pre>
+<p>Use <code>activation</code> to introduce a scalar activation curve, then <code>network</code> and
+<code>forward</code> to follow one computation. Add <code>loss</code>, <code>backward</code>, and <code>update</code> for
+one explicit, numerically truthful learning step. Use <code>tensor</code>, <code>kernel</code>,
+<code>convolve</code>, <code>pool</code>, and the shared <code>scan</code> for CNN/operator stories. Large layers
+automatically reduce visual detail without reducing the numerical model. Use
+<code>tokenize</code> and <code>embedding</code> to reveal honest token boundaries, stable lookup
+vectors, exact positional values, and their elementwise sum. Use
+<code>transformer</code> and <code>encode</code> for one complete multi-head block with masking,
+normalization, residuals, MLP, and truthful training/inference dropout. Use
+<code>logits</code> and <code>sample</code> to keep the separate LM projection, temperature-scaled
+full softmax, filtering, renormalization, and seeded next-token choice truthful. Use
+<code>attention</code> and <code>attend</code> for one focused, exact self-attention head; add <code>topk</code>
+only when a deterministic educational candidate ranking helps the story. See
+<a href="ml.html">Machine learning — models made visible</a>.</p>
 <h2 id="three-3d"><a class="header" href="#three-3d">three (3D)</a></h2>
 <p>A whole second world — a camera, solids, surfaces, and curves in real 3D space,
 which you spin and morph. Every 3D word ends in <code>3</code>:</p>
@@ -304,7 +347,7 @@ all in motion in the <a href="examples.html">Examples gallery</a>.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="language-layer.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="ml.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -318,7 +361,7 @@ all in motion in the <a href="examples.html">Examples gallery</a>.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="language-layer.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="ml.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

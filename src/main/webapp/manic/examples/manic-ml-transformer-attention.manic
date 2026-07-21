@@ -1,0 +1,102 @@
+// manic-ml-transformer-attention.manic — ML4 acceptance story
+// Explicit token embeddings become Q/K/V, one query row becomes normalized
+// attention weights, values mix, a residual is added, and a real output
+// projection produces top-k probabilities.
+
+title("Manic ML — One Transformer Attention Head");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_attention safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.105), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.38), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.82, h*0.40, 23);
+  topk(next, head, 3, (cx, h*0.71), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.14), "One token finds context");
+  text(caption, (cx, h*0.83), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (w*0.40, h*0.48), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.68, h*0.58, 23);
+  topk(next, head, 3, (w*0.84, h*0.52), "business | work | world | industry | future | people", 4, w*0.26, h*0.34, 29);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.13), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.39), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.84, h*0.42, 23);
+  topk(next, head, 3, (cx, h*0.72), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(head); hidden(next);
+
+step("tokens") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(head.labels, 0.40);
+  show(head.tokens, 0.60);
+}
+wait(0.55);
+
+step("projections") {
+  par {
+    show(head.q, 0.55);
+    show(head.k, 0.55);
+    show(head.v, 0.55);
+    say(caption, "Each embedding is projected into a Query, Key, and Value vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("scores") {
+  show(head.matrix, 0.70);
+  say(caption, "Scaled dot products become one softmax row: every weight is positive and the row sums to 100%.", 0.45);
+}
+wait(0.65);
+
+step("attend") {
+  par {
+    attend(head, 3, 5.20, smooth);
+    say(caption, "Focus intelligence: Q asks, K measures relevance, and weighted V carries the context.", 0.45);
+    seq {
+      par { cam((cx, h*0.46), 0.75, smooth); zoom(1.07, 0.75, smooth); }
+      wait(3.45);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.75);
+
+step("prediction") {
+  show(next, 0.70);
+  say(caption, "The residual plus attention mix enters an output projection and a truthful softmax ranking.", 0.45);
+}
+wait(0.80);
+
+step("takeaway") {
+  pulse(next.rank0, 0.75);
+  say(caption, "Attention is selective information flow—not every connection shouting at once.", 0.45);
+}
+wait(1.50);

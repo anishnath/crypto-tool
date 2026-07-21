@@ -1,0 +1,110 @@
+// manic-ml-token-embedding.manic — ML5 acceptance story
+// A repeated word keeps one seeded educational token embedding, while exact
+// sinusoidal position makes each occurrence a different model input.
+
+title("Manic ML — From Words to Positioned Embeddings");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_representation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.16, h*0.055), "Made With Manic");
+  text(kicker, (cx, h*0.055), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.095), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.19), "the cat chased the cat", word, w*0.80);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.16, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.125), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.23), "the cat chased the cat", word, w*0.68);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.17), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.83), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.30), "the cat chased the cat", word, w*0.76);
+  embedding(context, words, (cx, h*0.60), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.84); hidden(headline);
+size(caption, 20*u); color(caption, dim); wrap(caption, w*0.82); hidden(caption);
+hidden(words);
+hidden(context);
+
+step("sentence") {
+  show(kicker, 0.30);
+  show(headline, 0.42);
+  show(words.labels, 0.35);
+  show(words.source, 0.40);
+  show(caption, 0.35);
+}
+wait(0.55);
+
+step("tokens") {
+  par {
+    show(words.tokens, 0.75);
+    show(words.indices, 0.75);
+    say(caption, "Word tokenization turns the sentence into five ordered identities.", 0.38);
+  }
+}
+wait(0.60);
+
+step("lookup") {
+  fade(words, 0.35);
+  par {
+    show(context.labels, 0.40);
+    show(context.tokens, 0.55);
+    show(context.vectors, 0.95);
+    say(caption, "A seeded educational lookup gives each token identity one six-number vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("same-word") {
+  par {
+    pulse(context.row1, 0.70);
+    pulse(context.row4, 0.70);
+    say(caption, "Both copies of cat reuse the same base embedding. The lookup depends on the token—not its location.", 0.42);
+  }
+}
+wait(0.65);
+
+step("position") {
+  par {
+    show(context.positions, 1.00);
+    show(context.operators, 0.45);
+    say(caption, "Sinusoidal position adds a deterministic coordinate for places 0 through 4.", 0.42);
+  }
+}
+wait(0.65);
+
+step("model-input") {
+  par {
+    show(context.combined, 1.00);
+    say(caption, "Token vector plus position becomes the model input. The repeated word now carries two different locations.", 0.42);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  par {
+    pulse(context.row1, 0.72);
+    pulse(context.row4, 0.72);
+    say(caption, "Meaning says what the token is. Position says where this occurrence belongs.", 0.42);
+  }
+}
+wait(1.40);

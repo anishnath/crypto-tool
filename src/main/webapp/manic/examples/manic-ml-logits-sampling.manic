@@ -1,0 +1,112 @@
+// manic-ml-logits-sampling.manic — ML7 acceptance story
+// The same LM projection is viewed at two temperatures, then top-p sampling
+// filters, renormalizes, and makes one reproducible next-token choice.
+
+title("Manic ML — How a Transformer Chooses the Next Token");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.115), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.83), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.17), "the model learned to", word, w*0.78);
+  embedding(context, words, (cx, h*0.42), "seeded 6 37", sinusoidal, w*0.88, h*0.34);
+  transformer(block, context, (cx, h*0.47), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.50);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.86, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.86, h*0.54, 73);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.13), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.64);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.42);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.58);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.78, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.78, h*0.54, 73);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.155), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.70);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.40);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.55);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.82, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.82, h*0.54, 73);
+}
+
+size(kicker, 17*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88); hidden(headline);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+hidden(cool);
+hidden(warm);
+
+step("prompt") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.28);
+    show(words.source, 0.34);
+    show(words.tokens, 0.62);
+    show(words.indices, 0.62);
+    show(caption, 0.28);
+    say(caption, "The prompt becomes an ordered token lane.", 0.34);
+  }
+}
+wait(0.45);
+
+step("hidden-state") {
+  seq {
+    fade(words, 0.28);
+    par {
+      show(block.output, 0.70);
+      show(block.labels, 0.26);
+      say(caption, "The transformer MLP ends at a hidden representation—not probabilities.", 0.40);
+    }
+    pulse(block.output, 0.72);
+  }
+}
+wait(0.45);
+
+step("cool-temperature") {
+  seq {
+    fade(block, 0.30);
+    sample(cool, "greedy", 3.4, smooth);
+    say(caption, "Low temperature sharpens every candidate. Greedy keeps only the maximum.", 0.42);
+  }
+}
+wait(0.65);
+
+step("warm-temperature") {
+  seq {
+    fade(cool, 0.30);
+    sample(warm, "top-p 0.90 seed=17", 3.8, smooth);
+    say(caption, "Higher temperature spreads the full softmax. Top-p keeps the smallest 90% nucleus, renormalizes it, then samples.", 0.46);
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(warm.temperature, 0.70);
+    pulse(warm.probabilities, 0.70);
+    say(caption, "Temperature reshapes probability. Sampling turns that distribution into one reproducible next token.", 0.44);
+  }
+}
+wait(1.30);

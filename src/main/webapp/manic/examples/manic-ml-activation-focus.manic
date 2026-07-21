@@ -1,0 +1,133 @@
+// manic-ml-activation-focus.manic — one ML noun, one complete lesson
+// `activation` supplies the truthful ReLU curve. Core Manic supplies the
+// question, equation, input probes, local emphasis, timing, and takeaway.
+
+title("Manic ML — Why ReLU Changes a Neuron");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_rule safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.11), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.79), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.60), `\operatorname{ReLU}(x)=\max(0,x)`, 35*u);
+
+  activation(reluView, (cx, h*0.38), relu, w*0.74, h*0.22);
+  line(negativePath, (w*0.13, h*0.466), (cx, h*0.466));
+  line(positivePath, (cx, h*0.466), (w*0.87, h*0.27));
+  line(positiveGuide, (w*0.685, h*0.466), (w*0.685, h*0.368));
+  circle(negativeProbe, (w*0.315, h*0.466), 8*u);
+  circle(positiveProbe, (w*0.685, h*0.368), 8*u);
+  text(negativeNote, (w*0.27, h*0.525), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.525), "x = 2  →  2");
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.14), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (w*0.79, h*0.36), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (w*0.38, h*0.49), relu, w*0.52, h*0.48);
+  line(negativePath, (w*0.12, h*0.677), (w*0.38, h*0.677));
+  line(positivePath, (w*0.38, h*0.677), (w*0.64, h*0.25));
+  line(positiveGuide, (w*0.51, h*0.677), (w*0.51, h*0.463));
+  circle(negativeProbe, (w*0.25, h*0.677), 8*u);
+  circle(positiveProbe, (w*0.51, h*0.463), 8*u);
+  text(negativeNote, (w*0.79, h*0.50), "x = −2  →  0");
+  text(positiveNote, (w*0.79, h*0.59), "x = 2  →  2");
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.145), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.67), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.28);
+  line(negativePath, (w*0.14, h*0.509), (cx, h*0.509));
+  line(positivePath, (cx, h*0.509), (w*0.86, h*0.26));
+  line(positiveGuide, (w*0.68, h*0.509), (w*0.68, h*0.384));
+  circle(negativeProbe, (w*0.32, h*0.509), 8*u);
+  circle(positiveProbe, (w*0.68, h*0.384), 8*u);
+  text(negativeNote, (w*0.27, h*0.58), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.58), "x = 2  →  2");
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(rule);
+
+color(negativePath, magenta); stroke(negativePath, 5*u); glow(negativePath, 0.35); untraced(negativePath);
+color(positivePath, cyan); stroke(positivePath, 5*u); glow(positivePath, 0.35); untraced(positivePath);
+color(positiveGuide, dim); stroke(positiveGuide, 2*u); dashed(positiveGuide, 9*u, 7*u); untraced(positiveGuide);
+
+color(negativeProbe, magenta); filled(negativeProbe); glow(negativeProbe, 0.55); hidden(negativeProbe);
+color(positiveProbe, cyan); filled(positiveProbe); glow(positiveProbe, 0.55); hidden(positiveProbe);
+size(negativeNote, 18*u); color(negativeNote, magenta); bold(negativeNote); hidden(negativeNote);
+size(positiveNote, 18*u); color(positiveNote, cyan); bold(positiveNote); hidden(positiveNote);
+
+untraced(reluView.axes);
+untraced(reluView.curve);
+hidden(reluView.label);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  draw(reluView.axes, 0.75);
+}
+wait(0.55);
+
+step("rule") {
+  show(rule, 0.55);
+  say(caption, "ReLU makes one transparent promise: return the larger of zero and x.", 0.40);
+}
+wait(0.55);
+
+step("negative-input") {
+  par {
+    draw(negativePath, 0.75);
+    show(negativeProbe, 0.35);
+    show(negativeNote, 0.35);
+    say(caption, "Negative input is muted at zero; it cannot send negative evidence onward.", 0.40);
+  }
+}
+wait(0.65);
+
+step("positive-input") {
+  par {
+    draw(positivePath, 0.85);
+    draw(positiveGuide, 0.55);
+    show(positiveProbe, 0.35);
+    show(positiveNote, 0.35);
+    say(caption, "Positive input passes through unchanged, preserving its strength.", 0.40);
+  }
+}
+wait(0.70);
+
+step("activation") {
+  par {
+    draw(reluView.curve, 1.10);
+    show(reluView.label, 0.35);
+    say(caption, "That small bend gives a network a nonlinear decision boundary.", 0.40);
+    par { cam((cx, h*0.47), 0.70, smooth); zoom(1.10, 0.70, smooth); }
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(reluView.curve, 0.75);
+    say(caption, "ReLU does not invent a signal: it gates what the neuron already computed.", 0.45);
+    par { cam((cx, cy), 0.70, smooth); zoom(1.0, 0.70, smooth); }
+  }
+}
+wait(1.50);

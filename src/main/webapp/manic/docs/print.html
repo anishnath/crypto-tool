@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-97eb084f.js";
+            window.path_to_searchindex_js = "searchindex-3d8310d6.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-fc30ace8.js"></script>
+        <script src="toc-d5f29a23.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1300,7 +1300,7 @@ loop-generated set in one line:</p>
 draw(g.edges);       // trace every edge on together
 flash(a.cells, cyan);// flash all array cells
 </code></pre>
-<p>More on grouping in the <a href="#kits--math-geometry-algorithms">Kits</a> chapter. Next, control <em>when</em> things
+<p>More on grouping in the <a href="#kits--domain-knowledge-ordinary-manic-composition">Kits</a> chapter. Next, control <em>when</em> things
 happen → <a href="#timing--flow-named-phases--clocks">Timing</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="motion-graphics--move-ideas-not-layers"><a class="header" href="#motion-graphics--move-ideas-not-layers">Motion graphics — move ideas, not layers</a></h1>
@@ -2359,9 +2359,1488 @@ branch(1, cx, h - 40, 1.5708, 150, 12);
 let total = sum(i in 1..n : i);   // 1 + 2 + … + (n-1)
 </code></pre>
 <p>That’s the whole language. The rest is <strong>kits</strong> — bundles of higher-level
-figures → <a href="#kits--math-geometry-algorithms">Kits</a>.</p>
+figures → <a href="#kits--domain-knowledge-ordinary-manic-composition">Kits</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="kits--math-geometry-algorithms"><a class="header" href="#kits--math-geometry-algorithms">Kits — math, geometry, algorithms</a></h1>
+<h1 id="machine-learning--models-made-visible"><a class="header" href="#machine-learning--models-made-visible">Machine learning — models made visible</a></h1>
+<p>Manic ML begins with a simple promise: the learner should see the values the
+model actually computed, one meaningful flow at a time. A dense network is not
+useful merely because every node and edge is present. The current layer should
+be legible; the surrounding architecture should provide context without
+becoming a mesh of noise.</p>
+<p>ML1 covers deterministic feed-forward networks and activation functions. ML2
+adds supervised loss, exact reverse-mode gradients, and explicit parameter
+updates on the same persistent figure. ML3 adds tensors, convolution, pooling,
+and a shared operator scan. ML4 adds one exact, focused self-attention head and
+a deterministic top-k output view. ML5 makes the earlier text-to-model-input
+journey visible through honest token boundaries, embeddings, and position.
+ML6 carries those vectors through a complete multi-head transformer block.
+ML7 keeps the final language-model projection separate, then makes temperature
+and next-token sampling visible without pretending to run a pretrained model.</p>
+<h2 id="the-visual-language-is-still-ordinary-manic"><a class="header" href="#the-visual-language-is-still-ordinary-manic">The visual language is still ordinary Manic</a></h2>
+<p>The ML nouns compute the diagram. Core Manic supplies the cinematography. The
+shipped examples use a small visual grammar consistently:</p>
+<ul>
+<li>cyan carries input or data;</li>
+<li>lime carries positive or retained signal;</li>
+<li>magenta carries negative contribution or reverse gradient;</li>
+<li>gold marks the active operation, residual result, or selected prediction;</li>
+<li>dim structure preserves context without letting every edge compete.</li>
+</ul>
+<p>Attention outputs and Transformer stages contain real vector summaries or
+signed mini bars, so a labelled box is never the only explanation. <code>forward</code>
+leaves a quiet contribution-weighted trace, <code>backward</code> uses external gradient
+badges, and <code>encode</code> flows through the main path plus both residual bypasses.
+These are defaults of the kit; creators do not need to animate internal tags by
+hand.</p>
+<p>Camera motion is optional. When it helps, keep it small, focus one calculation,
+and return to the complete result:</p>
+<pre><code class="language-manic">step("compute") {
+  par {
+    forward(net, "0.15 0.92 0.38", 4.2, smooth);
+    seq {
+      par { cam((w*0.24,h*0.47),0.55,smooth); zoom(1.06,0.55,smooth); }
+      wait(0.55);
+      cam((cx,h*0.47),0.8,smooth);
+      wait(0.55);
+      cam((w*0.76,h*0.47),0.8,smooth);
+      par { cam((cx,cy),0.55,smooth); zoom(1,0.55,smooth); }
+    }
+  }
+}
+</code></pre>
+<p>Avoid decorative particles around a network. Use a bounded packet or <code>flow</code>
+only when it represents a token, activation, attention contribution, gradient,
+or sampled choice. The settled frame must remain understandable with motion
+paused and with the default mono template.</p>
+<h2 id="start-with-the-story-you-need"><a class="header" href="#start-with-the-story-you-need">Start with the story you need</a></h2>
+<p>You do not need to learn the whole ML kit. Choose one row, create the named
+object, and use normal Manic <code>step</code>, <code>show</code>, <code>say</code>, and <code>pulse</code> calls around it.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Story</th><th>Start with</th><th>Animate with</th></tr>
+</thead>
+<tbody>
+<tr><td>Scalar → vector → matrix → tensor</td><td><code>tensor</code></td><td>core Manic verbs</td></tr>
+<tr><td>One activation function</td><td><code>activation</code></td><td>core Manic verbs</td></tr>
+<tr><td>Prediction through a dense model</td><td><code>network</code></td><td><code>forward</code></td></tr>
+<tr><td>Why a prediction is wrong</td><td><code>network</code> + <code>forward</code></td><td><code>loss</code></td></tr>
+<tr><td>How gradients assign credit</td><td>prediction + loss</td><td><code>backward</code></td></tr>
+<tr><td>One visible learning correction</td><td>completed backward pass</td><td><code>update</code></td></tr>
+<tr><td>Image → feature map</td><td><code>tensor</code> + <code>kernel</code> + <code>convolve</code></td><td><code>scan</code></td></tr>
+<tr><td>Smaller feature map</td><td>tensor + <code>pool</code></td><td><code>scan</code></td></tr>
+<tr><td>Text → tokens → positioned vectors</td><td><code>tokenize</code> + <code>embedding</code></td><td>core Manic verbs</td></tr>
+<tr><td>How one token finds context</td><td><code>attention</code></td><td><code>attend</code></td></tr>
+<tr><td>Context → candidate probabilities</td><td><code>attention</code> + <code>topk</code></td><td>core Manic verbs</td></tr>
+<tr><td>Complete transformer block</td><td><code>transformer</code></td><td><code>encode</code></td></tr>
+<tr><td>Hidden state → logits → next token</td><td><code>transformer</code> + <code>logits</code></td><td><code>sample</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>The smallest useful pattern is:</p>
+<pre><code class="language-manic">activation(view, (cx,cy), relu, 510, 260);
+untraced(view.axes);
+untraced(view.curve);
+
+step("meet-the-rule") {
+  draw(view.axes, 0.7);
+  draw(view.curve, 1.2);
+}
+</code></pre>
+<p>ML words compute or construct the truthful figure. Core Manic remains the
+story language. This division keeps a tensor-only or activation-only lesson
+small instead of forcing every creator into a complete neural network.</p>
+<h2 id="the-complete-ml1ml7-vocabulary"><a class="header" href="#the-complete-ml1ml7-vocabulary">The complete ML1–ML7 vocabulary</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Kind</th><th>Words</th><th>What the creator supplies</th></tr>
+</thead>
+<tbody>
+<tr><td>Figures</td><td><code>tensor</code>, <code>kernel</code>, <code>activation</code>, <code>network</code>, <code>tokenize</code>, <code>embedding</code>, <code>attention</code>, <code>transformer</code></td><td>values, shape, text, boundaries, activation names, embeddings, compact block options, or a deterministic seed</td></tr>
+<tr><td>Derived views</td><td><code>convolve</code>, <code>pool</code>, <code>topk</code>, <code>logits</code></td><td>a source figure plus operator, candidate, token, temperature, or projection choices</td></tr>
+<tr><td>Computation</td><td><code>forward</code>, <code>loss</code>, <code>backward</code>, <code>update</code>, <code>scan</code>, <code>attend</code>, <code>encode</code>, <code>sample</code></td><td>input, target, learning rate, selected token/block, decoding strategy, duration, and easing</td></tr>
+</tbody>
+</table>
+</div>
+<p><code>backward</code> is intentionally not standalone: it requires a <code>forward</code> prediction
+and <code>loss</code>. <code>scan</code> similarly requires a <code>convolve</code> or <code>pool</code> result. Errors name
+the missing prerequisite instead of drawing a plausible but false animation.</p>
+<h2 id="learn-tensors-without-a-network"><a class="header" href="#learn-tensors-without-a-network">Learn tensors without a network</a></h2>
+<p>Use a 1×1 grid for one displayed scalar, one row for a vector, rows for a
+matrix, and <code>|</code> to stack channels. The accompanying title can name the familiar
+rank while the same <code>tensor</code> noun supplies stable cells and values:</p>
+<pre><code class="language-manic">tensor(scalar, (180,360), "7");
+tensor(vector, (460,360), "7 2 -1 4");
+tensor(matrix, (760,360), "7 2 -1; 4 0 3; 1 5 6");
+tensor(volume, (1060,360),
+  "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6");
+</code></pre>
+<p>Every part is selectable: <code>volume.channel0</code>, <code>volume.row1</code>, <code>volume.col2</code>,
+<code>volume.cells</code>, <code>volume.values</code>, or one cell such as <code>volume.c1.r0c2</code>.</p>
+<h2 id="explain-one-activation-without-a-network"><a class="header" href="#explain-one-activation-without-a-network">Explain one activation without a network</a></h2>
+<pre><code class="language-manic">activation(view, (cx,cy), relu, 620, 320);
+</code></pre>
+<p>Standalone plots support <code>linear</code>, <code>relu</code>, <code>sigmoid</code>, and <code>tanh</code>. Use
+<code>view.axes</code>, <code>view.curve</code>, and the ordinary line, point, equation, draw, and
+pulse tools to test inputs or explain a region. <code>softmax</code> belongs inside a
+network because it transforms a complete vector rather than one scalar.</p>
+<h2 id="a-complete-forward-pass"><a class="header" href="#a-complete-forward-pass">A complete forward pass</a></h2>
+<pre><code class="language-manic">network(net, (cx, cy), "3 6 4 3", "relu tanh softmax", 820, 350, 21);
+forward(net, "0.15 0.92 0.38", 4.2, smooth);
+</code></pre>
+<p>The two quoted lists serve different purposes:</p>
+<ul>
+<li><code>"3 6 4 3"</code> defines input, hidden, hidden, and output layer sizes.</li>
+<li><code>"relu tanh softmax"</code> defines what happens after each of the three affine
+transitions.</li>
+<li><code>21</code> is the deterministic seed. The same file produces the same weights,
+activations, prediction, and frames every time.</li>
+<li>The input supplied to <code>forward</code> must contain exactly three finite values.</li>
+</ul>
+<p>Manic uses Xavier-uniform weights for the seeded educational model. It computes
+each affine layer, applies the named activation, and uses a numerically stable
+softmax. The output bars and percentages are derived from that result.</p>
+<h2 id="one-complete-learning-step"><a class="header" href="#one-complete-learning-step">One complete learning step</a></h2>
+<pre><code class="language-manic">forward(net, "0.15 0.92 0.38", 3.2, smooth);
+loss(net, "1 0 0", crossentropy, 1.5, smooth);
+backward(net, 3.2, smooth);
+update(net, 0.18, 2.3, smooth);
+</code></pre>
+<p>These four beats deliberately remain visible:</p>
+<ol>
+<li><code>forward</code> stores the real activations for the authored input.</li>
+<li><code>loss</code> compares the output with the target. <code>crossentropy</code> requires a
+softmax output and a non-negative target distribution that sums to one.
+<code>mse</code> supports other output activations and arbitrary finite targets.</li>
+<li><code>backward</code> calculates exact reverse-mode gradients for every visible and
+hidden parameter. The pulse travels output → input along the existing edges.</li>
+<li><code>update</code> applies <code>parameter -= learning_rate * gradient</code>, recomputes the
+same input, and replaces the output bars and loss with their new computed
+values.</li>
+</ol>
+<p>The optional loss kind defaults to cross-entropy for a softmax output and MSE
+otherwise. The default learning rate is <code>0.15</code>. A learning rate is not a visual
+speed: changing it changes the mathematics, and a large value can truthfully
+increase the loss.</p>
+<h2 id="from-pixels-to-feature-maps"><a class="header" href="#from-pixels-to-feature-maps">From pixels to feature maps</a></h2>
+<p>Rows use <code>;</code>, values use spaces or commas, and channels use <code>|</code> inside one
+quoted grid. This keeps small textbook tensors readable:</p>
+<pre><code class="language-manic">tensor(image, (250, 340), "0 0 1; 0 1 1; 0 0 1", 44, cyan);
+kernel(edge, (540, 340), "-1 0 1; -2 0 2; -1 0 1", 44, magenta);
+
+convolve(feature, image, edge, (820, 340), 1, 1, 0, relu, 44);
+scan(feature, 4.0, smooth);
+
+pool(compact, feature, (1080, 340), max, 2, 2, 0, 44);
+scan(compact, 2.8, smooth);
+</code></pre>
+<p><code>convolve</code> computes one output feature map. Its optional values are stride,
+zero padding, bias, cellwise activation, and cell size. A multi-channel input
+uses one kernel grid per input channel and sums every channel into each output
+cell:</p>
+<pre><code class="language-manic">tensor(rgb, (300, 340), "1 2; 3 4 | 10 20; 30 40 | 2 0; 1 3");
+kernel(k, (600, 340), "1 | 0.5 | -1");
+convolve(feature, rgb, k, (900, 340));
+</code></pre>
+<p>For multiple feature detectors, author multiple kernels and outputs. That keeps
+each receptive field explainable instead of hiding a filter bank behind one
+visually dense call.</p>
+<p><code>pool</code> supports <code>max</code> and <code>average</code>, operating independently on each channel.
+The default window is 2 and the default stride equals the window. Padding does
+not fabricate candidate values: padded positions are excluded. Max-pool ties
+select the first valid cell in row-major order, which makes selection stable
+across renders and direct seeking.</p>
+<h2 id="one-scanner-for-convolution-and-pooling"><a class="header" href="#one-scanner-for-convolution-and-pooling">One scanner for convolution and pooling</a></h2>
+<p><code>scan(output, duration, easing)</code> coordinates four identities that should never
+drift apart:</p>
+<ul>
+<li>the receptive-field frame on the source;</li>
+<li>the kernel/operator focus;</li>
+<li>the truthful arithmetic summary;</li>
+<li>the destination frame and exact revealed value.</li>
+</ul>
+<p>When a pooled tensor consumes a convolution result, starting the pooling scan
+automatically quiets the completed convolution arithmetic strip. The figures
+remain in place, so the learner sees continuity without two competing status
+lines. Use normal <code>step</code>, caption, <code>show</code>, and <code>pulse</code> calls for the narrative;
+let <code>scan</code> own the synchronized numerical choreography.</p>
+<h2 id="show-how-words-gain-position"><a class="header" href="#show-how-words-gain-position">Show how words gain position</a></h2>
+<p>Start with the sentence, choose honest boundaries, then turn those identities
+into vectors:</p>
+<pre><code class="language-manic">tokenize(words, (cx, 150), "the cat chased the cat", word, w*0.70);
+embedding(context, words, (cx, 470), "seeded 6 37", sinusoidal,
+  w*0.90, h*0.46);
+</code></pre>
+<p>The optional token mode is:</p>
+<ul>
+<li><code>word</code> — Unicode letters/numbers form words; punctuation stays separate;</li>
+<li><code>character</code> — each character is a token and whitespace remains visible;</li>
+<li><code>authored</code> — <code>|</code> marks every exact boundary for a hand-authored subword
+explanation.</li>
+</ul>
+<p>Authored boundaries are not called BPE because Manic has not applied a merge
+table. <code>embedding</code> accepts either one explicit numeric row per token (rows
+separated with <code>;</code>) or <code>"seeded DIM [SEED]"</code>. Seeded values are reproducible
+educational lookup vectors, not pretrained weights. Repeated copies of the
+same token reuse the same base vector; adding exact sinusoidal position makes
+their final model inputs different. Use <code>none</code> instead of <code>sinusoidal</code> when the
+lesson should stop at the lookup table.</p>
+<p>Reveal <code>context.vectors</code>, then <code>context.positions</code>, then <code>context.combined</code>.
+For comparison, pulse stable rows such as <code>context.row1</code>; use <code>.dimN</code> to focus
+one feature across the table. Manic caps the story at 12 tokens and eight
+dimensions so the values remain teachable on a phone.</p>
+<h2 id="explain-one-transformer-attention-head"><a class="header" href="#explain-one-transformer-attention-head">Explain one transformer attention head</a></h2>
+<p>Give <code>attention</code> a short token list and one embedding row per token. Then focus
+one token with its 1-based position:</p>
+<pre><code class="language-manic">attention(head, (cx, 360),
+  "Art | ificial | intelligence | transforms | business",
+  "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+  980, 420, 23);
+
+attend(head, 3, 5.2, smooth);
+</code></pre>
+<p>This computes one seeded Q/K/V projection, the scaled score matrix
+<code>QK^T / sqrt(d)</code>, a stable row-wise softmax, and each exact weighted value mix.
+<code>attend(head, 3, ...)</code> highlights the query for <code>intelligence</code>; it does not
+rebuild or replace the surrounding tokens.</p>
+<p>Add a small output ranking only when the story needs it:</p>
+<pre><code class="language-manic">topk(next, head, 3, (1540, 400),
+  "business | work | world | industry | future | people",
+  4, 420, 260, 29);
+</code></pre>
+<p><code>topk</code> adds the selected embedding to its attention output, applies a seeded
+educational output projection, and shows probabilities from the full softmax.
+Those percentages are mathematically exact for the authored figure, but they
+are not predictions from a pretrained language model. Keep the candidate list
+small enough to read; the visual shows at most eight selected results.</p>
+<h2 id="walk-through-a-complete-transformer-block"><a class="header" href="#walk-through-a-complete-transformer-block">Walk through a complete transformer block</a></h2>
+<p>Pass the ML5 embedding directly into <code>transformer</code>; do not copy its rows:</p>
+<pre><code class="language-manic">transformer(block, context, (cx, 500),
+  "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41",
+  w*0.92, h*0.62);
+encode(block, 6.2, smooth);
+</code></pre>
+<p>The one configuration sentence controls the choices that change the actual
+calculation:</p>
+<ul>
+<li><code>heads=1..4</code>; <code>d_model</code> must divide exactly across them;</li>
+<li><code>mask=none|causal</code>; causal future cells receive zero probability;</li>
+<li><code>mlp=WIDTH</code> up to 32 and <code>activation=gelu|relu|silu|tanh</code>;</li>
+<li><code>norm=pre|post</code>, which changes where both layer normalizations happen;</li>
+<li><code>dropout=0..less-than-1</code>, <code>mode=inference|training</code>, and a reproducible
+<code>seed</code>.</li>
+</ul>
+<p>Each head computes scaled Q/K scores, applies its mask, normalizes with stable
+softmax, and mixes V. Manic concatenates the heads, applies the output
+projection, follows the first residual/norm stage, expands and contracts the
+MLP, then follows the second residual/norm stage. Training dropout is a real
+seeded boolean mask with inverted scaling; inference disables it completely.
+<code>encode</code> reveals this existing computation and remains safe under direct seek.</p>
+<h2 id="turn-a-hidden-state-into-one-next-token"><a class="header" href="#turn-a-hidden-state-into-one-next-token">Turn a hidden state into one next token</a></h2>
+<p>The transformer’s MLP produces another hidden representation. It does not
+directly produce vocabulary probabilities. <code>logits</code> makes the separate
+language-model head explicit:</p>
+<pre><code class="language-manic">logits(next, block, 5, (cx, 520),
+  "reason | predict | learn | adapt | explain | .",
+  0.8, 760, 440, 73);
+sample(next, "top-p 0.90 seed=17", 3.8, smooth);
+</code></pre>
+<p>The third argument is a 1-based transformer token. Candidate labels are
+<code>|</code>-separated and intentionally authored; Manic supports 2–12 in one readable
+view. The optional temperature defaults to 1, followed by width, height, and
+projection seed.</p>
+<p><code>logits</code> computes <code>W_lm h + b</code> from that final hidden row. It then divides every
+logit by the positive temperature and applies one numerically stable softmax to
+the complete candidate list. Reuse the same projection seed for a fair
+temperature comparison: logits remain identical while every probability is
+recomputed. Lower temperature sharpens the distribution; higher temperature
+spreads it.</p>
+<p><code>sample</code> keeps four common choices behind one word:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Strategy string</th><th>Exact behavior</th></tr>
+</thead>
+<tbody>
+<tr><td><code>"greedy"</code></td><td>selects the highest probability; the decoding distribution is one-hot</td></tr>
+<tr><td><code>"categorical seed=17"</code></td><td>samples from the complete temperature-scaled distribution</td></tr>
+<tr><td><code>"top-k 3 seed=17"</code></td><td>keeps exactly the three highest candidates, zeros the rest, then renormalizes</td></tr>
+<tr><td><code>"top-p 0.90 seed=17"</code></td><td>keeps the smallest descending prefix reaching 90% mass, zeros the rest, then renormalizes</td></tr>
+</tbody>
+</table>
+</div>
+<p>An excluded candidate has exact probability zero and cannot be sampled. The
+same seed and same distribution choose the same result. All displayed values
+come from the deterministic educational projection declared in the scene; they
+are not predictions from a pretrained language model.</p>
+<h2 id="introduce-an-activation-first"><a class="header" href="#introduce-an-activation-first">Introduce an activation first</a></h2>
+<pre><code class="language-manic">activation(reluView, (cx, cy), relu, 510, 260);
+untraced(reluView.axes);
+untraced(reluView.curve);
+
+par {
+  draw(reluView.axes, 0.7);
+  draw(reluView.curve, 1.2);
+}
+</code></pre>
+<p><code>activation</code> supports <code>linear</code>, <code>relu</code>, <code>sigmoid</code>, and <code>tanh</code>. A standalone
+softmax curve would be misleading because softmax depends on all entries in a
+vector; show it as the output activation of a <code>network</code> instead.</p>
+<h2 id="design-details-that-make-the-result-readable"><a class="header" href="#design-details-that-make-the-result-readable">Design details that make the result readable</a></h2>
+<ul>
+<li>Inactive edges remain quiet. During <code>forward</code>, contribution magnitude drives
+emphasis and one pulse travels in the direction of computation.</li>
+<li>Weight sign and magnitude affect edge styling, but labels, brightness, and
+width keep the structure understandable under the monochrome template.</li>
+<li>Large numerical layers show their first and last units around an ellipsis.
+Computation still uses every unit; only the drawing uses level of detail.</li>
+<li>Input, hidden, and output nodes retain stable ids throughout the story. Manic
+updates values instead of clearing and rebuilding the network.</li>
+<li>Output bars grow from zero to the computed value. A softmax output is labelled
+as a percentage and the status strip names the selected class.</li>
+<li><code>loss</code> places the target beside each output without replacing the prediction.
+Error magnitude focuses attention on the outputs that disagree.</li>
+<li><code>backward</code> temporarily recolours connections by gradient sign and weights
+their emphasis by gradient magnitude. The settled network remains the same
+object, ready for the update.</li>
+<li><code>update</code> shows the gradient direction first, then restores edge styling from
+the new weights and recomputes every node. Its final status preserves the old
+and new loss so the claimed learning outcome is inspectable.</li>
+</ul>
+<h2 id="compose-it-like-any-other-manic-scene"><a class="header" href="#compose-it-like-any-other-manic-scene">Compose it like any other Manic scene</a></h2>
+<p>Every part is an ordinary entity carrying useful tags:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Tag</th><th>Selects</th></tr>
+</thead>
+<tbody>
+<tr><td><code>net</code></td><td>the complete network figure</td></tr>
+<tr><td><code>net.nodes</code>, <code>net.edges</code>, <code>net.values</code></td><td>one visual role</td></tr>
+<tr><td><code>net.layer0</code>, <code>net.layer1</code>, …</td><td>one layer</td></tr>
+<tr><td><code>net.input</code>, <code>net.hidden</code>, <code>net.output</code></td><td>semantic layer groups</td></tr>
+<tr><td><code>net.probabilities</code></td><td>output bars and readouts</td></tr>
+<tr><td><code>net.loss</code></td><td>supervised target readouts</td></tr>
+<tr><td><code>image.cells</code>, <code>image.values</code>, <code>image.labels</code></td><td>tensor visual roles</td></tr>
+<tr><td><code>image.channel0</code>, <code>image.row0</code>, <code>image.col0</code></td><td>tensor slices</td></tr>
+<tr><td><code>image.c0.r0c0</code> and <code>.value</code></td><td>one cell and its numeric text</td></tr>
+<tr><td><code>feature.scan</code></td><td>receptive-field/operator/destination overlays</td></tr>
+<tr><td><code>words.source</code>, <code>.tokens</code>, <code>.indices</code>, <code>.tokenN</code></td><td>tokenization stages</td></tr>
+<tr><td><code>context.vectors</code>, <code>.positions</code>, <code>.combined</code></td><td>embedding addition stages</td></tr>
+<tr><td><code>context.rowN</code>, <code>.dimN</code>, <code>.operators</code></td><td>one token, feature, or operator</td></tr>
+<tr><td><code>block.heads</code>, <code>.headN</code>, <code>.mask</code>, <code>.matrix</code></td><td>multi-head attention and masks</td></tr>
+<tr><td><code>block.concat</code>, <code>.projection</code>, <code>.residual1</code>, <code>.norm1</code></td><td>first half of the block</td></tr>
+<tr><td><code>block.mlp</code>, <code>.activation</code>, <code>.dropout</code>, <code>.residual2</code>, <code>.norm2</code></td><td>second half</td></tr>
+<tr><td><code>block.input</code>, <code>.output</code>, <code>.tokenN</code>, <code>.rowN</code></td><td>persistent token lanes</td></tr>
+<tr><td><code>head.tokens</code>, <code>.q</code>, <code>.k</code>, <code>.v</code>, <code>.matrix</code></td><td>attention stages</td></tr>
+<tr><td><code>head.connections</code>, <code>.outputs</code>, <code>.residual</code></td><td>attention flow and residual lanes</td></tr>
+<tr><td><code>next.labels</code>, <code>.bars</code>, <code>.probabilities</code></td><td>top-k output roles</td></tr>
+</tbody>
+</table>
+</div>
+<p>That means normal verbs still apply:</p>
+<pre><code class="language-manic">hidden(net);
+
+step("meet-the-model") {
+  show(net, 0.6);
+}
+
+step("compute") {
+  forward(net, "0.15 0.92 0.38", 4.2, smooth);
+}
+
+step("decision") {
+  pulse(net.output, 0.7);
+}
+</code></pre>
+<p>Use named steps for question, intuition, computation, and takeaway. Let
+<code>forward</code> own the dense numerical choreography; use captions and equations to
+explain why the active operation matters.</p>
+<p>For a learning story, keep the causal order clear:</p>
+<pre><code class="language-manic">step("predict") { forward(net, "0.15 0.92 0.38", 3.2); }
+step("compare") { loss(net, "1 0 0", crossentropy, 1.5); }
+step("credit")  { backward(net, 3.2); }
+step("learn")   { update(net, 0.18, 2.3); }
+</code></pre>
+<p>Calling <code>forward</code> with a new input starts a fresh learning beat and clears the
+old target/gradient state. After <code>update</code>, another <code>backward</code> may compute fresh
+gradients for the updated parameters and the same retained target. Every
+<code>update</code> still requires a preceding <code>backward</code>; there is no invisible optimizer
+loop.</p>
+<h2 id="current-boundary"><a class="header" href="#current-boundary">Current boundary</a></h2>
+<p>The ML kit is intentionally for small educational models. It does not load
+arbitrary PyTorch or TensorFlow programs, run hidden training loops, expose an
+optimizer catalogue, train large models, or require a GPU. Explicit authored
+weights, automatic filter banks, convolutional back-propagation, stacks of
+multiple transformer blocks, model imports, and packaged pretrained tokenizers
+remain planned work. ML4 deliberately computes one
+educational attention head, not a hidden pretrained language model. ML5 offers
+deterministic word/character splitting and exact authored boundaries; it does
+not claim a heuristic is BPE. Token sequences accept at most 12 tokens and
+eight embedding values each. Attention accepts 2–8 tokens with at most eight
+embedding values each; its candidate vocabulary is capped at 16.
+ML6 accepts 1–4 heads, requires exact division of the model dimension, caps the
+MLP at 32 values, and computes one educational block rather than an imported
+language model. ML7 accepts 2–12 authored candidates and a positive finite
+temperature; its LM projection and sampling seed are educational and explicit.
+Tensor axes are capped at 16 cells and a tensor at 2,048 values so unreadable
+stories fail early instead of silently becoming visual noise.</p>
+<h2 id="review-the-shipped-stories"><a class="header" href="#review-the-shipped-stories">Review the shipped stories</a></h2>
+<p>The foundation story proves that <code>tensor</code> plus ordinary Manic is enough to
+explain rank and dimensional growth:</p>
+<pre><code class="language-manic">// manic-ml-scalar-to-tensor.manic — ML foundation story
+// One value gains an axis, then rows, then stacked channels. The ML-specific
+// surface is only tensor(...); ordinary Manic verbs own the explanation.
+
+title("Manic ML — From Scalar to Tensor");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Build_the_dimensions safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 38*u;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.105), "One value gains dimensions");
+  text(caption, (cx, h*0.84), "Begin with one measured value.");
+
+  tensor(scalar, (cx, h*0.20), "7", cell, gold);
+  tensor(vector, (cx, h*0.35), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (cx, h*0.53), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (cx, h*0.72), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (cx, h*0.155), "SCALAR · RANK 0");
+  text(vectorTitle, (cx, h*0.295), "VECTOR · RANK 1");
+  text(matrixTitle, (cx, h*0.445), "MATRIX · RANK 2");
+  text(volumeTitle, (cx, h*0.625), "TENSOR · RANK 3");
+
+  arrow(grow1, (cx, h*0.245), (cx, h*0.285));
+  arrow(grow2, (cx, h*0.395), (cx, h*0.435));
+  arrow(grow3, (cx, h*0.585), (cx, h*0.615));
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.14), "One value gains dimensions");
+  text(caption, (cx, h*0.82), "Begin with one measured value.");
+
+  tensor(scalar, (w*0.11, h*0.46), "7", cell, gold);
+  tensor(vector, (w*0.34, h*0.46), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (w*0.61, h*0.46), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (w*0.86, h*0.46), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (w*0.11, h*0.34), "SCALAR · RANK 0");
+  text(vectorTitle, (w*0.34, h*0.34), "VECTOR · RANK 1");
+  text(matrixTitle, (w*0.61, h*0.34), "MATRIX · RANK 2");
+  text(volumeTitle, (w*0.86, h*0.34), "TENSOR · RANK 3");
+
+  arrow(grow1, (w*0.17, h*0.46), (w*0.23, h*0.46));
+  arrow(grow2, (w*0.44, h*0.46), (w*0.51, h*0.46));
+  arrow(grow3, (w*0.70, h*0.46), (w*0.76, h*0.46));
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.17), "One value gains dimensions");
+  text(caption, (cx, h*0.84), "Begin with one measured value.");
+
+  tensor(scalar, (w*0.24, h*0.34), "7", cell, gold);
+  tensor(vector, (w*0.73, h*0.34), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (w*0.24, h*0.65), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (w*0.73, h*0.65), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (w*0.24, h*0.235), "SCALAR · RANK 0");
+  text(vectorTitle, (w*0.73, h*0.235), "VECTOR · RANK 1");
+  text(matrixTitle, (w*0.24, h*0.505), "MATRIX · RANK 2");
+  text(volumeTitle, (w*0.73, h*0.505), "TENSOR · RANK 3");
+
+  arrow(grow1, (w*0.34, h*0.34), (w*0.50, h*0.34));
+  arrow(grow2, (w*0.73, h*0.40), (w*0.36, h*0.56));
+  arrow(grow3, (w*0.35, h*0.65), (w*0.50, h*0.65));
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+size(scalarTitle, 17*u); bold(scalarTitle); color(scalarTitle, dim); hidden(scalarTitle);
+size(vectorTitle, 17*u); bold(vectorTitle); color(vectorTitle, dim); hidden(vectorTitle);
+size(matrixTitle, 17*u); bold(matrixTitle); color(matrixTitle, dim); hidden(matrixTitle);
+size(volumeTitle, 17*u); bold(volumeTitle); color(volumeTitle, dim); hidden(volumeTitle);
+
+color(grow1, dim); stroke(grow1, 2.5*u); hidden(grow1);
+color(grow2, dim); stroke(grow2, 2.5*u); hidden(grow2);
+color(grow3, dim); stroke(grow3, 2.5*u); hidden(grow3);
+
+hidden(scalar.cells); hidden(scalar.values); hidden(scalar.labels);
+hidden(vector.cells); hidden(vector.values); hidden(vector.labels);
+hidden(matrix.cells); hidden(matrix.values); hidden(matrix.labels);
+hidden(volume.cells); hidden(volume.values); hidden(volume.labels);
+
+step("scalar") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(scalarTitle, 0.30);
+  par {
+    show(scalar.cells, 0.55);
+    show(scalar.values, 0.55);
+  }
+}
+wait(0.55);
+
+step("vector") {
+  par {
+    show(grow1, 0.35);
+    show(vectorTitle, 0.30);
+    show(vector.cells, 0.60);
+    show(vector.values, 0.60);
+    say(caption, "Repeat the value along one ordered axis: position now matters.", 0.40);
+  }
+}
+wait(0.60);
+
+step("matrix") {
+  par {
+    show(grow2, 0.35);
+    show(matrixTitle, 0.30);
+    show(matrix.cells, 0.65);
+    show(matrix.values, 0.65);
+    say(caption, "Add rows to the columns: one axis becomes a two-dimensional matrix.", 0.40);
+  }
+}
+wait(0.65);
+
+step("tensor") {
+  par {
+    show(grow3, 0.35);
+    show(volumeTitle, 0.30);
+    show(volume.cells, 0.70);
+    show(volume.values, 0.70);
+    say(caption, "Stack matrices as channels: the same values now carry depth and context.", 0.40);
+  }
+}
+wait(0.75);
+
+step("one-family") {
+  pulse(volume.channel1, 0.75);
+  say(caption, "Scalar, vector, and matrix are all tensors—distinguished by their axes.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GkguFn1qB_k" title="Scalar, Vector, Matrix, Tensor — How Data Gains Dimensions in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The activation story uses one real ReLU plot and core Manic probes to explain
+negative and positive inputs:</p>
+<pre><code class="language-manic">// manic-ml-activation-focus.manic — one ML noun, one complete lesson
+// `activation` supplies the truthful ReLU curve. Core Manic supplies the
+// question, equation, input probes, local emphasis, timing, and takeaway.
+
+title("Manic ML — Why ReLU Changes a Neuron");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_rule safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.11), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.79), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.60), `\operatorname{ReLU}(x)=\max(0,x)`, 35*u);
+
+  activation(reluView, (cx, h*0.38), relu, w*0.74, h*0.22);
+  line(negativePath, (w*0.13, h*0.466), (cx, h*0.466));
+  line(positivePath, (cx, h*0.466), (w*0.87, h*0.27));
+  line(positiveGuide, (w*0.685, h*0.466), (w*0.685, h*0.368));
+  circle(negativeProbe, (w*0.315, h*0.466), 8*u);
+  circle(positiveProbe, (w*0.685, h*0.368), 8*u);
+  text(negativeNote, (w*0.27, h*0.525), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.525), "x = 2  →  2");
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.14), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (w*0.79, h*0.36), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (w*0.38, h*0.49), relu, w*0.52, h*0.48);
+  line(negativePath, (w*0.12, h*0.677), (w*0.38, h*0.677));
+  line(positivePath, (w*0.38, h*0.677), (w*0.64, h*0.25));
+  line(positiveGuide, (w*0.51, h*0.677), (w*0.51, h*0.463));
+  circle(negativeProbe, (w*0.25, h*0.677), 8*u);
+  circle(positiveProbe, (w*0.51, h*0.463), 8*u);
+  text(negativeNote, (w*0.79, h*0.50), "x = −2  →  0");
+  text(positiveNote, (w*0.79, h*0.59), "x = 2  →  2");
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.145), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.67), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.28);
+  line(negativePath, (w*0.14, h*0.509), (cx, h*0.509));
+  line(positivePath, (cx, h*0.509), (w*0.86, h*0.26));
+  line(positiveGuide, (w*0.68, h*0.509), (w*0.68, h*0.384));
+  circle(negativeProbe, (w*0.32, h*0.509), 8*u);
+  circle(positiveProbe, (w*0.68, h*0.384), 8*u);
+  text(negativeNote, (w*0.27, h*0.58), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.58), "x = 2  →  2");
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(rule);
+
+color(negativePath, magenta); stroke(negativePath, 5*u); glow(negativePath, 0.35); untraced(negativePath);
+color(positivePath, cyan); stroke(positivePath, 5*u); glow(positivePath, 0.35); untraced(positivePath);
+color(positiveGuide, dim); stroke(positiveGuide, 2*u); dashed(positiveGuide, 9*u, 7*u); untraced(positiveGuide);
+
+color(negativeProbe, magenta); filled(negativeProbe); glow(negativeProbe, 0.55); hidden(negativeProbe);
+color(positiveProbe, cyan); filled(positiveProbe); glow(positiveProbe, 0.55); hidden(positiveProbe);
+size(negativeNote, 18*u); color(negativeNote, magenta); bold(negativeNote); hidden(negativeNote);
+size(positiveNote, 18*u); color(positiveNote, cyan); bold(positiveNote); hidden(positiveNote);
+
+untraced(reluView.axes);
+untraced(reluView.curve);
+hidden(reluView.label);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  draw(reluView.axes, 0.75);
+}
+wait(0.55);
+
+step("rule") {
+  show(rule, 0.55);
+  say(caption, "ReLU makes one transparent promise: return the larger of zero and x.", 0.40);
+}
+wait(0.55);
+
+step("negative-input") {
+  par {
+    draw(negativePath, 0.75);
+    show(negativeProbe, 0.35);
+    show(negativeNote, 0.35);
+    say(caption, "Negative input is muted at zero; it cannot send negative evidence onward.", 0.40);
+  }
+}
+wait(0.65);
+
+step("positive-input") {
+  par {
+    draw(positivePath, 0.85);
+    draw(positiveGuide, 0.55);
+    show(positiveProbe, 0.35);
+    show(positiveNote, 0.35);
+    say(caption, "Positive input passes through unchanged, preserving its strength.", 0.40);
+  }
+}
+wait(0.70);
+
+step("activation") {
+  par {
+    draw(reluView.curve, 1.10);
+    show(reluView.label, 0.35);
+    say(caption, "That small bend gives a network a nonlinear decision boundary.", 0.40);
+    par { cam((cx, h*0.47), 0.70, smooth); zoom(1.10, 0.70, smooth); }
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(reluView.curve, 0.75);
+    say(caption, "ReLU does not invent a signal: it gates what the neuron already computed.", 0.45);
+    par { cam((cx, cy), 0.70, smooth); zoom(1.0, 0.70, smooth); }
+  }
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zW0wHsaASl0" title="Why ReLU? — One Activation Function Explained Visually in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The gallery example combines activation, network, forward computation, named
+story stages, Creator branding, and a professional restrained layout:</p>
+<pre><code class="language-manic">// manic-ml-forward-pass.manic — ML1 creator proof
+// A real deterministic network computes one prediction. The story keeps the
+// model persistent and reveals only the active computation instead of flashing
+// every connection at once.
+
+title("Manic ML — A Forward Pass You Can Follow");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+// One story reflows to portrait, feed, square, and landscape. The portrait
+// network narrows to reserve a clean probability lane at the right.
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.18, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.72), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.24);
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.14), "How does a network choose?");
+  text(caption, (cx, h*0.83), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.49), relu, w*0.42, h*0.36);
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.82), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.43), relu, w*0.68, h*0.30);
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 36*u); bold(headline); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+// A truthful ReLU curve introduces the operation used by the hidden layer.
+hidden(reluView);
+untraced(reluView.axes);
+untraced(reluView.curve);
+
+// 3 inputs → 6 ReLU units → 4 tanh units → 3 softmax probabilities.
+// Seed 21 makes the educational model reproducible across every render.
+hidden(model);
+
+step("activation") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(reluView, 0.55);
+  draw(reluView.axes, 0.70);
+  draw(reluView.curve, 1.20);
+}
+wait(0.75);
+
+step("meet-the-network") {
+  fade(reluView, 0.45);
+  show(model, 0.65);
+  say(caption, "The same operation now lives inside a small, deterministic network.", 0.45);
+}
+wait(0.65);
+
+step("forward-pass") {
+  par {
+    forward(model, "0.15 0.92 0.38", 4.20, smooth);
+    say(caption, "Follow the bright path: inputs become evidence, then probabilities.", 0.45);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.55, smooth); zoom(1.06, 0.55, smooth); }
+      wait(0.55);
+      cam((cx, h*0.47), 0.80, smooth);
+      wait(0.55);
+      cam((w*0.76, h*0.47), 0.80, smooth);
+      wait(0.40);
+      par { cam((cx, cy), 0.55, smooth); zoom(1.0, 0.55, smooth); }
+    }
+  }
+}
+wait(0.90);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "The picture is driven by the computed values—not a decorative animation.", 0.45);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VjRF8VpjhR8" title="How a Neural Network Chooses — Follow One Real Forward Pass in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The ML2 story keeps one network on screen through prediction, target, loss,
+backward credit assignment, and a visibly recomputed gradient update:</p>
+<pre><code class="language-manic">// manic-ml-learning-step.manic — ML2 creator proof
+// One persistent network predicts, measures its mistake, sends exact gradients
+// backward, and changes its parameters. No layer is cleared and redrawn.
+
+title("Manic ML — How One Mistake Becomes Learning");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_learning safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.72), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.14), "How does a model learn?");
+  text(caption, (cx, h*0.83), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.82), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(model);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(model, 0.65);
+}
+wait(0.55);
+
+step("predict") {
+  par {
+    forward(model, "0.15 0.92 0.38", 3.20, smooth);
+    say(caption, "A forward pass turns the input into three probabilities.", 0.40);
+  }
+}
+wait(0.55);
+
+step("measure-the-mistake") {
+  par {
+    loss(model, "1 0 0", crossentropy, 1.50, smooth);
+    say(caption, "The correct answer is class 1. Cross-entropy measures the mismatch.", 0.40);
+  }
+}
+wait(0.55);
+
+step("send-credit-backward") {
+  par {
+    backward(model, 3.20, smooth);
+    say(caption, "The gradient carries responsibility backward through the same connections.", 0.40);
+    seq {
+      par { cam((w*0.76, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.24, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.55);
+
+step("learn") {
+  par {
+    update(model, 0.18, 2.30, smooth);
+    say(caption, "Each parameter moves opposite its gradient; the same input is computed again.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tdCuY1FKrXI" title="How One Mistake Teaches a Neural Network — Loss, Gradients and Learning in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The ML3 story turns a small image into an edge-response feature map and then a
+pooled summary, with the same scanner serving both operators:</p>
+<pre><code class="language-manic">// manic-ml-cnn-edge-story.manic — ML3 creator proof
+// A tiny image becomes a feature map and then a pooled summary. Every number is
+// computed by Manic; scan coordinates the receptive field and destination.
+
+title("Manic ML — How a CNN Finds an Edge");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_feature safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 48*u;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.72), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.28, h*0.35), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.72, h*0.35), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.34, h*0.54), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.72, h*0.54), max, 2, 1, 0, cell);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.14), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.17, h*0.47), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.42, h*0.47), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.68, h*0.47), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.47), max, 2, 1, 0, cell);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.18, h*0.44), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.45, h*0.44), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.70, h*0.44), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.44), max, 2, 1, 0, cell);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(image); hidden(edge); hidden(feature); hidden(pooled);
+
+step("pixels") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(image, 0.65);
+}
+wait(0.55);
+
+step("edge-detector") {
+  show(edge, 0.55);
+  say(caption, "This 3×3 kernel compares the left side of each patch with the right.", 0.40);
+}
+wait(0.55);
+
+step("feature-map") {
+  show(feature, 0.50);
+  say(caption, "The feature map begins quiet; each destination waits for one receptive field.", 0.40);
+}
+wait(0.35);
+
+step("convolution-scan") {
+  par {
+    scan(feature, 4.80, smooth);
+    say(caption, "The same kernel slides, multiplies, sums, applies ReLU, and writes one cell.", 0.40);
+    seq {
+      par { cam((w*0.38, h*0.45), 0.75, smooth); zoom(1.10, 0.75, smooth); }
+      wait(2.95);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.60);
+
+step("pooling-map") {
+  show(pooled, 0.50);
+  say(caption, "Max pooling asks a simpler question: where is the strongest local evidence?", 0.40);
+}
+wait(0.40);
+
+step("pooling-scan") {
+  par {
+    scan(pooled, 3.40, smooth);
+    say(caption, "Each 2×2 window keeps its first maximum; ties are deterministic.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(pooled.cells, 0.75);
+  say(caption, "A CNN builds meaning locally: pixels → feature responses → compact evidence.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hAbU0m_Qieg" title="How a CNN Finds Edges — Convolution and Max Pooling Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The ML5 story begins with a repeated word, proves that its base lookup vector
+is reused, and then shows how sinusoidal position makes each occurrence unique:</p>
+<pre><code class="language-manic">// manic-ml-token-embedding.manic — ML5 acceptance story
+// A repeated word keeps one seeded educational token embedding, while exact
+// sinusoidal position makes each occurrence a different model input.
+
+title("Manic ML — From Words to Positioned Embeddings");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_representation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.16, h*0.055), "Made With Manic");
+  text(kicker, (cx, h*0.055), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.095), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.19), "the cat chased the cat", word, w*0.80);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.16, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.125), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.23), "the cat chased the cat", word, w*0.68);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.17), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.83), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.30), "the cat chased the cat", word, w*0.76);
+  embedding(context, words, (cx, h*0.60), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.84); hidden(headline);
+size(caption, 20*u); color(caption, dim); wrap(caption, w*0.82); hidden(caption);
+hidden(words);
+hidden(context);
+
+step("sentence") {
+  show(kicker, 0.30);
+  show(headline, 0.42);
+  show(words.labels, 0.35);
+  show(words.source, 0.40);
+  show(caption, 0.35);
+}
+wait(0.55);
+
+step("tokens") {
+  par {
+    show(words.tokens, 0.75);
+    show(words.indices, 0.75);
+    say(caption, "Word tokenization turns the sentence into five ordered identities.", 0.38);
+  }
+}
+wait(0.60);
+
+step("lookup") {
+  fade(words, 0.35);
+  par {
+    show(context.labels, 0.40);
+    show(context.tokens, 0.55);
+    show(context.vectors, 0.95);
+    say(caption, "A seeded educational lookup gives each token identity one six-number vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("same-word") {
+  par {
+    pulse(context.row1, 0.70);
+    pulse(context.row4, 0.70);
+    say(caption, "Both copies of cat reuse the same base embedding. The lookup depends on the token—not its location.", 0.42);
+  }
+}
+wait(0.65);
+
+step("position") {
+  par {
+    show(context.positions, 1.00);
+    show(context.operators, 0.45);
+    say(caption, "Sinusoidal position adds a deterministic coordinate for places 0 through 4.", 0.42);
+  }
+}
+wait(0.65);
+
+step("model-input") {
+  par {
+    show(context.combined, 1.00);
+    say(caption, "Token vector plus position becomes the model input. The repeated word now carries two different locations.", 0.42);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  par {
+    pulse(context.row1, 0.72);
+    pulse(context.row4, 0.72);
+    say(caption, "Meaning says what the token is. Position says where this occurrence belongs.", 0.42);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0a5ePmj6GCU" title="How Words Gain Position — Tokenization and Embeddings Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The ML4 story keeps the token lanes visible while one query reveals Q/K/V,
+one truthful softmax row, its weighted value mix, the residual, and a small
+candidate ranking:</p>
+<pre><code class="language-manic">// manic-ml-transformer-attention.manic — ML4 acceptance story
+// Explicit token embeddings become Q/K/V, one query row becomes normalized
+// attention weights, values mix, a residual is added, and a real output
+// projection produces top-k probabilities.
+
+title("Manic ML — One Transformer Attention Head");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_attention safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.105), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.38), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.82, h*0.40, 23);
+  topk(next, head, 3, (cx, h*0.71), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.14), "One token finds context");
+  text(caption, (cx, h*0.83), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (w*0.40, h*0.48), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.68, h*0.58, 23);
+  topk(next, head, 3, (w*0.84, h*0.52), "business | work | world | industry | future | people", 4, w*0.26, h*0.34, 29);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.13), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.39), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.84, h*0.42, 23);
+  topk(next, head, 3, (cx, h*0.72), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(head); hidden(next);
+
+step("tokens") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(head.labels, 0.40);
+  show(head.tokens, 0.60);
+}
+wait(0.55);
+
+step("projections") {
+  par {
+    show(head.q, 0.55);
+    show(head.k, 0.55);
+    show(head.v, 0.55);
+    say(caption, "Each embedding is projected into a Query, Key, and Value vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("scores") {
+  show(head.matrix, 0.70);
+  say(caption, "Scaled dot products become one softmax row: every weight is positive and the row sums to 100%.", 0.45);
+}
+wait(0.65);
+
+step("attend") {
+  par {
+    attend(head, 3, 5.20, smooth);
+    say(caption, "Focus intelligence: Q asks, K measures relevance, and weighted V carries the context.", 0.45);
+    seq {
+      par { cam((cx, h*0.46), 0.75, smooth); zoom(1.07, 0.75, smooth); }
+      wait(3.45);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.75);
+
+step("prediction") {
+  show(next, 0.70);
+  say(caption, "The residual plus attention mix enters an output projection and a truthful softmax ranking.", 0.45);
+}
+wait(0.80);
+
+step("takeaway") {
+  pulse(next.rank0, 0.75);
+  say(caption, "Attention is selective information flow—not every connection shouting at once.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1qXzB4e0Ksg" title="How Self-Attention Finds Context — One Transformer Head Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The ML6 story preserves one token lane through two causal heads, concatenation,
+both residual/norm stages, a GELU MLP, and the exact settled block output:</p>
+<pre><code class="language-manic">// manic-ml-transformer-block.manic — ML6 acceptance story
+// One persistent token lane passes through multi-head causal attention,
+// concatenation, two residual paths, pre-normalization, and a GELU MLP.
+
+title("Manic ML — Inside One Transformer Block");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.105), "Inside one transformer block");
+  text(caption, (cx, h*0.84), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.15), "the cat slept because it dreamed", word, w*0.82);
+  embedding(context, words, (cx, h*0.41), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+  transformer(block, context, (cx, h*0.49), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.56);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.14), "Inside one transformer block");
+  text(caption, (cx, h*0.82), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.22), "the cat slept because it dreamed", word, w*0.72);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.92, h*0.62);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.13), "Inside one transformer block");
+  text(caption, (cx, h*0.83), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.23), "the cat slept because it dreamed", word, w*0.78);
+  embedding(context, words, (cx, h*0.52), "seeded 6 37", sinusoidal, w*0.90, h*0.44);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.57);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86); hidden(headline);
+size(caption, 19*u); color(caption, dim); wrap(caption, w*0.84); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+
+step("tokens") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.30);
+    show(words.source, 0.36);
+    show(words.tokens, 0.70);
+    show(words.indices, 0.70);
+    show(caption, 0.32);
+    say(caption, "Six ordered tokens begin as one persistent lane.", 0.36);
+  }
+}
+wait(0.55);
+
+step("model-input") {
+  seq {
+    fade(words, 0.32);
+    par {
+      show(context.labels, 0.32);
+      show(context.tokens, 0.42);
+      show(context.vectors, 0.82);
+      say(caption, "Each identity receives a stable lookup vector.", 0.36);
+    }
+    par {
+      show(context.positions, 0.72);
+      show(context.operators, 0.34);
+      show(context.combined, 0.78);
+      say(caption, "Position is added exactly. These six vectors are the block input.", 0.38);
+    }
+  }
+}
+wait(0.60);
+
+step("encode") {
+  seq {
+    par {
+      fade(context, 0.34);
+      fade(caption, 0.24);
+    }
+    par {
+      encode(block, 6.2, smooth);
+      seq {
+        par { cam((cx - w*0.25, h*0.52), 0.75, smooth); zoom(1.08, 0.75, smooth); }
+        wait(1.35);
+        cam((cx + w*0.17, h*0.52), 1.15, smooth);
+        wait(1.50);
+        par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+      }
+    }
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  seq {
+    show(caption, 0.20);
+    par {
+      pulse(block.residual1, 0.72);
+      pulse(block.residual2, 0.72);
+      pulse(block.output, 0.72);
+      say(caption, "Attention shares context. The MLP reshapes each token. Residuals keep its identity continuous.", 0.42);
+    }
+  }
+}
+wait(1.35);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Ev1tY_0MHmg" title="Inside One Transformer Block — Attention, Residuals and MLP Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>The ML7 story compares the same projection at cool and warm temperatures, then
+shows greedy and top-p decoding as exact filtered distributions and one seeded
+next-token choice:</p>
+<pre><code class="language-manic">// manic-ml-logits-sampling.manic — ML7 acceptance story
+// The same LM projection is viewed at two temperatures, then top-p sampling
+// filters, renormalizes, and makes one reproducible next-token choice.
+
+title("Manic ML — How a Transformer Chooses the Next Token");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.115), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.83), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.17), "the model learned to", word, w*0.78);
+  embedding(context, words, (cx, h*0.42), "seeded 6 37", sinusoidal, w*0.88, h*0.34);
+  transformer(block, context, (cx, h*0.47), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.50);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.86, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.86, h*0.54, 73);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.13), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.64);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.42);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.58);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.78, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.78, h*0.54, 73);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.155), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.70);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.40);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.55);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.82, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.82, h*0.54, 73);
+}
+
+size(kicker, 17*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88); hidden(headline);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+hidden(cool);
+hidden(warm);
+
+step("prompt") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.28);
+    show(words.source, 0.34);
+    show(words.tokens, 0.62);
+    show(words.indices, 0.62);
+    show(caption, 0.28);
+    say(caption, "The prompt becomes an ordered token lane.", 0.34);
+  }
+}
+wait(0.45);
+
+step("hidden-state") {
+  seq {
+    fade(words, 0.28);
+    par {
+      show(block.output, 0.70);
+      show(block.labels, 0.26);
+      say(caption, "The transformer MLP ends at a hidden representation—not probabilities.", 0.40);
+    }
+    pulse(block.output, 0.72);
+  }
+}
+wait(0.45);
+
+step("cool-temperature") {
+  seq {
+    fade(block, 0.30);
+    sample(cool, "greedy", 3.4, smooth);
+    say(caption, "Low temperature sharpens every candidate. Greedy keeps only the maximum.", 0.42);
+  }
+}
+wait(0.65);
+
+step("warm-temperature") {
+  seq {
+    fade(cool, 0.30);
+    sample(warm, "top-p 0.90 seed=17", 3.8, smooth);
+    say(caption, "Higher temperature spreads the full softmax. Top-p keeps the smallest 90% nucleus, renormalizes it, then samples.", 0.46);
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(warm.temperature, 0.70);
+    pulse(warm.probabilities, 0.70);
+    say(caption, "Temperature reshapes probability. Sampling turns that distribution into one reproducible next token.", 0.44);
+  }
+}
+wait(1.30);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9LsIXokfnfc" title="How a Transformer Chooses Its Next Word — Temperature and Sampling Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="kits--domain-knowledge-ordinary-manic-composition"><a class="header" href="#kits--domain-knowledge-ordinary-manic-composition">Kits — domain knowledge, ordinary Manic composition</a></h1>
 <p>The words so far (<code>circle</code>, <code>move</code>, <code>flash</code>, <code>for</code>…) are the <strong>core</strong>. On top of
 that, manic ships <strong>kits</strong> — bundles of higher-level figures for a domain. You
 use them exactly like any other call.</p>
@@ -2390,6 +3869,49 @@ dijkstra(g, a);                 // animates shortest paths
 </code></pre>
 <p>Groups make these one-liners: a graph tags its nodes and edges, so
 <code>draw(g.edges)</code> or <code>flash(g.nodes, cyan)</code> animates the whole set.</p>
+<h2 id="ml"><a class="header" href="#ml">ml</a></h2>
+<p>Small neural-network explanations whose displayed activations and probabilities
+come from the declared model rather than a staged effect:</p>
+<pre><code class="language-manic">network(net, (cx, cy), "3 6 4 3", "relu tanh softmax", 820, 350, 21);
+forward(net, "0.15 0.92 0.38", 4.2, smooth);
+loss(net, "1 0 0", crossentropy, 1.5, smooth);
+backward(net, 3.2, smooth);
+update(net, 0.18, 2.3, smooth);
+
+tensor(image, (260, 340), "0 0 1; 0 1 1; 0 0 1", 44);
+kernel(edge, (560, 340), "-1 0 1; -2 0 2; -1 0 1", 44);
+convolve(feature, image, edge, (850, 340), 1, 1, 0, relu, 44);
+scan(feature, 4.0, smooth);
+
+tokenize(words, (650, 150), "the cat chased the cat", word, 900);
+embedding(context, words, (650, 470), "seeded 6 37", sinusoidal, 1080, 430);
+transformer(block, context, (650, 500),
+  "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41",
+  1120, 520);
+encode(block, 6.2, smooth);
+logits(next, block, 5, (650, 500),
+  "reason | predict | learn | adapt | explain | .", 0.8, 760, 440, 73);
+sample(next, "top-p 0.90 seed=17", 3.8, smooth);
+
+attention(head, (650, 360), "Art | ificial | intelligence | transforms | business",
+  "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+  980, 420, 23);
+attend(head, 3, 5.2, smooth);
+</code></pre>
+<p>Use <code>activation</code> to introduce a scalar activation curve, then <code>network</code> and
+<code>forward</code> to follow one computation. Add <code>loss</code>, <code>backward</code>, and <code>update</code> for
+one explicit, numerically truthful learning step. Use <code>tensor</code>, <code>kernel</code>,
+<code>convolve</code>, <code>pool</code>, and the shared <code>scan</code> for CNN/operator stories. Large layers
+automatically reduce visual detail without reducing the numerical model. Use
+<code>tokenize</code> and <code>embedding</code> to reveal honest token boundaries, stable lookup
+vectors, exact positional values, and their elementwise sum. Use
+<code>transformer</code> and <code>encode</code> for one complete multi-head block with masking,
+normalization, residuals, MLP, and truthful training/inference dropout. Use
+<code>logits</code> and <code>sample</code> to keep the separate LM projection, temperature-scaled
+full softmax, filtering, renormalization, and seeded next-token choice truthful. Use
+<code>attention</code> and <code>attend</code> for one focused, exact self-attention head; add <code>topk</code>
+only when a deterministic educational candidate ranking helps the story. See
+<a href="#machine-learning--models-made-visible">Machine learning — models made visible</a>.</p>
 <h2 id="three-3d"><a class="header" href="#three-3d">three (3D)</a></h2>
 <p>A whole second world — a camera, solids, surfaces, and curves in real 3D space,
 which you spin and morph. Every 3D word ends in <code>3</code>:</p>
@@ -2987,6 +4509,7 @@ shape (with a message that names the 3D replacement):</p>
 <li><a href="#calculus--functions">Calculus &amp; functions</a> — 22 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 13 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
+<li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
 <li><a href="#physics--simulations">Physics — simulations</a> — 54 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
@@ -7286,6 +8809,1060 @@ say(cap, "each step a random direction — chance draws a wandering path", 0.5);
 wait(2.2);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/l9sqYflGPL8" title="A Probability Playground — Distributions, CI, Monte-Carlo & Random Walks — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="machine-learning"><a class="header" href="#machine-learning">Machine learning</a></h1>
+<p>Small, deterministic models whose displayed values are computed rather than staged. The ML examples use progressive focus so forward values, supervised loss, reverse gradients, and parameter updates stay readable on one persistent network.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="manic-ml-scalar-to-tensor"><a class="header" href="#manic-ml-scalar-to-tensor">manic-ml-scalar-to-tensor</a></h2>
+<p>Start with one value, extend it into a vector, arrange values into a matrix, then stack channels into a rank-3 tensor. The only ML noun is <code>tensor</code>; ordinary Manic steps, arrows, reveals, and captions tell the complete dimensional story.</p>
+<pre><code class="language-manic">// manic-ml-scalar-to-tensor.manic — ML foundation story
+// One value gains an axis, then rows, then stacked channels. The ML-specific
+// surface is only tensor(...); ordinary Manic verbs own the explanation.
+
+title("Manic ML — From Scalar to Tensor");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Build_the_dimensions safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 38*u;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.105), "One value gains dimensions");
+  text(caption, (cx, h*0.84), "Begin with one measured value.");
+
+  tensor(scalar, (cx, h*0.20), "7", cell, gold);
+  tensor(vector, (cx, h*0.35), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (cx, h*0.53), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (cx, h*0.72), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (cx, h*0.155), "SCALAR · RANK 0");
+  text(vectorTitle, (cx, h*0.295), "VECTOR · RANK 1");
+  text(matrixTitle, (cx, h*0.445), "MATRIX · RANK 2");
+  text(volumeTitle, (cx, h*0.625), "TENSOR · RANK 3");
+
+  arrow(grow1, (cx, h*0.245), (cx, h*0.285));
+  arrow(grow2, (cx, h*0.395), (cx, h*0.435));
+  arrow(grow3, (cx, h*0.585), (cx, h*0.615));
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.14), "One value gains dimensions");
+  text(caption, (cx, h*0.82), "Begin with one measured value.");
+
+  tensor(scalar, (w*0.11, h*0.46), "7", cell, gold);
+  tensor(vector, (w*0.34, h*0.46), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (w*0.61, h*0.46), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (w*0.86, h*0.46), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (w*0.11, h*0.34), "SCALAR · RANK 0");
+  text(vectorTitle, (w*0.34, h*0.34), "VECTOR · RANK 1");
+  text(matrixTitle, (w*0.61, h*0.34), "MATRIX · RANK 2");
+  text(volumeTitle, (w*0.86, h*0.34), "TENSOR · RANK 3");
+
+  arrow(grow1, (w*0.17, h*0.46), (w*0.23, h*0.46));
+  arrow(grow2, (w*0.44, h*0.46), (w*0.51, h*0.46));
+  arrow(grow3, (w*0.70, h*0.46), (w*0.76, h*0.46));
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · DATA FOUNDATIONS");
+  text(headline, (cx, h*0.17), "One value gains dimensions");
+  text(caption, (cx, h*0.84), "Begin with one measured value.");
+
+  tensor(scalar, (w*0.24, h*0.34), "7", cell, gold);
+  tensor(vector, (w*0.73, h*0.34), "7 2 -1 4", cell, cyan);
+  tensor(matrix, (w*0.24, h*0.65), "7 2 -1; 4 0 3; 1 5 6", cell, magenta);
+  tensor(volume, (w*0.73, h*0.65), "7 2 -1; 4 0 3; 1 5 6 | 2 4 8; 1 3 9; 0 5 6", cell, lime);
+
+  text(scalarTitle, (w*0.24, h*0.235), "SCALAR · RANK 0");
+  text(vectorTitle, (w*0.73, h*0.235), "VECTOR · RANK 1");
+  text(matrixTitle, (w*0.24, h*0.505), "MATRIX · RANK 2");
+  text(volumeTitle, (w*0.73, h*0.505), "TENSOR · RANK 3");
+
+  arrow(grow1, (w*0.34, h*0.34), (w*0.50, h*0.34));
+  arrow(grow2, (w*0.73, h*0.40), (w*0.36, h*0.56));
+  arrow(grow3, (w*0.35, h*0.65), (w*0.50, h*0.65));
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+size(scalarTitle, 17*u); bold(scalarTitle); color(scalarTitle, dim); hidden(scalarTitle);
+size(vectorTitle, 17*u); bold(vectorTitle); color(vectorTitle, dim); hidden(vectorTitle);
+size(matrixTitle, 17*u); bold(matrixTitle); color(matrixTitle, dim); hidden(matrixTitle);
+size(volumeTitle, 17*u); bold(volumeTitle); color(volumeTitle, dim); hidden(volumeTitle);
+
+color(grow1, dim); stroke(grow1, 2.5*u); hidden(grow1);
+color(grow2, dim); stroke(grow2, 2.5*u); hidden(grow2);
+color(grow3, dim); stroke(grow3, 2.5*u); hidden(grow3);
+
+hidden(scalar.cells); hidden(scalar.values); hidden(scalar.labels);
+hidden(vector.cells); hidden(vector.values); hidden(vector.labels);
+hidden(matrix.cells); hidden(matrix.values); hidden(matrix.labels);
+hidden(volume.cells); hidden(volume.values); hidden(volume.labels);
+
+step("scalar") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(scalarTitle, 0.30);
+  par {
+    show(scalar.cells, 0.55);
+    show(scalar.values, 0.55);
+  }
+}
+wait(0.55);
+
+step("vector") {
+  par {
+    show(grow1, 0.35);
+    show(vectorTitle, 0.30);
+    show(vector.cells, 0.60);
+    show(vector.values, 0.60);
+    say(caption, "Repeat the value along one ordered axis: position now matters.", 0.40);
+  }
+}
+wait(0.60);
+
+step("matrix") {
+  par {
+    show(grow2, 0.35);
+    show(matrixTitle, 0.30);
+    show(matrix.cells, 0.65);
+    show(matrix.values, 0.65);
+    say(caption, "Add rows to the columns: one axis becomes a two-dimensional matrix.", 0.40);
+  }
+}
+wait(0.65);
+
+step("tensor") {
+  par {
+    show(grow3, 0.35);
+    show(volumeTitle, 0.30);
+    show(volume.cells, 0.70);
+    show(volume.values, 0.70);
+    say(caption, "Stack matrices as channels: the same values now carry depth and context.", 0.40);
+  }
+}
+wait(0.75);
+
+step("one-family") {
+  pulse(volume.channel1, 0.75);
+  say(caption, "Scalar, vector, and matrix are all tensors—distinguished by their axes.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GkguFn1qB_k" title="Scalar, Vector, Matrix, Tensor — How Data Gains Dimensions in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-activation-focus"><a class="header" href="#manic-ml-activation-focus">manic-ml-activation-focus</a></h2>
+<p>A focused ReLU lesson: draw the truthful activation curve, test one negative and one positive input, then connect the bend to nonlinearity. <code>activation</code> supplies the mathematics while core Manic owns the probes, guides, equation, and pacing.</p>
+<pre><code class="language-manic">// manic-ml-activation-focus.manic — one ML noun, one complete lesson
+// `activation` supplies the truthful ReLU curve. Core Manic supplies the
+// question, equation, input probes, local emphasis, timing, and takeaway.
+
+title("Manic ML — Why ReLU Changes a Neuron");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_rule safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.11), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.79), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.60), `\operatorname{ReLU}(x)=\max(0,x)`, 35*u);
+
+  activation(reluView, (cx, h*0.38), relu, w*0.74, h*0.22);
+  line(negativePath, (w*0.13, h*0.466), (cx, h*0.466));
+  line(positivePath, (cx, h*0.466), (w*0.87, h*0.27));
+  line(positiveGuide, (w*0.685, h*0.466), (w*0.685, h*0.368));
+  circle(negativeProbe, (w*0.315, h*0.466), 8*u);
+  circle(positiveProbe, (w*0.685, h*0.368), 8*u);
+  text(negativeNote, (w*0.27, h*0.525), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.525), "x = 2  →  2");
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.14), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (w*0.79, h*0.36), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (w*0.38, h*0.49), relu, w*0.52, h*0.48);
+  line(negativePath, (w*0.12, h*0.677), (w*0.38, h*0.677));
+  line(positivePath, (w*0.38, h*0.677), (w*0.64, h*0.25));
+  line(positiveGuide, (w*0.51, h*0.677), (w*0.51, h*0.463));
+  circle(negativeProbe, (w*0.25, h*0.677), 8*u);
+  circle(positiveProbe, (w*0.51, h*0.463), 8*u);
+  text(negativeNote, (w*0.79, h*0.50), "x = −2  →  0");
+  text(positiveNote, (w*0.79, h*0.59), "x = 2  →  2");
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · ACTIVATION");
+  text(headline, (cx, h*0.145), "Why does a neuron need ReLU?");
+  text(caption, (cx, h*0.82), "A neuron first receives an unrestricted number.");
+  equation(rule, (cx, h*0.67), `\operatorname{ReLU}(x)=\max(0,x)`, 34*u);
+
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.28);
+  line(negativePath, (w*0.14, h*0.509), (cx, h*0.509));
+  line(positivePath, (cx, h*0.509), (w*0.86, h*0.26));
+  line(positiveGuide, (w*0.68, h*0.509), (w*0.68, h*0.384));
+  circle(negativeProbe, (w*0.32, h*0.509), 8*u);
+  circle(positiveProbe, (w*0.68, h*0.384), 8*u);
+  text(negativeNote, (w*0.27, h*0.58), "x = −2  →  0");
+  text(positiveNote, (w*0.73, h*0.58), "x = 2  →  2");
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(rule);
+
+color(negativePath, magenta); stroke(negativePath, 5*u); glow(negativePath, 0.35); untraced(negativePath);
+color(positivePath, cyan); stroke(positivePath, 5*u); glow(positivePath, 0.35); untraced(positivePath);
+color(positiveGuide, dim); stroke(positiveGuide, 2*u); dashed(positiveGuide, 9*u, 7*u); untraced(positiveGuide);
+
+color(negativeProbe, magenta); filled(negativeProbe); glow(negativeProbe, 0.55); hidden(negativeProbe);
+color(positiveProbe, cyan); filled(positiveProbe); glow(positiveProbe, 0.55); hidden(positiveProbe);
+size(negativeNote, 18*u); color(negativeNote, magenta); bold(negativeNote); hidden(negativeNote);
+size(positiveNote, 18*u); color(positiveNote, cyan); bold(positiveNote); hidden(positiveNote);
+
+untraced(reluView.axes);
+untraced(reluView.curve);
+hidden(reluView.label);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  draw(reluView.axes, 0.75);
+}
+wait(0.55);
+
+step("rule") {
+  show(rule, 0.55);
+  say(caption, "ReLU makes one transparent promise: return the larger of zero and x.", 0.40);
+}
+wait(0.55);
+
+step("negative-input") {
+  par {
+    draw(negativePath, 0.75);
+    show(negativeProbe, 0.35);
+    show(negativeNote, 0.35);
+    say(caption, "Negative input is muted at zero; it cannot send negative evidence onward.", 0.40);
+  }
+}
+wait(0.65);
+
+step("positive-input") {
+  par {
+    draw(positivePath, 0.85);
+    draw(positiveGuide, 0.55);
+    show(positiveProbe, 0.35);
+    show(positiveNote, 0.35);
+    say(caption, "Positive input passes through unchanged, preserving its strength.", 0.40);
+  }
+}
+wait(0.70);
+
+step("activation") {
+  par {
+    draw(reluView.curve, 1.10);
+    show(reluView.label, 0.35);
+    say(caption, "That small bend gives a network a nonlinear decision boundary.", 0.40);
+    par { cam((cx, h*0.47), 0.70, smooth); zoom(1.10, 0.70, smooth); }
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(reluView.curve, 0.75);
+    say(caption, "ReLU does not invent a signal: it gates what the neuron already computed.", 0.45);
+    par { cam((cx, cy), 0.70, smooth); zoom(1.0, 0.70, smooth); }
+  }
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zW0wHsaASl0" title="Why ReLU? — One Activation Function Explained Visually in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-forward-pass"><a class="header" href="#manic-ml-forward-pass">manic-ml-forward-pass</a></h2>
+<p>A creator-first neural-network story: introduce the ReLU activation, reveal a seeded 3→6→4→3 model, then follow one real forward pass into softmax probabilities. <code>network</code>, <code>activation</code>, and <code>forward</code> provide the truthful structure while ordinary named steps, captions, and Creator branding tell the lesson.</p>
+<pre><code class="language-manic">// manic-ml-forward-pass.manic — ML1 creator proof
+// A real deterministic network computes one prediction. The story keeps the
+// model persistent and reveals only the active computation instead of flashing
+// every connection at once.
+
+title("Manic ML — A Forward Pass You Can Follow");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+// One story reflows to portrait, feed, square, and landscape. The portrait
+// network narrows to reserve a clean probability lane at the right.
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.18, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.72), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.40), relu, w*0.72, h*0.24);
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.14), "How does a network choose?");
+  text(caption, (cx, h*0.83), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.49), relu, w*0.42, h*0.36);
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · FORWARD PASS");
+  text(headline, (cx, h*0.13), "How does a network choose?");
+  text(caption, (cx, h*0.82), "First, a neuron keeps positive evidence and removes negative evidence.");
+  activation(reluView, (cx, h*0.43), relu, w*0.68, h*0.30);
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 36*u); bold(headline); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+// A truthful ReLU curve introduces the operation used by the hidden layer.
+hidden(reluView);
+untraced(reluView.axes);
+untraced(reluView.curve);
+
+// 3 inputs → 6 ReLU units → 4 tanh units → 3 softmax probabilities.
+// Seed 21 makes the educational model reproducible across every render.
+hidden(model);
+
+step("activation") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(reluView, 0.55);
+  draw(reluView.axes, 0.70);
+  draw(reluView.curve, 1.20);
+}
+wait(0.75);
+
+step("meet-the-network") {
+  fade(reluView, 0.45);
+  show(model, 0.65);
+  say(caption, "The same operation now lives inside a small, deterministic network.", 0.45);
+}
+wait(0.65);
+
+step("forward-pass") {
+  par {
+    forward(model, "0.15 0.92 0.38", 4.20, smooth);
+    say(caption, "Follow the bright path: inputs become evidence, then probabilities.", 0.45);
+    seq {
+      par { cam((w*0.24, h*0.47), 0.55, smooth); zoom(1.06, 0.55, smooth); }
+      wait(0.55);
+      cam((cx, h*0.47), 0.80, smooth);
+      wait(0.55);
+      cam((w*0.76, h*0.47), 0.80, smooth);
+      wait(0.40);
+      par { cam((cx, cy), 0.55, smooth); zoom(1.0, 0.55, smooth); }
+    }
+  }
+}
+wait(0.90);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "The picture is driven by the computed values—not a decorative animation.", 0.45);
+}
+wait(1.60);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VjRF8VpjhR8" title="How a Neural Network Chooses — Follow One Real Forward Pass in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-learning-step"><a class="header" href="#manic-ml-learning-step">manic-ml-learning-step</a></h2>
+<p>One complete supervised learning beat on a persistent network: predict, compare with a target using cross-entropy, send exact reverse-mode gradients backward, update every weight and bias, then recompute the same input. <code>loss</code>, <code>backward</code>, and <code>update</code> expose the mathematics without turning the DSL into a training framework.</p>
+<pre><code class="language-manic">// manic-ml-learning-step.manic — ML2 creator proof
+// One persistent network predicts, measures its mistake, sends exact gradients
+// backward, and changes its parameters. No layer is cleared and redrawn.
+
+title("Manic ML — How One Mistake Becomes Learning");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_learning safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.72), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.42), "3 6 4 3", "relu tanh softmax", w*0.55, h*0.32, 21);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.14), "How does a model learn?");
+  text(caption, (cx, h*0.83), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.47), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.39, 21);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · ONE LEARNING STEP");
+  text(headline, (cx, h*0.13), "How does a model learn?");
+  text(caption, (cx, h*0.82), "First the network predicts from the current weights.");
+  network(model, (cx, h*0.45), "3 6 4 3", "relu tanh softmax", w*0.64, h*0.40, 21);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(model);
+
+step("question") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(model, 0.65);
+}
+wait(0.55);
+
+step("predict") {
+  par {
+    forward(model, "0.15 0.92 0.38", 3.20, smooth);
+    say(caption, "A forward pass turns the input into three probabilities.", 0.40);
+  }
+}
+wait(0.55);
+
+step("measure-the-mistake") {
+  par {
+    loss(model, "1 0 0", crossentropy, 1.50, smooth);
+    say(caption, "The correct answer is class 1. Cross-entropy measures the mismatch.", 0.40);
+  }
+}
+wait(0.55);
+
+step("send-credit-backward") {
+  par {
+    backward(model, 3.20, smooth);
+    say(caption, "The gradient carries responsibility backward through the same connections.", 0.40);
+    seq {
+      par { cam((w*0.76, h*0.47), 0.40, smooth); zoom(1.08, 0.40, smooth); }
+      wait(0.30);
+      cam((cx, h*0.47), 0.55, smooth);
+      wait(0.25);
+      cam((w*0.24, h*0.47), 0.55, smooth);
+      wait(0.25);
+      par { cam((cx, cy), 0.45, smooth); zoom(1.0, 0.45, smooth); }
+    }
+  }
+}
+wait(0.55);
+
+step("learn") {
+  par {
+    update(model, 0.18, 2.30, smooth);
+    say(caption, "Each parameter moves opposite its gradient; the same input is computed again.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(model.output, 0.75);
+  say(caption, "Learning is a measured correction: predict → compare → trace blame → update.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/tdCuY1FKrXI" title="How One Mistake Teaches a Neural Network — Loss, Gradients and Learning in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-cnn-edge-story"><a class="header" href="#manic-ml-cnn-edge-story">manic-ml-cnn-edge-story</a></h2>
+<p>A tiny image becomes an edge-response feature map and then a pooled summary. The shared <code>scan</code> choreography keeps each receptive field, kernel/operator, arithmetic line, and destination cell synchronized while <code>tensor</code>, <code>kernel</code>, <code>convolve</code>, and <code>pool</code> supply the exact values.</p>
+<pre><code class="language-manic">// manic-ml-cnn-edge-story.manic — ML3 creator proof
+// A tiny image becomes a feature map and then a pooled summary. Every number is
+// computed by Manic; scan coordinates the receptive field and destination.
+
+title("Manic ML — How a CNN Finds an Edge");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_feature safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 48*u;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.72), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.28, h*0.35), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.72, h*0.35), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.34, h*0.54), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.72, h*0.54), max, 2, 1, 0, cell);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.14), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.17, h*0.47), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.42, h*0.47), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.68, h*0.47), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.47), max, 2, 1, 0, cell);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.18, h*0.44), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.45, h*0.44), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.70, h*0.44), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.44), max, 2, 1, 0, cell);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(image); hidden(edge); hidden(feature); hidden(pooled);
+
+step("pixels") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(image, 0.65);
+}
+wait(0.55);
+
+step("edge-detector") {
+  show(edge, 0.55);
+  say(caption, "This 3×3 kernel compares the left side of each patch with the right.", 0.40);
+}
+wait(0.55);
+
+step("feature-map") {
+  show(feature, 0.50);
+  say(caption, "The feature map begins quiet; each destination waits for one receptive field.", 0.40);
+}
+wait(0.35);
+
+step("convolution-scan") {
+  par {
+    scan(feature, 4.80, smooth);
+    say(caption, "The same kernel slides, multiplies, sums, applies ReLU, and writes one cell.", 0.40);
+    seq {
+      par { cam((w*0.38, h*0.45), 0.75, smooth); zoom(1.10, 0.75, smooth); }
+      wait(2.95);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.60);
+
+step("pooling-map") {
+  show(pooled, 0.50);
+  say(caption, "Max pooling asks a simpler question: where is the strongest local evidence?", 0.40);
+}
+wait(0.40);
+
+step("pooling-scan") {
+  par {
+    scan(pooled, 3.40, smooth);
+    say(caption, "Each 2×2 window keeps its first maximum; ties are deterministic.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(pooled.cells, 0.75);
+  say(caption, "A CNN builds meaning locally: pixels → feature responses → compact evidence.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hAbU0m_Qieg" title="How a CNN Finds Edges — Convolution and Max Pooling Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-token-embedding"><a class="header" href="#manic-ml-token-embedding">manic-ml-token-embedding</a></h2>
+<p>A sentence becomes honest word tokens, stable seeded educational lookup vectors, exact sinusoidal positions, and model-input vectors. Repeated words prove that token identity keeps one base embedding while position distinguishes each occurrence.</p>
+<pre><code class="language-manic">// manic-ml-token-embedding.manic — ML5 acceptance story
+// A repeated word keeps one seeded educational token embedding, while exact
+// sinusoidal position makes each occurrence a different model input.
+
+title("Manic ML — From Words to Positioned Embeddings");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_representation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.16, h*0.055), "Made With Manic");
+  text(kicker, (cx, h*0.055), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.095), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.19), "the cat chased the cat", word, w*0.80);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.16, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.125), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.84), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.23), "the cat chased the cat", word, w*0.68);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · EMBEDDINGS");
+  text(headline, (cx, h*0.17), "A word needs meaning—and a place");
+  text(caption, (cx, h*0.83), "Start with text. Keep every boundary and every number inspectable.");
+
+  tokenize(words, (cx, h*0.30), "the cat chased the cat", word, w*0.76);
+  embedding(context, words, (cx, h*0.60), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.84); hidden(headline);
+size(caption, 20*u); color(caption, dim); wrap(caption, w*0.82); hidden(caption);
+hidden(words);
+hidden(context);
+
+step("sentence") {
+  show(kicker, 0.30);
+  show(headline, 0.42);
+  show(words.labels, 0.35);
+  show(words.source, 0.40);
+  show(caption, 0.35);
+}
+wait(0.55);
+
+step("tokens") {
+  par {
+    show(words.tokens, 0.75);
+    show(words.indices, 0.75);
+    say(caption, "Word tokenization turns the sentence into five ordered identities.", 0.38);
+  }
+}
+wait(0.60);
+
+step("lookup") {
+  fade(words, 0.35);
+  par {
+    show(context.labels, 0.40);
+    show(context.tokens, 0.55);
+    show(context.vectors, 0.95);
+    say(caption, "A seeded educational lookup gives each token identity one six-number vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("same-word") {
+  par {
+    pulse(context.row1, 0.70);
+    pulse(context.row4, 0.70);
+    say(caption, "Both copies of cat reuse the same base embedding. The lookup depends on the token—not its location.", 0.42);
+  }
+}
+wait(0.65);
+
+step("position") {
+  par {
+    show(context.positions, 1.00);
+    show(context.operators, 0.45);
+    say(caption, "Sinusoidal position adds a deterministic coordinate for places 0 through 4.", 0.42);
+  }
+}
+wait(0.65);
+
+step("model-input") {
+  par {
+    show(context.combined, 1.00);
+    say(caption, "Token vector plus position becomes the model input. The repeated word now carries two different locations.", 0.42);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  par {
+    pulse(context.row1, 0.72);
+    pulse(context.row4, 0.72);
+    say(caption, "Meaning says what the token is. Position says where this occurrence belongs.", 0.42);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0a5ePmj6GCU" title="How Words Gain Position — Tokenization and Embeddings Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-transformer-attention"><a class="header" href="#manic-ml-transformer-attention">manic-ml-transformer-attention</a></h2>
+<p>One token finds context through a real scaled dot-product self-attention head. Explicit embeddings become Q/K/V, one selected softmax row drives the weighted value mix and residual, and a deterministic educational output projection produces exact top-k probabilities without pretending to be a pretrained language model.</p>
+<pre><code class="language-manic">// manic-ml-transformer-attention.manic — ML4 acceptance story
+// Explicit token embeddings become Q/K/V, one query row becomes normalized
+// attention weights, values mix, a residual is added, and a real output
+// projection produces top-k probabilities.
+
+title("Manic ML — One Transformer Attention Head");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_attention safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.105), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.38), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.82, h*0.40, 23);
+  topk(next, head, 3, (cx, h*0.71), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.14), "One token finds context");
+  text(caption, (cx, h*0.83), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (w*0.40, h*0.48), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.68, h*0.58, 23);
+  topk(next, head, 3, (w*0.84, h*0.52), "business | work | world | industry | future | people", 4, w*0.26, h*0.34, 29);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · SELF-ATTENTION");
+  text(headline, (cx, h*0.13), "One token finds context");
+  text(caption, (cx, h*0.84), "Start with explicit token embeddings—not decorative wires.");
+
+  attention(head, (cx, h*0.39), "Art | ificial | intelligence | transforms | business",
+    "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+    w*0.84, h*0.42, 23);
+  topk(next, head, 3, (cx, h*0.72), "business | work | world | industry | future | people", 4, w*0.72, h*0.18, 29);
+}
+
+size(kicker, 19*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 21*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(head); hidden(next);
+
+step("tokens") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(head.labels, 0.40);
+  show(head.tokens, 0.60);
+}
+wait(0.55);
+
+step("projections") {
+  par {
+    show(head.q, 0.55);
+    show(head.k, 0.55);
+    show(head.v, 0.55);
+    say(caption, "Each embedding is projected into a Query, Key, and Value vector.", 0.40);
+  }
+}
+wait(0.60);
+
+step("scores") {
+  show(head.matrix, 0.70);
+  say(caption, "Scaled dot products become one softmax row: every weight is positive and the row sums to 100%.", 0.45);
+}
+wait(0.65);
+
+step("attend") {
+  par {
+    attend(head, 3, 5.20, smooth);
+    say(caption, "Focus intelligence: Q asks, K measures relevance, and weighted V carries the context.", 0.45);
+    seq {
+      par { cam((cx, h*0.46), 0.75, smooth); zoom(1.07, 0.75, smooth); }
+      wait(3.45);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.75);
+
+step("prediction") {
+  show(next, 0.70);
+  say(caption, "The residual plus attention mix enters an output projection and a truthful softmax ranking.", 0.45);
+}
+wait(0.80);
+
+step("takeaway") {
+  pulse(next.rank0, 0.75);
+  say(caption, "Attention is selective information flow—not every connection shouting at once.", 0.45);
+}
+wait(1.50);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1qXzB4e0Ksg" title="How Self-Attention Finds Context — One Transformer Head Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-transformer-block"><a class="header" href="#manic-ml-transformer-block">manic-ml-transformer-block</a></h2>
+<p>One persistent token lane crosses a complete deterministic transformer block: two causal attention heads, concatenation and output projection, both residual/norm stages, a GELU MLP, and exact settled outputs. <code>transformer</code> owns the computation while <code>encode</code> provides a smooth directly seekable explanation.</p>
+<pre><code class="language-manic">// manic-ml-transformer-block.manic — ML6 acceptance story
+// One persistent token lane passes through multi-head causal attention,
+// concatenation, two residual paths, pre-normalization, and a GELU MLP.
+
+title("Manic ML — Inside One Transformer Block");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.105), "Inside one transformer block");
+  text(caption, (cx, h*0.84), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.15), "the cat slept because it dreamed", word, w*0.82);
+  embedding(context, words, (cx, h*0.41), "seeded 6 37", sinusoidal, w*0.90, h*0.38);
+  transformer(block, context, (cx, h*0.49), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.56);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.14), "Inside one transformer block");
+  text(caption, (cx, h*0.82), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.22), "the cat slept because it dreamed", word, w*0.72);
+  embedding(context, words, (cx, h*0.54), "seeded 6 37", sinusoidal, w*0.90, h*0.48);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.92, h*0.62);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.06), "MANIC ML · TRANSFORMER BLOCK");
+  text(headline, (cx, h*0.13), "Inside one transformer block");
+  text(caption, (cx, h*0.83), "Follow one token lane through every computed stage.");
+
+  tokenize(words, (cx, h*0.23), "the cat slept because it dreamed", word, w*0.78);
+  embedding(context, words, (cx, h*0.52), "seeded 6 37", sinusoidal, w*0.90, h*0.44);
+  transformer(block, context, (cx, h*0.52), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.57);
+}
+
+size(kicker, 18*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86); hidden(headline);
+size(caption, 19*u); color(caption, dim); wrap(caption, w*0.84); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+
+step("tokens") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.30);
+    show(words.source, 0.36);
+    show(words.tokens, 0.70);
+    show(words.indices, 0.70);
+    show(caption, 0.32);
+    say(caption, "Six ordered tokens begin as one persistent lane.", 0.36);
+  }
+}
+wait(0.55);
+
+step("model-input") {
+  seq {
+    fade(words, 0.32);
+    par {
+      show(context.labels, 0.32);
+      show(context.tokens, 0.42);
+      show(context.vectors, 0.82);
+      say(caption, "Each identity receives a stable lookup vector.", 0.36);
+    }
+    par {
+      show(context.positions, 0.72);
+      show(context.operators, 0.34);
+      show(context.combined, 0.78);
+      say(caption, "Position is added exactly. These six vectors are the block input.", 0.38);
+    }
+  }
+}
+wait(0.60);
+
+step("encode") {
+  seq {
+    par {
+      fade(context, 0.34);
+      fade(caption, 0.24);
+    }
+    par {
+      encode(block, 6.2, smooth);
+      seq {
+        par { cam((cx - w*0.25, h*0.52), 0.75, smooth); zoom(1.08, 0.75, smooth); }
+        wait(1.35);
+        cam((cx + w*0.17, h*0.52), 1.15, smooth);
+        wait(1.50);
+        par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+      }
+    }
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  seq {
+    show(caption, 0.20);
+    par {
+      pulse(block.residual1, 0.72);
+      pulse(block.residual2, 0.72);
+      pulse(block.output, 0.72);
+      say(caption, "Attention shares context. The MLP reshapes each token. Residuals keep its identity continuous.", 0.42);
+    }
+  }
+}
+wait(1.35);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Ev1tY_0MHmg" title="Inside One Transformer Block — Attention, Residuals and MLP Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="manic-ml-logits-sampling"><a class="header" href="#manic-ml-logits-sampling">manic-ml-logits-sampling</a></h2>
+<p>The same educational LM projection is viewed at low and high temperature before greedy and top-p decoding make their support explicit. <code>logits</code> computes every candidate from the final hidden row; <code>sample</code> filters, renormalizes, and selects one reproducible next token without pretending to run a pretrained model.</p>
+<pre><code class="language-manic">// manic-ml-logits-sampling.manic — ML7 acceptance story
+// The same LM projection is viewed at two temperatures, then top-p sampling
+// filters, renormalizes, and makes one reproducible next-token choice.
+
+title("Manic ML — How a Transformer Chooses the Next Token");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Follow_the_computation safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+
+if h &gt; 1.45*w {
+  watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.115), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.83), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.17), "the model learned to", word, w*0.78);
+  embedding(context, words, (cx, h*0.42), "seeded 6 37", sinusoidal, w*0.88, h*0.34);
+  transformer(block, context, (cx, h*0.47), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.50);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.86, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.86, h*0.54, 73);
+}
+else if w &gt; 1.25*h {
+  watermark(manicMark, (w*0.17, h*0.09), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.13), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.64);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.42);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.58);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.78, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.78, h*0.54, 73);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.065), "MANIC ML · LOGITS → PROBABILITIES → TOKEN");
+  text(headline, (cx, h*0.155), "How does a transformer choose its next word?");
+  text(caption, (cx, h*0.82), "One hidden vector. One full distribution. One reproducible choice.");
+
+  tokenize(words, (cx, h*0.21), "the model learned to", word, w*0.70);
+  embedding(context, words, (cx, h*0.50), "seeded 6 37", sinusoidal, w*0.88, h*0.40);
+  transformer(block, context, (cx, h*0.50), "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41", w*0.90, h*0.55);
+  logits(cool, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 0.55, w*0.82, h*0.54, 73);
+  logits(warm, block, 4, (cx, h*0.51), "reason | predict | learn | adapt | explain | .", 1.45, w*0.82, h*0.54, 73);
+}
+
+size(kicker, 17*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88); hidden(headline);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86); hidden(caption);
+hidden(words);
+hidden(context);
+hidden(block);
+hidden(cool);
+hidden(warm);
+
+step("prompt") {
+  par {
+    show(kicker, 0.28);
+    show(headline, 0.42);
+    show(words.labels, 0.28);
+    show(words.source, 0.34);
+    show(words.tokens, 0.62);
+    show(words.indices, 0.62);
+    show(caption, 0.28);
+    say(caption, "The prompt becomes an ordered token lane.", 0.34);
+  }
+}
+wait(0.45);
+
+step("hidden-state") {
+  seq {
+    fade(words, 0.28);
+    par {
+      show(block.output, 0.70);
+      show(block.labels, 0.26);
+      say(caption, "The transformer MLP ends at a hidden representation—not probabilities.", 0.40);
+    }
+    pulse(block.output, 0.72);
+  }
+}
+wait(0.45);
+
+step("cool-temperature") {
+  seq {
+    fade(block, 0.30);
+    sample(cool, "greedy", 3.4, smooth);
+    say(caption, "Low temperature sharpens every candidate. Greedy keeps only the maximum.", 0.42);
+  }
+}
+wait(0.65);
+
+step("warm-temperature") {
+  seq {
+    fade(cool, 0.30);
+    sample(warm, "top-p 0.90 seed=17", 3.8, smooth);
+    say(caption, "Higher temperature spreads the full softmax. Top-p keeps the smallest 90% nucleus, renormalizes it, then samples.", 0.46);
+  }
+}
+wait(0.75);
+
+step("takeaway") {
+  par {
+    pulse(warm.temperature, 0.70);
+    pulse(warm.probabilities, 0.70);
+    say(caption, "Temperature reshapes probability. Sampling turns that distribution into one reproducible next token.", 0.44);
+  }
+}
+wait(1.30);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9LsIXokfnfc" title="How a Transformer Chooses Its Next Word — Temperature and Sampling Visualized in Manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="physics--simulations"><a class="header" href="#physics--simulations">Physics — simulations</a></h1>

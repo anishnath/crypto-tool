@@ -272,6 +272,148 @@ Easings: `smooth linear in out overshoot bounce elastic`.
 [ch],["col labels"],["row labels"])` (grid lines `{id}.hlines`/`{id}.vlines`).
 **Linear algebra** (a 2×2 `[[a,b],[c,d]]` on the plane, math y-up): `linmap(id,(cx,cy),unit,a,b,c,d,[span])` deformed grid + basis î,ĵ on the columns · `determinant(id,(cx,cy),unit,a,b,c,d,[color])` unit-square→parallelogram, area = det · `eigen(id,(cx,cy),unit,a,b,c,d,[color])` real eigenvector lines + eigenvalues · `linsolve(id,(cx,cy),unit,a,b,c,d,e,f,[span])` the row picture of Ax=b — two lines meeting at the solution (parallel rows = no unique solution) · `span(id,(cx,cy),unit,(vx,vy),[(wx,wy)],[color])` the span of one/two vectors: a line (rank-1 collapse) or the whole plane · `diagonalise(id,(cx,cy),unit,a,b,c,d,[color])` (alias `diagonalize`) A = P D P⁻¹: in the eigenbasis A is a pure stretch (eigen-grid + unit cell → its stretched image) · `rref(id,"2 1 5 ; 1 3 10",(cx,cy),[cellw],[rowh])` animated Gaussian elimination: draws one matrix per state `{id}.s{k}` (hidden) + row-op text `{id}.op{k}` at the same spot — reveal in order (cross-fade s{k-1}→s{k}) to watch [A|b] reduce to RREF in place · `project(id,(cx,cy),unit,(bx,by),(ax,ay),[color])` orthogonal projection of b onto span(a): subspace line, b, shadow p, residual b−p at a right angle · `leastsquares(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` best-fit line through points (regression) with vertical residuals.
 
+### ML kit
+
+Use the ML kit for a small, inspectable feed-forward learning story—not as a
+substitute for a training framework. `network(id,(cx,cy),"3 5 2","relu softmax",[width],[height],[seed])`
+declares a deterministic layered model; give one activation to reuse it or one
+per transition. Supported activations: `linear relu sigmoid tanh softmax`.
+`forward(id,"v1 v2 ...",[duration],[ease])` validates and computes the real
+affine/activation values, then progressively highlights the weighted flow and
+settles on labelled outputs (softmax becomes percentages). Example:
+
+```manic
+network(net, (cx,cy), "3 6 4 3", "relu tanh softmax", 820, 350, 21);
+forward(net, "0.15 0.92 0.38", 4.2, smooth);
+loss(net, "1 0 0", crossentropy, 1.5, smooth);
+backward(net, 3.2, smooth);
+update(net, 0.18, 2.3, smooth);
+```
+
+For learning, preserve this order: `forward` → `loss` → `backward` → `update`.
+`loss(id,"target",[crossentropy|mse],[duration],[ease])` computes a real scalar
+objective; softmax cross-entropy needs a target distribution summing to one.
+`backward(id,[duration],[ease])` computes exact reverse-mode gradients and
+focuses the same edges from output to input. `update(id,[learning_rate],
+[duration],[ease])` applies one explicit gradient-descent step, recomputes the
+same input, and shows the exact new outputs and loss. Never invent displayed
+losses, gradients, or improvements. A large learning rate may truthfully make
+loss worse; use a modest value when the story is meant to demonstrate progress.
+
+`activation(id,(cx,cy),relu,[width],[height])` plots one truthful scalar
+activation (`linear`, `relu`, `sigmoid`, or `tanh`). Do not request a standalone
+softmax curve: softmax operates on a vector, so show it through `network`.
+Networks expose `{id}.nodes`, `.edges`, `.values`, `.labels`, `.probabilities`,
+`.layer0`..., `.input`, `.hidden`, and `.output` tags. Prefer the built-in
+progressive focus; do not manually flash every edge. Large layers intentionally
+render a bounded first/last-unit summary while retaining their complete numeric
+calculation. Keep model explanation in ordinary named `step`s and combine with
+captions/equations rather than inventing extra ML verbs. The kit does not
+support arbitrary framework imports, optimizer catalogues, hidden training
+loops, or large-model training. Keep each update visible and authored rather
+than hiding repetition inside a loop.
+
+For a CNN/operator story, use one compact grid notation: rows use `;`, entries
+use spaces/commas, and channels use `|` inside the quoted values.
+
+```manic
+tensor(image, (250,340), "0 0 1; 0 1 1; 0 0 1", 44, cyan);
+kernel(edge, (540,340), "-1 0 1; -2 0 2; -1 0 1", 44, magenta);
+convolve(feature, image, edge, (820,340), 1, 1, 0, relu, 44);
+scan(feature, 4.0, smooth);
+pool(compact, feature, (1080,340), max, 2, 2, 0, 44);
+scan(compact, 2.8, smooth);
+```
+
+`convolve(output,input,kernel,center,[stride],[padding],[bias],[activation],
+[cell])` computes zero-padded multi-channel convolution; the kernel must have
+one grid per input channel. `pool(output,input,center,max|average,[window],
+[stride],[padding],[cell])` operates independently per channel. Max-pool ties
+select the first valid row-major cell; padded positions are excluded from both
+pool kinds. `scan(output,[duration],[ease])` owns the receptive field, operator
+focus, truthful arithmetic summary, destination highlight, and cell reveal.
+Do not animate these pieces separately unless demonstrating a deliberately
+different algorithm. Author multiple kernels/outputs for multiple feature
+detectors instead of hiding a filter bank in one unreadable call.
+
+For a text-to-representation story, use the ML5 nouns instead of manually
+drawing token boxes or inventing positional values:
+
+```manic
+tokenize(words, (650,150), "the cat chased the cat", word, 900);
+embedding(context, words, (650,470), "seeded 6 37", sinusoidal, 1080, 430);
+```
+
+`tokenize` supports `word`, `character`, and `authored`. Authored boundaries
+use `|`; call them authored subwords, not BPE, unless a real tokenizer package
+or merge table exists. `embedding` accepts explicit numeric rows or
+`"seeded DIM [SEED]"`. Always describe the latter as deterministic educational
+values, never pretrained weights. Repeated token identities keep the same base
+vector; `sinusoidal` position is then added separately and exactly. Use `none`
+when the story should stop at token lookup. Compose reveals with ordinary
+steps and stable parts such as `.tokens`, `.vectors`, `.positions`,
+`.combined`, `.rowN`, and `.dimN`.
+
+For one transformer self-attention story, provide explicit token embeddings and
+let Manic own the Q/K/V arithmetic:
+
+```manic
+attention(head, (650,360), "Art | ificial | intelligence | transforms | business",
+  "1 0.2 -0.4 0.7; 0.8 0.1 -0.3 0.6; -0.2 1 0.5 0.3; 0.1 0.6 0.9 -0.2; 0.7 -0.1 0.4 1",
+  980, 420, 23);
+attend(head, 3, 5.2, smooth);
+topk(next, head, 3, (1540,390), "business | work | world | industry | future | people",
+  4, 420, 260, 29);
+```
+
+`attention` computes one seeded scaled dot-product head; token indices used by
+`attend` and `topk` are 1-based. `topk` uses the selected residual and a seeded
+educational output projection, so its full-softmax percentages are exact for
+the scene but must never be described as output from a pretrained model. Keep
+the focused token bright and the other connection field quiet. Use normal
+steps and captions for the explanation; do not manually fake attention weights
+or add a separate verb for each transformer subcomponent. Multi-head attention,
+complete transformer blocks, model imports, and pretrained/package tokenizers
+are available only through the ML6 block below; model imports and pretrained/
+package tokenizers are not supported.
+
+For a complete transformer-block story, consume an existing ML5 embedding:
+
+```manic
+transformer(block, context, (650,500),
+  "heads=2 mask=causal mlp=12 activation=gelu norm=pre dropout=0 mode=inference seed=41",
+  1120, 520);
+encode(block, 6.2, smooth);
+```
+
+Use `attention`/`attend` when the story is only about one selected attention
+row. Use `transformer`/`encode` when the learner needs the complete block. Keep
+the specification compact; do not manually fake separate heads, residuals,
+normalization, activation, or dropout. `d_model` must divide exactly across the
+head count. Causal mask cells are truly impossible before softmax. `norm=pre`
+and `norm=post` change the numerical order. `mode=inference` disables dropout;
+`mode=training` applies deterministic seeded inverted dropout. Never describe
+seeded educational weights as a pretrained model.
+
+For a next-token story, keep the language-model head separate from the block:
+
+```manic
+logits(next, block, 6, (650,500),
+  "business | work | world | future | people | .", 0.8, 760, 440, 73);
+sample(next, "top-p 0.90 seed=17", 3.8, smooth);
+```
+
+The token index is 1-based. `logits` computes an explicit educational
+`W_lm h + b`, then the full stable `softmax(logits / temperature)` over the
+authored labels. Do not call the transformer MLP itself the logits layer. Use
+the same projection seed when comparing temperatures so only the temperature
+changes. `sample` accepts `greedy`, `categorical`, `top-k K`, or `top-p P`, with
+an optional `seed=N` inside the quoted strategy. Top-k/top-p candidates outside
+the retained support are exactly impossible; the remaining probabilities are
+renormalized before selection. Never describe these values as pretrained-model
+predictions unless a future explicit model package supplies the weights and
+tokenizer.
+
 ### 3D kit (right-handed, Z-up)
 `camera3((ex,ey,ez),(tx,ty,tz),[fov],[perspective|orthographic])` ·
 `point3(id,(x,y,z),[r])` · `line3(id,from,to)` · `arrow3(id,from,to)` ·

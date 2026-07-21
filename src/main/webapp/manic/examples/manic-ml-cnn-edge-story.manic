@@ -1,0 +1,102 @@
+// manic-ml-cnn-edge-story.manic — ML3 creator proof
+// A tiny image becomes a feature map and then a pooled summary. Every number is
+// computed by Manic; scan coordinates the receptive field and destination.
+
+title("Manic ML — How a CNN Finds an Edge");
+canvas("16:9");
+template("mono");
+
+creator(me, "@anish2good name=Manic_ML tagline=Models_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=See_the_feature safe=clean");
+socials(me);
+
+let u = (w+h-abs(w-h))/1440;
+let cell = 48*u;
+
+if h > 1.45*w {
+  watermark(manicMark, (w*0.13, h*0.075), "Made With Manic");
+  text(kicker, (cx, h*0.08), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.72), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.28, h*0.35), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.72, h*0.35), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.34, h*0.54), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.72, h*0.54), max, 2, 1, 0, cell);
+}
+else if w > 1.25*h {
+  watermark(manicMark, (w*0.18, h*0.10), "Made With Manic");
+  text(kicker, (cx, h*0.075), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.14), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.17, h*0.47), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.42, h*0.47), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.68, h*0.47), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.47), max, 2, 1, 0, cell);
+}
+else {
+  watermark(manicMark, (w*0.18, h*0.08), "Made With Manic");
+  text(kicker, (cx, h*0.07), "MANIC ML · CONVOLUTION");
+  text(headline, (cx, h*0.13), "How does a CNN see edges?");
+  text(caption, (cx, h*0.82), "Start with a tiny image: bright cells form a simple shape.");
+  tensor(image, (w*0.18, h*0.44), "0 0 0 0 0; 0 0 1 1 0; 0 1 1 1 0; 0 0 1 1 0; 0 0 0 0 0", cell, cyan);
+  kernel(edge, (w*0.45, h*0.44), "-1 0 1; -2 0 2; -1 0 1", cell, magenta);
+  convolve(feature, image, edge, (w*0.70, h*0.44), 1, 0, 0, relu, cell);
+  pool(pooled, feature, (w*0.89, h*0.44), max, 2, 1, 0, cell);
+}
+
+size(kicker, 20*u); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 35*u); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22*u); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+hidden(image); hidden(edge); hidden(feature); hidden(pooled);
+
+step("pixels") {
+  show(kicker, 0.35);
+  show(headline, 0.45);
+  show(caption, 0.40);
+  show(image, 0.65);
+}
+wait(0.55);
+
+step("edge-detector") {
+  show(edge, 0.55);
+  say(caption, "This 3×3 kernel compares the left side of each patch with the right.", 0.40);
+}
+wait(0.55);
+
+step("feature-map") {
+  show(feature, 0.50);
+  say(caption, "The feature map begins quiet; each destination waits for one receptive field.", 0.40);
+}
+wait(0.35);
+
+step("convolution-scan") {
+  par {
+    scan(feature, 4.80, smooth);
+    say(caption, "The same kernel slides, multiplies, sums, applies ReLU, and writes one cell.", 0.40);
+    seq {
+      par { cam((w*0.38, h*0.45), 0.75, smooth); zoom(1.10, 0.75, smooth); }
+      wait(2.95);
+      par { cam((cx, cy), 0.85, smooth); zoom(1.0, 0.85, smooth); }
+    }
+  }
+}
+wait(0.60);
+
+step("pooling-map") {
+  show(pooled, 0.50);
+  say(caption, "Max pooling asks a simpler question: where is the strongest local evidence?", 0.40);
+}
+wait(0.40);
+
+step("pooling-scan") {
+  par {
+    scan(pooled, 3.40, smooth);
+    say(caption, "Each 2×2 window keeps its first maximum; ties are deterministic.", 0.40);
+  }
+}
+wait(0.70);
+
+step("takeaway") {
+  pulse(pooled.cells, 0.75);
+  say(caption, "A CNN builds meaning locally: pixels → feature responses → compact evidence.", 0.45);
+}
+wait(1.50);
