@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-835c3647.js";
+            window.path_to_searchindex_js = "searchindex-ea718de6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-122320bb.js"></script>
@@ -197,9 +197,10 @@ message       route    hotpath         flow
 providers</strong>; declaration-first nested clusters with responsive layout; direct,
 curved, and orthogonal connections with node-boundary ports; cold dashed
 topology kept separate from solid runtime motion; and one persistent message
-whose identity survives every hop. The kit shines for one clear story — for a
-very dense platform overview, split or place clusters yourself to keep it
-readable.</p>
+whose identity survives every hop. The kit shines for one clear story — and
+density is no longer your job: geometry is optional, so even a dense platform
+overview auto-fits and scales itself to stay in-frame (see <a href="#it-just-fits--no-coordinates"><em>It just
+fits</em></a>, below).</p>
 <h2 id="possible-vs-actual"><a class="header" href="#possible-vs-actual">Possible vs. actual</a></h2>
 <p>The one rule to internalise: a <strong>connection states what is possible; a moving
 message states what happened.</strong></p>
@@ -236,6 +237,263 @@ Use explicit <code>route</code>/<code>travel</code> for one authored journey, <c
 and <code>par</code> plus multiple objects when several journeys should happen together.
 <code>hotpath</code> is only an optional seeded walk over declared graph geometry; it is
 not a simulation of the services shown.</p>
+<h2 id="it-just-fits--no-coordinates"><a class="header" href="#it-just-fits--no-coordinates">It just fits — no coordinates</a></h2>
+<p>Geometry is optional. Write <code>architecture(id)</code> with <strong>no</strong> center or size and the
+diagram fills the canvas (leaving the title and caption bands clear), centres
+itself, and lays out every cluster and node for you:</p>
+<pre><code class="language-manic">architecture(platform);   // that's the whole canvas declaration
+</code></pre>
+<p>Then add as much as the story needs. Leaf clusters with many children wrap into a
+grid, top-level tiers wrap into rows, and when the packed content would still
+overflow the frame, the <strong>whole diagram scales down as one</strong> — cards, icons,
+labels, and every connection lane together — to a legible minimum. Nothing clips
+off-canvas, and you never touch a coordinate, split a cluster into columns, or
+shrink a font to make it fit.</p>
+<p>This example declares Route 53, an edge load balancer, a gateway, three
+availability zones of services, a replicated database cluster, and monitoring —
+all with zero geometry. Add a tier or a zone and it simply re-fits:</p>
+<pre><code class="language-manic">title("A Microservices Platform — Laid Out Automatically");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · AUTO-FIT · NO COORDINATES");
+text(headline, (cx, h*0.12), "Add a tier. It re-fits itself.");
+text(caption, (cx, h*0.95), "DNS, load balancing, three AZs of services, a database cluster, and monitoring — all auto-laid.");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 17*u); color(caption, dim); wrap(caption, w*0.86);
+
+// No geometry: the diagram auto-fits. Route 53, an edge load balancer, three
+// availability zones, a replicated database cluster and monitoring all reflow
+// to fit — and when the content would overflow, the whole diagram scales down
+// as one. The author types no coordinate.
+architecture(platform);
+
+node(dns, platform, "aws:route53", "route 53");
+node(lb, platform, "aws:elb", "load balancer");
+node(gateway, platform, "aws:api-gateway", "gateway");
+
+cluster(region, platform, "REGION us-east-1");
+cluster(azA, region, "AZ-A");
+node(a1, azA, "aws:ecs", "svc"); node(a2, azA, "aws:ecs", "svc"); node(a3, azA, "aws:ecs", "svc");
+cluster(azB, region, "AZ-B");
+node(b1, azB, "aws:ecs", "svc"); node(b2, azB, "aws:ecs", "svc"); node(b3, azB, "aws:ecs", "svc");
+cluster(azC, region, "AZ-C");
+node(c1, azC, "aws:ecs", "svc"); node(c2, azC, "aws:ecs", "svc"); node(c3, azC, "aws:ecs", "svc");
+
+cluster(database, platform, "DATABASE CLUSTER");
+node(primary, database, "aws:rds", "primary");
+node(replica1, database, "aws:rds", "replica");
+node(replica2, database, "aws:rds", "replica");
+node(cache, database, "aws:elasticache", "cache");
+
+cluster(observability, platform, "MONITORING");
+node(metrics, observability, "aws:cloudwatch", "metrics");
+node(logs, observability, "aws:cloudwatch", "logs");
+node(alarms, observability, "aws:cloudwatch", "alarms");
+
+connect(dnsToLb, dns, lb);        // resolve, then hit the edge load balancer
+connect(lbToGw, lb, gateway);     // balanced across the API gateway
+connect(toA, gateway, azA);       // gateway fans out to each zone's services
+connect(toB, gateway, azB);
+connect(toC, gateway, azC);
+connect(toWrite, a1, primary);    // a representative service writes the primary
+connect(toRead, a1, replica1);    // reads served from a replica
+connect(toCache, a1, cache);
+connect(repl1, primary, replica1); // primary replicates to both replicas
+connect(repl2, primary, replica2);
+connect(toMetrics, b1, metrics);  // services emit telemetry to monitoring
+
+color(dnsToLb, cyan);   color(dnsToLb.hot, cyan);      // request path
+color(lbToGw, cyan);    color(lbToGw.hot, cyan);
+color(toA, cyan);       color(toA.hot, cyan);
+color(toB, cyan);       color(toB.hot, cyan);
+color(toC, cyan);       color(toC.hot, cyan);
+color(toRead, cyan);    color(toRead.hot, cyan);
+color(toCache, cyan);   color(toCache.hot, cyan);
+color(toWrite, magenta); color(toWrite.hot, magenta);  // write path
+color(repl1, lime);     color(repl1.hot, lime);         // replication
+color(repl2, lime);     color(repl2.hot, lime);
+color(toMetrics, gold); color(toMetrics.hot, gold);     // telemetry
+
+request(call, dns, "GET /order");
+
+hidden(platform.nodes);
+hidden(region.parts); hidden(azA.parts); hidden(azB.parts); hidden(azC.parts);
+hidden(database.parts); hidden(observability.parts);
+hidden(call.parts);
+untraced(dnsToLb); untraced(lbToGw);
+untraced(toA); untraced(toB); untraced(toC);
+untraced(toWrite); untraced(toRead); untraced(toCache);
+untraced(repl1); untraced(repl2); untraced(toMetrics);
+
+step("edge") {
+  par {
+    stagger(0.08) { show(dns, 0.4); show(lb, 0.4); show(gateway, 0.4); }
+    say(caption, "Route 53 resolves the name, an edge load balancer spreads the traffic, the gateway takes it from there.", 0.4);
+  }
+}
+wait(0.2);
+
+step("reveal-zones") {
+  par {
+    show(region.parts, 0.4);
+    show(azA.parts, 0.4); stagger(0.05) { show(a1,0.3); show(a2,0.3); show(a3,0.3); }
+    show(azB.parts, 0.4); stagger(0.05) { show(b1,0.3); show(b2,0.3); show(b3,0.3); }
+    show(azC.parts, 0.4); stagger(0.05) { show(c1,0.3); show(c2,0.3); show(c3,0.3); }
+    say(caption, "Three availability zones, each with its own services — nested clusters, auto-laid.", 0.4);
+  }
+}
+wait(0.2);
+
+step("state-and-monitoring") {
+  par {
+    show(database.parts, 0.4); show(primary, 0.4); show(replica1, 0.4); show(replica2, 0.4); show(cache, 0.4);
+    show(observability.parts, 0.4); show(metrics, 0.4); show(logs, 0.4); show(alarms, 0.4);
+    say(caption, "A replicated database cluster and monitoring join in — the whole diagram re-fits.", 0.4);
+  }
+}
+wait(0.25);
+
+step("topology") {
+  par {
+    stagger(0.06) {
+      draw(dnsToLb,0.4); draw(lbToGw,0.4);
+      draw(toA,0.4); draw(toB,0.4); draw(toC,0.4);
+      draw(toWrite,0.4); draw(toRead,0.4); draw(toCache,0.4);
+      draw(repl1,0.4); draw(repl2,0.4); draw(toMetrics,0.4);
+    }
+    say(caption, "Paths coloured by relationship: request cyan, writes magenta, replication lime, telemetry gold.", 0.4);
+  }
+}
+wait(0.3);
+
+step("one-request") {
+  par {
+    seq {
+      show(call.parts, 0.2);
+      route(call, dnsToLb, 0.7, smooth);
+      route(call, lbToGw, 0.7, smooth);
+      route(call, toA, 0.7, smooth);
+      route(call, toWrite, 0.7, smooth);
+    }
+    say(caption, "One order: Route 53 → load balancer → gateway → an AZ-A service → the primary database.", 0.4);
+  }
+}
+wait(0.3);
+
+step("takeaway") {
+  par {
+    pulse(region.parts, 0.7);
+    pulse(database.parts, 0.7);
+    say(caption, "Add a tier, a zone, a replica — you never touch a coordinate. That is manic.", 0.45);
+  }
+}
+wait(1.4);
+</code></pre>
+<p>Pass explicit <code>(center, width, height)</code> only when you deliberately want a
+hand-placed diagram; it is never required to make one fit.</p>
+<h2 id="flowcharts--a-diagram-that-runs"><a class="header" href="#flowcharts--a-diagram-that-runs">Flowcharts — a diagram that runs</a></h2>
+<p>An architecture lays out regions and clusters; a <strong>flowchart</strong> ranks its nodes by
+the edges between them (like Mermaid’s <code>graph TD</code>/<code>LR</code>) and — this is manic’s edge
+— it <em>runs</em>: a token walks the process and takes a branch. Just declare
+<code>flowchart(id)</code>: like an architecture it auto-fits and needs no coordinates. It
+lays the flow top-down and, when the flow is long, <strong>wraps it into side-by-side
+columns</strong> — the count chosen to fill the frame — so every node stays full-size and
+readable: you read down one column, then across to the top of the next, like a
+multi-column diagram on paper. Forward edges are clean elbows; a long feedback loop
+routes neatly around the bottom-left perimeter instead of cutting across the middle.
+Pass <code>flowchart(id, LR)</code> to force a single left-to-right row instead.</p>
+<p>A flowchart is only useful if you can <strong>read</strong> its nodes, so there is a readability
+limit — 26 nodes top-down, 14 left-right — and past it (more than even column
+wrapping keeps legible) the editor warns you to <strong>split the process into linked
+sub-flows</strong>: end one chart with a <code>connector</code> node that hands off to the next.
+Raise the limit with a third argument, <code>flowchart(id, dir, N)</code>, when you
+deliberately want a denser chart.</p>
+<p>Every node is the same <code>node(id, parent, "kind", "label")</code> you already know — only
+now the <code>kind</code> is a <strong>shape</strong>: <code>terminator</code> (a start/end pill), <code>process</code> (a step
+rectangle), <code>decision</code> (a diamond), <code>io</code> (a parallelogram), <code>subprocess</code>, or
+<code>connector</code> (a small circle). The shape <em>is</em> the node’s body, with the label
+centred inside — nothing new to learn beyond the shape names.</p>
+<p>Connect the nodes; inside a flowchart the edges default to clean orthogonal elbow
+connectors along the rank direction. Give a decision’s branches captions with
+<code>annotate(edge, "yes")</code>, colour them by meaning, and <code>route</code> a token from the
+start terminator to watch the algorithm execute. A loop is just an edge back to an
+earlier node (give it explicit ports so it routes up the side):</p>
+<pre><code class="language-manic">title("A Flowchart That Runs — the Factorial Loop");
+canvas("16:9");
+template("paper");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.06), "DIAGRAMS · FLOWCHART · AUTO-LAID");
+text(headline, (cx, h*0.12), "A flowchart that runs");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.86);
+
+// `flowchart(fc)` ranks nodes by their connections, auto-fits, and auto-orients:
+// a shallow flow like this stays top-down on its own. No coordinates, no direction
+// to choose. Node shapes are string kinds.
+flowchart(fc);
+node(start, fc, "terminator", "start");
+node(rd, fc, "io", "read n");
+node(init, fc, "process", "f=1  i=1");
+node(dec, fc, "decision", "i &lt;= n?");
+node(body, fc, "process", "f=f*i  i=i+1");
+node(out, fc, "io", "print f");
+node(fin, fc, "terminator", "end");
+
+connect(e1, start, rd);
+connect(e2, rd, init);
+connect(e3, init, dec);
+connect(e4, dec, body);                          // keep looping
+connect(e5, dec, out);                           // exit
+connect(e6, body, dec, orthogonal, right, right); // loop back up the side
+connect(e7, out, fin);
+
+color(e4, cyan); color(e4.hot, cyan);
+color(e5, lime); color(e5.hot, lime);
+color(e6, gold); color(e6.hot, gold);
+annotate(e4, "yes"); annotate(e5, "no"); annotate(e6, "loop");
+
+// A colour key stands in for narration — the diagram explains itself.
+text(k1, (w*0.34, h*0.93), "— continue"); size(k1, 14*u); color(k1, cyan); bold(k1);
+text(k2, (w*0.50, h*0.93), "— exit");     size(k2, 14*u); color(k2, lime); bold(k2);
+text(k3, (w*0.66, h*0.93), "— loop back"); size(k3, 14*u); color(k3, gold); bold(k3);
+
+request(tok, start, "n = 3");
+hidden(fc.nodes);
+hidden(tok.parts);
+
+step("shape") {
+  stagger(0.07) {
+    show(start, 0.3); show(rd, 0.3); show(init, 0.3); show(dec, 0.3);
+    show(body, 0.3); show(out, 0.3); show(fin, 0.3);
+  }
+}
+wait(0.2);
+
+step("run") {
+  seq {
+    show(tok.parts, 0.2);
+    route(tok, e1, 0.4, smooth); route(tok, e2, 0.4, smooth); route(tok, e3, 0.4, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e5, 0.4, smooth); route(tok, e7, 0.4, smooth);
+  }
+}
+wait(0.3);
+
+step("takeaway") {
+  seq { pulse(fin, 0.7); pulse(fin, 0.7); }
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9Q7QwzN3e3k" title="A Flowchart That Runs — Ranked Auto-Layout + a Token That Walks the Loop" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="start-without-a-cloud-provider"><a class="header" href="#start-without-a-cloud-provider">Start without a cloud provider</a></h2>
 <p>The foundation includes native visual archetypes for <code>client</code>, <code>service</code>,
 <code>gateway</code>, <code>database</code>, <code>cache</code>, <code>queue</code>, <code>storage</code>, and <code>external</code>. These names

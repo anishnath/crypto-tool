@@ -595,6 +595,15 @@ archetypes `"client"`, `"service"`, `"gateway"`, `"database"`, `"cache"`,
 appearance only; they never add routing, queueing, balancing, or persistence
 semantics — the creator authors behaviour with `route`/`flow`/ordinary verbs.
 
+**Geometry is optional — let it auto-fit.** Prefer `architecture(id)` with **no**
+center/width/height: the diagram fills the canvas (leaving title/caption bands
+clear) and centres itself. Leaf clusters with many children grid-wrap, top-level
+members flow-wrap into rows, and if the packed content still overflows, the whole
+diagram scales down uniformly to stay in-frame. So do **not** hand-tune
+coordinates, split a cluster into columns, or shrink fonts to make a dense diagram
+fit — just declare the structure and add nodes/tiers freely; the engine re-fits.
+Pass explicit `(center, w, h)` only for a deliberately hand-placed diagram.
+
 Use `connect(id,from,to,[bend])` for possible directed topology. Use
 `connect(id,from,to,orthogonal,[from_port],[to_port])` for one Manhattan
 connector whose optional ports are `auto`, `left`, `right`, `top`, or `bottom`.
@@ -636,6 +645,32 @@ exposes two colourable parts — the cold dashed line `id` and the hot overlay
 `color`/`hue`/`glow`/`dashed`, plus a small text legend: e.g. requests cyan,
 analytics gold, telemetry `hue(...,328)` pink, replication `dim`. The engine
 never infers a path's meaning — colour is how the creator assigns it.
+
+**Flowcharts** use the same kit. Declare `flowchart(id)` instead of `architecture`
+— it ranks nodes by connection direction and auto-fits, laying the flow top-down
+and **wrapping a long flow into side-by-side columns** (the count chosen to fill
+the frame) so nodes stay full-size and readable — reading down one column, then
+across to the top of the next. Forward edges are clean orthogonal elbows; a long
+feedback loop routes around the bottom-left perimeter rather than cutting across
+the middle. Pass `flowchart(id, LR)` to force a single left-to-right row instead.
+You never place a coordinate. **Keep it readable** — a flowchart exists to be
+read, not just to fit. The editor warns past a node limit (26 for top-down/auto,
+14 for left-right); when a process is bigger than one screen holds legibly,
+**split it into linked sub-flows** (end one chart with a `connector` node that
+hands off to the next). Raise the limit with a third argument —
+`flowchart(id, dir, N)` — when you deliberately want a denser chart. Give each
+`node` a **shape kind** string: `terminator` (start/end pill), `process` (step
+rectangle), `decision` (diamond), `io` (parallelogram), `subprocess`, or
+`connector` (small circle) — e.g. `node(check, chart, "decision", "i <= n?")`.
+The shape *is* the node body with a centred label (no icon). `connect` edges;
+inside a flowchart they default to clean orthogonal elbow connectors along the
+rank direction. Annotate a decision's branches with `annotate(edge, "yes")` /
+`annotate(edge, "no")` (a midpoint caption — note the name is `annotate`, since
+`label` is the core std builtin). Then tell the story: colour the branches, and
+`route` a token from the start terminator so it walks the process and takes the
+authored branch — a loop is just an edge back to an earlier node, which auto-routes
+as a curve or a perimeter rail. The chart runs; it does not infer which branch is
+taken — the creator authors it.
 
 ### Algo kit
 `graph(id, "v1 v2 v3", "a-b a>c", layout, (cx,cy), scale, [radius])` — a node/edge

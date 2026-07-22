@@ -1,5 +1,5 @@
 {
-  "count": 228,
+  "count": 231,
   "categories": [
     {
       "slug": "algorithms",
@@ -1396,6 +1396,24 @@
           "file": "systems-arrow-patterns.manic",
           "title": "Systems arrow patterns",
           "desc": "The connection-grammar reference: one-way, parallel, round-trip, port-aware orthogonal, fan-out, and diagonal-duplex lanes."
+        },
+        {
+          "name": "microservices-platform",
+          "file": "microservices-platform.manic",
+          "title": "Microservices platform",
+          "desc": "Auto-fit showcase: Route 53 \u2192 load balancer \u2192 gateway, three availability zones of ECS services, a replicated RDS database cluster, and CloudWatch monitoring \u2014 declared with zero coordinates."
+        },
+        {
+          "name": "factorial-flowchart",
+          "file": "factorial-flowchart.manic",
+          "title": "Factorial flowchart",
+          "desc": "A flowchart that runs: flowchart(fc) auto-lays seven shape-nodes (terminator/io/process/decision) top-down with no coordinates, then a token walks the factorial loop \u2014 taking the yes branch, looping back, and exiting to the end."
+        },
+        {
+          "name": "complex-flowchart",
+          "file": "complex-flowchart.manic",
+          "title": "Complex flowchart",
+          "desc": "A big pipeline that builds itself, then runs: a 24-node CI/CD flow with 7 decisions and feedback loops auto-wraps into readable side-by-side columns (long loops routed around the perimeter)."
         },
         {
           "name": "systems-rabbitmq-consumers",

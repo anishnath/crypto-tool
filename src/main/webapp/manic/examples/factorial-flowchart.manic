@@ -1,0 +1,69 @@
+title("A Flowchart That Runs — the Factorial Loop");
+canvas("16:9");
+template("paper");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.06), "DIAGRAMS · FLOWCHART · AUTO-LAID");
+text(headline, (cx, h*0.12), "A flowchart that runs");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.86);
+
+// `flowchart(fc)` ranks nodes by their connections, auto-fits, and auto-orients:
+// a shallow flow like this stays top-down on its own. No coordinates, no direction
+// to choose. Node shapes are string kinds.
+flowchart(fc);
+node(start, fc, "terminator", "start");
+node(rd, fc, "io", "read n");
+node(init, fc, "process", "f=1  i=1");
+node(dec, fc, "decision", "i <= n?");
+node(body, fc, "process", "f=f*i  i=i+1");
+node(out, fc, "io", "print f");
+node(fin, fc, "terminator", "end");
+
+connect(e1, start, rd);
+connect(e2, rd, init);
+connect(e3, init, dec);
+connect(e4, dec, body);                          // keep looping
+connect(e5, dec, out);                           // exit
+connect(e6, body, dec, orthogonal, right, right); // loop back up the side
+connect(e7, out, fin);
+
+color(e4, cyan); color(e4.hot, cyan);
+color(e5, lime); color(e5.hot, lime);
+color(e6, gold); color(e6.hot, gold);
+annotate(e4, "yes"); annotate(e5, "no"); annotate(e6, "loop");
+
+// A colour key stands in for narration — the diagram explains itself.
+text(k1, (w*0.34, h*0.93), "— continue"); size(k1, 14*u); color(k1, cyan); bold(k1);
+text(k2, (w*0.50, h*0.93), "— exit");     size(k2, 14*u); color(k2, lime); bold(k2);
+text(k3, (w*0.66, h*0.93), "— loop back"); size(k3, 14*u); color(k3, gold); bold(k3);
+
+request(tok, start, "n = 3");
+hidden(fc.nodes);
+hidden(tok.parts);
+
+step("shape") {
+  stagger(0.07) {
+    show(start, 0.3); show(rd, 0.3); show(init, 0.3); show(dec, 0.3);
+    show(body, 0.3); show(out, 0.3); show(fin, 0.3);
+  }
+}
+wait(0.2);
+
+step("run") {
+  seq {
+    show(tok.parts, 0.2);
+    route(tok, e1, 0.4, smooth); route(tok, e2, 0.4, smooth); route(tok, e3, 0.4, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e5, 0.4, smooth); route(tok, e7, 0.4, smooth);
+  }
+}
+wait(0.3);
+
+step("takeaway") {
+  seq { pulse(fin, 0.7); pulse(fin, 0.7); }
+}
+wait(1.0);

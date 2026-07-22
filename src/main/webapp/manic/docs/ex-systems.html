@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-835c3647.js";
+            window.path_to_searchindex_js = "searchindex-ea718de6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-122320bb.js"></script>
@@ -179,7 +179,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="diagrams"><a class="header" href="#diagrams">Diagrams</a></h1>
-<p>Animated diagrams — not another static boxes-and-arrows generator. Declare a bounded architecture with auto-positioned nodes and directed connections, then move one persistent request through the graph. Node artwork comes from a string kind (<code>aws:lambda</code>, <code>gcp:bigquery</code>, <code>onprem:redis</code>, <code>k8s:pod</code> — 17 providers, see <a href="systems-icons.html">icon reference &amp; aliases</a>); paths are coloured by relationship. The kit never infers behaviour — the creator authors it with <code>route</code>, <code>flow</code>, and ordinary verbs.</p>
+<p>Animated diagrams — not another static boxes-and-arrows generator. Declare an architecture (or a <code>flowchart</code>) with auto-positioned nodes and directed connections — geometry is optional, so a diagram auto-fits the canvas and, when it grows dense, scales itself down as one to stay inside the frame (you never touch a coordinate) — then move one persistent request through the graph. A flowchart ranks its nodes top-down and runs: a token walks the process and takes a branch. Node artwork comes from a string kind (<code>aws:lambda</code>, <code>gcp:bigquery</code>, <code>onprem:redis</code>, <code>k8s:pod</code> — 17 providers, see <a href="systems-icons.html">icon reference &amp; aliases</a>); paths are coloured by relationship. The kit never infers behaviour — the creator authors it with <code>route</code>, <code>flow</code>, and ordinary verbs.</p>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
 <h2 id="systems-foundation"><a class="header" href="#systems-foundation">systems-foundation</a></h2>
 <p>Provider-neutral: only native <code>client</code>/<code>gateway</code>/<code>service</code>/<code>cache</code>/<code>database</code> archetypes — reveals cold topology, sends one persistent request forward, and returns the same identity over separately directed paths, with no cloud assets.</p>
@@ -509,6 +509,426 @@ step("creator-controls-semantics") {
 wait(1.20);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/jbjiZwKPh-M" title="Every Connection Pattern in One Diagram — manic Systems Kit" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="microservices-platform"><a class="header" href="#microservices-platform">microservices-platform</a></h2>
+<p>Auto-fit showcase: Route 53 → load balancer → gateway, three availability zones of ECS services, a replicated RDS database cluster, and CloudWatch monitoring — declared with zero coordinates. Add a tier or a zone and the whole diagram reflows and scales itself down to the frame; paths coloured by relationship (request · write · replication · telemetry).</p>
+<pre><code class="language-manic">title("A Microservices Platform — Laid Out Automatically");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · AUTO-FIT · NO COORDINATES");
+text(headline, (cx, h*0.12), "Add a tier. It re-fits itself.");
+text(caption, (cx, h*0.95), "DNS, load balancing, three AZs of services, a database cluster, and monitoring — all auto-laid.");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 17*u); color(caption, dim); wrap(caption, w*0.86);
+
+// No geometry: the diagram auto-fits. Route 53, an edge load balancer, three
+// availability zones, a replicated database cluster and monitoring all reflow
+// to fit — and when the content would overflow, the whole diagram scales down
+// as one. The author types no coordinate.
+architecture(platform);
+
+node(dns, platform, "aws:route53", "route 53");
+node(lb, platform, "aws:elb", "load balancer");
+node(gateway, platform, "aws:api-gateway", "gateway");
+
+cluster(region, platform, "REGION us-east-1");
+cluster(azA, region, "AZ-A");
+node(a1, azA, "aws:ecs", "svc"); node(a2, azA, "aws:ecs", "svc"); node(a3, azA, "aws:ecs", "svc");
+cluster(azB, region, "AZ-B");
+node(b1, azB, "aws:ecs", "svc"); node(b2, azB, "aws:ecs", "svc"); node(b3, azB, "aws:ecs", "svc");
+cluster(azC, region, "AZ-C");
+node(c1, azC, "aws:ecs", "svc"); node(c2, azC, "aws:ecs", "svc"); node(c3, azC, "aws:ecs", "svc");
+
+cluster(database, platform, "DATABASE CLUSTER");
+node(primary, database, "aws:rds", "primary");
+node(replica1, database, "aws:rds", "replica");
+node(replica2, database, "aws:rds", "replica");
+node(cache, database, "aws:elasticache", "cache");
+
+cluster(observability, platform, "MONITORING");
+node(metrics, observability, "aws:cloudwatch", "metrics");
+node(logs, observability, "aws:cloudwatch", "logs");
+node(alarms, observability, "aws:cloudwatch", "alarms");
+
+connect(dnsToLb, dns, lb);        // resolve, then hit the edge load balancer
+connect(lbToGw, lb, gateway);     // balanced across the API gateway
+connect(toA, gateway, azA);       // gateway fans out to each zone's services
+connect(toB, gateway, azB);
+connect(toC, gateway, azC);
+connect(toWrite, a1, primary);    // a representative service writes the primary
+connect(toRead, a1, replica1);    // reads served from a replica
+connect(toCache, a1, cache);
+connect(repl1, primary, replica1); // primary replicates to both replicas
+connect(repl2, primary, replica2);
+connect(toMetrics, b1, metrics);  // services emit telemetry to monitoring
+
+color(dnsToLb, cyan);   color(dnsToLb.hot, cyan);      // request path
+color(lbToGw, cyan);    color(lbToGw.hot, cyan);
+color(toA, cyan);       color(toA.hot, cyan);
+color(toB, cyan);       color(toB.hot, cyan);
+color(toC, cyan);       color(toC.hot, cyan);
+color(toRead, cyan);    color(toRead.hot, cyan);
+color(toCache, cyan);   color(toCache.hot, cyan);
+color(toWrite, magenta); color(toWrite.hot, magenta);  // write path
+color(repl1, lime);     color(repl1.hot, lime);         // replication
+color(repl2, lime);     color(repl2.hot, lime);
+color(toMetrics, gold); color(toMetrics.hot, gold);     // telemetry
+
+request(call, dns, "GET /order");
+
+hidden(platform.nodes);
+hidden(region.parts); hidden(azA.parts); hidden(azB.parts); hidden(azC.parts);
+hidden(database.parts); hidden(observability.parts);
+hidden(call.parts);
+untraced(dnsToLb); untraced(lbToGw);
+untraced(toA); untraced(toB); untraced(toC);
+untraced(toWrite); untraced(toRead); untraced(toCache);
+untraced(repl1); untraced(repl2); untraced(toMetrics);
+
+step("edge") {
+  par {
+    stagger(0.08) { show(dns, 0.4); show(lb, 0.4); show(gateway, 0.4); }
+    say(caption, "Route 53 resolves the name, an edge load balancer spreads the traffic, the gateway takes it from there.", 0.4);
+  }
+}
+wait(0.2);
+
+step("reveal-zones") {
+  par {
+    show(region.parts, 0.4);
+    show(azA.parts, 0.4); stagger(0.05) { show(a1,0.3); show(a2,0.3); show(a3,0.3); }
+    show(azB.parts, 0.4); stagger(0.05) { show(b1,0.3); show(b2,0.3); show(b3,0.3); }
+    show(azC.parts, 0.4); stagger(0.05) { show(c1,0.3); show(c2,0.3); show(c3,0.3); }
+    say(caption, "Three availability zones, each with its own services — nested clusters, auto-laid.", 0.4);
+  }
+}
+wait(0.2);
+
+step("state-and-monitoring") {
+  par {
+    show(database.parts, 0.4); show(primary, 0.4); show(replica1, 0.4); show(replica2, 0.4); show(cache, 0.4);
+    show(observability.parts, 0.4); show(metrics, 0.4); show(logs, 0.4); show(alarms, 0.4);
+    say(caption, "A replicated database cluster and monitoring join in — the whole diagram re-fits.", 0.4);
+  }
+}
+wait(0.25);
+
+step("topology") {
+  par {
+    stagger(0.06) {
+      draw(dnsToLb,0.4); draw(lbToGw,0.4);
+      draw(toA,0.4); draw(toB,0.4); draw(toC,0.4);
+      draw(toWrite,0.4); draw(toRead,0.4); draw(toCache,0.4);
+      draw(repl1,0.4); draw(repl2,0.4); draw(toMetrics,0.4);
+    }
+    say(caption, "Paths coloured by relationship: request cyan, writes magenta, replication lime, telemetry gold.", 0.4);
+  }
+}
+wait(0.3);
+
+step("one-request") {
+  par {
+    seq {
+      show(call.parts, 0.2);
+      route(call, dnsToLb, 0.7, smooth);
+      route(call, lbToGw, 0.7, smooth);
+      route(call, toA, 0.7, smooth);
+      route(call, toWrite, 0.7, smooth);
+    }
+    say(caption, "One order: Route 53 → load balancer → gateway → an AZ-A service → the primary database.", 0.4);
+  }
+}
+wait(0.3);
+
+step("takeaway") {
+  par {
+    pulse(region.parts, 0.7);
+    pulse(database.parts, 0.7);
+    say(caption, "Add a tier, a zone, a replica — you never touch a coordinate. That is manic.", 0.45);
+  }
+}
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nyywVUsJwsY" title="Add a Tier, It Re-Fits Itself — Auto-Layout Diagrams in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="factorial-flowchart"><a class="header" href="#factorial-flowchart">factorial-flowchart</a></h2>
+<p>A flowchart that runs: <code>flowchart(fc)</code> auto-lays seven shape-nodes (terminator/io/process/decision) top-down with no coordinates, then a token walks the factorial loop — taking the yes branch, looping back, and exiting to the end. Node shapes are string kinds; branches are coloured and <code>annotate</code>d yes/no/loop, on a clean paper theme with a colour legend.</p>
+<pre><code class="language-manic">title("A Flowchart That Runs — the Factorial Loop");
+canvas("16:9");
+template("paper");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.06), "DIAGRAMS · FLOWCHART · AUTO-LAID");
+text(headline, (cx, h*0.12), "A flowchart that runs");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.86);
+
+// `flowchart(fc)` ranks nodes by their connections, auto-fits, and auto-orients:
+// a shallow flow like this stays top-down on its own. No coordinates, no direction
+// to choose. Node shapes are string kinds.
+flowchart(fc);
+node(start, fc, "terminator", "start");
+node(rd, fc, "io", "read n");
+node(init, fc, "process", "f=1  i=1");
+node(dec, fc, "decision", "i &lt;= n?");
+node(body, fc, "process", "f=f*i  i=i+1");
+node(out, fc, "io", "print f");
+node(fin, fc, "terminator", "end");
+
+connect(e1, start, rd);
+connect(e2, rd, init);
+connect(e3, init, dec);
+connect(e4, dec, body);                          // keep looping
+connect(e5, dec, out);                           // exit
+connect(e6, body, dec, orthogonal, right, right); // loop back up the side
+connect(e7, out, fin);
+
+color(e4, cyan); color(e4.hot, cyan);
+color(e5, lime); color(e5.hot, lime);
+color(e6, gold); color(e6.hot, gold);
+annotate(e4, "yes"); annotate(e5, "no"); annotate(e6, "loop");
+
+// A colour key stands in for narration — the diagram explains itself.
+text(k1, (w*0.34, h*0.93), "— continue"); size(k1, 14*u); color(k1, cyan); bold(k1);
+text(k2, (w*0.50, h*0.93), "— exit");     size(k2, 14*u); color(k2, lime); bold(k2);
+text(k3, (w*0.66, h*0.93), "— loop back"); size(k3, 14*u); color(k3, gold); bold(k3);
+
+request(tok, start, "n = 3");
+hidden(fc.nodes);
+hidden(tok.parts);
+
+step("shape") {
+  stagger(0.07) {
+    show(start, 0.3); show(rd, 0.3); show(init, 0.3); show(dec, 0.3);
+    show(body, 0.3); show(out, 0.3); show(fin, 0.3);
+  }
+}
+wait(0.2);
+
+step("run") {
+  seq {
+    show(tok.parts, 0.2);
+    route(tok, e1, 0.4, smooth); route(tok, e2, 0.4, smooth); route(tok, e3, 0.4, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e4, 0.4, smooth); route(tok, e6, 0.5, smooth);
+    route(tok, e5, 0.4, smooth); route(tok, e7, 0.4, smooth);
+  }
+}
+wait(0.3);
+
+step("takeaway") {
+  seq { pulse(fin, 0.7); pulse(fin, 0.7); }
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9Q7QwzN3e3k" title="A Flowchart That Runs — Ranked Auto-Layout + a Token That Walks the Loop" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="complex-flowchart"><a class="header" href="#complex-flowchart">complex-flowchart</a></h2>
+<p>A big pipeline that builds itself, then runs: a 24-node CI/CD flow with 7 decisions and feedback loops auto-wraps into readable side-by-side columns (long loops routed around the perimeter). It first draws box-by-box in flow order, then pairs of commits race the pipeline in parallel to different outcomes — ship, rollback-to-start, held — twice. All <code>flowchart</code> + <code>route</code> + <code>par</code>, no coordinates.</p>
+<pre><code class="language-manic">title("Deployment Pipeline — Many Decisions &amp; Loops");
+// Stress test: 7 decisions and several back-edges — some loop to an earlier step,
+// one loops all the way back to `start`. `flowchart` still auto-wraps into
+// side-by-side columns; forward edges are clean elbows, backward edges (loops,
+// column wraps) arc as curves. No coordinates.
+canvas("16:9");
+template("paper");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · FLOWCHART · DECISIONS &amp; LOOPS");
+text(headline, (cx, h*0.12), "Seven decisions, five loops, one chart");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 23*u); bold(headline); wrap(headline, w*0.86);
+
+flowchart(cd, auto, 40);
+node(start, cd, "terminator", "start");
+node(checkout, cd, "io", "checkout");
+node(install, cd, "process", "install deps");
+node(build, cd, "process", "build");
+node(bok, cd, "decision", "build ok?");
+node(fix, cd, "process", "fix build");
+node(unit, cd, "process", "unit tests");
+node(uok, cd, "decision", "tests pass?");
+node(debug, cd, "process", "debug");
+node(integ, cd, "process", "integration");
+node(iok, cd, "decision", "integ ok?");
+node(scan, cd, "process", "security scan");
+node(sok, cd, "decision", "scan clean?");
+node(patch, cd, "process", "patch deps");
+node(stage, cd, "process", "deploy staging");
+node(smoke, cd, "process", "smoke test");
+node(smok, cd, "decision", "smoke ok?");
+node(approve, cd, "decision", "approve prod?");
+node(hold, cd, "terminator", "held");
+node(roll, cd, "process", "rollback");
+node(prod, cd, "process", "deploy prod");
+node(health, cd, "decision", "healthy?");
+node(notify, cd, "process", "notify team");
+node(done, cd, "terminator", "shipped");
+
+connect(e1, start, checkout);
+connect(e2, checkout, install);
+connect(e3, install, build);
+connect(e4, build, bok);
+connect(e5, bok, unit);            // yes
+connect(e6, bok, fix);             // no
+connect(e7, fix, build);           // loop -&gt; build
+connect(e8, unit, uok);
+connect(e9, uok, integ);           // yes
+connect(e10, uok, debug);          // no
+connect(e11, debug, build);        // loop -&gt; build
+connect(e12, integ, iok);
+connect(e13, iok, scan);           // yes
+connect(e14, iok, debug);          // no -&gt; debug (which loops to build)
+connect(e15, scan, sok);
+connect(e16, sok, stage);          // yes
+connect(e17, sok, patch);          // no
+connect(e18, patch, scan);         // loop -&gt; scan
+connect(e19, stage, smoke);
+connect(e20, smoke, smok);
+connect(e21, smok, approve);       // yes
+connect(e22, smok, roll);          // no
+connect(e23, roll, start);         // loop -&gt; start (all the way back)
+connect(e24, approve, prod);       // yes
+connect(e25, approve, hold);       // no
+connect(e26, prod, health);
+connect(e27, health, notify);      // yes
+connect(e28, health, roll);        // no -&gt; rollback
+connect(e29, notify, done);
+
+// forward = proceed, back-edges = loops/failures
+color(e6, magenta);  color(e6.hot, magenta);
+color(e10, magenta); color(e10.hot, magenta);
+color(e14, magenta); color(e14.hot, magenta);
+color(e17, magenta); color(e17.hot, magenta);
+color(e22, magenta); color(e22.hot, magenta);
+color(e28, magenta); color(e28.hot, magenta);
+color(e7, gold);  color(e7.hot, gold);
+color(e11, gold); color(e11.hot, gold);
+color(e18, gold); color(e18.hot, gold);
+color(e23, gold); color(e23.hot, gold);
+annotate(e5, "yes");  annotate(e6, "no");
+annotate(e9, "yes");  annotate(e10, "no");
+annotate(e16, "yes"); annotate(e17, "no");
+annotate(e21, "yes"); annotate(e22, "no");
+annotate(e24, "yes"); annotate(e25, "no");
+annotate(e27, "yes"); annotate(e28, "no");
+
+text(k1, (w*0.36, h*0.94), "— proceed"); size(k1, 13*u); color(k1, fg); bold(k1);
+text(k2, (w*0.52, h*0.94), "— reject"); size(k2, 13*u); color(k2, magenta); bold(k2);
+text(k3, (w*0.66, h*0.94), "— loop back"); size(k3, 13*u); color(k3, gold); bold(k3);
+
+// Two tokens per round, released together — they share the pipeline, then split
+// at a decision and reach different ends. Two rounds, then done.
+request(a1, start, "PR-A"); request(b1, start, "PR-B");   // round 1
+request(a2, start, "PR-C"); request(b2, start, "PR-D");   // round 2
+hidden(cd.nodes);
+untraced(cd.connections);   // edges start undrawn — we draw them as we build
+hidden(a1.parts); hidden(b1.parts); hidden(a2.parts); hidden(b2.parts);
+
+// Build the chart the way you'd draw it: each box appears in flow order and the
+// edge into it draws first, so you watch the whole pipeline take shape — then the
+// tokens run it. Best way to learn how a flowchart is put together.
+step("build-chart") {
+  seq {
+    show(start, 0.3);
+    draw(e1, 0.14);  show(checkout, 0.18);
+    draw(e2, 0.14);  show(install, 0.18);
+    draw(e3, 0.14);  show(build, 0.18);
+    draw(e4, 0.14);  show(bok, 0.18);
+    draw(e5, 0.14);  show(unit, 0.18);
+    draw(e6, 0.14);  show(fix, 0.18);
+    draw(e8, 0.14);  show(uok, 0.18);
+    draw(e9, 0.14);  show(integ, 0.18);
+    draw(e10, 0.14); show(debug, 0.18);
+    draw(e12, 0.14); show(iok, 0.18);
+    draw(e13, 0.14); show(scan, 0.18);
+    draw(e14, 0.14);                       // iok no → debug (already shown)
+    draw(e15, 0.14); show(sok, 0.18);
+    draw(e16, 0.14); show(stage, 0.18);
+    draw(e17, 0.14); show(patch, 0.18);
+    draw(e19, 0.14); show(smoke, 0.18);
+    draw(e20, 0.14); show(smok, 0.18);
+    draw(e21, 0.14); show(approve, 0.18);
+    draw(e22, 0.14); show(roll, 0.18);
+    draw(e24, 0.14); show(prod, 0.18);
+    draw(e25, 0.14); show(hold, 0.18);
+    draw(e26, 0.14); show(health, 0.18);
+    draw(e27, 0.14); show(notify, 0.18);
+    draw(e28, 0.14);                       // health no → roll (already shown)
+    draw(e29, 0.14); show(done, 0.18);
+    // feedback loops complete the picture last
+    draw(e7, 0.22); draw(e11, 0.22); draw(e18, 0.22); draw(e23, 0.35);
+  }
+}
+wait(0.5);
+
+// Round 1 — two PRs race the pipeline in parallel. They ride together until the
+// smoke test, where A ships and B fails and rolls back around to the start.
+step("round-1") {
+  par {
+    seq {
+      show(a1.parts, 0.2);
+      route(a1, e1, 0.22, smooth); route(a1, e2, 0.22, smooth); route(a1, e3, 0.22, smooth);
+      route(a1, e4, 0.22, smooth); route(a1, e5, 0.22, smooth); route(a1, e8, 0.22, smooth);
+      route(a1, e9, 0.22, smooth); route(a1, e12, 0.22, smooth); route(a1, e13, 0.22, smooth);
+      route(a1, e15, 0.22, smooth); route(a1, e16, 0.22, smooth); route(a1, e19, 0.22, smooth);
+      route(a1, e20, 0.22, smooth); route(a1, e21, 0.22, smooth); route(a1, e24, 0.22, smooth);
+      route(a1, e26, 0.22, smooth); route(a1, e27, 0.22, smooth); route(a1, e29, 0.3, smooth);
+    }
+    seq {
+      show(b1.parts, 0.2);
+      route(b1, e1, 0.22, smooth); route(b1, e2, 0.22, smooth); route(b1, e3, 0.22, smooth);
+      route(b1, e4, 0.22, smooth); route(b1, e5, 0.22, smooth); route(b1, e8, 0.22, smooth);
+      route(b1, e9, 0.22, smooth); route(b1, e12, 0.22, smooth); route(b1, e13, 0.22, smooth);
+      route(b1, e15, 0.22, smooth); route(b1, e16, 0.22, smooth); route(b1, e19, 0.22, smooth);
+      route(b1, e20, 0.22, smooth);
+      route(b1, e22, 0.35, smooth);  // smoke ok? no → rollback
+      route(b1, e23, 0.8, smooth);   // rollback → start (around the perimeter)
+    }
+  }
+}
+wait(0.6);
+step("clear-1") {
+  par { fade(a1.parts, 0.3); fade(b1.parts, 0.3); to(cd.hotpaths, trace, 0, 0.4); }
+}
+wait(0.3);
+
+// Round 2 — another pair. They split at the unit-test gate: C carries on but is
+// held at approval, while D fails its tests and loops back to rebuild.
+step("round-2") {
+  par {
+    seq {
+      show(a2.parts, 0.2);
+      route(a2, e1, 0.22, smooth); route(a2, e2, 0.22, smooth); route(a2, e3, 0.22, smooth);
+      route(a2, e4, 0.22, smooth); route(a2, e5, 0.22, smooth); route(a2, e8, 0.22, smooth);
+      route(a2, e9, 0.22, smooth); route(a2, e12, 0.22, smooth); route(a2, e13, 0.22, smooth);
+      route(a2, e15, 0.22, smooth); route(a2, e16, 0.22, smooth); route(a2, e19, 0.22, smooth);
+      route(a2, e20, 0.22, smooth); route(a2, e21, 0.25, smooth);
+      route(a2, e25, 0.35, smooth);  // approve prod? no → held
+    }
+    seq {
+      show(b2.parts, 0.2);
+      route(b2, e1, 0.22, smooth); route(b2, e2, 0.22, smooth); route(b2, e3, 0.22, smooth);
+      route(b2, e4, 0.22, smooth); route(b2, e5, 0.22, smooth); route(b2, e8, 0.22, smooth);
+      route(b2, e10, 0.35, smooth);  // tests pass? no → debug
+      route(b2, e11, 0.6, smooth);   // debug → build (loop back)
+    }
+  }
+}
+wait(0.6);
+step("clear-2") {
+  par { fade(a2.parts, 0.3); fade(b2.parts, 0.3); to(cd.hotpaths, trace, 0, 0.4); }
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5iBfClaMyY8" title="Watch a Big Flowchart Build Itself, Then Run — Auto-Wrap + Parallel Tokens in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="systems-rabbitmq-consumers"><a class="header" href="#systems-rabbitmq-consumers">systems-rabbitmq-consumers</a></h2>
 <p>Authored one-of-many delivery: messages 101/102/103 explicitly select different workers — the kit never infers RabbitMQ or round-robin behaviour.</p>

@@ -1,0 +1,196 @@
+title("Deployment Pipeline — Many Decisions & Loops");
+// Stress test: 7 decisions and several back-edges — some loop to an earlier step,
+// one loops all the way back to `start`. `flowchart` still auto-wraps into
+// side-by-side columns; forward edges are clean elbows, backward edges (loops,
+// column wraps) arc as curves. No coordinates.
+canvas("16:9");
+template("paper");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · FLOWCHART · DECISIONS & LOOPS");
+text(headline, (cx, h*0.12), "Seven decisions, five loops, one chart");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 23*u); bold(headline); wrap(headline, w*0.86);
+
+flowchart(cd, auto, 40);
+node(start, cd, "terminator", "start");
+node(checkout, cd, "io", "checkout");
+node(install, cd, "process", "install deps");
+node(build, cd, "process", "build");
+node(bok, cd, "decision", "build ok?");
+node(fix, cd, "process", "fix build");
+node(unit, cd, "process", "unit tests");
+node(uok, cd, "decision", "tests pass?");
+node(debug, cd, "process", "debug");
+node(integ, cd, "process", "integration");
+node(iok, cd, "decision", "integ ok?");
+node(scan, cd, "process", "security scan");
+node(sok, cd, "decision", "scan clean?");
+node(patch, cd, "process", "patch deps");
+node(stage, cd, "process", "deploy staging");
+node(smoke, cd, "process", "smoke test");
+node(smok, cd, "decision", "smoke ok?");
+node(approve, cd, "decision", "approve prod?");
+node(hold, cd, "terminator", "held");
+node(roll, cd, "process", "rollback");
+node(prod, cd, "process", "deploy prod");
+node(health, cd, "decision", "healthy?");
+node(notify, cd, "process", "notify team");
+node(done, cd, "terminator", "shipped");
+
+connect(e1, start, checkout);
+connect(e2, checkout, install);
+connect(e3, install, build);
+connect(e4, build, bok);
+connect(e5, bok, unit);            // yes
+connect(e6, bok, fix);             // no
+connect(e7, fix, build);           // loop -> build
+connect(e8, unit, uok);
+connect(e9, uok, integ);           // yes
+connect(e10, uok, debug);          // no
+connect(e11, debug, build);        // loop -> build
+connect(e12, integ, iok);
+connect(e13, iok, scan);           // yes
+connect(e14, iok, debug);          // no -> debug (which loops to build)
+connect(e15, scan, sok);
+connect(e16, sok, stage);          // yes
+connect(e17, sok, patch);          // no
+connect(e18, patch, scan);         // loop -> scan
+connect(e19, stage, smoke);
+connect(e20, smoke, smok);
+connect(e21, smok, approve);       // yes
+connect(e22, smok, roll);          // no
+connect(e23, roll, start);         // loop -> start (all the way back)
+connect(e24, approve, prod);       // yes
+connect(e25, approve, hold);       // no
+connect(e26, prod, health);
+connect(e27, health, notify);      // yes
+connect(e28, health, roll);        // no -> rollback
+connect(e29, notify, done);
+
+// forward = proceed, back-edges = loops/failures
+color(e6, magenta);  color(e6.hot, magenta);
+color(e10, magenta); color(e10.hot, magenta);
+color(e14, magenta); color(e14.hot, magenta);
+color(e17, magenta); color(e17.hot, magenta);
+color(e22, magenta); color(e22.hot, magenta);
+color(e28, magenta); color(e28.hot, magenta);
+color(e7, gold);  color(e7.hot, gold);
+color(e11, gold); color(e11.hot, gold);
+color(e18, gold); color(e18.hot, gold);
+color(e23, gold); color(e23.hot, gold);
+annotate(e5, "yes");  annotate(e6, "no");
+annotate(e9, "yes");  annotate(e10, "no");
+annotate(e16, "yes"); annotate(e17, "no");
+annotate(e21, "yes"); annotate(e22, "no");
+annotate(e24, "yes"); annotate(e25, "no");
+annotate(e27, "yes"); annotate(e28, "no");
+
+text(k1, (w*0.36, h*0.94), "— proceed"); size(k1, 13*u); color(k1, fg); bold(k1);
+text(k2, (w*0.52, h*0.94), "— reject"); size(k2, 13*u); color(k2, magenta); bold(k2);
+text(k3, (w*0.66, h*0.94), "— loop back"); size(k3, 13*u); color(k3, gold); bold(k3);
+
+// Two tokens per round, released together — they share the pipeline, then split
+// at a decision and reach different ends. Two rounds, then done.
+request(a1, start, "PR-A"); request(b1, start, "PR-B");   // round 1
+request(a2, start, "PR-C"); request(b2, start, "PR-D");   // round 2
+hidden(cd.nodes);
+untraced(cd.connections);   // edges start undrawn — we draw them as we build
+hidden(a1.parts); hidden(b1.parts); hidden(a2.parts); hidden(b2.parts);
+
+// Build the chart the way you'd draw it: each box appears in flow order and the
+// edge into it draws first, so you watch the whole pipeline take shape — then the
+// tokens run it. Best way to learn how a flowchart is put together.
+step("build-chart") {
+  seq {
+    show(start, 0.3);
+    draw(e1, 0.14);  show(checkout, 0.18);
+    draw(e2, 0.14);  show(install, 0.18);
+    draw(e3, 0.14);  show(build, 0.18);
+    draw(e4, 0.14);  show(bok, 0.18);
+    draw(e5, 0.14);  show(unit, 0.18);
+    draw(e6, 0.14);  show(fix, 0.18);
+    draw(e8, 0.14);  show(uok, 0.18);
+    draw(e9, 0.14);  show(integ, 0.18);
+    draw(e10, 0.14); show(debug, 0.18);
+    draw(e12, 0.14); show(iok, 0.18);
+    draw(e13, 0.14); show(scan, 0.18);
+    draw(e14, 0.14);                       // iok no → debug (already shown)
+    draw(e15, 0.14); show(sok, 0.18);
+    draw(e16, 0.14); show(stage, 0.18);
+    draw(e17, 0.14); show(patch, 0.18);
+    draw(e19, 0.14); show(smoke, 0.18);
+    draw(e20, 0.14); show(smok, 0.18);
+    draw(e21, 0.14); show(approve, 0.18);
+    draw(e22, 0.14); show(roll, 0.18);
+    draw(e24, 0.14); show(prod, 0.18);
+    draw(e25, 0.14); show(hold, 0.18);
+    draw(e26, 0.14); show(health, 0.18);
+    draw(e27, 0.14); show(notify, 0.18);
+    draw(e28, 0.14);                       // health no → roll (already shown)
+    draw(e29, 0.14); show(done, 0.18);
+    // feedback loops complete the picture last
+    draw(e7, 0.22); draw(e11, 0.22); draw(e18, 0.22); draw(e23, 0.35);
+  }
+}
+wait(0.5);
+
+// Round 1 — two PRs race the pipeline in parallel. They ride together until the
+// smoke test, where A ships and B fails and rolls back around to the start.
+step("round-1") {
+  par {
+    seq {
+      show(a1.parts, 0.2);
+      route(a1, e1, 0.22, smooth); route(a1, e2, 0.22, smooth); route(a1, e3, 0.22, smooth);
+      route(a1, e4, 0.22, smooth); route(a1, e5, 0.22, smooth); route(a1, e8, 0.22, smooth);
+      route(a1, e9, 0.22, smooth); route(a1, e12, 0.22, smooth); route(a1, e13, 0.22, smooth);
+      route(a1, e15, 0.22, smooth); route(a1, e16, 0.22, smooth); route(a1, e19, 0.22, smooth);
+      route(a1, e20, 0.22, smooth); route(a1, e21, 0.22, smooth); route(a1, e24, 0.22, smooth);
+      route(a1, e26, 0.22, smooth); route(a1, e27, 0.22, smooth); route(a1, e29, 0.3, smooth);
+    }
+    seq {
+      show(b1.parts, 0.2);
+      route(b1, e1, 0.22, smooth); route(b1, e2, 0.22, smooth); route(b1, e3, 0.22, smooth);
+      route(b1, e4, 0.22, smooth); route(b1, e5, 0.22, smooth); route(b1, e8, 0.22, smooth);
+      route(b1, e9, 0.22, smooth); route(b1, e12, 0.22, smooth); route(b1, e13, 0.22, smooth);
+      route(b1, e15, 0.22, smooth); route(b1, e16, 0.22, smooth); route(b1, e19, 0.22, smooth);
+      route(b1, e20, 0.22, smooth);
+      route(b1, e22, 0.35, smooth);  // smoke ok? no → rollback
+      route(b1, e23, 0.8, smooth);   // rollback → start (around the perimeter)
+    }
+  }
+}
+wait(0.6);
+step("clear-1") {
+  par { fade(a1.parts, 0.3); fade(b1.parts, 0.3); to(cd.hotpaths, trace, 0, 0.4); }
+}
+wait(0.3);
+
+// Round 2 — another pair. They split at the unit-test gate: C carries on but is
+// held at approval, while D fails its tests and loops back to rebuild.
+step("round-2") {
+  par {
+    seq {
+      show(a2.parts, 0.2);
+      route(a2, e1, 0.22, smooth); route(a2, e2, 0.22, smooth); route(a2, e3, 0.22, smooth);
+      route(a2, e4, 0.22, smooth); route(a2, e5, 0.22, smooth); route(a2, e8, 0.22, smooth);
+      route(a2, e9, 0.22, smooth); route(a2, e12, 0.22, smooth); route(a2, e13, 0.22, smooth);
+      route(a2, e15, 0.22, smooth); route(a2, e16, 0.22, smooth); route(a2, e19, 0.22, smooth);
+      route(a2, e20, 0.22, smooth); route(a2, e21, 0.25, smooth);
+      route(a2, e25, 0.35, smooth);  // approve prod? no → held
+    }
+    seq {
+      show(b2.parts, 0.2);
+      route(b2, e1, 0.22, smooth); route(b2, e2, 0.22, smooth); route(b2, e3, 0.22, smooth);
+      route(b2, e4, 0.22, smooth); route(b2, e5, 0.22, smooth); route(b2, e8, 0.22, smooth);
+      route(b2, e10, 0.35, smooth);  // tests pass? no → debug
+      route(b2, e11, 0.6, smooth);   // debug → build (loop back)
+    }
+  }
+}
+wait(0.6);
+step("clear-2") {
+  par { fade(a2.parts, 0.3); fade(b2.parts, 0.3); to(cd.hotpaths, trace, 0, 0.4); }
+}
+wait(1.0);
