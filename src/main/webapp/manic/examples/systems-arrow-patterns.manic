@@ -1,0 +1,151 @@
+title("Systems Foundation — Arrow Patterns");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+let pw = w*0.27;
+let ph = h*0.25;
+let x1 = w*0.18;
+let x2 = w*0.50;
+let x3 = w*0.82;
+let y1 = h*0.34;
+let y2 = h*0.68;
+
+watermark(mark, (w*0.09, h*0.045), "Made With Manic");
+text(kicker, (cx, h*0.045), "SYSTEMS FOUNDATION · DIRECTION IS VISIBLE");
+text(headline, (cx, h*0.12), "One arrow grammar, many delivery stories");
+text(caption, (cx, h*0.925), "Arrows describe paths. seq, par, travel, and flow describe what moves through them.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 31*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.88);
+
+rect(p1, (x1,y1), pw,ph); outlined(p1); color(p1, dim); stroke(p1, 2*u);
+rect(p2, (x2,y1), pw,ph); outlined(p2); color(p2, dim); stroke(p2, 2*u);
+rect(p3, (x3,y1), pw,ph); outlined(p3); color(p3, dim); stroke(p3, 2*u);
+rect(p4, (x1,y2), pw,ph); outlined(p4); color(p4, dim); stroke(p4, 2*u);
+rect(p5, (x2,y2), pw,ph); outlined(p5); color(p5, dim); stroke(p5, 2*u);
+rect(p6, (x3,y2), pw,ph); outlined(p6); color(p6, dim); stroke(p6, 2*u);
+
+text(t1, (x1,y1-ph*0.36), "ONE WAY");
+text(t2, (x2,y1-ph*0.36), "ROUND TRIP");
+text(t3, (x3,y1-ph*0.36), "ORTHOGONAL");
+text(t4, (x1,y2-ph*0.36), "VERTICAL PORTS");
+text(t5, (x2,y2-ph*0.36), "FAN OUT");
+text(t6, (x3,y2-ph*0.36), "DIAGONAL DUPLEX");
+size(t1, 16*u); size(t2, 16*u); size(t3, 16*u);
+size(t4, 16*u); size(t5, 16*u); size(t6, 16*u);
+color(t1, dim); color(t2, dim); color(t3, dim);
+color(t4, dim); color(t5, dim); color(t6, dim);
+bold(t1); bold(t2); bold(t3); bold(t4); bold(t5); bold(t6);
+
+// 1 — one source, one destination.
+arrow(one, (x1-pw*0.34,y1+ph*0.08), (x1+pw*0.34,y1+ph*0.08));
+color(one, cyan); stroke(one, 4*u); untraced(one);
+circle(oneDot, (x1-pw*0.34,y1+ph*0.08), 8*u); color(oneDot, cyan); hidden(oneDot);
+
+// 2 — request and response remain separate, honest directions.
+arrow(outbound, (x2-pw*0.34,y1), (x2+pw*0.34,y1));
+arrow(inbound, (x2+pw*0.34,y1+ph*0.17), (x2-pw*0.34,y1+ph*0.17));
+color(outbound, cyan); color(inbound, magenta);
+stroke(outbound, 4*u); stroke(inbound, 4*u);
+untraced(outbound); untraced(inbound);
+circle(requestDot, (x2-pw*0.34,y1), 8*u); color(requestDot, cyan); hidden(requestDot);
+circle(responseDot, (x2+pw*0.34,y1+ph*0.17), 8*u); color(responseDot, magenta); hidden(responseDot);
+
+// 3 — generic geometry can draw a stepped path; Systems nodes use one
+// `connect(path, a, b, orthogonal)` declaration for the same routed identity.
+line(elbowA, (x3-pw*0.34,y1-ph*0.02), (x3,y1-ph*0.02));
+line(elbowB, (x3,y1-ph*0.02), (x3,y1+ph*0.20));
+arrow(elbowC, (x3,y1+ph*0.20), (x3+pw*0.34,y1+ph*0.20));
+color(elbowA, gold); color(elbowB, gold); color(elbowC, gold);
+stroke(elbowA, 4*u); stroke(elbowB, 4*u); stroke(elbowC, 4*u);
+untraced(elbowA); untraced(elbowB); untraced(elbowC);
+circle(elbowDot, (x3-pw*0.34,y1-ph*0.02), 8*u); color(elbowDot, gold); hidden(elbowDot);
+
+// 4 — ports can face vertically without changing motion semantics.
+arrow(downLane, (x1-pw*0.12,y2-ph*0.20), (x1-pw*0.12,y2+ph*0.25));
+arrow(upLane, (x1+pw*0.12,y2+ph*0.25), (x1+pw*0.12,y2-ph*0.20));
+color(downLane, cyan); color(upLane, magenta);
+stroke(downLane, 4*u); stroke(upLane, 4*u);
+untraced(downLane); untraced(upLane);
+circle(downDot, (x1-pw*0.12,y2-ph*0.20), 8*u); color(downDot, cyan); hidden(downDot);
+circle(upDot, (x1+pw*0.12,y2+ph*0.25), 8*u); color(upDot, magenta); hidden(upDot);
+
+// 5 — fan-out is three explicitly authored deliveries, not inferred broadcast.
+arrow(fanA, (x2-pw*0.34,y2+ph*0.04), (x2+pw*0.34,y2-ph*0.22));
+arrow(fanB, (x2-pw*0.34,y2+ph*0.04), (x2+pw*0.34,y2+ph*0.04));
+arrow(fanC, (x2-pw*0.34,y2+ph*0.04), (x2+pw*0.34,y2+ph*0.30));
+color(fanA, cyan); color(fanB, cyan); color(fanC, cyan);
+stroke(fanA, 3*u); stroke(fanB, 3*u); stroke(fanC, 3*u);
+untraced(fanA); untraced(fanB); untraced(fanC);
+circle(fanDotA, (x2-pw*0.34,y2+ph*0.04), 7*u); color(fanDotA, cyan); hidden(fanDotA);
+circle(fanDotB, (x2-pw*0.34,y2+ph*0.04), 7*u); color(fanDotB, cyan); hidden(fanDotB);
+circle(fanDotC, (x2-pw*0.34,y2+ph*0.04), 7*u); color(fanDotC, cyan); hidden(fanDotC);
+
+// 6 — diagonal request/return lanes use different styling and directions.
+arrow(diagOut, (x3-pw*0.32,y2+ph*0.24), (x3+pw*0.27,y2-ph*0.22));
+arrow(diagBack, (x3+pw*0.34,y2-ph*0.12), (x3-pw*0.25,y2+ph*0.34));
+color(diagOut, cyan); color(diagBack, magenta); dashed(diagBack);
+stroke(diagOut, 4*u); stroke(diagBack, 4*u);
+untraced(diagOut); untraced(diagBack);
+circle(diagRequest, (x3-pw*0.32,y2+ph*0.24), 8*u); color(diagRequest, cyan); hidden(diagRequest);
+circle(diagResponse, (x3+pw*0.34,y2-ph*0.12), 8*u); color(diagResponse, magenta); hidden(diagResponse);
+
+tag(p1, cards); tag(p2, cards); tag(p3, cards); tag(p4, cards); tag(p5, cards); tag(p6, cards);
+tag(t1, cards); tag(t2, cards); tag(t3, cards); tag(t4, cards); tag(t5, cards); tag(t6, cards);
+tag(one, paths); tag(outbound, paths); tag(inbound, paths);
+tag(elbowA, paths); tag(elbowB, paths); tag(elbowC, paths);
+tag(downLane, paths); tag(upLane, paths);
+tag(fanA, paths); tag(fanB, paths); tag(fanC, paths);
+tag(diagOut, paths); tag(diagBack, paths);
+
+hidden(kicker); hidden(headline); hidden(caption); hidden(cards);
+
+step("arrow-grammar") {
+  par {
+    show(kicker, 0.30);
+    show(headline, 0.45);
+    show(caption, 0.40);
+    show(cards, 0.45);
+    draw(paths, 1.10, smooth);
+  }
+}
+wait(0.35);
+
+step("traffic") {
+  par {
+    show(oneDot, 0.15); travel(oneDot, one, 1.20, linear); flow(one, 1.20);
+    seq {
+      show(requestDot, 0.15); travel(requestDot, outbound, 0.65, linear);
+      show(responseDot, 0.15); travel(responseDot, inbound, 0.65, linear);
+    }
+    seq {
+      show(elbowDot, 0.15);
+      travel(elbowDot, elbowA, 0.40, linear);
+      travel(elbowDot, elbowB, 0.35, linear);
+      travel(elbowDot, elbowC, 0.45, linear);
+    }
+    par {
+      show(downDot, 0.15); travel(downDot, downLane, 1.20, linear);
+      show(upDot, 0.15); travel(upDot, upLane, 1.20, linear);
+    }
+    par {
+      show(fanDotA, 0.15); travel(fanDotA, fanA, 1.20, linear);
+      show(fanDotB, 0.15); travel(fanDotB, fanB, 1.20, linear);
+      show(fanDotC, 0.15); travel(fanDotC, fanC, 1.20, linear);
+    }
+    par {
+      show(diagRequest, 0.15); travel(diagRequest, diagOut, 1.20, linear);
+      show(diagResponse, 0.15); travel(diagResponse, diagBack, 1.20, linear);
+    }
+  }
+}
+wait(0.55);
+
+step("creator-controls-semantics") {
+  par {
+    pulse(paths, 0.75);
+    say(caption, "The same paths can mean request, response, queue delivery, broadcast, or pure motion—the creator decides.", 0.40);
+  }
+}
+wait(1.20);

@@ -1,5 +1,5 @@
 {
-  "count": 213,
+  "count": 228,
   "categories": [
     {
       "slug": "algorithms",
@@ -1372,6 +1372,102 @@
           "file": "volume3.manic",
           "title": "Volume3",
           "desc": "The volume under a surface represented as solid 3D Riemann-sum columns, turning a double integral into visible geometry."
+        }
+      ]
+    },
+    {
+      "slug": "systems",
+      "title": "Diagrams",
+      "examples": [
+        {
+          "name": "systems-foundation",
+          "file": "systems-foundation.manic",
+          "title": "Systems foundation",
+          "desc": "Provider-neutral: only native client/gateway/service/cache/database archetypes \u2014 reveals cold topology, sends one persistent request forward, and returns the same identity over separately directed paths, with no cloud assets."
+        },
+        {
+          "name": "systems-architecture-poc",
+          "file": "systems-architecture-poc.manic",
+          "title": "Systems architecture poc",
+          "desc": "The first story: one Buy request travels Browser \u2192 CloudFront \u2192 API Gateway \u2192 Lambda \u2192 DynamoDB \u2192 SQS, auto-laid horizontally or vertically by the responsive region."
+        },
+        {
+          "name": "systems-arrow-patterns",
+          "file": "systems-arrow-patterns.manic",
+          "title": "Systems arrow patterns",
+          "desc": "The connection-grammar reference: one-way, parallel, round-trip, port-aware orthogonal, fan-out, and diagonal-duplex lanes."
+        },
+        {
+          "name": "systems-rabbitmq-consumers",
+          "file": "systems-rabbitmq-consumers.manic",
+          "title": "Systems rabbitmq consumers",
+          "desc": "Authored one-of-many delivery: messages 101/102/103 explicitly select different workers \u2014 the kit never infers RabbitMQ or round-robin behaviour."
+        },
+        {
+          "name": "aws-three-tier-web-application",
+          "file": "aws-three-tier-web-application.manic",
+          "title": "Aws three tier web application",
+          "desc": "Presentation / Application / Data as three responsive tiers; one request travels Route 53 \u2192 CloudFront \u2192 ELB \u2192 ECS \u2192 ElastiCache \u2192 RDS."
+        },
+        {
+          "name": "aws-event-processing-clusters-poc",
+          "file": "aws-event-processing-clusters-poc.manic",
+          "title": "Aws event processing clusters poc",
+          "desc": "Nested clusters + parallel topology: EKS \u2192 three ECS workers \u2192 SQS \u2192 three Lambda processors \u2192 S3 & Redshift, with one seeded hot path through the fan-out."
+        },
+        {
+          "name": "aws-clustered-web-services",
+          "file": "aws-clustered-web-services.manic",
+          "title": "Aws clustered web services",
+          "desc": "Route 53 \u2192 ELB \u2192 ECS pool with an RDS primary/replica cluster and ElastiCache; request and response follow separately coloured lanes."
+        },
+        {
+          "name": "gcp-clustered-web-services",
+          "file": "gcp-clustered-web-services.manic",
+          "title": "Gcp clustered web services",
+          "desc": "The same clustered-web story on Google Cloud: Cloud DNS \u2192 Load Balancing \u2192 GKE pool \u2192 Cloud SQL cluster + Memorystore \u2014 a pure provider swap."
+        },
+        {
+          "name": "gcp-message-collecting",
+          "file": "gcp-message-collecting.manic",
+          "title": "Gcp message collecting",
+          "desc": "GCP IoT: three IoT Core devices publish to Pub/Sub, and Dataflow fans out to a data lake, a processing branch, and a serverless branch \u2014 three-level nested clusters."
+        },
+        {
+          "name": "k8s-three-tier",
+          "file": "k8s-three-tier.manic",
+          "title": "K8s three tier",
+          "desc": "A three-tier app on Kubernetes: Ingress \u2192 web Deployment \u2192 api Service/Deployment \u2192 Redis + a PostgreSQL StatefulSet, following one checkout request."
+        },
+        {
+          "name": "k8s-stateful-architecture",
+          "file": "k8s-stateful-architecture.manic",
+          "title": "K8s stateful architecture",
+          "desc": "A StatefulSet's storage: a Service, three pods, their PVCs, and the PV/StorageClass that provision them \u2014 generated with a for loop, coloured by access/ownership/provisioning."
+        },
+        {
+          "name": "k8s-cluster-components",
+          "file": "k8s-cluster-components.manic",
+          "title": "K8s cluster components",
+          "desc": "The canonical Kubernetes components diagram \u2014 control plane (api hub, c-m, c-c-m, etcd, sched) + nodes + the cloud provider \u2014 drawn AND flowed with plain primitives, no systems kit at all."
+        },
+        {
+          "name": "serverless-processing",
+          "file": "serverless-processing.manic",
+          "title": "Serverless processing",
+          "desc": "A mixed on-prem + AWS pipeline: Kafka + Docker engines \u2192 SQS (+ dead-letter) \u2192 Lambda \u2192 S3/Redshift, with a Fluentd\u2192Kafka\u2192Spark tap; paths coloured by relationship."
+        },
+        {
+          "name": "onprem-advanced-web-service",
+          "file": "onprem-advanced-web-service.manic",
+          "title": "Onprem advanced web service",
+          "desc": "The on-prem stress test with native archetypes: Nginx, gRPC, Redis/PostgreSQL HA, Fluentd\u2192Kafka\u2192Spark, and Prometheus/Grafana \u2014 three runtime stories on one platform."
+        },
+        {
+          "name": "onprem-advanced-web-service-v2",
+          "file": "onprem-advanced-web-service-v2.manic",
+          "title": "Onprem advanced web service v2",
+          "desc": "The same platform with real provider icons and paths coloured by relationship (request \u00b7 analytics \u00b7 telemetry \u00b7 replication)."
         }
       ]
     }

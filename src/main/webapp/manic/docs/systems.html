@@ -1,0 +1,857 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Diagrams — draw a system, then watch it work - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-835c3647.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-122320bb.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="diagrams--draw-a-system-then-watch-it-work"><a class="header" href="#diagrams--draw-a-system-then-watch-it-work">Diagrams — draw a system, then watch it work</a></h1>
+<p>Declare a technical diagram as text and manic animates it — <strong>architecture
+diagrams today</strong>, with flows, sequences, and more to come. Declare what belongs
+where, connect the topology, then follow one message through the design. Manic
+handles nested responsive layout, provider artwork, parallel lanes, and
+deterministic motion; ordinary <code>step</code>, <code>show</code>, <code>draw</code>, <code>flow</code>, camera, and text
+verbs remain the presentation language.</p>
+<p>Unlike static diagram-as-code (Mermaid, Mingrammer), a manic diagram <em>moves</em>:
+the same source that draws the boxes also carries a request through them.</p>
+<h2 id="the-vocabulary"><a class="header" href="#the-vocabulary">The vocabulary</a></h2>
+<p>The whole kit is nine words — a behaviour layer over diagram structure, not a
+catalogue of cloud verbs:</p>
+<pre><code class="language-text">architecture  cluster  node  connect  link
+message       route    hotpath         flow
+</code></pre>
+<p>With them you get provider-neutral nodes (no assets) or real icons from <strong>17
+providers</strong>; declaration-first nested clusters with responsive layout; direct,
+curved, and orthogonal connections with node-boundary ports; cold dashed
+topology kept separate from solid runtime motion; and one persistent message
+whose identity survives every hop. The kit shines for one clear story — for a
+very dense platform overview, split or place clusters yourself to keep it
+readable.</p>
+<h2 id="possible-vs-actual"><a class="header" href="#possible-vs-actual">Possible vs. actual</a></h2>
+<p>The one rule to internalise: a <strong>connection states what is possible; a moving
+message states what happened.</strong></p>
+<pre><code class="language-manic">connect(toWorker1, queue, worker1, orthogonal, right, left);
+connect(toWorker2, queue, worker2);
+connect(toWorker3, queue, worker3, orthogonal, right, left);
+
+message(job, queue, "101");
+route(job, toWorker2, 0.9, linear);
+route(job, worker2ToDatabase, 0.9, linear);
+</code></pre>
+<p>The three connections state what is possible. Only the two explicit <code>route</code>
+calls state what happened. Manic does not claim RabbitMQ selected Worker 2; the
+creator authored that selection.</p>
+<h2 id="the-mental-model"><a class="header" href="#the-mental-model">The mental model</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Layer</th><th>Words</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td>Ownership</td><td><code>architecture</code>, <code>cluster</code>, <code>node</code></td><td>what belongs where</td></tr>
+<tr><td>Topology</td><td><code>connect</code>, <code>link</code></td><td>possible directed paths and neutral visual relationships</td></tr>
+<tr><td>Runtime story</td><td><code>message</code>, <code>route</code>, <code>hotpath</code></td><td>what one persistent message actually does</td></tr>
+<tr><td>Aggregate activity</td><td><code>flow</code></td><td>untracked traffic over one path or a path group</td></tr>
+</tbody>
+</table>
+</div>
+<p><code>request</code> is an HTTP-friendly alias of <code>message</code>. Provider services are data,
+not vocabulary: use <code>"aws:lambda"</code>, not a separate Lambda constructor.</p>
+<p>Provider names are visual metadata only. Manic does not infer balancing,
+queueing, broadcasting, retries, or any other behavior from an icon or label.
+Use explicit <code>route</code>/<code>travel</code> for one authored journey, <code>seq</code> for authored order,
+and <code>par</code> plus multiple objects when several journeys should happen together.
+<code>hotpath</code> is only an optional seeded walk over declared graph geometry; it is
+not a simulation of the services shown.</p>
+<h2 id="start-without-a-cloud-provider"><a class="header" href="#start-without-a-cloud-provider">Start without a cloud provider</a></h2>
+<p>The foundation includes native visual archetypes for <code>client</code>, <code>service</code>,
+<code>gateway</code>, <code>database</code>, <code>cache</code>, <code>queue</code>, <code>storage</code>, and <code>external</code>. These names
+select a compact visual only; they still imply no runtime behavior:</p>
+<pre><code class="language-manic">architecture(platform, (cx,cy), w*0.88, h*0.58);
+node(user, platform, "client", "User");
+node(edge, platform, "gateway", "Gateway");
+node(api, platform, "service", "API Service");
+node(db, platform, "database", "Database");
+</code></pre>
+<p>Use provider names only when recognizable artwork helps the lesson. A generic
+diagram remains fully portable and needs no image assets.</p>
+<p>The complete foundation story sends one request forward and returns the same
+identity over separately directed paths:</p>
+<pre><code class="language-manic">title("Systems Foundation — One Request, One Return");
+canvas("16:9");
+template("mono");
+
+watermark(mark, (160, 54), "Made With Manic");
+text(kicker, (cx, 54), "PROVIDER-NEUTRAL SYSTEMS");
+text(headline, (cx, 104), "Structure is not behaviour");
+text(caption, (cx, h-58), "Cold paths show what is possible. One persistent dot shows what actually happened.");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+size(caption, 20); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(platform, (cx, cy+15), w*0.88, h*0.58);
+node(user, platform, "client", "User");
+node(edge, platform, "gateway", "Gateway");
+node(api, platform, "service", "API Service");
+node(cache, platform, "cache", "Cache");
+node(db, platform, "database", "Database");
+
+connect(toEdge, user, edge);
+connect(toApi, edge, api);
+connect(toCache, api, cache);
+// One semantic connection: Manic chooses node-boundary ports and keeps the
+// packet continuous across every internal orthogonal segment.
+connect(toDb, cache, db, orthogonal, right, top);
+connect(dbReturn, db, api, 95);
+connect(apiReturn, api, edge, 75);
+connect(edgeReturn, edge, user, 55);
+
+message(packet, user, "GET");
+hidden(kicker); hidden(headline); hidden(caption);
+untraced(platform.connections);
+hidden(packet);
+
+step("structure") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.45);
+    show(caption, 0.45);
+    draw(platform.connections, 1.20, smooth);
+  }
+}
+wait(0.45);
+
+step("continuous-round-trip") {
+  par {
+    show(packet, 0.20);
+    say(caption, "One dot moves continuously end to end. Every route hand-off preserves its identity.", 0.35);
+    seq {
+      route(packet, toEdge, 0.70, linear);
+      route(packet, toApi, 0.70, linear);
+      route(packet, toCache, 0.70, linear);
+      route(packet, toDb, 0.70, linear);
+      par {
+        recolor(packet, magenta, 0.30);
+        route(packet, dbReturn, 0.80, linear);
+      }
+      route(packet, apiReturn, 0.75, linear);
+      route(packet, edgeReturn, 0.75, linear);
+    }
+  }
+}
+wait(0.45);
+
+step("proof") {
+  par {
+    pulse(packet, 0.70);
+    say(caption, "The same dot is back at the User: one identity, seven connected journeys, zero animation gaps.", 0.40);
+  }
+}
+wait(1.10);
+</code></pre>
+<h2 id="declare-the-parent-first"><a class="header" href="#declare-the-parent-first">Declare the parent first</a></h2>
+<p>A node’s second argument is its parent architecture or cluster. Clusters may
+themselves belong to an earlier cluster, giving hierarchy without member lists
+or special block syntax:</p>
+<pre><code class="language-manic">architecture(events, (cx,cy), w*0.9, h*0.7);
+
+node(source, events, "aws:eks", "K8s Source");
+cluster(flows, events, "EVENT FLOWS");
+
+cluster(workers, flows, "EVENT WORKERS");
+node(worker1, workers, "aws:ecs", "Worker 1");
+node(worker2, workers, "aws:ecs", "Worker 2");
+node(worker3, workers, "aws:ecs", "Worker 3");
+
+node(queue, flows, "aws:sqs", "Event Queue");
+
+cluster(processing, flows, "PROCESSING");
+node(proc1, processing, "aws:lambda", "Processor 1");
+node(proc2, processing, "aws:lambda", "Processor 2");
+node(proc3, processing, "aws:lambda", "Processor 3");
+
+node(store, events, "aws:s3", "Events Store");
+node(analytics, events, "aws:redshift", "Analytics");
+</code></pre>
+<p>Landscape uses a horizontal system flow and stacks replicated members inside
+their clusters. Portrait rotates the main flow and places replicated members
+across the available width. Cluster frames resize from their descendants.</p>
+<h2 id="cold-topology-then-hot-behaviour"><a class="header" href="#cold-topology-then-hot-behaviour">Cold topology, then hot behaviour</a></h2>
+<pre><code class="language-manic">connect(toWorkers, source, workers);
+connect(toQueue, workers, queue);
+connect(toProcessors, queue, processing);
+connect(toStore, processing, store);
+
+message(event, source, "EVENT");
+
+step("process") {
+  seq {
+    route(event, toWorkers, 0.8, smooth);
+    route(event, toQueue, 0.8, smooth);
+    route(event, toProcessors, 0.8, smooth);
+  }
+}
+</code></pre>
+<p>Connecting a node to a cluster creates the possible lane to every member.
+Connections are dashed by default: they explain a relationship without falsely
+claiming that data is flowing. The hot overlay stays solid when activity begins.</p>
+<p>The declared connection name addresses the complete fan-out or fan-in group, so
+<code>draw(toWorkers)</code> and <code>flow(toWorkers, ...)</code> affect every physical lane. <code>route</code>
+still selects only the lane beginning at the message’s current node.</p>
+<p><code>route</code> is the explicit form. It chooses the physical lane that begins at the
+message’s current node, illuminates that lane, moves the same message identity,
+and records its semantic destination. A later route that does not start there
+fails during <code>manic check</code> instead of teleporting.</p>
+<p>Use <code>draw(toWorkers)</code> to reveal every possible lane. Use <code>route</code> for one real
+message. Use <code>flow(toWorkers, ...)</code> only when the idea is aggregate activity
+across the worker pool.</p>
+<h2 id="route-around-a-visual-obstacle"><a class="header" href="#route-around-a-visual-obstacle">Route around a visual obstacle</a></h2>
+<p>Connections remain direct unless the creator supplies a signed bend in canvas
+units:</p>
+<pre><code class="language-manic">connect(toDatabase, services, database);
+connect(toCache, services, cache, 145*u);
+</code></pre>
+<p>The optional fourth argument changes only the drawn curve and the route that
+travels over it. Positive and negative values curve on opposite sides. It does
+not infer obstacles, architecture semantics, or provider behavior; use the
+smallest bend that keeps the diagram readable on every target canvas.</p>
+<h2 id="use-one-orthogonal-connector"><a class="header" href="#use-one-orthogonal-connector">Use one orthogonal connector</a></h2>
+<p>For architecture diagrams that need right-angle routing, keep the connection
+as one semantic identity:</p>
+<pre><code class="language-manic">connect(toDatabase, cache, database, orthogonal);
+connect(returnPath, database, api, orthogonal, bottom, right);
+
+message(packet, cache, "GET");
+route(packet, toDatabase, 0.9, linear);
+</code></pre>
+<p><code>orthogonal</code> uses automatic node-boundary ports by default. Add explicit source
+and destination ports only when the composition needs them: <code>left</code>, <code>right</code>,
+<code>top</code>, or <code>bottom</code>. The engine builds the internal elbows, but <code>draw</code>, <code>flow</code>,
+<code>route</code>, and <code>hotpath</code> still address the declared connection id. One message
+moves across every segment without replacement objects or animation gaps.</p>
+<p>This is deterministic Manhattan geometry, not obstacle avoidance. Manic does
+not inspect service kinds or guess what the connection means.</p>
+<h2 id="the-connection--arrow-grammar"><a class="header" href="#the-connection--arrow-grammar">The connection &amp; arrow grammar</a></h2>
+<p><code>systems-arrow-patterns.manic</code> is the visual reference for every way one
+connection can be drawn. All six share one rule: the <strong>connection describes a
+possible relationship</strong>; direction and meaning come from the <em>moving</em> object
+(<code>route</code>/<code>flow</code>) and from creator-chosen <strong>colour</strong>, never from the arrowhead
+alone.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>#</th><th>Pattern</th><th>How to author it</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td><strong>One-way</strong> — one source, one destination</td><td><code>connect(a2b, a, b)</code></td></tr>
+<tr><td>2</td><td><strong>Round-trip</strong> — request and response as <em>separate</em>, honest lanes</td><td><code>connect(fwd, a, b)</code> + <code>connect(ret, b, a)</code> (style/colour them differently)</td></tr>
+<tr><td>3</td><td><strong>Orthogonal</strong> — right-angle Manhattan routing, one identity</td><td><code>connect(a2b, a, b, orthogonal)</code></td></tr>
+<tr><td>4</td><td><strong>Vertical ports</strong> — the lane enters/leaves a chosen face</td><td><code>connect(a2b, a, b, orthogonal, top, bottom)</code></td></tr>
+<tr><td>5</td><td><strong>Fan-out</strong> — N <em>explicitly authored</em> deliveries (not inferred broadcast)</td><td><code>connect(toW1, q, w1)</code> … <code>connect(toW3, q, w3)</code>, or one <code>connect(toWorkers, q, workers)</code> to a cluster</td></tr>
+<tr><td>6</td><td><strong>Diagonal duplex</strong> — two directions with distinct styling</td><td>two <code>connect</code>s + per-lane <code>color</code>/<code>hue</code>/<code>dashed</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Colour the lanes by relationship so a dense diagram reads at a glance — each
+connection exposes the cold line <code>id</code> and the hot overlay <code>id.hot</code>:</p>
+<pre><code class="language-manic">color(fwd, cyan);   color(fwd.hot, cyan);      // request
+hue(ret, 328);      hue(ret.hot, 328);         // response (pink)
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/jbjiZwKPh-M" title="Every Connection Pattern in One Diagram — manic Systems Kit" allowfullscreen loading="lazy"></iframe></div>
+
+<p>Nothing here implies balancing, buffering, or broadcast. A fan-out is <em>possible</em>
+lanes; the message that moves — and the colour you give each lane — is what tells
+the runtime story.</p>
+<h2 id="translate-a-mingrammer-diagram"><a class="header" href="#translate-a-mingrammer-diagram">Translate a Mingrammer diagram</a></h2>
+<p>The structural mapping is deliberately small:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Mingrammer</th><th>Manic</th></tr>
+</thead>
+<tbody>
+<tr><td><code>Diagram(...)</code></td><td><code>architecture(...)</code></td></tr>
+<tr><td><code>Cluster(...)</code></td><td><code>cluster(...)</code></td></tr>
+<tr><td><code>ECS(...)</code>, <code>RDS(...)</code>, and other provider objects</td><td><code>node(..., "aws:kind", ...)</code></td></tr>
+<tr><td><code>a &gt;&gt; b</code></td><td><code>connect(path, a, b)</code></td></tr>
+<tr><td><code>a - b</code></td><td><code>link(path, a.card, b.card)</code></td></tr>
+<tr><td>runtime behavior</td><td>explicit <code>message</code>, <code>route</code>, <code>travel</code>, or <code>flow</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>This keeps the imported design faithful without turning labels such as “lb,”
+“queue,” or “topic” into hidden behavior. The creator decides which object
+moves, which path it takes, and whether several motions use <code>seq</code> or <code>par</code>.</p>
+<p>The clustered web-services example recreates Route 53, ELB, three ECS services,
+an RDS primary/read-only pair, and ElastiCache. It then distinguishes all cold
+relationships from one database round trip, one cache round trip, and a
+separately authored database-link pulse. Return journeys use separately
+directed connections and recolour the same persistent identity rather than
+playing the incoming path backward. The example gives responses a second visual
+grammar—curved pink dashed arrows, a heavier glow, and a matching response
+identity—while requests remain clean solid strokes:</p>
+<pre><code class="language-manic">title("Clustered Web Services on AWS");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.025), "Made With Manic");
+text(kicker, (cx, h*0.055), "AWS ARCHITECTURE · CLUSTERED WEB SERVICES");
+text(headline, (cx, h*0.115), "Requests in. Responses back.");
+text(caption, (cx, h*0.935), "Dashed paths describe what is connected—not what is moving now.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.84, h*0.70);
+  text(requestKey, (w*0.36, h*0.225), "REQUEST");
+  arrow(requestSample, (w*0.48, h*0.225), (w*0.64, h*0.225));
+  text(responseKey, (w*0.36, h*0.265), "RESPONSE");
+  arrow(responseSample, (w*0.48, h*0.265), (w*0.64, h*0.265));
+}
+else {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.94, h*0.69);
+  text(requestKey, (w*0.105, h*0.205), "REQUEST");
+  arrow(requestSample, (w*0.15, h*0.205), (w*0.205, h*0.205));
+  text(responseKey, (w*0.105, h*0.245), "RESPONSE");
+  arrow(responseSample, (w*0.15, h*0.245), (w*0.205, h*0.245));
+}
+size(requestKey, 15*u); color(requestKey, fg); bold(requestKey);
+size(responseKey, 15*u); hue(responseKey, 328, 0.90, 0.62); bold(responseKey);
+color(requestSample, fg); stroke(requestSample, 3*u);
+hue(responseSample, 328, 0.90, 0.62); dashed(responseSample, 10*u, 7*u);
+stroke(responseSample, 4*u); glow(responseSample, 0.85);
+hidden(requestKey); hidden(requestSample);
+hidden(responseKey); hidden(responseSample);
+
+node(dns, clusteredWeb, "aws:route53", "dns");
+node(lb, clusteredWeb, "aws:elb", "lb");
+
+cluster(services, clusteredWeb, "SERVICES");
+node(web1, services, "aws:ecs", "web1");
+node(web2, services, "aws:ecs", "web2");
+node(web3, services, "aws:ecs", "web3");
+
+cluster(database, clusteredWeb, "DB CLUSTER");
+node(dbPrimary, database, "aws:rds", "userdb");
+node(dbReplica, database, "aws:rds", "userdb ro");
+
+node(memcached, clusteredWeb, "aws:elasticache", "memcached");
+
+connect(dnsToLb, dns, lb);
+connect(lbToServices, lb, services);
+connect(servicesToDb, services, dbPrimary);
+connect(servicesToCache, services, memcached, 145*u);
+connect(dbToServices, dbPrimary, services, 42*u);
+connect(servicesToLb, services, lb, 42*u);
+connect(cacheToWeb2, memcached, web2, 145*u);
+hue(dbToServices.hot, 328, 0.90, 0.62);
+hue(servicesToLb.hot, 328, 0.90, 0.62);
+hue(cacheToWeb2.hot, 328, 0.90, 0.62);
+dashed(dbToServices.hot, 10*u, 7*u);
+dashed(servicesToLb.hot, 10*u, 7*u);
+dashed(cacheToWeb2.hot, 10*u, 7*u);
+stroke(dbToServices.hot, 4.5*u); glow(dbToServices.hot, 0.95);
+stroke(servicesToLb.hot, 4.5*u); glow(servicesToLb.hot, 0.95);
+stroke(cacheToWeb2.hot, 4.5*u); glow(cacheToWeb2.hot, 0.95);
+link(replication, dbPrimary.card, dbReplica.card);
+dashed(replication); color(replication, dim); stroke(replication, 2.5*u);
+
+message(pageRequest, dns, "GET");
+message(cacheRead, web2, "READ");
+
+hidden(clusteredWeb.nodes);
+hidden(services.parts); hidden(database.parts);
+hidden(pageRequest.parts); hidden(cacheRead.parts);
+untraced(dnsToLb); untraced(lbToServices);
+untraced(servicesToDb); untraced(servicesToCache);
+untraced(dbToServices); untraced(servicesToLb); untraced(cacheToWeb2);
+untraced(replication);
+
+step("entry") {
+  par {
+    show(dns, 0.40);
+    show(lb, 0.40);
+    say(caption, "Route 53 and the load balancer form the public entry into the design.", 0.40);
+  }
+}
+wait(0.20);
+
+step("service-pool") {
+  par {
+    show(services.parts, 0.45);
+    stagger(0.10) {
+      show(web1, 0.35);
+      show(web2, 0.35);
+      show(web3, 0.35);
+    }
+    say(caption, "Three ECS services share one ownership boundary; no runtime choice is implied yet.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state") {
+  par {
+    show(database.parts, 0.45);
+    show(dbPrimary, 0.40);
+    show(dbReplica, 0.40);
+    show(memcached, 0.40);
+    say(caption, "The database cluster and cache complete the static architecture.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(dnsToLb, 0.40);
+    draw(lbToServices, 0.60);
+    draw(servicesToDb, 0.60);
+    draw(servicesToCache, 0.60);
+    draw(replication, 0.45);
+    show(requestKey, 0.35); show(requestSample, 0.35);
+    show(responseKey, 0.35); show(responseSample, 0.35);
+    say(caption, "Every dashed lane is possible. The next moving object will identify the path actually used.", 0.40);
+  }
+}
+wait(0.30);
+
+step("request-to-database") {
+  par {
+    seq {
+      show(pageRequest.parts, 0.20);
+      route(pageRequest, dnsToLb, 0.65, smooth);
+      route(pageRequest, lbToServices, 0.90, smooth);
+      route(pageRequest, servicesToDb, 0.90, smooth);
+    }
+    say(caption, "This request follows one authored lane: dns → lb → web1 → userdb.", 0.40);
+  }
+}
+wait(0.35);
+
+step("database-response") {
+  par {
+    seq {
+      par {
+        say(pageRequest.label, "200 OK", 0.25);
+        to(pageRequest.parts, hue, 328, 0.25, smooth);
+      }
+      route(pageRequest, dbToServices, 0.90, smooth);
+      route(pageRequest, servicesToLb, 0.90, smooth);
+    }
+    say(caption, "The same identity returns userdb → web1 → lb. DNS resolved the name; it is not the HTTP response path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("cache-round-trip") {
+  par {
+    seq {
+      show(cacheRead.parts, 0.20);
+      route(cacheRead, servicesToCache, 1.05, smooth);
+      par {
+        say(cacheRead.label, "HIT", 0.25);
+        to(cacheRead.parts, hue, 328, 0.25, smooth);
+      }
+      route(cacheRead, cacheToWeb2, 1.05, smooth);
+    }
+    say(caption, "A separate cache read travels web2 → memcached, becomes HIT, and returns to that same service.", 0.40);
+  }
+}
+wait(0.35);
+
+step("replica-relationship") {
+  par {
+    flow(replication, 3.20, both, continuous);
+    say(caption, "The neutral database link can carry a two-way visual pulse only because the creator asked for it.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70);
+    pulse(database.parts, 0.70);
+    say(caption, "Architecture stays readable; objects, paths, timing, and composition tell the runtime story.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<h2 id="infer-one-complete-hot-path"><a class="header" href="#infer-one-complete-hot-path">Infer one complete hot path</a></h2>
+<p>For the common architecture-explainer shot, Manic can follow the graph itself:</p>
+<pre><code class="language-manic">message(event, source, "EVENT");
+
+step("runtime") {
+  hotpath(event, 6.0, 27);
+}
+</code></pre>
+<p><code>hotpath(message, [duration], [seed])</code> begins at the message’s current node,
+finds valid outgoing physical lanes, chooses one at every fan-out, and keeps the
+same dot moving until it reaches a sink. Only the selected lanes illuminate;
+all other relationships stay dashed and quiet.</p>
+<p>The optional seed controls the branch choices. The result feels random to a
+viewer but is deterministic across previews, backend renders, and WASM. Change
+the seed to show another valid execution without rewriting the story. Use
+<code>route</code> when the exact service sequence is part of the lesson; use <code>hotpath</code>
+when the lesson is “one possible runtime through this topology.”</p>
+<h2 id="directional-and-continuous-flow"><a class="header" href="#directional-and-continuous-flow">Directional and continuous flow</a></h2>
+<pre><code class="language-manic">flow(path, 0.8);                         // forward, one clean pulse
+flow(path, 4.0, forward, continuous);    // finite repeating stream
+flow(returnPath, 1.0, reverse, once);    // reverse pulse on generic geometry
+flow(syncPath, 4.0, both, continuous);   // independent duplex streams
+</code></pre>
+<p>The full signature is:</p>
+<pre><code class="language-text">flow(path, [duration], [forward|reverse|both], [once|continuous])
+</code></pre>
+<p>Continuous flow chooses an integer number of length-aware cycles. It begins
+empty and ends on a cycle boundary, so seeking remains deterministic and the
+stream drains instead of freezing halfway along the connection. In a Systems
+story, prefer a separately directed return connection when the topology truly
+contains a response path.</p>
+<h2 id="complete-event-processing-story"><a class="header" href="#complete-event-processing-story">Complete event-processing story</a></h2>
+<pre><code class="language-manic">title("Event Processing on AWS — From Topology to Hot Path");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.055), "AWS ARCHITECTURE · EVENT PROCESSING");
+text(headline, (cx, h*0.115), "One topology. One event. One visible hot path.");
+text(caption, (cx, h*0.935), "Dashed relationships show every route the architecture allows.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(eventProcessing, (cx, h*0.51), w*0.82, h*0.70);
+}
+else {
+  architecture(eventProcessing, (cx, h*0.51), w*0.92, h*0.69);
+}
+
+node(source, eventProcessing, "aws:eks", "K8s Source");
+cluster(flows, eventProcessing, "EVENT FLOWS");
+cluster(workers, flows, "EVENT WORKERS");
+node(worker1, workers, "aws:ecs", "Worker 1");
+node(worker2, workers, "aws:ecs", "Worker 2");
+node(worker3, workers, "aws:ecs", "Worker 3");
+node(queue, flows, "aws:sqs", "Event Queue");
+cluster(processing, flows, "PROCESSING");
+node(proc1, processing, "aws:lambda", "Processor 1");
+node(proc2, processing, "aws:lambda", "Processor 2");
+node(proc3, processing, "aws:lambda", "Processor 3");
+node(store, eventProcessing, "aws:s3", "Events Store");
+node(warehouse, eventProcessing, "aws:redshift", "Analytics");
+
+connect(toWorkers, source, workers);
+connect(toQueue, workers, queue);
+connect(toHandlers, queue, processing);
+connect(toStore, processing, store);
+connect(toAnalytics, processing, warehouse);
+
+message(event, source, "EVENT");
+
+hidden(eventProcessing.nodes);
+hidden(flows.parts); hidden(workers.parts); hidden(processing.parts);
+hidden(event.parts);
+untraced(toWorkers); untraced(toQueue); untraced(toHandlers);
+untraced(toStore); untraced(toAnalytics);
+
+step("source") {
+  par {
+    show(source, 0.45);
+    say(caption, "EKS is the source; the rest of the system is still only structure.", 0.40);
+  }
+}
+wait(0.25);
+
+step("ownership") {
+  par {
+    show(flows.parts, 0.50);
+    show(workers.parts, 0.45);
+    stagger(0.10) { show(worker1, 0.35); show(worker2, 0.35); show(worker3, 0.35); }
+    show(queue, 0.40);
+    show(processing.parts, 0.45);
+    stagger(0.10) { show(proc1, 0.35); show(proc2, 0.35); show(proc3, 0.35); }
+    show(store, 0.40); show(warehouse, 0.40);
+    say(caption, "Nested boundaries reveal ownership without hiding the individual services.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(toWorkers, 0.55);
+    draw(toQueue, 0.55);
+    draw(toHandlers, 0.55);
+    draw(toStore, 0.55); draw(toAnalytics, 0.55);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.35);
+
+step("runtime-hot-path") {
+  par {
+    show(event.parts, 0.25);
+    hotpath(event, 6.20, 27);
+    say(caption, "The event now chooses valid branches and travels end-to-end as one continuous hot path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(event.parts, 0.70);
+    say(caption, "Cold topology explains relationships. The moving dot proves what happened now.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<p>Run and audit it directly:</p>
+<pre><code class="language-bash">manic examples/aws-event-processing-clusters-poc.manic
+manic check examples/aws-event-processing-clusters-poc.manic --canvas all
+</code></pre>
+<h2 id="what-the-kit-will-not-do-for-you"><a class="header" href="#what-the-kit-will-not-do-for-you">What the kit will not do for you</a></h2>
+<p>By design, the kit never infers behaviour from an icon or a label. It will not
+decide that a node is a load balancer, a queue, or a database, and it never
+simulates balancing, buffering, broadcast, retries, or failure. You author what
+happens with explicit <code>route</code>, <code>flow</code>, <code>seq</code>, <code>par</code>, colour, and ordinary verbs
+— that is what keeps the vocabulary small and the diagram honest.</p>
+<p>Two practical tips:</p>
+<ul>
+<li><strong>Draw the return path, don’t reverse the arrow.</strong> A response is its own
+connection with its own colour, not the request lane played backward.</li>
+<li><strong>For very dense diagrams, shape the layout yourself.</strong> Group nodes into
+clusters and split wide rows into columns so nothing overflows the frame.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="kits.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="systems-icons.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="kits.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="systems-icons.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

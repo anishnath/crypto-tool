@@ -1,0 +1,82 @@
+title("Kubernetes Cluster Components");
+canvas("16:9");
+template("neon");
+
+// ---- boxes (drawn first, behind; hollow-ish so icons read on top) ----
+rect(clusterBox, (800, 380), 880, 560);   outline(clusterBox, dim); opacity(clusterBox, 0.22);
+rect(cpBox,      (575, 440), 400, 430);    outline(cpBox, cyan);    opacity(cpBox, 0.28);
+rect(node1Box,   (1000, 320), 400, 150);   outline(node1Box, dim);  opacity(node1Box, 0.35);
+rect(node2Box,   (1000, 520), 400, 150);   outline(node2Box, dim);  opacity(node2Box, 0.35);
+
+text(clusterLabel, (470, 130), "Kubernetes cluster"); size(clusterLabel, 26); bold(clusterLabel);
+text(cpLabel, (490, 250), "Control Plane"); size(cpLabel, 20); color(cpLabel, cyan); bold(cpLabel);
+text(n1Label, (855, 268), "Node"); size(n1Label, 18); color(n1Label, dim); bold(n1Label);
+text(n2Label, (855, 468), "Node"); size(n2Label, 18); color(n2Label, dim); bold(n2Label);
+
+// ---- cloud provider API (outside the cluster, left) ----
+ellipse(cloud, (165, 360), 210, 120); outline(cloud, blue); opacity(cloud, 0.30);
+text(cloudLabel, (165, 360), "Cloud provider\nAPI"); size(cloudLabel, 20); color(cloudLabel, blue); bold(cloudLabel);
+
+// ---- control-plane connections (api is the hub) ----
+line(lCm,   (615, 400), (615, 320));   stroke(lCm, 3);
+line(lSched,(615, 485), (615, 560));   stroke(lSched, 3);
+line(lEtcd, (590, 465), (505, 500));   stroke(lEtcd, 3);
+line(lCcmApi, (505, 375), (580, 425)); stroke(lCcmApi, 3); dashed(lCcmApi, 9, 7);
+arrow(aCloud, (440, 360), (270, 360)); stroke(aCloud, 3);
+line(lN1, (800, 320), (660, 425));     stroke(lN1, 3);
+line(lN2, (800, 520), (660, 450));     stroke(lN2, 3);
+
+// ---- component icons (placed at the reference positions) ----
+image(api,   (615, 440), "asset:diagrams/k8s/controlplane/api.png", 62, 62);
+image(cm,    (615, 285), "asset:diagrams/k8s/controlplane/c-m.png", 58, 58);
+image(sched, (615, 590), "asset:diagrams/k8s/controlplane/sched.png", 58, 58);
+image(ccm,   (470, 360), "asset:diagrams/k8s/controlplane/c-c-m.png", 58, 58);
+image(etcd,  (470, 510), "asset:diagrams/k8s/infra/etcd.png", 58, 58);
+image(kubelet1, (890, 335), "asset:diagrams/k8s/controlplane/kubelet.png", 54, 54);
+image(kproxy1,  (1100, 335), "asset:diagrams/k8s/controlplane/k-proxy.png", 54, 54);
+image(kubelet2, (890, 535), "asset:diagrams/k8s/controlplane/kubelet.png", 54, 54);
+image(kproxy2,  (1100, 535), "asset:diagrams/k8s/controlplane/k-proxy.png", 54, 54);
+
+// ---- icon captions ----
+text(tApi, (615, 478), "api"); size(tApi, 15);
+text(tCm, (615, 320), "c-m"); size(tCm, 15);
+text(tSched, (615, 625), "sched"); size(tSched, 15);
+text(tCcm, (470, 395), "c-c-m"); size(tCcm, 15);
+text(tEtcd, (470, 545), "etcd"); size(tEtcd, 15);
+text(tKl1, (890, 370), "kubelet"); size(tKl1, 14);
+text(tKp1, (1100, 370), "k-proxy"); size(tKp1, 14);
+text(tKl2, (890, 570), "kubelet"); size(tKl2, 14);
+text(tKp2, (1100, 570), "k-proxy"); size(tKp2, 14);
+
+// ---- data flow: ordinary manic verbs on the hand-drawn wires (NO systems kit) ----
+text(cap, (cx, h*0.95), "Every component talks through the API server."); size(cap, 20); color(cap, dim); wrap(cap, w*0.8);
+dot(packet, (800, 320), 11); color(packet, lime); hidden(packet);
+
+wait(0.5);
+par {
+  flow(lN1, 1.0); flow(lN2, 1.0);
+  say(cap, "kubelets report node and pod status up to the API server", 0.4);
+}
+par {
+  flow(lCm, 1.0); flow(lSched, 1.0);
+  say(cap, "the scheduler and controllers act only through the API server", 0.4);
+}
+par {
+  flow(lEtcd, 1.0);
+  say(cap, "the API server reads and writes all cluster state in etcd", 0.4);
+}
+par {
+  flow(aCloud, 1.0);
+  say(cap, "the cloud-controller-manager provisions infrastructure via the cloud API", 0.4);
+}
+wait(0.2);
+par {
+  show(packet, 0.2);
+  say(cap, "one node update: kubelet -> API server -> etcd", 0.4);
+}
+seq {
+  travel(packet, lN1, 0.9, smooth);
+  travel(packet, lEtcd, 0.9, smooth);
+}
+pulse(api, 0.7);
+wait(1.4);

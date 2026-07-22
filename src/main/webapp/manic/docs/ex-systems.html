@@ -1,0 +1,2368 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Diagrams - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Write animations as plain text. A friendly, example-first guide for creators.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-835c3647.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-122320bb.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="diagrams"><a class="header" href="#diagrams">Diagrams</a></h1>
+<p>Animated diagrams — not another static boxes-and-arrows generator. Declare a bounded architecture with auto-positioned nodes and directed connections, then move one persistent request through the graph. Node artwork comes from a string kind (<code>aws:lambda</code>, <code>gcp:bigquery</code>, <code>onprem:redis</code>, <code>k8s:pod</code> — 17 providers, see <a href="systems-icons.html">icon reference &amp; aliases</a>); paths are coloured by relationship. The kit never infers behaviour — the creator authors it with <code>route</code>, <code>flow</code>, and ordinary verbs.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="systems-foundation"><a class="header" href="#systems-foundation">systems-foundation</a></h2>
+<p>Provider-neutral: only native <code>client</code>/<code>gateway</code>/<code>service</code>/<code>cache</code>/<code>database</code> archetypes — reveals cold topology, sends one persistent request forward, and returns the same identity over separately directed paths, with no cloud assets.</p>
+<pre><code class="language-manic">title("Systems Foundation — One Request, One Return");
+canvas("16:9");
+template("mono");
+
+watermark(mark, (160, 54), "Made With Manic");
+text(kicker, (cx, 54), "PROVIDER-NEUTRAL SYSTEMS");
+text(headline, (cx, 104), "Structure is not behaviour");
+text(caption, (cx, h-58), "Cold paths show what is possible. One persistent dot shows what actually happened.");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+size(caption, 20); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(platform, (cx, cy+15), w*0.88, h*0.58);
+node(user, platform, "client", "User");
+node(edge, platform, "gateway", "Gateway");
+node(api, platform, "service", "API Service");
+node(cache, platform, "cache", "Cache");
+node(db, platform, "database", "Database");
+
+connect(toEdge, user, edge);
+connect(toApi, edge, api);
+connect(toCache, api, cache);
+// One semantic connection: Manic chooses node-boundary ports and keeps the
+// packet continuous across every internal orthogonal segment.
+connect(toDb, cache, db, orthogonal, right, top);
+connect(dbReturn, db, api, 95);
+connect(apiReturn, api, edge, 75);
+connect(edgeReturn, edge, user, 55);
+
+message(packet, user, "GET");
+hidden(kicker); hidden(headline); hidden(caption);
+untraced(platform.connections);
+hidden(packet);
+
+step("structure") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.45);
+    show(caption, 0.45);
+    draw(platform.connections, 1.20, smooth);
+  }
+}
+wait(0.45);
+
+step("continuous-round-trip") {
+  par {
+    show(packet, 0.20);
+    say(caption, "One dot moves continuously end to end. Every route hand-off preserves its identity.", 0.35);
+    seq {
+      route(packet, toEdge, 0.70, linear);
+      route(packet, toApi, 0.70, linear);
+      route(packet, toCache, 0.70, linear);
+      route(packet, toDb, 0.70, linear);
+      par {
+        recolor(packet, magenta, 0.30);
+        route(packet, dbReturn, 0.80, linear);
+      }
+      route(packet, apiReturn, 0.75, linear);
+      route(packet, edgeReturn, 0.75, linear);
+    }
+  }
+}
+wait(0.45);
+
+step("proof") {
+  par {
+    pulse(packet, 0.70);
+    say(caption, "The same dot is back at the User: one identity, seven connected journeys, zero animation gaps.", 0.40);
+  }
+}
+wait(1.10);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VMhagIpa65Y" title="Animated Architecture, No Cloud Assets — manic Systems Kit" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="systems-architecture-poc"><a class="header" href="#systems-architecture-poc">systems-architecture-poc</a></h2>
+<p>The first story: one Buy request travels Browser → CloudFront → API Gateway → Lambda → DynamoDB → SQS, auto-laid horizontally or vertically by the responsive region.</p>
+<pre><code class="language-manic">title("Systems Kit PoC — What Happens When You Click Buy?");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.07), "Made With Manic");
+text(kicker, (cx, h*0.075), "SYSTEMS KIT · REQUEST JOURNEY");
+text(headline, (cx, h*0.155), "What happens when you click Buy?");
+text(caption, (cx, h*0.88), "One request keeps its identity while the architecture responds.");
+size(kicker, 18*u); color(kicker, dim); bold(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.84);
+size(caption, 19*u); color(caption, dim); wrap(caption, w*0.82);
+
+architecture(shop, (cx, h*0.49), w*0.84, h*0.58);
+node(browser, shop, "client", "Browser");
+node(edge, shop, "aws:cloudfront", "CloudFront");
+node(api, shop, "aws:api-gateway", "API Gateway");
+node(checkout, shop, "aws:lambda", "Checkout");
+node(orders, shop, "aws:dynamodb", "Orders");
+node(events, shop, "aws:sqs", "Events");
+
+connect(toEdge, browser, edge);
+connect(toApi, edge, api);
+connect(toCheckout, api, checkout);
+connect(toOrders, checkout, orders);
+connect(toEvents, orders, events);
+request(order, browser, "BUY");
+
+hidden(shop.nodes);
+untraced(shop.connections);
+hidden(order.parts);
+
+step("architecture") {
+  stagger(0.10) {
+    show(browser, 0.30); show(edge, 0.30); show(api, 0.30);
+    show(checkout, 0.30); show(orders, 0.30); show(events, 0.30);
+  }
+}
+wait(0.25);
+
+step("request") {
+  par {
+    show(order.parts, 0.30);
+    draw(shop.connections, 0.90);
+    say(caption, "The browser sends one request into the edge network.", 0.35);
+  }
+}
+wait(0.20);
+
+step("edge") {
+  par {
+    route(order, toEdge, 0.90, smooth);
+    say(caption, "CloudFront receives it first, close to the customer.", 0.35);
+  }
+}
+
+step("api") {
+  par {
+    route(order, toApi, 0.90, smooth);
+    say(caption, "API Gateway validates and routes the operation.", 0.35);
+  }
+}
+
+step("compute") {
+  par {
+    route(order, toCheckout, 0.90, smooth);
+    say(caption, "Lambda executes the checkout logic.", 0.35);
+  }
+}
+
+step("persist") {
+  par {
+    route(order, toOrders, 0.90, smooth);
+    say(caption, "DynamoDB persists the order.", 0.35);
+  }
+}
+
+step("event") {
+  par {
+    route(order, toEvents, 0.90, smooth);
+    say(caption, "SQS decouples the work that can happen next.", 0.35);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(shop.nodes, 0.75);
+    say(caption, "Architecture becomes understandable when we follow behavior—not only boxes and arrows.", 0.45);
+  }
+}
+wait(1.20);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mzM3owjKGHo" title="Watch One Request Cross a Whole AWS Architecture — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="systems-arrow-patterns"><a class="header" href="#systems-arrow-patterns">systems-arrow-patterns</a></h2>
+<p>The connection-grammar reference: one-way, parallel, round-trip, port-aware orthogonal, fan-out, and diagonal-duplex lanes.</p>
+<pre><code class="language-manic">title("Systems Foundation — Arrow Patterns");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+let pw = w*0.27;
+let ph = h*0.25;
+let x1 = w*0.18;
+let x2 = w*0.50;
+let x3 = w*0.82;
+let y1 = h*0.34;
+let y2 = h*0.68;
+
+watermark(mark, (w*0.09, h*0.045), "Made With Manic");
+text(kicker, (cx, h*0.045), "SYSTEMS FOUNDATION · DIRECTION IS VISIBLE");
+text(headline, (cx, h*0.12), "One arrow grammar, many delivery stories");
+text(caption, (cx, h*0.925), "Arrows describe paths. seq, par, travel, and flow describe what moves through them.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 31*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.88);
+
+rect(p1, (x1,y1), pw,ph); outlined(p1); color(p1, dim); stroke(p1, 2*u);
+rect(p2, (x2,y1), pw,ph); outlined(p2); color(p2, dim); stroke(p2, 2*u);
+rect(p3, (x3,y1), pw,ph); outlined(p3); color(p3, dim); stroke(p3, 2*u);
+rect(p4, (x1,y2), pw,ph); outlined(p4); color(p4, dim); stroke(p4, 2*u);
+rect(p5, (x2,y2), pw,ph); outlined(p5); color(p5, dim); stroke(p5, 2*u);
+rect(p6, (x3,y2), pw,ph); outlined(p6); color(p6, dim); stroke(p6, 2*u);
+
+text(t1, (x1,y1-ph*0.36), "ONE WAY");
+text(t2, (x2,y1-ph*0.36), "ROUND TRIP");
+text(t3, (x3,y1-ph*0.36), "ORTHOGONAL");
+text(t4, (x1,y2-ph*0.36), "VERTICAL PORTS");
+text(t5, (x2,y2-ph*0.36), "FAN OUT");
+text(t6, (x3,y2-ph*0.36), "DIAGONAL DUPLEX");
+size(t1, 16*u); size(t2, 16*u); size(t3, 16*u);
+size(t4, 16*u); size(t5, 16*u); size(t6, 16*u);
+color(t1, dim); color(t2, dim); color(t3, dim);
+color(t4, dim); color(t5, dim); color(t6, dim);
+bold(t1); bold(t2); bold(t3); bold(t4); bold(t5); bold(t6);
+
+// 1 — one source, one destination.
+arrow(one, (x1-pw*0.34,y1+ph*0.08), (x1+pw*0.34,y1+ph*0.08));
+color(one, cyan); stroke(one, 4*u); untraced(one);
+circle(oneDot, (x1-pw*0.34,y1+ph*0.08), 8*u); color(oneDot, cyan); hidden(oneDot);
+
+// 2 — request and response remain separate, honest directions.
+arrow(outbound, (x2-pw*0.34,y1), (x2+pw*0.34,y1));
+arrow(inbound, (x2+pw*0.34,y1+ph*0.17), (x2-pw*0.34,y1+ph*0.17));
+color(outbound, cyan); color(inbound, magenta);
+stroke(outbound, 4*u); stroke(inbound, 4*u);
+untraced(outbound); untraced(inbound);
+circle(requestDot, (x2-pw*0.34,y1), 8*u); color(requestDot, cyan); hidden(requestDot);
+circle(responseDot, (x2+pw*0.34,y1+ph*0.17), 8*u); color(responseDot, magenta); hidden(responseDot);
+
+// 3 — generic geometry can draw a stepped path; Systems nodes use one
+// `connect(path, a, b, orthogonal)` declaration for the same routed identity.
+line(elbowA, (x3-pw*0.34,y1-ph*0.02), (x3,y1-ph*0.02));
+line(elbowB, (x3,y1-ph*0.02), (x3,y1+ph*0.20));
+arrow(elbowC, (x3,y1+ph*0.20), (x3+pw*0.34,y1+ph*0.20));
+color(elbowA, gold); color(elbowB, gold); color(elbowC, gold);
+stroke(elbowA, 4*u); stroke(elbowB, 4*u); stroke(elbowC, 4*u);
+untraced(elbowA); untraced(elbowB); untraced(elbowC);
+circle(elbowDot, (x3-pw*0.34,y1-ph*0.02), 8*u); color(elbowDot, gold); hidden(elbowDot);
+
+// 4 — ports can face vertically without changing motion semantics.
+arrow(downLane, (x1-pw*0.12,y2-ph*0.20), (x1-pw*0.12,y2+ph*0.25));
+arrow(upLane, (x1+pw*0.12,y2+ph*0.25), (x1+pw*0.12,y2-ph*0.20));
+color(downLane, cyan); color(upLane, magenta);
+stroke(downLane, 4*u); stroke(upLane, 4*u);
+untraced(downLane); untraced(upLane);
+circle(downDot, (x1-pw*0.12,y2-ph*0.20), 8*u); color(downDot, cyan); hidden(downDot);
+circle(upDot, (x1+pw*0.12,y2+ph*0.25), 8*u); color(upDot, magenta); hidden(upDot);
+
+// 5 — fan-out is three explicitly authored deliveries, not inferred broadcast.
+arrow(fanA, (x2-pw*0.34,y2+ph*0.04), (x2+pw*0.34,y2-ph*0.22));
+arrow(fanB, (x2-pw*0.34,y2+ph*0.04), (x2+pw*0.34,y2+ph*0.04));
+arrow(fanC, (x2-pw*0.34,y2+ph*0.04), (x2+pw*0.34,y2+ph*0.30));
+color(fanA, cyan); color(fanB, cyan); color(fanC, cyan);
+stroke(fanA, 3*u); stroke(fanB, 3*u); stroke(fanC, 3*u);
+untraced(fanA); untraced(fanB); untraced(fanC);
+circle(fanDotA, (x2-pw*0.34,y2+ph*0.04), 7*u); color(fanDotA, cyan); hidden(fanDotA);
+circle(fanDotB, (x2-pw*0.34,y2+ph*0.04), 7*u); color(fanDotB, cyan); hidden(fanDotB);
+circle(fanDotC, (x2-pw*0.34,y2+ph*0.04), 7*u); color(fanDotC, cyan); hidden(fanDotC);
+
+// 6 — diagonal request/return lanes use different styling and directions.
+arrow(diagOut, (x3-pw*0.32,y2+ph*0.24), (x3+pw*0.27,y2-ph*0.22));
+arrow(diagBack, (x3+pw*0.34,y2-ph*0.12), (x3-pw*0.25,y2+ph*0.34));
+color(diagOut, cyan); color(diagBack, magenta); dashed(diagBack);
+stroke(diagOut, 4*u); stroke(diagBack, 4*u);
+untraced(diagOut); untraced(diagBack);
+circle(diagRequest, (x3-pw*0.32,y2+ph*0.24), 8*u); color(diagRequest, cyan); hidden(diagRequest);
+circle(diagResponse, (x3+pw*0.34,y2-ph*0.12), 8*u); color(diagResponse, magenta); hidden(diagResponse);
+
+tag(p1, cards); tag(p2, cards); tag(p3, cards); tag(p4, cards); tag(p5, cards); tag(p6, cards);
+tag(t1, cards); tag(t2, cards); tag(t3, cards); tag(t4, cards); tag(t5, cards); tag(t6, cards);
+tag(one, paths); tag(outbound, paths); tag(inbound, paths);
+tag(elbowA, paths); tag(elbowB, paths); tag(elbowC, paths);
+tag(downLane, paths); tag(upLane, paths);
+tag(fanA, paths); tag(fanB, paths); tag(fanC, paths);
+tag(diagOut, paths); tag(diagBack, paths);
+
+hidden(kicker); hidden(headline); hidden(caption); hidden(cards);
+
+step("arrow-grammar") {
+  par {
+    show(kicker, 0.30);
+    show(headline, 0.45);
+    show(caption, 0.40);
+    show(cards, 0.45);
+    draw(paths, 1.10, smooth);
+  }
+}
+wait(0.35);
+
+step("traffic") {
+  par {
+    show(oneDot, 0.15); travel(oneDot, one, 1.20, linear); flow(one, 1.20);
+    seq {
+      show(requestDot, 0.15); travel(requestDot, outbound, 0.65, linear);
+      show(responseDot, 0.15); travel(responseDot, inbound, 0.65, linear);
+    }
+    seq {
+      show(elbowDot, 0.15);
+      travel(elbowDot, elbowA, 0.40, linear);
+      travel(elbowDot, elbowB, 0.35, linear);
+      travel(elbowDot, elbowC, 0.45, linear);
+    }
+    par {
+      show(downDot, 0.15); travel(downDot, downLane, 1.20, linear);
+      show(upDot, 0.15); travel(upDot, upLane, 1.20, linear);
+    }
+    par {
+      show(fanDotA, 0.15); travel(fanDotA, fanA, 1.20, linear);
+      show(fanDotB, 0.15); travel(fanDotB, fanB, 1.20, linear);
+      show(fanDotC, 0.15); travel(fanDotC, fanC, 1.20, linear);
+    }
+    par {
+      show(diagRequest, 0.15); travel(diagRequest, diagOut, 1.20, linear);
+      show(diagResponse, 0.15); travel(diagResponse, diagBack, 1.20, linear);
+    }
+  }
+}
+wait(0.55);
+
+step("creator-controls-semantics") {
+  par {
+    pulse(paths, 0.75);
+    say(caption, "The same paths can mean request, response, queue delivery, broadcast, or pure motion—the creator decides.", 0.40);
+  }
+}
+wait(1.20);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/jbjiZwKPh-M" title="Every Connection Pattern in One Diagram — manic Systems Kit" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="systems-rabbitmq-consumers"><a class="header" href="#systems-rabbitmq-consumers">systems-rabbitmq-consumers</a></h2>
+<p>Authored one-of-many delivery: messages 101/102/103 explicitly select different workers — the kit never infers RabbitMQ or round-robin behaviour.</p>
+<pre><code class="language-manic">title("RabbitMQ Consumers — One Message, One Worker");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.14, h*0.035), "Made With Manic");
+text(kicker, (cx, h*0.055), "SYSTEMS KIT · COMPETING CONSUMERS");
+text(headline, (cx, h*0.125), "One queue. Three workers. One owner per message.");
+text(caption, (cx, h*0.94), "Cold paths show every legal route; the moving job shows the route selected now.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(runtime, (cx, h*0.52), w*0.84, h*0.70);
+}
+else {
+  architecture(runtime, (cx, h*0.52), w*0.90, h*0.68);
+}
+
+node(queue, runtime, "queue", "RabbitMQ Queue");
+
+cluster(consumers, runtime, "RABBITMQ CONSUMERS");
+node(worker1, consumers, "service", "Pod Worker 1");
+node(worker2, consumers, "service", "Pod Worker 2");
+node(worker3, consumers, "service", "Pod Worker 3");
+
+node(database, runtime, "database", "Database");
+
+// Every lane is structural possibility. Explicit ports keep the upper and
+// lower routes orthogonal without changing the semantic connection identity.
+connect(queueToWorker1, queue, worker1, orthogonal, right, left);
+connect(queueToWorker2, queue, worker2);
+connect(queueToWorker3, queue, worker3, orthogonal, right, left);
+connect(worker1ToDatabase, worker1, database, orthogonal, right, left);
+connect(worker2ToDatabase, worker2, database);
+connect(worker3ToDatabase, worker3, database, orthogonal, right, left);
+
+message(job101, queue, "101");
+message(job102, queue, "102");
+message(job103, queue, "103");
+
+hidden(kicker); hidden(headline); hidden(caption);
+hidden(runtime.nodes); hidden(consumers.parts);
+hidden(job101.parts); hidden(job102.parts); hidden(job103.parts);
+untraced(runtime.connections);
+
+step("queue-and-consumer-pool") {
+  par {
+    show(kicker, 0.30); show(headline, 0.45); show(caption, 0.40);
+    show(queue, 0.35);
+    show(consumers.parts, 0.45);
+    stagger(0.10) {
+      show(worker1, 0.32);
+      show(worker2, 0.32);
+      show(worker3, 0.32);
+    }
+    say(caption, "The queue and three workers are structure only. No delivery policy is inferred from their icons.", 0.40);
+  }
+}
+wait(0.25);
+
+step("shared-database") {
+  par {
+    show(database, 0.38);
+    draw(runtime.connections, 1.10, smooth);
+    say(caption, "Each worker can consume from RabbitMQ and write its result to the same database.", 0.40);
+  }
+}
+wait(0.35);
+
+step("message-101-selects-worker-2") {
+  par {
+    seq {
+      show(job101.parts, 0.18);
+      route(job101, queueToWorker2, 0.90, linear);
+      route(job101, worker2ToDatabase, 0.90, linear);
+    }
+    say(caption, "Message 101 is delivered to Worker 2 only. The upper and lower consumer routes stay cold.", 0.40);
+  }
+}
+wait(0.35);
+
+step("message-102-selects-worker-1") {
+  par {
+    fade(job101.parts, 0.20);
+    fade(queueToWorker2.hot, 0.25); fade(worker2ToDatabase.hot, 0.25);
+    seq {
+      show(job102.parts, 0.18);
+      route(job102, queueToWorker1, 1.05, linear);
+      route(job102, worker1ToDatabase, 1.05, linear);
+    }
+    say(caption, "The next message can select Worker 1. Orthogonal turns preserve the same moving identity.", 0.40);
+  }
+}
+wait(0.35);
+
+step("message-103-selects-worker-3") {
+  par {
+    fade(job102.parts, 0.20);
+    fade(queueToWorker1.hot, 0.25); fade(worker1ToDatabase.hot, 0.25);
+    seq {
+      show(job103.parts, 0.18);
+      route(job103, queueToWorker3, 1.05, linear);
+      route(job103, worker3ToDatabase, 1.05, linear);
+    }
+    say(caption, "Message 103 selects Worker 3: three jobs were shared, never broadcast as three copies.", 0.40);
+  }
+}
+wait(0.45);
+
+step("takeaway") {
+  par {
+    pulse(queue, 0.65); pulse(consumers.parts, 0.75); pulse(database, 0.65);
+    say(caption, "Manic does not guess RabbitMQ semantics—the creator explicitly authors each selected delivery.", 0.45);
+  }
+}
+wait(1.30);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/XMR3hm_a01I" title="One-of-Many Delivery, Authored Not Inferred — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="aws-three-tier-web-application"><a class="header" href="#aws-three-tier-web-application">aws-three-tier-web-application</a></h2>
+<p>Presentation / Application / Data as three responsive tiers; one request travels Route 53 → CloudFront → ELB → ECS → ElastiCache → RDS.</p>
+<pre><code class="language-manic">title("Designing and Building a Three-Tier Web Application Architecture on AWS");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.06), "Made With Manic");
+text(kicker, (cx, h*0.065), "AWS ARCHITECTURE · THREE TIERS");
+text(headline, (cx, h*0.145), "Designing a Three-Tier Web Application");
+text(caption, (cx, h*0.91), "Each tier has one responsibility—and the request keeps moving.");
+size(kicker, 17*u); color(kicker, dim); bold(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.84);
+
+if h &gt; 1.25*w {
+  architecture(presentation, (cx, h*0.30), w*0.72, h*0.18);
+  architecture(application, (cx, h*0.52), w*0.72, h*0.18);
+  architecture(dataTier, (cx, h*0.74), w*0.72, h*0.18);
+  text(presentationLabel, (w*0.13, h*0.30), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.13, h*0.52), "2 · APPLICATION");
+  text(dataLabel, (w*0.13, h*0.74), "3 · DATA");
+}
+else {
+  architecture(presentation, (w*0.20, h*0.50), w*0.27, h*0.55);
+  architecture(application, (w*0.50, h*0.50), w*0.27, h*0.55);
+  architecture(dataTier, (w*0.80, h*0.50), w*0.27, h*0.55);
+  text(presentationLabel, (w*0.20, h*0.235), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.50, h*0.235), "2 · APPLICATION");
+  text(dataLabel, (w*0.80, h*0.235), "3 · DATA");
+}
+
+size(presentationLabel, 16*u); color(presentationLabel, cyan); bold(presentationLabel);
+size(applicationLabel, 16*u); color(applicationLabel, magenta); bold(applicationLabel);
+size(dataLabel, 16*u); color(dataLabel, gold); bold(dataLabel);
+
+node(dns, presentation, "aws:route53", "Route 53");
+node(cdn, presentation, "aws:cloudfront", "CloudFront");
+node(balancer, application, "aws:elb", "Load Balancer");
+node(app, application, "aws:ecs", "ECS Service");
+node(cache, dataTier, "aws:elasticache", "ElastiCache");
+node(database, dataTier, "aws:rds", "Amazon RDS");
+
+connect(resolvePath, dns, cdn);
+connect(toApplication, cdn, balancer);
+connect(toService, balancer, app);
+connect(toCache, app, cache);
+connect(toDatabase, cache, database);
+request(webRequest, dns, "GET /checkout");
+
+hidden(presentation.nodes); hidden(application.nodes); hidden(dataTier.nodes);
+untraced(resolvePath); untraced(toApplication); untraced(toService);
+untraced(toCache); untraced(toDatabase);
+hidden(webRequest.parts);
+
+step("three-responsibilities") {
+  par {
+    show(presentation.nodes, 0.55);
+    say(caption, "Presentation receives users, resolves DNS, and serves content from the edge.", 0.40);
+  }
+}
+wait(0.20);
+
+step("application-tier") {
+  par {
+    show(application.nodes, 0.55);
+    say(caption, "Application distributes traffic and runs stateless business logic.", 0.40);
+  }
+}
+wait(0.20);
+
+step("data-tier") {
+  par {
+    show(dataTier.nodes, 0.55);
+    say(caption, "Data accelerates repeated reads and persists durable records.", 0.40);
+  }
+}
+wait(0.25);
+
+step("connect-the-tiers") {
+  par {
+    stagger(0.10) {
+      draw(resolvePath, 0.35); draw(toApplication, 0.35); draw(toService, 0.35);
+      draw(toCache, 0.35); draw(toDatabase, 0.35);
+    }
+    show(webRequest.parts, 0.30);
+    say(caption, "Now follow one checkout request through the complete design.", 0.40);
+  }
+}
+wait(0.20);
+
+step("presentation-flow") {
+  par {
+    route(webRequest, resolvePath, 0.80, smooth);
+    say(caption, "Route 53 resolves the domain; CloudFront brings the experience closer to users.", 0.40);
+  }
+}
+
+step("load-balance") {
+  par {
+    route(webRequest, toApplication, 0.95, smooth);
+    say(caption, "The load balancer is the controlled entry into the application tier.", 0.40);
+  }
+}
+
+step("run-the-application") {
+  par {
+    route(webRequest, toService, 0.80, smooth);
+    say(caption, "ECS runs replicated application tasks without mixing them with stored data.", 0.40);
+  }
+}
+
+step("read-fast") {
+  par {
+    route(webRequest, toCache, 0.95, smooth);
+    say(caption, "ElastiCache answers hot reads quickly and protects the database from repeated work.", 0.40);
+  }
+}
+
+step("persist-safely") {
+  par {
+    route(webRequest, toDatabase, 0.80, smooth);
+    say(caption, "Amazon RDS remains the durable source of truth for the transaction.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(presentation.nodes, 0.70);
+    pulse(application.nodes, 0.70);
+    pulse(dataTier.nodes, 0.70);
+    say(caption, "Three tiers isolate delivery, computation, and state—so each can scale and evolve independently.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/3uNmnY6qAII" title="A Three-Tier AWS App, One Moving Request — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="aws-event-processing-clusters-poc"><a class="header" href="#aws-event-processing-clusters-poc">aws-event-processing-clusters-poc</a></h2>
+<p>Nested clusters + parallel topology: EKS → three ECS workers → SQS → three Lambda processors → S3 &amp; Redshift, with one seeded hot path through the fan-out.</p>
+<pre><code class="language-manic">title("Event Processing on AWS — From Topology to Hot Path");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.055), "AWS ARCHITECTURE · EVENT PROCESSING");
+text(headline, (cx, h*0.115), "One topology. One event. One visible hot path.");
+text(caption, (cx, h*0.935), "Dashed relationships show every route the architecture allows.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(eventProcessing, (cx, h*0.51), w*0.82, h*0.70);
+}
+else {
+  architecture(eventProcessing, (cx, h*0.51), w*0.92, h*0.69);
+}
+
+node(source, eventProcessing, "aws:eks", "K8s Source");
+cluster(flows, eventProcessing, "EVENT FLOWS");
+cluster(workers, flows, "EVENT WORKERS");
+node(worker1, workers, "aws:ecs", "Worker 1");
+node(worker2, workers, "aws:ecs", "Worker 2");
+node(worker3, workers, "aws:ecs", "Worker 3");
+node(queue, flows, "aws:sqs", "Event Queue");
+cluster(processing, flows, "PROCESSING");
+node(proc1, processing, "aws:lambda", "Processor 1");
+node(proc2, processing, "aws:lambda", "Processor 2");
+node(proc3, processing, "aws:lambda", "Processor 3");
+node(store, eventProcessing, "aws:s3", "Events Store");
+node(warehouse, eventProcessing, "aws:redshift", "Analytics");
+
+connect(toWorkers, source, workers);
+connect(toQueue, workers, queue);
+connect(toHandlers, queue, processing);
+connect(toStore, processing, store);
+connect(toAnalytics, processing, warehouse);
+
+message(event, source, "EVENT");
+
+hidden(eventProcessing.nodes);
+hidden(flows.parts); hidden(workers.parts); hidden(processing.parts);
+hidden(event.parts);
+untraced(toWorkers); untraced(toQueue); untraced(toHandlers);
+untraced(toStore); untraced(toAnalytics);
+
+step("source") {
+  par {
+    show(source, 0.45);
+    say(caption, "EKS is the source; the rest of the system is still only structure.", 0.40);
+  }
+}
+wait(0.25);
+
+step("ownership") {
+  par {
+    show(flows.parts, 0.50);
+    show(workers.parts, 0.45);
+    stagger(0.10) { show(worker1, 0.35); show(worker2, 0.35); show(worker3, 0.35); }
+    show(queue, 0.40);
+    show(processing.parts, 0.45);
+    stagger(0.10) { show(proc1, 0.35); show(proc2, 0.35); show(proc3, 0.35); }
+    show(store, 0.40); show(warehouse, 0.40);
+    say(caption, "Nested boundaries reveal ownership without hiding the individual services.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(toWorkers, 0.55);
+    draw(toQueue, 0.55);
+    draw(toHandlers, 0.55);
+    draw(toStore, 0.55); draw(toAnalytics, 0.55);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.35);
+
+step("runtime-hot-path") {
+  par {
+    show(event.parts, 0.25);
+    hotpath(event, 6.20, 27);
+    say(caption, "The event now chooses valid branches and travels end-to-end as one continuous hot path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(event.parts, 0.70);
+    say(caption, "Cold topology explains relationships. The moving dot proves what happened now.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Ljq93V7cmIQ" title="Event Processing on AWS: Topology to Hot Path — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="aws-clustered-web-services"><a class="header" href="#aws-clustered-web-services">aws-clustered-web-services</a></h2>
+<p>Route 53 → ELB → ECS pool with an RDS primary/replica cluster and ElastiCache; request and response follow separately coloured lanes.</p>
+<pre><code class="language-manic">title("Clustered Web Services on AWS");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.025), "Made With Manic");
+text(kicker, (cx, h*0.055), "AWS ARCHITECTURE · CLUSTERED WEB SERVICES");
+text(headline, (cx, h*0.115), "Requests in. Responses back.");
+text(caption, (cx, h*0.935), "Dashed paths describe what is connected—not what is moving now.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.84, h*0.70);
+  text(requestKey, (w*0.36, h*0.225), "REQUEST");
+  arrow(requestSample, (w*0.48, h*0.225), (w*0.64, h*0.225));
+  text(responseKey, (w*0.36, h*0.265), "RESPONSE");
+  arrow(responseSample, (w*0.48, h*0.265), (w*0.64, h*0.265));
+}
+else {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.94, h*0.69);
+  text(requestKey, (w*0.105, h*0.205), "REQUEST");
+  arrow(requestSample, (w*0.15, h*0.205), (w*0.205, h*0.205));
+  text(responseKey, (w*0.105, h*0.245), "RESPONSE");
+  arrow(responseSample, (w*0.15, h*0.245), (w*0.205, h*0.245));
+}
+size(requestKey, 15*u); color(requestKey, fg); bold(requestKey);
+size(responseKey, 15*u); hue(responseKey, 328, 0.90, 0.62); bold(responseKey);
+color(requestSample, fg); stroke(requestSample, 3*u);
+hue(responseSample, 328, 0.90, 0.62); dashed(responseSample, 10*u, 7*u);
+stroke(responseSample, 4*u); glow(responseSample, 0.85);
+hidden(requestKey); hidden(requestSample);
+hidden(responseKey); hidden(responseSample);
+
+node(dns, clusteredWeb, "aws:route53", "dns");
+node(lb, clusteredWeb, "aws:elb", "lb");
+
+cluster(services, clusteredWeb, "SERVICES");
+node(web1, services, "aws:ecs", "web1");
+node(web2, services, "aws:ecs", "web2");
+node(web3, services, "aws:ecs", "web3");
+
+cluster(database, clusteredWeb, "DB CLUSTER");
+node(dbPrimary, database, "aws:rds", "userdb");
+node(dbReplica, database, "aws:rds", "userdb ro");
+
+node(memcached, clusteredWeb, "aws:elasticache", "memcached");
+
+connect(dnsToLb, dns, lb);
+connect(lbToServices, lb, services);
+connect(servicesToDb, services, dbPrimary);
+connect(servicesToCache, services, memcached, 145*u);
+connect(dbToServices, dbPrimary, services, 42*u);
+connect(servicesToLb, services, lb, 42*u);
+connect(cacheToWeb2, memcached, web2, 145*u);
+hue(dbToServices.hot, 328, 0.90, 0.62);
+hue(servicesToLb.hot, 328, 0.90, 0.62);
+hue(cacheToWeb2.hot, 328, 0.90, 0.62);
+dashed(dbToServices.hot, 10*u, 7*u);
+dashed(servicesToLb.hot, 10*u, 7*u);
+dashed(cacheToWeb2.hot, 10*u, 7*u);
+stroke(dbToServices.hot, 4.5*u); glow(dbToServices.hot, 0.95);
+stroke(servicesToLb.hot, 4.5*u); glow(servicesToLb.hot, 0.95);
+stroke(cacheToWeb2.hot, 4.5*u); glow(cacheToWeb2.hot, 0.95);
+link(replication, dbPrimary.card, dbReplica.card);
+dashed(replication); color(replication, dim); stroke(replication, 2.5*u);
+
+message(pageRequest, dns, "GET");
+message(cacheRead, web2, "READ");
+
+hidden(clusteredWeb.nodes);
+hidden(services.parts); hidden(database.parts);
+hidden(pageRequest.parts); hidden(cacheRead.parts);
+untraced(dnsToLb); untraced(lbToServices);
+untraced(servicesToDb); untraced(servicesToCache);
+untraced(dbToServices); untraced(servicesToLb); untraced(cacheToWeb2);
+untraced(replication);
+
+step("entry") {
+  par {
+    show(dns, 0.40);
+    show(lb, 0.40);
+    say(caption, "Route 53 and the load balancer form the public entry into the design.", 0.40);
+  }
+}
+wait(0.20);
+
+step("service-pool") {
+  par {
+    show(services.parts, 0.45);
+    stagger(0.10) {
+      show(web1, 0.35);
+      show(web2, 0.35);
+      show(web3, 0.35);
+    }
+    say(caption, "Three ECS services share one ownership boundary; no runtime choice is implied yet.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state") {
+  par {
+    show(database.parts, 0.45);
+    show(dbPrimary, 0.40);
+    show(dbReplica, 0.40);
+    show(memcached, 0.40);
+    say(caption, "The database cluster and cache complete the static architecture.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(dnsToLb, 0.40);
+    draw(lbToServices, 0.60);
+    draw(servicesToDb, 0.60);
+    draw(servicesToCache, 0.60);
+    draw(replication, 0.45);
+    show(requestKey, 0.35); show(requestSample, 0.35);
+    show(responseKey, 0.35); show(responseSample, 0.35);
+    say(caption, "Every dashed lane is possible. The next moving object will identify the path actually used.", 0.40);
+  }
+}
+wait(0.30);
+
+step("request-to-database") {
+  par {
+    seq {
+      show(pageRequest.parts, 0.20);
+      route(pageRequest, dnsToLb, 0.65, smooth);
+      route(pageRequest, lbToServices, 0.90, smooth);
+      route(pageRequest, servicesToDb, 0.90, smooth);
+    }
+    say(caption, "This request follows one authored lane: dns → lb → web1 → userdb.", 0.40);
+  }
+}
+wait(0.35);
+
+step("database-response") {
+  par {
+    seq {
+      par {
+        say(pageRequest.label, "200 OK", 0.25);
+        to(pageRequest.parts, hue, 328, 0.25, smooth);
+      }
+      route(pageRequest, dbToServices, 0.90, smooth);
+      route(pageRequest, servicesToLb, 0.90, smooth);
+    }
+    say(caption, "The same identity returns userdb → web1 → lb. DNS resolved the name; it is not the HTTP response path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("cache-round-trip") {
+  par {
+    seq {
+      show(cacheRead.parts, 0.20);
+      route(cacheRead, servicesToCache, 1.05, smooth);
+      par {
+        say(cacheRead.label, "HIT", 0.25);
+        to(cacheRead.parts, hue, 328, 0.25, smooth);
+      }
+      route(cacheRead, cacheToWeb2, 1.05, smooth);
+    }
+    say(caption, "A separate cache read travels web2 → memcached, becomes HIT, and returns to that same service.", 0.40);
+  }
+}
+wait(0.35);
+
+step("replica-relationship") {
+  par {
+    flow(replication, 3.20, both, continuous);
+    say(caption, "The neutral database link can carry a two-way visual pulse only because the creator asked for it.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70);
+    pulse(database.parts, 0.70);
+    say(caption, "Architecture stays readable; objects, paths, timing, and composition tell the runtime story.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/j_NJweoV6iw" title="Clustered Web Services on AWS, Request & Response — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="gcp-clustered-web-services"><a class="header" href="#gcp-clustered-web-services">gcp-clustered-web-services</a></h2>
+<p>The same clustered-web story on Google Cloud: Cloud DNS → Load Balancing → GKE pool → Cloud SQL cluster + Memorystore — a pure provider swap.</p>
+<pre><code class="language-manic">title("Clustered Web Services on Google Cloud");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.025), "Made With Manic");
+text(kicker, (cx, h*0.055), "GOOGLE CLOUD ARCHITECTURE · CLUSTERED WEB SERVICES");
+text(headline, (cx, h*0.115), "Requests in. Responses back.");
+text(caption, (cx, h*0.935), "Dashed paths describe what is connected—not what is moving now.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.84, h*0.70);
+  text(requestKey, (w*0.36, h*0.225), "REQUEST");
+  arrow(requestSample, (w*0.48, h*0.225), (w*0.64, h*0.225));
+  text(responseKey, (w*0.36, h*0.265), "RESPONSE");
+  arrow(responseSample, (w*0.48, h*0.265), (w*0.64, h*0.265));
+}
+else {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.94, h*0.69);
+  text(requestKey, (w*0.105, h*0.205), "REQUEST");
+  arrow(requestSample, (w*0.15, h*0.205), (w*0.205, h*0.205));
+  text(responseKey, (w*0.105, h*0.245), "RESPONSE");
+  arrow(responseSample, (w*0.15, h*0.245), (w*0.205, h*0.245));
+}
+size(requestKey, 15*u); color(requestKey, fg); bold(requestKey);
+size(responseKey, 15*u); hue(responseKey, 328, 0.90, 0.62); bold(responseKey);
+color(requestSample, fg); stroke(requestSample, 3*u);
+hue(responseSample, 328, 0.90, 0.62); dashed(responseSample, 10*u, 7*u);
+stroke(responseSample, 4*u); glow(responseSample, 0.85);
+hidden(requestKey); hidden(requestSample);
+hidden(responseKey); hidden(responseSample);
+
+node(dns, clusteredWeb, "gcp:dns", "cloud dns");
+node(lb, clusteredWeb, "gcp:load-balancing", "load balancing");
+
+cluster(services, clusteredWeb, "SERVICES");
+node(web1, services, "gcp:kubernetes-engine", "web1");
+node(web2, services, "gcp:kubernetes-engine", "web2");
+node(web3, services, "gcp:kubernetes-engine", "web3");
+
+cluster(database, clusteredWeb, "DB CLUSTER");
+node(dbPrimary, database, "gcp:sql", "userdb");
+node(dbReplica, database, "gcp:sql", "userdb ro");
+
+node(cache, clusteredWeb, "gcp:memorystore", "memorystore");
+
+connect(dnsToLb, dns, lb);
+connect(lbToServices, lb, services);
+connect(servicesToDb, services, dbPrimary);
+connect(servicesToCache, services, cache, 145*u);
+connect(dbToServices, dbPrimary, services, 42*u);
+connect(servicesToLb, services, lb, 42*u);
+connect(cacheToWeb2, cache, web2, 145*u);
+hue(dbToServices.hot, 328, 0.90, 0.62);
+hue(servicesToLb.hot, 328, 0.90, 0.62);
+hue(cacheToWeb2.hot, 328, 0.90, 0.62);
+dashed(dbToServices.hot, 10*u, 7*u);
+dashed(servicesToLb.hot, 10*u, 7*u);
+dashed(cacheToWeb2.hot, 10*u, 7*u);
+stroke(dbToServices.hot, 4.5*u); glow(dbToServices.hot, 0.95);
+stroke(servicesToLb.hot, 4.5*u); glow(servicesToLb.hot, 0.95);
+stroke(cacheToWeb2.hot, 4.5*u); glow(cacheToWeb2.hot, 0.95);
+link(replication, dbPrimary.card, dbReplica.card);
+dashed(replication); color(replication, dim); stroke(replication, 2.5*u);
+
+message(pageRequest, dns, "GET");
+message(cacheRead, web2, "READ");
+
+hidden(clusteredWeb.nodes);
+hidden(services.parts); hidden(database.parts);
+hidden(pageRequest.parts); hidden(cacheRead.parts);
+untraced(dnsToLb); untraced(lbToServices);
+untraced(servicesToDb); untraced(servicesToCache);
+untraced(dbToServices); untraced(servicesToLb); untraced(cacheToWeb2);
+untraced(replication);
+
+step("entry") {
+  par {
+    show(dns, 0.40);
+    show(lb, 0.40);
+    say(caption, "Cloud DNS and Cloud Load Balancing form the public entry into the design.", 0.40);
+  }
+}
+wait(0.20);
+
+step("service-pool") {
+  par {
+    show(services.parts, 0.45);
+    stagger(0.10) {
+      show(web1, 0.35);
+      show(web2, 0.35);
+      show(web3, 0.35);
+    }
+    say(caption, "Three GKE services share one ownership boundary; no runtime choice is implied yet.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state") {
+  par {
+    show(database.parts, 0.45);
+    show(dbPrimary, 0.40);
+    show(dbReplica, 0.40);
+    show(cache, 0.40);
+    say(caption, "The Cloud SQL cluster and Memorystore complete the static architecture.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(dnsToLb, 0.40);
+    draw(lbToServices, 0.60);
+    draw(servicesToDb, 0.60);
+    draw(servicesToCache, 0.60);
+    draw(replication, 0.45);
+    show(requestKey, 0.35); show(requestSample, 0.35);
+    show(responseKey, 0.35); show(responseSample, 0.35);
+    say(caption, "Every dashed lane is possible. The next moving object will identify the path actually used.", 0.40);
+  }
+}
+wait(0.30);
+
+step("request-to-database") {
+  par {
+    seq {
+      show(pageRequest.parts, 0.20);
+      route(pageRequest, dnsToLb, 0.65, smooth);
+      route(pageRequest, lbToServices, 0.90, smooth);
+      route(pageRequest, servicesToDb, 0.90, smooth);
+    }
+    say(caption, "This request follows one authored lane: dns → lb → web1 → userdb.", 0.40);
+  }
+}
+wait(0.35);
+
+step("database-response") {
+  par {
+    seq {
+      par {
+        say(pageRequest.label, "200 OK", 0.25);
+        to(pageRequest.parts, hue, 328, 0.25, smooth);
+      }
+      route(pageRequest, dbToServices, 0.90, smooth);
+      route(pageRequest, servicesToLb, 0.90, smooth);
+    }
+    say(caption, "The same identity returns userdb → web1 → lb. Cloud DNS resolved the name; it is not the HTTP response path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("cache-round-trip") {
+  par {
+    seq {
+      show(cacheRead.parts, 0.20);
+      route(cacheRead, servicesToCache, 1.05, smooth);
+      par {
+        say(cacheRead.label, "HIT", 0.25);
+        to(cacheRead.parts, hue, 328, 0.25, smooth);
+      }
+      route(cacheRead, cacheToWeb2, 1.05, smooth);
+    }
+    say(caption, "A separate cache read travels web2 → memorystore, becomes HIT, and returns to that same service.", 0.40);
+  }
+}
+wait(0.35);
+
+step("replica-relationship") {
+  par {
+    flow(replication, 3.20, both, continuous);
+    say(caption, "The neutral database link can carry a two-way visual pulse only because the creator asked for it.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70);
+    pulse(database.parts, 0.70);
+    say(caption, "Architecture stays readable; objects, paths, timing, and composition tell the runtime story.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/C6cVg6uAWtc" title="The Same Architecture on Google Cloud — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="gcp-message-collecting"><a class="header" href="#gcp-message-collecting">gcp-message-collecting</a></h2>
+<p>GCP IoT: three IoT Core devices publish to Pub/Sub, and Dataflow fans out to a data lake, a processing branch, and a serverless branch — three-level nested clusters.</p>
+<pre><code class="language-manic">title("Message Collecting on Google Cloud — IoT to Data Lake");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.045), "Made With Manic");
+text(kicker, (cx, h*0.05), "GOOGLE CLOUD · IOT MESSAGE COLLECTING");
+text(headline, (cx, h*0.11), "Devices publish once. The pipeline fans out.");
+text(caption, (cx, h*0.94), "Dashed relationships show every route the architecture allows.");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 17*u); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(collect, (cx, h*0.52), w*0.96, h*0.72);
+
+cluster(sourceData, collect, "SOURCE OF DATA");
+node(core1, sourceData, "gcp:iot-core", "core1");
+node(core2, sourceData, "gcp:iot-core", "core2");
+node(core3, sourceData, "gcp:iot-core", "core3");
+
+node(pubsub, collect, "gcp:pubsub", "pubsub");
+
+cluster(targets, collect, "TARGETS");
+
+cluster(dataFlow, targets, "DATA FLOW");
+node(df, dataFlow, "gcp:dataflow", "data flow");
+
+cluster(dataLake, targets, "DATA LAKE");
+node(bq, dataLake, "gcp:bigquery", "bq");
+node(gcs, dataLake, "gcp:storage", "storage");
+
+cluster(eventDriven, targets, "EVENT DRIVEN");
+
+cluster(processing, eventDriven, "PROCESSING");
+node(engine, processing, "gcp:app-engine", "engine");
+node(bigtable, processing, "gcp:bigtable", "bigtable");
+
+cluster(serverless, eventDriven, "SERVERLESS");
+node(func, serverless, "gcp:functions", "func");
+node(appengine, serverless, "gcp:app-engine", "appengine");
+
+// --- topology ---
+connect(toPubsub, sourceData, pubsub);   // [core1,core2,core3] &gt;&gt; pubsub
+connect(toFlow, pubsub, df);             // pubsub &gt;&gt; flow
+connect(toBq, df, bq);                   // flow &gt;&gt; bq
+connect(toGcs, df, gcs);                 // flow &gt;&gt; storage
+connect(toEngine, df, engine);           // flow &gt;&gt; engine
+connect(engineToBt, engine, bigtable);   // engine &gt;&gt; bigtable
+connect(toFunc, df, func);               // flow &gt;&gt; func
+connect(funcToApp, func, appengine);     // func &gt;&gt; appengine
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+color(toPubsub, cyan);     color(toPubsub.hot, cyan);
+color(toFlow, cyan);       color(toFlow.hot, cyan);
+color(toBq, gold);         color(toBq.hot, gold);
+color(toGcs, gold);        color(toGcs.hot, gold);
+color(toEngine, magenta);  color(toEngine.hot, magenta);
+color(engineToBt, magenta);color(engineToBt.hot, magenta);
+color(toFunc, lime);       color(toFunc.hot, lime);
+color(funcToApp, lime);    color(funcToApp.hot, lime);
+// legend
+text(legIn, (w*0.22, h*0.175), "INGEST"); size(legIn, 13); color(legIn, cyan); bold(legIn);
+text(legLake, (w*0.36, h*0.175), "DATA LAKE"); size(legLake, 13); color(legLake, gold); bold(legLake);
+text(legProc, (w*0.54, h*0.175), "PROCESSING"); size(legProc, 13); color(legProc, magenta); bold(legProc);
+text(legSls, (w*0.72, h*0.175), "SERVERLESS"); size(legSls, 13); color(legSls, lime); bold(legSls);
+hidden(legIn); hidden(legLake); hidden(legProc); hidden(legSls);
+
+message(msg, pubsub, "msg");
+
+hidden(collect.nodes);
+hidden(sourceData.parts); hidden(targets.parts); hidden(dataFlow.parts);
+hidden(dataLake.parts); hidden(eventDriven.parts); hidden(processing.parts); hidden(serverless.parts);
+hidden(msg.parts);
+untraced(toPubsub); untraced(toFlow); untraced(toBq); untraced(toGcs);
+untraced(toEngine); untraced(engineToBt); untraced(toFunc); untraced(funcToApp);
+
+step("devices") {
+  par {
+    show(sourceData.parts, 0.45);
+    stagger(0.10) { show(core1, 0.35); show(core2, 0.35); show(core3, 0.35); }
+    show(pubsub, 0.40);
+    say(caption, "Three IoT Core devices publish into one Pub/Sub topic.", 0.40);
+  }
+}
+wait(0.20);
+
+step("targets") {
+  par {
+    show(targets.parts, 0.5);
+    show(dataFlow.parts, 0.4); show(df, 0.4);
+    show(dataLake.parts, 0.4); show(bq, 0.4); show(gcs, 0.4);
+    show(eventDriven.parts, 0.4);
+    show(processing.parts, 0.4); show(engine, 0.4); show(bigtable, 0.4);
+    show(serverless.parts, 0.4); show(func, 0.4); show(appengine, 0.4);
+    say(caption, "Dataflow is the hub; targets nest into a data lake, a processing branch, and a serverless branch.", 0.40);
+  }
+}
+wait(0.25);
+
+step("possible-topology") {
+  par {
+    stagger(0.07) {
+      draw(toPubsub, 0.4); draw(toFlow, 0.4); draw(toBq, 0.4); draw(toGcs, 0.4);
+      draw(toEngine, 0.4); draw(engineToBt, 0.4); draw(toFunc, 0.4); draw(funcToApp, 0.4);
+    }
+    show(legIn, 0.3); show(legLake, 0.3); show(legProc, 0.3); show(legSls, 0.3);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.30);
+
+step("collect") {
+  par {
+    seq {
+      show(msg.parts, 0.2);
+      route(msg, toFlow, 0.9, smooth);
+    }
+    say(caption, "A published message reaches Dataflow through Pub/Sub.", 0.40);
+  }
+}
+wait(0.25);
+
+step("fan-out") {
+  par {
+    flow(toBq, 1.0); flow(toGcs, 1.0);
+    seq { flow(toEngine, 0.9); flow(engineToBt, 0.9); }
+    seq { flow(toFunc, 0.9); flow(funcToApp, 0.9); }
+    say(caption, "Dataflow fans out: BigQuery + storage (lake), App Engine → Bigtable, and Functions → App Engine.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(targets.parts, 0.70);
+    say(caption, "One publish; many destinations—each branch owns its own runtime and storage.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/AjCnMgu7XzY" title="GCP IoT: Devices Publish Once, the Pipeline Fans Out — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="k8s-three-tier"><a class="header" href="#k8s-three-tier">k8s-three-tier</a></h2>
+<p>A three-tier app on Kubernetes: Ingress → web Deployment → api Service/Deployment → Redis + a PostgreSQL StatefulSet, following one checkout request.</p>
+<pre><code class="language-manic">title("A Three-Tier Application on Kubernetes — Following One Request");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.06), "Made With Manic");
+text(kicker, (cx, h*0.065), "KUBERNETES · THREE TIERS · ONE DATA FLOW");
+text(headline, (cx, h*0.145), "A Three-Tier App on Kubernetes");
+text(caption, (cx, h*0.91), "Ingress in, pods compute, state persists — and the request keeps moving.");
+size(kicker, 17*u); color(kicker, dim); bold(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.84);
+
+if h &gt; 1.25*w {
+  architecture(presentation, (cx, h*0.30), w*0.72, h*0.18);
+  architecture(application, (cx, h*0.52), w*0.72, h*0.18);
+  architecture(dataTier, (cx, h*0.74), w*0.72, h*0.18);
+  text(presentationLabel, (w*0.13, h*0.30), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.13, h*0.52), "2 · APPLICATION");
+  text(dataLabel, (w*0.13, h*0.74), "3 · DATA");
+}
+else {
+  architecture(presentation, (w*0.20, h*0.50), w*0.27, h*0.55);
+  architecture(application, (w*0.50, h*0.50), w*0.27, h*0.55);
+  architecture(dataTier, (w*0.80, h*0.50), w*0.27, h*0.55);
+  text(presentationLabel, (w*0.20, h*0.235), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.50, h*0.235), "2 · APPLICATION");
+  text(dataLabel, (w*0.80, h*0.235), "3 · DATA");
+}
+
+size(presentationLabel, 16*u); color(presentationLabel, cyan); bold(presentationLabel);
+size(applicationLabel, 16*u); color(applicationLabel, magenta); bold(applicationLabel);
+size(dataLabel, 16*u); color(dataLabel, gold); bold(dataLabel);
+
+node(ingress, presentation, "k8s:ing", "Ingress");
+node(web, presentation, "k8s:deploy", "web Deployment x3");
+node(apisvc, application, "k8s:svc", "api Service");
+node(api, application, "k8s:deploy", "api Deployment x3");
+node(cache, dataTier, "onprem:redis", "Redis");
+node(database, dataTier, "onprem:postgresql", "PostgreSQL (StatefulSet)");
+
+connect(toWeb, ingress, web);
+connect(toApiSvc, web, apisvc);
+connect(toApi, apisvc, api);
+connect(toCache, api, cache);
+connect(toDatabase, cache, database);
+request(userRequest, ingress, "GET /checkout");
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+color(toWeb, cyan);        color(toWeb.hot, cyan);
+color(toApiSvc, cyan);     color(toApiSvc.hot, cyan);
+color(toApi, cyan);        color(toApi.hot, cyan);
+color(toCache, magenta);   color(toCache.hot, magenta);
+color(toDatabase, gold);   color(toDatabase.hot, gold);
+// legend
+text(legReq, (w*0.30, h*0.175), "REQUEST"); size(legReq, 13); color(legReq, cyan); bold(legReq);
+text(legCache, (w*0.48, h*0.175), "CACHE"); size(legCache, 13); color(legCache, magenta); bold(legCache);
+text(legDb, (w*0.62, h*0.175), "PERSIST"); size(legDb, 13); color(legDb, gold); bold(legDb);
+hidden(legReq); hidden(legCache); hidden(legDb);
+hidden(presentation.nodes); hidden(application.nodes); hidden(dataTier.nodes);
+untraced(toWeb); untraced(toApiSvc); untraced(toApi);
+untraced(toCache); untraced(toDatabase);
+hidden(userRequest.parts);
+
+step("presentation-tier") {
+  par {
+    show(presentation.nodes, 0.55);
+    say(caption, "Presentation: the Ingress terminates traffic and routes it to the web pods.", 0.40);
+  }
+}
+wait(0.20);
+
+step("application-tier") {
+  par {
+    show(application.nodes, 0.55);
+    say(caption, "Application: a Service load-balances across stateless api pods that scale on demand.", 0.40);
+  }
+}
+wait(0.20);
+
+step("data-tier") {
+  par {
+    show(dataTier.nodes, 0.55);
+    say(caption, "Data: Redis serves hot reads; a PostgreSQL StatefulSet holds durable state.", 0.40);
+  }
+}
+wait(0.25);
+
+step("connect-the-tiers") {
+  par {
+    stagger(0.10) {
+      draw(toWeb, 0.35); draw(toApiSvc, 0.35); draw(toApi, 0.35);
+      draw(toCache, 0.35); draw(toDatabase, 0.35);
+    }
+    show(userRequest.parts, 0.30);
+    show(legReq, 0.3); show(legCache, 0.3); show(legDb, 0.3);
+    say(caption, "Now follow one checkout request through the whole cluster.", 0.40);
+  }
+}
+wait(0.20);
+
+step("ingress-to-web") {
+  par {
+    route(userRequest, toWeb, 0.85, smooth);
+    say(caption, "The Ingress forwards the request to a web pod via the Service.", 0.40);
+  }
+}
+
+step("web-to-api") {
+  par {
+    route(userRequest, toApiSvc, 0.90, smooth);
+    say(caption, "The web tier calls the api Service — one controlled entry into business logic.", 0.40);
+  }
+}
+
+step("into-a-pod") {
+  par {
+    route(userRequest, toApi, 0.80, smooth);
+    say(caption, "The Service load-balances into one replicated api pod.", 0.40);
+  }
+}
+
+step("read-fast") {
+  par {
+    route(userRequest, toCache, 0.90, smooth);
+    say(caption, "Redis answers the hot read first, shielding the database from repeated work.", 0.40);
+  }
+}
+
+step("persist-safely") {
+  par {
+    route(userRequest, toDatabase, 0.85, smooth);
+    say(caption, "On a miss, the PostgreSQL StatefulSet is the durable source of truth.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(presentation.nodes, 0.70);
+    pulse(application.nodes, 0.70);
+    pulse(dataTier.nodes, 0.70);
+    say(caption, "Ingress, Services, Deployments and a StatefulSet keep delivery, compute, and state independent.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UnG43NCJj8I" title="A Three-Tier App on Kubernetes, Following One Request — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="k8s-stateful-architecture"><a class="header" href="#k8s-stateful-architecture">k8s-stateful-architecture</a></h2>
+<p>A StatefulSet’s storage: a Service, three pods, their PVCs, and the PV/StorageClass that provision them — generated with a <code>for</code> loop, coloured by access/ownership/provisioning.</p>
+<pre><code class="language-manic">title("A Stateful Set on Kubernetes — Pods, Claims, and Volumes");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.045), "Made With Manic");
+text(kicker, (cx, h*0.05), "KUBERNETES · STATEFUL ARCHITECTURE");
+text(headline, (cx, h*0.11), "Every replica keeps its own storage.");
+text(caption, (cx, h*0.94), "Dashed relationships show every route the architecture allows.");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 17*u); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(stateful, (cx, h*0.52), w*0.94, h*0.72);
+
+cluster(apps, stateful, "APPS");
+node(svc, apps, "k8s:svc", "svc");
+node(sts, apps, "k8s:sts", "sts");
+
+cluster(pods, stateful, "PODS");
+for i in 0..3 {
+  node(pod{i}, pods, "k8s:pod", "pod");
+}
+
+cluster(claims, stateful, "CLAIMS");
+for i in 0..3 {
+  node(pvc{i}, claims, "k8s:pvc", "pvc");
+}
+
+cluster(storage, stateful, "STORAGE");
+node(pv, storage, "k8s:pv", "pv");
+node(sc, storage, "k8s:sc", "sc");
+
+// topology: svc &gt;&gt; pod &gt;&gt; pvc, pod - sts - pvc, and sc &gt;&gt; pv &gt;&gt; pvc (provisioning)
+for i in 0..3 {
+  connect(svcPod{i}, svc, pod{i});
+  connect(podPvc{i}, pod{i}, pvc{i});
+  connect(podSts{i}, pod{i}, sts);
+  connect(stsPvc{i}, sts, pvc{i});
+  connect(pvPvc{i}, pv, pvc{i});
+}
+connect(scPv, sc, pv);
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+for i in 0..3 {
+  color(svcPod{i}, cyan);      // ACCESS
+  color(podPvc{i}, cyan);
+  color(podSts{i}, magenta);   // OWNERSHIP
+  color(stsPvc{i}, magenta);
+  color(pvPvc{i}, gold);       // PROVISIONING
+}
+color(scPv, gold); color(scPv.hot, gold);
+text(legAcc, (w*0.30, h*0.175), "ACCESS"); size(legAcc, 13); color(legAcc, cyan); bold(legAcc);
+text(legOwn, (w*0.46, h*0.175), "OWNERSHIP"); size(legOwn, 13); color(legOwn, magenta); bold(legOwn);
+text(legProv, (w*0.64, h*0.175), "PROVISIONING"); size(legProv, 13); color(legProv, gold); bold(legProv);
+hidden(legAcc); hidden(legOwn); hidden(legProv);
+
+hidden(stateful.nodes);
+hidden(apps.parts); hidden(pods.parts); hidden(claims.parts); hidden(storage.parts);
+for i in 0..3 {
+  untraced(svcPod{i}); untraced(podPvc{i}); untraced(podSts{i});
+  untraced(stsPvc{i}); untraced(pvPvc{i});
+}
+untraced(scPv);
+
+step("apps") {
+  par {
+    show(apps.parts, 0.5);
+    show(svc, 0.4); show(sts, 0.4);
+    show(pods.parts, 0.4);
+    stagger(0.08) { show(pod0, 0.35); show(pod1, 0.35); show(pod2, 0.35); }
+    show(claims.parts, 0.4);
+    stagger(0.08) { show(pvc0, 0.35); show(pvc1, 0.35); show(pvc2, 0.35); }
+    say(caption, "A Service fronts three pods; a StatefulSet gives each pod a stable identity and claim.", 0.40);
+  }
+}
+wait(0.20);
+
+step("storage") {
+  par {
+    show(storage.parts, 0.45);
+    show(pv, 0.4); show(sc, 0.4);
+    say(caption, "A StorageClass provisions PersistentVolumes that back each PersistentVolumeClaim.", 0.40);
+  }
+}
+wait(0.25);
+
+step("possible-topology") {
+  par {
+    stagger(0.05) {
+      draw(svcPod0, 0.35); draw(svcPod1, 0.35); draw(svcPod2, 0.35);
+      draw(podPvc0, 0.35); draw(podPvc1, 0.35); draw(podPvc2, 0.35);
+      draw(podSts0, 0.35); draw(podSts1, 0.35); draw(podSts2, 0.35);
+      draw(stsPvc0, 0.35); draw(stsPvc1, 0.35); draw(stsPvc2, 0.35);
+      draw(scPv, 0.35);
+      draw(pvPvc0, 0.35); draw(pvPvc1, 0.35); draw(pvPvc2, 0.35);
+    }
+    show(legAcc, 0.3); show(legOwn, 0.3); show(legProv, 0.3);
+    say(caption, "Every dashed edge is a relationship: routing, ownership, and storage binding together.", 0.40);
+  }
+}
+wait(0.30);
+
+step("app-access") {
+  par {
+    stagger(0.12) {
+      seq { flow(svcPod0, 0.7); flow(podPvc0, 0.7); }
+      seq { flow(svcPod1, 0.7); flow(podPvc1, 0.7); }
+      seq { flow(svcPod2, 0.7); flow(podPvc2, 0.7); }
+    }
+    say(caption, "Traffic: the Service reaches a pod, which reads and writes its own claim.", 0.40);
+  }
+}
+wait(0.25);
+
+step("provisioning") {
+  par {
+    seq {
+      flow(scPv, 0.8);
+      par { flow(pvPvc0, 0.8); flow(pvPvc1, 0.8); flow(pvPvc2, 0.8); }
+    }
+    say(caption, "Provisioning: the StorageClass creates PVs that bind to each claim.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(apps.parts, 0.7);
+    pulse(storage.parts, 0.7);
+    say(caption, "Stateful means identity plus durable storage—one claim and volume per replica.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/eFMhiVjUBGE" title="How a Kubernetes StatefulSet Keeps Its Storage — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="k8s-cluster-components"><a class="header" href="#k8s-cluster-components">k8s-cluster-components</a></h2>
+<p>The canonical Kubernetes components diagram — control plane (api hub, c-m, c-c-m, etcd, sched) + nodes + the cloud provider — drawn AND flowed with plain primitives, no systems kit at all.</p>
+<pre><code class="language-manic">title("Kubernetes Cluster Components");
+canvas("16:9");
+template("neon");
+
+// ---- boxes (drawn first, behind; hollow-ish so icons read on top) ----
+rect(clusterBox, (800, 380), 880, 560);   outline(clusterBox, dim); opacity(clusterBox, 0.22);
+rect(cpBox,      (575, 440), 400, 430);    outline(cpBox, cyan);    opacity(cpBox, 0.28);
+rect(node1Box,   (1000, 320), 400, 150);   outline(node1Box, dim);  opacity(node1Box, 0.35);
+rect(node2Box,   (1000, 520), 400, 150);   outline(node2Box, dim);  opacity(node2Box, 0.35);
+
+text(clusterLabel, (470, 130), "Kubernetes cluster"); size(clusterLabel, 26); bold(clusterLabel);
+text(cpLabel, (490, 250), "Control Plane"); size(cpLabel, 20); color(cpLabel, cyan); bold(cpLabel);
+text(n1Label, (855, 268), "Node"); size(n1Label, 18); color(n1Label, dim); bold(n1Label);
+text(n2Label, (855, 468), "Node"); size(n2Label, 18); color(n2Label, dim); bold(n2Label);
+
+// ---- cloud provider API (outside the cluster, left) ----
+ellipse(cloud, (165, 360), 210, 120); outline(cloud, blue); opacity(cloud, 0.30);
+text(cloudLabel, (165, 360), "Cloud provider\nAPI"); size(cloudLabel, 20); color(cloudLabel, blue); bold(cloudLabel);
+
+// ---- control-plane connections (api is the hub) ----
+line(lCm,   (615, 400), (615, 320));   stroke(lCm, 3);
+line(lSched,(615, 485), (615, 560));   stroke(lSched, 3);
+line(lEtcd, (590, 465), (505, 500));   stroke(lEtcd, 3);
+line(lCcmApi, (505, 375), (580, 425)); stroke(lCcmApi, 3); dashed(lCcmApi, 9, 7);
+arrow(aCloud, (440, 360), (270, 360)); stroke(aCloud, 3);
+line(lN1, (800, 320), (660, 425));     stroke(lN1, 3);
+line(lN2, (800, 520), (660, 450));     stroke(lN2, 3);
+
+// ---- component icons (placed at the reference positions) ----
+image(api,   (615, 440), "asset:diagrams/k8s/controlplane/api.png", 62, 62);
+image(cm,    (615, 285), "asset:diagrams/k8s/controlplane/c-m.png", 58, 58);
+image(sched, (615, 590), "asset:diagrams/k8s/controlplane/sched.png", 58, 58);
+image(ccm,   (470, 360), "asset:diagrams/k8s/controlplane/c-c-m.png", 58, 58);
+image(etcd,  (470, 510), "asset:diagrams/k8s/infra/etcd.png", 58, 58);
+image(kubelet1, (890, 335), "asset:diagrams/k8s/controlplane/kubelet.png", 54, 54);
+image(kproxy1,  (1100, 335), "asset:diagrams/k8s/controlplane/k-proxy.png", 54, 54);
+image(kubelet2, (890, 535), "asset:diagrams/k8s/controlplane/kubelet.png", 54, 54);
+image(kproxy2,  (1100, 535), "asset:diagrams/k8s/controlplane/k-proxy.png", 54, 54);
+
+// ---- icon captions ----
+text(tApi, (615, 478), "api"); size(tApi, 15);
+text(tCm, (615, 320), "c-m"); size(tCm, 15);
+text(tSched, (615, 625), "sched"); size(tSched, 15);
+text(tCcm, (470, 395), "c-c-m"); size(tCcm, 15);
+text(tEtcd, (470, 545), "etcd"); size(tEtcd, 15);
+text(tKl1, (890, 370), "kubelet"); size(tKl1, 14);
+text(tKp1, (1100, 370), "k-proxy"); size(tKp1, 14);
+text(tKl2, (890, 570), "kubelet"); size(tKl2, 14);
+text(tKp2, (1100, 570), "k-proxy"); size(tKp2, 14);
+
+// ---- data flow: ordinary manic verbs on the hand-drawn wires (NO systems kit) ----
+text(cap, (cx, h*0.95), "Every component talks through the API server."); size(cap, 20); color(cap, dim); wrap(cap, w*0.8);
+dot(packet, (800, 320), 11); color(packet, lime); hidden(packet);
+
+wait(0.5);
+par {
+  flow(lN1, 1.0); flow(lN2, 1.0);
+  say(cap, "kubelets report node and pod status up to the API server", 0.4);
+}
+par {
+  flow(lCm, 1.0); flow(lSched, 1.0);
+  say(cap, "the scheduler and controllers act only through the API server", 0.4);
+}
+par {
+  flow(lEtcd, 1.0);
+  say(cap, "the API server reads and writes all cluster state in etcd", 0.4);
+}
+par {
+  flow(aCloud, 1.0);
+  say(cap, "the cloud-controller-manager provisions infrastructure via the cloud API", 0.4);
+}
+wait(0.2);
+par {
+  show(packet, 0.2);
+  say(cap, "one node update: kubelet -&gt; API server -&gt; etcd", 0.4);
+}
+seq {
+  travel(packet, lN1, 0.9, smooth);
+  travel(packet, lEtcd, 0.9, smooth);
+}
+pulse(api, 0.7);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/AOrjYpi5lCU" title="Inside a Kubernetes Cluster — Everything Talks to the API — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="serverless-processing"><a class="header" href="#serverless-processing">serverless-processing</a></h2>
+<p>A mixed on-prem + AWS pipeline: Kafka + Docker engines → SQS (+ dead-letter) → Lambda → S3/Redshift, with a Fluentd→Kafka→Spark tap; paths coloured by relationship.</p>
+<pre><code class="language-manic">title("Serverless Event Processing — From Kafka to Cold Storage");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.055), "SERVERLESS · EVENT PROCESSING · MIXED STACK");
+text(headline, (cx, h*0.115), "Events in. Results, dead letters, and cold storage out.");
+text(caption, (cx, h*0.935), "Dashed relationships show every route the architecture allows.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 27*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(pipeline, (cx, h*0.52), w*0.86, h*0.72);
+}
+else {
+  architecture(pipeline, (cx, h*0.52), w*0.94, h*0.70);
+}
+
+// --- the ingress + event source + a bold analytics tap (on-prem stack) ---
+cluster(ingest, pipeline, "INGEST");
+node(ingress, ingest, "onprem:fluentd", "logging");
+node(source, ingest, "onprem:kafka", "Event-Sourcing");
+node(spark, ingest, "onprem:spark", "Spark");
+
+cluster(flows, pipeline, "EVENT FLOWS");
+
+cluster(engines, flows, "DATA PROCESSING ENGINES");
+node(clicks, engines, "onprem:docker", "click stream");
+node(logins, engines, "onprem:docker", "user logins");
+node(analytics, engines, "onprem:docker", "data analytics");
+
+node(queue, flows, "aws:sqs", "results queue");
+node(dlq, flows, "aws:sqs", "Dead Letter Queue");
+
+cluster(processing, flows, "PROCESSING");
+node(persist, processing, "aws:lambda", "persist results");
+
+cluster(storage, flows, "STORAGE");
+node(store, storage, "aws:s3", "cold storage");
+node(dw, storage, "aws:redshift", "operational storage");
+
+// --- topology (Mingrammer edges) ---
+connect(parse, ingress, source);          // ingress &gt;&gt; Edge("parse") &gt;&gt; source
+connect(toSpark, source, spark);          // source &gt;&gt; Edge(bold) &gt;&gt; Spark
+connect(toEngines, source, engines);      // source &gt;&gt; workers
+connect(toQueue, engines, queue);         // workers &gt;&gt; queue
+connect(toHandlers, queue, processing);   // queue &gt;&gt; handlers
+connect(toDlq, queue, dlq, 120*u);        // queue &gt;&gt; dlq
+connect(toStore, processing, store);      // handlers &gt;&gt; store
+connect(toDw, processing, dw);            // handlers &gt;&gt; dw
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+color(parse, cyan);        color(parse.hot, cyan);
+color(toEngines, cyan);    color(toEngines.hot, cyan);
+color(toQueue, cyan);      color(toQueue.hot, cyan);
+color(toHandlers, cyan);   color(toHandlers.hot, cyan);
+color(toSpark, magenta);   color(toSpark.hot, magenta);
+color(toStore, gold);      color(toStore.hot, gold);
+color(toDw, gold);         color(toDw.hot, gold);
+color(toDlq, red);         color(toDlq.hot, red);
+// legend
+text(legPipe, (w*0.24, h*0.175), "PIPELINE"); size(legPipe, 13); color(legPipe, cyan); bold(legPipe);
+text(legAna, (w*0.40, h*0.175), "ANALYTICS"); size(legAna, 13); color(legAna, magenta); bold(legAna);
+text(legStore, (w*0.58, h*0.175), "STORAGE"); size(legStore, 13); color(legStore, gold); bold(legStore);
+text(legDlq, (w*0.74, h*0.175), "DEAD-LETTER"); size(legDlq, 13); color(legDlq, red); bold(legDlq);
+hidden(legPipe); hidden(legAna); hidden(legStore); hidden(legDlq);
+message(event, source, "event");
+
+hidden(pipeline.nodes);
+hidden(ingest.parts); hidden(flows.parts); hidden(engines.parts); hidden(processing.parts); hidden(storage.parts);
+hidden(event.parts);
+untraced(parse); untraced(toSpark); untraced(toEngines); untraced(toQueue);
+untraced(toHandlers); untraced(toDlq); untraced(toStore); untraced(toDw);
+
+step("ingest") {
+  par {
+    show(ingest.parts, 0.45);
+    show(ingress, 0.40);
+    show(source, 0.40);
+    show(spark, 0.40);
+    say(caption, "Fluentd parses raw logs into Kafka; a bold tap also streams the source into Spark.", 0.40);
+  }
+}
+wait(0.20);
+
+step("event-flows") {
+  par {
+    show(flows.parts, 0.50);
+    show(engines.parts, 0.45);
+    stagger(0.10) { show(clicks, 0.35); show(logins, 0.35); show(analytics, 0.35); }
+    show(queue, 0.40); show(dlq, 0.40);
+    show(processing.parts, 0.45); show(persist, 0.40);
+    show(storage.parts, 0.45); show(store, 0.40); show(dw, 0.40);
+    say(caption, "Docker engines process the stream; a queue, a dead-letter queue, a Lambda, and storage complete it.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    stagger(0.08) {
+      draw(parse, 0.4); draw(toEngines, 0.4); draw(toQueue, 0.4); draw(toHandlers, 0.4);
+      draw(toDlq, 0.4); draw(toStore, 0.4); draw(toDw, 0.4); draw(toSpark, 0.4);
+    }
+    show(legPipe, 0.3); show(legAna, 0.3); show(legStore, 0.3); show(legDlq, 0.3);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.30);
+
+step("ingress-flow") {
+  par {
+    seq { flow(parse, 1.0); flow(toSpark, 1.0); }
+    say(caption, "Logging → parse → Kafka → Spark: the ingest-and-analytics tap.", 0.40);
+  }
+}
+wait(0.20);
+
+step("runtime-hot-path") {
+  par {
+    show(event.parts, 0.25);
+    hotpath(event, 6.0, 27);
+    say(caption, "One event chooses valid branches: Kafka → an engine → results queue → Lambda → storage.", 0.40);
+  }
+}
+wait(0.30);
+
+step("dead-letter") {
+  par {
+    flow(toDlq, 1.2);
+    say(caption, "Messages the handler cannot process are diverted to the dead-letter queue.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(flows.parts, 0.70);
+    pulse(event.parts, 0.60);
+    say(caption, "One mixed stack—on-prem ingest, serverless compute, cloud storage—stays readable end to end.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WtqKNndDX2o" title="A Mixed On-Prem + AWS Event Pipeline, Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="onprem-advanced-web-service"><a class="header" href="#onprem-advanced-web-service">onprem-advanced-web-service</a></h2>
+<p>The on-prem stress test with native archetypes: Nginx, gRPC, Redis/PostgreSQL HA, Fluentd→Kafka→Spark, and Prometheus/Grafana — three runtime stories on one platform.</p>
+<pre><code class="language-manic">title("Advanced On-Premises Web Service — Runtime Paths");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.14, h*0.03), "Made With Manic");
+text(kicker, (cx, h*0.04), "SYSTEMS KIT · ON-PREMISES WEB SERVICE");
+text(headline, (cx, h*0.125), "One platform. Three runtime stories.");
+text(caption, (cx, h*0.945), "First reveal ownership; then distinguish requests, telemetry, and the analytics stream.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(platform, (cx,h*0.52), w*0.84,h*0.72);
+}
+else {
+  architecture(platform, (cx,h*0.52), w*0.95,h*0.72);
+}
+
+node(ingress, platform, "gateway", "Nginx Ingress");
+
+cluster(services, platform, "SERVICE CLUSTER");
+node(grpc1, services, "service", "gRPC 1");
+node(grpc2, services, "service", "gRPC 2");
+node(grpc3, services, "service", "gRPC 3");
+
+cluster(state, platform, "");
+cluster(sessions, state, "SESSIONS HA");
+node(sessionPrimary, sessions, "cache", "Redis Session");
+node(sessionReplica, sessions, "cache", "Redis Replica");
+cluster(databases, state, "DATABASE HA");
+node(dbPrimary, databases, "database", "PostgreSQL Users");
+node(dbReplica, databases, "database", "PostgreSQL Replica");
+
+cluster(pipeline, platform, "EVENT ANALYTICS");
+node(logging, pipeline, "service", "Fluentd Logging");
+node(stream, pipeline, "queue", "Kafka Stream");
+node(analytics, pipeline, "service", "Spark Analytics");
+
+cluster(observability, platform, "OBSERVABILITY");
+node(metrics, observability, "external", "Prometheus");
+node(monitoring, observability, "external", "Grafana");
+
+// Main request and dependency possibilities.
+connect(ingressToServices, ingress, services);
+connect(servicesToSessions, services, sessionPrimary, orthogonal);
+connect(servicesToDatabase, services, dbPrimary, orthogonal);
+connect(servicesToLogging, services, logging, orthogonal);
+
+// The log stream remains one explicit pipeline.
+connect(loggingToStream, logging, stream, orthogonal);
+connect(streamToAnalytics, stream, analytics, orthogonal);
+
+// Grafana queries Prometheus; Prometheus explicitly scrapes both replicas.
+connect(dashboardQuery, monitoring, metrics, orthogonal);
+connect(sessionScrape, metrics, sessionReplica, orthogonal);
+connect(databaseScrape, metrics, dbReplica, orthogonal);
+
+// HA replication is a neutral relationship, not a directed runtime claim.
+link(sessionReplication, sessionPrimary.card, sessionReplica.card);
+link(databaseReplication, dbPrimary.card, dbReplica.card);
+dashed(sessionReplication); dashed(databaseReplication);
+color(sessionReplication, dim); color(databaseReplication, dim);
+stroke(sessionReplication, 2.5*u); stroke(databaseReplication, 2.5*u);
+
+message(webRequest, ingress, "REQ");
+message(sessionRead, grpc2, "S");
+message(databaseRead, grpc3, "DB");
+message(logEvent, grpc1, "LOG");
+message(query, monitoring, "Q");
+message(sessionProbe, metrics, "S");
+message(databaseProbe, metrics, "D");
+
+hidden(kicker); hidden(headline); hidden(caption);
+hidden(platform.nodes);
+hidden(services.parts); hidden(state.parts); hidden(sessions.parts); hidden(databases.parts);
+hidden(pipeline.parts); hidden(observability.parts);
+hidden(webRequest.parts); hidden(sessionRead.parts); hidden(databaseRead.parts);
+hidden(logEvent.parts); hidden(query.parts); hidden(sessionProbe.parts); hidden(databaseProbe.parts);
+untraced(platform.connections); untraced(sessionReplication); untraced(databaseReplication);
+
+step("entry-and-services") {
+  par {
+    show(kicker, 0.30); show(headline, 0.45); show(caption, 0.40);
+    show(ingress, 0.35);
+    show(services.parts, 0.45);
+    stagger(0.08) { show(grpc1, 0.30); show(grpc2, 0.30); show(grpc3, 0.30); }
+    say(caption, "Nginx can reach three gRPC workers. The dashed fan-out is possibility, not a load-balancing simulation.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state-pipeline-and-monitoring") {
+  par {
+    show(state.parts, 0.45); show(sessions.parts, 0.40); show(databases.parts, 0.40);
+    show(sessionPrimary, 0.30); show(sessionReplica, 0.30);
+    show(dbPrimary, 0.30); show(dbReplica, 0.30);
+    show(pipeline.parts, 0.45); show(logging, 0.30); show(stream, 0.30); show(analytics, 0.30);
+    show(observability.parts, 0.45); show(metrics, 0.30); show(monitoring, 0.30);
+    say(caption, "Sessions, users, analytics, and observability keep separate ownership boundaries.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(platform.connections, 1.10, smooth);
+    draw(sessionReplication, 0.55, smooth);
+    draw(databaseReplication, 0.55, smooth);
+    say(caption, "Straight, curved, and port-aware orthogonal paths still form one selectable topology.", 0.40);
+  }
+}
+wait(0.30);
+
+step("one-ingress-request") {
+  par {
+    seq {
+      show(webRequest.parts, 0.18);
+      route(webRequest, ingressToServices, 1.00, linear);
+    }
+    say(caption, "One HTTP request selects one gRPC worker; the other possible ingress lanes remain cold.", 0.40);
+  }
+}
+wait(0.25);
+
+step("parallel-state-dependencies") {
+  par {
+    fade(webRequest.parts, 0.20);
+    seq { show(sessionRead.parts, 0.18); route(sessionRead, servicesToSessions, 1.45, linear); }
+    seq { show(databaseRead.parts, 0.18); route(databaseRead, servicesToDatabase, 1.45, linear); }
+    flow(sessionReplication, 1.45, both, continuous);
+    flow(databaseReplication, 1.45, both, continuous);
+    say(caption, "Two workers can contact independent state systems while replication stays a neutral HA relationship.", 0.40);
+  }
+}
+wait(0.25);
+
+step("logging-to-analytics") {
+  par {
+    fade(sessionRead.parts, 0.20); fade(databaseRead.parts, 0.20);
+    fade(servicesToSessions.hot, 0.25); fade(servicesToDatabase.hot, 0.25);
+    seq {
+      show(logEvent.parts, 0.18);
+      route(logEvent, servicesToLogging, 1.00, linear);
+      route(logEvent, loggingToStream, 0.85, linear);
+      route(logEvent, streamToAnalytics, 0.85, linear);
+    }
+    say(caption, "The same log event travels gRPC → Fluentd → Kafka → Spark without becoming a replacement dot.", 0.40);
+  }
+}
+wait(0.25);
+
+step("observability") {
+  par {
+    fade(logEvent.parts, 0.20);
+    fade(servicesToLogging.hot, 0.25);
+    fade(loggingToStream.hot, 0.25);
+    fade(streamToAnalytics.hot, 0.25);
+    seq { show(query.parts, 0.18); route(query, dashboardQuery, 0.80, linear); }
+    seq { show(sessionProbe.parts, 0.18); route(sessionProbe, sessionScrape, 1.25, linear); }
+    seq { show(databaseProbe.parts, 0.18); route(databaseProbe, databaseScrape, 1.25, linear); }
+    say(caption, "Grafana queries Prometheus while two explicit scrape messages select the replica targets.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70); pulse(state.parts, 0.70);
+    pulse(pipeline.parts, 0.70); pulse(observability.parts, 0.70);
+    say(caption, "Ownership stays static. Persistent objects and authored paths explain what the platform does.", 0.45);
+  }
+}
+wait(1.30);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Ze7T4z8KGr0" title="One On-Prem Platform, Three Runtime Stories — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="onprem-advanced-web-service-v2"><a class="header" href="#onprem-advanced-web-service-v2">onprem-advanced-web-service-v2</a></h2>
+<p>The same platform with real provider icons and paths coloured by relationship (request · analytics · telemetry · replication).</p>
+<pre><code class="language-manic">title("Advanced On-Premises Web Service — Runtime Paths (with icons)");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.14, h*0.03), "Made With Manic");
+text(kicker, (cx, h*0.04), "SYSTEMS KIT · ON-PREMISES WEB SERVICE");
+text(headline, (cx, h*0.125), "One platform. Three runtime stories.");
+text(caption, (cx, h*0.945), "First reveal ownership; then distinguish requests, telemetry, and the analytics stream.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h &gt; 1.25*w {
+  architecture(platform, (cx,h*0.52), w*0.84,h*0.72);
+}
+else {
+  architecture(platform, (cx,h*0.52), w*0.95,h*0.72);
+}
+
+node(ingress, platform, "onprem:nginx", "Nginx Ingress");
+
+cluster(services, platform, "SERVICE CLUSTER");
+node(grpc1, services, "onprem:server", "gRPC 1");
+node(grpc2, services, "onprem:server", "gRPC 2");
+node(grpc3, services, "onprem:server", "gRPC 3");
+
+cluster(state, platform, "");
+cluster(sessions, state, "SESSIONS HA");
+node(sessionPrimary, sessions, "onprem:redis", "Redis Session");
+node(sessionReplica, sessions, "onprem:redis", "Redis Replica");
+cluster(databases, state, "DATABASE HA");
+node(dbPrimary, databases, "onprem:postgresql", "PostgreSQL Users");
+node(dbReplica, databases, "onprem:postgresql", "PostgreSQL Replica");
+
+cluster(pipeline, platform, "EVENT ANALYTICS");
+node(logging, pipeline, "onprem:fluentd", "Fluentd Logging");
+node(stream, pipeline, "onprem:kafka", "Kafka Stream");
+node(analytics, pipeline, "onprem:spark", "Spark Analytics");
+
+cluster(observability, platform, "OBSERVABILITY");
+node(metrics, observability, "onprem:prometheus", "Prometheus");
+node(monitoring, observability, "onprem:grafana", "Grafana");
+
+// Main request and dependency possibilities.
+connect(ingressToServices, ingress, services);
+connect(servicesToSessions, services, sessionPrimary, orthogonal);
+connect(servicesToDatabase, services, dbPrimary, orthogonal);
+connect(servicesToLogging, services, logging, orthogonal);
+
+// The log stream remains one explicit pipeline.
+connect(loggingToStream, logging, stream, orthogonal);
+connect(streamToAnalytics, stream, analytics, orthogonal);
+
+// Grafana queries Prometheus; Prometheus explicitly scrapes both replicas.
+connect(dashboardQuery, monitoring, metrics, orthogonal);
+connect(sessionScrape, metrics, sessionReplica, orthogonal);
+connect(databaseScrape, metrics, dbReplica, orthogonal);
+
+// HA replication is a neutral relationship, not a directed runtime claim.
+link(sessionReplication, sessionPrimary.card, sessionReplica.card);
+link(databaseReplication, dbPrimary.card, dbReplica.card);
+dashed(sessionReplication); dashed(databaseReplication);
+color(sessionReplication, dim); color(databaseReplication, dim);
+stroke(sessionReplication, 2.5*u); stroke(databaseReplication, 2.5*u);
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+// request path = cyan · analytics pipeline = gold · telemetry/scrape = magenta.
+color(ingressToServices, cyan);  color(ingressToServices.hot, cyan);
+color(servicesToSessions, cyan); color(servicesToSessions.hot, cyan);
+color(servicesToDatabase, cyan); color(servicesToDatabase.hot, cyan);
+color(servicesToLogging, gold);  color(servicesToLogging.hot, gold);
+color(loggingToStream, gold);    color(loggingToStream.hot, gold);
+color(streamToAnalytics, gold);  color(streamToAnalytics.hot, gold);
+color(dashboardQuery, magenta);  color(dashboardQuery.hot, magenta);
+color(sessionScrape, magenta);   color(sessionScrape.hot, magenta);
+color(databaseScrape, magenta);  color(databaseScrape.hot, magenta);
+// (replication links stay neutral dim — a relationship, not a runtime path)
+
+// legend: relationship → colour
+text(legReq, (w*0.30, h*0.175), "REQUEST"); size(legReq, 13*u); color(legReq, cyan); bold(legReq);
+text(legAna, (w*0.44, h*0.175), "ANALYTICS"); size(legAna, 13*u); color(legAna, gold); bold(legAna);
+text(legTel, (w*0.60, h*0.175), "TELEMETRY"); size(legTel, 13*u); color(legTel, magenta); bold(legTel);
+text(legRep, (w*0.76, h*0.175), "REPLICATION"); size(legRep, 13*u); color(legRep, dim); bold(legRep);
+hidden(legReq); hidden(legAna); hidden(legTel); hidden(legRep);
+
+message(webRequest, ingress, "REQ");
+message(sessionRead, grpc2, "S");
+message(databaseRead, grpc3, "DB");
+message(logEvent, grpc1, "LOG");
+message(query, monitoring, "Q");
+message(sessionProbe, metrics, "S");
+message(databaseProbe, metrics, "D");
+
+hidden(kicker); hidden(headline); hidden(caption);
+hidden(platform.nodes);
+hidden(services.parts); hidden(state.parts); hidden(sessions.parts); hidden(databases.parts);
+hidden(pipeline.parts); hidden(observability.parts);
+hidden(webRequest.parts); hidden(sessionRead.parts); hidden(databaseRead.parts);
+hidden(logEvent.parts); hidden(query.parts); hidden(sessionProbe.parts); hidden(databaseProbe.parts);
+untraced(platform.connections); untraced(sessionReplication); untraced(databaseReplication);
+
+step("entry-and-services") {
+  par {
+    show(kicker, 0.30); show(headline, 0.45); show(caption, 0.40);
+    show(ingress, 0.35);
+    show(services.parts, 0.45);
+    stagger(0.08) { show(grpc1, 0.30); show(grpc2, 0.30); show(grpc3, 0.30); }
+    say(caption, "Nginx can reach three gRPC workers. The dashed fan-out is possibility, not a load-balancing simulation.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state-pipeline-and-monitoring") {
+  par {
+    show(state.parts, 0.45); show(sessions.parts, 0.40); show(databases.parts, 0.40);
+    show(sessionPrimary, 0.30); show(sessionReplica, 0.30);
+    show(dbPrimary, 0.30); show(dbReplica, 0.30);
+    show(pipeline.parts, 0.45); show(logging, 0.30); show(stream, 0.30); show(analytics, 0.30);
+    show(observability.parts, 0.45); show(metrics, 0.30); show(monitoring, 0.30);
+    say(caption, "Sessions, users, analytics, and observability keep separate ownership boundaries.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(platform.connections, 1.10, smooth);
+    draw(sessionReplication, 0.55, smooth);
+    draw(databaseReplication, 0.55, smooth);
+    show(legReq, 0.3); show(legAna, 0.3); show(legTel, 0.3); show(legRep, 0.3);
+    say(caption, "Each path is coloured by relationship: request, analytics, telemetry, replication.", 0.40);
+  }
+}
+wait(0.30);
+
+step("one-ingress-request") {
+  par {
+    seq {
+      show(webRequest.parts, 0.18);
+      route(webRequest, ingressToServices, 1.00, linear);
+    }
+    say(caption, "One HTTP request selects one gRPC worker; the other possible ingress lanes remain cold.", 0.40);
+  }
+}
+wait(0.25);
+
+step("parallel-state-dependencies") {
+  par {
+    fade(webRequest.parts, 0.20);
+    seq { show(sessionRead.parts, 0.18); route(sessionRead, servicesToSessions, 1.45, linear); }
+    seq { show(databaseRead.parts, 0.18); route(databaseRead, servicesToDatabase, 1.45, linear); }
+    flow(sessionReplication, 1.45, both, continuous);
+    flow(databaseReplication, 1.45, both, continuous);
+    say(caption, "Two workers can contact independent state systems while replication stays a neutral HA relationship.", 0.40);
+  }
+}
+wait(0.25);
+
+step("logging-to-analytics") {
+  par {
+    fade(sessionRead.parts, 0.20); fade(databaseRead.parts, 0.20);
+    fade(servicesToSessions.hot, 0.25); fade(servicesToDatabase.hot, 0.25);
+    seq {
+      show(logEvent.parts, 0.18);
+      route(logEvent, servicesToLogging, 1.00, linear);
+      route(logEvent, loggingToStream, 0.85, linear);
+      route(logEvent, streamToAnalytics, 0.85, linear);
+    }
+    say(caption, "The same log event travels gRPC → Fluentd → Kafka → Spark without becoming a replacement dot.", 0.40);
+  }
+}
+wait(0.25);
+
+step("observability") {
+  par {
+    fade(logEvent.parts, 0.20);
+    fade(servicesToLogging.hot, 0.25);
+    fade(loggingToStream.hot, 0.25);
+    fade(streamToAnalytics.hot, 0.25);
+    seq { show(query.parts, 0.18); route(query, dashboardQuery, 0.80, linear); }
+    seq { show(sessionProbe.parts, 0.18); route(sessionProbe, sessionScrape, 1.25, linear); }
+    seq { show(databaseProbe.parts, 0.18); route(databaseProbe, databaseScrape, 1.25, linear); }
+    say(caption, "Grafana queries Prometheus while two explicit scrape messages select the replica targets.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70); pulse(state.parts, 0.70);
+    pulse(pipeline.parts, 0.70); pulse(observability.parts, 0.70);
+    say(caption, "Ownership stays static. Persistent objects and authored paths explain what the platform does.", 0.45);
+  }
+}
+wait(1.30);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Dhl6cFAOBHw" title="Advanced On-Prem Web Service, Paths Coloured by Relationship — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-3d.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="troubleshooting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-3d.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="troubleshooting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

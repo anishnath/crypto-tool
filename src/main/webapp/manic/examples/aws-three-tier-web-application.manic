@@ -1,0 +1,134 @@
+title("Designing and Building a Three-Tier Web Application Architecture on AWS");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.06), "Made With Manic");
+text(kicker, (cx, h*0.065), "AWS ARCHITECTURE · THREE TIERS");
+text(headline, (cx, h*0.145), "Designing a Three-Tier Web Application");
+text(caption, (cx, h*0.91), "Each tier has one responsibility—and the request keeps moving.");
+size(kicker, 17*u); color(kicker, dim); bold(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.84);
+
+if h > 1.25*w {
+  architecture(presentation, (cx, h*0.30), w*0.72, h*0.18);
+  architecture(application, (cx, h*0.52), w*0.72, h*0.18);
+  architecture(dataTier, (cx, h*0.74), w*0.72, h*0.18);
+  text(presentationLabel, (w*0.13, h*0.30), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.13, h*0.52), "2 · APPLICATION");
+  text(dataLabel, (w*0.13, h*0.74), "3 · DATA");
+}
+else {
+  architecture(presentation, (w*0.20, h*0.50), w*0.27, h*0.55);
+  architecture(application, (w*0.50, h*0.50), w*0.27, h*0.55);
+  architecture(dataTier, (w*0.80, h*0.50), w*0.27, h*0.55);
+  text(presentationLabel, (w*0.20, h*0.235), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.50, h*0.235), "2 · APPLICATION");
+  text(dataLabel, (w*0.80, h*0.235), "3 · DATA");
+}
+
+size(presentationLabel, 16*u); color(presentationLabel, cyan); bold(presentationLabel);
+size(applicationLabel, 16*u); color(applicationLabel, magenta); bold(applicationLabel);
+size(dataLabel, 16*u); color(dataLabel, gold); bold(dataLabel);
+
+node(dns, presentation, "aws:route53", "Route 53");
+node(cdn, presentation, "aws:cloudfront", "CloudFront");
+node(balancer, application, "aws:elb", "Load Balancer");
+node(app, application, "aws:ecs", "ECS Service");
+node(cache, dataTier, "aws:elasticache", "ElastiCache");
+node(database, dataTier, "aws:rds", "Amazon RDS");
+
+connect(resolvePath, dns, cdn);
+connect(toApplication, cdn, balancer);
+connect(toService, balancer, app);
+connect(toCache, app, cache);
+connect(toDatabase, cache, database);
+request(webRequest, dns, "GET /checkout");
+
+hidden(presentation.nodes); hidden(application.nodes); hidden(dataTier.nodes);
+untraced(resolvePath); untraced(toApplication); untraced(toService);
+untraced(toCache); untraced(toDatabase);
+hidden(webRequest.parts);
+
+step("three-responsibilities") {
+  par {
+    show(presentation.nodes, 0.55);
+    say(caption, "Presentation receives users, resolves DNS, and serves content from the edge.", 0.40);
+  }
+}
+wait(0.20);
+
+step("application-tier") {
+  par {
+    show(application.nodes, 0.55);
+    say(caption, "Application distributes traffic and runs stateless business logic.", 0.40);
+  }
+}
+wait(0.20);
+
+step("data-tier") {
+  par {
+    show(dataTier.nodes, 0.55);
+    say(caption, "Data accelerates repeated reads and persists durable records.", 0.40);
+  }
+}
+wait(0.25);
+
+step("connect-the-tiers") {
+  par {
+    stagger(0.10) {
+      draw(resolvePath, 0.35); draw(toApplication, 0.35); draw(toService, 0.35);
+      draw(toCache, 0.35); draw(toDatabase, 0.35);
+    }
+    show(webRequest.parts, 0.30);
+    say(caption, "Now follow one checkout request through the complete design.", 0.40);
+  }
+}
+wait(0.20);
+
+step("presentation-flow") {
+  par {
+    route(webRequest, resolvePath, 0.80, smooth);
+    say(caption, "Route 53 resolves the domain; CloudFront brings the experience closer to users.", 0.40);
+  }
+}
+
+step("load-balance") {
+  par {
+    route(webRequest, toApplication, 0.95, smooth);
+    say(caption, "The load balancer is the controlled entry into the application tier.", 0.40);
+  }
+}
+
+step("run-the-application") {
+  par {
+    route(webRequest, toService, 0.80, smooth);
+    say(caption, "ECS runs replicated application tasks without mixing them with stored data.", 0.40);
+  }
+}
+
+step("read-fast") {
+  par {
+    route(webRequest, toCache, 0.95, smooth);
+    say(caption, "ElastiCache answers hot reads quickly and protects the database from repeated work.", 0.40);
+  }
+}
+
+step("persist-safely") {
+  par {
+    route(webRequest, toDatabase, 0.80, smooth);
+    say(caption, "Amazon RDS remains the durable source of truth for the transaction.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(presentation.nodes, 0.70);
+    pulse(application.nodes, 0.70);
+    pulse(dataTier.nodes, 0.70);
+    say(caption, "Three tiers isolate delivery, computation, and state—so each can scale and evolve independently.", 0.45);
+  }
+}
+wait(1.40);

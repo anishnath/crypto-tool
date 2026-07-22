@@ -1,0 +1,146 @@
+title("A Three-Tier Application on Kubernetes — Following One Request");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.06), "Made With Manic");
+text(kicker, (cx, h*0.065), "KUBERNETES · THREE TIERS · ONE DATA FLOW");
+text(headline, (cx, h*0.145), "A Three-Tier App on Kubernetes");
+text(caption, (cx, h*0.91), "Ingress in, pods compute, state persists — and the request keeps moving.");
+size(kicker, 17*u); color(kicker, dim); bold(kicker);
+size(headline, 32*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.84);
+
+if h > 1.25*w {
+  architecture(presentation, (cx, h*0.30), w*0.72, h*0.18);
+  architecture(application, (cx, h*0.52), w*0.72, h*0.18);
+  architecture(dataTier, (cx, h*0.74), w*0.72, h*0.18);
+  text(presentationLabel, (w*0.13, h*0.30), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.13, h*0.52), "2 · APPLICATION");
+  text(dataLabel, (w*0.13, h*0.74), "3 · DATA");
+}
+else {
+  architecture(presentation, (w*0.20, h*0.50), w*0.27, h*0.55);
+  architecture(application, (w*0.50, h*0.50), w*0.27, h*0.55);
+  architecture(dataTier, (w*0.80, h*0.50), w*0.27, h*0.55);
+  text(presentationLabel, (w*0.20, h*0.235), "1 · PRESENTATION");
+  text(applicationLabel, (w*0.50, h*0.235), "2 · APPLICATION");
+  text(dataLabel, (w*0.80, h*0.235), "3 · DATA");
+}
+
+size(presentationLabel, 16*u); color(presentationLabel, cyan); bold(presentationLabel);
+size(applicationLabel, 16*u); color(applicationLabel, magenta); bold(applicationLabel);
+size(dataLabel, 16*u); color(dataLabel, gold); bold(dataLabel);
+
+node(ingress, presentation, "k8s:ing", "Ingress");
+node(web, presentation, "k8s:deploy", "web Deployment x3");
+node(apisvc, application, "k8s:svc", "api Service");
+node(api, application, "k8s:deploy", "api Deployment x3");
+node(cache, dataTier, "onprem:redis", "Redis");
+node(database, dataTier, "onprem:postgresql", "PostgreSQL (StatefulSet)");
+
+connect(toWeb, ingress, web);
+connect(toApiSvc, web, apisvc);
+connect(toApi, apisvc, api);
+connect(toCache, api, cache);
+connect(toDatabase, cache, database);
+request(userRequest, ingress, "GET /checkout");
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+color(toWeb, cyan);        color(toWeb.hot, cyan);
+color(toApiSvc, cyan);     color(toApiSvc.hot, cyan);
+color(toApi, cyan);        color(toApi.hot, cyan);
+color(toCache, magenta);   color(toCache.hot, magenta);
+color(toDatabase, gold);   color(toDatabase.hot, gold);
+// legend
+text(legReq, (w*0.30, h*0.175), "REQUEST"); size(legReq, 13); color(legReq, cyan); bold(legReq);
+text(legCache, (w*0.48, h*0.175), "CACHE"); size(legCache, 13); color(legCache, magenta); bold(legCache);
+text(legDb, (w*0.62, h*0.175), "PERSIST"); size(legDb, 13); color(legDb, gold); bold(legDb);
+hidden(legReq); hidden(legCache); hidden(legDb);
+hidden(presentation.nodes); hidden(application.nodes); hidden(dataTier.nodes);
+untraced(toWeb); untraced(toApiSvc); untraced(toApi);
+untraced(toCache); untraced(toDatabase);
+hidden(userRequest.parts);
+
+step("presentation-tier") {
+  par {
+    show(presentation.nodes, 0.55);
+    say(caption, "Presentation: the Ingress terminates traffic and routes it to the web pods.", 0.40);
+  }
+}
+wait(0.20);
+
+step("application-tier") {
+  par {
+    show(application.nodes, 0.55);
+    say(caption, "Application: a Service load-balances across stateless api pods that scale on demand.", 0.40);
+  }
+}
+wait(0.20);
+
+step("data-tier") {
+  par {
+    show(dataTier.nodes, 0.55);
+    say(caption, "Data: Redis serves hot reads; a PostgreSQL StatefulSet holds durable state.", 0.40);
+  }
+}
+wait(0.25);
+
+step("connect-the-tiers") {
+  par {
+    stagger(0.10) {
+      draw(toWeb, 0.35); draw(toApiSvc, 0.35); draw(toApi, 0.35);
+      draw(toCache, 0.35); draw(toDatabase, 0.35);
+    }
+    show(userRequest.parts, 0.30);
+    show(legReq, 0.3); show(legCache, 0.3); show(legDb, 0.3);
+    say(caption, "Now follow one checkout request through the whole cluster.", 0.40);
+  }
+}
+wait(0.20);
+
+step("ingress-to-web") {
+  par {
+    route(userRequest, toWeb, 0.85, smooth);
+    say(caption, "The Ingress forwards the request to a web pod via the Service.", 0.40);
+  }
+}
+
+step("web-to-api") {
+  par {
+    route(userRequest, toApiSvc, 0.90, smooth);
+    say(caption, "The web tier calls the api Service — one controlled entry into business logic.", 0.40);
+  }
+}
+
+step("into-a-pod") {
+  par {
+    route(userRequest, toApi, 0.80, smooth);
+    say(caption, "The Service load-balances into one replicated api pod.", 0.40);
+  }
+}
+
+step("read-fast") {
+  par {
+    route(userRequest, toCache, 0.90, smooth);
+    say(caption, "Redis answers the hot read first, shielding the database from repeated work.", 0.40);
+  }
+}
+
+step("persist-safely") {
+  par {
+    route(userRequest, toDatabase, 0.85, smooth);
+    say(caption, "On a miss, the PostgreSQL StatefulSet is the durable source of truth.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(presentation.nodes, 0.70);
+    pulse(application.nodes, 0.70);
+    pulse(dataTier.nodes, 0.70);
+    say(caption, "Ingress, Services, Deployments and a StatefulSet keep delivery, compute, and state independent.", 0.45);
+  }
+}
+wait(1.40);

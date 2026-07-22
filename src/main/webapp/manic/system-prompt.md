@@ -98,7 +98,13 @@ Constructors and timeline may be written in any order.
 4. **Colors are a fixed palette**: `fg`, `void`, `cyan`, `magenta`, `lime`,
    `gold`, `red`, `orange`, `blue`, `dim`, `panel`. No hex/RGB and no other names. For a computed/per-item colour
    use `hue(id, degrees)` (0–360).
-5. **Real math → `equation(...)`; `text(...)` stays plain mono.** For anything
+5. **Real math → `equation(...)`; `text(...)` stays ordinary shaped text.**
+   `text`/`say`/captions use deterministic embedded fonts—never request or
+   invent a font name. Unicode fallback, combining marks, bidi/RTL, Arabic,
+   Devanagari, wrapping, reveal, rotation, glow, and zoom are automatic. If
+   `manic check` reports an unsupported cluster, use a native primitive, LaTeX
+   for math, or an approved bundled script; do not substitute silent tofu or
+   colour emoji. For anything
    with fractions/roots/exponents/Greek/operators, use
    `equation(id, (x,y), `latex`, [size])` — it typesets real LaTeX (KaTeX-grade)
    and takes the template colour.
@@ -237,7 +243,8 @@ compatible geometry interpolates and other pairs use a safe local crossfade ·
 `turn(id_or_tag,pivot,degrees,[d],[ease])` rotates one entity or a tagged
 arrangement rigidly around a point/entity pivot; use `spin` for in-place
 rotation and `transform` when the matrix itself is the idea ·
-`flow(path,[d])` (travelling luminous emphasis) ·
+`flow(path,[d],[forward|reverse|both],[once|continuous])` (directional travelling
+emphasis; continuous uses finite complete cycles and drains cleanly) ·
 `erase(id,[d])` · `type(id,[d])` · `say(id,"s",[d])` · `recolor(id,name,[d])` ·
 `` rewrite(id, `latex`, [d], [ease]) `` (existing `equation` only: smoothly match
 unchanged RaTeX parts into the next author-supplied formula; Manic animates the
@@ -259,6 +266,14 @@ outline; `spin` degrees winds the blend) then `to(a, morph, 1, dur)` to animate
 (open paths stay open; closed outlines stay closed; `a` becomes a polyline).
 `copy(new, src)` duplicates an entity
 (standalone) — copy then morph/move it while the original stays.
+
+**Motion is domain-neutral.** Never infer behavior from an icon kind, label,
+filename, or subject word. A load balancer, topic, queue, photon, cell, vehicle,
+and decorative spark are all ordinary creator-authored entities. Use `travel`
+for persistent object identity, `flow` for identity-free path activity, `seq`
+for authored order, `par` for simultaneous paths, and tags for grouped paths.
+`flow` does not require a connected graph or endpoints.
+
 Easings: `smooth linear in out overshoot bounce elastic`.
 
 ### Math kit
@@ -560,6 +575,67 @@ follows from a construction the geo kit actually computes.
   frame after the reveal, then inspect label collisions, formula contrast,
   safe-area clearance, and whether the drawn figure accidentally suggests an
   unstated special case.
+
+### Diagrams kit
+Animate a technical diagram (architecture today; flows/sequences later). Separate
+the structure from its runtime story. Declare one responsive
+`architecture`, declare each `cluster(id,parent,"label")` before its children,
+and give every `node` either the architecture or a cluster as parent. Node
+artwork is a **`provider:name` string** from a catalogue of **17 providers**
+(`aws`, `gcp`, `azure`, `onprem`, `k8s`, `ibm`, `oci`, `alibabacloud`,
+`digitalocean`, `firebase`, `elastic`, `openstack`, `outscale`, `programming`,
+`saas`, `gis`, `generic`) — e.g. `"aws:lambda"`, `"gcp:bigquery"`,
+`"onprem:redis"`, `"k8s:pod"`. Use `provider:category/name` to disambiguate a
+repeated name (`"aws:network/internet-gateway"`). Friendly AWS aliases resolve
+automatically (`aws:sqs`, `aws:s3`, `aws:elb`, `aws:ecs`, `aws:eks`,
+`aws:route53`). **Never invent a constructor per cloud service** — it is always a
+string kind. When provider artwork is unnecessary, use the native visual
+archetypes `"client"`, `"service"`, `"gateway"`, `"database"`, `"cache"`,
+`"queue"`, `"storage"`, or `"external"` (no assets). These names select
+appearance only; they never add routing, queueing, balancing, or persistence
+semantics — the creator authors behaviour with `route`/`flow`/ordinary verbs.
+
+Use `connect(id,from,to,[bend])` for possible directed topology. Use
+`connect(id,from,to,orthogonal,[from_port],[to_port])` for one Manhattan
+connector whose optional ports are `auto`, `left`, `right`, `top`, or `bottom`.
+The default `auto` ports follow the dominant node-to-node direction. Connections
+render as cold dashed relationships until activity illuminates a solid hot
+overlay. The optional signed bend is explicit visual geometry for routing around
+a known obstruction; do not imply that Manic detects obstacles or provider
+semantics. Orthogonal routing is also creator-selected geometry, not automatic
+obstacle avoidance. A node-to-cluster or cluster-to-node connection expands the available
+member lanes, and the declared connection id addresses the complete lane group. Use
+`message(id,source,"label")` for a generic persistent event/job/packet/command;
+`request` is an HTTP-friendly alias. `route(message,connection,[d],[ease])`
+moves the same identity through one selected lane and automatically illuminates
+that lane. Route in a continuous chain: Manic rejects a connection whose source
+does not match the message's current semantic node.
+
+For an inferred execution, use `hotpath(message,[duration],[seed])`. It starts
+from the message's current node, chooses one valid physical lane at each
+fan-out, and moves that same dot continuously to a sink. The optional seed is
+deterministic across preview, backend, and WASM. Use `route` when every hop is
+part of the explanation; use `hotpath` when one valid end-to-end execution is
+the explanation. It follows graph geometry only and never infers balancing,
+queueing, or broadcast semantics from node kinds. Cyclic retry traversal is not
+yet automatic.
+
+Do not animate all cluster lanes to represent one message. Use `draw(group)` to
+reveal possible topology, `route` for the actual trace, and
+`flow(group,d,forward,continuous)` only for aggregate activity. Generic flow is
+`flow(path,[d],[forward|reverse|both],[once|continuous])`; a continuous stream is
+finite, scrubbable, length-aware, and drains cleanly. Prefer a separately
+directed return connection in a Systems story instead of moving against an
+arrow. Compose focus/failure/health explanations with ordinary `show`, `fade`,
+`color`, `pulse`, `shake`, camera, and text verbs rather than inventing
+provider-specific action vocabulary.
+
+**Colour paths by relationship** to make a dense diagram readable. A connection
+exposes two colourable parts — the cold dashed line `id` and the hot overlay
+`id.hot`. Group connections by relationship and colour each group with
+`color`/`hue`/`glow`/`dashed`, plus a small text legend: e.g. requests cyan,
+analytics gold, telemetry `hue(...,328)` pink, replication `dim`. The engine
+never infers a path's meaning — colour is how the creator assigns it.
 
 ### Algo kit
 `graph(id, "v1 v2 v3", "a-b a>c", layout, (cx,cy), scale, [radius])` — a node/edge

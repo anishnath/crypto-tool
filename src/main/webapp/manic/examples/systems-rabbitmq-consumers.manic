@@ -1,0 +1,118 @@
+title("RabbitMQ Consumers — One Message, One Worker");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.14, h*0.035), "Made With Manic");
+text(kicker, (cx, h*0.055), "SYSTEMS KIT · COMPETING CONSUMERS");
+text(headline, (cx, h*0.125), "One queue. Three workers. One owner per message.");
+text(caption, (cx, h*0.94), "Cold paths show every legal route; the moving job shows the route selected now.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h > 1.25*w {
+  architecture(runtime, (cx, h*0.52), w*0.84, h*0.70);
+}
+else {
+  architecture(runtime, (cx, h*0.52), w*0.90, h*0.68);
+}
+
+node(queue, runtime, "queue", "RabbitMQ Queue");
+
+cluster(consumers, runtime, "RABBITMQ CONSUMERS");
+node(worker1, consumers, "service", "Pod Worker 1");
+node(worker2, consumers, "service", "Pod Worker 2");
+node(worker3, consumers, "service", "Pod Worker 3");
+
+node(database, runtime, "database", "Database");
+
+// Every lane is structural possibility. Explicit ports keep the upper and
+// lower routes orthogonal without changing the semantic connection identity.
+connect(queueToWorker1, queue, worker1, orthogonal, right, left);
+connect(queueToWorker2, queue, worker2);
+connect(queueToWorker3, queue, worker3, orthogonal, right, left);
+connect(worker1ToDatabase, worker1, database, orthogonal, right, left);
+connect(worker2ToDatabase, worker2, database);
+connect(worker3ToDatabase, worker3, database, orthogonal, right, left);
+
+message(job101, queue, "101");
+message(job102, queue, "102");
+message(job103, queue, "103");
+
+hidden(kicker); hidden(headline); hidden(caption);
+hidden(runtime.nodes); hidden(consumers.parts);
+hidden(job101.parts); hidden(job102.parts); hidden(job103.parts);
+untraced(runtime.connections);
+
+step("queue-and-consumer-pool") {
+  par {
+    show(kicker, 0.30); show(headline, 0.45); show(caption, 0.40);
+    show(queue, 0.35);
+    show(consumers.parts, 0.45);
+    stagger(0.10) {
+      show(worker1, 0.32);
+      show(worker2, 0.32);
+      show(worker3, 0.32);
+    }
+    say(caption, "The queue and three workers are structure only. No delivery policy is inferred from their icons.", 0.40);
+  }
+}
+wait(0.25);
+
+step("shared-database") {
+  par {
+    show(database, 0.38);
+    draw(runtime.connections, 1.10, smooth);
+    say(caption, "Each worker can consume from RabbitMQ and write its result to the same database.", 0.40);
+  }
+}
+wait(0.35);
+
+step("message-101-selects-worker-2") {
+  par {
+    seq {
+      show(job101.parts, 0.18);
+      route(job101, queueToWorker2, 0.90, linear);
+      route(job101, worker2ToDatabase, 0.90, linear);
+    }
+    say(caption, "Message 101 is delivered to Worker 2 only. The upper and lower consumer routes stay cold.", 0.40);
+  }
+}
+wait(0.35);
+
+step("message-102-selects-worker-1") {
+  par {
+    fade(job101.parts, 0.20);
+    fade(queueToWorker2.hot, 0.25); fade(worker2ToDatabase.hot, 0.25);
+    seq {
+      show(job102.parts, 0.18);
+      route(job102, queueToWorker1, 1.05, linear);
+      route(job102, worker1ToDatabase, 1.05, linear);
+    }
+    say(caption, "The next message can select Worker 1. Orthogonal turns preserve the same moving identity.", 0.40);
+  }
+}
+wait(0.35);
+
+step("message-103-selects-worker-3") {
+  par {
+    fade(job102.parts, 0.20);
+    fade(queueToWorker1.hot, 0.25); fade(worker1ToDatabase.hot, 0.25);
+    seq {
+      show(job103.parts, 0.18);
+      route(job103, queueToWorker3, 1.05, linear);
+      route(job103, worker3ToDatabase, 1.05, linear);
+    }
+    say(caption, "Message 103 selects Worker 3: three jobs were shared, never broadcast as three copies.", 0.40);
+  }
+}
+wait(0.45);
+
+step("takeaway") {
+  par {
+    pulse(queue, 0.65); pulse(consumers.parts, 0.75); pulse(database, 0.65);
+    say(caption, "Manic does not guess RabbitMQ semantics—the creator explicitly authors each selected delivery.", 0.45);
+  }
+}
+wait(1.30);

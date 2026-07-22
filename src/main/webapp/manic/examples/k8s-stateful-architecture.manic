@@ -1,0 +1,134 @@
+title("A Stateful Set on Kubernetes — Pods, Claims, and Volumes");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.045), "Made With Manic");
+text(kicker, (cx, h*0.05), "KUBERNETES · STATEFUL ARCHITECTURE");
+text(headline, (cx, h*0.11), "Every replica keeps its own storage.");
+text(caption, (cx, h*0.94), "Dashed relationships show every route the architecture allows.");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 17*u); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(stateful, (cx, h*0.52), w*0.94, h*0.72);
+
+cluster(apps, stateful, "APPS");
+node(svc, apps, "k8s:svc", "svc");
+node(sts, apps, "k8s:sts", "sts");
+
+cluster(pods, stateful, "PODS");
+for i in 0..3 {
+  node(pod{i}, pods, "k8s:pod", "pod");
+}
+
+cluster(claims, stateful, "CLAIMS");
+for i in 0..3 {
+  node(pvc{i}, claims, "k8s:pvc", "pvc");
+}
+
+cluster(storage, stateful, "STORAGE");
+node(pv, storage, "k8s:pv", "pv");
+node(sc, storage, "k8s:sc", "sc");
+
+// topology: svc >> pod >> pvc, pod - sts - pvc, and sc >> pv >> pvc (provisioning)
+for i in 0..3 {
+  connect(svcPod{i}, svc, pod{i});
+  connect(podPvc{i}, pod{i}, pvc{i});
+  connect(podSts{i}, pod{i}, sts);
+  connect(stsPvc{i}, sts, pvc{i});
+  connect(pvPvc{i}, pv, pvc{i});
+}
+connect(scPv, sc, pv);
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+for i in 0..3 {
+  color(svcPod{i}, cyan);      // ACCESS
+  color(podPvc{i}, cyan);
+  color(podSts{i}, magenta);   // OWNERSHIP
+  color(stsPvc{i}, magenta);
+  color(pvPvc{i}, gold);       // PROVISIONING
+}
+color(scPv, gold); color(scPv.hot, gold);
+text(legAcc, (w*0.30, h*0.175), "ACCESS"); size(legAcc, 13); color(legAcc, cyan); bold(legAcc);
+text(legOwn, (w*0.46, h*0.175), "OWNERSHIP"); size(legOwn, 13); color(legOwn, magenta); bold(legOwn);
+text(legProv, (w*0.64, h*0.175), "PROVISIONING"); size(legProv, 13); color(legProv, gold); bold(legProv);
+hidden(legAcc); hidden(legOwn); hidden(legProv);
+
+hidden(stateful.nodes);
+hidden(apps.parts); hidden(pods.parts); hidden(claims.parts); hidden(storage.parts);
+for i in 0..3 {
+  untraced(svcPod{i}); untraced(podPvc{i}); untraced(podSts{i});
+  untraced(stsPvc{i}); untraced(pvPvc{i});
+}
+untraced(scPv);
+
+step("apps") {
+  par {
+    show(apps.parts, 0.5);
+    show(svc, 0.4); show(sts, 0.4);
+    show(pods.parts, 0.4);
+    stagger(0.08) { show(pod0, 0.35); show(pod1, 0.35); show(pod2, 0.35); }
+    show(claims.parts, 0.4);
+    stagger(0.08) { show(pvc0, 0.35); show(pvc1, 0.35); show(pvc2, 0.35); }
+    say(caption, "A Service fronts three pods; a StatefulSet gives each pod a stable identity and claim.", 0.40);
+  }
+}
+wait(0.20);
+
+step("storage") {
+  par {
+    show(storage.parts, 0.45);
+    show(pv, 0.4); show(sc, 0.4);
+    say(caption, "A StorageClass provisions PersistentVolumes that back each PersistentVolumeClaim.", 0.40);
+  }
+}
+wait(0.25);
+
+step("possible-topology") {
+  par {
+    stagger(0.05) {
+      draw(svcPod0, 0.35); draw(svcPod1, 0.35); draw(svcPod2, 0.35);
+      draw(podPvc0, 0.35); draw(podPvc1, 0.35); draw(podPvc2, 0.35);
+      draw(podSts0, 0.35); draw(podSts1, 0.35); draw(podSts2, 0.35);
+      draw(stsPvc0, 0.35); draw(stsPvc1, 0.35); draw(stsPvc2, 0.35);
+      draw(scPv, 0.35);
+      draw(pvPvc0, 0.35); draw(pvPvc1, 0.35); draw(pvPvc2, 0.35);
+    }
+    show(legAcc, 0.3); show(legOwn, 0.3); show(legProv, 0.3);
+    say(caption, "Every dashed edge is a relationship: routing, ownership, and storage binding together.", 0.40);
+  }
+}
+wait(0.30);
+
+step("app-access") {
+  par {
+    stagger(0.12) {
+      seq { flow(svcPod0, 0.7); flow(podPvc0, 0.7); }
+      seq { flow(svcPod1, 0.7); flow(podPvc1, 0.7); }
+      seq { flow(svcPod2, 0.7); flow(podPvc2, 0.7); }
+    }
+    say(caption, "Traffic: the Service reaches a pod, which reads and writes its own claim.", 0.40);
+  }
+}
+wait(0.25);
+
+step("provisioning") {
+  par {
+    seq {
+      flow(scPv, 0.8);
+      par { flow(pvPvc0, 0.8); flow(pvPvc1, 0.8); flow(pvPvc2, 0.8); }
+    }
+    say(caption, "Provisioning: the StorageClass creates PVs that bind to each claim.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(apps.parts, 0.7);
+    pulse(storage.parts, 0.7);
+    say(caption, "Stateful means identity plus durable storage—one claim and volume per replica.", 0.45);
+  }
+}
+wait(1.40);

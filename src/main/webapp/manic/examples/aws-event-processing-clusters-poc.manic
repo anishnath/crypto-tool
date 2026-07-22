@@ -1,0 +1,97 @@
+title("Event Processing on AWS — From Topology to Hot Path");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.055), "AWS ARCHITECTURE · EVENT PROCESSING");
+text(headline, (cx, h*0.115), "One topology. One event. One visible hot path.");
+text(caption, (cx, h*0.935), "Dashed relationships show every route the architecture allows.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h > 1.25*w {
+  architecture(eventProcessing, (cx, h*0.51), w*0.82, h*0.70);
+}
+else {
+  architecture(eventProcessing, (cx, h*0.51), w*0.92, h*0.69);
+}
+
+node(source, eventProcessing, "aws:eks", "K8s Source");
+cluster(flows, eventProcessing, "EVENT FLOWS");
+cluster(workers, flows, "EVENT WORKERS");
+node(worker1, workers, "aws:ecs", "Worker 1");
+node(worker2, workers, "aws:ecs", "Worker 2");
+node(worker3, workers, "aws:ecs", "Worker 3");
+node(queue, flows, "aws:sqs", "Event Queue");
+cluster(processing, flows, "PROCESSING");
+node(proc1, processing, "aws:lambda", "Processor 1");
+node(proc2, processing, "aws:lambda", "Processor 2");
+node(proc3, processing, "aws:lambda", "Processor 3");
+node(store, eventProcessing, "aws:s3", "Events Store");
+node(warehouse, eventProcessing, "aws:redshift", "Analytics");
+
+connect(toWorkers, source, workers);
+connect(toQueue, workers, queue);
+connect(toHandlers, queue, processing);
+connect(toStore, processing, store);
+connect(toAnalytics, processing, warehouse);
+
+message(event, source, "EVENT");
+
+hidden(eventProcessing.nodes);
+hidden(flows.parts); hidden(workers.parts); hidden(processing.parts);
+hidden(event.parts);
+untraced(toWorkers); untraced(toQueue); untraced(toHandlers);
+untraced(toStore); untraced(toAnalytics);
+
+step("source") {
+  par {
+    show(source, 0.45);
+    say(caption, "EKS is the source; the rest of the system is still only structure.", 0.40);
+  }
+}
+wait(0.25);
+
+step("ownership") {
+  par {
+    show(flows.parts, 0.50);
+    show(workers.parts, 0.45);
+    stagger(0.10) { show(worker1, 0.35); show(worker2, 0.35); show(worker3, 0.35); }
+    show(queue, 0.40);
+    show(processing.parts, 0.45);
+    stagger(0.10) { show(proc1, 0.35); show(proc2, 0.35); show(proc3, 0.35); }
+    show(store, 0.40); show(warehouse, 0.40);
+    say(caption, "Nested boundaries reveal ownership without hiding the individual services.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(toWorkers, 0.55);
+    draw(toQueue, 0.55);
+    draw(toHandlers, 0.55);
+    draw(toStore, 0.55); draw(toAnalytics, 0.55);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.35);
+
+step("runtime-hot-path") {
+  par {
+    show(event.parts, 0.25);
+    hotpath(event, 6.20, 27);
+    say(caption, "The event now chooses valid branches and travels end-to-end as one continuous hot path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(event.parts, 0.70);
+    say(caption, "Cold topology explains relationships. The moving dot proves what happened now.", 0.45);
+  }
+}
+wait(1.40);

@@ -1,0 +1,196 @@
+title("Advanced On-Premises Web Service — Runtime Paths (with icons)");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.14, h*0.03), "Made With Manic");
+text(kicker, (cx, h*0.04), "SYSTEMS KIT · ON-PREMISES WEB SERVICE");
+text(headline, (cx, h*0.125), "One platform. Three runtime stories.");
+text(caption, (cx, h*0.945), "First reveal ownership; then distinguish requests, telemetry, and the analytics stream.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.86);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h > 1.25*w {
+  architecture(platform, (cx,h*0.52), w*0.84,h*0.72);
+}
+else {
+  architecture(platform, (cx,h*0.52), w*0.95,h*0.72);
+}
+
+node(ingress, platform, "onprem:nginx", "Nginx Ingress");
+
+cluster(services, platform, "SERVICE CLUSTER");
+node(grpc1, services, "onprem:server", "gRPC 1");
+node(grpc2, services, "onprem:server", "gRPC 2");
+node(grpc3, services, "onprem:server", "gRPC 3");
+
+cluster(state, platform, "");
+cluster(sessions, state, "SESSIONS HA");
+node(sessionPrimary, sessions, "onprem:redis", "Redis Session");
+node(sessionReplica, sessions, "onprem:redis", "Redis Replica");
+cluster(databases, state, "DATABASE HA");
+node(dbPrimary, databases, "onprem:postgresql", "PostgreSQL Users");
+node(dbReplica, databases, "onprem:postgresql", "PostgreSQL Replica");
+
+cluster(pipeline, platform, "EVENT ANALYTICS");
+node(logging, pipeline, "onprem:fluentd", "Fluentd Logging");
+node(stream, pipeline, "onprem:kafka", "Kafka Stream");
+node(analytics, pipeline, "onprem:spark", "Spark Analytics");
+
+cluster(observability, platform, "OBSERVABILITY");
+node(metrics, observability, "onprem:prometheus", "Prometheus");
+node(monitoring, observability, "onprem:grafana", "Grafana");
+
+// Main request and dependency possibilities.
+connect(ingressToServices, ingress, services);
+connect(servicesToSessions, services, sessionPrimary, orthogonal);
+connect(servicesToDatabase, services, dbPrimary, orthogonal);
+connect(servicesToLogging, services, logging, orthogonal);
+
+// The log stream remains one explicit pipeline.
+connect(loggingToStream, logging, stream, orthogonal);
+connect(streamToAnalytics, stream, analytics, orthogonal);
+
+// Grafana queries Prometheus; Prometheus explicitly scrapes both replicas.
+connect(dashboardQuery, monitoring, metrics, orthogonal);
+connect(sessionScrape, metrics, sessionReplica, orthogonal);
+connect(databaseScrape, metrics, dbReplica, orthogonal);
+
+// HA replication is a neutral relationship, not a directed runtime claim.
+link(sessionReplication, sessionPrimary.card, sessionReplica.card);
+link(databaseReplication, dbPrimary.card, dbReplica.card);
+dashed(sessionReplication); dashed(databaseReplication);
+color(sessionReplication, dim); color(databaseReplication, dim);
+stroke(sessionReplication, 2.5*u); stroke(databaseReplication, 2.5*u);
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+// request path = cyan · analytics pipeline = gold · telemetry/scrape = magenta.
+color(ingressToServices, cyan);  color(ingressToServices.hot, cyan);
+color(servicesToSessions, cyan); color(servicesToSessions.hot, cyan);
+color(servicesToDatabase, cyan); color(servicesToDatabase.hot, cyan);
+color(servicesToLogging, gold);  color(servicesToLogging.hot, gold);
+color(loggingToStream, gold);    color(loggingToStream.hot, gold);
+color(streamToAnalytics, gold);  color(streamToAnalytics.hot, gold);
+color(dashboardQuery, magenta);  color(dashboardQuery.hot, magenta);
+color(sessionScrape, magenta);   color(sessionScrape.hot, magenta);
+color(databaseScrape, magenta);  color(databaseScrape.hot, magenta);
+// (replication links stay neutral dim — a relationship, not a runtime path)
+
+// legend: relationship → colour
+text(legReq, (w*0.30, h*0.175), "REQUEST"); size(legReq, 13*u); color(legReq, cyan); bold(legReq);
+text(legAna, (w*0.44, h*0.175), "ANALYTICS"); size(legAna, 13*u); color(legAna, gold); bold(legAna);
+text(legTel, (w*0.60, h*0.175), "TELEMETRY"); size(legTel, 13*u); color(legTel, magenta); bold(legTel);
+text(legRep, (w*0.76, h*0.175), "REPLICATION"); size(legRep, 13*u); color(legRep, dim); bold(legRep);
+hidden(legReq); hidden(legAna); hidden(legTel); hidden(legRep);
+
+message(webRequest, ingress, "REQ");
+message(sessionRead, grpc2, "S");
+message(databaseRead, grpc3, "DB");
+message(logEvent, grpc1, "LOG");
+message(query, monitoring, "Q");
+message(sessionProbe, metrics, "S");
+message(databaseProbe, metrics, "D");
+
+hidden(kicker); hidden(headline); hidden(caption);
+hidden(platform.nodes);
+hidden(services.parts); hidden(state.parts); hidden(sessions.parts); hidden(databases.parts);
+hidden(pipeline.parts); hidden(observability.parts);
+hidden(webRequest.parts); hidden(sessionRead.parts); hidden(databaseRead.parts);
+hidden(logEvent.parts); hidden(query.parts); hidden(sessionProbe.parts); hidden(databaseProbe.parts);
+untraced(platform.connections); untraced(sessionReplication); untraced(databaseReplication);
+
+step("entry-and-services") {
+  par {
+    show(kicker, 0.30); show(headline, 0.45); show(caption, 0.40);
+    show(ingress, 0.35);
+    show(services.parts, 0.45);
+    stagger(0.08) { show(grpc1, 0.30); show(grpc2, 0.30); show(grpc3, 0.30); }
+    say(caption, "Nginx can reach three gRPC workers. The dashed fan-out is possibility, not a load-balancing simulation.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state-pipeline-and-monitoring") {
+  par {
+    show(state.parts, 0.45); show(sessions.parts, 0.40); show(databases.parts, 0.40);
+    show(sessionPrimary, 0.30); show(sessionReplica, 0.30);
+    show(dbPrimary, 0.30); show(dbReplica, 0.30);
+    show(pipeline.parts, 0.45); show(logging, 0.30); show(stream, 0.30); show(analytics, 0.30);
+    show(observability.parts, 0.45); show(metrics, 0.30); show(monitoring, 0.30);
+    say(caption, "Sessions, users, analytics, and observability keep separate ownership boundaries.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(platform.connections, 1.10, smooth);
+    draw(sessionReplication, 0.55, smooth);
+    draw(databaseReplication, 0.55, smooth);
+    show(legReq, 0.3); show(legAna, 0.3); show(legTel, 0.3); show(legRep, 0.3);
+    say(caption, "Each path is coloured by relationship: request, analytics, telemetry, replication.", 0.40);
+  }
+}
+wait(0.30);
+
+step("one-ingress-request") {
+  par {
+    seq {
+      show(webRequest.parts, 0.18);
+      route(webRequest, ingressToServices, 1.00, linear);
+    }
+    say(caption, "One HTTP request selects one gRPC worker; the other possible ingress lanes remain cold.", 0.40);
+  }
+}
+wait(0.25);
+
+step("parallel-state-dependencies") {
+  par {
+    fade(webRequest.parts, 0.20);
+    seq { show(sessionRead.parts, 0.18); route(sessionRead, servicesToSessions, 1.45, linear); }
+    seq { show(databaseRead.parts, 0.18); route(databaseRead, servicesToDatabase, 1.45, linear); }
+    flow(sessionReplication, 1.45, both, continuous);
+    flow(databaseReplication, 1.45, both, continuous);
+    say(caption, "Two workers can contact independent state systems while replication stays a neutral HA relationship.", 0.40);
+  }
+}
+wait(0.25);
+
+step("logging-to-analytics") {
+  par {
+    fade(sessionRead.parts, 0.20); fade(databaseRead.parts, 0.20);
+    fade(servicesToSessions.hot, 0.25); fade(servicesToDatabase.hot, 0.25);
+    seq {
+      show(logEvent.parts, 0.18);
+      route(logEvent, servicesToLogging, 1.00, linear);
+      route(logEvent, loggingToStream, 0.85, linear);
+      route(logEvent, streamToAnalytics, 0.85, linear);
+    }
+    say(caption, "The same log event travels gRPC → Fluentd → Kafka → Spark without becoming a replacement dot.", 0.40);
+  }
+}
+wait(0.25);
+
+step("observability") {
+  par {
+    fade(logEvent.parts, 0.20);
+    fade(servicesToLogging.hot, 0.25);
+    fade(loggingToStream.hot, 0.25);
+    fade(streamToAnalytics.hot, 0.25);
+    seq { show(query.parts, 0.18); route(query, dashboardQuery, 0.80, linear); }
+    seq { show(sessionProbe.parts, 0.18); route(sessionProbe, sessionScrape, 1.25, linear); }
+    seq { show(databaseProbe.parts, 0.18); route(databaseProbe, databaseScrape, 1.25, linear); }
+    say(caption, "Grafana queries Prometheus while two explicit scrape messages select the replica targets.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70); pulse(state.parts, 0.70);
+    pulse(pipeline.parts, 0.70); pulse(observability.parts, 0.70);
+    say(caption, "Ownership stays static. Persistent objects and authored paths explain what the platform does.", 0.45);
+  }
+}
+wait(1.30);

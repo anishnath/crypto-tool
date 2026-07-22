@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-715ee855.js";
+            window.path_to_searchindex_js = "searchindex-835c3647.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d5f29a23.js"></script>
+        <script src="toc-122320bb.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -198,6 +198,21 @@ declare shapes once; the name is how you address them later in the script.</p>
 </tbody>
 </table>
 </div>
+<h3 id="ordinary-text-is-portable-and-shaped-automatically"><a class="header" href="#ordinary-text-is-portable-and-shaped-automatically">Ordinary text is portable and shaped automatically</a></h3>
+<p><code>text</code>, <code>say</code>, captions, labels, and kit-generated words use Manic’s embedded
+font engine. No machine font is consulted, and there is no font-selection DSL:
+choose only the semantic <code>mono</code>, <code>bold</code>, or <code>display</code> look. Manic handles
+fallback, ligatures, combining marks, bidirectional order, wrapping, reveal,
+rotation, glow, camera zoom, and recording from one shaped layout.</p>
+<p>Arabic and Devanagari are bundled script examples, so these work unchanged in
+preview, backend recording, and the browser build:</p>
+<pre><code class="language-manic">text(arabic, (cx, 300), "التعلّم يجعل الأفكار واضحة");
+text(hindi,  (cx, 420), "ज्ञान से प्रकाश मिलता है");
+</code></pre>
+<p>Use <code>equation</code> or inline <code>$…$</code> for mathematical typesetting. Run <code>manic check</code>
+before rendering; an unsupported Unicode cluster names the entity and code
+point instead of silently drawing a replacement box. Colour emoji remains
+intentionally unsupported until colour-font rendering is portable.</p>
 <p>Plus a few composite helpers built from those: <code>polygon</code>, <code>arc</code>/<code>sector</code>, <code>brace</code>/
 <code>bracelabel</code>, <code>caption</code> (a row of words), and <code>support(id, (cx,cy), [len], ["dir"])</code>
 — the hatched wall / ceiling / floor for mechanics &amp; textbook diagrams (<code>"dir"</code> is

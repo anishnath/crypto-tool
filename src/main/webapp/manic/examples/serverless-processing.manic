@@ -1,0 +1,145 @@
+title("Serverless Event Processing — From Kafka to Cold Storage");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.055), "SERVERLESS · EVENT PROCESSING · MIXED STACK");
+text(headline, (cx, h*0.115), "Events in. Results, dead letters, and cold storage out.");
+text(caption, (cx, h*0.935), "Dashed relationships show every route the architecture allows.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 27*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h > 1.25*w {
+  architecture(pipeline, (cx, h*0.52), w*0.86, h*0.72);
+}
+else {
+  architecture(pipeline, (cx, h*0.52), w*0.94, h*0.70);
+}
+
+// --- the ingress + event source + a bold analytics tap (on-prem stack) ---
+cluster(ingest, pipeline, "INGEST");
+node(ingress, ingest, "onprem:fluentd", "logging");
+node(source, ingest, "onprem:kafka", "Event-Sourcing");
+node(spark, ingest, "onprem:spark", "Spark");
+
+cluster(flows, pipeline, "EVENT FLOWS");
+
+cluster(engines, flows, "DATA PROCESSING ENGINES");
+node(clicks, engines, "onprem:docker", "click stream");
+node(logins, engines, "onprem:docker", "user logins");
+node(analytics, engines, "onprem:docker", "data analytics");
+
+node(queue, flows, "aws:sqs", "results queue");
+node(dlq, flows, "aws:sqs", "Dead Letter Queue");
+
+cluster(processing, flows, "PROCESSING");
+node(persist, processing, "aws:lambda", "persist results");
+
+cluster(storage, flows, "STORAGE");
+node(store, storage, "aws:s3", "cold storage");
+node(dw, storage, "aws:redshift", "operational storage");
+
+// --- topology (Mingrammer edges) ---
+connect(parse, ingress, source);          // ingress >> Edge("parse") >> source
+connect(toSpark, source, spark);          // source >> Edge(bold) >> Spark
+connect(toEngines, source, engines);      // source >> workers
+connect(toQueue, engines, queue);         // workers >> queue
+connect(toHandlers, queue, processing);   // queue >> handlers
+connect(toDlq, queue, dlq, 120*u);        // queue >> dlq
+connect(toStore, processing, store);      // handlers >> store
+connect(toDw, processing, dw);            // handlers >> dw
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+color(parse, cyan);        color(parse.hot, cyan);
+color(toEngines, cyan);    color(toEngines.hot, cyan);
+color(toQueue, cyan);      color(toQueue.hot, cyan);
+color(toHandlers, cyan);   color(toHandlers.hot, cyan);
+color(toSpark, magenta);   color(toSpark.hot, magenta);
+color(toStore, gold);      color(toStore.hot, gold);
+color(toDw, gold);         color(toDw.hot, gold);
+color(toDlq, red);         color(toDlq.hot, red);
+// legend
+text(legPipe, (w*0.24, h*0.175), "PIPELINE"); size(legPipe, 13); color(legPipe, cyan); bold(legPipe);
+text(legAna, (w*0.40, h*0.175), "ANALYTICS"); size(legAna, 13); color(legAna, magenta); bold(legAna);
+text(legStore, (w*0.58, h*0.175), "STORAGE"); size(legStore, 13); color(legStore, gold); bold(legStore);
+text(legDlq, (w*0.74, h*0.175), "DEAD-LETTER"); size(legDlq, 13); color(legDlq, red); bold(legDlq);
+hidden(legPipe); hidden(legAna); hidden(legStore); hidden(legDlq);
+message(event, source, "event");
+
+hidden(pipeline.nodes);
+hidden(ingest.parts); hidden(flows.parts); hidden(engines.parts); hidden(processing.parts); hidden(storage.parts);
+hidden(event.parts);
+untraced(parse); untraced(toSpark); untraced(toEngines); untraced(toQueue);
+untraced(toHandlers); untraced(toDlq); untraced(toStore); untraced(toDw);
+
+step("ingest") {
+  par {
+    show(ingest.parts, 0.45);
+    show(ingress, 0.40);
+    show(source, 0.40);
+    show(spark, 0.40);
+    say(caption, "Fluentd parses raw logs into Kafka; a bold tap also streams the source into Spark.", 0.40);
+  }
+}
+wait(0.20);
+
+step("event-flows") {
+  par {
+    show(flows.parts, 0.50);
+    show(engines.parts, 0.45);
+    stagger(0.10) { show(clicks, 0.35); show(logins, 0.35); show(analytics, 0.35); }
+    show(queue, 0.40); show(dlq, 0.40);
+    show(processing.parts, 0.45); show(persist, 0.40);
+    show(storage.parts, 0.45); show(store, 0.40); show(dw, 0.40);
+    say(caption, "Docker engines process the stream; a queue, a dead-letter queue, a Lambda, and storage complete it.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    stagger(0.08) {
+      draw(parse, 0.4); draw(toEngines, 0.4); draw(toQueue, 0.4); draw(toHandlers, 0.4);
+      draw(toDlq, 0.4); draw(toStore, 0.4); draw(toDw, 0.4); draw(toSpark, 0.4);
+    }
+    show(legPipe, 0.3); show(legAna, 0.3); show(legStore, 0.3); show(legDlq, 0.3);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.30);
+
+step("ingress-flow") {
+  par {
+    seq { flow(parse, 1.0); flow(toSpark, 1.0); }
+    say(caption, "Logging → parse → Kafka → Spark: the ingest-and-analytics tap.", 0.40);
+  }
+}
+wait(0.20);
+
+step("runtime-hot-path") {
+  par {
+    show(event.parts, 0.25);
+    hotpath(event, 6.0, 27);
+    say(caption, "One event chooses valid branches: Kafka → an engine → results queue → Lambda → storage.", 0.40);
+  }
+}
+wait(0.30);
+
+step("dead-letter") {
+  par {
+    flow(toDlq, 1.2);
+    say(caption, "Messages the handler cannot process are diverted to the dead-letter queue.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(flows.parts, 0.70);
+    pulse(event.parts, 0.60);
+    say(caption, "One mixed stack—on-prem ingest, serverless compute, cloud storage—stays readable end to end.", 0.45);
+  }
+}
+wait(1.40);

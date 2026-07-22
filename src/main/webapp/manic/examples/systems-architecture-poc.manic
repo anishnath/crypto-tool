@@ -1,0 +1,92 @@
+title("Systems Kit PoC — What Happens When You Click Buy?");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.07), "Made With Manic");
+text(kicker, (cx, h*0.075), "SYSTEMS KIT · REQUEST JOURNEY");
+text(headline, (cx, h*0.155), "What happens when you click Buy?");
+text(caption, (cx, h*0.88), "One request keeps its identity while the architecture responds.");
+size(kicker, 18*u); color(kicker, dim); bold(kicker);
+size(headline, 34*u); bold(headline); wrap(headline, w*0.84);
+size(caption, 19*u); color(caption, dim); wrap(caption, w*0.82);
+
+architecture(shop, (cx, h*0.49), w*0.84, h*0.58);
+node(browser, shop, "client", "Browser");
+node(edge, shop, "aws:cloudfront", "CloudFront");
+node(api, shop, "aws:api-gateway", "API Gateway");
+node(checkout, shop, "aws:lambda", "Checkout");
+node(orders, shop, "aws:dynamodb", "Orders");
+node(events, shop, "aws:sqs", "Events");
+
+connect(toEdge, browser, edge);
+connect(toApi, edge, api);
+connect(toCheckout, api, checkout);
+connect(toOrders, checkout, orders);
+connect(toEvents, orders, events);
+request(order, browser, "BUY");
+
+hidden(shop.nodes);
+untraced(shop.connections);
+hidden(order.parts);
+
+step("architecture") {
+  stagger(0.10) {
+    show(browser, 0.30); show(edge, 0.30); show(api, 0.30);
+    show(checkout, 0.30); show(orders, 0.30); show(events, 0.30);
+  }
+}
+wait(0.25);
+
+step("request") {
+  par {
+    show(order.parts, 0.30);
+    draw(shop.connections, 0.90);
+    say(caption, "The browser sends one request into the edge network.", 0.35);
+  }
+}
+wait(0.20);
+
+step("edge") {
+  par {
+    route(order, toEdge, 0.90, smooth);
+    say(caption, "CloudFront receives it first, close to the customer.", 0.35);
+  }
+}
+
+step("api") {
+  par {
+    route(order, toApi, 0.90, smooth);
+    say(caption, "API Gateway validates and routes the operation.", 0.35);
+  }
+}
+
+step("compute") {
+  par {
+    route(order, toCheckout, 0.90, smooth);
+    say(caption, "Lambda executes the checkout logic.", 0.35);
+  }
+}
+
+step("persist") {
+  par {
+    route(order, toOrders, 0.90, smooth);
+    say(caption, "DynamoDB persists the order.", 0.35);
+  }
+}
+
+step("event") {
+  par {
+    route(order, toEvents, 0.90, smooth);
+    say(caption, "SQS decouples the work that can happen next.", 0.35);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(shop.nodes, 0.75);
+    say(caption, "Architecture becomes understandable when we follow behavior—not only boxes and arrows.", 0.45);
+  }
+}
+wait(1.20);

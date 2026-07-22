@@ -1,0 +1,186 @@
+title("Clustered Web Services on Google Cloud");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.025), "Made With Manic");
+text(kicker, (cx, h*0.055), "GOOGLE CLOUD ARCHITECTURE · CLUSTERED WEB SERVICES");
+text(headline, (cx, h*0.115), "Requests in. Responses back.");
+text(caption, (cx, h*0.935), "Dashed paths describe what is connected—not what is moving now.");
+size(kicker, 16*u); color(kicker, dim); bold(kicker);
+size(headline, 29*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 18*u); color(caption, dim); wrap(caption, w*0.86);
+
+if h > 1.25*w {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.84, h*0.70);
+  text(requestKey, (w*0.36, h*0.225), "REQUEST");
+  arrow(requestSample, (w*0.48, h*0.225), (w*0.64, h*0.225));
+  text(responseKey, (w*0.36, h*0.265), "RESPONSE");
+  arrow(responseSample, (w*0.48, h*0.265), (w*0.64, h*0.265));
+}
+else {
+  architecture(clusteredWeb, (cx, h*0.51), w*0.94, h*0.69);
+  text(requestKey, (w*0.105, h*0.205), "REQUEST");
+  arrow(requestSample, (w*0.15, h*0.205), (w*0.205, h*0.205));
+  text(responseKey, (w*0.105, h*0.245), "RESPONSE");
+  arrow(responseSample, (w*0.15, h*0.245), (w*0.205, h*0.245));
+}
+size(requestKey, 15*u); color(requestKey, fg); bold(requestKey);
+size(responseKey, 15*u); hue(responseKey, 328, 0.90, 0.62); bold(responseKey);
+color(requestSample, fg); stroke(requestSample, 3*u);
+hue(responseSample, 328, 0.90, 0.62); dashed(responseSample, 10*u, 7*u);
+stroke(responseSample, 4*u); glow(responseSample, 0.85);
+hidden(requestKey); hidden(requestSample);
+hidden(responseKey); hidden(responseSample);
+
+node(dns, clusteredWeb, "gcp:dns", "cloud dns");
+node(lb, clusteredWeb, "gcp:load-balancing", "load balancing");
+
+cluster(services, clusteredWeb, "SERVICES");
+node(web1, services, "gcp:kubernetes-engine", "web1");
+node(web2, services, "gcp:kubernetes-engine", "web2");
+node(web3, services, "gcp:kubernetes-engine", "web3");
+
+cluster(database, clusteredWeb, "DB CLUSTER");
+node(dbPrimary, database, "gcp:sql", "userdb");
+node(dbReplica, database, "gcp:sql", "userdb ro");
+
+node(cache, clusteredWeb, "gcp:memorystore", "memorystore");
+
+connect(dnsToLb, dns, lb);
+connect(lbToServices, lb, services);
+connect(servicesToDb, services, dbPrimary);
+connect(servicesToCache, services, cache, 145*u);
+connect(dbToServices, dbPrimary, services, 42*u);
+connect(servicesToLb, services, lb, 42*u);
+connect(cacheToWeb2, cache, web2, 145*u);
+hue(dbToServices.hot, 328, 0.90, 0.62);
+hue(servicesToLb.hot, 328, 0.90, 0.62);
+hue(cacheToWeb2.hot, 328, 0.90, 0.62);
+dashed(dbToServices.hot, 10*u, 7*u);
+dashed(servicesToLb.hot, 10*u, 7*u);
+dashed(cacheToWeb2.hot, 10*u, 7*u);
+stroke(dbToServices.hot, 4.5*u); glow(dbToServices.hot, 0.95);
+stroke(servicesToLb.hot, 4.5*u); glow(servicesToLb.hot, 0.95);
+stroke(cacheToWeb2.hot, 4.5*u); glow(cacheToWeb2.hot, 0.95);
+link(replication, dbPrimary.card, dbReplica.card);
+dashed(replication); color(replication, dim); stroke(replication, 2.5*u);
+
+message(pageRequest, dns, "GET");
+message(cacheRead, web2, "READ");
+
+hidden(clusteredWeb.nodes);
+hidden(services.parts); hidden(database.parts);
+hidden(pageRequest.parts); hidden(cacheRead.parts);
+untraced(dnsToLb); untraced(lbToServices);
+untraced(servicesToDb); untraced(servicesToCache);
+untraced(dbToServices); untraced(servicesToLb); untraced(cacheToWeb2);
+untraced(replication);
+
+step("entry") {
+  par {
+    show(dns, 0.40);
+    show(lb, 0.40);
+    say(caption, "Cloud DNS and Cloud Load Balancing form the public entry into the design.", 0.40);
+  }
+}
+wait(0.20);
+
+step("service-pool") {
+  par {
+    show(services.parts, 0.45);
+    stagger(0.10) {
+      show(web1, 0.35);
+      show(web2, 0.35);
+      show(web3, 0.35);
+    }
+    say(caption, "Three GKE services share one ownership boundary; no runtime choice is implied yet.", 0.40);
+  }
+}
+wait(0.20);
+
+step("state") {
+  par {
+    show(database.parts, 0.45);
+    show(dbPrimary, 0.40);
+    show(dbReplica, 0.40);
+    show(cache, 0.40);
+    say(caption, "The Cloud SQL cluster and Memorystore complete the static architecture.", 0.40);
+  }
+}
+wait(0.20);
+
+step("possible-topology") {
+  par {
+    draw(dnsToLb, 0.40);
+    draw(lbToServices, 0.60);
+    draw(servicesToDb, 0.60);
+    draw(servicesToCache, 0.60);
+    draw(replication, 0.45);
+    show(requestKey, 0.35); show(requestSample, 0.35);
+    show(responseKey, 0.35); show(responseSample, 0.35);
+    say(caption, "Every dashed lane is possible. The next moving object will identify the path actually used.", 0.40);
+  }
+}
+wait(0.30);
+
+step("request-to-database") {
+  par {
+    seq {
+      show(pageRequest.parts, 0.20);
+      route(pageRequest, dnsToLb, 0.65, smooth);
+      route(pageRequest, lbToServices, 0.90, smooth);
+      route(pageRequest, servicesToDb, 0.90, smooth);
+    }
+    say(caption, "This request follows one authored lane: dns → lb → web1 → userdb.", 0.40);
+  }
+}
+wait(0.35);
+
+step("database-response") {
+  par {
+    seq {
+      par {
+        say(pageRequest.label, "200 OK", 0.25);
+        to(pageRequest.parts, hue, 328, 0.25, smooth);
+      }
+      route(pageRequest, dbToServices, 0.90, smooth);
+      route(pageRequest, servicesToLb, 0.90, smooth);
+    }
+    say(caption, "The same identity returns userdb → web1 → lb. Cloud DNS resolved the name; it is not the HTTP response path.", 0.40);
+  }
+}
+wait(0.35);
+
+step("cache-round-trip") {
+  par {
+    seq {
+      show(cacheRead.parts, 0.20);
+      route(cacheRead, servicesToCache, 1.05, smooth);
+      par {
+        say(cacheRead.label, "HIT", 0.25);
+        to(cacheRead.parts, hue, 328, 0.25, smooth);
+      }
+      route(cacheRead, cacheToWeb2, 1.05, smooth);
+    }
+    say(caption, "A separate cache read travels web2 → memorystore, becomes HIT, and returns to that same service.", 0.40);
+  }
+}
+wait(0.35);
+
+step("replica-relationship") {
+  par {
+    flow(replication, 3.20, both, continuous);
+    say(caption, "The neutral database link can carry a two-way visual pulse only because the creator asked for it.", 0.40);
+  }
+}
+wait(0.35);
+
+step("takeaway") {
+  par {
+    pulse(services.parts, 0.70);
+    pulse(database.parts, 0.70);
+    say(caption, "Architecture stays readable; objects, paths, timing, and composition tell the runtime story.", 0.45);
+  }
+}
+wait(1.40);

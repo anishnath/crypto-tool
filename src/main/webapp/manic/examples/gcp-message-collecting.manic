@@ -1,0 +1,139 @@
+title("Message Collecting on Google Cloud — IoT to Data Lake");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.045), "Made With Manic");
+text(kicker, (cx, h*0.05), "GOOGLE CLOUD · IOT MESSAGE COLLECTING");
+text(headline, (cx, h*0.11), "Devices publish once. The pipeline fans out.");
+text(caption, (cx, h*0.94), "Dashed relationships show every route the architecture allows.");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 26*u); bold(headline); wrap(headline, w*0.88);
+size(caption, 17*u); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(collect, (cx, h*0.52), w*0.96, h*0.72);
+
+cluster(sourceData, collect, "SOURCE OF DATA");
+node(core1, sourceData, "gcp:iot-core", "core1");
+node(core2, sourceData, "gcp:iot-core", "core2");
+node(core3, sourceData, "gcp:iot-core", "core3");
+
+node(pubsub, collect, "gcp:pubsub", "pubsub");
+
+cluster(targets, collect, "TARGETS");
+
+cluster(dataFlow, targets, "DATA FLOW");
+node(df, dataFlow, "gcp:dataflow", "data flow");
+
+cluster(dataLake, targets, "DATA LAKE");
+node(bq, dataLake, "gcp:bigquery", "bq");
+node(gcs, dataLake, "gcp:storage", "storage");
+
+cluster(eventDriven, targets, "EVENT DRIVEN");
+
+cluster(processing, eventDriven, "PROCESSING");
+node(engine, processing, "gcp:app-engine", "engine");
+node(bigtable, processing, "gcp:bigtable", "bigtable");
+
+cluster(serverless, eventDriven, "SERVERLESS");
+node(func, serverless, "gcp:functions", "func");
+node(appengine, serverless, "gcp:app-engine", "appengine");
+
+// --- topology ---
+connect(toPubsub, sourceData, pubsub);   // [core1,core2,core3] >> pubsub
+connect(toFlow, pubsub, df);             // pubsub >> flow
+connect(toBq, df, bq);                   // flow >> bq
+connect(toGcs, df, gcs);                 // flow >> storage
+connect(toEngine, df, engine);           // flow >> engine
+connect(engineToBt, engine, bigtable);   // engine >> bigtable
+connect(toFunc, df, func);               // flow >> func
+connect(funcToApp, func, appengine);     // func >> appengine
+
+// --- colour every path by its RELATIONSHIP (cold dashed line + hot overlay) ---
+color(toPubsub, cyan);     color(toPubsub.hot, cyan);
+color(toFlow, cyan);       color(toFlow.hot, cyan);
+color(toBq, gold);         color(toBq.hot, gold);
+color(toGcs, gold);        color(toGcs.hot, gold);
+color(toEngine, magenta);  color(toEngine.hot, magenta);
+color(engineToBt, magenta);color(engineToBt.hot, magenta);
+color(toFunc, lime);       color(toFunc.hot, lime);
+color(funcToApp, lime);    color(funcToApp.hot, lime);
+// legend
+text(legIn, (w*0.22, h*0.175), "INGEST"); size(legIn, 13); color(legIn, cyan); bold(legIn);
+text(legLake, (w*0.36, h*0.175), "DATA LAKE"); size(legLake, 13); color(legLake, gold); bold(legLake);
+text(legProc, (w*0.54, h*0.175), "PROCESSING"); size(legProc, 13); color(legProc, magenta); bold(legProc);
+text(legSls, (w*0.72, h*0.175), "SERVERLESS"); size(legSls, 13); color(legSls, lime); bold(legSls);
+hidden(legIn); hidden(legLake); hidden(legProc); hidden(legSls);
+
+message(msg, pubsub, "msg");
+
+hidden(collect.nodes);
+hidden(sourceData.parts); hidden(targets.parts); hidden(dataFlow.parts);
+hidden(dataLake.parts); hidden(eventDriven.parts); hidden(processing.parts); hidden(serverless.parts);
+hidden(msg.parts);
+untraced(toPubsub); untraced(toFlow); untraced(toBq); untraced(toGcs);
+untraced(toEngine); untraced(engineToBt); untraced(toFunc); untraced(funcToApp);
+
+step("devices") {
+  par {
+    show(sourceData.parts, 0.45);
+    stagger(0.10) { show(core1, 0.35); show(core2, 0.35); show(core3, 0.35); }
+    show(pubsub, 0.40);
+    say(caption, "Three IoT Core devices publish into one Pub/Sub topic.", 0.40);
+  }
+}
+wait(0.20);
+
+step("targets") {
+  par {
+    show(targets.parts, 0.5);
+    show(dataFlow.parts, 0.4); show(df, 0.4);
+    show(dataLake.parts, 0.4); show(bq, 0.4); show(gcs, 0.4);
+    show(eventDriven.parts, 0.4);
+    show(processing.parts, 0.4); show(engine, 0.4); show(bigtable, 0.4);
+    show(serverless.parts, 0.4); show(func, 0.4); show(appengine, 0.4);
+    say(caption, "Dataflow is the hub; targets nest into a data lake, a processing branch, and a serverless branch.", 0.40);
+  }
+}
+wait(0.25);
+
+step("possible-topology") {
+  par {
+    stagger(0.07) {
+      draw(toPubsub, 0.4); draw(toFlow, 0.4); draw(toBq, 0.4); draw(toGcs, 0.4);
+      draw(toEngine, 0.4); draw(engineToBt, 0.4); draw(toFunc, 0.4); draw(funcToApp, 0.4);
+    }
+    show(legIn, 0.3); show(legLake, 0.3); show(legProc, 0.3); show(legSls, 0.3);
+    say(caption, "Every dashed edge is a possible relationship—not a claim that data is flowing.", 0.40);
+  }
+}
+wait(0.30);
+
+step("collect") {
+  par {
+    seq {
+      show(msg.parts, 0.2);
+      route(msg, toFlow, 0.9, smooth);
+    }
+    say(caption, "A published message reaches Dataflow through Pub/Sub.", 0.40);
+  }
+}
+wait(0.25);
+
+step("fan-out") {
+  par {
+    flow(toBq, 1.0); flow(toGcs, 1.0);
+    seq { flow(toEngine, 0.9); flow(engineToBt, 0.9); }
+    seq { flow(toFunc, 0.9); flow(funcToApp, 0.9); }
+    say(caption, "Dataflow fans out: BigQuery + storage (lake), App Engine → Bigtable, and Functions → App Engine.", 0.40);
+  }
+}
+wait(0.30);
+
+step("takeaway") {
+  par {
+    pulse(targets.parts, 0.70);
+    say(caption, "One publish; many destinations—each branch owns its own runtime and storage.", 0.45);
+  }
+}
+wait(1.40);

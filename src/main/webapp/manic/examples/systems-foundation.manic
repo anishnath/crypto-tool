@@ -1,0 +1,71 @@
+title("Systems Foundation — One Request, One Return");
+canvas("16:9");
+template("mono");
+
+watermark(mark, (160, 54), "Made With Manic");
+text(kicker, (cx, 54), "PROVIDER-NEUTRAL SYSTEMS");
+text(headline, (cx, 104), "Structure is not behaviour");
+text(caption, (cx, h-58), "Cold paths show what is possible. One persistent dot shows what actually happened.");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+size(caption, 20); color(caption, dim); wrap(caption, w*0.86);
+
+architecture(platform, (cx, cy+15), w*0.88, h*0.58);
+node(user, platform, "client", "User");
+node(edge, platform, "gateway", "Gateway");
+node(api, platform, "service", "API Service");
+node(cache, platform, "cache", "Cache");
+node(db, platform, "database", "Database");
+
+connect(toEdge, user, edge);
+connect(toApi, edge, api);
+connect(toCache, api, cache);
+// One semantic connection: Manic chooses node-boundary ports and keeps the
+// packet continuous across every internal orthogonal segment.
+connect(toDb, cache, db, orthogonal, right, top);
+connect(dbReturn, db, api, 95);
+connect(apiReturn, api, edge, 75);
+connect(edgeReturn, edge, user, 55);
+
+message(packet, user, "GET");
+hidden(kicker); hidden(headline); hidden(caption);
+untraced(platform.connections);
+hidden(packet);
+
+step("structure") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.45);
+    show(caption, 0.45);
+    draw(platform.connections, 1.20, smooth);
+  }
+}
+wait(0.45);
+
+step("continuous-round-trip") {
+  par {
+    show(packet, 0.20);
+    say(caption, "One dot moves continuously end to end. Every route hand-off preserves its identity.", 0.35);
+    seq {
+      route(packet, toEdge, 0.70, linear);
+      route(packet, toApi, 0.70, linear);
+      route(packet, toCache, 0.70, linear);
+      route(packet, toDb, 0.70, linear);
+      par {
+        recolor(packet, magenta, 0.30);
+        route(packet, dbReturn, 0.80, linear);
+      }
+      route(packet, apiReturn, 0.75, linear);
+      route(packet, edgeReturn, 0.75, linear);
+    }
+  }
+}
+wait(0.45);
+
+step("proof") {
+  par {
+    pulse(packet, 0.70);
+    say(caption, "The same dot is back at the User: one identity, seven connected journeys, zero animation gaps.", 0.40);
+  }
+}
+wait(1.10);

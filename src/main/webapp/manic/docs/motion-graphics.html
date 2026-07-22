@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-715ee855.js";
+            window.path_to_searchindex_js = "searchindex-835c3647.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d5f29a23.js"></script>
+        <script src="toc-122320bb.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -196,7 +196,7 @@ the relationship only where the story needs it.</p>
 <tr><td>Change visual identity</td><td><code>become(source, blueprint, [dur], [ease])</code></td><td>the source keeps its id and settles exactly on the blueprint</td></tr>
 <tr><td>Turn a whole arrangement</td><td><code>turn(id_or_tag, pivot, degrees, [dur], [ease])</code></td><td>every member follows the same circular pivot motion</td></tr>
 <tr><td>Move a real object on a path</td><td><code>travel(object, path, dur, ease)</code></td><td>the object arrives and remains at the endpoint</td></tr>
-<tr><td>Send temporary path emphasis</td><td><code>flow(path, dur)</code></td><td>a pulse passes without moving an authored object</td></tr>
+<tr><td>Send temporary or sustained path emphasis</td><td>`flow(path, dur, [forward</td><td>reverse</td></tr>
 <tr><td>Add contained ambient life</td><td><code>wander(particles, dur)</code></td><td>seeded, repeatable motion within the container</td></tr>
 <tr><td>Reorganize the same particles</td><td>`arrange(particles, region, “random</td><td>grid</td></tr>
 <tr><td>Change an ordinary property</td><td><code>to(id, property, value, dur, ease)</code></td><td>the general escape hatch remains available</td></tr>
@@ -205,6 +205,29 @@ the relationship only where the story needs it.</p>
 </div>
 <p>The three V2 words add relationships; they do not replace <code>move</code>, <code>travel</code>,
 <code>flow</code>, <code>arrange</code>, <code>spin</code>, <code>transform</code>, <code>rewrite</code>, or <code>morph</code>.</p>
+<h2 id="manic-does-not-infer-the-subject"><a class="header" href="#manic-does-not-infer-the-subject">Manic does not infer the subject</a></h2>
+<p>An icon, label, or filename never changes motion semantics. Manic does not know
+that an object represents a load balancer, queue, topic, photon, vehicle, blood
+cell, or decorative spark. The creator supplies that meaning through ordinary
+composition:</p>
+<pre><code class="language-manic">// One selected route
+par { travel(packet, lane2, 1.2, smooth); flow(lane2, 1.2); }
+
+// Three authored deliveries together
+par {
+  travel(copy1, lane1, 1.0, smooth);
+  travel(copy2, lane2, 1.0, smooth);
+  travel(copy3, lane3, 1.0, smooth);
+}
+
+// A path connected to nothing—motion used purely as design
+flow(ribbon, 4.0, both, continuous);
+</code></pre>
+<p><code>seq</code> creates an authored order. <code>par</code> creates simultaneous motion. <code>travel</code>
+moves any ordinary 2-D entity and preserves its identity. <code>flow</code> requires only
+a path; it does not require endpoints, architecture metadata, or an object to
+carry. Tags let one <code>flow</code> address several paths when the creator wants them to
+act together.</p>
 <h2 id="attach--author-the-relationship"><a class="header" href="#attach--author-the-relationship"><code>attach</code> — author the relationship</a></h2>
 <pre><code class="language-manic">dot(marker, (180,620), 8);
 text(readout, (180,580), "sample A");
@@ -260,7 +283,169 @@ idea is a matrix, shear, reflection, or other precise linear map.</p>
 }
 </code></pre>
 <p>Use <code>travel</code> for a vehicle, probe, token, particle, or graph marker. Use <code>flow</code>
-for energy, attention, traffic, or a signal that should disappear after passing.</p>
+for energy, attention, traffic, or a signal that should disappear after passing.
+The default remains one forward pulse. For sustained activity use
+<code>flow(curve, 4, forward, continuous)</code>; Manic chooses length-aware complete
+cycles, so the stream begins empty and drains cleanly at the end. Use
+<code>flow(curve, 1, reverse, once)</code> for generic reverse motion and <code>both</code> for two
+independent opposing streams.</p>
+<h2 id="motion-flow-foundation-example"><a class="header" href="#motion-flow-foundation-example">Motion-flow foundation example</a></h2>
+<p>This example proves the same vocabulary across four different intentions: one
+selected path, three motions authored in order, three motions authored together,
+and a free spline used only as visual design.</p>
+<pre><code class="language-manic">// motion-flow-foundation.manic — objects, paths, timing, and composition
+
+title("Motion Flow Foundation — The Creator Decides");
+canvas("9:16");
+template("mono");
+let u = (w+h-abs(w-h))/2160;
+let left = w*0.17;
+let right = w*0.83;
+let upper = h*0.36;
+let middle = h*0.48;
+let lower = h*0.60;
+watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+
+text(kicker, (cx, h*0.06), "MANIC · DOMAIN-NEUTRAL MOTION");
+text(headline, (cx, h*0.13), "The path has no meaning until you give it one.");
+text(mode, (cx, h*0.20), "ONE OBJECT · ONE SELECTED PATH");
+text(caption, (cx, h*0.82), "Three relationships are possible. The creator activates only the middle path.");
+size(kicker, 21*u); color(kicker, dim); bold(kicker);
+size(headline, 36*u); bold(headline); wrap(headline, w*0.82);
+size(mode, 25*u); color(mode, cyan); bold(mode);
+size(caption, 24*u); color(caption, dim); wrap(caption, w*0.80);
+
+rect(stage, (cx, h*0.49), w*0.88, h*0.56);
+color(stage, panel); outline(stage, dim); opacity(stage, 0.72);
+
+// Scene 1: one authored object chooses one authored route.
+line(cold1a, (left,middle), (right,upper)); dashed(cold1a); color(cold1a, dim); stroke(cold1a, 3*u);
+line(cold1b, (left,middle), (right,middle)); dashed(cold1b); color(cold1b, dim); stroke(cold1b, 3*u);
+line(cold1c, (left,middle), (right,lower)); dashed(cold1c); color(cold1c, dim); stroke(cold1c, 3*u);
+line(hot1b,  (left,middle), (right,middle)); color(hot1b, cyan); stroke(hot1b, 7*u); untraced(hot1b);
+circle(choiceA, (right,upper), 32*u); outlined(choiceA); color(choiceA, dim); stroke(choiceA, 3*u);
+circle(choiceB, (right,middle), 32*u); outlined(choiceB); color(choiceB, cyan); stroke(choiceB, 4*u);
+circle(choiceC, (right,lower), 32*u); outlined(choiceC); color(choiceC, dim); stroke(choiceC, 3*u);
+rect(parcel, (left,middle), 34*u,34*u); color(parcel, gold); glow(parcel, 1.5);
+tag(cold1a, scene1); tag(cold1b, scene1); tag(cold1c, scene1); tag(hot1b, scene1);
+tag(choiceA, scene1); tag(choiceB, scene1); tag(choiceC, scene1); tag(parcel, scene1);
+
+// Scene 2: the creator makes the same three routes active in sequence.
+line(cold2a, (left,middle), (right,upper)); dashed(cold2a); color(cold2a, dim); stroke(cold2a, 3*u); hidden(cold2a);
+line(cold2b, (left,middle), (right,middle)); dashed(cold2b); color(cold2b, dim); stroke(cold2b, 3*u); hidden(cold2b);
+line(cold2c, (left,middle), (right,lower)); dashed(cold2c); color(cold2c, dim); stroke(cold2c, 3*u); hidden(cold2c);
+line(hot2a,  (left,middle), (right,upper)); color(hot2a, cyan); stroke(hot2a, 7*u); untraced(hot2a);
+line(hot2b,  (left,middle), (right,middle)); color(hot2b, cyan); stroke(hot2b, 7*u); untraced(hot2b);
+line(hot2c,  (left,middle), (right,lower)); color(hot2c, cyan); stroke(hot2c, 7*u); untraced(hot2c);
+circle(roundA, (right,upper), 32*u); outlined(roundA); color(roundA, dim); stroke(roundA, 3*u); hidden(roundA);
+circle(roundB, (right,middle), 32*u); outlined(roundB); color(roundB, dim); stroke(roundB, 3*u); hidden(roundB);
+circle(roundC, (right,lower), 32*u); outlined(roundC); color(roundC, dim); stroke(roundC, 3*u); hidden(roundC);
+circle(r1, (left,middle), 13*u); color(r1, gold); hidden(r1);
+rect(r2, (left,middle), 25*u,25*u); color(r2, magenta); hidden(r2);
+text(r3, (left,middle), "◆"); size(r3, 34*u); color(r3, cyan); hidden(r3);
+tag(cold2a, scene2structure); tag(cold2b, scene2structure); tag(cold2c, scene2structure);
+tag(roundA, scene2structure); tag(roundB, scene2structure); tag(roundC, scene2structure);
+tag(cold2a, scene2); tag(cold2b, scene2); tag(cold2c, scene2);
+tag(hot2a, scene2); tag(hot2b, scene2); tag(hot2c, scene2);
+tag(roundA, scene2); tag(roundB, scene2); tag(roundC, scene2);
+tag(r1, scene2); tag(r2, scene2); tag(r3, scene2);
+
+// Scene 3: parallel composition makes every authored route active.
+line(cold3a, (left,middle), (right,upper)); dashed(cold3a); color(cold3a, dim); stroke(cold3a, 3*u); hidden(cold3a);
+line(cold3b, (left,middle), (right,middle)); dashed(cold3b); color(cold3b, dim); stroke(cold3b, 3*u); hidden(cold3b);
+line(cold3c, (left,middle), (right,lower)); dashed(cold3c); color(cold3c, dim); stroke(cold3c, 3*u); hidden(cold3c);
+line(hot3a,  (left,middle), (right,upper)); color(hot3a, cyan); stroke(hot3a, 7*u); untraced(hot3a);
+line(hot3b,  (left,middle), (right,middle)); color(hot3b, magenta); stroke(hot3b, 7*u); untraced(hot3b);
+line(hot3c,  (left,middle), (right,lower)); color(hot3c, gold); stroke(hot3c, 7*u); untraced(hot3c);
+circle(allA, (right,upper), 32*u); outlined(allA); color(allA, cyan); stroke(allA, 4*u); hidden(allA);
+circle(allB, (right,middle), 32*u); outlined(allB); color(allB, magenta); stroke(allB, 4*u); hidden(allB);
+circle(allC, (right,lower), 32*u); outlined(allC); color(allC, gold); stroke(allC, 4*u); hidden(allC);
+circle(b1, (left,middle), 13*u); color(b1, cyan); hidden(b1);
+rect(b2, (left,middle), 25*u,25*u); color(b2, magenta); hidden(b2);
+text(b3, (left,middle), "◆"); size(b3, 34*u); color(b3, gold); hidden(b3);
+tag(cold3a, scene3structure); tag(cold3b, scene3structure); tag(cold3c, scene3structure);
+tag(allA, scene3structure); tag(allB, scene3structure); tag(allC, scene3structure);
+tag(cold3a, scene3); tag(cold3b, scene3); tag(cold3c, scene3);
+tag(hot3a, scene3); tag(hot3b, scene3); tag(hot3c, scene3);
+tag(allA, scene3); tag(allB, scene3); tag(allC, scene3);
+tag(b1, scene3); tag(b2, scene3); tag(b3, scene3);
+
+// Scene 4: this curve connects nothing. It exists only because the design wants motion.
+spline(ribbon, (w*0.11,h*0.57), (w*0.24,h*0.38), (w*0.40,h*0.55), (w*0.59,h*0.34), (w*0.88,h*0.49));
+color(ribbon, magenta); stroke(ribbon, 8*u); untraced(ribbon); tag(ribbon, scene4);
+hidden(ribbon.knots);
+circle(spark1, (w*0.24,h*0.37), 8*u); color(spark1, cyan); hidden(spark1); tag(spark1, scene4);
+circle(spark2, (w*0.73,h*0.53), 8*u); color(spark2, gold); hidden(spark2); tag(spark2, scene4);
+
+step("select-one") {
+  par {
+    draw(hot1b, 1.65, smooth);
+    flow(hot1b, 1.65);
+    travel(parcel, hot1b, 1.65, smooth);
+  }
+}
+wait(0.55);
+
+step("creator-orders-the-motion") {
+  seq {
+    fade(scene1, 0.35);
+    par {
+      show(scene2structure, 0.40);
+      say(mode, "THREE OBJECTS · CREATOR-AUTHORED ORDER", 0.35);
+      say(caption, "Nothing inferred round robin. The creator simply places three motions in seq.", 0.40);
+    }
+    par { show(r1, 0.15); draw(hot2a, 0.75, smooth); flow(hot2a, 0.75); travel(r1, hot2a, 0.75, smooth); }
+    par { show(r2, 0.15); draw(hot2b, 0.75, smooth); flow(hot2b, 0.75); travel(r2, hot2b, 0.75, smooth); }
+    par { show(r3, 0.15); draw(hot2c, 0.75, smooth); flow(hot2c, 0.75); travel(r3, hot2c, 0.75, smooth); }
+  }
+}
+wait(0.55);
+
+step("creator-sends-together") {
+  seq {
+    fade(scene2, 0.35);
+    par {
+      show(scene3structure, 0.40);
+      show(b1, 0.20); show(b2, 0.20); show(b3, 0.20);
+      say(mode, "THREE OBJECTS · THREE PATHS · TOGETHER", 0.35);
+      say(caption, "Nothing inferred broadcast. par makes every authored journey happen together.", 0.40);
+    }
+    par {
+      draw(hot3a, 1.40, smooth); flow(hot3a, 1.40); travel(b1, hot3a, 1.40, smooth);
+      draw(hot3b, 1.40, smooth); flow(hot3b, 1.40); travel(b2, hot3b, 1.40, smooth);
+      draw(hot3c, 1.40, smooth); flow(hot3c, 1.40); travel(b3, hot3c, 1.40, smooth);
+    }
+  }
+}
+wait(0.55);
+
+step("motion-can-just-be-design") {
+  seq {
+    fade(scene3, 0.35);
+    par {
+      say(mode, "NO ENDPOINTS · NO DOMAIN · JUST MOTION", 0.35);
+      say(caption, "A free curve can carry light in both directions because the composition asks for it.", 0.40);
+      show(spark1, 0.25); show(spark2, 0.25);
+      draw(ribbon, 0.80, smooth);
+    }
+    flow(ribbon, 4.20, both, continuous);
+  }
+}
+wait(1.25);
+
+step("foundation") {
+  par {
+    pulse(ribbon, 0.75);
+    say(mode, "OBJECTS · PATHS · MOTION · TIMING", 0.35);
+    say(caption, "Manic animates the creator's declaration. It never invents the subject's behavior.", 0.45);
+  }
+}
+wait(1.40);
+</code></pre>
+<p>Run it directly or audit every target format:</p>
+<pre><code class="language-bash">manic examples/motion-flow-foundation.manic
+manic check examples/motion-flow-foundation.manic --canvas all
+</code></pre>
 <h2 id="complete-v2-example"><a class="header" href="#complete-v2-example">Complete V2 example</a></h2>
 <p>This generic Reel demonstrates all three relationship words, release, path
 travel, an identity-preserving blueprint change, particle arrangement, a shared
