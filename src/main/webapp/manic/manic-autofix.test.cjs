@@ -8,6 +8,7 @@ const fs = require('fs');
 const mod = { exports: {} };
 new Function('module', 'self', fs.readFileSync(__dirname + '/manic-autofix.js', 'utf8'))(mod, {});
 const applyFixes = mod.exports.applyFixes;
+const wrapBareLatex = mod.exports.wrapBareLatex;
 
 let pass = 0, fail = 0;
 function ok(name, cond, extra) {
@@ -101,6 +102,42 @@ eq('null input', applyFixes(null, () => []).code, '');
   eq('removal deletes the token', manual.code, 'a\n\nb');
   // default (no opts) includes removals — matches the manual/button behaviour
   eq('removal on by default', applyFixes('a\nsadas\nb', strayRemoval).fixed, 1);
+}
+
+// 11) wrapBareLatex: bare equation/rewrite math gets backticked; safe cases untouched
+{
+  const w = wrapBareLatex;
+  eq('wrap cmd',       w('equation(f, (cx, 72), 1+2+3+\\cdots+10, 54);'),
+     'equation(f, (cx, 72), `1+2+3+\\cdots+10`, 54);');
+  eq('wrap number',    w('equation(n, (x0 + 0 * gap, rowY), 1, 38);'),
+     'equation(n, (x0 + 0 * gap, rowY), `1`, 38);');
+  eq('wrap operator',  w('equation(p, (px0 + 24, pairY), +, 34);'),
+     'equation(p, (px0 + 24, pairY), `+`, 34);');
+  eq('wrap boxed',     w('equation(z, (cx, h - 55), \\boxed{55}, 58);'),
+     'equation(z, (cx, h - 55), `\\boxed{55}`, 58);');
+  eq('wrap rw parens', w('rewrite(eq, S=(1+10)+(2+9)+(3+8), 0.9);'),
+     'rewrite(eq, `S=(1+10)+(2+9)+(3+8)`, 0.9);');
+  eq('wrap rw ease',   w('rewrite(eq, S=(1+10)+(2+9), 0.9, smooth);'),
+     'rewrite(eq, `S=(1+10)+(2+9)`, 0.9, smooth);');
+  eq('wrap no-size',   w('equation(g, (cx,cy), \\frac12);'),
+     'equation(g, (cx,cy), `\\frac12`);');
+  // untouched:
+  eq('keep quoted',    w('equation(f, (cx,cy), `V=\\pi r^2`, 60);'),
+     'equation(f, (cx,cy), `V=\\pi r^2`, 60);');
+  eq('keep dquoted',   w('equation(f, (cx,cy), "V", 60);'),
+     'equation(f, (cx,cy), "V", 60);');
+  eq('keep bare var',  w('equation(f, (cx,cy), myLatex, 40);'),
+     'equation(f, (cx,cy), myLatex, 40);');
+  eq('keep non-eq',    w('color(head, cyan);'), 'color(head, cyan);');
+  eq('wrap idempotent', w(w('equation(p, (cx,cy), +, 34);')),
+     'equation(p, (cx,cy), `+`, 34);');
+}
+
+// 12) applyFixes runs the latex-wrap pass even with a no-op check
+{
+  const r = applyFixes('equation(f, (cx,cy), \\frac12, 40);', () => []);
+  eq('applyFixes wraps latex', r.code, 'equation(f, (cx,cy), `\\frac12`, 40);');
+  ok('applyFixes counts wrap', r.fixed >= 1, 'fixed=' + r.fixed);
 }
 
 console.log((fail ? 'FAILED ' : 'OK ') + pass + ' passed, ' + fail + ' failed');
