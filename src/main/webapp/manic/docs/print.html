@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-27147bf3.js";
+            window.path_to_searchindex_js = "searchindex-9d0ee4bc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e8fbc168.js"></script>
@@ -5707,14 +5707,14 @@ shape (with a message that names the 3D replacement):</p>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 13 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
 <li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
-<li><a href="#physics--simulations">Physics — simulations</a> — 54 examples</li>
+<li><a href="#physics--simulations">Physics — simulations</a> — 55 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 8 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
 <li><a href="#generative--recursive">Generative &amp; recursive</a> — 10 examples</li>
-<li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 21 examples</li>
+<li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 22 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
 <li><a href="#3d-scenes">3D scenes</a> — 26 examples</li>
 <li><a href="#diagrams">Diagrams</a> — 24 examples</li>
@@ -13662,6 +13662,102 @@ support(floor, (cx, 612), 150, "up");
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/pAj6lWNuLNs" title="Textbook Tension Figure — 60/30 Ropes — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="spinning-cylinder-flow"><a class="header" href="#spinning-cylinder-flow">spinning-cylinder-flow</a></h2>
+<p>Potential flow around a spinning cylinder — WHY a spun ball curves. Parallel streamlines
+(uniform flow) and concentric circles (a free vortex) superpose into the asymmetric flow
+around the cylinder: bunched (fast, low-pressure) one side, spread (slow, high-pressure) the
+other → a net Magnus force, <code>L=ρUΓ</code>. Every streamline is integrated straight from the
+velocity field with <code>trajectory</code> — the asymmetry is computed, not drawn.</p>
+<pre><code class="language-manic">// Streamlines of potential flow around a spinning cylinder — the superposition
+// that explains the Magnus effect (why a spun ball curves). Uniform flow (parallel
+// streamlines) + a free vortex (concentric streamlines) superpose into the
+// asymmetric flow around a rotating cylinder: bunched (fast, low-pressure) on one
+// side, spread (slow, high-pressure) on the other → a net Magnus force. The combined
+// streamlines are integrated straight from the velocity field with `trajectory`.
+title("Why a Spinning Ball Curves");
+canvas("16:9");
+template("neon");
+
+let ox = cx;
+let oy = cy + 20;
+let sc = 82;      // px per field unit
+let a = 98;       // cylinder radius (px)
+
+
+// --- stage 1: uniform flow = parallel streamlines ---
+for k in 0..11 {
+  line(uni{k}, (ox-430, oy + (k-5)*44), (ox+430, oy + (k-5)*44));
+  color(uni{k}, cyan); untraced(uni{k}); tag(uni{k}, uniform);
+}
+// --- stage 2: a free vortex = concentric circular streamlines ---
+for k in 0..5 {
+  circle(vor{k}, (ox, oy), 55 + k*52); color(vor{k}, magenta); untraced(vor{k}); tag(vor{k}, vortex);
+}
+
+// --- stage 3: the superposition — streamlines around the spinning cylinder ---
+for i in 0..17 {
+  let y0 = -4.4 + i*0.55;
+  trajectory(fl{i},
+    "1 - 1.44*(x*x-y*y)/((x*x+y*y)^2) - 0.7*y/(x*x+y*y)",
+    "0 - 2.88*x*y/((x*x+y*y)^2) + 0.7*x/(x*x+y*y)",
+    (-4.6, y0), (ox, oy), sc, 520);
+  color(fl{i}, cyan); glow(fl{i}, 0.4); untraced(fl{i}); tag(fl{i}, combo);
+}
+circle(cyl, (ox, oy), a); color(cyl, gold); filled(cyl); hidden(cyl);
+circle(cylo, (ox, oy), a); color(cylo, gold); outline(cylo, gold); hidden(cylo);
+
+// spin arrow (clockwise) + labels + net force + Kutta–Joukowski
+arrow(spinT, (ox-34, oy-a-8), (ox+34, oy-a-8)); color(spinT, gold); hidden(spinT);
+arrow(spinB, (ox+34, oy+a+8), (ox-34, oy+a+8)); color(spinB, gold); hidden(spinB);
+arrow(inflow, (ox-430, oy+230), (ox-330, oy+230)); color(inflow, dim); hidden(inflow);
+text(inl, (ox-360, oy+205), "U"); size(inl, 22); color(inl, dim); hidden(inl);
+arrow(force, (ox+a+70, oy+30), (ox+a+70, oy-90)); color(force, lime); stroke(force, 5); hidden(force);
+text(fl_lab, (ox+a+150, oy-30), "Magnus\nforce"); size(fl_lab, 22); color(fl_lab, lime); hidden(fl_lab);
+text(fast, (ox, oy-a-70), "streamlines bunch → faster → LOW pressure"); size(fast, 20); color(fast, cyan); wrap(fast, 520); hidden(fast);
+text(slow, (ox, oy+a+70), "spread → slower → HIGH pressure"); size(slow, 20); color(slow, magenta); wrap(slow, 520); hidden(slow);
+equation(kj, (cx, h-70), `L=\rho\,U\,\Gamma`, 40); color(kj, lime); hidden(kj);
+
+text(cap, (cx, h-30), ""); size(cap, 22); color(cap, dim); wrap(cap, w*0.8); hidden(cap);
+
+show(cap, 0.3);
+
+// 1 — uniform flow
+say(cap, "uniform flow — parallel streamlines");
+stagger(0.05) { for k in 0..11 { draw(uni{k}, 0.6); } }
+wait(0.6);
+
+// 2 — a free vortex
+say(cap, "a free vortex — concentric streamlines (the spin's circulation)");
+stagger(0.08) { for k in 0..5 { draw(vor{k}, 0.7); } }
+wait(0.7);
+
+// 3 — superpose them
+say(cap, "superpose them → the flow around a spinning cylinder");
+par {
+  fade(uniform, 0.5); fade(vortex, 0.5);
+  show(cyl, 0.4); show(cylo, 0.4);
+}
+stagger(0.04) { for i in 0..17 { draw(fl{i}, 0.9); } }
+wait(0.6);
+
+// 4 — the asymmetry → pressure → force
+say(cap, "the flow is faster on top, slower below — Bernoulli does the rest");
+par {
+  show(spinT, 0.4); show(spinB, 0.4);
+  show(inflow, 0.4); show(inl, 0.4);
+  show(fast, 0.5); show(slow, 0.5);
+}
+wait(0.5);
+par { show(force, 0.6); show(fl_lab, 0.5); show(kj, 0.5); }
+wait(0.6);
+
+// 5 — the payoff
+say(cap, "a pressure difference pushes it sideways — the Magnus force that curls a free kick");
+pulse(force, 0.8);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nkQF8PlAiDE" title="Why a Spinning Ball Curves — Streamlines Around a Spinning Cylinder in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="optics--light-as-geometry"><a class="header" href="#optics--light-as-geometry">Optics — light as geometry</a></h1>
 <p>Easy builtins with the <strong>real physics underneath</strong> — Snell’s law and Sellmeier dispersion — so the bending and the colours are earned, not painted. Each is static geometry that animates by a parameter sweep: call <code>run(id)</code>.</p>
@@ -17969,6 +18065,203 @@ show(me.endcard, 0.6);
 wait(1.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/lZmssQerVNY" title="How Noise Builds Worlds — Random to Perlin to Fractal Terrain in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-free-kicks"><a class="header" href="#creator-free-kicks">creator-free-kicks</a></h2>
+<p>Roberto Carlos’ impossible free kick, told as a Short: he walks the ball in and places it,
+paces back, computes the Magnus law WITH VALUES until it locks, sprints up and strikes —
+the RK4 <code>freekick</code> ball swerves metres and curls in by the post for a GOAL, while the same
+strike with no spin (red dashed) sails wide. Then the scene REWINDS and the ball becomes a
+spinning cylinder: uniform flow + a free vortex superpose (integrated live with <code>trajectory</code>)
+into an asymmetric flow — faster one side, slower the other — the pressure difference that IS
+the Magnus force. Physics proven, then explained, in one branded 9:16 story.</p>
+<pre><code class="language-manic">// Roberto Carlos' Banana Kick — the whole story. He walks the ball in and places
+// it, paces back, computes the Magnus law WITH VALUES until it locks, sprints up
+// and strikes — the RK4 ball swerves metres and curls in by the post: GOAL. Then
+// the scene REWINDS, and the same ball becomes a spinning cylinder: uniform flow +
+// a free vortex superpose into an asymmetric flow — faster one side, slower the
+// other — a pressure difference that pushes it sideways. That IS the Magnus force
+// that bent the kick. Every trajectory and streamline is computed, not drawn.
+title("Roberto Carlos' Banana Kick");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// --- schematic top-down pitch ---
+let kx = cx;
+let ky = h*0.66;
+rect(gbox, (cx, h*0.20), w*0.66, h*0.24); outline(gbox, dim);
+rect(goal, (cx, h*0.085), w*0.34, h*0.035); outline(goal, fg);
+line(gline, (cx-w*0.5, h*0.105), (cx+w*0.5, h*0.105)); color(gline, dim);
+for j in 0..5 { dot(walld{j}, (cx + (j-2)*w*0.052, h*0.40), 15); color(walld{j}, dim); tag(walld{j}, wall); }
+
+// --- Roberto Carlos: a stick figure (points + reflowing segments), gait by hand ---
+let fY   = ky + 48;
+let hipY = ky - 4;
+let neckY= ky - 96;
+let handY= ky - 46;
+let headY= ky - 114;
+let sx0  = kx - 260;
+point(neck, (sx0, neckY)); point(hip, (sx0, hipY));
+point(handL,(sx0-24, handY)); point(handR,(sx0+24, handY));
+point(footL,(sx0-16, fY)); point(footR,(sx0+16, fY));
+hidden(neck); hidden(hip); hidden(handL); hidden(handR); hidden(footL); hidden(footR);
+circle(head, (sx0, headY), 14); color(head, fg);
+segment(spine, neck, hip); segment(armL, neck, handL); segment(armR, neck, handR);
+segment(legL, hip, footL); segment(legR, hip, footR);
+color(spine, fg); color(armL, fg); color(armR, fg); color(legL, fg); color(legR, fg);
+stroke(spine, 4); stroke(armL, 4); stroke(armR, 4); stroke(legL, 4); stroke(legR, 4);
+tag(head, pl); tag(spine, pl); tag(armL, pl); tag(armR, pl); tag(legL, pl); tag(legR, pl);
+
+// --- the kick: RK4 Magnus banana; the ball rides at the feet until placed ---
+freekick(rc, (kx, ky), 30, 22, 3.1, 13, 175);
+color(rc, gold); glow(rc, 0.8); untraced(rc); color(rc.ball, fg);
+to(rc.ball, x, sx0+52, 0.01); to(rc.ball, y, ky, 0.01);
+// the counterfactual: same strike, no spin → no Magnus → sails wide (red dashed)
+freekick(ns, (kx, ky), 30, 22, 0, 13, 175);
+color(ns, red); glow(ns, 0.4); dashed(ns); untraced(ns); hidden(ns.ball);
+
+equation(calc, (cx, h*0.74), `\mathbf{a}_M=\kappa\,(\hat{\boldsymbol\omega}\times\mathbf{v})`, 42);
+color(calc, gold); hidden(calc);
+
+// --- Act 2 physics inset: the ball as a spinning cylinder (built now, revealed later) ---
+let mpy = h*0.42;
+circle(mcyl, (cx, mpy), 60); color(mcyl, gold); filled(mcyl); hidden(mcyl);
+for i in 0..15 {
+  let y0 = -4.4 + i*0.62;
+  trajectory(mfl{i},
+    "1 - 1.44*(x*x-y*y)/((x*x+y*y)^2) - 0.7*y/(x*x+y*y)",
+    "0 - 2.88*x*y/((x*x+y*y)^2) + 0.7*x/(x*x+y*y)",
+    (-4.6, y0), (cx, mpy), 50, 460);
+  color(mfl{i}, cyan); glow(mfl{i}, 0.35); untraced(mfl{i}); tag(mfl{i}, flow);
+}
+arrow(spinT, (cx-30, mpy-72), (cx+30, mpy-72)); color(spinT, gold); hidden(spinT);
+arrow(spinB, (cx+30, mpy+72), (cx-30, mpy+72)); color(spinB, gold); hidden(spinB);
+arrow(force, (cx+140, mpy+30), (cx+140, mpy-70)); color(force, lime); stroke(force, 6); hidden(force);
+text(flab, (cx+200, mpy-34), "Magnus\nforce"); size(flab, 24); color(flab, lime); hidden(flab);
+text(fastl, (cx, mpy-115), "faster → low pressure"); size(fastl, 24); color(fastl, cyan); hidden(fastl);
+text(slowl, (cx, mpy+115), "slower → high pressure"); size(slowl, 24); color(slowl, magenta); hidden(slowl);
+
+text(kicker, (cx, h*0.13), "Roberto Carlos' impossible free kick");
+size(kicker, 32); color(kicker, gold); bold(kicker); wrap(kicker, w*0.82);
+text(cap, (cx, h*0.80), ""); size(cap, 30); color(cap, dim); wrap(cap, w*0.84);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+untraced(kicker); cursor(kicker);
+
+// 1 — HOOK.
+mark("hook");
+type(kicker, 1.3);
+
+// 2 — WALK the ball in and place it (sin-phased gait).
+show(cap, 0.3); say(cap, "he walks it in and sets it down");
+for i in 1..11 {
+  let bx = sx0 + i*20; let ph = i*90; let sw = 22*sin(ph*pi/180); let lift = 8*abs(sin(ph*pi/180));
+  par {
+    move(neck,(bx, neckY-lift*0.4),0.11,smooth); move(hip,(bx, hipY),0.11,smooth);
+    move(handL,(bx-sw, handY),0.11,smooth); move(handR,(bx+sw, handY),0.11,smooth);
+    move(footL,(bx+sw, fY-lift),0.11,smooth); move(footR,(bx-sw, fY-lift),0.11,smooth);
+    move(head,(bx, headY-lift*0.4),0.11,smooth); move(rc.ball,(bx+52, ky),0.11,smooth);
+  }
+}
+wait(0.3);
+
+// 3 — PACE BACK; the calculation begins.
+fade(kicker, 0.4); say(cap, "paces back — will this work?"); show(calc, 0.4);
+for i in 1..6 {
+  let bx = (kx-60) - i*18; let ph = i*90; let sw = 16*sin(ph*pi/180); let lift = 6*abs(sin(ph*pi/180));
+  par {
+    move(neck,(bx, neckY-lift*0.4),0.12,smooth); move(hip,(bx, hipY),0.12,smooth);
+    move(handL,(bx-sw, handY),0.12,smooth); move(handR,(bx+sw, handY),0.12,smooth);
+    move(footL,(bx+sw, fY-lift),0.12,smooth); move(footR,(bx-sw, fY-lift),0.12,smooth);
+    move(head,(bx, headY-lift*0.4),0.12,smooth);
+  }
+}
+
+// 4 — COMPUTE the Magnus law WITH VALUES, then lock it.
+rewrite(calc, `\mathbf{a}_M=(0.05)(3.1)(30)`, 0.7, smooth);
+rewrite(calc, `\mathbf{a}_M\approx 4.6\ \mathrm{m/s^2}`, 0.7, smooth);
+say(cap, "locked in"); recolor(cap, lime);
+rewrite(calc, `\text{curl}\approx 3\ \text{m}`, 0.6, smooth);
+wait(0.3);
+
+// 5 — RAN FAST up to the ball.
+recolor(cap, dim); say(cap, ""); fade(calc, 0.4);
+for i in 1..9 {
+  let bx = (kx-150) + i*15; let ph = i*120; let sw = 30*sin(ph*pi/180); let lift = 12*abs(sin(ph*pi/180));
+  par {
+    move(neck,(bx, neckY-lift*0.4),0.05,smooth); move(hip,(bx, hipY),0.05,smooth);
+    move(handL,(bx-sw, handY),0.05,smooth); move(handR,(bx+sw, handY),0.05,smooth);
+    move(footL,(bx+sw, fY-lift),0.05,smooth); move(footR,(bx-sw, fY-lift),0.05,smooth);
+    move(head,(bx, headY-lift*0.4),0.05,smooth);
+  }
+}
+
+// 6 — STRIKE → the banana swerves in by the post.
+seq {
+  par { move(footR,(kx-4, ky+34),0.13,smooth); move(hip,(kx-30, hipY),0.13,smooth); }
+  par {
+    draw(rc, 2.0); run(rc, 2.0);
+    seq { wait(1.1); recolor(cap, gold); say(cap, "aimed metres wide — it curled in by the post"); }
+  }
+}
+wait(0.4);
+
+// 7 — GOAL.
+recolor(cap, gold); say(cap, "GOAL — impossible without the spin");
+par { flash(goal, gold); pulse(goal, 0.7); }
+wait(0.7);
+
+// 7.5 — proof: same strike, no spin, no air to curl it → it sails wide.
+recolor(cap, red); say(cap, "no spin, no air pushing it — the same strike sails wide");
+draw(ns, 1.3);
+wait(0.8);
+
+// 8 — REWIND: both trajectories retract; the ball returns to the spot.
+recolor(cap, dim); say(cap, "so WHY does the spin bend it? rewind…");
+par {
+  erase(rc, 0.9); erase(ns, 0.9);
+  to(rc.ball, x, kx, 0.9, smooth); to(rc.ball, y, ky, 0.9, smooth);
+}
+wait(0.3);
+
+// 9 — the same ball becomes a SPINNING CYLINDER: the flow field appears.
+say(cap, "zoom into the ball — it's a spinning cylinder in the air");
+par {
+  fade(pl, 0.5); fade(head, 0.5);
+  fade(gbox, 0.5); fade(goal, 0.5); fade(gline, 0.5); fade(wall, 0.5);
+  to(rc.ball, x, cx, 0.6, smooth); to(rc.ball, y, mpy, 0.6, smooth);
+  show(mcyl, 0.5);
+}
+stagger(0.04) { for i in 0..15 { draw(mfl{i}, 0.9); } }
+wait(0.4);
+
+// 10 — uniform flow + free vortex superpose → asymmetry → sideways force.
+say(cap, "spin drags the air: faster on top, slower below");
+par { show(spinT, 0.4); show(spinB, 0.4); show(fastl, 0.5); show(slowl, 0.5); }
+wait(0.5);
+say(cap, "a pressure difference pushes it sideways — the Magnus force");
+par { show(force, 0.6); show(flab, 0.5); pulse(force, 0.8); }
+wait(0.6);
+
+// 11 — the point.
+recolor(cap, cyan); say(cap, "that sideways force is what curled the free kick — all computed");
+wait(1.1);
+
+// 12 — END CARD.
+mark("endcard");
+par {
+  fade(cap, 0.4); fade(me.footer, 0.4);
+  fade(mcyl, 0.4); fade(flow, 0.4); fade(rc.ball, 0.4);
+  fade(spinT, 0.4); fade(spinB, 0.4); fade(force, 0.4); fade(flab, 0.4); fade(fastl, 0.4); fade(slowl, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Z_G4L66Mo-U" title="Roberto Carlos' Banana Kick — the Magnus Effect, Computed and Explained in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-options-socials"><a class="header" href="#creator-v2-options-socials">creator-v2-options-socials</a></h2>
 <p>The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D

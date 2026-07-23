@@ -1,5 +1,5 @@
 {
-  "count": 249,
+  "count": 251,
   "categories": [
     {
       "slug": "algorithms",
@@ -802,6 +802,12 @@
           "file": "textbook-tension.manic",
           "title": "Textbook tension",
           "desc": "Another textbook figure: two support ropes at 60\u00b0/30\u00b0 meeting a knot, a string over a hanging pulley carrying 10 kg with the other end anchored to a hatched floor \u2014 support + template(\"paper\") for the flat exam-paper look."
+        },
+        {
+          "name": "spinning-cylinder-flow",
+          "file": "spinning-cylinder-flow.manic",
+          "title": "Spinning cylinder flow",
+          "desc": "Potential flow around a spinning cylinder \u2014 WHY a spun ball curves."
         }
       ]
     },
@@ -1198,6 +1204,12 @@
           "file": "creator-noise-story.manic",
           "title": "Creator noise story",
           "desc": "How Noise Builds Worlds \u2014 a Short walking procedural noise from 1D to fractal: raw rand(x) (jagged) vs smooth noise(x) (Perlin), then noise(x,y) tilting from a flat field into a 3D surface, then fbm stacking octaves into fractal terrain."
+        },
+        {
+          "name": "creator-free-kicks",
+          "file": "creator-free-kicks.manic",
+          "title": "Creator free kicks",
+          "desc": "Roberto Carlos' impossible free kick, told as a Short: he walks the ball in and places it, paces back, computes the Magnus law WITH VALUES until it locks, sprints up and strikes \u2014 the RK4 freekick ball swerves metres and curls in by the post for a GOAL, while the same strike with no spin (red dashed) sails wide."
         },
         {
           "name": "creator-v2-options-socials",

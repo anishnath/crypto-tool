@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-27147bf3.js";
+            window.path_to_searchindex_js = "searchindex-9d0ee4bc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e8fbc168.js"></script>
@@ -2634,6 +2634,102 @@ line(ropeF, (cx, 496), (cx, 600)); color(ropeF, fg); stroke(ropeF, 2);
 support(floor, (cx, 612), 150, "up");
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/pAj6lWNuLNs" title="Textbook Tension Figure — 60/30 Ropes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spinning-cylinder-flow"><a class="header" href="#spinning-cylinder-flow">spinning-cylinder-flow</a></h2>
+<p>Potential flow around a spinning cylinder — WHY a spun ball curves. Parallel streamlines
+(uniform flow) and concentric circles (a free vortex) superpose into the asymmetric flow
+around the cylinder: bunched (fast, low-pressure) one side, spread (slow, high-pressure) the
+other → a net Magnus force, <code>L=ρUΓ</code>. Every streamline is integrated straight from the
+velocity field with <code>trajectory</code> — the asymmetry is computed, not drawn.</p>
+<pre><code class="language-manic">// Streamlines of potential flow around a spinning cylinder — the superposition
+// that explains the Magnus effect (why a spun ball curves). Uniform flow (parallel
+// streamlines) + a free vortex (concentric streamlines) superpose into the
+// asymmetric flow around a rotating cylinder: bunched (fast, low-pressure) on one
+// side, spread (slow, high-pressure) on the other → a net Magnus force. The combined
+// streamlines are integrated straight from the velocity field with `trajectory`.
+title("Why a Spinning Ball Curves");
+canvas("16:9");
+template("neon");
+
+let ox = cx;
+let oy = cy + 20;
+let sc = 82;      // px per field unit
+let a = 98;       // cylinder radius (px)
+
+
+// --- stage 1: uniform flow = parallel streamlines ---
+for k in 0..11 {
+  line(uni{k}, (ox-430, oy + (k-5)*44), (ox+430, oy + (k-5)*44));
+  color(uni{k}, cyan); untraced(uni{k}); tag(uni{k}, uniform);
+}
+// --- stage 2: a free vortex = concentric circular streamlines ---
+for k in 0..5 {
+  circle(vor{k}, (ox, oy), 55 + k*52); color(vor{k}, magenta); untraced(vor{k}); tag(vor{k}, vortex);
+}
+
+// --- stage 3: the superposition — streamlines around the spinning cylinder ---
+for i in 0..17 {
+  let y0 = -4.4 + i*0.55;
+  trajectory(fl{i},
+    "1 - 1.44*(x*x-y*y)/((x*x+y*y)^2) - 0.7*y/(x*x+y*y)",
+    "0 - 2.88*x*y/((x*x+y*y)^2) + 0.7*x/(x*x+y*y)",
+    (-4.6, y0), (ox, oy), sc, 520);
+  color(fl{i}, cyan); glow(fl{i}, 0.4); untraced(fl{i}); tag(fl{i}, combo);
+}
+circle(cyl, (ox, oy), a); color(cyl, gold); filled(cyl); hidden(cyl);
+circle(cylo, (ox, oy), a); color(cylo, gold); outline(cylo, gold); hidden(cylo);
+
+// spin arrow (clockwise) + labels + net force + Kutta–Joukowski
+arrow(spinT, (ox-34, oy-a-8), (ox+34, oy-a-8)); color(spinT, gold); hidden(spinT);
+arrow(spinB, (ox+34, oy+a+8), (ox-34, oy+a+8)); color(spinB, gold); hidden(spinB);
+arrow(inflow, (ox-430, oy+230), (ox-330, oy+230)); color(inflow, dim); hidden(inflow);
+text(inl, (ox-360, oy+205), "U"); size(inl, 22); color(inl, dim); hidden(inl);
+arrow(force, (ox+a+70, oy+30), (ox+a+70, oy-90)); color(force, lime); stroke(force, 5); hidden(force);
+text(fl_lab, (ox+a+150, oy-30), "Magnus\nforce"); size(fl_lab, 22); color(fl_lab, lime); hidden(fl_lab);
+text(fast, (ox, oy-a-70), "streamlines bunch → faster → LOW pressure"); size(fast, 20); color(fast, cyan); wrap(fast, 520); hidden(fast);
+text(slow, (ox, oy+a+70), "spread → slower → HIGH pressure"); size(slow, 20); color(slow, magenta); wrap(slow, 520); hidden(slow);
+equation(kj, (cx, h-70), `L=\rho\,U\,\Gamma`, 40); color(kj, lime); hidden(kj);
+
+text(cap, (cx, h-30), ""); size(cap, 22); color(cap, dim); wrap(cap, w*0.8); hidden(cap);
+
+show(cap, 0.3);
+
+// 1 — uniform flow
+say(cap, "uniform flow — parallel streamlines");
+stagger(0.05) { for k in 0..11 { draw(uni{k}, 0.6); } }
+wait(0.6);
+
+// 2 — a free vortex
+say(cap, "a free vortex — concentric streamlines (the spin's circulation)");
+stagger(0.08) { for k in 0..5 { draw(vor{k}, 0.7); } }
+wait(0.7);
+
+// 3 — superpose them
+say(cap, "superpose them → the flow around a spinning cylinder");
+par {
+  fade(uniform, 0.5); fade(vortex, 0.5);
+  show(cyl, 0.4); show(cylo, 0.4);
+}
+stagger(0.04) { for i in 0..17 { draw(fl{i}, 0.9); } }
+wait(0.6);
+
+// 4 — the asymmetry → pressure → force
+say(cap, "the flow is faster on top, slower below — Bernoulli does the rest");
+par {
+  show(spinT, 0.4); show(spinB, 0.4);
+  show(inflow, 0.4); show(inl, 0.4);
+  show(fast, 0.5); show(slow, 0.5);
+}
+wait(0.5);
+par { show(force, 0.6); show(fl_lab, 0.5); show(kj, 0.5); }
+wait(0.6);
+
+// 5 — the payoff
+say(cap, "a pressure difference pushes it sideways — the Magnus force that curls a free kick");
+pulse(force, 0.8);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nkQF8PlAiDE" title="Why a Spinning Ball Curves — Streamlines Around a Spinning Cylinder in manic" allowfullscreen loading="lazy"></iframe></div>
 
 
                     </main>
