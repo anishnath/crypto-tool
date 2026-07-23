@@ -77,7 +77,7 @@ public class ManicServlet extends HttpServlet {
     private static final int SOCKET_TIMEOUT_MS = 30_000; // API returns immediately (async render)
 
     private static final long CACHE_TTL_LIMITS_MS = 20_000L;       // limits (with usage): 20 s
-    private static final long PREMIUM_CACHE_TTL_MS = 5 * 60_000L;  // Pro status: 5 min
+    private static final long PREMIUM_CACHE_TTL_MS = 6L * 60 * 60 * 1000L;  // Pro status: 6 h
 
     /** In-memory cache for the limits endpoint (key = "limits|plan|user"). */
     private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<>();

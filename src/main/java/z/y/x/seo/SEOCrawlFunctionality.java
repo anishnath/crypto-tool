@@ -12,6 +12,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import z.y.x.billing.BillingPageSupport;
 import z.y.x.r.LoadPropertyFileFunctionality;
 
 import javax.servlet.ServletException;
@@ -41,7 +42,7 @@ public class SEOCrawlFunctionality extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    // Rate limit: 3 crawl starts per IP per 5 minutes
+    // Rate limit: 3 crawl starts per IP per 5 minutes (Pro users bypass)
     private static final int CRAWLS_PER_WINDOW = 3;
     private static final int MAX_BUCKETS = 10_000;
     private static final Map<String, Bucket> crawlBuckets = new ConcurrentHashMap<>();
@@ -85,20 +86,35 @@ public class SEOCrawlFunctionality extends HttpServlet {
         return apiBase;
     }
 
+    /** Server-side tier for upstream Go API (never trust the browser). */
+    private String resolveSeoTier(HttpServletRequest req) {
+        return BillingPageSupport.isPremiumUser(req) ? "pro" : "free";
+    }
+
+    private static String seoInternalSecret() {
+        String secret = System.getenv("SEO_INTERNAL_SECRET");
+        return secret != null ? secret.trim() : "";
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
-        // Rate limit crawl starts
-        String clientIp = getClientIp(req);
-        Bucket bucket = resolveBucket(clientIp);
-        ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
-        if (!probe.isConsumed()) {
-            long waitSeconds = probe.getNanosToWaitForRefill() / 1_000_000_000;
-            resp.setStatus(429);
-            resp.getWriter().write("{\"error\":\"Rate limit exceeded. Try again in " + waitSeconds + " seconds.\"}");
-            return;
+        String seoTier = resolveSeoTier(req);
+        boolean pro = "pro".equals(seoTier);
+
+        // Rate limit crawl starts (Pro bypass)
+        if (!pro) {
+            String clientIp = getClientIp(req);
+            Bucket bucket = resolveBucket(clientIp);
+            ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+            if (!probe.isConsumed()) {
+                long waitSeconds = probe.getNanosToWaitForRefill() / 1_000_000_000;
+                resp.setStatus(429);
+                resp.getWriter().write("{\"error\":\"Rate limit exceeded. Try again in " + waitSeconds + " seconds.\"}");
+                return;
+            }
         }
 
         String action = req.getParameter("action");
@@ -111,7 +127,7 @@ public class SEOCrawlFunctionality extends HttpServlet {
                 resp.getWriter().write("{\"error\":\"Missing or invalid parameter: id\"}");
                 return;
             }
-            proxyPost(getApiBase() + "api/seo/crawl/" + id + "/cancel", null, resp);
+            proxyPost(getApiBase() + "api/seo/crawl/" + id + "/cancel", null, seoTier, resp);
             return;
         }
 
@@ -164,7 +180,7 @@ public class SEOCrawlFunctionality extends HttpServlet {
             }
         }
 
-        proxyPost(getApiBase() + "api/seo/crawl", bodyStr, resp);
+        proxyPost(getApiBase() + "api/seo/crawl", bodyStr, seoTier, resp);
     }
 
     @Override
@@ -349,7 +365,7 @@ public class SEOCrawlFunctionality extends HttpServlet {
         }
     }
 
-    private void proxyPost(String url, String body, HttpServletResponse resp) throws IOException {
+    private void proxyPost(String url, String body, String seoTier, HttpServletResponse resp) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
             HttpPost post = new HttpPost(url);
@@ -358,23 +374,32 @@ public class SEOCrawlFunctionality extends HttpServlet {
                 post.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
             }
             post.addHeader("Accept", "application/json");
+            String internalSecret = seoInternalSecret();
+            if (!internalSecret.isEmpty()) {
+                post.addHeader("X-SEO-Internal-Secret", internalSecret);
+                post.addHeader("X-SEO-Tier", seoTier != null ? seoTier : "free");
+            }
 
             HttpResponse response = httpClient.execute(post);
             int status = response.getStatusLine().getStatusCode();
             resp.setStatus(status);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            StringBuilder content = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                content.append(line);
-            }
-            resp.getWriter().write(content.toString());
+            resp.getWriter().write(readResponseBody(response));
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("{\"error\":\"SEO crawl API unavailable\"}");
         } finally {
             httpClient.close();
         }
+    }
+
+    private static String readResponseBody(HttpResponse response) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        StringBuilder content = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            content.append(line);
+        }
+        return content.toString();
     }
 }

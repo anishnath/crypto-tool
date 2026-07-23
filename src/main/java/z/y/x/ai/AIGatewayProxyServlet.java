@@ -61,7 +61,7 @@ public class AIGatewayProxyServlet extends HttpServlet {
 
     // Premium status cache (userId -> [isPremium(0/1), expiresAtMillis]) to avoid
     // hitting the billing gateway on every chat request. TTL: 5 minutes.
-    private static final long PREMIUM_CACHE_TTL_MS = 5 * 60 * 1000L;
+    private static final long PREMIUM_CACHE_TTL_MS = 6L * 60 * 60 * 1000L;
     private static final Map<String, long[]> premiumCache = new ConcurrentHashMap<>();
 
     private Bucket resolveBucket(String key) {

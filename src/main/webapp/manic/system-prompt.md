@@ -110,7 +110,13 @@ Constructors and timeline may be written in any order.
    and takes the template colour.
    **⚠️ The LaTeX must be inside a STRING — default to backticks `` `...` ``.**
    The one real mistake is leaving it BARE: `equation(q,(x,y),\frac12)` won't
-   parse. Backticks are fully raw (all backslashes survive) so they ALWAYS work:
+   parse. **This holds for EVERY math argument, even one with no backslash** — a
+   plain number, a lone operator, or an ordinary expression are ALL strings too:
+   `` equation(n,(x,y),`1`) ``, `` equation(p,(x,y),`+`) ``,
+   `` equation(s,(x,y),`S = 1+2+3+\cdots+10`) ``, `` rewrite(eq,`S = 55`) ``.
+   Bare `1` is read as a number (wrong slot) and bare `+` / `S=1+2` is a syntax
+   error — so quote **every** `equation`/`rewrite` math argument, never just the
+   ones with `\`. Backticks are fully raw (all backslashes survive) so they ALWAYS work:
    `` equation(f,(cx,320),`V = \pi r^2 h`,60) ``. Double quotes also work for
    single-line LaTeX (`equation(f,(cx,320),"V = \pi r^2 h",60)`) but they eat a
    `\\`, so **multi-line LaTeX MUST use backticks** — e.g.

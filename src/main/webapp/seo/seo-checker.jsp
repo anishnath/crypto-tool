@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="true" %>
+<%@ page import="z.y.x.billing.BillingPageSupport" %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
     request.setAttribute("aiToolId", "seo/checker");
     request.setAttribute("aiRequireSignIn", "true");
+    boolean seoIsPro = BillingPageSupport.isPremiumUser(request);
+    boolean seoShowAds = !seoIsPro;
 %>
 <%@ include file="../modern/components/ai-assistant-vars.inc.jsp" %>
 <!DOCTYPE html>
@@ -51,20 +54,26 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/navigation.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/seo/css/seo-checker.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/seo/css/seo-ai-fix.css">
+<% if (seoShowAds) { %>
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/ads.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<% } %>
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/dark-mode.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/footer.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="<%=request.getContextPath()%>/modern/css/search.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
+<% if (seoShowAds) { %>
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/ads.css">
+<% } %>
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/dark-mode.css">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/footer.css">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/modern/css/search.css">
     </noscript>
 
+<% if (seoShowAds) { %>
     <%@ include file="../modern/ads/ad-init.jsp" %>
+<% } %>
 </head>
-<body>
+<body<% if (seoIsPro) { %> class="seo-pro-user" data-seo-pro="true"<% } %>>
 
     <!-- Navigation -->
     <%@ include file="../modern/components/nav-header.jsp" %>
@@ -80,8 +89,10 @@
         </div>
     </nav>
 
+<% if (seoShowAds) { %>
     <% request.setAttribute("seoProBannerVariant", "compact"); %>
     <%@ include file="../modern/components/seo-pro-pricing-banner.inc.jsp" %>
+<% } %>
 
     <!-- ═══════════════════════════════════════════════
          STATE: INPUT — Hero search bar
@@ -170,10 +181,12 @@
                 <div id="seo-summary" class="seo-summary-cell"></div>
             </div>
 
+<% if (seoShowAds) { %>
             <!-- Ad slot -->
             <div class="seo-ad-slot">
                 <%@ include file="../modern/ads/ad-in-content-top.jsp" %>
             </div>
+<% } %>
 
             <!-- Issues -->
             <div id="seo-issues-container"></div>
@@ -195,10 +208,12 @@
         </div>
     </div>
 
+<% if (seoShowAds) { %>
     <!-- Below-fold ad -->
     <div class="seo-bottom-ad">
         <%@ include file="../modern/ads/ad-in-content-mid.jsp" %>
     </div>
+<% } %>
 
     <!-- SEO content (below fold, for crawlers) -->
     <section class="seo-seo-content">

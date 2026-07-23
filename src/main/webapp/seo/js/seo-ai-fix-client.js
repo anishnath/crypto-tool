@@ -375,9 +375,20 @@ var SeoAiFixClient = (function () {
     });
   }
 
+  function hideSeoAds() {
+    document.querySelectorAll('.seo-ad-slot, .seo-bottom-ad').forEach(function (el) {
+      el.hidden = true;
+    });
+    if (document.body) {
+      document.body.classList.add('seo-pro-user');
+      document.body.setAttribute('data-seo-pro', 'true');
+    }
+  }
+
   function updatePricingBannerVisibility(banner) {
     fetchBillingPremium().then(function (isPro) {
-      banner.hidden = isPro;
+      if (banner) banner.hidden = isPro;
+      if (isPro) hideSeoAds();
     });
   }
 
