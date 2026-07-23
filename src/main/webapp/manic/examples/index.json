@@ -1,5 +1,5 @@
 {
-  "count": 231,
+  "count": 237,
   "categories": [
     {
       "slug": "algorithms",
@@ -1414,6 +1414,42 @@
           "file": "complex-flowchart.manic",
           "title": "Complex flowchart",
           "desc": "A big pipeline that builds itself, then runs: a 24-node CI/CD flow with 7 decisions and feedback loops auto-wraps into readable side-by-side columns (long loops routed around the perimeter)."
+        },
+        {
+          "name": "c4-internet-banking",
+          "file": "c4-internet-banking.manic",
+          "title": "C4 internet banking",
+          "desc": "C4 Level 1 \u2014 System Context: the Internet Banking System in its world."
+        },
+        {
+          "name": "c4-internet-banking-containers",
+          "file": "c4-internet-banking-containers.manic",
+          "title": "C4 internet banking containers",
+          "desc": "C4 Level 2 \u2014 Containers: zoom inside the system to a single-page app, an API application and a database, each carrying its technology in a [Container: tech] tag; the mainframe stays external."
+        },
+        {
+          "name": "c4-internet-banking-components",
+          "file": "c4-internet-banking-components.manic",
+          "title": "C4 internet banking components",
+          "desc": "C4 Level 3 \u2014 Components: inside the API application, sign-in and accounts controllers, a security component and a mainframe facade \u2014 declared so related pairs sit adjacent, so the Uses and Reads/writes edges never cross an intervening box."
+        },
+        {
+          "name": "c4-zoom",
+          "file": "c4-zoom.manic",
+          "title": "C4 zoom",
+          "desc": "The C4 differentiator \u2014 it moves."
+        },
+        {
+          "name": "c4-story",
+          "file": "c4-story.manic",
+          "title": "C4 story",
+          "desc": "One system, at every altitude \u2014 a full end-to-end walkthrough."
+        },
+        {
+          "name": "c4-test",
+          "file": "c4-test.manic",
+          "title": "C4 test",
+          "desc": "The canonical bigbank Container diagram, translated straight from the Python diagrams library."
         },
         {
           "name": "systems-rabbitmq-consumers",

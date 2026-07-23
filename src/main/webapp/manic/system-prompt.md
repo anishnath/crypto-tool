@@ -678,6 +678,31 @@ authored branch — a loop is just an edge back to an earlier node, which auto-r
 as a curve or a perimeter rail. The chart runs; it does not infer which branch is
 taken — the creator authors it.
 
+**C4 diagrams** (Simon Brown's model) use the same kit. Declare `c4(id, level)`
+instead of `architecture` — `level` is `context`, `container`, or `component`. Each
+`node` takes a **C4 element kind** plus rich text in one call:
+`node(id, parent, "kind", "name", [description], [technology])`, where `kind` is
+`person`, `system`, `container`, `component`, or `external`. Boxes are outline-styled
+(coloured border + text, transparent fill — the Structurizr look), a `person` gets a
+head circle atop its box, and the label composes as `name` / `[Type: tech]` /
+`description`. You place **no coordinates**: C4 lays out in the conventional tiers —
+people on top, internal systems/containers in the middle, external systems on the
+bottom — and a tier too wide for the frame **auto-splits into a balanced grid**.
+Within a tier, declaration order is left→right, so keep related boxes adjacent (pair
+them by column when a tier wraps to two rows) and their `Uses`/`Reads-writes` edge
+sits in the gap instead of crossing a box. Relationships are `connect` + `annotate`
+(the C4 label: a verb phrase and an optional `[tech]`, which auto-splits to two
+lines); a relationship that runs *upward* across tiers (e.g. an external system's
+notification back to the person on top) automatically **bows around the margin** so
+it never bisects the diagram. C4's real edge is that **it moves**: compose the
+Context→Container→Component zoom with ordinary verbs — overlap two (or three) `c4`
+diagrams at the same centre with the deeper ones `hidden`, `zoom` into the centred
+system while you `fade` the surroundings, then `zoom(1.0)` back out and `show` the
+next level (keep the title/caption on screen with `sticky` so they don't zoom). For
+the most compelling reveal, **build the next level along a flowing request**: reveal
+each box, its edge and its label in a `par` as you `route` the token to it, so the
+diagram assembles as the call travels through it rather than popping in all at once.
+
 ### Algo kit
 `graph(id, "v1 v2 v3", "a-b a>c", layout, (cx,cy), scale, [radius])` — a node/edge
 graph. Edges: `a-b` (line), `a>b` (arrow). `layout` is `circular`/`row`/`grid`.

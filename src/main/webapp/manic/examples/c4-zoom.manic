@@ -1,0 +1,69 @@
+title("C4 — Zoom From Context Into Containers");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic"); sticky(mark);
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · CONTEXT → CONTAINER");
+size(kicker, 15*u); color(kicker, dim); bold(kicker); sticky(kicker);
+text(cap, (cx, h*0.93), "One system in its world.");
+size(cap, 16*u); color(cap, dim); wrap(cap, w*0.86); sticky(cap);
+
+// ---- Level 1: System Context (visible first) ----
+c4(ctx, context);
+node(cust, ctx, "person",   "Customer", "A retail banking customer");
+node(ibs,  ctx, "system",   "Internet Banking System", "View accounts, make payments");
+node(mail, ctx, "external", "E-mail System", "Sends notifications");
+node(core, ctx, "external", "Mainframe", "Core banking information");
+connect(x1, cust, ibs); annotate(x1, "Uses");
+connect(x2, ibs, mail); annotate(x2, "Sends e-mail [SMTP]");
+connect(x3, ibs, core); annotate(x3, "Reads/writes [XML/HTTPS]");
+color(x1, cyan); color(x1.hot, cyan);
+color(x2, gold); color(x2.hot, gold);
+color(x3, cyan); color(x3.hot, cyan);
+
+// ---- Level 2: Containers (hidden until we zoom in) ----
+c4(cnt, container);
+node(pcust, cnt, "person",    "Customer", "A retail banking customer");
+node(spa,   cnt, "container", "Single-Page App", "Account UI in the browser", "JavaScript / Angular");
+node(api,   cnt, "container", "API Application", "Banking functionality (JSON/HTTPS)", "Java / Spring Boot");
+node(db,    cnt, "container", "Database", "Users, accounts and payments", "Oracle");
+node(mf,    cnt, "external",  "Mainframe", "Core banking information");
+connect(y1, pcust, spa); annotate(y1, "Uses [HTTPS]");
+connect(y2, spa, api);   annotate(y2, "Calls [JSON/HTTPS]");
+connect(y3, api, db);    annotate(y3, "Reads/writes [JDBC]");
+connect(y4, api, mf);    annotate(y4, "Uses [XML/HTTPS]");
+color(y1, cyan); color(y1.hot, cyan);
+color(y2, cyan); color(y2.hot, cyan);
+color(y3, cyan); color(y3.hot, cyan);
+color(y4, gold); color(y4.hot, gold);
+
+// The container diagram overlaps the context one (both centred) — hide it, and its
+// duplicate frame, until the zoom reveals it.
+hidden(cnt);
+hidden(cnt.nodes); hidden(cnt.connections); hidden(cnt.hotpaths);
+
+wait(0.8);
+
+// Push the camera into the centred system, dropping everything around it.
+step("zoom-in") {
+  par {
+    say(cap, "Zoom into the Internet Banking System…", 0.4);
+    zoom(2.6, 1.1, smooth);
+    fade(cust, 0.6); fade(mail, 0.6); fade(core, 0.6);
+    fade(ctx.connections, 0.6);
+  }
+}
+wait(0.2);
+
+// The system dissolves and its containers rise in as the camera pulls back.
+step("open") {
+  par {
+    say(cap, "…and its containers are inside: SPA → API → Database.", 0.4);
+    fade(ibs, 0.4);
+    zoom(1.0, 1.0, smooth);
+    show(cnt.nodes, 0.7);
+    show(cnt.connections, 0.8);
+  }
+}
+wait(1.4);

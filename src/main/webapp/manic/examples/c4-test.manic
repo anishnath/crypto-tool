@@ -1,0 +1,52 @@
+title("Container diagram — Internet Banking System");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · CONTAINER");
+text(headline, (cx, h*0.12), "Container diagram for Internet Banking System");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 22*u); bold(headline); wrap(headline, w*0.86);
+
+// One c4 container diagram. Tiers do the grouping — person on top, the internal
+// containers in the middle (they auto-split into balanced sub-rows), external
+// systems on the bottom. Declaration order = left→right / row-major, so keep
+// related boxes adjacent (web beside spa, spa's path down to api beside db).
+c4(ib, container);
+
+// person — top tier
+node(cust, ib, "person", "Personal Banking Customer", "A customer of the bank, with personal bank accounts");
+
+// internal containers — middle tier
+node(web, ib, "container", "Web Application", "Delivers static content and the Internet banking SPA", "Java / Spring MVC");
+node(spa, ib, "container", "Single-Page Application", "Internet banking in the web browser", "JavaScript / Angular");
+node(mob, ib, "container", "Mobile App", "A subset of the banking functionality", "Xamarin");
+node(api, ib, "container", "API Application", "Banking functionality via a JSON/HTTPS API", "Java / Spring MVC");
+node(db,  ib, "container", "Database", "Stores users, credentials and access logs", "Oracle");
+
+// external systems — bottom tier
+node(email, ib, "external", "E-mail System", "The internal Microsoft Exchange system");
+node(mf,    ib, "external", "Mainframe Banking System", "Core banking: customers, accounts, transactions");
+
+connect(e1,  cust, web);   annotate(e1,  "Visits bigbank.com/ib [HTTPS]");
+connect(e2,  cust, spa);   annotate(e2,  "Views balances, makes payments");
+connect(e3,  cust, mob);   annotate(e3,  "Views balances, makes payments");
+connect(e4,  web,  spa);   annotate(e4,  "Delivers to the browser");
+connect(e5,  spa,  api);   annotate(e5,  "API calls [JSON/HTTPS]");
+connect(e6,  mob,  api);   annotate(e6,  "API calls [JSON/HTTPS]");
+connect(e7,  api,  db);    annotate(e7,  "Reads/writes [JDBC]");
+connect(e8,  api,  email); annotate(e8,  "Sends e-mail [SMTP]");
+connect(e9,  api,  mf);    annotate(e9,  "API calls [XML/HTTPS]");
+connect(e10, email, cust); annotate(e10, "Sends e-mails to");
+
+color(e1, cyan); color(e1.hot, cyan);
+color(e2, cyan); color(e2.hot, cyan);
+color(e3, cyan); color(e3.hot, cyan);
+color(e4, cyan); color(e4.hot, cyan);
+color(e5, cyan); color(e5.hot, cyan);
+color(e6, cyan); color(e6.hot, cyan);
+color(e7, cyan); color(e7.hot, cyan);
+color(e8, gold); color(e8.hot, gold);
+color(e9, gold); color(e9.hot, gold);
+color(e10, gold); color(e10.hot, gold);

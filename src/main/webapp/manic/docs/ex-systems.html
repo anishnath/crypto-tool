@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ea718de6.js";
+            window.path_to_searchindex_js = "searchindex-df6dd56b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-122320bb.js"></script>
@@ -179,7 +179,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="diagrams"><a class="header" href="#diagrams">Diagrams</a></h1>
-<p>Animated diagrams — not another static boxes-and-arrows generator. Declare an architecture (or a <code>flowchart</code>) with auto-positioned nodes and directed connections — geometry is optional, so a diagram auto-fits the canvas and, when it grows dense, scales itself down as one to stay inside the frame (you never touch a coordinate) — then move one persistent request through the graph. A flowchart ranks its nodes top-down and runs: a token walks the process and takes a branch. Node artwork comes from a string kind (<code>aws:lambda</code>, <code>gcp:bigquery</code>, <code>onprem:redis</code>, <code>k8s:pod</code> — 17 providers, see <a href="systems-icons.html">icon reference &amp; aliases</a>); paths are coloured by relationship. The kit never infers behaviour — the creator authors it with <code>route</code>, <code>flow</code>, and ordinary verbs.</p>
+<p>Animated diagrams — not another static boxes-and-arrows generator. Declare an architecture (or a <code>flowchart</code>) with auto-positioned nodes and directed connections — geometry is optional, so a diagram auto-fits the canvas and, when it grows dense, scales itself down as one to stay inside the frame (you never touch a coordinate) — then move one persistent request through the graph. A flowchart ranks its nodes top-down and runs: a token walks the process and takes a branch. It also speaks <strong>C4</strong> — <code>c4(id, level)</code> with <code>person</code>/<code>system</code>/<code>container</code>/<code>component</code> nodes draws Simon Brown’s model in the conventional outline style, tiers people over internals over externals, auto-splits a dense tier into a balanced grid, and zooms from Context to Container to Component as a request flows through it. Node artwork comes from a string kind (<code>aws:lambda</code>, <code>gcp:bigquery</code>, <code>onprem:redis</code>, <code>k8s:pod</code> — 17 providers, see <a href="systems-icons.html">icon reference &amp; aliases</a>); paths are coloured by relationship. The kit never infers behaviour — the creator authors it with <code>route</code>, <code>flow</code>, and ordinary verbs.</p>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
 <h2 id="systems-foundation"><a class="header" href="#systems-foundation">systems-foundation</a></h2>
 <p>Provider-neutral: only native <code>client</code>/<code>gateway</code>/<code>service</code>/<code>cache</code>/<code>database</code> archetypes — reveals cold topology, sends one persistent request forward, and returns the same identity over separately directed paths, with no cloud assets.</p>
@@ -929,6 +929,416 @@ step("clear-2") {
 wait(1.0);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/5iBfClaMyY8" title="Watch a Big Flowchart Build Itself, Then Run — Auto-Wrap + Parallel Tokens in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="c4-internet-banking"><a class="header" href="#c4-internet-banking">c4-internet-banking</a></h2>
+<p>C4 Level 1 — System Context: the Internet Banking System in its world. A customer (a <code>person</code>, drawn as a box with a head), the system itself, and two external systems (e-mail, mainframe), joined by labelled relationships. Outline styling, <code>[Type]</code> tags and people-top tiers, all auto-laid with no coordinates.</p>
+<pre><code class="language-manic">title("Internet Banking — C4 System Context");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · SYSTEM CONTEXT");
+text(headline, (cx, h*0.12), "Internet Banking — the big picture");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 24*u); bold(headline); wrap(headline, w*0.86);
+
+// `c4(id, level)` — inside it, node kinds are C4 elements. The extra args are the
+// box's description and (for containers) technology. No coordinates.
+c4(bank, context);
+node(cust, bank, "person",   "Personal Banking Customer", "A customer of the bank with personal accounts");
+node(ibs,  bank, "system",   "Internet Banking System",   "Lets customers view accounts and make payments");
+node(mail, bank, "external", "E-mail System",             "Sends notifications to customers");
+node(core, bank, "external", "Mainframe Banking System",  "Stores core banking information");
+
+connect(r1, cust, ibs);  annotate(r1, "Views accounts, makes payments");
+connect(r2, ibs, core);  annotate(r2, "Reads/writes [XML/HTTPS]");
+connect(r3, ibs, mail);  annotate(r3, "Sends e-mail [SMTP]");
+
+color(r1, cyan);    color(r1.hot, cyan);
+color(r2, cyan);    color(r2.hot, cyan);
+color(r3, gold);    color(r3.hot, gold);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/MFbQ-H4EZp0" title="C4 System Context in One Screen — Draw the Whole System's World in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="c4-internet-banking-containers"><a class="header" href="#c4-internet-banking-containers">c4-internet-banking-containers</a></h2>
+<p>C4 Level 2 — Containers: zoom inside the system to a single-page app, an API application and a database, each carrying its technology in a <code>[Container: tech]</code> tag; the mainframe stays external. Same <code>c4</code> container, one level down.</p>
+<pre><code class="language-manic">title("Internet Banking — C4 Containers");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · CONTAINER");
+text(headline, (cx, h*0.12), "Inside the Internet Banking System");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 24*u); bold(headline); wrap(headline, w*0.86);
+
+// Level 2 — zoom into the system: its containers, each with a technology. The
+// technology is the optional 6th `node` argument, shown in the `[Container: …]` tag.
+c4(bank, container);
+node(cust, bank, "person",    "Customer", "A retail banking customer");
+node(spa,  bank, "container", "Single-Page App", "Account summary and payments in the browser", "JavaScript / Angular");
+node(api,  bank, "container", "API Application", "Banking functionality via a JSON/HTTPS API", "Java / Spring Boot");
+node(db,   bank, "container", "Database", "Stores users, accounts and payments", "Oracle");
+node(core, bank, "external",  "Mainframe Banking System", "Stores core banking information");
+
+connect(r1, cust, spa); annotate(r1, "Uses [HTTPS]");
+connect(r2, spa, api);  annotate(r2, "Calls [JSON/HTTPS]");
+connect(r3, api, db);   annotate(r3, "Reads/writes [JDBC]");
+connect(r4, api, core); annotate(r4, "Uses [XML/HTTPS]");
+
+color(r1, cyan); color(r1.hot, cyan);
+color(r2, cyan); color(r2.hot, cyan);
+color(r3, cyan); color(r3.hot, cyan);
+color(r4, gold); color(r4.hot, gold);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/rWOyFI2VrzU" title="C4 Containers — Zoom Inside the System, Tech Tags and All — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="c4-internet-banking-components"><a class="header" href="#c4-internet-banking-components">c4-internet-banking-components</a></h2>
+<p>C4 Level 3 — Components: inside the API application, sign-in and accounts controllers, a security component and a mainframe facade — declared so related pairs sit adjacent, so the <code>Uses</code> and <code>Reads/writes</code> edges never cross an intervening box.</p>
+<pre><code class="language-manic">title("Internet Banking — C4 Components");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · COMPONENT");
+text(headline, (cx, h*0.12), "Inside the API Application");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 24*u); bold(headline); wrap(headline, w*0.86);
+
+// Level 3 — zoom into a container: its components. `component` is a C4 node kind;
+// the dependencies it talks to sit below as externals.
+// Declaration order = left-to-right in the tier, so keep each related pair
+// adjacent (sign-in beside security, accounts beside the facade) — their "Uses"
+// edge then sits in the gap instead of crossing an intervening box.
+c4(api, component);
+node(signin,   api, "component", "Sign-In Controller", "Lets users sign in", "Spring MVC");
+node(security, api, "component", "Security Component", "Authentication and access control", "Spring Bean");
+node(accounts, api, "component", "Accounts Controller", "Provides account summaries", "Spring MVC");
+node(facade,   api, "component", "Mainframe Facade", "A facade over the mainframe", "Spring Bean");
+node(db,   api, "external", "Database", "Stores users, accounts and payments");
+node(mf,   api, "external", "Mainframe Banking System", "Stores core banking information");
+
+connect(c1, signin,   security); annotate(c1, "Uses");
+connect(c2, accounts, facade);   annotate(c2, "Uses");
+connect(c3, security, db);       annotate(c3, "Reads/writes [JDBC]");
+connect(c4x, facade,  mf);       annotate(c4x, "Uses [XML/HTTPS]");
+
+color(c1, cyan); color(c1.hot, cyan);
+color(c2, cyan); color(c2.hot, cyan);
+color(c3, cyan); color(c3.hot, cyan);
+color(c4x, gold); color(c4x.hot, gold);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/i3mNCR2r-h0" title="C4 Components — Inside One Container, Zero Crossing Edges — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="c4-zoom"><a class="header" href="#c4-zoom">c4-zoom</a></h2>
+<p>The C4 differentiator — it moves. One diagram zooms from System Context into its Containers: <code>zoom</code> into the centred system, <code>fade</code> the surroundings, then reveal the containers — author-composed with <code>zoom</code>/<code>fade</code>/<code>show</code> and <code>sticky</code> chrome, no new vocabulary.</p>
+<pre><code class="language-manic">title("C4 — Zoom From Context Into Containers");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic"); sticky(mark);
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · CONTEXT → CONTAINER");
+size(kicker, 15*u); color(kicker, dim); bold(kicker); sticky(kicker);
+text(cap, (cx, h*0.93), "One system in its world.");
+size(cap, 16*u); color(cap, dim); wrap(cap, w*0.86); sticky(cap);
+
+// ---- Level 1: System Context (visible first) ----
+c4(ctx, context);
+node(cust, ctx, "person",   "Customer", "A retail banking customer");
+node(ibs,  ctx, "system",   "Internet Banking System", "View accounts, make payments");
+node(mail, ctx, "external", "E-mail System", "Sends notifications");
+node(core, ctx, "external", "Mainframe", "Core banking information");
+connect(x1, cust, ibs); annotate(x1, "Uses");
+connect(x2, ibs, mail); annotate(x2, "Sends e-mail [SMTP]");
+connect(x3, ibs, core); annotate(x3, "Reads/writes [XML/HTTPS]");
+color(x1, cyan); color(x1.hot, cyan);
+color(x2, gold); color(x2.hot, gold);
+color(x3, cyan); color(x3.hot, cyan);
+
+// ---- Level 2: Containers (hidden until we zoom in) ----
+c4(cnt, container);
+node(pcust, cnt, "person",    "Customer", "A retail banking customer");
+node(spa,   cnt, "container", "Single-Page App", "Account UI in the browser", "JavaScript / Angular");
+node(api,   cnt, "container", "API Application", "Banking functionality (JSON/HTTPS)", "Java / Spring Boot");
+node(db,    cnt, "container", "Database", "Users, accounts and payments", "Oracle");
+node(mf,    cnt, "external",  "Mainframe", "Core banking information");
+connect(y1, pcust, spa); annotate(y1, "Uses [HTTPS]");
+connect(y2, spa, api);   annotate(y2, "Calls [JSON/HTTPS]");
+connect(y3, api, db);    annotate(y3, "Reads/writes [JDBC]");
+connect(y4, api, mf);    annotate(y4, "Uses [XML/HTTPS]");
+color(y1, cyan); color(y1.hot, cyan);
+color(y2, cyan); color(y2.hot, cyan);
+color(y3, cyan); color(y3.hot, cyan);
+color(y4, gold); color(y4.hot, gold);
+
+// The container diagram overlaps the context one (both centred) — hide it, and its
+// duplicate frame, until the zoom reveals it.
+hidden(cnt);
+hidden(cnt.nodes); hidden(cnt.connections); hidden(cnt.hotpaths);
+
+wait(0.8);
+
+// Push the camera into the centred system, dropping everything around it.
+step("zoom-in") {
+  par {
+    say(cap, "Zoom into the Internet Banking System…", 0.4);
+    zoom(2.6, 1.1, smooth);
+    fade(cust, 0.6); fade(mail, 0.6); fade(core, 0.6);
+    fade(ctx.connections, 0.6);
+  }
+}
+wait(0.2);
+
+// The system dissolves and its containers rise in as the camera pulls back.
+step("open") {
+  par {
+    say(cap, "…and its containers are inside: SPA → API → Database.", 0.4);
+    fade(ibs, 0.4);
+    zoom(1.0, 1.0, smooth);
+    show(cnt.nodes, 0.7);
+    show(cnt.connections, 0.8);
+  }
+}
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/0GIwQPopfDg" title="Your C4 Diagram Should MOVE — Zoom From Context Into Containers — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="c4-story"><a class="header" href="#c4-story">c4-story</a></h2>
+<p>One system, at every altitude — a full end-to-end walkthrough. Context → zoom in → the Containers build along a <code>GET /accounts</code> request as it travels browser→API→database → zoom into the API → the Components build along a sign-in call → zoom back out. The flow IS the reveal, led by a moving token.</p>
+<pre><code class="language-manic">title("C4 — One System, at Every Altitude");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic"); sticky(mark);
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · CONTEXT → CONTAINER → COMPONENT");
+size(kicker, 15*u); color(kicker, dim); bold(kicker); sticky(kicker);
+text(cap, (cx, h*0.93), "Every system lives in a world of people and neighbours.");
+size(cap, 16*u); color(cap, dim); wrap(cap, w*0.86); sticky(cap);
+
+// ---- Level 1: System Context ----
+c4(ctx, context);
+node(cust, ctx, "person",   "Customer", "A retail banking customer");
+node(sys,  ctx, "system",   "Internet Banking System", "View accounts, make payments");
+node(mail, ctx, "external", "E-mail System", "Sends notifications");
+node(core, ctx, "external", "Mainframe", "Core banking information");
+connect(cx1, cust, sys); annotate(cx1, "Uses");
+connect(cx2, sys, core); annotate(cx2, "Reads/writes [XML/HTTPS]");
+connect(cx3, sys, mail); annotate(cx3, "Sends e-mail [SMTP]");
+color(cx1, cyan); color(cx1.hot, cyan);
+color(cx2, cyan); color(cx2.hot, cyan);
+color(cx3, gold); color(cx3.hot, gold);
+
+// ---- Level 2: Containers ----
+c4(cnt, container);
+node(ccust, cnt, "person",    "Customer", "A retail banking customer");
+node(spa,   cnt, "container", "Single-Page App", "Account UI in the browser", "JavaScript / Angular");
+node(api,   cnt, "container", "API Application", "Banking functionality (JSON/HTTPS)", "Java / Spring Boot");
+node(cdb,   cnt, "container", "Database", "Users, accounts, payments", "Oracle");
+node(cmf,   cnt, "external",  "Mainframe", "Core banking information");
+connect(cn1, ccust, spa); annotate(cn1, "Uses [HTTPS]");
+connect(cn2, spa, api);   annotate(cn2, "Calls [JSON/HTTPS]");
+connect(cn3, api, cdb);   annotate(cn3, "Reads/writes [JDBC]");
+connect(cn4, api, cmf);   annotate(cn4, "Uses [XML/HTTPS]");
+color(cn1, cyan); color(cn1.hot, cyan);
+color(cn2, cyan); color(cn2.hot, cyan);
+color(cn3, cyan); color(cn3.hot, cyan);
+color(cn4, gold); color(cn4.hot, gold);
+
+// ---- Level 3: Components (inside the API) ----
+// Declaration order fills the 2x2 grid row-major, so ordering the pairs as
+// (signin, accounts) then (security, facade) makes two clean vertical columns:
+//   sign-in → security → database   |   accounts → facade → mainframe
+c4(cmp, component);
+node(signin, cmp, "component", "Sign-In Controller", "Lets users sign in", "Spring MVC");
+node(acct,   cmp, "component", "Accounts Controller", "Account summaries", "Spring MVC");
+node(sec,    cmp, "component", "Security Component", "Authentication &amp; access", "Spring Bean");
+node(fac,    cmp, "component", "Mainframe Facade", "Facade over the mainframe", "Spring Bean");
+node(mdb,    cmp, "external",  "Database", "Users, accounts, payments");
+node(mmf,    cmp, "external",  "Mainframe", "Core banking information");
+connect(cp1, signin, sec); annotate(cp1, "Uses");
+connect(cp2, acct, fac);   annotate(cp2, "Uses");
+connect(cp3, sec, mdb);    annotate(cp3, "Reads/writes [JDBC]");
+connect(cp4, fac, mmf);    annotate(cp4, "Uses [XML/HTTPS]");
+color(cp1, cyan); color(cp1.hot, cyan);
+color(cp2, cyan); color(cp2.hot, cyan);
+color(cp3, cyan); color(cp3.hot, cyan);
+color(cp4, gold); color(cp4.hot, gold);
+
+// tokens: one request per level
+request(req,  ccust,  "GET /accounts");
+request(req2, signin, "authorise");
+
+// Start at Context; everything else is hidden and overlaps the same centre.
+hidden(cnt); hidden(cnt.nodes); hidden(cnt.connections); hidden(cnt.hotpaths);
+hidden(cmp); hidden(cmp.nodes); hidden(cmp.connections); hidden(cmp.hotpaths);
+hidden(ctx.nodes);
+hidden(req.parts); hidden(req2.parts);
+
+// 1 — the system in its world (pieces arrive one by one)
+step("context") {
+  seq {
+    stagger(0.12) { show(cust, 0.4); show(sys, 0.4); show(mail, 0.4); show(core, 0.4); }
+    draw(ctx.connections, 0.7);
+  }
+}
+wait(0.5);
+
+// 2 — push into the system
+step("into-system") {
+  par {
+    say(cap, "Zoom into the system…", 0.4);
+    zoom(2.5, 1.1, smooth);
+    fade(cust, 0.6); fade(mail, 0.6); fade(core, 0.6); fade(ctx.connections, 0.6);
+  }
+}
+wait(0.2);
+
+// 3 — inside, the containers ASSEMBLE as the request travels through them.
+// The dot leads: each box + its edge materialise just as the call arrives.
+step("containers") {
+  seq {
+    par {
+      say(cap, "Inside — a request builds the containers as it travels.", 0.4);
+      fade(sys, 0.4);
+      zoom(1.0, 1.0, smooth);
+    }
+    par { show(ccust, 0.4); show(req.parts, 0.25); }
+    par { show(cn1, 0.6); show(cn1.text.bg, 0.6); show(cn1.text, 0.6); show(spa, 0.5); route(req, cn1, 0.6, smooth); }
+    par { show(cn2, 0.6); show(cn2.text.bg, 0.6); show(cn2.text, 0.6); show(api, 0.5); route(req, cn2, 0.6, smooth); }
+    par { show(cn3, 0.7); show(cn3.text.bg, 0.7); show(cn3.text, 0.7); show(cdb, 0.5); route(req, cn3, 0.7, smooth); }
+    par { show(cmf, 0.5); show(cn4, 0.6); show(cn4.text.bg, 0.6); show(cn4.text, 0.6); }
+  }
+}
+wait(0.5);
+
+// 4 — push into the API container
+step("into-api") {
+  par {
+    say(cap, "Zoom into the API…", 0.4);
+    zoom(2.4, 1.1, smooth);
+    fade(ccust, 0.6); fade(spa, 0.6); fade(cdb, 0.6); fade(cmf, 0.6);
+    fade(cnt.connections, 0.6); fade(req.parts, 0.4);
+  }
+}
+wait(0.2);
+
+// 5 — inside the API, the components ASSEMBLE as the sign-in call travels.
+step("components") {
+  seq {
+    par {
+      say(cap, "…inside, a sign-in call builds the components it touches.", 0.4);
+      fade(api, 0.4);
+      zoom(1.0, 1.0, smooth);
+    }
+    par { show(signin, 0.4); show(req2.parts, 0.25); }
+    par { show(cp1, 0.6); show(cp1.text.bg, 0.6); show(cp1.text, 0.6); show(sec, 0.5); route(req2, cp1, 0.6, smooth); }
+    par { show(cp3, 0.7); show(cp3.text.bg, 0.7); show(cp3.text, 0.7); show(mdb, 0.5); route(req2, cp3, 0.7, smooth); }
+    par {
+      show(acct, 0.5); show(fac, 0.5); show(mmf, 0.5);
+      show(cp2, 0.6); show(cp2.text.bg, 0.6); show(cp2.text, 0.6);
+      show(cp4, 0.6); show(cp4.text.bg, 0.6); show(cp4.text, 0.6);
+    }
+  }
+}
+wait(0.5);
+
+// 8 — climb back to the containers (fade components out, pull back, reveal)
+step("back-to-containers") {
+  seq {
+    par {
+      say(cap, "Zoom back out to the containers…", 0.4);
+      fade(cmp.nodes, 0.4); fade(cmp.connections, 0.4); fade(req2.parts, 0.3);
+      zoom(0.8, 0.5, smooth);
+    }
+    par {
+      zoom(1.0, 0.6, smooth);
+      show(ccust, 0.5); show(spa, 0.5); show(api, 0.5); show(cdb, 0.5); show(cmf, 0.5);
+      show(cnt.connections, 0.5);
+    }
+  }
+}
+wait(0.4);
+
+// 9 — and out to the whole system in its world
+step("back-to-context") {
+  seq {
+    par {
+      say(cap, "…and out to the whole system, at every altitude. That is manic.", 0.5);
+      fade(ccust, 0.4); fade(spa, 0.4); fade(api, 0.4); fade(cdb, 0.4); fade(cmf, 0.4);
+      fade(cnt.connections, 0.4);
+      zoom(0.8, 0.5, smooth);
+    }
+    par {
+      zoom(1.0, 0.6, smooth);
+      show(cust, 0.6); show(sys, 0.6); show(mail, 0.6); show(core, 0.6); show(ctx.connections, 0.6);
+    }
+  }
+}
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/lrQ5Q_uEmKQ" title="One System at Every Altitude — A Complete Animated C4 Walkthrough — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="c4-test"><a class="header" href="#c4-test">c4-test</a></h2>
+<p>The canonical bigbank Container diagram, translated straight from the Python <code>diagrams</code> library. Five containers auto-split into a balanced grid, and the long notification edge from the e-mail system back to the customer routes around the margin instead of bisecting the diagram — dense C4, still readable.</p>
+<pre><code class="language-manic">title("Container diagram — Internet Banking System");
+canvas("16:9");
+template("mono");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mark, (w*0.15, h*0.04), "Made With Manic");
+text(kicker, (cx, h*0.055), "DIAGRAMS · C4 · CONTAINER");
+text(headline, (cx, h*0.12), "Container diagram for Internet Banking System");
+size(kicker, 15*u); color(kicker, dim); bold(kicker);
+size(headline, 22*u); bold(headline); wrap(headline, w*0.86);
+
+// One c4 container diagram. Tiers do the grouping — person on top, the internal
+// containers in the middle (they auto-split into balanced sub-rows), external
+// systems on the bottom. Declaration order = left→right / row-major, so keep
+// related boxes adjacent (web beside spa, spa's path down to api beside db).
+c4(ib, container);
+
+// person — top tier
+node(cust, ib, "person", "Personal Banking Customer", "A customer of the bank, with personal bank accounts");
+
+// internal containers — middle tier
+node(web, ib, "container", "Web Application", "Delivers static content and the Internet banking SPA", "Java / Spring MVC");
+node(spa, ib, "container", "Single-Page Application", "Internet banking in the web browser", "JavaScript / Angular");
+node(mob, ib, "container", "Mobile App", "A subset of the banking functionality", "Xamarin");
+node(api, ib, "container", "API Application", "Banking functionality via a JSON/HTTPS API", "Java / Spring MVC");
+node(db,  ib, "container", "Database", "Stores users, credentials and access logs", "Oracle");
+
+// external systems — bottom tier
+node(email, ib, "external", "E-mail System", "The internal Microsoft Exchange system");
+node(mf,    ib, "external", "Mainframe Banking System", "Core banking: customers, accounts, transactions");
+
+connect(e1,  cust, web);   annotate(e1,  "Visits bigbank.com/ib [HTTPS]");
+connect(e2,  cust, spa);   annotate(e2,  "Views balances, makes payments");
+connect(e3,  cust, mob);   annotate(e3,  "Views balances, makes payments");
+connect(e4,  web,  spa);   annotate(e4,  "Delivers to the browser");
+connect(e5,  spa,  api);   annotate(e5,  "API calls [JSON/HTTPS]");
+connect(e6,  mob,  api);   annotate(e6,  "API calls [JSON/HTTPS]");
+connect(e7,  api,  db);    annotate(e7,  "Reads/writes [JDBC]");
+connect(e8,  api,  email); annotate(e8,  "Sends e-mail [SMTP]");
+connect(e9,  api,  mf);    annotate(e9,  "API calls [XML/HTTPS]");
+connect(e10, email, cust); annotate(e10, "Sends e-mails to");
+
+color(e1, cyan); color(e1.hot, cyan);
+color(e2, cyan); color(e2.hot, cyan);
+color(e3, cyan); color(e3.hot, cyan);
+color(e4, cyan); color(e4.hot, cyan);
+color(e5, cyan); color(e5.hot, cyan);
+color(e6, cyan); color(e6.hot, cyan);
+color(e7, cyan); color(e7.hot, cyan);
+color(e8, gold); color(e8.hot, gold);
+color(e9, gold); color(e9.hot, gold);
+color(e10, gold); color(e10.hot, gold);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/W69nePax5L4" title="The bigbank C4 Diagram, Auto-Laid — Dense Containers That Stay Readable — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="systems-rabbitmq-consumers"><a class="header" href="#systems-rabbitmq-consumers">systems-rabbitmq-consumers</a></h2>
 <p>Authored one-of-many delivery: messages 101/102/103 explicitly select different workers — the kit never infers RabbitMQ or round-robin behaviour.</p>
