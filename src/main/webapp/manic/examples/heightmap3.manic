@@ -1,0 +1,23 @@
+// heightmap3 — a Grid Kit → 3D bridge. A 2D grid's per-cell state is lifted into a
+// surface3-style terrain mesh. The grid kit stays entirely 3D-unaware; heightmap3
+// lives on the 3D side and just reads the grid's cells. Here a seeded Wave Function
+// Collapse settles a map, then its walls rise into an island terrain a camera orbits.
+title("Heightmap3 — A Grid Becomes Terrain");
+canvas("16:9");
+template("neon");
+
+// A grid-kit map: `collapse` pre-simulates a seeded WFC settle (clustered walls).
+grid(mz, (cx, cy), 18, 14, 30);
+collapse(mz, "islands", 5);
+hidden(mz.cells); hidden(mz.lines);   // we only want the 3D terrain, not the flat grid
+
+// Lift it: h = 1 for a filled cell, 0 otherwise. The formula raises the walls and
+// blends in organic `fbm` noise for a natural roll — grid value AND noise compose.
+camera3((0, -12, 7), (0, 0, 0.7), 32);
+heightmap3(land, mz, "h*1.5 + fbm(x*1.1, y*1.1)*0.85 + 0.1", 7);
+color(land, cyan);
+
+// A slow turntable so the terrain reads in 3D.
+orbit3(70, 34, 13, 4.5, smooth);
+orbit3(200, 30, 13, 4.5, smooth);
+orbit3(330, 36, 13, 4.5, smooth);

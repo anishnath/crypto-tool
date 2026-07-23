@@ -1,0 +1,15 @@
+title("A* Pathfinding — Search Over Space");
+canvas("16:9");
+template("neon");
+
+watermark(mark, (w*0.15, h*0.05), "Made With Manic");
+
+// A cell grid seeded from a compact ASCII maze: `#` wall, `.` open, `@` start,
+// `*` goal. A* explores the open cells (frontier cyan → current magenta), then
+// the shortest route is traced in gold — the spatial sibling of the algo kit's
+// graph search, sharing its exact colour grammar.
+grid(g, "@ . . . . . . . ; # # # # # # . # ; . . . . . . . . ; . # # # # # # # ; . . . . . . . . ; # # # # # # # *", (cx, cy+20), 8, 6, 78);
+neighbors(g, "4");
+
+gridastar(g, (0,0), (7,5), manhattan);
+draw(g.path, 1.4);

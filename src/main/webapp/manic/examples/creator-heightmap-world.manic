@@ -1,0 +1,77 @@
+// Your Map Is a 3D World — a Creator v2 Short of the Grid→3D bridge. A grid-kit WFC
+// map settles in 2D, then the SAME grid is lifted by heightmap3 into 3D terrain:
+// the camera pulls back to show the whole world, rotates, then flies in low. 9:16
+// shorts frame with creator identity, socials and an end card.
+title("Your Map Is a 3D World");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// The 2D map (grid kit) and the 3D terrain from the SAME grid.
+grid(world, (cx, h*0.44), 16, 16, 52);
+collapse(world, "islands", 8);
+camera3((0, -1.6, 22), (0, 0, 0), 26);
+heightmap3(land, world, "h*1.7 + fbm(x*1.2, y*1.2)*0.85 + 0.1", 8);
+color(land, cyan);
+hidden(land);
+
+text(kicker, (cx, h*0.135), "your flat map is hiding a 3D world");
+size(kicker, 33); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.82);
+text(cap, (cx, h*0.785), "a 2D map, generated cell by cell…");
+size(cap, 31); color(cap, dim); wrap(cap, w*0.84);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+hidden(cap);
+untraced(kicker); cursor(kicker);
+
+// 1 — HOOK + the 2D map settles (Wave Function Collapse).
+mark("hook");
+type(kicker, 1.4);
+step("map") {
+  par {
+    say(cap, "a 2D map, generated cell by cell…");
+    run(world, 16, 3.0);
+  }
+}
+wait(0.3);
+
+// 2 — the same grid lifts into 3D (still near top-down, so it reads flat at first).
+step("lift") {
+  par {
+    say(cap, "…is secretly a 3D world");
+    fade(world.cells, 0.5); fade(world.lines, 0.5);
+    show(land, 0.6);
+  }
+}
+
+// 3 — pull back to see the WHOLE world.
+step("reveal") {
+  orbit3(25, 36, 30, 3.4, smooth);
+}
+wait(0.3);
+
+// 4 — rotate around it.
+step("rotate") {
+  seq {
+    par { say(cap, "one grid — 2D and 3D, bridged by Manic"); recolor(cap, cyan); }
+    orbit3(185, 32, 30, 4.4, smooth);
+  }
+}
+
+// 5 — fly in low over the peaks.
+step("zoom") {
+  orbit3(255, 15, 12, 3.8, smooth);
+}
+wait(0.6);
+
+// 6 — END CARD.
+mark("endcard");
+par {
+  fade(kicker, 0.4); fade(cap, 0.4); fade(me.footer, 0.4); fade(land, 0.5);
+}
+show(me.endcard, 0.6);
+wait(1.6);

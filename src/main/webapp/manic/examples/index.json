@@ -1,5 +1,5 @@
 {
-  "count": 237,
+  "count": 249,
   "categories": [
     {
       "slug": "algorithms",
@@ -76,6 +76,36 @@
           "file": "cubic-graphs.manic",
           "title": "Cubic graphs",
           "desc": "A hand-composed graph-theory plate: five 3-connected simple cubic graphs (including the 6-spoke wheel from a for loop) drawn on in sequence, with LaTeX node labels ($u_i$, $v_i$) and typeset names $G_1..G_5$ \u2014 a paper-style figure straight from a theorem statement."
+        }
+      ]
+    },
+    {
+      "slug": "grids",
+      "title": "Grids \u2014 pathfinding & automata",
+      "examples": [
+        {
+          "name": "grid-astar",
+          "file": "grid-astar.manic",
+          "title": "Grid astar",
+          "desc": "A* over a seeded ASCII maze: open cells flood by f-score (frontier cyan \u2192 current magenta), a live frontier/visited readout counts up, and the shortest route traces out in gold as {id}.path."
+        },
+        {
+          "name": "grid-life",
+          "file": "grid-life.manic",
+          "title": "Grid life",
+          "desc": "Conway's Game of Life: a glider seeded with setcell, then evolve pre-simulates six generations at build time (alive = a filled cell, Conway's B3/S23) and run replays them \u2014 the glider walks diagonally across the grid."
+        },
+        {
+          "name": "grid-wfc",
+          "file": "grid-wfc.manic",
+          "title": "Grid wfc",
+          "desc": "Wave Function Collapse: collapse pre-simulates a seeded, neighbour-constrained settling row by row, then run replays the grid resolving from empty into a finished maze \u2014 deterministic, so the same seed always settles the same way."
+        },
+        {
+          "name": "grid-life-zoo",
+          "file": "grid-life-zoo.manic",
+          "title": "Grid life zoo",
+          "desc": "Conway's Life's whole taxonomy \u2014 a still life (Block), an oscillator (Blinker) and a spaceship (Glider) \u2014 three grids seeded with setcell, evolved eight generations and run in parallel: the Block holds, the Blinker flips, the Glider walks."
         }
       ]
     },
@@ -1140,6 +1170,36 @@
           "desc": "One visible parameter drives a quadratic plot, its live tangent and slope, a geometric position, scale and a derived numeric readout."
         },
         {
+          "name": "pascal-triangle",
+          "file": "pascal-triangle.manic",
+          "title": "Pascal triangle",
+          "desc": "A non-quiz Creator v2 Short built entirely from the computation layer: each cell's binomial coefficient is a prod reduction, the triangle reveals row by row, the sum-of-two-parents rule is highlighted, and colouring the odd cells uncovers Sierpinski's triangle \u2014 all inside a branded 9:16 shorts frame with creator identity, socials and an end card (no grid kit needed: the triangle is triangular)."
+        },
+        {
+          "name": "creator-lattice-paths",
+          "file": "creator-lattice-paths.manic",
+          "title": "Creator lattice paths",
+          "desc": "The rectangular cousin of Pascal, on a real grid-kit lattice: 'how many ways from corner to corner moving only right and down?' Every cell's path-count is a prod reduction (C(i+j,i)), the same above-plus-left rule is highlighted, the far corner holds the total, and one actual monotone path is traced with a spline."
+        },
+        {
+          "name": "creator-rule90-sierpinski",
+          "file": "creator-rule90-sierpinski.manic",
+          "title": "Creator rule90 sierpinski",
+          "desc": "A QUIZ-style Short: Rule 90 (each new cell = its two upper neighbours XOR'd) draws Sierpinski's triangle from a single dot \u2014 because XOR of two parents is exactly Pascal's triangle mod 2 (a cell is lit iff C(n,k) is odd)."
+        },
+        {
+          "name": "creator-heightmap-world",
+          "file": "creator-heightmap-world.manic",
+          "title": "Creator heightmap world",
+          "desc": "The Grid\u21923D bridge as a Short: a grid-kit WFC map settles in 2D, then the SAME grid rises into 3D terrain via heightmap3 \u2014 the camera pulls back to reveal the whole world, rotates, then flies in low over the peaks."
+        },
+        {
+          "name": "creator-noise-story",
+          "file": "creator-noise-story.manic",
+          "title": "Creator noise story",
+          "desc": "How Noise Builds Worlds \u2014 a Short walking procedural noise from 1D to fractal: raw rand(x) (jagged) vs smooth noise(x) (Perlin), then noise(x,y) tilting from a flat field into a 3D surface, then fbm stacking octaves into fractal terrain."
+        },
+        {
           "name": "creator-v2-options-socials",
           "file": "creator-v2-options-socials.manic",
           "title": "Creator v2 options socials",
@@ -1372,6 +1432,24 @@
           "file": "volume3.manic",
           "title": "Volume3",
           "desc": "The volume under a surface represented as solid 3D Riemann-sum columns, turning a double integral into visible geometry."
+        },
+        {
+          "name": "heightmap3",
+          "file": "heightmap3.manic",
+          "title": "Heightmap3",
+          "desc": "The Grid Kit \u2192 3D bridge: heightmap3(land, grid, \"z(x,y,h)\") lifts a 2-D grid's per-cell state into a surface3-style terrain mesh."
+        },
+        {
+          "name": "heightmap3-world",
+          "file": "heightmap3-world.manic",
+          "title": "Heightmap3 world",
+          "desc": "The creative payoff: a grid-kit WFC map settles in 2-D, then the very same grid lifts into a 3-D world as the camera tilts down \u2014 one grid, two dimensions."
+        },
+        {
+          "name": "noise-terrain",
+          "file": "noise-terrain.manic",
+          "title": "Noise terrain",
+          "desc": "Procedural generation from a single formula: noise(x,y) and fbm(x,y) (fractal Brownian motion) are now formula functions beside sin/cos, so surface3(land, \"fbm(x*0.9,y*0.9)*2.4\") sculpts an organic fractal landscape the camera tours \u2014 no new kit, just two functions the shared expression evaluator now understands."
         }
       ]
     },

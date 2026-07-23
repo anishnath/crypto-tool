@@ -1,0 +1,118 @@
+// Lattice-path counting — "how many ways from corner to corner moving only right
+// and down?" The SAME recurrence as Pascal (cell = the one above + the one to the
+// left) but on a RECTANGLE — so it uses the grid kit. Each cell's count is a `prod`
+// reduction (C(i+j,i)); afterwards one actual path is traced with `spline`.
+// Different template (blueprint) + different typewriter (a question that erases and
+// retypes into its answer).
+title("Lattice Paths");
+canvas("9:16");
+template("blueprint");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+let C = 5;          // columns of cells
+let R = 4;          // rows of cells
+let s = w*0.162;    // cell size
+let gy = h*0.455;   // grid centre y
+let ox = cx - C*s*0.5;
+let oy = gy - R*s*0.5;
+
+// The rectangular lattice IS a grid-kit grid. Overlay a path-count on every cell:
+// value(i,j) = C(i+j, i), the number of monotone right/down paths reaching it.
+grid(lat, (cx, gy), C, R, s);
+opacity(lat.cells, 0);   // a lattice is its lines — clear the cell fills so the counts read
+for i in 0..R {
+  for j in 0..C {
+    let val = prod(t in 1..i+1 : (j+t)/t);   // C(i+j, i)
+    counter(pc{i}_{j}, (ox+(j+0.5)*s, oy+(i+0.5)*s), val, 0);
+    tag(pc{i}_{j}, pathnums); tag(pc{i}_{j}, prow{i});
+  }
+}
+
+// One monotone path (right/right/down/right/down/right/down) traced afterward.
+spline(route,
+  (ox+0.5*s, oy+0.5*s), (ox+1.5*s, oy+0.5*s), (ox+2.5*s, oy+0.5*s),
+  (ox+2.5*s, oy+1.5*s), (ox+3.5*s, oy+1.5*s), (ox+3.5*s, oy+2.5*s),
+  (ox+4.5*s, oy+2.5*s), (ox+4.5*s, oy+3.5*s));
+color(route, gold); stroke(route, 7); glow(route, 0.8); untraced(route); hidden(route);
+
+// --- text: a question that later erases and retypes into the answer ---
+text(kicker, (cx, h*0.115), "How many paths, corner to corner?");
+size(kicker, 33); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.86);
+text(sub, (cx, h*0.165), "moving only RIGHT and DOWN");
+size(sub, 27); color(sub, dim);
+text(answer, (cx, h*0.13), "35 paths — every one of them counted.");
+size(answer, 34); color(answer, gold); bold(answer); wrap(answer, w*0.86);
+text(cap, (cx, h*0.80), "each cell counts the ways to reach it");
+size(cap, 31); color(cap, dim); wrap(cap, w*0.84);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+hidden(pathnums); hidden(cap);
+untraced(kicker); cursor(kicker);
+untraced(sub);
+untraced(answer); hidden(answer);
+
+// 1 — HOOK: the question types on (two lines), then the lattice fills in.
+mark("hook");
+type(kicker, 1.2);
+type(sub, 0.9);
+show(cap, 0.4);
+for i in 0..R { show(prow{i}, 0.3); wait(0.12); }
+wait(0.4);
+
+// 2 — THE RULE: 4 + 6 = 10 — every cell is (the one above) + (the one to the left).
+step("rule") {
+  seq {
+    say(cap, "= the cell above  +  the cell to its left   (4 + 6 = 10)");
+    par { flash(pc1_3, cyan); flash(pc2_2, cyan); }
+    flash(pc2_3, gold);
+  }
+}
+wait(0.5);
+
+// 3 — THE ANSWER: the far corner holds the total. The question erases & retypes.
+step("answer") {
+  seq {
+    par { erase(kicker, 0.5); erase(sub, 0.4); }
+    fade(kicker, 0.15);   // clear the residual typewriter cursor left after erase
+    par {
+      pulse(pc3_4, 0.8);
+      flash(pc3_4, gold);
+      show(answer, 0.1);
+      type(answer, 1.1);
+    }
+    say(cap, "and every path is a right/down staircase");
+  }
+}
+wait(0.5);
+
+// 4 — TRACE ONE: draw an actual corner-to-corner path with a spline.
+step("trace") {
+  par {
+    show(route, 0.2);
+    draw(route, 1.6);
+  }
+}
+wait(0.7);
+
+// 5 — THE POINT: one script did the grid, the counting AND the path.
+step("power") {
+  seq {
+    say(cap, "one short script: the grid, the counting, and the path");
+    par { pulse(pathnums, 0.7); recolor(cap, cyan); }
+    say(cap, "Manic animates math, physics, algorithms & more — from plain text");
+  }
+}
+wait(1.3);
+
+// 6 — END CARD.
+mark("endcard");
+par {
+  fade(answer, 0.4); fade(cap, 0.4); fade(me.footer, 0.4);
+  fade(pathnums, 0.4); fade(lat.cells, 0.4); fade(lat.lines, 0.4); fade(route, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);

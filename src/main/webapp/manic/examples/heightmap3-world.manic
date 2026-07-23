@@ -1,0 +1,64 @@
+// From Flat Map to 3D World — the creative payoff of the Grid→3D bridge. A grid-kit
+// Wave Function Collapse settles a map in 2D; then the very same grid is lifted by
+// heightmap3 into a 3D terrain that rises as the camera tilts down. One grid, two
+// dimensions — the grid kit never learns about 3D.
+title("From Flat Map to 3D World");
+canvas("16:9");
+template("neon");
+
+let u = (w+h-abs(w-h))/1440;
+watermark(mk, (w*0.86, h*0.06), "Made With Manic");
+
+// The 2D map (grid kit): a seeded WFC settle.
+grid(world, (cx, cy), 20, 16, 30);
+collapse(world, "maze", 11);
+
+// The 3D terrain from the SAME grid — near top-down at first, so it reads flat like
+// the map, then the tilt reveals its height. Hidden until the lift.
+camera3((0, -1.6, 20), (0, 0, 0), 24);
+heightmap3(land, world, "h*1.9 + fbm(x*1.2, y*1.2)*0.9 + 0.1", 8);
+color(land, cyan);
+hidden(land);
+
+text(cap, (cx, h*0.9), "a flat 2D map…");
+size(cap, 30*u); color(cap, dim); wrap(cap, w*0.7);
+
+// 1 — the map settles in 2D (Wave Function Collapse).
+step("settle") {
+  par {
+    say(cap, "a flat 2D map, generated cell by cell…");
+    run(world, 16, 3.4);
+  }
+}
+wait(0.4);
+
+// 2 — the same grid lifts into 3D: fade the flat map, reveal the terrain (still
+// near top-down, so it still reads flat — the map has just gained a third axis).
+step("lift") {
+  par {
+    say(cap, "…is secretly a 3D world");
+    fade(world.cells, 0.6);
+    fade(world.lines, 0.6);
+    show(land, 0.7);
+  }
+}
+
+// 3 — pull back and tilt so the WHOLE world is in frame at once.
+step("reveal") {
+  orbit3(25, 38, 27, 3.8, smooth);
+}
+wait(0.4);
+
+// 4 — a slow rotation around the full terrain.
+step("rotate") {
+  seq {
+    say(cap, "one grid — 2D pathfinding AND 3D terrain, bridged by manic");
+    orbit3(170, 34, 27, 5.2, smooth);
+  }
+}
+
+// 5 — then fly in close and low over the peaks. That's manic.
+step("zoom") {
+  orbit3(235, 15, 10, 4.6, smooth);
+}
+wait(1.2);

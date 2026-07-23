@@ -1,0 +1,16 @@
+// Fractal Terrain — procedural generation from a single formula. `noise(x,y)` and
+// `fbm(x,y)` (fractal Brownian motion — five octaves of smooth value noise) are now
+// formula functions, right beside sin/cos, so any `surface3`/`heightmap3`/`plot`
+// formula can be organic. Here fbm alone sculpts a whole landscape the camera tours.
+title("Fractal Terrain — Noise in a Formula");
+canvas("16:9");
+template("neon");
+
+camera3((0, -13, 6.5), (0, 0, 0.3), 28);
+surface3(land, "fbm(x*0.9, y*0.9)*2.4", (-4, 4), (-4, 4), 72);
+color(land, cyan);
+
+// A slow turntable so the fractal relief reads in 3D.
+orbit3(60, 30, 13, 4.5, smooth);
+orbit3(190, 26, 13, 4.5, smooth);
+orbit3(320, 32, 13, 4.5, smooth);

@@ -1,0 +1,19 @@
+title("Conway's Life — A Glider");
+canvas("16:9");
+template("neon");
+
+watermark(mark, (w*0.15, h*0.05), "Made With Manic");
+
+// A cellular automaton on the same cell grid. `step` pre-simulates one Conway
+// generation at build time (alive = a filled `wall` cell, 8-neighbourhood);
+// `run` then replays the stored generations. This glider walks diagonally.
+grid(life, (cx, cy+10), 14, 12, 42);
+setcell(life, 1, 2, wall);
+setcell(life, 2, 3, wall);
+setcell(life, 3, 1, wall);
+setcell(life, 3, 2, wall);
+setcell(life, 3, 3, wall);
+
+evolve(life, "life"); evolve(life, "life"); evolve(life, "life");
+evolve(life, "life"); evolve(life, "life"); evolve(life, "life");
+run(life, 6, 5.0);

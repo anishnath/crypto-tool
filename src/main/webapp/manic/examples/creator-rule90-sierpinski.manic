@@ -1,0 +1,64 @@
+// Rule 90 → Sierpinski — a QUIZ-style Creator v2 Short. Rule 90 is the elementary
+// cellular automaton where each new cell = its two upper neighbours, XOR'd. From a
+// single seed it draws Sierpinski's triangle — because XOR of two parents is exactly
+// Pascal's triangle mod 2 (a cell is lit iff C(n,k) is ODD). Two birds, one stone:
+// the CA, the binomial parity, and the fractal are the same picture. The gasket is
+// the quiz's media (fit with `figure`), building as you're asked to predict it.
+title("Rule 90 → Sierpinski");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// The gasket: only the LIT cells (odd binomials) are drawn, so it reads as the
+// clean Sierpinski triangle. `figure` fits the whole group into the media region.
+let N = 16;
+let cw = 30;
+let rh = 30;
+for n in 0..N {
+  for k in 0..n+1 {
+    let val = prod(i in 1..k+1 : (n-k+i)/i);
+    let odd = round(val - 2*floor(val/2));
+    if odd > 0.5 {
+      dot(sc{n}_{k}, (cx + (k - n*0.5)*cw, cy - N*rh*0.5 + n*rh), 11);
+      color(sc{n}_{k}, magenta); tag(sc{n}_{k}, sier); tag(sc{n}_{k}, srow{n});
+    }
+  }
+}
+figure(sier);
+hidden(sier);   // hidden at first, then builds row by row while you predict
+
+quiz(q, "Rule 90: start with one dot. Each new cell = its two upper neighbours, XOR'd. What shape appears?",
+     "studio layout=media-first reveal=fade density=comfortable motion=calm safe=reels accent=cyan");
+option(q, "A checkerboard");
+option(q, "Sierpinski's triangle", correct);
+option(q, "Random static");
+option(q, "A solid pyramid");
+explain(q, "XOR of two parents = Pascal's triangle mod 2 — the ODD cells are Sierpinski.", "Why");
+
+timing(q, "calm ask=1.2 options=1.1 think=5.2 reveal=0.8 hold=2.4 stagger=0.06");
+timerstyle(q, "look=ring position=below number=inside direction=drain size=medium thickness=1.1 color=cyan track=dim label=PREDICT font=mono finish=pulse");
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+// Play the quiz; in parallel, Rule 90 builds the gasket row by row so it finishes
+// right as the answer is revealed.
+mark("hook");
+par {
+  run(q);
+  seq {
+    wait(1.1);
+    for n in 0..N { show(srow{n}, 0.16); wait(0.26); }
+  }
+}
+
+mark("endcard");
+par {
+  fade(q.parts, 0.45);
+  fade(sier, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.6);

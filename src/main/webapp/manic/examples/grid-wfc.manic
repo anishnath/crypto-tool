@@ -1,0 +1,13 @@
+title("Wave Function Collapse — A Maze, Settling");
+canvas("16:9");
+template("neon");
+
+watermark(mark, (w*0.15, h*0.05), "Made With Manic");
+
+// `collapse` pre-simulates a seeded Wave-Function-Collapse-style settling at
+// build time — each cell is decided under its neighbours' constraints, one row
+// at a time — then `run` replays the grid resolving from empty to a finished
+// maze. Seeded, so it is fully deterministic (same seed ⇒ same maze).
+grid(mz, (cx, cy+10), 20, 14, 30);
+collapse(mz, "maze", 7);
+run(mz, 14, 5.0);

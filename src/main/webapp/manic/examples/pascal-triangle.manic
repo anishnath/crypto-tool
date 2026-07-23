@@ -1,0 +1,92 @@
+// Pascal's Triangle — a real Creator v2 Short that shows off Manic's range: the
+// numbers are COMPUTED live (a `prod` reduction per cell), a hidden fractal is
+// revealed, and the close reframes it as "one script — Manic does math, physics,
+// algorithms & more." 9:16 shorts template, branded identity + socials + end card.
+title("Pascal's Triangle");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+let N = 8;
+let cw = w*0.112;
+let rh = w*0.112;
+let top = h*0.21;
+let rad = w*0.048;
+
+// Build the triangle from the computation layer: each cell's binomial coefficient
+// C(n,k) is a `prod` reduction on a filled disc. Tag by row (for the reveal) and
+// by parity (for the fractal finale).
+for n in 0..N {
+  for k in 0..n+1 {
+    let px = w*0.5 + (k - n*0.5)*cw;
+    let py = top + n*rh;
+    let val = prod(i in 1..k+1 : (n-k+i)/i);
+    dot(d{n}_{k}, (px, py), rad); color(d{n}_{k}, panel); tag(d{n}_{k}, discs); tag(d{n}_{k}, prow{n});
+    counter(v{n}_{k}, (px, py), val, 0); tag(v{n}_{k}, nums); tag(v{n}_{k}, prow{n});
+    let odd = round(val - 2*floor(val/2));
+    if odd > 0.5 { tag(d{n}_{k}, oddcells); } else { tag(d{n}_{k}, evencells); }
+  }
+}
+
+text(kicker, (cx, h*0.135), "This triangle of numbers hides a fractal");
+size(kicker, 32); color(kicker, dim); bold(kicker); wrap(kicker, w*0.82);
+text(cap, (cx, h*0.775), "every number here is computed, not typed");
+size(cap, 33); color(cap, dim); wrap(cap, w*0.82);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+hidden(discs); hidden(nums); hidden(cap);
+untraced(kicker); cursor(kicker);   // opening hook types on, letter by letter
+
+// 1 — HOOK: type the question, then build the triangle. The caption's promise —
+// "computed, not typed" — is Manic's real pitch: the numbers come from a formula.
+mark("hook");
+type(kicker, 1.4);
+show(cap, 0.4);
+for n in 0..N { show(prow{n}, 0.26); wait(0.09); }
+wait(0.4);
+
+// 2 — THE RULE: 3 + 3 = 6, every cell is the sum of its two parents.
+step("rule") {
+  seq {
+    say(cap, "each cell = the two above it   (3 + 3 = 6)");
+    par { flash(d3_1, gold); flash(d3_2, gold); }
+    flash(d4_2, cyan);
+  }
+}
+wait(0.5);
+
+// 3 — THE TWIST: colour the odd numbers and Sierpinski's triangle appears.
+step("fractal") {
+  par {
+    say(cap, "colour the ODD numbers — and a fractal appears");
+    recolor(oddcells, magenta);
+  }
+}
+wait(0.9);
+
+// 4 — THE POINT: this whole thing was one short script — and Manic's range is
+// the real story. Reframe the demo as evidence of what Manic can do.
+step("power") {
+  seq {
+    say(cap, "one short script did all of this");
+    par { pulse(discs, 0.7); recolor(cap, cyan); }
+    say(cap, "Manic animates math, physics, algorithms & more — from plain text");
+  }
+}
+wait(1.3);
+
+// 5 — END CARD: the brand CTA.
+mark("endcard");
+par {
+  fade(kicker, 0.4);
+  fade(cap, 0.4);
+  fade(me.footer, 0.4);
+  fade(discs, 0.4);
+  fade(nums, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);

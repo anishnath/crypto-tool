@@ -456,7 +456,7 @@ orthogonal projection) · `contour3(id,surface,level)` ·
 `label3(label,target,[world_height])` (projected label; optional natural depth scaling) ·
 `curve3(id,"x(t)","y(t)","z(t)",[(t0,t1)])` (parametric 3D curve) ·
 `surface3(id,"z(x,y)",(x0,x1),(y0,y1),[res])` (z=f(x,y) filled, flat-shaded surface; formulas may use `x` and `y`) ·
-`param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) · **multivariable calculus on a `surface3`:** `gradient3(id,surface,x,y,[color])` steepest-ascent arrow · `tangentplane3(id,surface,x,y,[color])` the tangent plane patch · `volume3(id,surface,[res],[color])` the volume under it as a column grid (double integral) ·
+`param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) · `heightmap3(id,grid,"z(x,y,h)",[size])` (**Grid→3D bridge:** lift a grid-kit `grid` into a terrain mesh — `h`=1 for a filled/`wall`/alive cell else 0, latest CA/WFC frame if run; `"h*1.6"` raises walls, add `fbm(x,y)` for organic roll; the grid kit stays 3D-unaware) · **procedural noise in ANY formula string** (plot/surface3/heightmap3/bind): `noise(x,y)` (smooth value noise) and `fbm(x,y)` (fractal Brownian motion) — both ~[-1,1], deterministic; e.g. `surface3(land,"fbm(x*0.9,y*0.9)*2.4",(-4,4),(-4,4),72)` is a fractal landscape. Formula strings also take 2-arg `atan2/hypot/min/max/mod` · **multivariable calculus on a `surface3`:** `gradient3(id,surface,x,y,[color])` steepest-ascent arrow · `tangentplane3(id,surface,x,y,[color])` the tangent plane patch · `volume3(id,surface,[res],[color])` the volume under it as a column grid (double integral) ·
 `prism3(id,(cx,cy,cz),sides,radius,height)` · `pyramid3(id,(cx,cy,cz),sides,radius,height)`
 (filled, flat-shaded solids; `sides ≥ 3`, many sides ≈ cylinder/cone) ·
 `revolve3(id,(cx,cy,cz),"r(t)",(t0,t1),[sides])` (solid of revolution; `r(t)` = radius at height `t`) ·
@@ -737,6 +737,30 @@ lime), relaxed edges light, tree edges stay lit. See examples/dijkstra.manic.
 `hashmap(id, n, (cx,cy))` — `n` buckets (separate chaining). `put(id,"k","v")` hashes
 the key (byte-sum mod n) to a bucket and chains a `k:v` entry on; `get(id,"k")` scans
 that bucket's chain (lime = found, magenta = miss). See examples/hashmap.manic.
+
+### Grid kit
+A first-class 2-D cell grid — the primitive under tilemaps, spatial pathfinding
+(space, not `graph`'s topology), cellular automata, and Wave Function Collapse.
+`grid(id, (cx,cy), cols, rows, [cellsize])` — an empty grid; cells `{id}.r{i}c{j}`,
+tags `{id}.cells`/`{id}.row{i}`/`{id}.col{j}`, lines `{id}.h{k}`/`{id}.v{k}` (same
+addressing as `matrix`/`table`). Or seed it from a compact ASCII layout:
+`grid(id, "# . . ; @ . *", (cx,cy), cols, rows, [cellsize])` — rows split by `;`,
+`#` wall, `.` open, `@` start, `*` goal. **Max 40×40** (fails at check otherwise —
+split a bigger world). `neighbors(id, "4"|"8")` sets 4- or 8-connectivity.
+`setcell(id, r, c, "kind")` (wall/open/start/goal) and `walls(id, "r,c r,c …")`
+mutate cells at build time (so a following pathfinder / `evolve` / `collapse` sees
+them). **Pathfinding** mirrors the algo kit's colour grammar: `gridbfs(id, start,
+goal)` (unweighted BFS) and `gridastar(id, start, goal, [heuristic])` (heuristic ∈
+manhattan/euclidean/diagonal) flood open cells discovered cyan → current magenta →
+done lime with a live `frontier:`/`visited:` readout; A* also traces the route as
+`{id}.path` (a gold polyline — `draw(id.path, …)` it). `start`/`goal` are `(col,row)`
+points. **Generation** pre-simulates at build time then replays: `evolve(id, "life"
+|"B3/S23")` computes one cellular-automaton generation (alive = a filled `wall`;
+`"life"` = Conway; call it N times) — it is `evolve`, NOT `step`, because `step` is
+the timeline stage block; `collapse(id, "tileset", [seed])` pre-simulates a seeded
+Wave-Function-Collapse settling (deterministic per seed); then `run(id, [gens],
+[dur])` replays the stored frames (the same `run` as physics/optics). See
+examples/grid-astar.manic, grid-life.manic, grid-wfc.manic.
 
 ### Stats kit
 `histogram(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — bins a number list into bars (the shape of the data). Bars are `{id}.bar{k}` (exactly `bins`, tagged `{id}.bars`) so `stagger(dt){ for k in 0..bins { draw(id.bar{k}) } }` builds them up; `{id}.meanline`/`{id}.mean` mark the mean, `{id}.min`/`{id}.max` the range. Data is a plain number list, like `leastsquares`. Pass `rainbow` as the colour to give every bar its own hue. · `summary(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — describe a dataset: mean(gold)/median(magenta)/mode(lime) markers + ±1σ band + n/range/variance/std readout, on a number line of dots. · `skew(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — histogram + mean(gold)/median(magenta) markers + labelled skewness (right/left/symmetric). · `boxplot(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — five-number summary box-and-whisker: box = Q1→Q3 (IQR), median line, whiskers to non-outliers, `{id}.outliers` dots beyond 1.5·IQR. · `correlation(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — scatter + best-fit line + the Pearson correlation r (strong/moderate/weak, positive/negative); x & y share `unit`. · `bellcurve(id,(cx,cy),mu,sigma,[unit],[color])` (alias `gaussian`) — the normal bell curve with the 68-95-99.7 rule shaded (nested ±1σ/±2σ/±3σ bands `{id}.band1/2/3`, mean line, % labels, value ticks). NOT `normal` (that's the calculus perpendicular-line builtin). · `hypothesis(id,(cx,cy),z,[alpha],[unit])` — significance test: standard-normal null, tails beyond ±z shaded = p-value vs alpha, with verdict. · `covariance(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — covariance as signed-area rectangles about the mean cross (cyan agree / magenta disagree). · `bayes(id,(cx,cy),heads,tails,[width],[height])` — Bayesian updating: prior + likelihood → posterior for a coin's bias. · `distribution(id,(cx,cy),"uniform|exponential|binomial|poisson",a,[b],[color])` — a named distribution (curve or bars). · `confidence(id,(cx,cy),mean,sd,n,[level],[width])` — a confidence interval (estimate ± z·sd/√n). · `montecarlo(id,(cx,cy),points,[seed],[size])` — estimate π by darts (seeded). · `randomwalk(id,(cx,cy),steps,[seed],[scale])` — a 2D random-walk path (seeded). · `lln(id,(cx,cy),trials,[seed],[width],[height])` — Law of Large Numbers: running proportion of coin flips settling onto 0.5 (`{id}.curve` + reference); seeded. · `clt(id,(cx,cy),samplesize,trials,[seed],[width],[height],[color])` — the Central Limit Theorem: histograms the averages of `samplesize` dice over `trials` runs (`{id}.bar{k}` ×30, `{id}.bars`) + the normal they converge to (`{id}.curve`); seeded/deterministic. **All bar builtins (histogram/distribution/skew/clt) accept `rainbow` as the colour for per-bar hues.**

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-df6dd56b.js";
+            window.path_to_searchindex_js = "searchindex-27147bf3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-122320bb.js"></script>
+        <script src="toc-e8fbc168.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -527,6 +527,523 @@ step("takeaway") {
 wait(1.60);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/ui5eqJDyLtk" title="One Parameter, Many Worlds — Reactive Visual Journeys in Manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pascal-triangle"><a class="header" href="#pascal-triangle">pascal-triangle</a></h2>
+<p>A non-quiz Creator v2 Short built entirely from the computation layer: each cell’s
+binomial coefficient is a <code>prod</code> reduction, the triangle reveals row by row, the
+sum-of-two-parents rule is highlighted, and colouring the odd cells uncovers Sierpinski’s
+triangle — all inside a branded 9:16 shorts frame with creator identity, socials and an
+end card (no grid kit needed: the triangle is triangular).</p>
+<pre><code class="language-manic">// Pascal's Triangle — a real Creator v2 Short that shows off Manic's range: the
+// numbers are COMPUTED live (a `prod` reduction per cell), a hidden fractal is
+// revealed, and the close reframes it as "one script — Manic does math, physics,
+// algorithms &amp; more." 9:16 shorts template, branded identity + socials + end card.
+title("Pascal's Triangle");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+let N = 8;
+let cw = w*0.112;
+let rh = w*0.112;
+let top = h*0.21;
+let rad = w*0.048;
+
+// Build the triangle from the computation layer: each cell's binomial coefficient
+// C(n,k) is a `prod` reduction on a filled disc. Tag by row (for the reveal) and
+// by parity (for the fractal finale).
+for n in 0..N {
+  for k in 0..n+1 {
+    let px = w*0.5 + (k - n*0.5)*cw;
+    let py = top + n*rh;
+    let val = prod(i in 1..k+1 : (n-k+i)/i);
+    dot(d{n}_{k}, (px, py), rad); color(d{n}_{k}, panel); tag(d{n}_{k}, discs); tag(d{n}_{k}, prow{n});
+    counter(v{n}_{k}, (px, py), val, 0); tag(v{n}_{k}, nums); tag(v{n}_{k}, prow{n});
+    let odd = round(val - 2*floor(val/2));
+    if odd &gt; 0.5 { tag(d{n}_{k}, oddcells); } else { tag(d{n}_{k}, evencells); }
+  }
+}
+
+text(kicker, (cx, h*0.135), "This triangle of numbers hides a fractal");
+size(kicker, 32); color(kicker, dim); bold(kicker); wrap(kicker, w*0.82);
+text(cap, (cx, h*0.775), "every number here is computed, not typed");
+size(cap, 33); color(cap, dim); wrap(cap, w*0.82);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+hidden(discs); hidden(nums); hidden(cap);
+untraced(kicker); cursor(kicker);   // opening hook types on, letter by letter
+
+// 1 — HOOK: type the question, then build the triangle. The caption's promise —
+// "computed, not typed" — is Manic's real pitch: the numbers come from a formula.
+mark("hook");
+type(kicker, 1.4);
+show(cap, 0.4);
+for n in 0..N { show(prow{n}, 0.26); wait(0.09); }
+wait(0.4);
+
+// 2 — THE RULE: 3 + 3 = 6, every cell is the sum of its two parents.
+step("rule") {
+  seq {
+    say(cap, "each cell = the two above it   (3 + 3 = 6)");
+    par { flash(d3_1, gold); flash(d3_2, gold); }
+    flash(d4_2, cyan);
+  }
+}
+wait(0.5);
+
+// 3 — THE TWIST: colour the odd numbers and Sierpinski's triangle appears.
+step("fractal") {
+  par {
+    say(cap, "colour the ODD numbers — and a fractal appears");
+    recolor(oddcells, magenta);
+  }
+}
+wait(0.9);
+
+// 4 — THE POINT: this whole thing was one short script — and Manic's range is
+// the real story. Reframe the demo as evidence of what Manic can do.
+step("power") {
+  seq {
+    say(cap, "one short script did all of this");
+    par { pulse(discs, 0.7); recolor(cap, cyan); }
+    say(cap, "Manic animates math, physics, algorithms &amp; more — from plain text");
+  }
+}
+wait(1.3);
+
+// 5 — END CARD: the brand CTA.
+mark("endcard");
+par {
+  fade(kicker, 0.4);
+  fade(cap, 0.4);
+  fade(me.footer, 0.4);
+  fade(discs, 0.4);
+  fade(nums, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/IpXkWAT4vnk" title="Why Pascal's Triangle Hides a Fractal — Built From One prod() in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-lattice-paths"><a class="header" href="#creator-lattice-paths">creator-lattice-paths</a></h2>
+<p>The rectangular cousin of Pascal, on a real grid-kit lattice: ‘how many ways from corner
+to corner moving only right and down?’ Every cell’s path-count is a <code>prod</code> reduction
+(C(i+j,i)), the same above-plus-left rule is highlighted, the far corner holds the total,
+and one actual monotone path is traced with a <code>spline</code>. Blueprint template, and a
+different typewriter beat — the question erases and retypes itself into the answer.</p>
+<pre><code class="language-manic">// Lattice-path counting — "how many ways from corner to corner moving only right
+// and down?" The SAME recurrence as Pascal (cell = the one above + the one to the
+// left) but on a RECTANGLE — so it uses the grid kit. Each cell's count is a `prod`
+// reduction (C(i+j,i)); afterwards one actual path is traced with `spline`.
+// Different template (blueprint) + different typewriter (a question that erases and
+// retypes into its answer).
+title("Lattice Paths");
+canvas("9:16");
+template("blueprint");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+let C = 5;          // columns of cells
+let R = 4;          // rows of cells
+let s = w*0.162;    // cell size
+let gy = h*0.455;   // grid centre y
+let ox = cx - C*s*0.5;
+let oy = gy - R*s*0.5;
+
+// The rectangular lattice IS a grid-kit grid. Overlay a path-count on every cell:
+// value(i,j) = C(i+j, i), the number of monotone right/down paths reaching it.
+grid(lat, (cx, gy), C, R, s);
+opacity(lat.cells, 0);   // a lattice is its lines — clear the cell fills so the counts read
+for i in 0..R {
+  for j in 0..C {
+    let val = prod(t in 1..i+1 : (j+t)/t);   // C(i+j, i)
+    counter(pc{i}_{j}, (ox+(j+0.5)*s, oy+(i+0.5)*s), val, 0);
+    tag(pc{i}_{j}, pathnums); tag(pc{i}_{j}, prow{i});
+  }
+}
+
+// One monotone path (right/right/down/right/down/right/down) traced afterward.
+spline(route,
+  (ox+0.5*s, oy+0.5*s), (ox+1.5*s, oy+0.5*s), (ox+2.5*s, oy+0.5*s),
+  (ox+2.5*s, oy+1.5*s), (ox+3.5*s, oy+1.5*s), (ox+3.5*s, oy+2.5*s),
+  (ox+4.5*s, oy+2.5*s), (ox+4.5*s, oy+3.5*s));
+color(route, gold); stroke(route, 7); glow(route, 0.8); untraced(route); hidden(route);
+
+// --- text: a question that later erases and retypes into the answer ---
+text(kicker, (cx, h*0.115), "How many paths, corner to corner?");
+size(kicker, 33); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.86);
+text(sub, (cx, h*0.165), "moving only RIGHT and DOWN");
+size(sub, 27); color(sub, dim);
+text(answer, (cx, h*0.13), "35 paths — every one of them counted.");
+size(answer, 34); color(answer, gold); bold(answer); wrap(answer, w*0.86);
+text(cap, (cx, h*0.80), "each cell counts the ways to reach it");
+size(cap, 31); color(cap, dim); wrap(cap, w*0.84);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+hidden(pathnums); hidden(cap);
+untraced(kicker); cursor(kicker);
+untraced(sub);
+untraced(answer); hidden(answer);
+
+// 1 — HOOK: the question types on (two lines), then the lattice fills in.
+mark("hook");
+type(kicker, 1.2);
+type(sub, 0.9);
+show(cap, 0.4);
+for i in 0..R { show(prow{i}, 0.3); wait(0.12); }
+wait(0.4);
+
+// 2 — THE RULE: 4 + 6 = 10 — every cell is (the one above) + (the one to the left).
+step("rule") {
+  seq {
+    say(cap, "= the cell above  +  the cell to its left   (4 + 6 = 10)");
+    par { flash(pc1_3, cyan); flash(pc2_2, cyan); }
+    flash(pc2_3, gold);
+  }
+}
+wait(0.5);
+
+// 3 — THE ANSWER: the far corner holds the total. The question erases &amp; retypes.
+step("answer") {
+  seq {
+    par { erase(kicker, 0.5); erase(sub, 0.4); }
+    fade(kicker, 0.15);   // clear the residual typewriter cursor left after erase
+    par {
+      pulse(pc3_4, 0.8);
+      flash(pc3_4, gold);
+      show(answer, 0.1);
+      type(answer, 1.1);
+    }
+    say(cap, "and every path is a right/down staircase");
+  }
+}
+wait(0.5);
+
+// 4 — TRACE ONE: draw an actual corner-to-corner path with a spline.
+step("trace") {
+  par {
+    show(route, 0.2);
+    draw(route, 1.6);
+  }
+}
+wait(0.7);
+
+// 5 — THE POINT: one script did the grid, the counting AND the path.
+step("power") {
+  seq {
+    say(cap, "one short script: the grid, the counting, and the path");
+    par { pulse(pathnums, 0.7); recolor(cap, cyan); }
+    say(cap, "Manic animates math, physics, algorithms &amp; more — from plain text");
+  }
+}
+wait(1.3);
+
+// 6 — END CARD.
+mark("endcard");
+par {
+  fade(answer, 0.4); fade(cap, 0.4); fade(me.footer, 0.4);
+  fade(pathnums, 0.4); fade(lat.cells, 0.4); fade(lat.lines, 0.4); fade(route, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LxfU9VRbZuA" title="How Many Paths Corner to Corner? — Lattice Counting, Animated in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-rule90-sierpinski"><a class="header" href="#creator-rule90-sierpinski">creator-rule90-sierpinski</a></h2>
+<p>A QUIZ-style Short: Rule 90 (each new cell = its two upper neighbours XOR’d) draws
+Sierpinski’s triangle from a single dot — because XOR of two parents is exactly Pascal’s
+triangle mod 2 (a cell is lit iff C(n,k) is odd). The gasket is the quiz’s media (fit with
+<code>figure</code>), building as you’re asked to predict it, then the correct card and the reason
+reveal. Full Creator v2 quiz: question, options, think timer, explanation and end card.</p>
+<pre><code class="language-manic">// Rule 90 → Sierpinski — a QUIZ-style Creator v2 Short. Rule 90 is the elementary
+// cellular automaton where each new cell = its two upper neighbours, XOR'd. From a
+// single seed it draws Sierpinski's triangle — because XOR of two parents is exactly
+// Pascal's triangle mod 2 (a cell is lit iff C(n,k) is ODD). Two birds, one stone:
+// the CA, the binomial parity, and the fractal are the same picture. The gasket is
+// the quiz's media (fit with `figure`), building as you're asked to predict it.
+title("Rule 90 → Sierpinski");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// The gasket: only the LIT cells (odd binomials) are drawn, so it reads as the
+// clean Sierpinski triangle. `figure` fits the whole group into the media region.
+let N = 16;
+let cw = 30;
+let rh = 30;
+for n in 0..N {
+  for k in 0..n+1 {
+    let val = prod(i in 1..k+1 : (n-k+i)/i);
+    let odd = round(val - 2*floor(val/2));
+    if odd &gt; 0.5 {
+      dot(sc{n}_{k}, (cx + (k - n*0.5)*cw, cy - N*rh*0.5 + n*rh), 11);
+      color(sc{n}_{k}, magenta); tag(sc{n}_{k}, sier); tag(sc{n}_{k}, srow{n});
+    }
+  }
+}
+figure(sier);
+hidden(sier);   // hidden at first, then builds row by row while you predict
+
+quiz(q, "Rule 90: start with one dot. Each new cell = its two upper neighbours, XOR'd. What shape appears?",
+     "studio layout=media-first reveal=fade density=comfortable motion=calm safe=reels accent=cyan");
+option(q, "A checkerboard");
+option(q, "Sierpinski's triangle", correct);
+option(q, "Random static");
+option(q, "A solid pyramid");
+explain(q, "XOR of two parents = Pascal's triangle mod 2 — the ODD cells are Sierpinski.", "Why");
+
+timing(q, "calm ask=1.2 options=1.1 think=5.2 reveal=0.8 hold=2.4 stagger=0.06");
+timerstyle(q, "look=ring position=below number=inside direction=drain size=medium thickness=1.1 color=cyan track=dim label=PREDICT font=mono finish=pulse");
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+// Play the quiz; in parallel, Rule 90 builds the gasket row by row so it finishes
+// right as the answer is revealed.
+mark("hook");
+par {
+  run(q);
+  seq {
+    wait(1.1);
+    for n in 0..N { show(srow{n}, 0.16); wait(0.26); }
+  }
+}
+
+mark("endcard");
+par {
+  fade(q.parts, 0.45);
+  fade(sier, 0.45);
+  fade(me.footer, 0.45);
+}
+show(me.endcard, 0.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/lCka4ayXxQ0" title="Rule 90 Draws Sierpinski’s Triangle — Can You Predict It? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-heightmap-world"><a class="header" href="#creator-heightmap-world">creator-heightmap-world</a></h2>
+<p>The Grid→3D bridge as a Short: a grid-kit WFC map settles in 2D, then the SAME grid rises
+into 3D terrain via <code>heightmap3</code> — the camera pulls back to reveal the whole world, rotates,
+then flies in low over the peaks. One grid, two dimensions, inside a 9:16 creator frame with
+typed hook, socials and end card.</p>
+<pre><code class="language-manic">// Your Map Is a 3D World — a Creator v2 Short of the Grid→3D bridge. A grid-kit WFC
+// map settles in 2D, then the SAME grid is lifted by heightmap3 into 3D terrain:
+// the camera pulls back to show the whole world, rotates, then flies in low. 9:16
+// shorts frame with creator identity, socials and an end card.
+title("Your Map Is a 3D World");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// The 2D map (grid kit) and the 3D terrain from the SAME grid.
+grid(world, (cx, h*0.44), 16, 16, 52);
+collapse(world, "islands", 8);
+camera3((0, -1.6, 22), (0, 0, 0), 26);
+heightmap3(land, world, "h*1.7 + fbm(x*1.2, y*1.2)*0.85 + 0.1", 8);
+color(land, cyan);
+hidden(land);
+
+text(kicker, (cx, h*0.135), "your flat map is hiding a 3D world");
+size(kicker, 33); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.82);
+text(cap, (cx, h*0.785), "a 2D map, generated cell by cell…");
+size(cap, 31); color(cap, dim); wrap(cap, w*0.84);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+hidden(cap);
+untraced(kicker); cursor(kicker);
+
+// 1 — HOOK + the 2D map settles (Wave Function Collapse).
+mark("hook");
+type(kicker, 1.4);
+step("map") {
+  par {
+    say(cap, "a 2D map, generated cell by cell…");
+    run(world, 16, 3.0);
+  }
+}
+wait(0.3);
+
+// 2 — the same grid lifts into 3D (still near top-down, so it reads flat at first).
+step("lift") {
+  par {
+    say(cap, "…is secretly a 3D world");
+    fade(world.cells, 0.5); fade(world.lines, 0.5);
+    show(land, 0.6);
+  }
+}
+
+// 3 — pull back to see the WHOLE world.
+step("reveal") {
+  orbit3(25, 36, 30, 3.4, smooth);
+}
+wait(0.3);
+
+// 4 — rotate around it.
+step("rotate") {
+  seq {
+    par { say(cap, "one grid — 2D and 3D, bridged by Manic"); recolor(cap, cyan); }
+    orbit3(185, 32, 30, 4.4, smooth);
+  }
+}
+
+// 5 — fly in low over the peaks.
+step("zoom") {
+  orbit3(255, 15, 12, 3.8, smooth);
+}
+wait(0.6);
+
+// 6 — END CARD.
+mark("endcard");
+par {
+  fade(kicker, 0.4); fade(cap, 0.4); fade(me.footer, 0.4); fade(land, 0.5);
+}
+show(me.endcard, 0.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xAn1KZhJJik" title="Your Flat Map Is Secretly a 3D World — Grid to Terrain Short in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-noise-story"><a class="header" href="#creator-noise-story">creator-noise-story</a></h2>
+<p>How Noise Builds Worlds — a Short walking procedural noise from 1D to fractal: raw <code>rand(x)</code>
+(jagged) vs smooth <code>noise(x)</code> (Perlin), then <code>noise(x,y)</code> tilting from a flat field into a 3D
+surface, then <code>fbm</code> stacking octaves into fractal terrain. Every visual is one formula in the
+shared expression engine — the arc that motivated adding <code>rand</code>/<code>noise</code>/<code>fbm</code>.</p>
+<pre><code class="language-manic">// How Noise Builds Worlds — a Creator v2 Short on procedural noise, 1D → 2D → 3D →
+// fractal. Raw RANDOM values (jagged) vs smooth PERLIN noise(x); then noise(x,y) as
+// a surface; then stacking octaves (fbm) for fractal detail. Every visual is one
+// formula — `rand`, `noise`, `fbm`. Captions use the word-pop (karaoke) variant;
+// the final scene pulls the camera back for a full view of the fractal world.
+title("How Noise Builds Worlds");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// --- 1D: a coordinate frame with two curves, raw random vs smooth noise ---
+axes(ax, (cx, h*0.33), w*0.4, 150);
+color(ax, dim); untraced(ax);
+plot(rnd, (cx, h*0.33), 62, 130, "rand(x)", (-6.5, 6.5));
+color(rnd, magenta); untraced(rnd);
+plot(perlin, (cx, h*0.33), 62, 130, "noise(x, 0)", (-6.5, 6.5));
+color(perlin, cyan); glow(perlin, 0.7); untraced(perlin);
+
+// --- 2D/3D: the same idea one dimension up. Near top-down so it reads flat first. ---
+camera3((0, -1.5, 20), (0, 0, 0), 24);
+surface3(hills, "noise(x*0.9, y*0.9)*2.0", (-4, 4), (-4, 4), 50);
+color(hills, cyan); hidden(hills);
+surface3(frac, "fbm(x*0.95, y*0.95)*2.4", (-4, 4), (-4, 4), 72);
+color(frac, cyan); hidden(frac);
+
+text(kicker, (cx, h*0.135), "random is not the same as noise");
+size(kicker, 32); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.82);
+untraced(kicker); cursor(kicker);
+
+// Word-pop captions — one per beat, popped in a word at a time, faded before the next.
+caption(cR, "raw random values", (cx, h*0.75), 33, magenta); hidden(cR.words);
+caption(cP, "smooth it into noise", (cx, h*0.75), 33, cyan); hidden(cP.words);
+caption(cD, "add a dimension", (cx, h*0.75), 33, dim); hidden(cD.words);
+caption(cL, "values become heights", (cx, h*0.75), 33, dim); hidden(cL.words);
+caption(cF, "octaves build fractals", (cx, h*0.75), 33, cyan); hidden(cF.words);
+caption(cE, "1D  2D  3D  fractal", (cx, h*0.75), 34, cyan); hidden(cE.words);
+caption(cM, "one formula. That's Manic.", (cx, h*0.75), 32, cyan); hidden(cM.words);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+// 1 — HOOK + raw random values (jagged).
+mark("hook");
+type(kicker, 1.3);
+step("random") {
+  par {
+    draw(ax, 0.6);
+    draw(rnd, 1.3);
+    seq { wait(0.5); wordpop(cR, 0.14); }
+  }
+}
+wait(0.5);
+
+// 2 — smooth it into Perlin noise(x).
+step("perlin") {
+  par {
+    fade(cR.words, 0.3);
+    fade(rnd, 0.5);
+    draw(perlin, 1.4);
+    seq { wait(0.4); wordpop(cP, 0.13); }
+  }
+}
+wait(0.6);
+
+// 3 — one dimension up: noise(x,y) as a field (top-down reads flat).
+step("to2d") {
+  par {
+    fade(cP.words, 0.3);
+    fade(ax, 0.5); fade(perlin, 0.5);
+    show(hills, 0.7);
+    seq { wait(0.4); wordpop(cD, 0.14); }
+  }
+}
+
+// 4 — tilt: the field IS a 3D surface (a heightmap).
+step("lift") {
+  par {
+    fade(cD.words, 0.3);
+    orbit3(25, 34, 16, 3.6, smooth);
+    seq { wait(0.5); wordpop(cL, 0.13); }
+  }
+}
+wait(0.5);
+
+// 5 — stack octaves into fbm; pull the camera WAY back for the full world.
+step("fbm") {
+  par {
+    fade(cL.words, 0.3);
+    fade(hills, 0.6);
+    show(frac, 0.7);
+    orbit3(120, 40, 30, 3.4, smooth);
+    seq { wait(0.5); wordpop(cF, 0.13); }
+  }
+}
+
+// 6 — a slow tour of the whole fractal world at full distance.
+step("tour") {
+  par {
+    fade(cF.words, 0.3);
+    orbit3(240, 36, 30, 4.6, smooth);
+    seq { wait(0.4); wordpop(cE, 0.16); }
+  }
+}
+wait(0.4);
+
+// 7 — THE POINT.
+step("point") {
+  seq {
+    fade(cE.words, 0.3);
+    wordpop(cM, 0.16);
+  }
+}
+wait(1.1);
+
+// 8 — END CARD.
+mark("endcard");
+par {
+  fade(kicker, 0.4); fade(cM.words, 0.4); fade(me.footer, 0.4); fade(frac, 0.5);
+}
+show(me.endcard, 0.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/lZmssQerVNY" title="How Noise Builds Worlds — Random to Perlin to Fractal Terrain in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-v2-options-socials"><a class="header" href="#creator-v2-options-socials">creator-v2-options-socials</a></h2>
 <p>The asset-free v2.4 review scene: collision-safe question hierarchy, professional A/B/C/D
