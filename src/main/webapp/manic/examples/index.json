@@ -1,5 +1,5 @@
 {
-  "count": 251,
+  "count": 255,
   "categories": [
     {
       "slug": "algorithms",
@@ -792,6 +792,12 @@
           "desc": "The elevation recipe on a RACE, told with KINETIC TYPOGRAPHY: wordpop pops the question in, karaoke sweeps a highlight across the four path names as the curves sketch on, then flash/glow crown the cycloid \u2014 a third, distinct elevation style."
         },
         {
+          "name": "gradient-fastest-descent",
+          "file": "gradient-fastest-descent.manic",
+          "title": "Gradient fastest descent",
+          "desc": "Bernoulli 1696, told THROUGH gradients: four wires race from A to B, each wearing a 3-stop vertical speedometer (v = \u221a(2g\u0394h) \u2014 depth IS speed), then the cycloid's secret is revealed by a \"curvature\" gradient \u2014 it bends hardest at the start."
+        },
+        {
           "name": "textbook-pulley",
           "file": "textbook-pulley.manic",
           "title": "Textbook pulley",
@@ -983,6 +989,12 @@
       "slug": "transforms",
       "title": "Transforms & morphing",
       "examples": [
+        {
+          "name": "gradient",
+          "file": "gradient.manic",
+          "title": "Gradient",
+          "desc": "Gradient paint, the acceptance demo: one word gradient(id, c1, c2, \u2026, [mode]) covers a radial well, a three-stop height-colored plot, a spline colored by \"curvature\", an RK4 free kick colored by \"speed\", and an arc-length arrow whose head takes the tip color."
+        },
         {
           "name": "motion-graphics-v2",
           "file": "motion-graphics-v2.manic",
@@ -1210,6 +1222,18 @@
           "file": "creator-free-kicks.manic",
           "title": "Creator free kicks",
           "desc": "Roberto Carlos' impossible free kick, told as a Short: he walks the ball in and places it, paces back, computes the Magnus law WITH VALUES until it locks, sprints up and strikes \u2014 the RK4 freekick ball swerves metres and curls in by the post for a GOAL, while the same strike with no spin (red dashed) sails wide."
+        },
+        {
+          "name": "gradient-fastest-descent-shorts",
+          "file": "gradient-fastest-descent-shorts.manic",
+          "title": "Gradient fastest descent shorts",
+          "desc": "The brachistochrone as a branded 9:16 Short: four height-colored wires race under gravity, the cycloid wins, then a \"curvature\" gradient reveals why \u2014 it bends hardest at the start."
+        },
+        {
+          "name": "gradient-pendulum-shorts",
+          "file": "gradient-pendulum-shorts.manic",
+          "title": "Gradient pendulum shorts",
+          "desc": "Galileo's chandelier as a Short told THROUGH a \"speed\" gradient: an RK4 pendulum swings, then its arc is colored by true local speed \u2014 gold floods the bottom, blue pools at the tips."
         },
         {
           "name": "creator-v2-options-socials",

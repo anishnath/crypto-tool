@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9d0ee4bc.js";
+            window.path_to_searchindex_js = "searchindex-a2c3446a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e8fbc168.js"></script>
@@ -203,14 +203,30 @@ roles are:</p>
 recolor(sun, magenta, 0.5);   // animate to a new palette colour
 </code></pre>
 <h2 id="any-colour-by-hue"><a class="header" href="#any-colour-by-hue">Any colour, by hue</a></h2>
-<p>For a <em>computed</em> colour — a gradient, or one per item in a loop — use <code>hue</code>,
-which takes an angle from 0 to 360:</p>
+<p>For a <em>computed</em> colour — one per item in a loop — use <code>hue</code>, which takes an
+angle from 0 to 360:</p>
 <pre><code class="language-manic">hue(sun, 200);              // a fixed hue
 for i in 0..24 {
   hue(p{i}, 360*i/24);      // a full rainbow around the loop
 }
 </code></pre>
 <p>That’s how the <a href="language-layer.html">rainbow-ring loop</a> gets its colours.</p>
+<h2 id="gradient-paint--computed-not-painted"><a class="header" href="#gradient-paint--computed-not-painted">Gradient paint — computed, not painted</a></h2>
+<p>For a colour that <em>reads a quantity</em>, use <code>gradient</code>. One word covers multi-stop
+ramps on fills and strokes; the mode (optional) picks the truth:</p>
+<pre><code class="language-manic">gradient(wave, blue, cyan, gold, 270);   // height of a plot
+gradient(path, magenta, cyan);           // arc length along a stroke
+gradient(well, panel, void, radial);     // centre → edge on a fill
+gradient(p.path, blue, cyan, gold, "speed");      // true local speed (physics traj.)
+gradient(swoop, dim, magenta, "curvature");       // how hard a path bends
+</code></pre>
+<p>Stops are palette names (≥2, evenly spaced) and stay template-aware.
+<code>"speed"</code> only works on pre-simulated physics trajectories; <code>"curvature"</code> works
+on any path. See the Modifiers table in <a href="shapes.html">Shapes</a>, and the demos
+<a href="ex-transforms.html#gradient">gradient</a>,
+<a href="ex-physics.html#gradient-fastest-descent">gradient-fastest-descent</a>, and the
+shorts <a href="ex-creator.html#gradient-fastest-descent-shorts">gradient-fastest-descent-shorts</a> /
+<a href="ex-creator.html#gradient-pendulum-shorts">gradient-pendulum-shorts</a>.</p>
 <h2 id="glow"><a class="header" href="#glow">Glow</a></h2>
 <p>Every entity has a neon <code>glow</code> (0 = crisp, higher = brighter halo):</p>
 <pre><code class="language-manic">glow(sun, 8);   // strong halo

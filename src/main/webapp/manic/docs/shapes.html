@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9d0ee4bc.js";
+            window.path_to_searchindex_js = "searchindex-a2c3446a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e8fbc168.js"></script>
@@ -290,11 +290,12 @@ begins. They take the entity name first, then a value:</p>
 <tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
 <tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
 <tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path (defaults 16/10 px)</td><td><code>dashed(curve, 18, 10);</code></td></tr>
+<tr><td><code>gradient(id, c1, c2, ..., [mode])</code></td><td>multi-stop gradient: along a path stroke, a linear (angle°) / <code>radial</code> fill, or a computed <code>"speed"</code>/<code>"curvature"</code> quantity on strokes</td><td><code>gradient(wave, blue, cyan, gold, 270);</code></td></tr>
 <tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
 <tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
 <tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
 <tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
-<tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — for gradients &amp; loops</td><td><code>hue(seg, 200);</code></td></tr>
+<tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — per-entity colour in loops</td><td><code>hue(seg, 200);</code></td></tr>
 <tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
 <tr><td><code>sticky(id)</code></td><td>pin to the screen so it stays put through a <code>cam</code>/<code>zoom</code> (a HUD)</td><td><code>sticky(caption);</code></td></tr>
 </tbody>

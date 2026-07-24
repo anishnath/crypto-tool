@@ -1,0 +1,125 @@
+// ============================================================================
+//  gradient-fastest-descent.manic — a 3B1B-style 16:9 story told THROUGH
+//  gradients (companion: gradient-fastest-descent-shorts.manic)
+// ----------------------------------------------------------------------------
+//  THE PROBLEM (Bernoulli, 1696): a bead slides from A down to B under gravity.
+//  Which wire shape gets it there fastest? Newton, Leibniz and the Bernoullis
+//  all answered: the CYCLOID — not the straight line.
+//
+//  THE GRADIENTS DO THE PHYSICS:
+//   · every ramp wears a 3-stop vertical gradient — for a frictionless bead
+//     v = √(2gΔh), so DEPTH IS SPEED and the color bar is a real speedometer
+//   · the winner's secret is revealed by a "curvature" gradient — the cycloid
+//     bends hardest at the very start, a near-vertical dive that buys speed
+//     immediately
+//   · a radial well sinks the stage behind the race
+//  Every curve, bead and color is computed (RK4 bead-on-wire), not drawn.
+// ============================================================================
+
+title("The Fastest Descent");
+canvas("16:9");
+template("blank");
+
+// ---- backdrop: a radial gravity well behind the race ----
+circle(stage, (cx, 380), 300);
+filled(stage);
+gradient(stage, panel, void, radial);
+opacity(stage, 0.4);
+
+// ---- the race: four wires from A to B, beads pre-integrated with RK4 ----
+brachistochrone(race, (300, 170), 155);
+untraced(race.straight); untraced(race.circle); untraced(race.parabola); untraced(race.cycloid);
+hidden(race.bead_straight); hidden(race.bead_circle); hidden(race.bead_parabola); hidden(race.bead_cycloid);
+hidden(race.markA); hidden(race.labelA); hidden(race.markB); hidden(race.labelB);
+stroke(race.straight, 4); stroke(race.circle, 4); stroke(race.parabola, 4); stroke(race.cycloid, 5);
+opacity(race.straight, 0.95); opacity(race.circle, 0.95); opacity(race.parabola, 0.95); opacity(race.cycloid, 1);
+
+// depth IS speed: v = √(2gΔh), so a vertical 3-stop gradient over each wire's
+// own bounds is its true speedometer — blue at the top (all potential),
+// gold at the bottom (all kinetic). 270 puts the first stop at the bottom.
+gradient(race.straight, gold, cyan, blue, 270);
+gradient(race.circle,   gold, cyan, blue, 270);
+gradient(race.parabola, gold, cyan, blue, 270);
+gradient(race.cycloid,  gold, cyan, blue, 270);
+
+// a second copy of the same sim: only its cycloid is used, re-dressed with a
+// CURVATURE gradient for the reveal — same computed curve, different truth
+brachistochrone(ghost, (300, 170), 155);
+hidden(ghost.straight); hidden(ghost.circle); hidden(ghost.parabola);
+hidden(ghost.bead_straight); hidden(ghost.bead_circle); hidden(ghost.bead_parabola); hidden(ghost.bead_cycloid);
+hidden(ghost.markA); hidden(ghost.labelA); hidden(ghost.markB); hidden(ghost.labelB);
+hidden(ghost.cycloid); untraced(ghost.cycloid);
+stroke(ghost.cycloid, 6);
+gradient(ghost.cycloid, dim, magenta, "curvature");
+glow(ghost.cycloid, 0.6);
+
+// ---- typography ----
+caption(q, "shortest path — or fastest?", (cx, 56), 34, gold);
+equation(law, (1020, 160), `v=\sqrt{2g\,\Delta h}`, 34);
+color(law, cyan); hidden(law);
+text(cap, (cx, h - 38), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================== SCRIPT ==============================
+
+// 1 — THE PROBLEM
+say(cap, "Bernoulli, 1696 — a bead slides from A down to B under gravity alone", 0.4);
+show(race.markA, 0.4); show(race.labelA, 0.3); pulse(race.markA);
+show(race.markB, 0.4); show(race.labelB, 0.3); pulse(race.markB);
+wait(0.3);
+wordpop(q, 0.18);
+wait(0.5);
+
+// 2 — THE CANDIDATES, each wearing its speedometer
+say(cap, "four wires — colored by depth, and depth IS speed", 0.4);
+stagger(0.15) {
+  draw(race.straight, 0.7);
+  draw(race.circle, 0.7);
+  draw(race.parabola, 0.7);
+  draw(race.cycloid, 0.9);
+}
+wait(0.3);
+
+show(law, 0.5);
+say(cap, "blue = all potential energy · gold = all of it cashed into speed", 0.4);
+wait(1.0);
+
+// 3 — THE RACE (real RK4 bead-on-wire integrations)
+say(cap, "release all four at once …", 0.4);
+par {
+  show(race.bead_straight, 0.25);
+  show(race.bead_circle, 0.25);
+  show(race.bead_parabola, 0.25);
+  show(race.bead_cycloid, 0.25);
+}
+run(race, 6);
+
+// 4 — THE WINNER
+say(cap, "the CYCLOID wins — the straight line isn't even close", 0.4);
+flash(race.cycloid, magenta);
+glow(race.bead_cycloid, 1.9);
+pulse(race.bead_cycloid);
+wait(0.8);
+
+// 5 — THE SECRET, told by a curvature gradient
+say(cap, "its secret, colored by curvature: it bends hardest at the very start", 0.4);
+par {
+  fade(race.straight, 0.5);
+  fade(race.circle, 0.5);
+  fade(race.parabola, 0.5);
+  fade(race.cycloid, 0.5);
+  fade(race.bead_straight, 0.4);
+  fade(race.bead_circle, 0.4);
+  fade(race.bead_parabola, 0.4);
+  fade(race.bead_cycloid, 0.4);
+}
+show(ghost.cycloid, 0.2);
+draw(ghost.cycloid, 1.4);
+wait(0.4);
+say(cap, "a near-vertical dive buys gold-speed immediately — then spends it on distance", 0.4);
+flash(ghost.cycloid, magenta);
+wait(1.0);
+
+// 6 — THE POINT
+recolor(cap, cyan);
+say(cap, "every color here is computed — depth is the speedometer, the bend is the strategy", 0.4);
+wait(1.6);

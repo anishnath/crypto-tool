@@ -1,0 +1,117 @@
+// ============================================================================
+//  gradient-pendulum-shorts.manic — a 9:16 cinematic short told THROUGH a
+//  "speed" gradient. Sister piece to the brachistochrone pair
+//  (gradient-fastest-descent.manic / gradient-fastest-descent-shorts.manic).
+// ----------------------------------------------------------------------------
+//  THE PROBLEM (Galileo, 1583): watching a chandelier swing in the Pisa
+//  cathedral, Galileo timed it with his own pulse. But WHERE along the arc is
+//  the bob fastest — and how would you ever see that?
+//
+//  THE GRADIENT DOES THE PHYSICS: the swing arc is a pre-simulated RK4
+//  trajectory, uniformly sampled in time — so gradient(p.path, ..., "speed")
+//  colors it by its TRUE local speed. Gold floods the bottom (all kinetic),
+//  blue pools at the ends (the bob stands still for an instant). Nothing is
+//  keyframed; the color IS the simulation.
+//
+//  Pattern mirrors creator-free-kicks.manic: hook → problem → reveal → law →
+//  prove on the painted arc → endcard.
+// ============================================================================
+
+title("Galileo's Chandelier");
+canvas("9:16");
+template("shorts");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// ---- backdrop: a radial pool of light under the chandelier ----
+circle(halo, (cx, h*0.42), w*0.52);
+filled(halo);
+gradient(halo, panel, void, radial);
+opacity(halo, 0.8);
+
+// ---- the chandelier: a real RK4 pendulum, arc uniformly sampled in time ----
+pendulum(p, (cx, h*0.26), 1, 55, w*0.36);
+hidden(p.overlays);
+untraced(p.path);
+stroke(p.path, 7);
+opacity(p.path, 0.95);
+// the reveal: 3 stops by TRUE local speed — slowest first, fastest last
+gradient(p.path, blue, cyan, gold, "speed");
+color(p.bob, gold); glow(p.bob, 0.7);
+stroke(p.rod, 3);
+
+// ---- typography ----
+text(kicker, (cx, h*0.11), "where is a pendulum FASTEST?");
+size(kicker, 34); color(kicker, gold); bold(kicker); wrap(kicker, w*0.82);
+untraced(kicker); cursor(kicker);
+
+equation(law, (cx, h*0.64), `mgh \;=\; \tfrac{1}{2}mv^2`, 40);
+color(law, cyan); hidden(law);
+
+text(cap, (cx, h*0.76), ""); size(cap, 30); color(cap, dim); wrap(cap, w*0.84);
+
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+
+// ============================== SCRIPT ==============================
+
+// 1 — HOOK.
+mark("hook");
+type(kicker, 1.2);
+
+// 2 — GALILEO'S PROBLEM.
+show(cap, 0.3);
+say(cap, "1583 — Galileo times a swinging chandelier with his own pulse");
+par {
+  show(p.pivot, 0.4);
+  show(p.rod, 0.4);
+  show(p.bob, 0.4);
+}
+pulse(p.bob);
+wait(0.4);
+
+// 3 — WATCH IT SWING. Your eye can't catch where it's quickest.
+say(cap, "watch it — can you SEE where it moves fastest?");
+swing(p, 4);
+wait(0.3);
+
+// 4 — THE REVEAL: paint the arc with its own speed.
+say(cap, "freeze — and color the arc by its true speed");
+draw(p.path, 1.8);
+wait(0.5);
+recolor(cap, gold);
+say(cap, "gold floods the bottom — blue pools at the tips, where it stops for an instant");
+flash(p.path, gold);
+wait(0.8);
+
+// 5 — WHY: energy. Height traded for speed, every swing, exactly.
+recolor(cap, dim);
+say(cap, "height falls, speed rises — energy just changes clothes");
+show(law, 0.5);
+wait(0.5);
+rewrite(law, `v=\sqrt{2gh}`, 0.8, smooth);
+say(cap, "at the lowest point ALL the height has become speed — that's the gold");
+wait(0.8);
+
+// 6 — PROVE IT: run the bob on its own painted speedometer.
+recolor(cap, cyan);
+say(cap, "the color is computed, not painted — a real RK4 swing on its own speedometer");
+swing(p, 4);
+wait(0.5);
+
+// 7 — END CARD.
+mark("endcard");
+par {
+  fade(cap, 0.4);
+  fade(me.footer, 0.4);
+  fade(law, 0.4);
+  fade(kicker, 0.4);
+  fade(p.path, 0.4);
+  fade(p.rod, 0.4);
+  fade(p.bob, 0.4);
+  fade(p.pivot, 0.4);
+  fade(halo, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);

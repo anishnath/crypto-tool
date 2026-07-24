@@ -96,8 +96,13 @@ Constructors and timeline may be written in any order.
      any `<var><fn>` shape (`acos`/`asin`/`atan` ARE real, but `xcos`, `ksin`,
      `rtan` are not — write `x*cos`, `k*sin`, `r*tan`).
 4. **Colors are a fixed palette**: `fg`, `void`, `cyan`, `magenta`, `lime`,
-   `gold`, `red`, `orange`, `blue`, `dim`, `panel`. No hex/RGB and no other names. For a computed/per-item colour
-   use `hue(id, degrees)` (0–360).
+   `gold`, `red`, `orange`, `blue`, `dim`, `panel`. No hex/RGB and no other names.
+   For a computed/per-item colour use `hue(id, degrees)` (0–360). For a colour
+   that *reads a quantity* (height, arc length, speed, curvature) use
+   `gradient(id, c1, c2, …, [mode])` — multi-stop, template-aware; modes:
+   omitted / angle° / `radial` / `"speed"` (physics trajectories only) /
+   `"curvature"`. See `examples/gradient.manic` and the brachistochrone /
+   pendulum gradient shorts.
 5. **Real math → `equation(...)`; `text(...)` stays ordinary shaped text.**
    `text`/`say`/captions use deterministic embedded fonts—never request or
    invent a font name. Unicode fallback, combining marks, bidi/RTL, Arabic,
@@ -227,7 +232,17 @@ seeded dots inside a circle/rectangle (`grid` is rectangular; `ring` is circular
 `hidden` · `untraced` · `cursor(id)` (typewriter `_` on text) · `sticky(id)` (pin to screen so it stays fixed through `cam`/`zoom` — HUD captions/counters) · `opacity(id,n)` · `color(id,name)` ·
 `hue(id,deg,[sat],[light])` · `outlined` · `filled` · `outline(id,name)` ·
 `size(id,n)` (text) · `stroke(id,n)` · `dashed(id,[dash],[gap])` (path-like
-entities; 16/10 px defaults) · `glow(id,n)` · `z(id,n)` · `rot(id,deg)`
+entities; 16/10 px defaults) · `gradient(id,c1,c2,...,[mode])` (multi-stop
+gradient, 2+ evenly spaced palette colours, on the primary paint: no mode =
+along a path stroke by TRUE arc length, or a linear top→bottom fill on filled
+shapes; a number = linear angle in degrees (0 = left→right, 90 = top→bottom) —
+`gradient(f,blue,cyan,gold,270)` colours a plot by its real height; `radial` =
+centre→edge on fills; `"speed"` colours a pre-simulated physics trajectory (a
+sim's `.path`, a `freekick` arc) by its TRUE local speed, slowest stop first —
+a build error on purely geometric paths; `"curvature"` colours any path by how
+hard it bends, straightest stop first. Palette names only, template-aware;
+composes with trace/dashed/glow/arrowheads; 2D shapes and strokes, not
+text/images; quantity modes stroke-only) · `glow(id,n)` · `z(id,n)` · `rot(id,deg)`
 · `bold` · `display` · `tag(id,name)` · `label(id,"s",[(dx,dy)])`.
 
 ### Verbs (timeline)

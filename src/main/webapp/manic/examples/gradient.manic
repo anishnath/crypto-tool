@@ -1,0 +1,74 @@
+// Gradient paint — the color is computed, not painted.
+//   manic examples/gradient.manic
+//   manic examples/gradient.manic --still 11 --scale 1.5
+//
+// One word, five truths (stops ≥ 2, evenly spaced; mode optional):
+//   gradient(path, c1, c2)                 arc-length along a stroke
+//   gradient(plot, c1, c2, c3, 270)        linear over the bounds — height, any number of stops
+//   gradient(shape, c1, c2, radial)        centre → edge
+//   gradient(traj, c1, c2, "speed")        a trajectory colored by its true local speed
+//   gradient(path, c1, c2, "curvature")    any path colored by how hard it bends
+
+title("Gradient Paint");
+canvas(1280, 720);
+template("blank");
+
+// --- cast ---
+
+// a radial "energy well" behind everything
+circle(well, (640, 400), 260);
+filled(well);
+gradient(well, panel, void, radial);
+opacity(well, 0.85);
+
+// a plot colored by its own height, in three stops: blue low, cyan mid, gold high.
+// The vertical linear gradient over the curve's bounds IS its y-value.
+axes(ax, (640, 400), 520, 220);
+plot(wave, (640, 400), 78, 150, sin, 6.6);
+stroke(wave, 4);
+gradient(wave, blue, cyan, gold, 270);
+untraced(wave);
+
+// a curve colored by its own curvature — the tight apex carries the color
+spline(swoop, (160, 640), (400, 260), (640, 160), (880, 260), (1120, 640));
+stroke(swoop, 5);
+gradient(swoop, dim, magenta, "curvature");
+untraced(swoop);
+
+// an RK4 free kick (top-down pitch) colored by its true speed —
+// gold off the boot, blue as drag bites (slowest stop first, fastest last)
+freekick(kick, (185, 690), 30, 36, 3.5, 5.5, 120);
+stroke(kick, 5);
+gradient(kick, blue, gold, "speed");
+untraced(kick);
+hidden(kick.ball);
+
+// an arrow whose head takes the gradient's tip color
+arrow(dart, (420, 600), (1040, 600));
+stroke(dart, 4);
+gradient(dart, dim, lime);
+untraced(dart);
+
+// headline + caption
+text(head, (640, 100), "the color is computed, not painted");
+display(head);  color(head, cyan);  size(head, 30);  hidden(head);
+text(cap, (640, 680), "");  color(cap, dim);  size(cap, 22);
+
+// --- script ---
+
+show(head, 0.5);
+say(cap, "a height-colored plot: blue low, cyan mid, gold high");
+draw(wave, 1.8);
+wait(0.6);
+
+say(cap, "a curve colored by its own curvature — the bend glows");
+draw(swoop, 1.6);
+wait(0.6);
+
+say(cap, "a free kick colored by its true speed — gold fast, blue slow");
+draw(kick, 1.6);
+wait(0.6);
+
+say(cap, "an arc-length stroke; the arrowhead takes its tip color");
+draw(dart, 1.2);
+wait(1.2);
