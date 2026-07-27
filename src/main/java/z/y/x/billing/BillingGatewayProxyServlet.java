@@ -28,6 +28,7 @@ import java.util.logging.Logger;
  *   <li>{@code POST /api/dodo/checkout} → {@code POST /v1/billing/checkout}</li>
  *   <li>{@code GET /api/billing/status} → {@code GET /v1/billing/status}</li>
  *   <li>{@code GET /api/billing/plans} → {@code GET /v1/billing/plans}</li>
+ *   <li>{@code GET /api/billing/entitlement} → {@code GET /v1/billing/entitlement}</li>
  * </ul>
  */
 public class BillingGatewayProxyServlet extends HttpServlet {
@@ -58,6 +59,16 @@ public class BillingGatewayProxyServlet extends HttpServlet {
             if (qs != null && !qs.trim().isEmpty()) {
                 target = target + "?" + qs;
             }
+            proxy(req, resp, "GET", target, null, false);
+            return;
+        }
+        if ("/api/billing/entitlement".equals(path)) {
+            String qs = req.getQueryString();
+            String target = gatewayBase() + "/v1/billing/entitlement";
+            if (qs != null && !qs.trim().isEmpty()) {
+                target = target + "?" + qs;
+            }
+            // Anonymous allowed (guest); attach session user when present.
             proxy(req, resp, "GET", target, null, false);
             return;
         }
@@ -115,17 +126,17 @@ public class BillingGatewayProxyServlet extends HttpServlet {
                 outbound = post;
             }
 
-            if (requireLogin) {
-                HttpSession session = req.getSession(false);
-                if (session != null) {
-                    String userId = (String) session.getAttribute("oauth_user_sub");
-                    String email = (String) session.getAttribute("oauth_user_email");
-                    if (userId != null) {
-                        outbound.setHeader("X-User-Id", userId);
-                    }
-                    if (email != null) {
-                        outbound.setHeader("X-User-Email", email);
-                    }
+            // Forward session identity whenever present (status/checkout require it;
+            // entitlement allows anonymous but still needs user_id when logged in).
+            HttpSession session = req.getSession(false);
+            if (session != null) {
+                String userId = (String) session.getAttribute("oauth_user_sub");
+                String email = (String) session.getAttribute("oauth_user_email");
+                if (userId != null && !userId.isEmpty()) {
+                    outbound.setHeader("X-User-Id", userId);
+                }
+                if (email != null && !email.isEmpty()) {
+                    outbound.setHeader("X-User-Email", email);
                 }
             }
 

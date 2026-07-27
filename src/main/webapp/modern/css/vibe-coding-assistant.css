@@ -519,6 +519,9 @@
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
+.vca-plans-grid-ultra {
+  margin-top: 12px;
+}
 
 .vca-plan-card {
   position: relative;

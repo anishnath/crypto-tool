@@ -1751,7 +1751,8 @@ export class ToolAiAssistant {
 
   async _refreshBilling() {
     if (!this.billing?.enabled || !this._els?.billingBar) return;
-    const { fetchBillingStatus } = await this._ensureBillingClient();
+    const client = await this._ensureBillingClient();
+    const { fetchBillingStatus, fetchEntitlement } = client;
     const bar = this._els.billingBar;
     const ctx = this.billing.ctx || this.ctx;
     const loggedIn = !!(this.billing.userId || this.userId);
@@ -1766,6 +1767,32 @@ export class ToolAiAssistant {
       return;
     }
     try {
+      // Tool-scoped tools (e.g. Manic) must not treat global is_premium as paid.
+      const toolId = this.toolId || this.billing?.toolId || '';
+      if (toolId && typeof fetchEntitlement === 'function') {
+        const ent = await fetchEntitlement(ctx, toolId);
+        this._billingStatus = ent;
+        const plan = String(ent?.plan || 'free').toLowerCase();
+        if (plan === 'pro' || plan === 'ultra') {
+          this._setTier('pro');
+          bar.dataset.state = plan;
+          bar.hidden = true;
+        } else {
+          this._setTier('free');
+          bar.dataset.state = 'free';
+          if (!stickyReason) bar.dataset.reason = 'idle';
+          bar.hidden = false;
+          const pending = this._consumePendingPlan();
+          if (pending) {
+            this._renderBillingBar();
+            this._startBillingCheckout(pending);
+            return;
+          }
+        }
+        this._renderBillingBar();
+        return;
+      }
+
       const status = await fetchBillingStatus(ctx);
       this._billingStatus = status;
       if (status?.is_premium) {
@@ -1797,10 +1824,16 @@ export class ToolAiAssistant {
   }
 
   _billingCopy(state, reason) {
-    // Single source of truth for the bar's price line. Hardcoded on purpose so
-    // the first screen never blocks on a plans fetch — keep in sync with the
-    // monthly Pro plan if pricing changes.
-    const price = '$3/mo';
+    // Prefer live catalog price when available; else tool-aware fallback.
+    const toolId = this.toolId || this.billing?.toolId || '';
+    const isManic = toolId === 'developer-tools/manic';
+    let price = isManic ? '$9/mo' : '$3/mo';
+    const monthly = this._plansCatalog?.plans?.find((p) => p.plan_key === 'monthly' || p.billing_interval === 'month');
+    if (monthly?.price_label) price = monthly.price_label;
+    else if (monthly?.price_amount != null && monthly.currency) {
+      const amt = Number(monthly.price_amount);
+      if (Number.isFinite(amt)) price = `$${(amt / 100).toFixed(0)}/mo`;
+    }
     if (state === 'guest') {
       if (reason === 'rate') {
         return { title: 'You hit the free AI limit', sub: `Sign in free for more requests — or go Pro (${price}) for the highest limits and zero waiting.` };
@@ -1889,7 +1922,7 @@ export class ToolAiAssistant {
     const btn = e.target.closest('[data-billing-plan]');
     if (!btn || this._billingBusy) return;
     e.preventDefault();
-    const plan = btn.getAttribute('data-billing-plan') === 'yearly' ? 'yearly' : 'monthly';
+    const plan = btn.getAttribute('data-billing-plan') || 'monthly';
     await this._startBillingCheckout(plan);
   }
 
@@ -1906,6 +1939,12 @@ export class ToolAiAssistant {
         'Pro chat model tier',
         'No rate-limit waiting between requests',
       ];
+    const ultraFeatures = [
+      'Highest Manic AI allotment',
+      'ElevenLabs + raw voice ids',
+      'Ultra render limits',
+      'Pro on cheaper tools',
+    ];
     const monthly = {
       name: 'Monthly',
       priceLabel: '',
@@ -1926,9 +1965,33 @@ export class ToolAiAssistant {
       ...(cfg.yearly || {}),
       ...(this._goPlan('yearly')),
     };
+    const ultraMonthly = {
+      name: 'Ultra Monthly',
+      priceLabel: '',
+      cadence: 'Billed monthly · cancel anytime',
+      badge: 'Ultra',
+      tokenLabel: '',
+      features: ultraFeatures,
+      ...(cfg.ultra_monthly || cfg.ultraMonthly || {}),
+      ...(this._goPlan('ultra_monthly')),
+    };
+    const ultraYearly = {
+      name: 'Ultra Yearly',
+      priceLabel: '',
+      cadence: 'Billed yearly',
+      badge: 'Ultra',
+      tokenLabel: '',
+      features: ultraFeatures,
+      ...(cfg.ultra_yearly || cfg.ultraYearly || {}),
+      ...(this._goPlan('ultra_yearly')),
+    };
     if (!monthly.features?.length) monthly.features = fallbackFeatures;
     if (!yearly.features?.length) yearly.features = fallbackFeatures;
-    return { monthly, yearly };
+    if (!ultraMonthly.features?.length) ultraMonthly.features = ultraFeatures;
+    if (!ultraYearly.features?.length) ultraYearly.features = ultraFeatures;
+    const list = Array.isArray(this._plansCatalog?.plans) ? this._plansCatalog.plans : [];
+    const hasUltra = list.some((p) => p && (p.key === 'ultra_monthly' || p.key === 'ultra_yearly'));
+    return { monthly, yearly, ultraMonthly, ultraYearly, hasUltra };
   }
 
   /** Map a Go plan record into picker fields. */
@@ -1939,8 +2002,7 @@ export class ToolAiAssistant {
     if (!p) return {};
     const out = {};
     if (p.name) {
-      out.name = String(p.name).replace(/^\s*pro\s+/i, '').trim()
-        || (key === 'yearly' ? 'Yearly' : 'Monthly');
+      out.name = String(p.name).trim();
     }
     if (p.price_label) out.priceLabel = p.price_label;
     if (p.badge) out.badge = p.badge;
@@ -2023,7 +2085,7 @@ export class ToolAiAssistant {
       <div class="vca-plan-card" data-plan="${plan}">
         ${badge}
         <div class="vca-plan-head">
-          <span class="vca-plan-name">Pro ${info.name}</span>
+          <span class="vca-plan-name">${info.name || plan}</span>
           ${price}
           ${token}
           ${model}
@@ -2033,7 +2095,7 @@ export class ToolAiAssistant {
         <ul class="vca-plan-feats">${feats}</ul>
         <button type="button" class="vca-billing-btn vca-billing-btn-primary vca-plan-choose"
                 data-billing-plan="${plan}" ${busy ? 'disabled' : ''}>
-          ${busy ? 'Starting…' : `Choose ${info.name}`}
+          ${busy ? 'Starting…' : `Choose ${info.name || plan}`}
         </button>
       </div>`;
   }
@@ -2041,7 +2103,7 @@ export class ToolAiAssistant {
   async _openPlanPicker() {
     if (!this._els?.modal) return;
     await this._loadPlans();
-    const { monthly, yearly } = this._plansConfig();
+    const { monthly, yearly, ultraMonthly, ultraYearly, hasUltra } = this._plansConfig();
     let overlay = this._els.plans;
     if (!overlay) {
       overlay = document.createElement('div');
@@ -2057,15 +2119,26 @@ export class ToolAiAssistant {
     const note = loggedIn
       ? 'Secure checkout via Dodo Payments. Cancel anytime.'
       : 'Pick a plan — you’ll sign in, then go straight to secure checkout.';
+    const title = hasUltra ? 'Upgrade Manic' : 'Upgrade to Pro';
+    const sub = hasUltra
+      ? 'Pro for Cartesia + Manic AI. Ultra for ElevenLabs, raw voice ids, and higher limits.'
+      : 'Higher Pro chat model, more monthly AI tokens, no rate-limit waits.';
+    const ultraGrid = hasUltra
+      ? `<div class="vca-plans-grid vca-plans-grid-ultra">
+          ${this._planCardHTML('ultra_monthly', ultraMonthly, this._billingBusy)}
+          ${this._planCardHTML('ultra_yearly', ultraYearly, this._billingBusy)}
+        </div>`
+      : '';
     overlay.innerHTML = `
-      <div class="vca-plans-sheet" role="dialog" aria-label="Choose a Pro plan">
+      <div class="vca-plans-sheet" role="dialog" aria-label="${title}">
         <button type="button" class="vca-plans-close" data-plans-close aria-label="Close">&times;</button>
-        <h3 class="vca-plans-title">Upgrade to Pro</h3>
-        <p class="vca-plans-sub">Higher Pro chat model, more monthly AI tokens, no rate-limit waits.</p>
+        <h3 class="vca-plans-title">${title}</h3>
+        <p class="vca-plans-sub">${sub}</p>
         <div class="vca-plans-grid">
           ${this._planCardHTML('monthly', monthly, this._billingBusy)}
           ${this._planCardHTML('yearly', yearly, this._billingBusy)}
         </div>
+        ${ultraGrid}
         ${this._tierCompareHTML()}
         <p class="vca-plans-note">${note}</p>
       </div>`;
@@ -2091,7 +2164,7 @@ export class ToolAiAssistant {
     const choose = e.target.closest('[data-billing-plan]');
     if (!choose || this._billingBusy) return;
     e.preventDefault();
-    const plan = choose.getAttribute('data-billing-plan') === 'yearly' ? 'yearly' : 'monthly';
+    const plan = choose.getAttribute('data-billing-plan') || 'monthly';
     await this._startBillingCheckout(plan);
   }
 
@@ -2114,7 +2187,7 @@ export class ToolAiAssistant {
       localStorage.removeItem(this._pendingPlanKey());
       const { plan, ts } = JSON.parse(raw);
       if (!plan || (Date.now() - ts) > 15 * 60 * 1000) return null;
-      return plan === 'yearly' ? 'yearly' : 'monthly';
+      return String(plan);
     } catch { return null; }
   }
 

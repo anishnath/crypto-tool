@@ -36,13 +36,14 @@ import com.google.gson.JsonParser;
  * server-held API key so the key never reaches the client.
  *
  * <p><b>Entitlement is decided here, server-side.</b>  The browser cannot be
- * trusted to claim a plan, so this servlet derives the caller's plan from their
- * logged-in identity: the OAuth {@code oauth_user_sub} in the session →
- * an active Pro subscription (billing status, same source as
- * {@code AIGatewayProxyServlet}) → {@code plan=pro}, otherwise {@code plan=free}.
- * The plan (and, for logged-in users, a stable {@code userid}) is injected into
- * every upstream call; the client-sent {@code plan} is ignored.  A client that
- * asks for a render tier above its plan is rejected upstream (403).
+ * trusted to claim a plan. Plan comes from the Manic tool entitlement only
+ * ({@code GET /v1/billing/entitlement?tool_id=developer-tools/manic}):
+ * anonymous → {@code guest}; logged-in with no Manic purchase → {@code free};
+ * Manic Pro/Ultra → {@code pro}/{@code ultra}. Global {@code is_premium}
+ * (other-tool Pro) does <b>not</b> unlock Manic. The plan (and, for logged-in
+ * users, a stable {@code userid}) is injected into every upstream call; the
+ * client-sent {@code plan} is ignored. A client that asks for a render tier
+ * above its plan is rejected upstream (403).
  *
  * <p>Endpoints (dispatched on {@code ?action=}):
  * <pre>
@@ -60,8 +61,8 @@ import com.google.gson.JsonParser;
  * <pre>
  *   AI_ENDPOINT              base URL of the onecompiler API (default http://localhost:8081)
  *   AI_API_KEY               forwarded as the X-API-Key header
- *   AI_GATEWAY               base URL of the billing/AI gateway (for Pro status; optional)
- *   BILLING_INTERNAL_SECRET  forwarded to the billing status endpoint (optional)
+ *   AI_GATEWAY               base URL of the billing/AI gateway (Manic entitlement; optional)
+ *   BILLING_INTERNAL_SECRET  forwarded to the entitlement endpoint (optional)
  * </pre>
  *
  * <p>Registered in web.xml at {@code /ManicFunctionality}.
@@ -77,12 +78,14 @@ public class ManicServlet extends HttpServlet {
     private static final int SOCKET_TIMEOUT_MS = 30_000; // API returns immediately (async render)
 
     private static final long CACHE_TTL_LIMITS_MS = 20_000L;       // limits (with usage): 20 s
-    private static final long PREMIUM_CACHE_TTL_MS = 6L * 60 * 60 * 1000L;  // Pro status: 6 h
+    /** Short TTL so purchase/cancel shows up quickly; entitlement API is cheap. */
+    private static final long PLAN_CACHE_TTL_MS = 60_000L;         // Manic plan: 60 s
+    private static final String MANIC_TOOL_ID = "developer-tools/manic";
 
     /** In-memory cache for the limits endpoint (key = "limits|plan|user"). */
     private static final ConcurrentHashMap<String, CacheEntry> CACHE = new ConcurrentHashMap<>();
-    /** Pro-status cache: userId → [isPro(0/1), expiresAtMillis]. */
-    private static final ConcurrentHashMap<String, long[]> PREMIUM = new ConcurrentHashMap<>();
+    /** Manic plan cache: userId → [planOrdinal, expiresAtMillis] (0=free,1=pro,2=ultra). */
+    private static final ConcurrentHashMap<String, long[]> MANIC_PLAN = new ConcurrentHashMap<>();
 
     private static final class CacheEntry {
         final int status; final String body; final long expiresAt;
@@ -94,7 +97,7 @@ public class ManicServlet extends HttpServlet {
     /** Resolved caller identity + entitlement. */
     private static final class Identity {
         final String userId;   // OAuth sub (logged in) or browser id (anon); may be null
-        final String plan;     // "pro" | "free"
+        final String plan;     // "guest" | "free" | "pro" | "ultra"
         final boolean loggedIn;
         Identity(String userId, String plan, boolean loggedIn) {
             this.userId = userId; this.plan = plan; this.loggedIn = loggedIn;
@@ -173,12 +176,11 @@ public class ManicServlet extends HttpServlet {
     private Identity resolve(HttpServletRequest req) {
         String sub = sessionUserId(req);
         if (sub != null) {
-            String plan = isPremiumUser(sub) ? "pro" : "free";
-            return new Identity(sub, plan, true);
+            return new Identity(sub, resolveManicPlan(sub), true);
         }
         String bid = req.getHeader("X-Browser-Id");
         if (bid != null && bid.trim().isEmpty()) bid = null;
-        return new Identity(bid, "free", false);
+        return new Identity(bid, "guest", false);
     }
 
     /** Logged-in user id from the session (trusted), or null for anonymous. */
@@ -204,37 +206,56 @@ public class ManicServlet extends HttpServlet {
         }
     }
 
-    private boolean isPremiumUser(String userId) {
-        if (userId == null || userId.isEmpty()) return false;
+    /** Manic tool entitlement only — never falls back to global is_premium. */
+    private String resolveManicPlan(String userId) {
+        if (userId == null || userId.isEmpty()) return "free";
         long now = System.currentTimeMillis();
-        long[] cached = PREMIUM.get(userId);
-        if (cached != null && cached[1] > now) return cached[0] == 1L;
-        boolean pro = fetchPremiumStatus(userId);
-        PREMIUM.put(userId, new long[]{ pro ? 1L : 0L, now + PREMIUM_CACHE_TTL_MS });
-        return pro;
+        long[] cached = MANIC_PLAN.get(userId);
+        if (cached != null && cached[1] > now) return planFromOrdinal(cached[0]);
+        String plan = fetchManicPlan(userId);
+        MANIC_PLAN.put(userId, new long[]{ planOrdinal(plan), now + PLAN_CACHE_TTL_MS });
+        return plan;
     }
 
-    /** Query the billing gateway for Pro status. Fails closed to free. */
-    private boolean fetchPremiumStatus(String userId) {
+    private static long planOrdinal(String plan) {
+        if ("ultra".equals(plan)) return 2L;
+        if ("pro".equals(plan)) return 1L;
+        return 0L; // free (and unknown)
+    }
+
+    private static String planFromOrdinal(long n) {
+        if (n >= 2L) return "ultra";
+        if (n == 1L) return "pro";
+        return "free";
+    }
+
+    /** Query tool entitlement for Manic. Fails closed to free (logged-in). */
+    private String fetchManicPlan(String userId) {
         String gateway = System.getenv("AI_GATEWAY");
-        if (gateway == null || gateway.isEmpty()) return false;
+        if (gateway == null || gateway.isEmpty()) return "free";
         if (gateway.endsWith("/")) gateway = gateway.substring(0, gateway.length() - 1);
         RequestConfig cfg = RequestConfig.custom()
             .setConnectTimeout(3000).setSocketTimeout(4000).build();
         try (CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(cfg).build()) {
-            HttpGet get = new HttpGet(gateway + "/v1/billing/status");
+            HttpGet get = new HttpGet(gateway + "/v1/billing/entitlement?tool_id="
+                + URLEncoder.encode(MANIC_TOOL_ID, StandardCharsets.UTF_8.name()));
             get.setHeader("X-User-Id", userId);
+            get.setHeader("X-Tool-Id", MANIC_TOOL_ID);
             String secret = System.getenv("BILLING_INTERNAL_SECRET");
             if (secret != null && !secret.isEmpty()) get.setHeader("X-Billing-Internal-Secret", secret);
             HttpResponse upstream = client.execute(get);
-            if (upstream.getStatusLine().getStatusCode() >= 400) return false;
+            if (upstream.getStatusLine().getStatusCode() >= 400) return "free";
             JsonObject obj = new JsonParser().parse(bodyOf(upstream)).getAsJsonObject();
-            if (obj == null || !obj.has("is_premium") || obj.get("is_premium").isJsonNull()) return false;
-            try { return obj.get("is_premium").getAsBoolean(); }
-            catch (Exception ex) { return obj.get("is_premium").getAsInt() != 0; }
+            if (obj == null || !obj.has("plan") || obj.get("plan").isJsonNull()) return "free";
+            String plan = obj.get("plan").getAsString();
+            if (plan == null) return "free";
+            plan = plan.trim().toLowerCase();
+            if ("ultra".equals(plan) || "pro".equals(plan) || "free".equals(plan)) return plan;
+            if ("guest".equals(plan)) return "free"; // logged-in should never be guest
+            return "free";
         } catch (Exception e) {
-            log.fine("manic: billing status check failed for " + userId + ": " + e.getMessage());
-            return false;
+            log.fine("manic: entitlement check failed for " + userId + ": " + e.getMessage());
+            return "free";
         }
     }
 

@@ -103,6 +103,27 @@ export async function fetchBillingStatus(ctx) {
 }
 
 /**
+ * Tool-scoped entitlement (Manic Pro ≠ global is_premium).
+ * @param {string} ctx
+ * @param {string} toolId e.g. developer-tools/manic
+ * @returns {Promise<{ plan?: string, tool_id?: string, source?: object, upgrade?: object }|null>}
+ */
+export async function fetchEntitlement(ctx, toolId) {
+  const tid = String(toolId || '').trim();
+  if (!tid) return null;
+  const res = await fetchWithTimeout(
+    joinUrl(ctx, `/api/billing/entitlement?tool_id=${encodeURIComponent(tid)}`),
+    {
+      method: 'GET',
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json', 'X-Tool-Id': tid },
+    },
+  );
+  if (res.status === 401) return null;
+  return parseJson(res, ctx);
+}
+
+/**
  * Fetch purchasable Pro plans for a tool (per-tool price overrides with global fallback).
  * @param {string} ctx
  * @param {{ toolId?: string }} [opts]
@@ -137,7 +158,8 @@ export async function fetchPlans(ctx, opts = {}) {
 
 /**
  * @param {string} ctx
- * @param {{ plan?: 'monthly'|'yearly', returnPath?: string }} opts
+ * @param {{ plan?: string, toolId?: string, returnPath?: string, cancelPath?: string, skipCheckoutFlag?: boolean }} opts
+ * plan: monthly | yearly | ultra_monthly | ultra_yearly | …
  */
 function withCheckoutFlag(returnPath) {
   const path = returnPath || '/';
@@ -152,12 +174,13 @@ export async function startCheckout(ctx, opts = {}) {
   const returnPath = opts.skipCheckoutFlag ? basePath : withCheckoutFlag(basePath);
   // Cancel returns the user to the same page without the success flag.
   const cancelPath = opts.cancelPath || basePath;
+  const plan = String(opts.plan || 'monthly').trim() || 'monthly';
   const res = await fetch(joinUrl(ctx, '/api/dodo/checkout'), {
     method: 'POST',
     credentials: 'same-origin',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify({
-      plan: opts.plan === 'yearly' ? 'yearly' : 'monthly',
+      plan,
       tool_id: opts.toolId || '',
       return_path: returnPath,
       cancel_path: cancelPath,
