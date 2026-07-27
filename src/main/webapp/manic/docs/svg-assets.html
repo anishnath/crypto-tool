@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-891a6e5e.js";
+            window.path_to_searchindex_js = "searchindex-566c6724.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-f09026c8.js"></script>
+        <script src="toc-74e98ac0.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -204,9 +204,14 @@ svg(joy,  (cx, cy), "asset:svg/emoji/1f525.svg",    140);   // …same, by codep
 </div>
 <p><strong>Themeable vs faithful.</strong> Lucide/Heroicons paint with <code>currentColor</code>, so they
 take the entity’s colour — <code>recolor(icon, cyan)</code> just works. Flags and emoji keep
-their real colours. Concave shapes (stars, emblems) fill correctly; a few
-clip/mask-built flags (e.g. <code>us</code>) render imperfectly. <code>svgcheck</code> a set before you
-rely on it.</p>
+their real colours. Concave shapes (stars, emblems) fill correctly, and
+stroke-drawn designs (stripes, Nordic crosses) import as filled bands.</p>
+<blockquote>
+<p><strong>Known limitation.</strong> A few flags place their stars with SVG <code>&lt;use&gt;</code> instancing
+(e.g. <code>cn</code> — China) or <code>&lt;marker&gt;</code>; those instanced glyphs render incorrectly for
+now (tracked). The flag’s plain fields still show, and <strong>all icons/emoji and most
+flags render cleanly</strong>. <code>svgcheck</code> a set before you rely on it.</p>
+</blockquote>
 <h2 id="emoji-friendly-aliases"><a class="header" href="#emoji-friendly-aliases">Emoji friendly aliases</a></h2>
 <p>Twemoji files are named by Unicode codepoint; these short names resolve to the
 same file — either works:</p>

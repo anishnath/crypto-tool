@@ -1,0 +1,76 @@
+// creator-race-quiz.manic — a Creator Short that PROVES a claim with a race chart.
+// Poses a quiz (which economy grew fastest since 1990?), lets you guess, reveals
+// the answer, then plays a bar-chart RACE that settles it — the data as the payoff.
+// Shows the charts kit composing with quiz cards, voice, and creator chrome.
+//
+//   ELEVENLABS_API_KEY=... manic examples/creator-race-quiz.manic --record out.mp4
+title("The Race-Chart Quiz");
+canvas("9:16");
+template("shorts");
+voice("elevenlabs");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_data_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(mark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// --- the question ---
+text(kick, (cx, h*0.13), "Since 1990, which economy grew the FASTEST?");
+size(kick, 46); color(kick, fg); bold(kick); wrap(kick, w*0.86); hidden(kick);
+
+// --- four option cards (India · China · S. Korea · Brazil) ---
+let cy0 = h*0.30; let ch = h*0.09; let gap = h*0.115;
+rect(card1, (cx, cy0),        w*0.74, ch); outlined(card1); outline(card1, dim); stroke(card1, 3); hidden(card1);
+rect(card2, (cx, cy0+gap),    w*0.74, ch); outlined(card2); outline(card2, dim); stroke(card2, 3); hidden(card2);
+rect(card3, (cx, cy0+gap*2),  w*0.74, ch); outlined(card3); outline(card3, dim); stroke(card3, 3); hidden(card3);
+rect(card4, (cx, cy0+gap*3),  w*0.74, ch); outlined(card4); outline(card4, dim); stroke(card4, 3); hidden(card4);
+text(lbl1, (cx, cy0),       "India");        size(lbl1, 40); color(lbl1, fg); bold(lbl1); hidden(lbl1);
+text(lbl2, (cx, cy0+gap),   "China");        size(lbl2, 40); color(lbl2, fg); bold(lbl2); hidden(lbl2);
+text(lbl3, (cx, cy0+gap*2), "South Korea");  size(lbl3, 40); color(lbl3, fg); bold(lbl3); hidden(lbl3);
+text(lbl4, (cx, cy0+gap*3), "Brazil");       size(lbl4, 40); color(lbl4, fg); bold(lbl4); hidden(lbl4);
+
+// --- the proof: a GDP bar-chart race (labels only), hidden until the reveal ---
+racechart(gdp, "bar", "1990 1998 2006 2014 2020 2026");
+racedata(gdp, "
+  USA,          5.96,  8.6, 13.8, 17.5, 21.1, 30.3
+  China,        0.36,  1.1,  2.8,  10.5, 14.7, 20.5
+  Japan,        3.13,  4.1,  4.6,   4.9,  5.1,  4.4
+  India,        0.32,  0.4,  0.9,   2.0,  2.7,  4.6
+  Brazil,       0.46,  0.9,  1.1,   2.5,  1.5,  2.4
+  South Korea,  0.28,  0.6,  1.0,   1.5,  1.6,  1.9
+");
+
+text(cap, (cx, h*0.70), ""); size(cap, 34); color(cap, dim); bold(cap); wrap(cap, w*0.86); hidden(cap);
+
+socials(me);
+endcard(me, "title=Race_ANY_Dataset cta=8gwifi.org/manic");
+
+// ---------------- the story ----------------
+fade(gdp, 0.01); // keep the race hidden during the quiz
+show(kick);
+speak("Since nineteen-ninety, one economy grew faster than every other major country. Which one?");
+stagger(0.16) { show(card1); show(card2); show(card3); show(card4); }
+par { show(lbl1); show(lbl2); show(lbl3); show(lbl4); }
+show(cap, 0.3); say(cap, "Lock in your guess…");
+wait(1.0);
+
+speak("The answer? China.");
+par { recolor(card2, gold); pulse(card2); recolor(lbl2, gold); }
+par { fade(card1); fade(card3); fade(card4); fade(lbl1); fade(lbl3); fade(lbl4); }
+wait(0.6);
+
+speak("But don't take my word for it — let the data settle it.");
+par { fade(card2); fade(lbl2); fade(kick); fade(cap); }
+show(gdp);
+par {
+  race(gdp, 8.0);
+  seq {
+    speak("Watch China — from the bottom of the pack,");
+    speak("climbing past Brazil, Korea, India, even Japan,");
+    speak("all the way to number two.");
+  }
+}
+wait(0.6);
+
+speak("The data doesn't argue. And this whole video is one Manic script — drop in any dataset, get a race. Free, at eight g wifi dot org slash manic.");
+par { fade(gdp); }
+show(me.endcard);
+wait(2.6);

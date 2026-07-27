@@ -1,0 +1,26 @@
+// charts-bar-line.manic — a BAR race with a companion LINE (the classic combo).
+//
+// The bars race as usual (reordering by value), and `raceline` draws a synced line
+// across the top strip — here the running TOTAL, auto-summed from the bars (pass
+// your own "v0 v1 …" to track a different metric). The line draws on, a marker
+// rides its leading point, and a live readout counts up — all locked to the race.
+//
+//   manic examples/charts-bar-line.manic
+canvas("16:9");
+template("blank");
+
+racechart(gdp, "bar", "1990 2000 2010 2020 2026",
+          "World GDP — Who's Biggest, and the Total Growing ($T)");
+
+racedata(gdp, "
+  USA,     us,  5.96, 10.25, 15.05, 21.06, 30.34
+  China,   cn,  0.36,  1.21,  6.09, 14.69, 20.50
+  Japan,   jp,  3.13,  4.97,  5.76,  5.06,  4.40
+  Germany, de,  1.60,  1.95,  3.40,  3.89,  4.90
+  India,   in,  0.32,  0.47,  1.68,  2.67,  4.60
+");
+
+// the companion line across the top — a running total of all bars (auto-summed)
+raceline(gdp, "World total");
+
+race(gdp, 12);

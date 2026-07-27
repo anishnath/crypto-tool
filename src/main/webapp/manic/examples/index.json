@@ -1,5 +1,5 @@
 {
-  "count": 265,
+  "count": 271,
   "categories": [
     {
       "slug": "algorithms",
@@ -1372,6 +1372,48 @@
           "file": "quiz-geometry-2.manic",
           "title": "Quiz geometry 2",
           "desc": "A layout stress-test: a different olympiad question with TWO figures side by side (an acute triangle with its circumcentre INSIDE vs an obtuse one with it OUTSIDE), proving the 2\u00d72 options, countdown and footer keep their spacing for richer figure content."
+        },
+        {
+          "name": "creator-race-quiz",
+          "file": "creator-race-quiz.manic",
+          "title": "Creator race quiz",
+          "desc": "The charts kit composed with everything else: a voiced 9:16 Short that poses a QUIZ (which economy grew fastest since 1990?), reveals the answer, then plays a bar-chart RACE that PROVES it \u2014 China climbing from the pack to #2."
+        }
+      ]
+    },
+    {
+      "slug": "charts",
+      "title": "Race charts \u2014 paste a table, get a race",
+      "examples": [
+        {
+          "name": "charts-gdp-race",
+          "file": "charts-gdp-race.manic",
+          "title": "Charts gdp race",
+          "desc": "The flagship bar-chart race: the world's biggest economies, GDP 1990\u21922026, with country flags riding the bars."
+        },
+        {
+          "name": "charts-column-race",
+          "file": "charts-column-race.manic",
+          "title": "Charts column race",
+          "desc": "A COLUMN race (vertical bars), built with the per-series raceseries input: men's tennis Grand Slam titles 2005\u21922024, Djokovic climbing to overtake Federer and Nadal, with flags."
+        },
+        {
+          "name": "charts-line-race",
+          "file": "charts-line-race.manic",
+          "title": "Charts line race",
+          "desc": "A LINE race: each series draws its line on left-to-right as the years tick, value/label/flag riding the leading tip; the race is which line climbs highest."
+        },
+        {
+          "name": "charts-bar-line",
+          "file": "charts-bar-line.manic",
+          "title": "Charts bar line",
+          "desc": "The bar+line combo: a GDP bar race with a companion raceline across the top showing the auto-summed world Total, drawn on with a marker and live readout, synced to the race."
+        },
+        {
+          "name": "charts-german-elections",
+          "file": "charts-german-elections.manic",
+          "title": "Charts german elections",
+          "desc": "Bar race + a multi-line history racepanel below (the Flourish bar+line layout), from a REAL CSV: German federal election vote share 1949\u21922021, 7 parties, missing early years as 0, Total 100."
         }
       ]
     },

@@ -1,0 +1,19 @@
+// charts-column-race.manic — a COLUMN chart race (vertical bars), built with the
+// per-series `raceseries` input (the computed/loop sibling of `racedata`). A sport
+// race: the men's tennis Grand Slam count, 2005 → 2024 — watch Djokovic climb from
+// nothing to overtake Federer and Nadal. Flags are imported SVG (rs/es/ch/gb).
+//
+//   manic examples/charts-column-race.manic
+canvas("16:9");
+template("blank");
+
+racechart(gs, "column", "2005 2009 2013 2017 2021 2024",
+          "Men's Tennis — Grand Slam Titles, 2005 to 2024");
+
+// one entity per player: raceseries(chart, "name", "flag", "v0 v1 …")
+raceseries(gs, "Federer",  "ch",  "5 15 17 19 20 20");
+raceseries(gs, "Nadal",    "es",  "4  6 13 16 20 22");
+raceseries(gs, "Djokovic", "rs",  "0  1  6 12 20 24");
+raceseries(gs, "Murray",   "gb",  "0  0  2  3  3  3");
+
+race(gs, 10);

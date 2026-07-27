@@ -1,0 +1,43 @@
+// charts-gdp-race.manic — an animated BAR-CHART RACE from a pasted data block.
+//
+// The `charts` kit turns a table into bars that actually REORDER as the numbers
+// change — the viral data-viz format, but true to the data and self-contained in
+// one script. Paste your data into `racedata` (one row per entity: label, an icon
+// shorthand, then a value per period), then `race` plays the whole thing —
+// re-ranking, sliding bars to their new slots, rescaling the axis, and ticking the
+// year + values. Bars are rounded, gradient-filled; flags are imported SVG.
+//
+// Nominal GDP, US$ trillion, 1990 → 2026 (approx.) — watch China climb from the
+// bottom to #2, Japan slide, and India rise.
+//
+//   manic examples/charts-gdp-race.manic
+canvas("16:9");
+template("blank");
+
+racechart(gdp, "bar", "1990 1995 2000 2005 2010 2015 2020 2026",
+          "The World's Biggest Economies — GDP 1990 to 2026 ($T)");
+
+// paste your table: label, ICON, then one value per period.
+// separators are forgiving — commas here, but tabs / spaces / newlines all work.
+//
+// the ICON column takes ANY svg, not just flags:
+//   us                              a flag shorthand      → asset:svg/flags/us.svg
+//   rocket / heart / trophy         an emoji/icon alias   → asset:svg/emoji|lucide/…
+//   asset:svg/lucide/lightbulb.svg  an explicit set path
+//   logos/acme.svg                  your OWN file (any path ending in .svg)
+// omit the icon entirely and the row is just label + values.
+//
+// NOTE: a few flags whose stars are drawn with SVG <use> (e.g. cn — China) render
+// imperfectly for now (tracked); most flags and all icons/emoji render cleanly.
+racedata(gdp, "
+  USA,     us,  5.96,  7.64, 10.25, 13.04, 15.05, 18.24, 21.06, 30.34
+  China,   cn,  0.36,  0.73,  1.21,  2.29,  6.09, 11.06, 14.69, 20.50
+  Japan,   jp,  3.13,  5.55,  4.97,  4.83,  5.76,  4.44,  5.06,  4.40
+  Germany, de,  1.60,  2.59,  1.95,  2.85,  3.40,  3.36,  3.89,  4.90
+  India,   in,  0.32,  0.36,  0.47,  0.82,  1.68,  2.10,  2.67,  4.60
+  UK,      gb,  1.09,  1.33,  1.66,  2.54,  2.49,  2.93,  2.70,  3.90
+  France,  fr,  1.27,  1.60,  1.36,  2.20,  2.65,  2.44,  2.63,  3.30
+  Brazil,  br,  0.46,  0.77,  0.65,  0.89,  2.21,  1.80,  1.48,  2.40
+");
+
+race(gdp, 14);

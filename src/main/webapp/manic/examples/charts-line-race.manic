@@ -1,0 +1,21 @@
+// charts-line-race.manic — a LINE chart race. Each series draws its line on
+// (left → right) as the years tick, with the value, label and flag riding the
+// leading tip; the "race" is which line climbs highest. Fixed y-axis (line charts
+// don't rescale), L-shaped axes, flags are imported SVG.
+//
+//   manic examples/charts-line-race.manic
+canvas("16:9");
+template("blank");
+
+racechart(gdp, "line", "1990 2000 2010 2020 2026",
+          "GDP Over Time — a Line Race ($T)");
+
+racedata(gdp, "
+  USA,     us,  5.96, 10.25, 15.05, 21.06, 30.34
+  China,   cn,  0.36,  1.21,  6.09, 14.69, 20.50
+  Japan,   jp,  3.13,  4.97,  5.76,  5.06,  4.40
+  Germany, de,  1.60,  1.95,  3.40,  3.89,  4.90
+  India,   in,  0.32,  0.47,  1.68,  2.67,  4.60
+");
+
+race(gdp, 10);
