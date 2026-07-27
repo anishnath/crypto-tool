@@ -246,7 +246,8 @@ All subscription D1 writes happen in this service. **Tomcat is the public edge**
 |-------|---------|
 | `POST /v1/billing/webhook` | Dodo webhook (signature verified) |
 | `POST /v1/billing/checkout` | Create checkout (`X-User-Id`, optional `X-User-Email`) |
-| `GET /v1/billing/status` | Premium + active subscription |
+| `GET /v1/billing/status` | Premium + active subscription (+ `entitlements[]`) |
+| `GET /v1/billing/entitlement?tool_id=` | Tool-scoped plan (`guest`/`free`/`pro`/`ultra`) |
 | `POST /v1/billing/users/upsert` | Upsert `users` after Google login |
 
 Schema: [`db/SUBSCRIPTIONS.md`](db/SUBSCRIPTIONS.md). **Ops guide:** [`docs/BILLING.md`](docs/BILLING.md). **Deploy:** [`docs/DEPLOY.md`](docs/DEPLOY.md). Env: [`docs/DODO_BILLING_ENV.md`](../docs/DODO_BILLING_ENV.md).

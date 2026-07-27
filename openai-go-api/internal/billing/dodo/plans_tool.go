@@ -67,7 +67,8 @@ func appendUniqueKey(keys []string, key string) []string {
 }
 
 // ResolveCheckoutProduct picks the Dodo product for checkout (tool override → global → env).
-func (s *Service) ResolveCheckoutProduct(ctx context.Context, toolID, planKey string) (productID, interval string, err error) {
+// aiPlanID is the entitlement tier (pro|ultra) from billing_plans.ai_plan_id; defaults to pro.
+func (s *Service) ResolveCheckoutProduct(ctx context.Context, toolID, planKey string) (productID, interval, aiPlanID string, err error) {
 	overrides, _, _ := s.loadPlanOverrides(ctx, toolID)
 	o, ok := overrides[planKey]
 	if !ok {
@@ -75,6 +76,10 @@ func (s *Service) ResolveCheckoutProduct(ctx context.Context, toolID, planKey st
 	}
 	productID = o.productID
 	interval = o.interval
+	aiPlanID = strings.TrimSpace(o.aiPlanID)
+	if aiPlanID == "" {
+		aiPlanID = "pro"
+	}
 	if interval == "" {
 		interval = intervalForKey(planKey)
 	}
@@ -82,7 +87,7 @@ func (s *Service) ResolveCheckoutProduct(ctx context.Context, toolID, planKey st
 		productID = s.productForKey(planKey)
 	}
 	if productID == "" {
-		return "", interval, errProductNotConfigured
+		return "", interval, aiPlanID, errProductNotConfigured
 	}
-	return productID, interval, nil
+	return productID, interval, aiPlanID, nil
 }

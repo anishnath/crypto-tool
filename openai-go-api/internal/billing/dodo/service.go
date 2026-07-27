@@ -347,10 +347,15 @@ func (s *Service) grantSubscription(ctx context.Context, userID, subID, custID, 
 	}
 	switch status {
 	case "active", "trialing":
-		return s.d1.Exec(ctx,
+		if err := s.d1.Exec(ctx,
 			`UPDATE users SET is_premium = 1, premium_until = ? WHERE id = ?`,
 			nullStr(periodEnd), userID,
-		)
+		); err != nil {
+			return err
+		}
+		// Dual-write: tool-scoped entitlement from product_id / checkout metadata.
+		// Global is_premium above still drives non-Manic AI; Manic ignores it.
+		return s.d1.SyncToolEntitlementsFromSubscriptions(ctx, userID)
 	case "cancelled", "expired", "failed":
 		return s.syncEntitlement(ctx, userID)
 	}
@@ -366,10 +371,16 @@ func (s *Service) syncEntitlement(ctx context.Context, userID string) error {
 		return err
 	}
 	if len(rows) == 0 {
-		return s.d1.Exec(ctx, `UPDATE users SET is_premium = 0, premium_until = NULL WHERE id = ?`, userID)
+		if err := s.d1.Exec(ctx, `UPDATE users SET is_premium = 0, premium_until = NULL WHERE id = ?`, userID); err != nil {
+			return err
+		}
+	} else {
+		end := str(rows[0], "current_period_end")
+		if err := s.d1.Exec(ctx, `UPDATE users SET is_premium = 1, premium_until = ? WHERE id = ?`, nullStr(end), userID); err != nil {
+			return err
+		}
 	}
-	end := str(rows[0], "current_period_end")
-	return s.d1.Exec(ctx, `UPDATE users SET is_premium = 1, premium_until = ? WHERE id = ?`, nullStr(end), userID)
+	return s.d1.SyncToolEntitlementsFromSubscriptions(ctx, userID)
 }
 
 func (s *Service) resolveUserByCustomer(ctx context.Context, customerID string) (string, error) {
@@ -412,21 +423,29 @@ func (s *Service) CreateCheckout(ctx context.Context, userID, email, plan, produ
 		planKey = "monthly"
 	}
 	interval := intervalForKey(planKey)
+	aiPlanID := "pro"
 	if productID == "" {
 		var err error
-		productID, interval, err = s.ResolveCheckoutProduct(ctx, toolID, planKey)
+		productID, interval, aiPlanID, err = s.ResolveCheckoutProduct(ctx, toolID, planKey)
 		if err != nil {
 			return nil, err
 		}
-	} else if s.cfg.ProductYearly != "" && productID == s.cfg.ProductYearly {
-		interval = "year"
+	} else {
+		if s.cfg.ProductYearly != "" && productID == s.cfg.ProductYearly {
+			interval = "year"
+		}
+		// Prefer ai_plan_id from catalog when product was supplied explicitly.
+		if _, _, catalogPlan, err := s.ResolveCheckoutProduct(ctx, toolID, planKey); err == nil && catalogPlan != "" {
+			aiPlanID = catalogPlan
+		}
 	}
 	if productID == "" {
 		return nil, errProductNotConfigured
 	}
 	meta := map[string]string{
 		"user_id":          userID,
-		"plan_key":         "pro",
+		"plan_key":         aiPlanID,
+		"ai_plan_id":       aiPlanID,
 		"billing_interval": interval,
 	}
 	if toolID != "" {
@@ -500,8 +519,8 @@ func (s *Service) CreateCheckout(ctx context.Context, userID, email, plan, produ
 	metaJSON, _ := json.Marshal(meta)
 	_ = s.d1.Exec(ctx,
 		`INSERT INTO dodo_checkout_sessions (session_id, user_id, dodo_product_id, plan_key, billing_interval,
-		 status, checkout_url, return_url, metadata_json) VALUES (?, ?, ?, 'pro', ?, 'open', ?, ?, ?)`,
-		result.SessionID, userID, productID, interval, result.CheckoutURL, returnURL, string(metaJSON),
+		 status, checkout_url, return_url, metadata_json) VALUES (?, ?, ?, ?, ?, 'open', ?, ?, ?)`,
+		result.SessionID, userID, productID, aiPlanID, interval, result.CheckoutURL, returnURL, string(metaJSON),
 	)
 	return result, nil
 }
@@ -1026,7 +1045,20 @@ func (s *Service) BillingStatus(ctx context.Context, userID string) (map[string]
 	} else {
 		out["subscription"] = nil
 	}
+	ents, err := s.d1.ListUserToolEntitlements(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	if ents == nil {
+		ents = []map[string]interface{}{}
+	}
+	out["entitlements"] = ents
 	return out, nil
+}
+
+// ToolEntitlement resolves the plan for a user on a specific tool (Manic, etc.).
+func (s *Service) ToolEntitlement(ctx context.Context, userID, toolID string) (billing.ToolEntitlement, error) {
+	return s.d1.ResolveToolEntitlement(ctx, userID, toolID)
 }
 
 func (s *Service) Config() Config { return s.cfg }

@@ -18,6 +18,7 @@ const (
 	PlanGuest = "guest"
 	PlanFree  = "free"
 	PlanPro   = "pro"
+	// PlanUltra is defined in entitlement.go (Manic Ultra / ai_plans.ultra).
 
 	SubjectUser      = "user"
 	SubjectAnonymous = "anonymous"
@@ -70,6 +71,7 @@ type QuotaLimits struct {
 	Guest int64
 	Free  int64
 	Pro   int64
+	Ultra int64
 }
 
 // LoadQuotaLimits returns env-based fallback caps used only when ai_plans cannot
@@ -79,6 +81,7 @@ func LoadQuotaLimits() QuotaLimits {
 		Guest: envInt64("AI_QUOTA_GUEST", 20_000),
 		Free:  envInt64("AI_QUOTA_FREE", 200_000),
 		Pro:   envInt64("AI_QUOTA_PRO", 2_000_000),
+		Ultra: envInt64("AI_QUOTA_ULTRA", 1_500_000),
 	}
 }
 
@@ -113,6 +116,17 @@ func subjectKey(user UserIdentity) (subjectType, subjectID string, err error) {
 
 func planLimit(limits QuotaLimits, planID string) int64 {
 	switch planID {
+	case PlanUltra:
+		if limits.Ultra > 0 {
+			return limits.Ultra
+		}
+		return limits.Pro
+	case PlanManicPro:
+		// Fallback when ai_plans.manic_pro missing — ~¼ of global Pro.
+		if limits.Pro > 0 {
+			return limits.Pro / 4
+		}
+		return 500_000
 	case PlanPro:
 		return limits.Pro
 	case PlanFree:

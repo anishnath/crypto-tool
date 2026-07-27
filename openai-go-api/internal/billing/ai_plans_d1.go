@@ -86,6 +86,8 @@ func ensureAIPlanFallbacks(plans map[string]aiPlanEntry) {
 		{PlanGuest, "Guest", fb.Guest},
 		{PlanFree, "Free account", fb.Free},
 		{PlanPro, "Pro", fb.Pro},
+		{PlanManicPro, "Manic Pro", 500_000},
+		{PlanUltra, "Ultra", fb.Ultra},
 	}
 	for _, p := range fill {
 		e, ok := plans[p.id]
@@ -191,7 +193,7 @@ func (s *D1Store) ListAIPlans(ctx context.Context) ([]AIPlanRecord, error) {
 	if err != nil {
 		return nil, err
 	}
-	order := []string{PlanGuest, PlanFree, PlanPro}
+	order := []string{PlanGuest, PlanFree, PlanPro, PlanUltra}
 	out := make([]AIPlanRecord, 0, len(order))
 	seen := map[string]bool{}
 	for _, id := range order {

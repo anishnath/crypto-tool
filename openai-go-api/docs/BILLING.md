@@ -6,10 +6,16 @@ How Pro subscriptions, AI quotas, model routing, and the plan picker work — an
 
 | Doc | Purpose |
 |-----|---------|
+| [`TOOL_ENTITLEMENTS.md`](./TOOL_ENTITLEMENTS.md) | Tool-scoped plans, coverage (Manic Pro → cheaper tools), split with onecompiler meters |
 | [`db/SUBSCRIPTIONS.md`](../db/SUBSCRIPTIONS.md) | D1 schema reference (columns, migrations) |
 | [`../../docs/DODO_BILLING_ENV.md`](../../docs/DODO_BILLING_ENV.md) | Env vars, network topology, webhook URL |
 | [`../README.md`](../README.md) | Gateway API, quota headers, frontend examples |
 | [`../config/models.yaml`](../config/models.yaml) | Which model ids exist and their modalities |
+
+> **Direction (see TOOL_ENTITLEMENTS.md):** move from global `users.is_premium` alone
+> toward `(user_id, tool_id) → plan_slug`, with tool-specific prices and optional
+> coverage so a higher-priced tool plan (e.g. Manic Pro) can grant Pro on cheaper
+> tools. onecompiler meters Manic render/voice; it does not own checkout.
 
 ---
 
@@ -33,7 +39,8 @@ How Pro subscriptions, AI quotas, model routing, and the plan picker work — an
 Browser
   ├─ GET  /api/billing/plans?tool=…     → Tomcat → Go → D1 billing_plans + ai_plans
   ├─ POST /api/dodo/checkout            → Tomcat → Go → Dodo API + D1 checkout session
-  ├─ GET  /api/billing/status           → Tomcat → Go → D1 users + subscriptions
+  ├─ GET  /api/billing/status           → Tomcat → Go → D1 users + subscriptions (+ entitlements[])
+  ├─ GET  /api/billing/entitlement?tool_id=… → Tomcat → Go → tool-scoped plan (see TOOL_ENTITLEMENTS.md)
   └─ POST /ai …                         → Tomcat → Go → LLM provider + D1 quota
 
 Dodo (internet)
@@ -349,7 +356,8 @@ Tomcat routes (`web.xml`):
 | Public URL | Go route |
 |------------|----------|
 | `GET /api/billing/plans` | `GET /v1/billing/plans` |
-| `GET /api/billing/status` | `GET /v1/billing/status` |
+| `GET /api/billing/status` | `GET /v1/billing/status` (`is_premium` + `entitlements[]`) |
+| `GET /api/billing/entitlement` | `GET /v1/billing/entitlement?tool_id=` |
 | `POST /api/dodo/checkout` | `POST /v1/billing/checkout` |
 | `POST /api/dodo/webhook` | `POST /v1/billing/webhook` |
 

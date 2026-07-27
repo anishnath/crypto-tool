@@ -123,10 +123,21 @@ func TestListAIPlansOrdered(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(rows) != 3 {
+	if len(rows) != 5 {
 		t.Fatalf("got %d plans", len(rows))
 	}
-	if rows[0].PlanID != PlanGuest || rows[2].PlanID != PlanPro {
-		t.Fatalf("order = %v %v %v", rows[0].PlanID, rows[1].PlanID, rows[2].PlanID)
+	if rows[0].PlanID != PlanGuest || rows[2].PlanID != PlanPro || rows[3].PlanID != PlanUltra {
+		t.Fatalf("order = %v %v %v %v %v", rows[0].PlanID, rows[1].PlanID, rows[2].PlanID, rows[3].PlanID, rows[4].PlanID)
+	}
+	// manic_pro is appended after the canonical guest/free/pro/ultra order
+	foundManicPro := false
+	for _, r := range rows {
+		if r.PlanID == PlanManicPro {
+			foundManicPro = true
+			break
+		}
+	}
+	if !foundManicPro {
+		t.Fatal("expected manic_pro fallback plan")
 	}
 }

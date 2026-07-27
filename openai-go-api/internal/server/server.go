@@ -53,6 +53,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /v1/billing/checkout", api.BillingCheckout)
 	mux.HandleFunc("GET /v1/billing/plans", api.BillingPlans)
 	mux.HandleFunc("GET /v1/billing/status", api.BillingStatus)
+	mux.HandleFunc("GET /v1/billing/entitlement", api.BillingEntitlement)
 	mux.HandleFunc("POST /v1/billing/users/upsert", api.BillingUpsertUser)
 
 	// Per-tool generation history (opt-in tools only — currently TikZ viewer)

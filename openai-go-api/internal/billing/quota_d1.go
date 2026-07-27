@@ -131,6 +131,26 @@ func (s *D1Store) AddAIUsage(ctx context.Context, user UserIdentity, tokens int6
 }
 
 func (s *D1Store) resolvePlan(ctx context.Context, user UserIdentity) (planID, planName string, err error) {
+	// Manic (and future expensive tools): tool-scoped entitlement only.
+	// Other-tool / global is_premium must NOT unlock Manic Pro.
+	if strings.TrimSpace(user.ToolID) == ToolIDManic {
+		ent, err := s.ResolveToolEntitlement(ctx, user.UserID, ToolIDManic)
+		if err != nil {
+			return "", "", err
+		}
+		planID = normalizePlanSlug(ent.Plan)
+		if planID == "" {
+			planID = PlanGuest
+		}
+		// Manic Pro purchases use the cheaper manic_pro AI allotment when present.
+		if planID == PlanPro {
+			if _, ok := s.GetAIPlan(ctx, PlanManicPro); ok {
+				return PlanManicPro, s.aiPlanName(ctx, PlanManicPro, "Manic Pro"), nil
+			}
+		}
+		return planID, s.aiPlanName(ctx, planID, planID), nil
+	}
+
 	if user.UserID != "" {
 		isPro, err := s.userIsPro(ctx, user.UserID)
 		if err != nil {

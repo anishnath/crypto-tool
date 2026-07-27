@@ -169,6 +169,34 @@ func (a *API) BillingStatus(w http.ResponseWriter, r *http.Request) {
 	writeBillingJSON(w, http.StatusOK, status)
 }
 
+// BillingEntitlement returns tool-scoped plan for a user (GET /v1/billing/entitlement?tool_id=).
+// Anonymous callers (no X-User-Id) get plan=guest. Logged-in with no purchase get plan=free.
+// Manic never uses global is_premium — see docs/TOOL_ENTITLEMENTS.md.
+func (a *API) BillingEntitlement(w http.ResponseWriter, r *http.Request) {
+	if a.dodo == nil {
+		writeBillingError(w, http.StatusServiceUnavailable, "billing not configured")
+		return
+	}
+	toolID := strings.TrimSpace(r.URL.Query().Get("tool_id"))
+	if toolID == "" {
+		toolID = strings.TrimSpace(r.URL.Query().Get("tool"))
+	}
+	if toolID == "" {
+		toolID = strings.TrimSpace(r.Header.Get("X-Tool-Id"))
+	}
+	if toolID == "" {
+		writeBillingError(w, http.StatusBadRequest, "tool_id required")
+		return
+	}
+	userID := strings.TrimSpace(r.Header.Get("X-User-Id"))
+	ent, err := a.dodo.ToolEntitlement(r.Context(), userID, toolID)
+	if err != nil {
+		writeBillingError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	writeBillingJSON(w, http.StatusOK, ent)
+}
+
 type upsertUserRequest struct {
 	UserID string `json:"user_id"`
 	Email  string `json:"email"`

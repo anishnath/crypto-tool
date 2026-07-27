@@ -21,6 +21,8 @@ type UserIdentity struct {
 	AuthMode    string
 	UserID      string
 	AnonymousID string
+	// ToolID is optional (X-Tool-Id). Used for tool-scoped plan resolution (e.g. Manic).
+	ToolID string
 }
 
 // APIKeyResolver maps a hashed API key to a user (optional; D1-backed).
@@ -31,8 +33,9 @@ type APIKeyResolver interface {
 // IdentityFromRequest resolves caller identity from headers.
 // Priority: X-User-Id > Bearer llm_* (via resolver) > X-Anonymous-Id > anonymous.
 func IdentityFromRequest(ctx context.Context, r *http.Request, resolver APIKeyResolver) UserIdentity {
+	toolID := strings.TrimSpace(r.Header.Get(headerToolID))
 	if userID := strings.TrimSpace(r.Header.Get(headerUserID)); userID != "" {
-		return UserIdentity{AuthMode: AuthAuthenticated, UserID: userID}
+		return UserIdentity{AuthMode: AuthAuthenticated, UserID: userID, ToolID: toolID}
 	}
 
 	if token := bearerToken(r); strings.HasPrefix(token, apiKeyPrefix) && resolver != nil {
@@ -40,15 +43,15 @@ func IdentityFromRequest(ctx context.Context, r *http.Request, resolver APIKeyRe
 		userID, keyID, err := resolver.ResolveAPIKey(ctx, hash)
 		if err == nil && userID != "" {
 			_ = keyID
-			return UserIdentity{AuthMode: AuthAPIKey, UserID: userID}
+			return UserIdentity{AuthMode: AuthAPIKey, UserID: userID, ToolID: toolID}
 		}
 	}
 
 	if anonID := strings.TrimSpace(r.Header.Get(headerAnonymousID)); anonID != "" {
-		return UserIdentity{AuthMode: AuthAnonymous, AnonymousID: anonID}
+		return UserIdentity{AuthMode: AuthAnonymous, AnonymousID: anonID, ToolID: toolID}
 	}
 
-	return UserIdentity{AuthMode: AuthAnonymous}
+	return UserIdentity{AuthMode: AuthAnonymous, ToolID: toolID}
 }
 
 func bearerToken(r *http.Request) string {
