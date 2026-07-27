@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a2c3446a.js";
+            window.path_to_searchindex_js = "searchindex-6cddf830.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e8fbc168.js"></script>
+        <script src="toc-c698a1f0.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -226,7 +226,9 @@ and it pulses once.</p>
 <p>Here primarily for vertical social video? Jump to
 <a href="#create-a-polished-reel">Create a polished Reel</a>, the complete Creator Kit workflow.
 Then use <a href="#reactive-stories--change-the-idea-not-the-scene">Reactive stories</a> to keep equations, plots,
-diagrams, and captions synchronized across each explanation beat.</p>
+diagrams, and captions synchronized across each explanation beat.
+Want spoken narration? See <a href="#voice--narrate-your-story">Voice</a> — optional, one <code>voice(...)</code> plus
+<code>speak("…")</code> lines.</p>
 </blockquote>
 <pre><code class="language-manic">// getting started — one shape, drawn on, then a pulse.
 title("Hello, manic");
@@ -1016,15 +1018,21 @@ declare shapes once; the name is how you address them later in the script.</p>
 <tr><th>shape</th><th>write</th><th>draws</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90, at the centre</td></tr>
-<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle 200 wide, 120 tall</td></tr>
-<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point</td></tr>
-<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end</td></tr>
-<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small filled dot, radius 8</td></tr>
+<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90 — <strong>filled + outlined by default</strong></td></tr>
+<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle — <strong>filled + outlined by default</strong></td></tr>
+<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point (stroke only)</td></tr>
+<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end (stroke only)</td></tr>
+<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small <strong>filled</strong> disc (no outline) — hides crossings</td></tr>
 <tr><td><strong>text</strong></td><td><code>text(cap, (cx, 640), "hello");</code></td><td>a text label anchored at a point</td></tr>
 </tbody>
 </table>
 </div>
+<p>Plus composites: <code>polygon</code> / <code>sector</code> / <code>annulus</code> / <code>pie</code> (filled by default),
+<code>arc</code> / <code>brace</code> / <code>ellipse</code> (stroke only), and boolean regions
+(<code>union</code> / <code>intersect</code> / …).</p>
+<p><strong>▶ See it play:</strong> <a href="#shapes-howto">SHAPECRAFT</a> — fill vs
+<code>outlined</code>, the cast, palette → <code>become</code>, spin-wound <code>morph</code>, a disc that
+<strong>splits into four colours → reunites → moves</strong>, and two-colour booleans.</p>
 <h3 id="ordinary-text-is-portable-and-shaped-automatically"><a class="header" href="#ordinary-text-is-portable-and-shaped-automatically">Ordinary text is portable and shaped automatically</a></h3>
 <p><code>text</code>, <code>say</code>, captions, labels, and kit-generated words use Manic’s embedded
 font engine. No machine font is consulted, and there is no font-selection DSL:
@@ -1116,7 +1124,7 @@ begins. They take the entity name first, then a value:</p>
 <tbody>
 <tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
 <tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
-<tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path (defaults 16/10 px)</td><td><code>dashed(curve, 18, 10);</code></td></tr>
+<tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path <em>or</em> outlined circle (defaults 16/10 px)</td><td><code>dashed(mark, 4, 3);</code></td></tr>
 <tr><td><code>gradient(id, c1, c2, ..., [mode])</code></td><td>multi-stop gradient: along a path stroke, a linear (angle°) / <code>radial</code> fill, or a computed <code>"speed"</code>/<code>"curvature"</code> quantity on strokes</td><td><code>gradient(wave, blue, cyan, gold, 270);</code></td></tr>
 <tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
 <tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
@@ -1128,6 +1136,17 @@ begins. They take the entity name first, then a value:</p>
 </tbody>
 </table>
 </div>
+<blockquote>
+<p><strong>Textbook diagrams:</strong> prefer <code>outlined</code> (or a thin <code>arc</code>) for angle marks and
+“regions of interest.” A <code>filled</code> disc or sector sitting <em>on top of</em> axes and
+construction lines hides what’s underneath — even at low opacity. Reserve solid
+fills for backdrop wells <em>behind</em> the diagram, not overlays.</p>
+<p><code>circle</code> defaults to <strong>filled + outlined</strong> (neon UI). For math constructions
+always pair <code>outlined(id)</code> — <code>outline(id, color)</code> alone only recolors the rim
+and leaves the fill on. Contact points that land on crossings should be
+<strong>open / dashed rings</strong> (<code>outlined</code> + <code>dashed</code>), not <code>dot</code> — a solid marker
+paints over the intersection you are trying to show.</p>
+</blockquote>
 <p>And two that decide <em>how a shape first appears</em>:</p>
 <div class="table-wrapper">
 <table>
@@ -1142,6 +1161,7 @@ begins. They take the entity name first, then a value:</p>
 </div>
 <blockquote>
 <p><strong>Colours are a fixed palette:</strong> <code>fg</code>, <code>void</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>,
+<code>gold</code>, <code>red</code>, <code>orange</code>, <code>blue</code>, <code>teal</code>, <code>violet</code>, <code>coral</code>, <code>indigo</code>, <code>mint</code>,
 <code>dim</code>, <code>panel</code>. For a computed colour (say, one per item in a loop) use
 <code>hue(id, degrees)</code>. More in <a href="#colour--style">Colour &amp; style</a>.</p>
 </blockquote>
@@ -2268,6 +2288,159 @@ timed(showclock) {
 
 <p>Next: the palette, glow, and easings → <a href="#colour--style">Colour &amp; style</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="voice--narrate-your-story"><a class="header" href="#voice--narrate-your-story">Voice — narrate your story</a></h1>
+<p>Add spoken narration to a Manic video with three ideas:</p>
+<ol>
+<li>Pick a voice once — <code>voice("…")</code></li>
+<li>Speak full sentences — <code>speak("…")</code></li>
+<li>Keep short on-screen text separate — <code>say(…)</code></li>
+</ol>
+<p>You do <strong>not</strong> time the audio by hand. Each <code>speak</code> line lasts as long as it
+takes to say — motion on that beat waits with it.</p>
+<p>Voice is optional. Skip it when the video should stay silent; use <code>say</code> alone
+for captions.</p>
+<hr>
+<h2 id="say-vs-speak"><a class="header" href="#say-vs-speak"><code>say</code> vs <code>speak</code></a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th></th><th><code>say</code></th><th><code>speak</code></th></tr>
+</thead>
+<tbody>
+<tr><td>What it does</td><td>Changes <strong>on-screen text</strong></td><td>Speaks a <strong>voice-over</strong> line</td></tr>
+<tr><td>Heard?</td><td>No</td><td>Yes</td></tr>
+<tr><td>Needs <code>voice(...)</code>?</td><td>No</td><td>Yes — once per file</td></tr>
+<tr><td>Best for</td><td>Short punch lines, labels</td><td>Full sentences the viewer hears</td></tr>
+<tr><td>Example</td><td><code>say(cap, "GOAL");</code></td><td><code>speak("The ball curls into the net.");</code></td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Rule of thumb:</strong> write the short caption with <code>say</code>, the full line with
+<code>speak</code>. They can run together on the same beat.</p>
+<pre><code class="language-manic">par {
+  say(cap, "same grid → 3D");                          // what you read
+  speak("Now lift the same grid into height.");        // what you hear
+}
+</code></pre>
+<p>Or update a caption <strong>and</strong> speak in one call:</p>
+<pre><code class="language-manic">speak(cap, "Pull the camera back.");
+</code></pre>
+<hr>
+<h2 id="how-to-add-narration-step-by-step"><a class="header" href="#how-to-add-narration-step-by-step">How to add narration (step by step)</a></h2>
+<h3 id="1-put-a-caption-box-on-the-cast-optional-but-common"><a class="header" href="#1-put-a-caption-box-on-the-cast-optional-but-common">1. Put a caption box on the cast (optional but common)</a></h3>
+<pre><code class="language-manic">text(cap, (cx, h*0.82), "");
+size(cap, 28); color(cap, dim); wrap(cap, w*0.8);
+</code></pre>
+<h3 id="2-choose-a-voice-once-near-the-top"><a class="header" href="#2-choose-a-voice-once-near-the-top">2. Choose a voice once (near the top)</a></h3>
+<pre><code class="language-manic">voice("cartesia");
+</code></pre>
+<p>You only need this <strong>if</strong> you use <code>speak</code>. One <code>voice(...)</code> per file is enough.</p>
+<h3 id="3-narrate-on-the-timeline"><a class="header" href="#3-narrate-on-the-timeline">3. Narrate on the timeline</a></h3>
+<pre><code class="language-manic">speak("Every world starts flat.");
+</code></pre>
+<p>Together:</p>
+<pre><code class="language-manic">title("A spoken beat");
+canvas("16:9");
+voice("cartesia");
+
+text(cap, (cx, h*0.82), "");
+size(cap, 28); color(cap, dim); wrap(cap, w*0.8);
+
+par {
+  say(cap, "cell by cell…");
+  speak("Watch a map generate itself until the islands lock.");
+}
+wait(0.3);    // a short breath before the next idea
+</code></pre>
+<p><code>speak</code> and <code>voice</code> always go together. Captions alone need only <code>say</code> — no
+<code>voice</code> line.</p>
+<hr>
+<h2 id="choosing-a-speaker"><a class="header" href="#choosing-a-speaker">Choosing a speaker</a></h2>
+<p><code>voice</code> takes up to four pieces:</p>
+<pre><code class="language-text">voice(service, speaker?, pace?, language?)
+</code></pre>
+<h3 id="easy-names-recommended"><a class="header" href="#easy-names-recommended">Easy names (recommended)</a></h3>
+<pre><code class="language-manic">voice("gtts");                         // simple built-in
+voice("cartesia");                     // Skylar
+voice("cartesia", "katie");
+voice("cartesia", "jameson");
+voice("elevenlabs");                   // Roger
+voice("elevenlabs", "alice");
+voice("elevenlabs", "jessica");
+</code></pre>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>service</th><th>easy speaker names</th></tr>
+</thead>
+<tbody>
+<tr><td>Cartesia</td><td><code>katie</code>, <code>skylar</code>, <code>jameson</code>, <code>gemma</code>, <code>archie</code></td></tr>
+<tr><td>ElevenLabs</td><td><code>roger</code>, <code>alice</code>, <code>sarah</code>, <code>jessica</code>, <code>adam</code>, <code>george</code>, <code>liam</code>, …</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="your-own-speaker-provider-voice-id"><a class="header" href="#your-own-speaker-provider-voice-id">Your own speaker (provider voice id)</a></h3>
+<p>Paste the <strong>voice id</strong> from Cartesia or ElevenLabs when you have a favourite
+speaker that is not in the easy list:</p>
+<pre><code class="language-manic">// Cartesia — voice UUID from your Cartesia voice library
+voice("cartesia", "a0e99841-438c-4a64-b679-ae501e7d6091");
+
+// ElevenLabs — voice id from your ElevenLabs voice library
+voice("elevenlabs", "21m00Tcm4TlvDq8ikWAM");
+</code></pre>
+<p>Easy names and raw ids both go in the same speaker slot.</p>
+<h3 id="pace"><a class="header" href="#pace">Pace</a></h3>
+<pre><code class="language-manic">voice("elevenlabs", "alice", "slow");     // normal | slow | fast
+voice("cartesia", "katie", "fast");
+</code></pre>
+<h3 id="language"><a class="header" href="#language">Language</a></h3>
+<p>Defaults to English (<code>en</code>). Pass a language code when the narration is not English:</p>
+<pre><code class="language-manic">// language last (with pace)
+voice("cartesia", "katie", "normal", "hi");
+voice("elevenlabs", "alice", "normal", "es");
+
+// or skip pace and put the language third
+voice("cartesia", "katie", "hi");
+voice("elevenlabs", "roger", "fr");
+</code></pre>
+<p>Common codes: <code>en</code>, <code>hi</code>, <code>es</code>, <code>fr</code>, <code>de</code>, <code>pt</code>, <code>ja</code>, <code>zh</code>, <code>ko</code>, <code>it</code>, <code>ar</code>, …</p>
+<p>For the built-in <code>gtts</code> service, the second argument <strong>is</strong> the language:</p>
+<pre><code class="language-manic">voice("gtts", "en");
+voice("gtts", "hi");
+</code></pre>
+<hr>
+<h2 id="narrate-with-motion-same-beat"><a class="header" href="#narrate-with-motion-same-beat">Narrate with motion (same beat)</a></h2>
+<p>Put caption, voice, and animation in one <code>par</code> so they land together:</p>
+<pre><code class="language-manic">par {
+  say(cap, "fly the ridges");
+  speak("Fly in low over the ridges.");
+  orbit3(255, 15, 12, 3.8, smooth);
+}
+</code></pre>
+<p>If the spoken line is longer than the motion, Manic holds the picture until
+the line finishes. A trailing <code>wait(0.3)</code> is only a pause <em>between</em> ideas —
+not a substitute for narration length.</p>
+<hr>
+<h2 id="math-in-spoken-lines"><a class="header" href="#math-in-spoken-lines">Math in spoken lines</a></h2>
+<p>Write symbols as you would on screen; Manic reads them naturally:</p>
+<pre><code class="language-manic">speak("The slope is √(tan θ).");
+</code></pre>
+<hr>
+<h2 id="examples-in-the-gallery"><a class="header" href="#examples-in-the-gallery">Examples in the gallery</a></h2>
+<ul>
+<li><a href="#creator-free-kicks">Roberto Carlos’ Banana Kick</a> — story VO + captions</li>
+<li><a href="#creator-heightmap-world">Your Map Is a 3D World</a> — map → 3D with narration</li>
+</ul>
+<hr>
+<h2 id="quick-checklist"><a class="header" href="#quick-checklist">Quick checklist</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"> One <code>voice("…")</code> near the top when you want narration</li>
+<li><input disabled="" type="checkbox"> Full sentences in <code>speak("…")</code></li>
+<li><input disabled="" type="checkbox"> Short on-screen lines in <code>say(cap, "…")</code></li>
+<li><input disabled="" type="checkbox"> Use <code>par { … }</code> when caption, voice, and motion should start together</li>
+<li><input disabled="" type="checkbox"> No voice? Omit <code>voice</code> / <code>speak</code> — <code>say</code> alone is fine</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="templates--choose-the-whole-visual-system"><a class="header" href="#templates--choose-the-whole-visual-system">Templates — choose the whole visual system</a></h1>
 <p>A template controls the background, semantic palette, glow character and any
 page chrome for the entire movie. Choose it once near the top of the file:</p>
@@ -2334,9 +2507,10 @@ wait(1);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/8R1BOiFmzJo" title="Black & White by Default — manic's Mono Template" allowfullscreen loading="lazy"></iframe></div>
 
 <p>Named colours remain meaningful under mono. <code>fg</code>, <code>dim</code>, <code>panel</code>, <code>cyan</code>,
-<code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, and <code>blue</code> are mapped to deliberately
-different greys instead of collapsing to identical white. This preserves
-hierarchy and correct-answer contrast while keeping the export monochrome.</p>
+<code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, <code>blue</code>, <code>teal</code>, <code>violet</code>, <code>coral</code>,
+<code>indigo</code>, and <code>mint</code> are mapped to deliberately different greys instead of
+collapsing to identical white. This preserves hierarchy and correct-answer
+contrast while keeping the export monochrome.</p>
 <p>Use named colours for template-aware work:</p>
 <pre><code class="language-manic">color(answer, lime);       // success role; becomes a bright mono tone
 color(note, dim);          // secondary role; remains visually quiet
@@ -2390,13 +2564,18 @@ roles are:</p>
 <tbody>
 <tr><td><code>cyan</code></td><td>electric blue</td><td><code>gold</code></td><td>warm amber</td></tr>
 <tr><td><code>magenta</code></td><td>hot pink</td><td><code>red</code></td><td>warm red</td></tr>
-<tr><td><code>lime</code></td><td>green</td><td><code>orange</code></td><td>orange</td></tr>
-<tr><td><code>blue</code></td><td>true blue (≠ cyan)</td><td><code>dim</code></td><td>muted grey-violet</td></tr>
-<tr><td><code>void</code></td><td>the background</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
-<tr><td><code>panel</code></td><td>dark fill</td><td></td><td></td></tr>
+<tr><td><code>lime</code></td><td>acid green</td><td><code>orange</code></td><td>orange</td></tr>
+<tr><td><code>blue</code></td><td>true blue (≠ cyan)</td><td><code>teal</code></td><td>cyan–green</td></tr>
+<tr><td><code>violet</code></td><td>true purple</td><td><code>coral</code></td><td>soft warm red-orange</td></tr>
+<tr><td><code>indigo</code></td><td>deep blue–violet</td><td><code>mint</code></td><td>soft cool green</td></tr>
+<tr><td><code>dim</code></td><td>muted grey-violet</td><td><code>fg</code></td><td>near-white (default text)</td></tr>
+<tr><td><code>void</code></td><td>the background</td><td><code>panel</code></td><td>dark fill</td></tr>
 </tbody>
 </table>
 </div>
+<p>Aliases: <code>pink</code>/<code>accent</code> → magenta · <code>green</code> → lime · <code>yellow</code>/<code>amber</code> → gold ·
+<code>purple</code> → violet · <code>turquoise</code> → teal · <code>salmon</code> → coral · <code>seafoam</code> → mint ·
+<code>azure</code> → blue · <code>crimson</code> → red · <code>gray</code>/<code>grey</code> → dim · <code>white</code> → fg · <code>bg</code> → void.</p>
 <pre><code class="language-manic">color(sun, cyan);
 recolor(sun, magenta, 0.5);   // animate to a new palette colour
 </code></pre>
@@ -5720,7 +5899,7 @@ shape (with a message that names the 3D replacement):</p>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
 <li><a href="#graphs">Graphs</a> — 5 examples</li>
 <li><a href="#grids--pathfinding--automata">Grids — pathfinding &amp; automata</a> — 4 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 22 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 24 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 13 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
 <li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
@@ -5728,7 +5907,7 @@ shape (with a message that names the 3D replacement):</p>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 3 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
-<li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 9 examples</li>
+<li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 10 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
 <li><a href="#generative--recursive">Generative &amp; recursive</a> — 10 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 24 examples</li>
@@ -8212,6 +8391,493 @@ draw(s, 2.2);
 show(cap, 0.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/luCo9NmmbaA" title="A Smooth Curve Through Any Points — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="sqrt-tanx"><a class="header" href="#sqrt-tanx">sqrt-tanx</a></h2>
+<p>√(tan θ) by pure geometry — a 3B1B-style proof: on the unit circle, tan θ is the
+vertical tangent length; Euclid’s geometric mean (semicircle on diameter 1+a,
+altitude at 1) turns that length into √(tan θ). Then the curve itself, painted
+teal → violet → coral. Uses the expanded semantic palette.</p>
+<pre><code class="language-manic">// ============================================================================
+//  sqrt-tanx.manic — √(tan x) by PURE GEOMETRY (3B1B-style)
+// ----------------------------------------------------------------------------
+//  THE PROBLEM: √(tan θ) looks like algebra. It is geometry.
+//
+//  THE PROOF, in three pictures:
+//   1. On the unit circle, tan θ IS the length of the vertical tangent segment.
+//   2. √a is the geometric mean of 1 and a — Euclid: semicircle on diameter
+//      1+a, erect a perpendicular at the "1" mark; its height is √a.
+//   3. Set a = tan θ. The altitude IS √(tan θ). No algebra required.
+//
+//  Then we sweep θ and watch the construction's height paint the curve —
+//  teal → violet → coral — using the expanded semantic palette.
+//
+//    manic examples/sqrt-tanx.manic
+//    manic examples/sqrt-tanx.manic --still 22
+// ============================================================================
+
+title("√(tan x) — Pure Geometry");
+canvas("16:9");
+template("blank");
+
+// ---- stage ----
+circle(well, (cx, 400), 340);
+filled(well);
+gradient(well, panel, void, radial);
+opacity(well, 0.55);
+
+// ============================================================================
+//  LEFT — the unit circle, where tan θ is a length
+// ============================================================================
+let ox = 250;
+let oy = 430;
+let R = 145;
+// a friendly angle: θ = 0.95 rad ≈ 54.4°, tan ≈ 1.40, √tan ≈ 1.18
+let th = 0.95;
+let Px = ox + R*cos(th);
+let Py = oy - R*sin(th);
+let Ty = oy - R*tan(th);
+
+circle(O, (ox, oy), 7); outlined(O); color(O, fg); stroke(O, 1.5); hidden(O);
+dot(A, (ox + R, oy), 5); color(A, dim); hidden(A);          // (1, 0)
+// contact points: open dashed rings (filled dots hide the circle + tangent)
+circle(P, (Px, Py), 11);
+outlined(P); color(P, mint); stroke(P, 2); dashed(P, 3.5, 2.8); untraced(P); hidden(P);
+circle(T, (ox + R, Ty), 11);
+outlined(T); color(T, coral); stroke(T, 2); dashed(T, 3.5, 2.8); untraced(T); hidden(T);
+
+// ray as a line (not arrow) so the filled arrowhead doesn't cover P
+line(ray, (ox, oy), (Px, Py));
+color(ray, mint); stroke(ray, 2.5); untraced(ray); hidden(ray);
+
+// the tangent SEGMENT — its length IS tan θ (in radii)
+line(tanseg, (ox + R, oy), (ox + R, Ty));
+color(tanseg, coral); stroke(tanseg, 5); untraced(tanseg); hidden(tanseg);
+
+// angle mark — textbook style: a thin ARC, never a filled wedge (fills hide the diagram)
+arc(wedge, (ox, oy), R*0.42, 0, -th*180/pi);
+color(wedge, violet); stroke(wedge, 2.5); untraced(wedge); hidden(wedge);
+
+circle(uc, (ox, oy), R);
+outlined(uc); outline(uc, teal); stroke(uc, 3); untraced(uc); hidden(uc);
+
+line(axX, (ox - R - 30, oy), (ox + R + 100, oy));
+color(axX, dim); stroke(axX, 1.5); untraced(axX); hidden(axX);
+line(axY, (ox, oy + R + 40), (ox, oy - R - 50));
+color(axY, dim); stroke(axY, 1.5); untraced(axY); hidden(axY);
+
+line(tline, (ox + R, oy + R + 50), (ox + R, oy - R - 90));
+color(tline, dim); stroke(tline, 1.5); dashed(tline, 10, 8); untraced(tline); hidden(tline);
+
+text(labP, (Px + 14, Py - 14), "P"); size(labP, 20); color(labP, mint); hidden(labP);
+text(labO, (ox - 18, oy + 22), "O"); size(labO, 18); color(labO, dim); hidden(labO);
+text(labA, (ox + R + 14, oy + 22), "1"); size(labA, 18); color(labA, dim); hidden(labA);
+text(labT, (ox + R + 18, Ty), "tan θ"); size(labT, 20); color(labT, coral); hidden(labT);
+text(labTh, (ox + 48, oy - 28), "θ"); size(labTh, 22); color(labTh, violet); hidden(labTh);
+
+// ============================================================================
+//  RIGHT — Euclid's geometric mean: √a from 1 and a
+// ============================================================================
+let gx = 620;
+let gy = 500;
+let u = 110;                         // px per unit
+let a = tan(th);                     // ≈ 1.40
+let root = sqrt(a);                  // ≈ 1.18
+let G0x = gx;
+let G1x = gx + u;                    // the "1" mark
+let G2x = gx + u*(1 + a);            // the "1+a" mark
+let mid = (G0x + G2x)*0.5;
+let rad = u*(1 + a)*0.5;
+
+dot(G0, (G0x, gy), 5); color(G0, dim); hidden(G0);
+dot(G1, (G1x, gy), 6); color(G1, teal); glow(G1, 0.4); hidden(G1);
+dot(G2, (G2x, gy), 5); color(G2, coral); hidden(G2);
+line(base, (G0x, gy), (G2x, gy));
+color(base, fg); stroke(base, 3); untraced(base); hidden(base);
+
+// upper semicircle on diameter [0, 1+a]
+// screen angles: 0° right, 90° down, 270° up — from left through UP: start 180, sweep +180
+arc(semi, (mid, gy), rad, 180, 180);
+color(semi, indigo); stroke(semi, 3); untraced(semi); hidden(semi);
+
+// altitude at the "1" mark — height = √(1·a) = √(tan θ)
+line(alt, (G1x, gy), (G1x, gy - root*u));
+color(alt, violet); stroke(alt, 5); untraced(alt); hidden(alt);
+dot(H, (G1x, gy - root*u), 8); color(H, violet); glow(H, 0.7); hidden(H);
+
+text(lab0, (G0x, gy + 28), "0"); size(lab0, 18); color(lab0, dim); hidden(lab0);
+text(lab1, (G1x, gy + 28), "1"); size(lab1, 18); color(lab1, teal); hidden(lab1);
+text(labA2, (G2x, gy + 28), "1+tanθ"); size(labA2, 18); color(labA2, coral); hidden(labA2);
+text(labH, (G1x + 16, gy - root*u - 8), "√(tan θ)"); size(labH, 22); color(labH, violet); hidden(labH);
+
+// brace / connector: coral tan length → feeds the geometric mean
+arrow(feed, (ox + R + 36, (oy + Ty)*0.5), (G2x - 10, gy - 40));
+color(feed, coral); stroke(feed, 2); dashed(feed, 8, 6); untraced(feed); hidden(feed);
+
+// ============================================================================
+//  BOTTOM — the curve itself, colored by the new palette
+// ============================================================================
+axes(ax, (920, 400), 280, 220);
+hidden(ax);
+plot(curve, (920, 400), 95, 85, "sqrt(tan(x))", (0.25, 1.35));
+stroke(curve, 5); untraced(curve); hidden(curve);
+gradient(curve, teal, violet, coral, 270);
+// low x → small √tan (teal); high x → large (coral), via height = truth
+
+// ============================================================================
+//  TYPOGRAPHY
+// ============================================================================
+caption(q, "what IS the square root of a tangent?", (cx, 58), 32, gold);
+equation(law, (cx, 110), `\sqrt{\tan\theta}`, 44);
+color(law, violet); hidden(law);
+equation(mean, (900, 160), `\sqrt{a}=\sqrt{1\cdot a}`, 28);
+color(mean, teal); hidden(mean);
+text(cap, (cx, h - 36), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================================================================
+//  SCRIPT
+// ============================================================================
+
+// 1 — HOOK
+say(cap, "an expression that looks like algebra — but it is a length", 0.4);
+wordpop(q, 0.16);
+wait(0.3);
+show(law, 0.5);
+wait(0.6);
+
+// 2 — UNIT CIRCLE
+say(cap, "start with the unit circle and an angle θ", 0.4);
+par { show(axX, 0.05); show(axY, 0.05); show(uc, 0.05); show(tline, 0.05); }
+par {
+  draw(axX, 0.5); draw(axY, 0.5);
+  draw(uc, 1.0);
+}
+par { show(O, 0.3); show(labO, 0.3); }
+draw(tline, 0.5);
+show(A, 0.3); show(labA, 0.3);
+wait(0.3);
+
+// 3 — THE ANGLE AND THE RAY
+say(cap, "draw the ray at angle θ — it meets the circle at P", 0.4);
+show(wedge, 0.05); draw(wedge, 0.5); show(labTh, 0.3);
+show(ray, 0.05); draw(ray, 0.7);
+show(P, 0.05); draw(P, 0.35); show(labP, 0.3);
+pulse(P);
+wait(0.4);
+
+// 4 — TAN θ IS A LENGTH
+say(cap, "extend to the vertical tangent line — that segment's length IS tan θ", 0.4);
+show(tanseg, 0.05); draw(tanseg, 0.9);
+show(T, 0.05); draw(T, 0.35); show(labT, 0.3);
+flash(tanseg, coral);
+wait(0.7);
+
+// 5 — GEOMETRIC MEAN
+say(cap, "now forget the circle — Euclid: √a is the geometric mean of 1 and a", 0.4);
+show(mean, 0.5);
+par {
+  show(G0, 0.3); show(G1, 0.3); show(G2, 0.3);
+  show(lab0, 0.3); show(lab1, 0.3); show(labA2, 0.3);
+  show(base, 0.05);
+}
+draw(base, 0.6);
+wait(0.3);
+
+say(cap, "semicircle on diameter 1 + tan θ — then erect a perpendicular at 1", 0.4);
+show(semi, 0.05); draw(semi, 1.2);
+show(alt, 0.05); draw(alt, 0.9);
+show(H, 0.3); show(labH, 0.3);
+flash(alt, violet);
+wait(0.5);
+
+say(cap, "by Thales + similar triangles, that height equals √(1 · tan θ)", 0.4);
+show(feed, 0.05); draw(feed, 0.7);
+pulse(H); pulse(T);
+wait(0.8);
+
+// 6 — THE IDENTITY
+recolor(cap, violet);
+say(cap, "so the altitude IS √(tan θ) — the symbol was a length all along", 0.4);
+rewrite(law, `\sqrt{\tan\theta}=h`, 0.8, smooth);
+wait(0.9);
+
+// 7 — THE CURVE
+recolor(cap, dim);
+say(cap, "every such height, for every θ, paints the curve √(tan x)", 0.4);
+show(ax, 0.5);
+show(curve, 0.05); draw(curve, 2.2);
+wait(0.4);
+say(cap, "teal near zero, coral as tan θ climbs toward the asymptote at π/2", 0.4);
+flash(curve, violet);
+wait(0.8);
+
+// 8 — POINT
+recolor(cap, teal);
+say(cap, "√(tan θ) is not a formula to memorize — it is a geometric construction", 0.4);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1Xsd54pS67Y" title="√(tan θ) Is a Length — Pure Geometry Proof in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="integral-sqrt-tanx"><a class="header" href="#integral-sqrt-tanx">integral-sqrt-tanx</a></h2>
+<p>Integrate √(tan P): substitute P = t + π/4, read A(t) from the circle x²+y²=2 and
+H(t) from the hyperbola x²−y²=2, then dA−dH recovers the integrand. Outline-only
+angle marks — no filled discs hiding the construction.</p>
+<pre><code class="language-manic">// ============================================================================
+//  integral-sqrt-tanx.manic — ∫ √(tan P) dP by PURE GEOMETRY
+//  Companion to sqrt-tanx.manic. Storyboard: the handwritten circle+hyperbola
+//  derivation (x²+y²=2 meets x²−y²=2; A(t)−H(t) recovers the integrand).
+// ----------------------------------------------------------------------------
+//  THE PROBLEM: √(tan P) is a length. What is its antiderivative?
+//
+//  THE GEOMETRY (one diagram, two curves of "radius" √2):
+//   · circle   x² + y² = 2     →   A(t) = arcsin(√2 sin t)
+//   · hyperbola x² − y² = 2    →   H(t) = arcosh(√2 cos t)
+//   · substitution  P = t + π/4  (so t ∈ (0, π/4) ⇒ P ∈ (π/4, π/2))
+//
+//  THE TRUTH:
+//      dA − dH  =  √2 · √(tan P) · dP
+//  therefore
+//      ∫ √(tan P) dP  =  (1/√2)(A(t) − H(t)) + C
+//
+//  Colours (expanded palette): teal = circle/A, coral = hyperbola/H,
+//  violet = the integral, mint = the moving point, gold = the hook.
+//
+//    manic examples/integral-sqrt-tanx.manic
+//    manic examples/integral-sqrt-tanx.manic --still 20
+// ============================================================================
+
+title("∫ √(tan P) dP — Circle Meets Hyperbola");
+canvas("16:9");
+template("blank");
+
+// ---- stage ----
+circle(well, (cx, 400), 360);
+filled(well);
+gradient(well, panel, void, radial);
+opacity(well, 0.5);
+
+// ============================================================================
+//  THE DIAGRAM — circle x²+y²=2 and hyperbola x²−y²=2
+//  Screen: origin at (ox,oy), scale s px per unit. Radius √2 ≈ 1.414.
+// ============================================================================
+let ox = 340;
+let oy = 400;
+let s = 130;                 // px per math-unit
+let R = s*sqrt(2);           // circle radius = √2
+// a friendly t inside (0, π/4): t = 0.40 rad ≈ 23°
+let t = 0.40;
+let P = t + pi/4;            // ≈ 1.185 rad ≈ 68°
+// point C on the circle: (√2 cos t, √2 sin t)
+let Cx = ox + s*sqrt(2)*cos(t);
+let Cy = oy - s*sqrt(2)*sin(t);
+// foot on the x-axis and the "hyperbola x" = √2 cosh u with cosh u = √2 cos t?
+// From notes: X = √2 cos t = cosh H, so the hyperbola vertex is at x=√2.
+// Point on right branch with x = √2 cos t... wait cosh H = √2 cos t, so
+// x_hyp = cosh H = √2 cos t (in math units where a=1 for cosh param form
+// of x²−y²=1). Our hyperbola is x²−y²=2 = (x/√2)² − (y/√2)², so
+// parametric: x = √2 cosh u, y = √2 sinh u. And cosh H = √2 cos t? Notes say
+// cosh(H) = X = √2 cos t — that would require cosh H ≤ √2, H = arcosh(√2 cos t).
+// For the diagram, mark the circle point and the matching hyperbola x.
+
+// axes
+line(axX, (ox - R - 40, oy), (ox + R + 120, oy));
+color(axX, dim); stroke(axX, 1.5); untraced(axX); hidden(axX);
+line(axY, (ox, oy + R + 50), (ox, oy - R - 60));
+color(axY, dim); stroke(axY, 1.5); untraced(axY); hidden(axY);
+
+// circle x² + y² = 2 — OUTLINED only. `circle` defaults to filled; a solid
+// disc hides axes and labels underneath (engine-test: never fill constructions).
+circle(circ, (ox, oy), R);
+outlined(circ); outline(circ, teal); stroke(circ, 3.5); untraced(circ); hidden(circ);
+
+// hyperbola x² − y² = 2  →  a = b = √2  (in math units) → a_px = R
+hyperbola(hyp, (ox, oy), R, R, 1.15);
+color(hyp, coral); stroke(hyp, 3); untraced(hyp);
+hidden(hyp.r); hidden(hyp.l);
+
+// origin: thin open ring (tiny r + thick stroke reads as a filled blob)
+circle(O, (ox, oy), 7);
+outlined(O); color(O, fg); stroke(O, 1.5); hidden(O);
+
+// contact point C: dashed open circle so circle + projections show through.
+// Keep radius &gt;&gt; stroke so the interior stays empty (textbook marker).
+circle(C, (Cx, Cy), 12);
+outlined(C); color(C, mint); stroke(C, 2); dashed(C, 3.5, 2.8); untraced(C); hidden(C);
+
+// radius toward C — a LINE, not an arrow: arrowheads are filled discs and
+// hide the open marker at the contact point (engine-test visibility rule)
+line(ray, (ox, oy), (Cx, Cy));
+color(ray, mint); stroke(ray, 2.5); untraced(ray); hidden(ray);
+
+// horizontal from C to y-axis? notes have Y = √2 sin t as height
+line(ht, (ox, Cy), (Cx, Cy));
+color(ht, violet); stroke(ht, 2); dashed(ht, 8, 6); untraced(ht); hidden(ht);
+// vertical drop to x-axis
+line(vt, (Cx, oy), (Cx, Cy));
+color(vt, teal); stroke(vt, 2); dashed(vt, 8, 6); untraced(vt); hidden(vt);
+
+// angle mark — textbook style: a thin ARC, never a filled disc (fills hide axes)
+arc(wedge, (ox, oy), R*0.38, 0, -t*180/pi);
+color(wedge, violet); stroke(wedge, 2.5); untraced(wedge); hidden(wedge);
+
+// labels on the diagram
+text(labO, (ox - 16, oy + 22), "O"); size(labO, 18); color(labO, dim); hidden(labO);
+text(labC, (Cx + 22, Cy - 22), "C(t)"); size(labC, 20); color(labC, mint); hidden(labC);
+text(labT, (ox + 42, oy - 22), "t"); size(labT, 22); color(labT, violet); hidden(labT);
+text(labCirc, (ox - 20, oy - R - 24), "x² + y² = 2"); size(labCirc, 20); color(labCirc, teal); hidden(labCirc);
+text(labHyp, (ox + R + 55, oy + 40), "x² − y² = 2"); size(labHyp, 20); color(labHyp, coral); hidden(labHyp);
+
+// region hint: dashed circle (not a filled disc, not just a short arc)
+circle(zone, (ox + R*0.42, oy - R*0.18), R*0.38);
+outlined(zone); color(zone, indigo); stroke(zone, 2); dashed(zone, 7, 5);
+untraced(zone); hidden(zone);
+
+// ============================================================================
+//  RIGHT — the algebraic spine, rewritten live
+// ============================================================================
+equation(eqP, (920, 150), `P=t+\tfrac{\pi}{4}`, 32);
+color(eqP, gold); hidden(eqP);
+
+equation(eqA, (920, 230), `A(t)=\sin^{-1}(\sqrt{2}\sin t)`, 28);
+color(eqA, teal); hidden(eqA);
+
+equation(eqH, (920, 300), `H(t)=\cosh^{-1}(\sqrt{2}\cos t)`, 28);
+color(eqH, coral); hidden(eqH);
+
+equation(eqD, (920, 390), `dA-dH=\sqrt{2}\,\sqrt{\tan P}\,dP`, 28);
+color(eqD, violet); hidden(eqD);
+
+equation(eqI, (920, 480), `\int\sqrt{\tan P}\,dP=\tfrac{1}{\sqrt{2}}(A-H)+C`, 30);
+color(eqI, mint); hidden(eqI);
+
+// final closed form (boxed punchline)
+equation(eqF, (920, 580), `\tfrac{1}{\sqrt{2}}\Big(\sin^{-1}(\sqrt{2}\sin(P-\tfrac{\pi}{4}))-\cosh^{-1}(\sqrt{2}\cos(P-\tfrac{\pi}{4}))\Big)+C`, 22);
+color(eqF, gold); hidden(eqF);
+
+// ============================================================================
+//  THE CURVE — √(tan x) on (π/4, ~1.4), then its antiderivative via ln-form of acosh
+// ============================================================================
+axes(ax, (920, 400), 300, 240);
+hidden(ax);
+// integrand (same spirit as the companion film)
+plot(integrand, (920, 400), 90, 70, "sqrt(tan(x))", (0.85, 1.45));
+stroke(integrand, 4); untraced(integrand); hidden(integrand);
+gradient(integrand, teal, violet, coral, 270);
+
+// antiderivative F(P) = (1/√2)(asin(√2 sin(P-π/4)) - acosh(√2 cos(P-π/4)))
+// acosh(u) = ln(u + sqrt(u*u - 1))
+plot(anti, (920, 400), 90, 55,
+  "(asin(sqrt(2)*sin(x-pi/4)) - ln(sqrt(2)*cos(x-pi/4) + sqrt(2*cos(x-pi/4)*cos(x-pi/4) - 1)))/sqrt(2)",
+  (0.85, 1.45));
+stroke(anti, 4); untraced(anti); hidden(anti);
+gradient(anti, mint, indigo, violet, 270);
+
+// ============================================================================
+//  TYPOGRAPHY
+// ============================================================================
+caption(q, "how do you integrate a square root of a tangent?", (cx, 52), 30, gold);
+equation(hook, (cx, 105), `\int\sqrt{\tan P}\,dP`, 42);
+color(hook, violet); hidden(hook);
+text(cap, (cx, h - 34), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================================================================
+//  SCRIPT
+// ============================================================================
+
+// 1 — HOOK
+say(cap, "√(tan P) is a length — we proved that. Now integrate it.", 0.4);
+wordpop(q, 0.14);
+wait(0.25);
+show(hook, 0.5);
+wait(0.6);
+
+// 2 — THE SUBSTITUTION
+say(cap, "one substitution opens the geometry: P = t + π/4", 0.4);
+show(eqP, 0.5);
+flash(eqP, gold);
+wait(0.7);
+
+// 3 — THE STAGE: two curves of the same "2"
+say(cap, "draw two curves that share the constant 2 — a circle and a hyperbola", 0.4);
+par { show(axX, 0.05); show(axY, 0.05); }
+par { draw(axX, 0.4); draw(axY, 0.4); }
+show(circ, 0.05); draw(circ, 1.0);
+show(labCirc, 0.3); show(O, 0.3); show(labO, 0.3);
+wait(0.3);
+show(hyp.r, 0.05); show(hyp.l, 0.05);
+draw(hyp.r, 1.0); draw(hyp.l, 1.0);
+show(labHyp, 0.3);
+wait(0.5);
+
+say(cap, "circle: x² + y² = 2.   hyperbola: x² − y² = 2.   Same 2 — intentional.", 0.4);
+pulse(circ); pulse(hyp.r);
+wait(0.7);
+
+// 4 — THE MOVING POINT
+say(cap, "park a point C(t) = (√2 cos t, √2 sin t) on the circle — t &lt; π/4", 0.4);
+show(wedge, 0.05); draw(wedge, 0.45); show(labT, 0.3);
+show(ray, 0.05); draw(ray, 0.7);
+show(C, 0.05); draw(C, 0.4); show(labC, 0.3);
+show(ht, 0.05); show(vt, 0.05);
+draw(ht, 0.5); draw(vt, 0.5);
+show(zone, 0.05); draw(zone, 0.6);
+wait(0.6);
+
+// 5 — A(t) FROM THE CIRCLE
+say(cap, "from the y-coordinate: A(t) = arcsin(√2 sin t) — an angle on that circle", 0.4);
+show(eqA, 0.5);
+flash(eqA, teal);
+wait(0.8);
+
+// 6 — H(t) FROM THE HYPERBOLA
+say(cap, "from the x-coordinate: H(t) = arcosh(√2 cos t) — a hyperbolic angle", 0.4);
+show(eqH, 0.5);
+flash(eqH, coral);
+wait(0.8);
+
+// 7 — THE DIFFERENTIAL IDENTITY
+say(cap, "differentiate both — their difference IS the integrand", 0.4);
+show(eqD, 0.6);
+flash(eqD, violet);
+wait(0.5);
+say(cap, "dA − dH = √2 · √(tan P) · dP   — geometry differentiated", 0.4);
+wait(1.0);
+
+// 8 — INTEGRATE
+recolor(cap, mint);
+say(cap, "integrate both sides — the √2 cancels into the prefactor", 0.4);
+show(eqI, 0.6);
+pulse(eqI);
+wait(0.9);
+
+// 9 — CLOSED FORM
+recolor(cap, violet);
+say(cap, "substitute t = P − π/4 back — the antiderivative in closed form", 0.4);
+show(eqF, 0.7);
+flash(eqF, violet);
+wait(1.0);
+
+// 10 — SEE IT: integrand then antiderivative
+recolor(cap, dim);
+say(cap, "the integrand √(tan x) climbing toward π/2", 0.4);
+par {
+  fade(eqA, 0.35); fade(eqH, 0.35); fade(eqD, 0.35); fade(eqI, 0.35); fade(eqF, 0.35);
+  fade(eqP, 0.35);
+}
+show(ax, 0.4);
+show(integrand, 0.05); draw(integrand, 1.8);
+wait(0.5);
+
+say(cap, "and its antiderivative — (1/√2)(A − H) — the circle minus the hyperbola", 0.4);
+show(anti, 0.05); draw(anti, 2.0);
+flash(anti, mint);
+wait(0.8);
+
+// 11 — POINT
+recolor(cap, teal);
+say(cap, "a hard integral, solved because two curves of the same 2 were waiting", 0.4);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/w-JWXioSe0c" title="Integrate √(tan P) — Circle Minus Hyperbola — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="trajectory"><a class="header" href="#trajectory">trajectory</a></h2>
 <p>A phase portrait: three paths flowing under a differential system, each
@@ -16097,6 +16763,426 @@ wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/Y6kpE-ZT-T8" title="Morph One Shape Into Another — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="shapes-howto"><a class="header" href="#shapes-howto">shapes-howto</a></h2>
+<p>SHAPECRAFT — Manic shape power in one film: outlined vs filled (the axes trap),
+the cast with particles/<code>travel</code>, the full palette that <code>become</code>s squares then triangles,
+spin-wound <code>morph</code>, then one coral disc that splits into four independent colours,
+reunites as one fill, and moves — beside two-colour boolean regions (A−B / B−A / A∩B).
+Docs-in-motion for the Shapes chapter.</p>
+<pre><code class="language-manic">// ============================================================================
+//  shapes-howto.manic — SHAPECRAFT
+//  A power demo that also teaches the rules:
+//    fills hide constructions · outlined reveals · dashed rings for contacts
+//    circle/rect/polygon/sector fill by default · morph / become change identity
+//
+//    manic examples/shapes-howto.manic
+//    manic examples/shapes-howto.manic --record out --preset studio
+// ============================================================================
+
+title("Shapecraft — Manic Shape Power");
+canvas("16:9");
+template("blank");
+
+text(cap, (cx, h - 34), ""); size(cap, 22); color(cap, dim); display(cap);
+text(head, (cx, 58), ""); size(head, 32); color(head, gold); display(head); bold(head);
+
+// ---- stage energy ----
+circle(well, (cx, cy), 420);
+filled(well); gradient(well, panel, void, indigo, radial); opacity(well, 0.7);
+
+spline(orbit, (180, 520), (340, 220), (640, 160), (940, 220), (1100, 520));
+stroke(orbit, 2.5); gradient(orbit, dim, violet, teal, "curvature");
+untraced(orbit); hidden(orbit); opacity(orbit, 0.55);
+
+// ---- hero: one persistent outlined circle ----
+circle(hero, (cx, cy), 120);
+outlined(hero); color(hero, cyan); stroke(hero, 6); glow(hero, 1.4);
+gradient(hero, cyan, mint, teal, 45);
+untraced(hero); hidden(hero);
+
+// fill veil — fades over the hero to show the trap without destroying morph
+circle(veil, (cx, cy), 120);
+filled(veil); color(veil, indigo); opacity(veil, 0.92); hidden(veil); z(veil, 5);
+
+rect(asSquare, (cx, cy), 220, 220); hidden(asSquare);
+polygon(asTri, (cx, 250), (cx - 140, 520), (cx + 140, 520)); hidden(asTri);
+sector(asPie, (cx, cy), 130, -30, 300); color(asPie, magenta); hidden(asPie);
+polygon(asDiamond, (cx, cy - 130), (cx + 130, cy), (cx, cy + 130), (cx - 130, cy));
+color(asDiamond, gold); hidden(asDiamond);
+
+circle(finalForm, (cx, cy), 130);
+outlined(finalForm); color(finalForm, cyan); stroke(finalForm, 6);
+gradient(finalForm, cyan, mint, violet, 90); glow(finalForm, 1.6); hidden(finalForm);
+
+morph(hero, asSquare, 180);   // spin-wound morph ready
+
+text(heroTag, (cx, cy - 170), "one persistent id");
+size(heroTag, 22); color(heroTag, fg); hidden(heroTag);
+
+// ---- axes for the fill-trap punch ----
+line(axX, (cx - 200, cy), (cx + 200, cy));
+color(axX, dim); stroke(axX, 2); untraced(axX); hidden(axX);
+line(axY, (cx, cy - 160), (cx, cy + 160));
+color(axY, dim); stroke(axY, 2); untraced(axY); hidden(axY);
+
+// ---- the cast (draw-on parade, then orbit travel) ----
+circle(castC, (cx - 280, 280), 48);
+outlined(castC); color(castC, teal); stroke(castC, 3.5); untraced(castC); hidden(castC);
+rect(castR, (cx - 100, 250), 90, 70);
+outlined(castR); color(castR, coral); stroke(castR, 3.5); untraced(castR); hidden(castR);
+polygon(castP, (cx + 80, 230), (cx + 30, 310), (cx + 130, 310));
+outlined(castP); color(castP, violet); stroke(castP, 3.5); untraced(castP); hidden(castP);
+sector(castS, (cx + 260, 280), 52, -40, 240);
+outlined(castS); color(castS, gold); stroke(castS, 3.5); untraced(castS); hidden(castS);
+arc(castA, (cx - 220, 480), 50, -20, 250);
+color(castA, mint); stroke(castA, 4); untraced(castA); hidden(castA);
+arrow(castV, (cx + 40, 500), (cx + 180, 430));
+color(castV, magenta); stroke(castV, 4); untraced(castV); hidden(castV);
+line(castL, (cx + 240, 500), (cx + 340, 430));
+color(castL, lime); stroke(castL, 4); untraced(castL); hidden(castL);
+
+// sparks that ring the hero, then settle
+rect(seed, (cx, cy), 60, 60); hidden(seed);
+particles(sparks, seed, 12, 6, 19, "random");
+color(sparks, cyan); glow(sparks, 0.5); hidden(sparks);
+circle(orbitRing, (cx, cy), 230); hidden(orbitRing);
+
+// ---- palette chips (fill OK — colour IS the subject) ----
+let py = 400;
+circle(chip0,  (140, py), 26);  filled(chip0);  color(chip0, fg);      hidden(chip0);
+circle(chip1,  (220, py), 26);  filled(chip1);  color(chip1, cyan);    hidden(chip1);
+circle(chip2,  (300, py), 26);  filled(chip2);  color(chip2, magenta); hidden(chip2);
+circle(chip3,  (380, py), 26);  filled(chip3);  color(chip3, lime);    hidden(chip3);
+circle(chip4,  (460, py), 26);  filled(chip4);  color(chip4, gold);    hidden(chip4);
+circle(chip5,  (540, py), 26);  filled(chip5);  color(chip5, red);     hidden(chip5);
+circle(chip6,  (620, py), 26);  filled(chip6);  color(chip6, orange);  hidden(chip6);
+circle(chip7,  (700, py), 26);  filled(chip7);  color(chip7, blue);    hidden(chip7);
+circle(chip8,  (780, py), 26);  filled(chip8);  color(chip8, teal);    hidden(chip8);
+circle(chip9,  (860, py), 26);  filled(chip9);  color(chip9, violet);  hidden(chip9);
+circle(chip10, (940, py), 26);  filled(chip10); color(chip10, coral);  hidden(chip10);
+circle(chip11, (1020,py), 26);  filled(chip11); color(chip11, indigo); hidden(chip11);
+circle(chip12, (1100,py), 26);  filled(chip12); color(chip12, mint);   hidden(chip12);
+circle(chip13, (1180,py), 26);  filled(chip13); color(chip13, dim);    hidden(chip13);
+
+rect(sq0,  (140, py), 48, 48); color(sq0, fg);      filled(sq0);  hidden(sq0);
+rect(sq1,  (220, py), 48, 48); color(sq1, cyan);    filled(sq1);  hidden(sq1);
+rect(sq2,  (300, py), 48, 48); color(sq2, magenta); filled(sq2);  hidden(sq2);
+rect(sq3,  (380, py), 48, 48); color(sq3, lime);    filled(sq3);  hidden(sq3);
+rect(sq4,  (460, py), 48, 48); color(sq4, gold);    filled(sq4);  hidden(sq4);
+rect(sq5,  (540, py), 48, 48); color(sq5, red);     filled(sq5);  hidden(sq5);
+rect(sq6,  (620, py), 48, 48); color(sq6, orange);  filled(sq6);  hidden(sq6);
+rect(sq7,  (700, py), 48, 48); color(sq7, blue);    filled(sq7);  hidden(sq7);
+rect(sq8,  (780, py), 48, 48); color(sq8, teal);    filled(sq8);  hidden(sq8);
+rect(sq9,  (860, py), 48, 48); color(sq9, violet);  filled(sq9);  hidden(sq9);
+rect(sq10, (940, py), 48, 48); color(sq10, coral);  filled(sq10); hidden(sq10);
+rect(sq11, (1020,py), 48, 48); color(sq11, indigo); filled(sq11); hidden(sq11);
+rect(sq12, (1100,py), 48, 48); color(sq12, mint);   filled(sq12); hidden(sq12);
+rect(sq13, (1180,py), 48, 48); color(sq13, dim);    filled(sq13); hidden(sq13);
+
+polygon(tri0,  (140, py-22), (114, py+22), (166, py+22)); color(tri0, fg);      filled(tri0);  hidden(tri0);
+polygon(tri1,  (220, py-22), (194, py+22), (246, py+22)); color(tri1, cyan);    filled(tri1);  hidden(tri1);
+polygon(tri2,  (300, py-22), (274, py+22), (326, py+22)); color(tri2, magenta); filled(tri2);  hidden(tri2);
+polygon(tri3,  (380, py-22), (354, py+22), (406, py+22)); color(tri3, lime);    filled(tri3);  hidden(tri3);
+polygon(tri4,  (460, py-22), (434, py+22), (486, py+22)); color(tri4, gold);    filled(tri4);  hidden(tri4);
+polygon(tri5,  (540, py-22), (514, py+22), (566, py+22)); color(tri5, red);     filled(tri5);  hidden(tri5);
+polygon(tri6,  (620, py-22), (594, py+22), (646, py+22)); color(tri6, orange);  filled(tri6);  hidden(tri6);
+polygon(tri7,  (700, py-22), (674, py+22), (726, py+22)); color(tri7, blue);    filled(tri7);  hidden(tri7);
+polygon(tri8,  (780, py-22), (754, py+22), (806, py+22)); color(tri8, teal);    filled(tri8);  hidden(tri8);
+polygon(tri9,  (860, py-22), (834, py+22), (886, py+22)); color(tri9, violet);  filled(tri9);  hidden(tri9);
+polygon(tri10, (940, py-22), (914, py+22), (966, py+22)); color(tri10, coral);  filled(tri10); hidden(tri10);
+polygon(tri11, (1020,py-22),(994, py+22),(1046,py+22)); color(tri11, indigo); filled(tri11); hidden(tri11);
+polygon(tri12, (1100,py-22),(1074,py+22),(1126,py+22)); color(tri12, mint);   filled(tri12); hidden(tri12);
+polygon(tri13, (1180,py-22),(1154,py+22),(1206,py+22)); color(tri13, dim);    filled(tri13); hidden(tri13);
+
+// ---- CENTER: one filled disc → 4 independent colours → one colour → move ----
+circle(disc, (cx, cy), 140);
+filled(disc); color(disc, coral); outline(disc, cyan); stroke(disc, 4);
+glow(disc, 0.6); hidden(disc);
+
+pie(q, (cx, cy), 140, 4);   // q0..q3 — same centre/radius as disc
+color(q0, teal);    filled(q0);  outline(q0, fg); stroke(q0, 2); untraced(q0); hidden(q0);
+color(q1, coral);   filled(q1);  outline(q1, fg); stroke(q1, 2); untraced(q1); hidden(q1);
+color(q2, violet);  filled(q2);  outline(q2, fg); stroke(q2, 2); untraced(q2); hidden(q2);
+color(q3, gold);    filled(q3);  outline(q3, fg); stroke(q3, 2); untraced(q3); hidden(q3);
+
+// reunited whole — one colour, one id that can move
+circle(whole, (cx, cy), 140);
+filled(whole); color(whole, cyan); outline(whole, mint); stroke(whole, 4);
+glow(whole, 0.8); hidden(whole);
+
+// ---- RIGHT: boolean → TWO regions, TWO colours ----
+let bx = 1000;
+let by = 400;
+rect(bBox, (bx - 35, by - 35), 130, 130);
+outlined(bBox); outline(bBox, cyan); opacity(bBox, 0.4); hidden(bBox);
+circle(bCirc, (bx + 40, by + 20), 78);
+outlined(bCirc); outline(bCirc, magenta); opacity(bCirc, 0.4); hidden(bCirc);
+difference(onlyBox, bBox, bCirc, teal);   hidden(onlyBox); glow(onlyBox, 0.6);
+difference(onlyCirc, bCirc, bBox, coral); hidden(onlyCirc); glow(onlyCirc, 0.6);
+intersect(bHit, bBox, bCirc, gold);       hidden(bHit); glow(bHit, 0.5);
+text(labBool, (bx, by + 155), "A−B · B−A · A∩B"); size(labBool, 16); color(labBool, dim); hidden(labBool);
+
+// ---- contact truth ----
+line(crossH, (cx - 160, cy), (cx + 160, cy));
+color(crossH, dim); stroke(crossH, 2.5); dashed(crossH, 12, 8); untraced(crossH); hidden(crossH);
+line(crossV, (cx, cy - 120), (cx, cy + 120));
+color(crossV, dim); stroke(crossV, 2.5); dashed(crossV, 12, 8); untraced(crossV); hidden(crossV);
+dot(badDot, (cx, cy), 16); color(badDot, coral); glow(badDot, 0.5); hidden(badDot);
+circle(goodRing, (cx, cy), 18);
+outlined(goodRing); color(goodRing, mint); stroke(goodRing, 2.8); dashed(goodRing, 4, 3);
+untraced(goodRing); hidden(goodRing);
+
+// ---- traveler on the orbit ----
+dot(rider, (180, 520), 9); color(rider, gold); glow(rider, 1.2); hidden(rider);
+
+// ============================================================================
+//  SCRIPT — one continuous shapecraft story
+// ============================================================================
+
+step("birth") {
+  seq {
+    say(head, "SHAPECRAFT", 0.35);
+    say(cap, "one shape. every identity. the visual stays true.", 0.35);
+    show(hero, 0.05);
+    par {
+      draw(hero, 1.2, smooth);
+      zoom(1.15, 1.2, smooth);
+    }
+    attach(heroTag, hero, (0, -160));
+    show(heroTag, 0.35);
+    wait(0.35);
+  }
+}
+
+step("truth") {
+  seq {
+    say(head, "outlined — constructions stay readable", 0.3);
+    say(cap, "axes through the hero: the rim never hides the truth.", 0.3);
+    par {
+      show(axX, 0.05); show(axY, 0.05);
+      draw(axX, 0.55); draw(axY, 0.55);
+      cam((cx, cy), 0.8, smooth); zoom(1.35, 0.8, smooth);
+    }
+    pulse(hero);
+    wait(0.45);
+
+    say(head, "filled — the trap", 0.25);
+    say(cap, "a filled disc sits on the axes and deletes them visually.", 0.25);
+    show(veil, 0.45);
+    flash(veil, coral);
+    wait(0.7);
+
+    say(head, "outlined — axes return", 0.25);
+    say(cap, "outline(id, c) only recolors the rim. outlined drops the fill.", 0.25);
+    fade(veil, 0.45);
+    flash(hero, mint);
+    wait(0.55);
+    par {
+      fade(axX, 0.35); fade(axY, 0.35); fade(heroTag, 0.35); fade(hero, 0.35);
+      cam((cx, cy), 0.7, smooth); zoom(1.0, 0.7, smooth);
+    }
+  }
+}
+
+step("cast") {
+  seq {
+    say(head, "the cast", 0.3);
+    say(cap, "circle · rect · polygon · sector · arc · line · arrow", 0.3);
+    show(sparks, 0.25);
+    arrange(sparks, orbitRing, "ring", 1.0, smooth);
+    wait(0.2);
+    stagger(0.1) {
+      show(castC, 0.05); draw(castC, 0.55);
+      show(castR, 0.05); draw(castR, 0.55);
+      show(castP, 0.05); draw(castP, 0.55);
+      show(castS, 0.05); draw(castS, 0.55);
+      show(castA, 0.05); draw(castA, 0.55);
+      show(castV, 0.05); draw(castV, 0.55);
+      show(castL, 0.05); draw(castL, 0.55);
+    }
+    wait(0.2);
+    show(orbit, 0.05); draw(orbit, 1.0, smooth);
+    show(rider, 0.2);
+    travel(rider, orbit, 2.0, smooth);
+    wait(0.25);
+    par {
+      fade(sparks, 0.4);
+      fade(castC, 0.4); fade(castR, 0.4); fade(castP, 0.4); fade(castS, 0.4);
+      fade(castA, 0.4); fade(castV, 0.4); fade(castL, 0.4);
+      fade(orbit, 0.4); fade(rider, 0.4);
+    }
+  }
+}
+
+step("palette") {
+  seq {
+    say(head, "the whole palette — then change the shape", 0.3);
+    say(cap, "filled chips when colour is the subject. become keeps the id.", 0.3);
+    stagger(0.05) {
+      show(chip0, 0.22);  show(chip1, 0.22);  show(chip2, 0.22);  show(chip3, 0.22);
+      show(chip4, 0.22);  show(chip5, 0.22);  show(chip6, 0.22);  show(chip7, 0.22);
+      show(chip8, 0.22);  show(chip9, 0.22);  show(chip10, 0.22); show(chip11, 0.22);
+      show(chip12, 0.22); show(chip13, 0.22);
+    }
+    wait(0.35);
+    say(cap, "become → square", 0.2);
+    stagger(0.035) {
+      for i in 0..14 { become(chip{i}, sq{i}, 0.65, smooth); }
+    }
+    wait(0.25);
+    say(cap, "become → triangle", 0.2);
+    stagger(0.035) {
+      for i in 0..14 { become(chip{i}, tri{i}, 0.65, smooth); }
+    }
+    wait(0.45);
+    par {
+      for i in 0..14 { fade(chip{i}, 0.35); }
+    }
+  }
+}
+
+step("morph") {
+  seq {
+    say(head, "morph · become · spin", 0.3);
+    say(cap, "same hero id — circle winds into a square, then becomes new geometry.", 0.3);
+    show(hero, 0.3);
+    to(hero, morph, 1, 1.5, smooth);     // → square (with 180° wind)
+    wait(0.25);
+    become(hero, asDiamond, 0.95, smooth);
+    pulse(hero);
+    wait(0.2);
+    become(hero, asPie, 0.95, smooth);
+    spin(hero, 40, 0.7, out);
+    wait(0.2);
+    become(hero, asTri, 0.9, smooth);
+    wait(0.45);
+  }
+}
+
+step("pieces") {
+  seq {
+    say(head, "one fill → four fills → one fill → move", 0.3);
+    say(cap, "a filled disc can split into independent colours, reunite, then travel as one.", 0.3);
+    fade(hero, 0.3);
+
+    // 1 — the coral disc (same look as the fill-trap)
+    par {
+      show(axX, 0.05); show(axY, 0.05);
+      draw(axX, 0.4); draw(axY, 0.4);
+      cam((cx, cy), 0.6, smooth); zoom(1.25, 0.6, smooth);
+    }
+    show(disc, 0.45);
+    flash(disc, coral);
+    wait(0.5);
+
+    // 2 — cut into 4 independent colours
+    say(cap, "cut: each quadrant keeps its own fill.", 0.25);
+    fade(disc, 0.3);
+    stagger(0.1) {
+      show(q0, 0.05); draw(q0, 0.45);
+      show(q1, 0.05); draw(q1, 0.45);
+      show(q2, 0.05); draw(q2, 0.45);
+      show(q3, 0.05); draw(q3, 0.45);
+    }
+    // explode slightly so the independence is obvious
+    par {
+      move(q0, (cx + 22, cy - 22), 0.45, overshoot);
+      move(q1, (cx - 22, cy - 22), 0.45, overshoot);
+      move(q2, (cx - 22, cy + 22), 0.45, overshoot);
+      move(q3, (cx + 22, cy + 22), 0.45, overshoot);
+    }
+    wait(0.45);
+
+    // 3 — reunite as ONE colour, then ONE circle
+    say(cap, "reunite: every slice takes one colour, then they become one disc.", 0.25);
+    par {
+      recolor(q0, cyan, 0.5);
+      recolor(q1, cyan, 0.5);
+      recolor(q2, cyan, 0.5);
+      recolor(q3, cyan, 0.5);
+    }
+    // snap slices back to centre
+    par {
+      move(q0, (cx, cy), 0.5, smooth);
+      move(q1, (cx, cy), 0.5, smooth);
+      move(q2, (cx, cy), 0.5, smooth);
+      move(q3, (cx, cy), 0.5, smooth);
+    }
+    wait(0.15);
+    // swap the four pieces for one solid disc (same colour)
+    par {
+      fade(q0, 0.3); fade(q1, 0.3); fade(q2, 0.3); fade(q3, 0.3);
+      show(whole, 0.35);
+    }
+    pulse(whole);
+    wait(0.4);
+
+    // 4 — move as one unit
+    say(cap, "now it moves as a single identity.", 0.25);
+    par {
+      fade(axX, 0.35); fade(axY, 0.35);
+      cam((cx + 120, cy), 0.9, smooth); zoom(1.05, 0.9, smooth);
+      move(whole, (cx + 260, cy), 1.1, smooth);
+    }
+    wait(0.35);
+
+    // side boolean still lands on the right as the disc arrives
+    say(head, "boolean keeps two colours", 0.25);
+    say(cap, "A−B teal · B−A coral · then A∩B gold — never one muddy fill.", 0.25);
+    par { show(bBox, 0.3); show(bCirc, 0.3); }
+    wait(0.3);
+    par { fade(bBox, 0.2); fade(bCirc, 0.2); }
+    par { show(onlyBox, 0.4); show(onlyCirc, 0.4); }
+    flash(onlyBox, teal); flash(onlyCirc, coral);
+    show(labBool, 0.25);
+    wait(0.4);
+    show(bHit, 0.45); flash(bHit, gold);
+    wait(0.7);
+
+    par {
+      fade(whole, 0.35);
+      fade(onlyBox, 0.35); fade(onlyCirc, 0.35); fade(bHit, 0.35); fade(labBool, 0.35);
+      cam((cx, cy), 0.6, smooth); zoom(1.0, 0.6, smooth);
+    }
+  }
+}
+
+step("contact") {
+  seq {
+    say(head, "contact points", 0.3);
+    say(cap, "a solid dot hides the crossing. a dashed ring keeps it.", 0.3);
+    par {
+      show(crossH, 0.05); show(crossV, 0.05);
+      draw(crossH, 0.5); draw(crossV, 0.5);
+      cam((cx, cy), 0.7, smooth); zoom(1.55, 0.7, smooth);
+    }
+    show(badDot, 0.3);
+    flash(badDot, coral);
+    wait(0.55);
+    fade(badDot, 0.25);
+    show(goodRing, 0.05); draw(goodRing, 0.55);
+    pulse(goodRing);
+    wait(0.7);
+    par {
+      fade(crossH, 0.35); fade(crossV, 0.35); fade(goodRing, 0.35);
+      cam((cx, cy), 0.7, smooth); zoom(1.0, 0.7, smooth);
+    }
+  }
+}
+
+step("settle") {
+  seq {
+    say(head, "fills for subjects. outlines for truth.", 0.35);
+    say(cap, "shapecraft: the visual is true — never hide what you're proving.", 0.35);
+    show(hero, 0.2);
+    become(hero, finalForm, 1.0, smooth);
+    pulse(hero);
+    wait(1.6);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cs9t5amsW00" title="SHAPECRAFT — Split, Recolour, Reunite & Move Shapes in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="text--ui"><a class="header" href="#text--ui">Text &amp; UI</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
@@ -18083,17 +19169,22 @@ wait(1.6);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/lCka4ayXxQ0" title="Rule 90 Draws Sierpinski’s Triangle — Can You Predict It? — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-heightmap-world"><a class="header" href="#creator-heightmap-world">creator-heightmap-world</a></h2>
-<p>The Grid→3D bridge as a Short: a grid-kit WFC map settles in 2D, then the SAME grid rises
-into 3D terrain via <code>heightmap3</code> — the camera pulls back to reveal the whole world, rotates,
-then flies in low over the peaks. One grid, two dimensions, inside a 9:16 creator frame with
-typed hook, socials and end card.</p>
-<pre><code class="language-manic">// Your Map Is a 3D World — a Creator v2 Short of the Grid→3D bridge. A grid-kit WFC
-// map settles in 2D, then the SAME grid is lifted by heightmap3 into 3D terrain:
-// the camera pulls back to show the whole world, rotates, then flies in low. 9:16
-// shorts frame with creator identity, socials and an end card.
+<p>The Grid→3D bridge as a narrated Short: a grid-kit WFC map settles in 2D, then the SAME grid
+rises into 3D terrain via <code>heightmap3</code> — camera pull-back, orbit, and a low ridge flyover.
+<code>speak</code> carries the story VO; <code>say</code> keeps short on-screen captions; Manic promo + end card close
+the piece. One grid, two dimensions, inside a 9:16 creator frame.</p>
+<pre><code class="language-manic">// Your Map Is a 3D World — Manic promo Short.
+// A grid settles cell by cell (Wave Function Collapse), then the SAME grid lifts
+// into 3D terrain. The camera pulls back, orbits, and flies low. Story narration
+// (`speak`) is separate from short on-screen captions (`say`). Outro names Manic.
 title("Your Map Is a 3D World");
 canvas("9:16");
 template("shorts");
+voice("elevenlabs");                       // story narration
+// voice("elevenlabs", "alice");
+// voice("elevenlabs", "jessica");
+// voice("cartesia");
+// voice("gtts");
 
 creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
 watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
@@ -18108,64 +19199,112 @@ hidden(land);
 
 text(kicker, (cx, h*0.135), "your flat map is hiding a 3D world");
 size(kicker, 33); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.82);
-text(cap, (cx, h*0.785), "a 2D map, generated cell by cell…");
+text(cap, (cx, h*0.785), "");
 size(cap, 31); color(cap, dim); wrap(cap, w*0.84);
+text(promo, (cx, h*0.42), "Manic"); size(promo, 72); color(promo, cyan); bold(promo); hidden(promo);
+text(promoSub, (cx, h*0.52), "plain text → animated explainers"); size(promoSub, 28); color(promoSub, magenta); wrap(promoSub, w*0.82); hidden(promoSub);
+text(promoUrl, (cx, h*0.62), "8gwifi.org/manic"); size(promoUrl, 30); color(promoUrl, fg); bold(promoUrl); hidden(promoUrl);
 
 socials(me);
 endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
 
-hidden(cap);
 untraced(kicker); cursor(kicker);
 
-// 1 — HOOK + the 2D map settles (Wave Function Collapse).
+// Narration tells the story. Captions stay short punch-lines on screen.
+// speak("…") = voice only; say(cap, "…") = text only; par both when needed.
+
+// 1 — HOOK: open the idea, then the 2D map settles (Wave Function Collapse).
 mark("hook");
-type(kicker, 1.4);
+par {
+  type(kicker, 1.4);
+  speak("Every world starts flat. Watch a map generate itself — cell by cell — until the islands lock.");
+}
 step("map") {
   par {
-    say(cap, "a 2D map, generated cell by cell…");
+    say(cap, "cell by cell…");
+    speak("This is Wave Function Collapse. Constraints push the grid toward a coherent coast.");
     run(world, 16, 3.0);
   }
 }
-wait(0.3);
+wait(0.25);
 
 // 2 — the same grid lifts into 3D (still near top-down, so it reads flat at first).
-step("lift") {
+mark("lift");
+step("height") {
   par {
-    say(cap, "…is secretly a 3D world");
+    say(cap, "same grid → 3D");
+    speak("Now lift the same grid into height. Nothing was redrawn — the cells became terrain.");
     fade(world.cells, 0.5); fade(world.lines, 0.5);
     show(land, 0.6);
   }
 }
 
 // 3 — pull back to see the WHOLE world.
-step("reveal") {
-  orbit3(25, 36, 30, 3.4, smooth);
+mark("reveal");
+step("pullback") {
+  par {
+    say(cap, "pull back");
+    speak("Pull the camera back. The flat map was hiding a whole landscape.");
+    orbit3(25, 36, 30, 3.4, smooth);
+  }
 }
-wait(0.3);
+wait(0.2);
 
 // 4 — rotate around it.
-step("rotate") {
-  seq {
-    par { say(cap, "one grid — 2D and 3D, bridged by Manic"); recolor(cap, cyan); }
+mark("rotate");
+step("orbit") {
+  par {
+    say(cap, "one grid, two worlds");
+    speak("One grid. Two readings — a 2D map for paths, a 3D world for place. Manic bridges them.");
+    recolor(cap, cyan);
     orbit3(185, 32, 30, 4.4, smooth);
   }
 }
 
 // 5 — fly in low over the peaks.
-step("zoom") {
-  orbit3(255, 15, 12, 3.8, smooth);
+mark("zoom");
+step("fly") {
+  par {
+    say(cap, "fly the ridges");
+    speak("Fly in low over the ridges. Every peak is computed from the map you just watched settle.");
+    orbit3(255, 15, 12, 3.8, smooth);
+  }
 }
-wait(0.6);
+wait(0.4);
 
-// 6 — END CARD.
+// 6 — MANIC PROMO: this video is the product.
+mark("manic");
+par {
+  fade(kicker, 0.35); fade(cap, 0.35); fade(me.footer, 0.35); fade(land, 0.45);
+}
+par {
+  say(cap, "made with Manic");
+  speak("And this whole Short was generated with Manic — a language for animated explainers.");
+  show(promo, 0.6);
+}
+wait(0.2);
+par {
+  say(cap, "plain text → motion");
+  speak("You write plain text. Manic turns it into grids, 3D, camera moves, and voice — no timeline editor.");
+  show(promoSub, 0.5);
+}
+wait(0.2);
+par {
+  say(cap, "8gwifi.org/manic");
+  speak("Learn more, try it free, and build your own explainers at eight g wifi dot org slash manic.");
+  show(promoUrl, 0.5); pulse(promoUrl, 0.8);
+}
+wait(0.5);
+
+// 7 — END CARD.
 mark("endcard");
 par {
-  fade(kicker, 0.4); fade(cap, 0.4); fade(me.footer, 0.4); fade(land, 0.5);
+  fade(cap, 0.4); fade(promo, 0.4); fade(promoSub, 0.4); fade(promoUrl, 0.4);
 }
 show(me.endcard, 0.6);
-wait(1.6);
+wait(1.8);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/xAn1KZhJJik" title="Your Flat Map Is Secretly a 3D World — Grid to Terrain Short in manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Zt67OIESpjc" title="Your Flat Map Is Secretly a 3D World — Grid to Terrain Short in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-noise-story"><a class="header" href="#creator-noise-story">creator-noise-story</a></h2>
 <p>How Noise Builds Worlds — a Short walking procedural noise from 1D to fractal: raw <code>rand(x)</code>
@@ -18299,23 +19438,19 @@ wait(1.6);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/lZmssQerVNY" title="How Noise Builds Worlds — Random to Perlin to Fractal Terrain in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="creator-free-kicks"><a class="header" href="#creator-free-kicks">creator-free-kicks</a></h2>
-<p>Roberto Carlos’ impossible free kick, told as a Short: he walks the ball in and places it,
-paces back, computes the Magnus law WITH VALUES until it locks, sprints up and strikes —
-the RK4 <code>freekick</code> ball swerves metres and curls in by the post for a GOAL, while the same
-strike with no spin (red dashed) sails wide. Then the scene REWINDS and the ball becomes a
-spinning cylinder: uniform flow + a free vortex superpose (integrated live with <code>trajectory</code>)
-into an asymmetric flow — faster one side, slower the other — the pressure difference that IS
-the Magnus force. Physics proven, then explained, in one branded 9:16 story.</p>
-<pre><code class="language-manic">// Roberto Carlos' Banana Kick — the whole story. He walks the ball in and places
-// it, paces back, computes the Magnus law WITH VALUES until it locks, sprints up
-// and strikes — the RK4 ball swerves metres and curls in by the post: GOAL. Then
-// the scene REWINDS, and the same ball becomes a spinning cylinder: uniform flow +
-// a free vortex superpose into an asymmetric flow — faster one side, slower the
-// other — a pressure difference that pushes it sideways. That IS the Magnus force
-// that bent the kick. Every trajectory and streamline is computed, not drawn.
+<p>Roberto Carlos’ impossible free kick as a narrated Short: walk-in, Magnus with values,
+the RK4 <code>freekick</code> curls in for a GOAL while the zero-spin twin sails wide, then a cylinder
+flow explains the pressure difference. <code>speak</code> / <code>say</code> carry story VO vs captions; Manic promo
+outro. Physics proven, then explained, in one branded 9:16 story.</p>
+<pre><code class="language-manic">// Roberto Carlos' Banana Kick — Manic promo cut. The physics story sells the
+// product: every path and streamline is computed from a plain `.manic` script,
+// then the outro names Manic and points to 8gwifi.org/manic.
 title("Roberto Carlos' Banana Kick");
 canvas("9:16");
 template("shorts");
+voice("cartesia");                         // story narration
+// voice("elevenlabs");
+// voice("gtts");
 
 creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
 watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
@@ -18378,18 +19513,32 @@ text(slowl, (cx, mpy+115), "slower → high pressure"); size(slowl, 24); color(s
 text(kicker, (cx, h*0.13), "Roberto Carlos' impossible free kick");
 size(kicker, 32); color(kicker, gold); bold(kicker); wrap(kicker, w*0.82);
 text(cap, (cx, h*0.80), ""); size(cap, 30); color(cap, dim); wrap(cap, w*0.84);
+text(promo, (cx, h*0.42), "Manic"); size(promo, 72); color(promo, gold); bold(promo); hidden(promo);
+text(promoSub, (cx, h*0.52), "plain text → animated explainers"); size(promoSub, 28); color(promoSub, cyan); wrap(promoSub, w*0.82); hidden(promoSub);
+text(promoUrl, (cx, h*0.62), "8gwifi.org/manic"); size(promoUrl, 30); color(promoUrl, fg); bold(promoUrl); hidden(promoUrl);
 
 socials(me);
 endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
 
 untraced(kicker); cursor(kicker);
 
-// 1 — HOOK.
+// Narration tells the story. Captions stay short punch-lines on screen.
+// Configure once: voice("gtts"|"cartesia"). speak("…") = voice only;
+// say(cap, "…") = text only; par both when needed.
+
+// 1 — HOOK: open the legend.
 mark("hook");
-type(kicker, 1.3);
+par {
+  type(kicker, 1.3);
+  speak("France, nineteen ninety-seven. Roberto Carlos stands thirty-five metres out — and takes a free kick the world still cannot believe.");
+}
 
 // 2 — WALK the ball in and place it (sin-phased gait).
-show(cap, 0.3); say(cap, "he walks it in and sets it down");
+show(cap, 0.3);
+par {
+  say(cap, "walk it in");
+  speak("He walks the ball in himself and sets it down. No rush. The wall is waiting.");
+}
 for i in 1..11 {
   let bx = sx0 + i*20; let ph = i*90; let sw = 22*sin(ph*pi/180); let lift = 8*abs(sin(ph*pi/180));
   par {
@@ -18402,7 +19551,11 @@ for i in 1..11 {
 wait(0.3);
 
 // 3 — PACE BACK; the calculation begins.
-fade(kicker, 0.4); say(cap, "paces back — will this work?"); show(calc, 0.4);
+fade(kicker, 0.4); show(calc, 0.4);
+par {
+  say(cap, "pace back");
+  speak("He paces back. Eyes on the posts. Somewhere in that run-up is a curve no keeper expects.");
+}
 for i in 1..6 {
   let bx = (kx-60) - i*18; let ph = i*90; let sw = 16*sin(ph*pi/180); let lift = 6*abs(sin(ph*pi/180));
   par {
@@ -18416,12 +19569,17 @@ for i in 1..6 {
 // 4 — COMPUTE the Magnus law WITH VALUES, then lock it.
 rewrite(calc, `\mathbf{a}_M=(0.05)(3.1)(30)`, 0.7, smooth);
 rewrite(calc, `\mathbf{a}_M\approx 4.6\ \mathrm{m/s^2}`, 0.7, smooth);
-say(cap, "locked in"); recolor(cap, lime);
+par {
+  say(cap, "Magnus locks");
+  recolor(cap, lime);
+  speak("Physics names the cheat code: Magnus acceleration. Spin crossed with velocity. About four point six metres per second squared of sideways push.");
+}
 rewrite(calc, `\text{curl}\approx 3\ \text{m}`, 0.6, smooth);
 wait(0.3);
 
 // 5 — RAN FAST up to the ball.
 recolor(cap, dim); say(cap, ""); fade(calc, 0.4);
+speak("Then he runs.");
 for i in 1..9 {
   let bx = (kx-150) + i*15; let ph = i*120; let sw = 30*sin(ph*pi/180); let lift = 12*abs(sin(ph*pi/180));
   par {
@@ -18437,63 +19595,116 @@ seq {
   par { move(footR,(kx-4, ky+34),0.13,smooth); move(hip,(kx-30, hipY),0.13,smooth); }
   par {
     draw(rc, 2.0); run(rc, 2.0);
-    seq { wait(1.1); recolor(cap, gold); say(cap, "aimed metres wide — it curled in by the post"); }
+    seq {
+      wait(1.1);
+      recolor(cap, gold);
+      par {
+        say(cap, "curl!");
+        speak("The shot starts metres wide of the post — then the air bends it in.");
+      }
+    }
   }
 }
 wait(0.4);
 
 // 7 — GOAL.
-recolor(cap, gold); say(cap, "GOAL — impossible without the spin");
-par { flash(goal, gold); pulse(goal, 0.7); }
-wait(0.7);
-
-// 7.5 — proof: same strike, no spin, no air to curl it → it sails wide.
-recolor(cap, red); say(cap, "no spin, no air pushing it — the same strike sails wide");
-draw(ns, 1.3);
-wait(0.8);
-
-// 8 — REWIND: both trajectories retract; the ball returns to the spot.
-recolor(cap, dim); say(cap, "so WHY does the spin bend it? rewind…");
+recolor(cap, gold);
 par {
+  say(cap, "GOAL");
+  speak("Goal. Without that spin, the ball never finds the net.");
+  flash(goal, gold); pulse(goal, 0.7);
+}
+wait(0.5);
+
+// 7.5 — proof: same strike, no spin → sails wide.
+recolor(cap, red);
+par {
+  say(cap, "no spin → wide");
+  speak("Same strike. Zero spin. No air pushing sideways. Watch it sail wide — the proof.");
+  draw(ns, 1.3);
+}
+wait(0.5);
+
+// 8 — REWIND.
+recolor(cap, dim);
+par {
+  say(cap, "rewind");
+  speak("So why does spin bend a football? Rewind.");
   erase(rc, 0.9); erase(ns, 0.9);
   to(rc.ball, x, kx, 0.9, smooth); to(rc.ball, y, ky, 0.9, smooth);
 }
 wait(0.3);
 
-// 9 — the same ball becomes a SPINNING CYLINDER: the flow field appears.
-say(cap, "zoom into the ball — it's a spinning cylinder in the air");
+// 9 — spinning cylinder + flow field.
 par {
+  say(cap, "spinning cylinder");
+  speak("Zoom into the ball. In flight it is a spinning cylinder in the air stream.");
   fade(pl, 0.5); fade(head, 0.5);
   fade(gbox, 0.5); fade(goal, 0.5); fade(gline, 0.5); fade(wall, 0.5);
   to(rc.ball, x, cx, 0.6, smooth); to(rc.ball, y, mpy, 0.6, smooth);
   show(mcyl, 0.5);
 }
 stagger(0.04) { for i in 0..15 { draw(mfl{i}, 0.9); } }
+wait(0.3);
+
+// 10 — asymmetry → Magnus force.
+par {
+  say(cap, "faster / slower");
+  speak("Spin drags the air: faster on top, slower below. Fast air means low pressure.");
+  show(spinT, 0.4); show(spinB, 0.4); show(fastl, 0.5); show(slowl, 0.5);
+}
+wait(0.3);
+par {
+  say(cap, "Magnus force");
+  speak("The pressure difference pushes the ball sideways. That sideways push is the Magnus force.");
+  show(force, 0.6); show(flab, 0.5); pulse(force, 0.8);
+}
 wait(0.4);
 
-// 10 — uniform flow + free vortex superpose → asymmetry → sideways force.
-say(cap, "spin drags the air: faster on top, slower below");
-par { show(spinT, 0.4); show(spinB, 0.4); show(fastl, 0.5); show(slowl, 0.5); }
-wait(0.5);
-say(cap, "a pressure difference pushes it sideways — the Magnus force");
-par { show(force, 0.6); show(flab, 0.5); pulse(force, 0.8); }
-wait(0.6);
-
 // 11 — the point.
-recolor(cap, cyan); say(cap, "that sideways force is what curled the free kick — all computed");
-wait(1.1);
-
-// 12 — END CARD.
-mark("endcard");
+recolor(cap, cyan);
 par {
-  fade(cap, 0.4); fade(me.footer, 0.4);
+  say(cap, "computed, not drawn");
+  speak("That force is what curled Carlos' free kick. Every path you saw was computed — not drawn by hand.");
+}
+wait(0.5);
+
+// 12 — MANIC PROMO: this video is the product.
+mark("manic");
+par {
+  fade(cap, 0.35); fade(me.footer, 0.35);
   fade(mcyl, 0.4); fade(flow, 0.4); fade(rc.ball, 0.4);
   fade(spinT, 0.4); fade(spinB, 0.4); fade(force, 0.4); fade(flab, 0.4); fade(fastl, 0.4); fade(slowl, 0.4);
+  fade(kicker, 0.35);
+}
+par {
+  say(cap, "made with Manic");
+  speak("And this whole video was generated with Manic — a language for animated explainers.");
+  show(promo, 0.6);
+}
+wait(0.25);
+par {
+  say(cap, "plain text → motion");
+  speak("You write plain text. Manic turns it into motion, math, physics, and voice — no timeline editor, no keyframes by hand.");
+  show(promoSub, 0.5);
+}
+wait(0.25);
+par {
+  say(cap, "8gwifi.org/manic");
+  speak("Learn more, try it free, and build your own explainers at eight g wifi dot org slash manic.");
+  show(promoUrl, 0.5); pulse(promoUrl, 0.8);
+}
+wait(0.6);
+
+// 13 — END CARD.
+mark("endcard");
+par {
+  fade(cap, 0.4); fade(promo, 0.4); fade(promoSub, 0.4); fade(promoUrl, 0.4);
 }
 show(me.endcard, 0.6);
-wait(1.6);
+wait(1.8);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/Z_G4L66Mo-U" title="Roberto Carlos' Banana Kick — the Magnus Effect, Computed and Explained in manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Hmr9UdBdCYU" title="Roberto Carlos' Banana Kick — the Magnus Effect, Computed and Explained in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="gradient-fastest-descent-shorts"><a class="header" href="#gradient-fastest-descent-shorts">gradient-fastest-descent-shorts</a></h2>
 <p>The brachistochrone as a branded 9:16 Short: four height-colored wires race under gravity,
@@ -24907,15 +26118,15 @@ color(titel, cyan);
 color(title, cyan);
 </code></pre>
 <h3 id="5-unknown-colour--use-the-palette-or-hue"><a class="header" href="#5-unknown-colour--use-the-palette-or-hue">5. <code>unknown colour</code> — use the palette (or <code>hue</code>)</a></h3>
-<p>Only the named palette colours work — no <code>red</code>, no <code>#ff0000</code>.</p>
-<pre><code class="language-manic"># ❌  unknown colour `red`
-color(dot, red);
+<p>Only the named palette colours work — no <code>#ff0000</code>.</p>
+<pre><code class="language-manic"># ❌  unknown colour `chartreuse`
+color(dot, chartreuse);
 # ✅  a palette colour…
-color(dot, magenta);
+color(dot, coral);
 # ✅  …or a computed one, 0–360
 hue(dot, 210);
 </code></pre>
-<p>Palette: <code>cyan  magenta  lime  gold  fg  dim  void  panel</code>.</p>
+<p>Palette: <code>cyan  magenta  lime  gold  red  orange  blue  teal  violet  coral indigo  mint  fg  dim  void  panel</code>.</p>
 <h3 id="6-stroke-is-2d-only--a-2d-styler-on-a-3d-shape"><a class="header" href="#6-stroke-is-2d-only--a-2d-styler-on-a-3d-shape">6. <code>stroke is 2D-only</code> — a 2D styler on a 3D shape</a></h3>
 <p>Some styling is 2D-only. On 3D shapes use the 3D equivalent.</p>
 <pre><code class="language-manic">cube3(bx, (0, 0, 1), (2, 2, 2));

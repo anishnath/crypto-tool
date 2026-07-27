@@ -59,10 +59,13 @@ public class AIGatewayProxyServlet extends HttpServlet {
     private static final int MAX_BUCKETS = 10_000;
     private static final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
-    // Premium status cache (userId -> [isPremium(0/1), expiresAtMillis]) to avoid
-    // hitting the billing gateway on every chat request. TTL: 5 minutes.
-    private static final long PREMIUM_CACHE_TTL_MS = 6L * 60 * 60 * 1000L;
+    // Premium / entitlement bypass cache. Short TTL so Manic purchase shows up quickly.
+    private static final long PREMIUM_CACHE_TTL_MS = 60_000L;
+    private static final String MANIC_TOOL_ID = "developer-tools/manic";
+    /** userId → [exempt 0/1, expiresAt] for global is_premium */
     private static final Map<String, long[]> premiumCache = new ConcurrentHashMap<>();
+    /** "userId|toolId" → [exempt 0/1, expiresAt] for tool entitlement */
+    private static final Map<String, long[]> entitlementCache = new ConcurrentHashMap<>();
 
     private Bucket resolveBucket(String key) {
         if (buckets.size() > MAX_BUCKETS) {
@@ -98,9 +101,22 @@ public class AIGatewayProxyServlet extends HttpServlet {
     }
 
     /**
-     * True when the logged-in user has an active Pro subscription. Cached per user
-     * for {@link #PREMIUM_CACHE_TTL_MS}. Anonymous users are never premium.
-     * Fails open to {@code false} (rate-limited) when billing status is unavailable.
+     * True when the caller bypasses the free-tier rate limit.
+     * Manic ({@code X-Tool-Id=developer-tools/manic}) uses tool entitlement only —
+     * global {@code is_premium} must not unlock Manic AI rate-limit bypass.
+     * Other tools keep global {@code is_premium} (legacy).
+     */
+    private boolean isRateLimitExempt(String userId, String toolId) {
+        if (userId == null || userId.isEmpty()) return false;
+        if (MANIC_TOOL_ID.equals(toolId)) {
+            return hasPaidToolEntitlement(userId, MANIC_TOOL_ID);
+        }
+        return isPremiumUser(userId);
+    }
+
+    /**
+     * True when the logged-in user has an active Pro subscription (global).
+     * Fails closed to {@code false} (rate-limited) when billing status is unavailable.
      */
     private boolean isPremiumUser(String userId) {
         if (userId == null || userId.isEmpty()) return false;
@@ -112,6 +128,20 @@ public class AIGatewayProxyServlet extends HttpServlet {
         boolean premium = fetchPremiumStatus(userId);
         premiumCache.put(userId, new long[]{ premium ? 1L : 0L, now + PREMIUM_CACHE_TTL_MS });
         return premium;
+    }
+
+    /** Tool-scoped paid plan (pro|ultra) for rate-limit bypass. */
+    private boolean hasPaidToolEntitlement(String userId, String toolId) {
+        if (userId == null || userId.isEmpty() || toolId == null || toolId.isEmpty()) return false;
+        String key = userId + "|" + toolId;
+        long now = System.currentTimeMillis();
+        long[] cached = entitlementCache.get(key);
+        if (cached != null && cached[1] > now) {
+            return cached[0] == 1L;
+        }
+        boolean paid = fetchToolEntitlementPaid(userId, toolId);
+        entitlementCache.put(key, new long[]{ paid ? 1L : 0L, now + PREMIUM_CACHE_TTL_MS });
+        return paid;
     }
 
     private boolean fetchPremiumStatus(String userId) {
@@ -144,6 +174,37 @@ public class AIGatewayProxyServlet extends HttpServlet {
         }
     }
 
+    private boolean fetchToolEntitlementPaid(String userId, String toolId) {
+        try {
+            String url = getGatewayBase() + "/v1/billing/entitlement?tool_id="
+                + java.net.URLEncoder.encode(toolId, StandardCharsets.UTF_8.name());
+            RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(3000)
+                .setSocketTimeout(4000)
+                .build();
+            try (CloseableHttpClient client = HttpClients.custom().setDefaultRequestConfig(config).build()) {
+                HttpGet get = new HttpGet(url);
+                get.setHeader("X-User-Id", userId);
+                get.setHeader("X-Tool-Id", toolId);
+                String secret = System.getenv("BILLING_INTERNAL_SECRET");
+                if (secret != null && !secret.isEmpty()) {
+                    get.setHeader("X-Billing-Internal-Secret", secret);
+                }
+                HttpResponse upstream = client.execute(get);
+                if (upstream.getStatusLine().getStatusCode() >= 400) return false;
+                String respBody = readBody(upstream);
+                @SuppressWarnings("unchecked")
+                Map<String, Object> obj = JsonUtil.fromJson(respBody, Map.class);
+                if (obj == null || obj.get("plan") == null) return false;
+                String plan = String.valueOf(obj.get("plan")).trim().toLowerCase();
+                return "pro".equals(plan) || "ultra".equals(plan);
+            }
+        } catch (Exception e) {
+            log.fine("entitlement check failed for user " + userId + " tool " + toolId + ": " + e.getMessage());
+            return false;
+        }
+    }
+
     /**
      * Enforce the free-tier rate limit. Returns {@code true} when the request may
      * proceed; writes a friendly upgrade-oriented 429 and returns {@code false}
@@ -151,9 +212,14 @@ public class AIGatewayProxyServlet extends HttpServlet {
      */
     private boolean enforceRateLimit(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String userId = sessionUserId(req);
-        if (isPremiumUser(userId)) {
-            resp.setHeader("X-RateLimit-Tier", "pro");
-            return true; // Pro: unlimited
+        String toolId = req.getHeader("X-Tool-Id");
+        if (toolId != null) toolId = toolId.trim();
+        if (toolId == null || toolId.isEmpty()) toolId = "";
+
+        if (isRateLimitExempt(userId, toolId)) {
+            resp.setHeader("X-RateLimit-Tier",
+                MANIC_TOOL_ID.equals(toolId) ? "manic-paid" : "pro");
+            return true;
         }
 
         boolean loggedIn = userId != null;
@@ -163,7 +229,8 @@ public class AIGatewayProxyServlet extends HttpServlet {
 
         if (!probe.isConsumed()) {
             long waitSeconds = Math.max(1, probe.getNanosToWaitForRefill() / 1_000_000_000);
-            log.warning("AI gateway rate-limit BLOCKED key=" + key + " loggedIn=" + loggedIn);
+            log.warning("AI gateway rate-limit BLOCKED key=" + key + " loggedIn=" + loggedIn
+                + " tool=" + toolId);
             resp.setContentType("application/json");
             resp.setStatus(429);
             resp.setHeader("Retry-After", String.valueOf(waitSeconds));

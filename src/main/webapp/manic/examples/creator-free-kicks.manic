@@ -1,13 +1,12 @@
-// Roberto Carlos' Banana Kick — the whole story. He walks the ball in and places
-// it, paces back, computes the Magnus law WITH VALUES until it locks, sprints up
-// and strikes — the RK4 ball swerves metres and curls in by the post: GOAL. Then
-// the scene REWINDS, and the same ball becomes a spinning cylinder: uniform flow +
-// a free vortex superpose into an asymmetric flow — faster one side, slower the
-// other — a pressure difference that pushes it sideways. That IS the Magnus force
-// that bent the kick. Every trajectory and streamline is computed, not drawn.
+// Roberto Carlos' Banana Kick — Manic promo cut. The physics story sells the
+// product: every path and streamline is computed from a plain `.manic` script,
+// then the outro names Manic and points to 8gwifi.org/manic.
 title("Roberto Carlos' Banana Kick");
 canvas("9:16");
 template("shorts");
+voice("cartesia");                         // story narration
+// voice("elevenlabs");
+// voice("gtts");
 
 creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
 watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
@@ -70,18 +69,32 @@ text(slowl, (cx, mpy+115), "slower → high pressure"); size(slowl, 24); color(s
 text(kicker, (cx, h*0.13), "Roberto Carlos' impossible free kick");
 size(kicker, 32); color(kicker, gold); bold(kicker); wrap(kicker, w*0.82);
 text(cap, (cx, h*0.80), ""); size(cap, 30); color(cap, dim); wrap(cap, w*0.84);
+text(promo, (cx, h*0.42), "Manic"); size(promo, 72); color(promo, gold); bold(promo); hidden(promo);
+text(promoSub, (cx, h*0.52), "plain text → animated explainers"); size(promoSub, 28); color(promoSub, cyan); wrap(promoSub, w*0.82); hidden(promoSub);
+text(promoUrl, (cx, h*0.62), "8gwifi.org/manic"); size(promoUrl, 30); color(promoUrl, fg); bold(promoUrl); hidden(promoUrl);
 
 socials(me);
 endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
 
 untraced(kicker); cursor(kicker);
 
-// 1 — HOOK.
+// Narration tells the story. Captions stay short punch-lines on screen.
+// Configure once: voice("gtts"|"cartesia"). speak("…") = voice only;
+// say(cap, "…") = text only; par both when needed.
+
+// 1 — HOOK: open the legend.
 mark("hook");
-type(kicker, 1.3);
+par {
+  type(kicker, 1.3);
+  speak("France, nineteen ninety-seven. Roberto Carlos stands thirty-five metres out — and takes a free kick the world still cannot believe.");
+}
 
 // 2 — WALK the ball in and place it (sin-phased gait).
-show(cap, 0.3); say(cap, "he walks it in and sets it down");
+show(cap, 0.3);
+par {
+  say(cap, "walk it in");
+  speak("He walks the ball in himself and sets it down. No rush. The wall is waiting.");
+}
 for i in 1..11 {
   let bx = sx0 + i*20; let ph = i*90; let sw = 22*sin(ph*pi/180); let lift = 8*abs(sin(ph*pi/180));
   par {
@@ -94,7 +107,11 @@ for i in 1..11 {
 wait(0.3);
 
 // 3 — PACE BACK; the calculation begins.
-fade(kicker, 0.4); say(cap, "paces back — will this work?"); show(calc, 0.4);
+fade(kicker, 0.4); show(calc, 0.4);
+par {
+  say(cap, "pace back");
+  speak("He paces back. Eyes on the posts. Somewhere in that run-up is a curve no keeper expects.");
+}
 for i in 1..6 {
   let bx = (kx-60) - i*18; let ph = i*90; let sw = 16*sin(ph*pi/180); let lift = 6*abs(sin(ph*pi/180));
   par {
@@ -108,12 +125,17 @@ for i in 1..6 {
 // 4 — COMPUTE the Magnus law WITH VALUES, then lock it.
 rewrite(calc, `\mathbf{a}_M=(0.05)(3.1)(30)`, 0.7, smooth);
 rewrite(calc, `\mathbf{a}_M\approx 4.6\ \mathrm{m/s^2}`, 0.7, smooth);
-say(cap, "locked in"); recolor(cap, lime);
+par {
+  say(cap, "Magnus locks");
+  recolor(cap, lime);
+  speak("Physics names the cheat code: Magnus acceleration. Spin crossed with velocity. About four point six metres per second squared of sideways push.");
+}
 rewrite(calc, `\text{curl}\approx 3\ \text{m}`, 0.6, smooth);
 wait(0.3);
 
 // 5 — RAN FAST up to the ball.
 recolor(cap, dim); say(cap, ""); fade(calc, 0.4);
+speak("Then he runs.");
 for i in 1..9 {
   let bx = (kx-150) + i*15; let ph = i*120; let sw = 30*sin(ph*pi/180); let lift = 12*abs(sin(ph*pi/180));
   par {
@@ -129,58 +151,111 @@ seq {
   par { move(footR,(kx-4, ky+34),0.13,smooth); move(hip,(kx-30, hipY),0.13,smooth); }
   par {
     draw(rc, 2.0); run(rc, 2.0);
-    seq { wait(1.1); recolor(cap, gold); say(cap, "aimed metres wide — it curled in by the post"); }
+    seq {
+      wait(1.1);
+      recolor(cap, gold);
+      par {
+        say(cap, "curl!");
+        speak("The shot starts metres wide of the post — then the air bends it in.");
+      }
+    }
   }
 }
 wait(0.4);
 
 // 7 — GOAL.
-recolor(cap, gold); say(cap, "GOAL — impossible without the spin");
-par { flash(goal, gold); pulse(goal, 0.7); }
-wait(0.7);
-
-// 7.5 — proof: same strike, no spin, no air to curl it → it sails wide.
-recolor(cap, red); say(cap, "no spin, no air pushing it — the same strike sails wide");
-draw(ns, 1.3);
-wait(0.8);
-
-// 8 — REWIND: both trajectories retract; the ball returns to the spot.
-recolor(cap, dim); say(cap, "so WHY does the spin bend it? rewind…");
+recolor(cap, gold);
 par {
+  say(cap, "GOAL");
+  speak("Goal. Without that spin, the ball never finds the net.");
+  flash(goal, gold); pulse(goal, 0.7);
+}
+wait(0.5);
+
+// 7.5 — proof: same strike, no spin → sails wide.
+recolor(cap, red);
+par {
+  say(cap, "no spin → wide");
+  speak("Same strike. Zero spin. No air pushing sideways. Watch it sail wide — the proof.");
+  draw(ns, 1.3);
+}
+wait(0.5);
+
+// 8 — REWIND.
+recolor(cap, dim);
+par {
+  say(cap, "rewind");
+  speak("So why does spin bend a football? Rewind.");
   erase(rc, 0.9); erase(ns, 0.9);
   to(rc.ball, x, kx, 0.9, smooth); to(rc.ball, y, ky, 0.9, smooth);
 }
 wait(0.3);
 
-// 9 — the same ball becomes a SPINNING CYLINDER: the flow field appears.
-say(cap, "zoom into the ball — it's a spinning cylinder in the air");
+// 9 — spinning cylinder + flow field.
 par {
+  say(cap, "spinning cylinder");
+  speak("Zoom into the ball. In flight it is a spinning cylinder in the air stream.");
   fade(pl, 0.5); fade(head, 0.5);
   fade(gbox, 0.5); fade(goal, 0.5); fade(gline, 0.5); fade(wall, 0.5);
   to(rc.ball, x, cx, 0.6, smooth); to(rc.ball, y, mpy, 0.6, smooth);
   show(mcyl, 0.5);
 }
 stagger(0.04) { for i in 0..15 { draw(mfl{i}, 0.9); } }
+wait(0.3);
+
+// 10 — asymmetry → Magnus force.
+par {
+  say(cap, "faster / slower");
+  speak("Spin drags the air: faster on top, slower below. Fast air means low pressure.");
+  show(spinT, 0.4); show(spinB, 0.4); show(fastl, 0.5); show(slowl, 0.5);
+}
+wait(0.3);
+par {
+  say(cap, "Magnus force");
+  speak("The pressure difference pushes the ball sideways. That sideways push is the Magnus force.");
+  show(force, 0.6); show(flab, 0.5); pulse(force, 0.8);
+}
 wait(0.4);
 
-// 10 — uniform flow + free vortex superpose → asymmetry → sideways force.
-say(cap, "spin drags the air: faster on top, slower below");
-par { show(spinT, 0.4); show(spinB, 0.4); show(fastl, 0.5); show(slowl, 0.5); }
-wait(0.5);
-say(cap, "a pressure difference pushes it sideways — the Magnus force");
-par { show(force, 0.6); show(flab, 0.5); pulse(force, 0.8); }
-wait(0.6);
-
 // 11 — the point.
-recolor(cap, cyan); say(cap, "that sideways force is what curled the free kick — all computed");
-wait(1.1);
-
-// 12 — END CARD.
-mark("endcard");
+recolor(cap, cyan);
 par {
-  fade(cap, 0.4); fade(me.footer, 0.4);
+  say(cap, "computed, not drawn");
+  speak("That force is what curled Carlos' free kick. Every path you saw was computed — not drawn by hand.");
+}
+wait(0.5);
+
+// 12 — MANIC PROMO: this video is the product.
+mark("manic");
+par {
+  fade(cap, 0.35); fade(me.footer, 0.35);
   fade(mcyl, 0.4); fade(flow, 0.4); fade(rc.ball, 0.4);
   fade(spinT, 0.4); fade(spinB, 0.4); fade(force, 0.4); fade(flab, 0.4); fade(fastl, 0.4); fade(slowl, 0.4);
+  fade(kicker, 0.35);
+}
+par {
+  say(cap, "made with Manic");
+  speak("And this whole video was generated with Manic — a language for animated explainers.");
+  show(promo, 0.6);
+}
+wait(0.25);
+par {
+  say(cap, "plain text → motion");
+  speak("You write plain text. Manic turns it into motion, math, physics, and voice — no timeline editor, no keyframes by hand.");
+  show(promoSub, 0.5);
+}
+wait(0.25);
+par {
+  say(cap, "8gwifi.org/manic");
+  speak("Learn more, try it free, and build your own explainers at eight g wifi dot org slash manic.");
+  show(promoUrl, 0.5); pulse(promoUrl, 0.8);
+}
+wait(0.6);
+
+// 13 — END CARD.
+mark("endcard");
+par {
+  fade(cap, 0.4); fade(promo, 0.4); fade(promoSub, 0.4); fade(promoUrl, 0.4);
 }
 show(me.endcard, 0.6);
-wait(1.6);
+wait(1.8);

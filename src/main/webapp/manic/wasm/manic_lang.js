@@ -1,6 +1,33 @@
 /* @ts-self-types="./manic_lang.d.ts" */
 
 /**
+ * Deterministic auto-correct — returns `{"code":"…","fixed":N}`. This is the SAME
+ * Rust logic behind the `manic fix` CLI (`crate::autofix`), so the browser playground
+ * can call it instead of maintaining its own copy. `include_removals` applies
+ * destructive stray-token removals (the 🔧 Auto-fix button behaviour; `false` = the
+ * silent post-AI pass); `wrap_latex` runs the bare `equation`/`rewrite` LaTeX normalizer.
+ * The whole multi-pass loop runs in Rust — no per-pass JS↔WASM `check()` round-trips.
+ * @param {string} src
+ * @param {boolean} include_removals
+ * @param {boolean} wrap_latex
+ * @returns {string}
+ */
+export function autofix(src, include_removals, wrap_latex) {
+    let deferred2_0;
+    let deferred2_1;
+    try {
+        const ptr0 = passStringToWasm0(src, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.autofix(ptr0, len0, include_removals, wrap_latex);
+        deferred2_0 = ret[0];
+        deferred2_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+    }
+}
+
+/**
  * Diagnostics — `[{start,len,severity,message,fix?}]`.
  * @param {string} src
  * @returns {string}
@@ -53,6 +80,30 @@ export function tokenize(src) {
         const ptr0 = passStringToWasm0(src, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
         const ret = wasm.tokenize(ptr0, len0);
+        deferred2_0 = ret[0];
+        deferred2_1 = ret[1];
+        return getStringFromWasm0(ret[0], ret[1]);
+    } finally {
+        wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+    }
+}
+
+/**
+ * Voice / TTS cost report — JSON with provider, model, characters, words, and
+ * estimated Cartesia credits (no network; parse + expand only).
+ *
+ * Shape:
+ * `{present,provider,model,voice,voice_id,tone,language,lines,characters,words,est_credits,cost_note,cues:[{text,characters,words}]}`
+ * @param {string} src
+ * @returns {string}
+ */
+export function voice_report(src) {
+    let deferred2_0;
+    let deferred2_1;
+    try {
+        const ptr0 = passStringToWasm0(src, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.voice_report(ptr0, len0);
         deferred2_0 = ret[0];
         deferred2_1 = ret[1];
         return getStringFromWasm0(ret[0], ret[1]);

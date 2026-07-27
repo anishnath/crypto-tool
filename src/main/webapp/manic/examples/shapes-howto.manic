@@ -1,0 +1,411 @@
+// ============================================================================
+//  shapes-howto.manic — SHAPECRAFT
+//  A power demo that also teaches the rules:
+//    fills hide constructions · outlined reveals · dashed rings for contacts
+//    circle/rect/polygon/sector fill by default · morph / become change identity
+//
+//    manic examples/shapes-howto.manic
+//    manic examples/shapes-howto.manic --record out --preset studio
+// ============================================================================
+
+title("Shapecraft — Manic Shape Power");
+canvas("16:9");
+template("blank");
+
+text(cap, (cx, h - 34), ""); size(cap, 22); color(cap, dim); display(cap);
+text(head, (cx, 58), ""); size(head, 32); color(head, gold); display(head); bold(head);
+
+// ---- stage energy ----
+circle(well, (cx, cy), 420);
+filled(well); gradient(well, panel, void, indigo, radial); opacity(well, 0.7);
+
+spline(orbit, (180, 520), (340, 220), (640, 160), (940, 220), (1100, 520));
+stroke(orbit, 2.5); gradient(orbit, dim, violet, teal, "curvature");
+untraced(orbit); hidden(orbit); opacity(orbit, 0.55);
+
+// ---- hero: one persistent outlined circle ----
+circle(hero, (cx, cy), 120);
+outlined(hero); color(hero, cyan); stroke(hero, 6); glow(hero, 1.4);
+gradient(hero, cyan, mint, teal, 45);
+untraced(hero); hidden(hero);
+
+// fill veil — fades over the hero to show the trap without destroying morph
+circle(veil, (cx, cy), 120);
+filled(veil); color(veil, indigo); opacity(veil, 0.92); hidden(veil); z(veil, 5);
+
+rect(asSquare, (cx, cy), 220, 220); hidden(asSquare);
+polygon(asTri, (cx, 250), (cx - 140, 520), (cx + 140, 520)); hidden(asTri);
+sector(asPie, (cx, cy), 130, -30, 300); color(asPie, magenta); hidden(asPie);
+polygon(asDiamond, (cx, cy - 130), (cx + 130, cy), (cx, cy + 130), (cx - 130, cy));
+color(asDiamond, gold); hidden(asDiamond);
+
+circle(finalForm, (cx, cy), 130);
+outlined(finalForm); color(finalForm, cyan); stroke(finalForm, 6);
+gradient(finalForm, cyan, mint, violet, 90); glow(finalForm, 1.6); hidden(finalForm);
+
+morph(hero, asSquare, 180);   // spin-wound morph ready
+
+text(heroTag, (cx, cy - 170), "one persistent id");
+size(heroTag, 22); color(heroTag, fg); hidden(heroTag);
+
+// ---- axes for the fill-trap punch ----
+line(axX, (cx - 200, cy), (cx + 200, cy));
+color(axX, dim); stroke(axX, 2); untraced(axX); hidden(axX);
+line(axY, (cx, cy - 160), (cx, cy + 160));
+color(axY, dim); stroke(axY, 2); untraced(axY); hidden(axY);
+
+// ---- the cast (draw-on parade, then orbit travel) ----
+circle(castC, (cx - 280, 280), 48);
+outlined(castC); color(castC, teal); stroke(castC, 3.5); untraced(castC); hidden(castC);
+rect(castR, (cx - 100, 250), 90, 70);
+outlined(castR); color(castR, coral); stroke(castR, 3.5); untraced(castR); hidden(castR);
+polygon(castP, (cx + 80, 230), (cx + 30, 310), (cx + 130, 310));
+outlined(castP); color(castP, violet); stroke(castP, 3.5); untraced(castP); hidden(castP);
+sector(castS, (cx + 260, 280), 52, -40, 240);
+outlined(castS); color(castS, gold); stroke(castS, 3.5); untraced(castS); hidden(castS);
+arc(castA, (cx - 220, 480), 50, -20, 250);
+color(castA, mint); stroke(castA, 4); untraced(castA); hidden(castA);
+arrow(castV, (cx + 40, 500), (cx + 180, 430));
+color(castV, magenta); stroke(castV, 4); untraced(castV); hidden(castV);
+line(castL, (cx + 240, 500), (cx + 340, 430));
+color(castL, lime); stroke(castL, 4); untraced(castL); hidden(castL);
+
+// sparks that ring the hero, then settle
+rect(seed, (cx, cy), 60, 60); hidden(seed);
+particles(sparks, seed, 12, 6, 19, "random");
+color(sparks, cyan); glow(sparks, 0.5); hidden(sparks);
+circle(orbitRing, (cx, cy), 230); hidden(orbitRing);
+
+// ---- palette chips (fill OK — colour IS the subject) ----
+let py = 400;
+circle(chip0,  (140, py), 26);  filled(chip0);  color(chip0, fg);      hidden(chip0);
+circle(chip1,  (220, py), 26);  filled(chip1);  color(chip1, cyan);    hidden(chip1);
+circle(chip2,  (300, py), 26);  filled(chip2);  color(chip2, magenta); hidden(chip2);
+circle(chip3,  (380, py), 26);  filled(chip3);  color(chip3, lime);    hidden(chip3);
+circle(chip4,  (460, py), 26);  filled(chip4);  color(chip4, gold);    hidden(chip4);
+circle(chip5,  (540, py), 26);  filled(chip5);  color(chip5, red);     hidden(chip5);
+circle(chip6,  (620, py), 26);  filled(chip6);  color(chip6, orange);  hidden(chip6);
+circle(chip7,  (700, py), 26);  filled(chip7);  color(chip7, blue);    hidden(chip7);
+circle(chip8,  (780, py), 26);  filled(chip8);  color(chip8, teal);    hidden(chip8);
+circle(chip9,  (860, py), 26);  filled(chip9);  color(chip9, violet);  hidden(chip9);
+circle(chip10, (940, py), 26);  filled(chip10); color(chip10, coral);  hidden(chip10);
+circle(chip11, (1020,py), 26);  filled(chip11); color(chip11, indigo); hidden(chip11);
+circle(chip12, (1100,py), 26);  filled(chip12); color(chip12, mint);   hidden(chip12);
+circle(chip13, (1180,py), 26);  filled(chip13); color(chip13, dim);    hidden(chip13);
+
+rect(sq0,  (140, py), 48, 48); color(sq0, fg);      filled(sq0);  hidden(sq0);
+rect(sq1,  (220, py), 48, 48); color(sq1, cyan);    filled(sq1);  hidden(sq1);
+rect(sq2,  (300, py), 48, 48); color(sq2, magenta); filled(sq2);  hidden(sq2);
+rect(sq3,  (380, py), 48, 48); color(sq3, lime);    filled(sq3);  hidden(sq3);
+rect(sq4,  (460, py), 48, 48); color(sq4, gold);    filled(sq4);  hidden(sq4);
+rect(sq5,  (540, py), 48, 48); color(sq5, red);     filled(sq5);  hidden(sq5);
+rect(sq6,  (620, py), 48, 48); color(sq6, orange);  filled(sq6);  hidden(sq6);
+rect(sq7,  (700, py), 48, 48); color(sq7, blue);    filled(sq7);  hidden(sq7);
+rect(sq8,  (780, py), 48, 48); color(sq8, teal);    filled(sq8);  hidden(sq8);
+rect(sq9,  (860, py), 48, 48); color(sq9, violet);  filled(sq9);  hidden(sq9);
+rect(sq10, (940, py), 48, 48); color(sq10, coral);  filled(sq10); hidden(sq10);
+rect(sq11, (1020,py), 48, 48); color(sq11, indigo); filled(sq11); hidden(sq11);
+rect(sq12, (1100,py), 48, 48); color(sq12, mint);   filled(sq12); hidden(sq12);
+rect(sq13, (1180,py), 48, 48); color(sq13, dim);    filled(sq13); hidden(sq13);
+
+polygon(tri0,  (140, py-22), (114, py+22), (166, py+22)); color(tri0, fg);      filled(tri0);  hidden(tri0);
+polygon(tri1,  (220, py-22), (194, py+22), (246, py+22)); color(tri1, cyan);    filled(tri1);  hidden(tri1);
+polygon(tri2,  (300, py-22), (274, py+22), (326, py+22)); color(tri2, magenta); filled(tri2);  hidden(tri2);
+polygon(tri3,  (380, py-22), (354, py+22), (406, py+22)); color(tri3, lime);    filled(tri3);  hidden(tri3);
+polygon(tri4,  (460, py-22), (434, py+22), (486, py+22)); color(tri4, gold);    filled(tri4);  hidden(tri4);
+polygon(tri5,  (540, py-22), (514, py+22), (566, py+22)); color(tri5, red);     filled(tri5);  hidden(tri5);
+polygon(tri6,  (620, py-22), (594, py+22), (646, py+22)); color(tri6, orange);  filled(tri6);  hidden(tri6);
+polygon(tri7,  (700, py-22), (674, py+22), (726, py+22)); color(tri7, blue);    filled(tri7);  hidden(tri7);
+polygon(tri8,  (780, py-22), (754, py+22), (806, py+22)); color(tri8, teal);    filled(tri8);  hidden(tri8);
+polygon(tri9,  (860, py-22), (834, py+22), (886, py+22)); color(tri9, violet);  filled(tri9);  hidden(tri9);
+polygon(tri10, (940, py-22), (914, py+22), (966, py+22)); color(tri10, coral);  filled(tri10); hidden(tri10);
+polygon(tri11, (1020,py-22),(994, py+22),(1046,py+22)); color(tri11, indigo); filled(tri11); hidden(tri11);
+polygon(tri12, (1100,py-22),(1074,py+22),(1126,py+22)); color(tri12, mint);   filled(tri12); hidden(tri12);
+polygon(tri13, (1180,py-22),(1154,py+22),(1206,py+22)); color(tri13, dim);    filled(tri13); hidden(tri13);
+
+// ---- CENTER: one filled disc → 4 independent colours → one colour → move ----
+circle(disc, (cx, cy), 140);
+filled(disc); color(disc, coral); outline(disc, cyan); stroke(disc, 4);
+glow(disc, 0.6); hidden(disc);
+
+pie(q, (cx, cy), 140, 4);   // q0..q3 — same centre/radius as disc
+color(q0, teal);    filled(q0);  outline(q0, fg); stroke(q0, 2); untraced(q0); hidden(q0);
+color(q1, coral);   filled(q1);  outline(q1, fg); stroke(q1, 2); untraced(q1); hidden(q1);
+color(q2, violet);  filled(q2);  outline(q2, fg); stroke(q2, 2); untraced(q2); hidden(q2);
+color(q3, gold);    filled(q3);  outline(q3, fg); stroke(q3, 2); untraced(q3); hidden(q3);
+
+// reunited whole — one colour, one id that can move
+circle(whole, (cx, cy), 140);
+filled(whole); color(whole, cyan); outline(whole, mint); stroke(whole, 4);
+glow(whole, 0.8); hidden(whole);
+
+// ---- RIGHT: boolean → TWO regions, TWO colours ----
+let bx = 1000;
+let by = 400;
+rect(bBox, (bx - 35, by - 35), 130, 130);
+outlined(bBox); outline(bBox, cyan); opacity(bBox, 0.4); hidden(bBox);
+circle(bCirc, (bx + 40, by + 20), 78);
+outlined(bCirc); outline(bCirc, magenta); opacity(bCirc, 0.4); hidden(bCirc);
+difference(onlyBox, bBox, bCirc, teal);   hidden(onlyBox); glow(onlyBox, 0.6);
+difference(onlyCirc, bCirc, bBox, coral); hidden(onlyCirc); glow(onlyCirc, 0.6);
+intersect(bHit, bBox, bCirc, gold);       hidden(bHit); glow(bHit, 0.5);
+text(labBool, (bx, by + 155), "A−B · B−A · A∩B"); size(labBool, 16); color(labBool, dim); hidden(labBool);
+
+// ---- contact truth ----
+line(crossH, (cx - 160, cy), (cx + 160, cy));
+color(crossH, dim); stroke(crossH, 2.5); dashed(crossH, 12, 8); untraced(crossH); hidden(crossH);
+line(crossV, (cx, cy - 120), (cx, cy + 120));
+color(crossV, dim); stroke(crossV, 2.5); dashed(crossV, 12, 8); untraced(crossV); hidden(crossV);
+dot(badDot, (cx, cy), 16); color(badDot, coral); glow(badDot, 0.5); hidden(badDot);
+circle(goodRing, (cx, cy), 18);
+outlined(goodRing); color(goodRing, mint); stroke(goodRing, 2.8); dashed(goodRing, 4, 3);
+untraced(goodRing); hidden(goodRing);
+
+// ---- traveler on the orbit ----
+dot(rider, (180, 520), 9); color(rider, gold); glow(rider, 1.2); hidden(rider);
+
+// ============================================================================
+//  SCRIPT — one continuous shapecraft story
+// ============================================================================
+
+step("birth") {
+  seq {
+    say(head, "SHAPECRAFT", 0.35);
+    say(cap, "one shape. every identity. the visual stays true.", 0.35);
+    show(hero, 0.05);
+    par {
+      draw(hero, 1.2, smooth);
+      zoom(1.15, 1.2, smooth);
+    }
+    attach(heroTag, hero, (0, -160));
+    show(heroTag, 0.35);
+    wait(0.35);
+  }
+}
+
+step("truth") {
+  seq {
+    say(head, "outlined — constructions stay readable", 0.3);
+    say(cap, "axes through the hero: the rim never hides the truth.", 0.3);
+    par {
+      show(axX, 0.05); show(axY, 0.05);
+      draw(axX, 0.55); draw(axY, 0.55);
+      cam((cx, cy), 0.8, smooth); zoom(1.35, 0.8, smooth);
+    }
+    pulse(hero);
+    wait(0.45);
+
+    say(head, "filled — the trap", 0.25);
+    say(cap, "a filled disc sits on the axes and deletes them visually.", 0.25);
+    show(veil, 0.45);
+    flash(veil, coral);
+    wait(0.7);
+
+    say(head, "outlined — axes return", 0.25);
+    say(cap, "outline(id, c) only recolors the rim. outlined drops the fill.", 0.25);
+    fade(veil, 0.45);
+    flash(hero, mint);
+    wait(0.55);
+    par {
+      fade(axX, 0.35); fade(axY, 0.35); fade(heroTag, 0.35); fade(hero, 0.35);
+      cam((cx, cy), 0.7, smooth); zoom(1.0, 0.7, smooth);
+    }
+  }
+}
+
+step("cast") {
+  seq {
+    say(head, "the cast", 0.3);
+    say(cap, "circle · rect · polygon · sector · arc · line · arrow", 0.3);
+    show(sparks, 0.25);
+    arrange(sparks, orbitRing, "ring", 1.0, smooth);
+    wait(0.2);
+    stagger(0.1) {
+      show(castC, 0.05); draw(castC, 0.55);
+      show(castR, 0.05); draw(castR, 0.55);
+      show(castP, 0.05); draw(castP, 0.55);
+      show(castS, 0.05); draw(castS, 0.55);
+      show(castA, 0.05); draw(castA, 0.55);
+      show(castV, 0.05); draw(castV, 0.55);
+      show(castL, 0.05); draw(castL, 0.55);
+    }
+    wait(0.2);
+    show(orbit, 0.05); draw(orbit, 1.0, smooth);
+    show(rider, 0.2);
+    travel(rider, orbit, 2.0, smooth);
+    wait(0.25);
+    par {
+      fade(sparks, 0.4);
+      fade(castC, 0.4); fade(castR, 0.4); fade(castP, 0.4); fade(castS, 0.4);
+      fade(castA, 0.4); fade(castV, 0.4); fade(castL, 0.4);
+      fade(orbit, 0.4); fade(rider, 0.4);
+    }
+  }
+}
+
+step("palette") {
+  seq {
+    say(head, "the whole palette — then change the shape", 0.3);
+    say(cap, "filled chips when colour is the subject. become keeps the id.", 0.3);
+    stagger(0.05) {
+      show(chip0, 0.22);  show(chip1, 0.22);  show(chip2, 0.22);  show(chip3, 0.22);
+      show(chip4, 0.22);  show(chip5, 0.22);  show(chip6, 0.22);  show(chip7, 0.22);
+      show(chip8, 0.22);  show(chip9, 0.22);  show(chip10, 0.22); show(chip11, 0.22);
+      show(chip12, 0.22); show(chip13, 0.22);
+    }
+    wait(0.35);
+    say(cap, "become → square", 0.2);
+    stagger(0.035) {
+      for i in 0..14 { become(chip{i}, sq{i}, 0.65, smooth); }
+    }
+    wait(0.25);
+    say(cap, "become → triangle", 0.2);
+    stagger(0.035) {
+      for i in 0..14 { become(chip{i}, tri{i}, 0.65, smooth); }
+    }
+    wait(0.45);
+    par {
+      for i in 0..14 { fade(chip{i}, 0.35); }
+    }
+  }
+}
+
+step("morph") {
+  seq {
+    say(head, "morph · become · spin", 0.3);
+    say(cap, "same hero id — circle winds into a square, then becomes new geometry.", 0.3);
+    show(hero, 0.3);
+    to(hero, morph, 1, 1.5, smooth);     // → square (with 180° wind)
+    wait(0.25);
+    become(hero, asDiamond, 0.95, smooth);
+    pulse(hero);
+    wait(0.2);
+    become(hero, asPie, 0.95, smooth);
+    spin(hero, 40, 0.7, out);
+    wait(0.2);
+    become(hero, asTri, 0.9, smooth);
+    wait(0.45);
+  }
+}
+
+step("pieces") {
+  seq {
+    say(head, "one fill → four fills → one fill → move", 0.3);
+    say(cap, "a filled disc can split into independent colours, reunite, then travel as one.", 0.3);
+    fade(hero, 0.3);
+
+    // 1 — the coral disc (same look as the fill-trap)
+    par {
+      show(axX, 0.05); show(axY, 0.05);
+      draw(axX, 0.4); draw(axY, 0.4);
+      cam((cx, cy), 0.6, smooth); zoom(1.25, 0.6, smooth);
+    }
+    show(disc, 0.45);
+    flash(disc, coral);
+    wait(0.5);
+
+    // 2 — cut into 4 independent colours
+    say(cap, "cut: each quadrant keeps its own fill.", 0.25);
+    fade(disc, 0.3);
+    stagger(0.1) {
+      show(q0, 0.05); draw(q0, 0.45);
+      show(q1, 0.05); draw(q1, 0.45);
+      show(q2, 0.05); draw(q2, 0.45);
+      show(q3, 0.05); draw(q3, 0.45);
+    }
+    // explode slightly so the independence is obvious
+    par {
+      move(q0, (cx + 22, cy - 22), 0.45, overshoot);
+      move(q1, (cx - 22, cy - 22), 0.45, overshoot);
+      move(q2, (cx - 22, cy + 22), 0.45, overshoot);
+      move(q3, (cx + 22, cy + 22), 0.45, overshoot);
+    }
+    wait(0.45);
+
+    // 3 — reunite as ONE colour, then ONE circle
+    say(cap, "reunite: every slice takes one colour, then they become one disc.", 0.25);
+    par {
+      recolor(q0, cyan, 0.5);
+      recolor(q1, cyan, 0.5);
+      recolor(q2, cyan, 0.5);
+      recolor(q3, cyan, 0.5);
+    }
+    // snap slices back to centre
+    par {
+      move(q0, (cx, cy), 0.5, smooth);
+      move(q1, (cx, cy), 0.5, smooth);
+      move(q2, (cx, cy), 0.5, smooth);
+      move(q3, (cx, cy), 0.5, smooth);
+    }
+    wait(0.15);
+    // swap the four pieces for one solid disc (same colour)
+    par {
+      fade(q0, 0.3); fade(q1, 0.3); fade(q2, 0.3); fade(q3, 0.3);
+      show(whole, 0.35);
+    }
+    pulse(whole);
+    wait(0.4);
+
+    // 4 — move as one unit
+    say(cap, "now it moves as a single identity.", 0.25);
+    par {
+      fade(axX, 0.35); fade(axY, 0.35);
+      cam((cx + 120, cy), 0.9, smooth); zoom(1.05, 0.9, smooth);
+      move(whole, (cx + 260, cy), 1.1, smooth);
+    }
+    wait(0.35);
+
+    // side boolean still lands on the right as the disc arrives
+    say(head, "boolean keeps two colours", 0.25);
+    say(cap, "A−B teal · B−A coral · then A∩B gold — never one muddy fill.", 0.25);
+    par { show(bBox, 0.3); show(bCirc, 0.3); }
+    wait(0.3);
+    par { fade(bBox, 0.2); fade(bCirc, 0.2); }
+    par { show(onlyBox, 0.4); show(onlyCirc, 0.4); }
+    flash(onlyBox, teal); flash(onlyCirc, coral);
+    show(labBool, 0.25);
+    wait(0.4);
+    show(bHit, 0.45); flash(bHit, gold);
+    wait(0.7);
+
+    par {
+      fade(whole, 0.35);
+      fade(onlyBox, 0.35); fade(onlyCirc, 0.35); fade(bHit, 0.35); fade(labBool, 0.35);
+      cam((cx, cy), 0.6, smooth); zoom(1.0, 0.6, smooth);
+    }
+  }
+}
+
+step("contact") {
+  seq {
+    say(head, "contact points", 0.3);
+    say(cap, "a solid dot hides the crossing. a dashed ring keeps it.", 0.3);
+    par {
+      show(crossH, 0.05); show(crossV, 0.05);
+      draw(crossH, 0.5); draw(crossV, 0.5);
+      cam((cx, cy), 0.7, smooth); zoom(1.55, 0.7, smooth);
+    }
+    show(badDot, 0.3);
+    flash(badDot, coral);
+    wait(0.55);
+    fade(badDot, 0.25);
+    show(goodRing, 0.05); draw(goodRing, 0.55);
+    pulse(goodRing);
+    wait(0.7);
+    par {
+      fade(crossH, 0.35); fade(crossV, 0.35); fade(goodRing, 0.35);
+      cam((cx, cy), 0.7, smooth); zoom(1.0, 0.7, smooth);
+    }
+  }
+}
+
+step("settle") {
+  seq {
+    say(head, "fills for subjects. outlines for truth.", 0.35);
+    say(cap, "shapecraft: the visual is true — never hide what you're proving.", 0.35);
+    show(hero, 0.2);
+    become(hero, finalForm, 1.0, smooth);
+    pulse(hero);
+    wait(1.6);
+  }
+}

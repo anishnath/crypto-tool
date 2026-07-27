@@ -15,6 +15,8 @@
  * Exposes window.ManicEditor:
  *   await ManicEditor.boot()                → loads Monaco + WASM, registers 'manic'
  *   ManicEditor.monaco                      → the monaco namespace (after boot)
+ *   ManicEditor.wasm                        → manic-lang WASM exports (after boot)
+ *   ManicEditor.voiceReport(src)            → WASM voice_report JSON (TTS preflight)
  *   ManicEditor.setActiveModel(model)       → recompute highlight + markers for it
  *   ManicEditor.onModelChanged(model)       → call from onDidChangeContent
  *   ManicEditor.THEME_DARK / THEME_LIGHT    → theme ids
@@ -309,6 +311,20 @@ window.ManicEditor = (function () {
     } catch (e) { return 0; }
   }
 
+  // Voice / TTS cost report from WASM (no network). Same shape as manic-lang
+  // `voice_report`: {present,provider,voice,voice_id,characters,est_credits,…}.
+  // Returns {present:false,error} when the export is missing or parse fails.
+  function voiceReport(src) {
+    if (!wasm || typeof wasm.voice_report !== 'function') {
+      return { present: false, error: 'voice_report unavailable — refresh to load the latest WASM' };
+    }
+    try {
+      return JSON.parse(wasm.voice_report(String(src == null ? '' : src))) || { present: false };
+    } catch (e) {
+      return { present: false, error: (e && e.message) ? e.message : String(e) };
+    }
+  }
+
   // User-triggered "Auto-fix" on the active model. Unlike the silent post-AI pass,
   // this INCLUDES destructive fixes (stray-token removal) and applies the result
   // as an undoable edit (Ctrl/Cmd+Z reverts it). Returns { fixed, remaining }.
@@ -367,6 +383,7 @@ window.ManicEditor = (function () {
     boot: boot,
     get monaco() { return monaco; },
     get wasm() { return wasm; },
+    voiceReport: voiceReport,
     setActiveModel: setActiveModel,
     onModelChanged: onModelChanged,
     refreshMarkers: refreshMarkers,

@@ -1,0 +1,217 @@
+// ============================================================================
+//  sqrt-tanx.manic — √(tan x) by PURE GEOMETRY (3B1B-style)
+// ----------------------------------------------------------------------------
+//  THE PROBLEM: √(tan θ) looks like algebra. It is geometry.
+//
+//  THE PROOF, in three pictures:
+//   1. On the unit circle, tan θ IS the length of the vertical tangent segment.
+//   2. √a is the geometric mean of 1 and a — Euclid: semicircle on diameter
+//      1+a, erect a perpendicular at the "1" mark; its height is √a.
+//   3. Set a = tan θ. The altitude IS √(tan θ). No algebra required.
+//
+//  Then we sweep θ and watch the construction's height paint the curve —
+//  teal → violet → coral — using the expanded semantic palette.
+//
+//    manic examples/sqrt-tanx.manic
+//    manic examples/sqrt-tanx.manic --still 22
+// ============================================================================
+
+title("√(tan x) — Pure Geometry");
+canvas("16:9");
+template("blank");
+
+// ---- stage ----
+circle(well, (cx, 400), 340);
+filled(well);
+gradient(well, panel, void, radial);
+opacity(well, 0.55);
+
+// ============================================================================
+//  LEFT — the unit circle, where tan θ is a length
+// ============================================================================
+let ox = 250;
+let oy = 430;
+let R = 145;
+// a friendly angle: θ = 0.95 rad ≈ 54.4°, tan ≈ 1.40, √tan ≈ 1.18
+let th = 0.95;
+let Px = ox + R*cos(th);
+let Py = oy - R*sin(th);
+let Ty = oy - R*tan(th);
+
+circle(O, (ox, oy), 7); outlined(O); color(O, fg); stroke(O, 1.5); hidden(O);
+dot(A, (ox + R, oy), 5); color(A, dim); hidden(A);          // (1, 0)
+// contact points: open dashed rings (filled dots hide the circle + tangent)
+circle(P, (Px, Py), 11);
+outlined(P); color(P, mint); stroke(P, 2); dashed(P, 3.5, 2.8); untraced(P); hidden(P);
+circle(T, (ox + R, Ty), 11);
+outlined(T); color(T, coral); stroke(T, 2); dashed(T, 3.5, 2.8); untraced(T); hidden(T);
+
+// ray as a line (not arrow) so the filled arrowhead doesn't cover P
+line(ray, (ox, oy), (Px, Py));
+color(ray, mint); stroke(ray, 2.5); untraced(ray); hidden(ray);
+
+// the tangent SEGMENT — its length IS tan θ (in radii)
+line(tanseg, (ox + R, oy), (ox + R, Ty));
+color(tanseg, coral); stroke(tanseg, 5); untraced(tanseg); hidden(tanseg);
+
+// angle mark — textbook style: a thin ARC, never a filled wedge (fills hide the diagram)
+arc(wedge, (ox, oy), R*0.42, 0, -th*180/pi);
+color(wedge, violet); stroke(wedge, 2.5); untraced(wedge); hidden(wedge);
+
+circle(uc, (ox, oy), R);
+outlined(uc); outline(uc, teal); stroke(uc, 3); untraced(uc); hidden(uc);
+
+line(axX, (ox - R - 30, oy), (ox + R + 100, oy));
+color(axX, dim); stroke(axX, 1.5); untraced(axX); hidden(axX);
+line(axY, (ox, oy + R + 40), (ox, oy - R - 50));
+color(axY, dim); stroke(axY, 1.5); untraced(axY); hidden(axY);
+
+line(tline, (ox + R, oy + R + 50), (ox + R, oy - R - 90));
+color(tline, dim); stroke(tline, 1.5); dashed(tline, 10, 8); untraced(tline); hidden(tline);
+
+text(labP, (Px + 14, Py - 14), "P"); size(labP, 20); color(labP, mint); hidden(labP);
+text(labO, (ox - 18, oy + 22), "O"); size(labO, 18); color(labO, dim); hidden(labO);
+text(labA, (ox + R + 14, oy + 22), "1"); size(labA, 18); color(labA, dim); hidden(labA);
+text(labT, (ox + R + 18, Ty), "tan θ"); size(labT, 20); color(labT, coral); hidden(labT);
+text(labTh, (ox + 48, oy - 28), "θ"); size(labTh, 22); color(labTh, violet); hidden(labTh);
+
+// ============================================================================
+//  RIGHT — Euclid's geometric mean: √a from 1 and a
+// ============================================================================
+let gx = 620;
+let gy = 500;
+let u = 110;                         // px per unit
+let a = tan(th);                     // ≈ 1.40
+let root = sqrt(a);                  // ≈ 1.18
+let G0x = gx;
+let G1x = gx + u;                    // the "1" mark
+let G2x = gx + u*(1 + a);            // the "1+a" mark
+let mid = (G0x + G2x)*0.5;
+let rad = u*(1 + a)*0.5;
+
+dot(G0, (G0x, gy), 5); color(G0, dim); hidden(G0);
+dot(G1, (G1x, gy), 6); color(G1, teal); glow(G1, 0.4); hidden(G1);
+dot(G2, (G2x, gy), 5); color(G2, coral); hidden(G2);
+line(base, (G0x, gy), (G2x, gy));
+color(base, fg); stroke(base, 3); untraced(base); hidden(base);
+
+// upper semicircle on diameter [0, 1+a]
+// screen angles: 0° right, 90° down, 270° up — from left through UP: start 180, sweep +180
+arc(semi, (mid, gy), rad, 180, 180);
+color(semi, indigo); stroke(semi, 3); untraced(semi); hidden(semi);
+
+// altitude at the "1" mark — height = √(1·a) = √(tan θ)
+line(alt, (G1x, gy), (G1x, gy - root*u));
+color(alt, violet); stroke(alt, 5); untraced(alt); hidden(alt);
+dot(H, (G1x, gy - root*u), 8); color(H, violet); glow(H, 0.7); hidden(H);
+
+text(lab0, (G0x, gy + 28), "0"); size(lab0, 18); color(lab0, dim); hidden(lab0);
+text(lab1, (G1x, gy + 28), "1"); size(lab1, 18); color(lab1, teal); hidden(lab1);
+text(labA2, (G2x, gy + 28), "1+tanθ"); size(labA2, 18); color(labA2, coral); hidden(labA2);
+text(labH, (G1x + 16, gy - root*u - 8), "√(tan θ)"); size(labH, 22); color(labH, violet); hidden(labH);
+
+// brace / connector: coral tan length → feeds the geometric mean
+arrow(feed, (ox + R + 36, (oy + Ty)*0.5), (G2x - 10, gy - 40));
+color(feed, coral); stroke(feed, 2); dashed(feed, 8, 6); untraced(feed); hidden(feed);
+
+// ============================================================================
+//  BOTTOM — the curve itself, colored by the new palette
+// ============================================================================
+axes(ax, (920, 400), 280, 220);
+hidden(ax);
+plot(curve, (920, 400), 95, 85, "sqrt(tan(x))", (0.25, 1.35));
+stroke(curve, 5); untraced(curve); hidden(curve);
+gradient(curve, teal, violet, coral, 270);
+// low x → small √tan (teal); high x → large (coral), via height = truth
+
+// ============================================================================
+//  TYPOGRAPHY
+// ============================================================================
+caption(q, "what IS the square root of a tangent?", (cx, 58), 32, gold);
+equation(law, (cx, 110), `\sqrt{\tan\theta}`, 44);
+color(law, violet); hidden(law);
+equation(mean, (900, 160), `\sqrt{a}=\sqrt{1\cdot a}`, 28);
+color(mean, teal); hidden(mean);
+text(cap, (cx, h - 36), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================================================================
+//  SCRIPT
+// ============================================================================
+
+// 1 — HOOK
+say(cap, "an expression that looks like algebra — but it is a length", 0.4);
+wordpop(q, 0.16);
+wait(0.3);
+show(law, 0.5);
+wait(0.6);
+
+// 2 — UNIT CIRCLE
+say(cap, "start with the unit circle and an angle θ", 0.4);
+par { show(axX, 0.05); show(axY, 0.05); show(uc, 0.05); show(tline, 0.05); }
+par {
+  draw(axX, 0.5); draw(axY, 0.5);
+  draw(uc, 1.0);
+}
+par { show(O, 0.3); show(labO, 0.3); }
+draw(tline, 0.5);
+show(A, 0.3); show(labA, 0.3);
+wait(0.3);
+
+// 3 — THE ANGLE AND THE RAY
+say(cap, "draw the ray at angle θ — it meets the circle at P", 0.4);
+show(wedge, 0.05); draw(wedge, 0.5); show(labTh, 0.3);
+show(ray, 0.05); draw(ray, 0.7);
+show(P, 0.05); draw(P, 0.35); show(labP, 0.3);
+pulse(P);
+wait(0.4);
+
+// 4 — TAN θ IS A LENGTH
+say(cap, "extend to the vertical tangent line — that segment's length IS tan θ", 0.4);
+show(tanseg, 0.05); draw(tanseg, 0.9);
+show(T, 0.05); draw(T, 0.35); show(labT, 0.3);
+flash(tanseg, coral);
+wait(0.7);
+
+// 5 — GEOMETRIC MEAN
+say(cap, "now forget the circle — Euclid: √a is the geometric mean of 1 and a", 0.4);
+show(mean, 0.5);
+par {
+  show(G0, 0.3); show(G1, 0.3); show(G2, 0.3);
+  show(lab0, 0.3); show(lab1, 0.3); show(labA2, 0.3);
+  show(base, 0.05);
+}
+draw(base, 0.6);
+wait(0.3);
+
+say(cap, "semicircle on diameter 1 + tan θ — then erect a perpendicular at 1", 0.4);
+show(semi, 0.05); draw(semi, 1.2);
+show(alt, 0.05); draw(alt, 0.9);
+show(H, 0.3); show(labH, 0.3);
+flash(alt, violet);
+wait(0.5);
+
+say(cap, "by Thales + similar triangles, that height equals √(1 · tan θ)", 0.4);
+show(feed, 0.05); draw(feed, 0.7);
+pulse(H); pulse(T);
+wait(0.8);
+
+// 6 — THE IDENTITY
+recolor(cap, violet);
+say(cap, "so the altitude IS √(tan θ) — the symbol was a length all along", 0.4);
+rewrite(law, `\sqrt{\tan\theta}=h`, 0.8, smooth);
+wait(0.9);
+
+// 7 — THE CURVE
+recolor(cap, dim);
+say(cap, "every such height, for every θ, paints the curve √(tan x)", 0.4);
+show(ax, 0.5);
+show(curve, 0.05); draw(curve, 2.2);
+wait(0.4);
+say(cap, "teal near zero, coral as tan θ climbs toward the asymptote at π/2", 0.4);
+flash(curve, violet);
+wait(0.8);
+
+// 8 — POINT
+recolor(cap, teal);
+say(cap, "√(tan θ) is not a formula to memorize — it is a geometric construction", 0.4);
+wait(1.6);

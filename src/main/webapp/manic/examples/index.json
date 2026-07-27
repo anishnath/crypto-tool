@@ -1,5 +1,5 @@
 {
-  "count": 255,
+  "count": 258,
   "categories": [
     {
       "slug": "algorithms",
@@ -202,6 +202,18 @@
           "file": "spline.manic",
           "title": "Spline",
           "desc": "Interpolation: one smooth curve drawn through a scattered set of points \u2014 it passes through every knot exactly."
+        },
+        {
+          "name": "sqrt-tanx",
+          "file": "sqrt-tanx.manic",
+          "title": "Sqrt tanx",
+          "desc": "\u221a(tan \u03b8) by pure geometry \u2014 a 3B1B-style proof: on the unit circle, tan \u03b8 is the vertical tangent length; Euclid's geometric mean (semicircle on diameter 1+a, altitude at 1) turns that length into \u221a(tan \u03b8)."
+        },
+        {
+          "name": "integral-sqrt-tanx",
+          "file": "integral-sqrt-tanx.manic",
+          "title": "Integral sqrt tanx",
+          "desc": "Integrate \u221a(tan P): substitute P = t + \u03c0/4, read A(t) from the circle x\u00b2+y\u00b2=2 and H(t) from the hyperbola x\u00b2\u2212y\u00b2=2, then dA\u2212dH recovers the integrand."
         },
         {
           "name": "trajectory",
@@ -1042,6 +1054,12 @@
           "file": "morph.manic",
           "title": "Morph",
           "desc": "A sampled-point shape morph from A to B."
+        },
+        {
+          "name": "shapes-howto",
+          "file": "shapes-howto.manic",
+          "title": "Shapes howto",
+          "desc": "SHAPECRAFT \u2014 Manic shape power in one film: outlined vs filled (the axes trap), the cast with particles/travel, the full palette that becomes squares then triangles, spin-wound morph, then one coral disc that splits into four independent colours, reunites as one fill, and moves \u2014 beside two-colour boolean regions (A\u2212B / B\u2212A / A\u2229B)."
         }
       ]
     },
@@ -1209,7 +1227,7 @@
           "name": "creator-heightmap-world",
           "file": "creator-heightmap-world.manic",
           "title": "Creator heightmap world",
-          "desc": "The Grid\u21923D bridge as a Short: a grid-kit WFC map settles in 2D, then the SAME grid rises into 3D terrain via heightmap3 \u2014 the camera pulls back to reveal the whole world, rotates, then flies in low over the peaks."
+          "desc": "The Grid\u21923D bridge as a narrated Short: a grid-kit WFC map settles in 2D, then the SAME grid rises into 3D terrain via heightmap3 \u2014 camera pull-back, orbit, and a low ridge flyover."
         },
         {
           "name": "creator-noise-story",
@@ -1221,7 +1239,7 @@
           "name": "creator-free-kicks",
           "file": "creator-free-kicks.manic",
           "title": "Creator free kicks",
-          "desc": "Roberto Carlos' impossible free kick, told as a Short: he walks the ball in and places it, paces back, computes the Magnus law WITH VALUES until it locks, sprints up and strikes \u2014 the RK4 freekick ball swerves metres and curls in by the post for a GOAL, while the same strike with no spin (red dashed) sails wide."
+          "desc": "Roberto Carlos' impossible free kick as a narrated Short: walk-in, Magnus with values, the RK4 freekick curls in for a GOAL while the zero-spin twin sails wide, then a cylinder flow explains the pressure difference."
         },
         {
           "name": "gradient-fastest-descent-shorts",

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a2c3446a.js";
+            window.path_to_searchindex_js = "searchindex-6cddf830.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e8fbc168.js"></script>
+        <script src="toc-c698a1f0.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -189,15 +189,21 @@ declare shapes once; the name is how you address them later in the script.</p>
 <tr><th>shape</th><th>write</th><th>draws</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90, at the centre</td></tr>
-<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle 200 wide, 120 tall</td></tr>
-<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point</td></tr>
-<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end</td></tr>
-<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small filled dot, radius 8</td></tr>
+<tr><td><strong>circle</strong></td><td><code>circle(sun, (cx, cy), 90);</code></td><td>a circle, radius 90 — <strong>filled + outlined by default</strong></td></tr>
+<tr><td><strong>rect</strong></td><td><code>rect(box, (cx, cy), 200, 120);</code></td><td>a rectangle — <strong>filled + outlined by default</strong></td></tr>
+<tr><td><strong>line</strong></td><td><code>line(edge, (100, 100), (400, 300));</code></td><td>a line from point to point (stroke only)</td></tr>
+<tr><td><strong>arrow</strong></td><td><code>arrow(v, (100, 400), (400, 400));</code></td><td>a line with an arrowhead at the end (stroke only)</td></tr>
+<tr><td><strong>dot</strong></td><td><code>dot(p, (cx, cy), 8);</code></td><td>a small <strong>filled</strong> disc (no outline) — hides crossings</td></tr>
 <tr><td><strong>text</strong></td><td><code>text(cap, (cx, 640), "hello");</code></td><td>a text label anchored at a point</td></tr>
 </tbody>
 </table>
 </div>
+<p>Plus composites: <code>polygon</code> / <code>sector</code> / <code>annulus</code> / <code>pie</code> (filled by default),
+<code>arc</code> / <code>brace</code> / <code>ellipse</code> (stroke only), and boolean regions
+(<code>union</code> / <code>intersect</code> / …).</p>
+<p><strong>▶ See it play:</strong> <a href="ex-transforms.html#shapes-howto">SHAPECRAFT</a> — fill vs
+<code>outlined</code>, the cast, palette → <code>become</code>, spin-wound <code>morph</code>, a disc that
+<strong>splits into four colours → reunites → moves</strong>, and two-colour booleans.</p>
 <h3 id="ordinary-text-is-portable-and-shaped-automatically"><a class="header" href="#ordinary-text-is-portable-and-shaped-automatically">Ordinary text is portable and shaped automatically</a></h3>
 <p><code>text</code>, <code>say</code>, captions, labels, and kit-generated words use Manic’s embedded
 font engine. No machine font is consulted, and there is no font-selection DSL:
@@ -289,7 +295,7 @@ begins. They take the entity name first, then a value:</p>
 <tbody>
 <tr><td><code>color(id, c)</code></td><td>fill / stroke colour</td><td><code>color(sun, cyan);</code></td></tr>
 <tr><td><code>stroke(id, w)</code></td><td>line thickness</td><td><code>stroke(sun, 4);</code></td></tr>
-<tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path (defaults 16/10 px)</td><td><code>dashed(curve, 18, 10);</code></td></tr>
+<tr><td><code>dashed(id, [dash], [gap])</code></td><td>dashed path <em>or</em> outlined circle (defaults 16/10 px)</td><td><code>dashed(mark, 4, 3);</code></td></tr>
 <tr><td><code>gradient(id, c1, c2, ..., [mode])</code></td><td>multi-stop gradient: along a path stroke, a linear (angle°) / <code>radial</code> fill, or a computed <code>"speed"</code>/<code>"curvature"</code> quantity on strokes</td><td><code>gradient(wave, blue, cyan, gold, 270);</code></td></tr>
 <tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
 <tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
@@ -301,6 +307,17 @@ begins. They take the entity name first, then a value:</p>
 </tbody>
 </table>
 </div>
+<blockquote>
+<p><strong>Textbook diagrams:</strong> prefer <code>outlined</code> (or a thin <code>arc</code>) for angle marks and
+“regions of interest.” A <code>filled</code> disc or sector sitting <em>on top of</em> axes and
+construction lines hides what’s underneath — even at low opacity. Reserve solid
+fills for backdrop wells <em>behind</em> the diagram, not overlays.</p>
+<p><code>circle</code> defaults to <strong>filled + outlined</strong> (neon UI). For math constructions
+always pair <code>outlined(id)</code> — <code>outline(id, color)</code> alone only recolors the rim
+and leaves the fill on. Contact points that land on crossings should be
+<strong>open / dashed rings</strong> (<code>outlined</code> + <code>dashed</code>), not <code>dot</code> — a solid marker
+paints over the intersection you are trying to show.</p>
+</blockquote>
 <p>And two that decide <em>how a shape first appears</em>:</p>
 <div class="table-wrapper">
 <table>
@@ -315,6 +332,7 @@ begins. They take the entity name first, then a value:</p>
 </div>
 <blockquote>
 <p><strong>Colours are a fixed palette:</strong> <code>fg</code>, <code>void</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>,
+<code>gold</code>, <code>red</code>, <code>orange</code>, <code>blue</code>, <code>teal</code>, <code>violet</code>, <code>coral</code>, <code>indigo</code>, <code>mint</code>,
 <code>dim</code>, <code>panel</code>. For a computed colour (say, one per item in a loop) use
 <code>hue(id, degrees)</code>. More in <a href="colour.html">Colour &amp; style</a>.</p>
 </blockquote>

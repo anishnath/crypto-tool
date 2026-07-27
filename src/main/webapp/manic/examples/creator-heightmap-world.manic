@@ -1,10 +1,15 @@
-// Your Map Is a 3D World — a Creator v2 Short of the Grid→3D bridge. A grid-kit WFC
-// map settles in 2D, then the SAME grid is lifted by heightmap3 into 3D terrain:
-// the camera pulls back to show the whole world, rotates, then flies in low. 9:16
-// shorts frame with creator identity, socials and an end card.
+// Your Map Is a 3D World — Manic promo Short.
+// A grid settles cell by cell (Wave Function Collapse), then the SAME grid lifts
+// into 3D terrain. The camera pulls back, orbits, and flies low. Story narration
+// (`speak`) is separate from short on-screen captions (`say`). Outro names Manic.
 title("Your Map Is a 3D World");
 canvas("9:16");
 template("shorts");
+voice("elevenlabs");                       // story narration
+// voice("elevenlabs", "alice");
+// voice("elevenlabs", "jessica");
+// voice("cartesia");
+// voice("gtts");
 
 creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
 watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
@@ -19,59 +24,107 @@ hidden(land);
 
 text(kicker, (cx, h*0.135), "your flat map is hiding a 3D world");
 size(kicker, 33); color(kicker, cyan); bold(kicker); wrap(kicker, w*0.82);
-text(cap, (cx, h*0.785), "a 2D map, generated cell by cell…");
+text(cap, (cx, h*0.785), "");
 size(cap, 31); color(cap, dim); wrap(cap, w*0.84);
+text(promo, (cx, h*0.42), "Manic"); size(promo, 72); color(promo, cyan); bold(promo); hidden(promo);
+text(promoSub, (cx, h*0.52), "plain text → animated explainers"); size(promoSub, 28); color(promoSub, magenta); wrap(promoSub, w*0.82); hidden(promoSub);
+text(promoUrl, (cx, h*0.62), "8gwifi.org/manic"); size(promoUrl, 30); color(promoUrl, fg); bold(promoUrl); hidden(promoUrl);
 
 socials(me);
 endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
 
-hidden(cap);
 untraced(kicker); cursor(kicker);
 
-// 1 — HOOK + the 2D map settles (Wave Function Collapse).
+// Narration tells the story. Captions stay short punch-lines on screen.
+// speak("…") = voice only; say(cap, "…") = text only; par both when needed.
+
+// 1 — HOOK: open the idea, then the 2D map settles (Wave Function Collapse).
 mark("hook");
-type(kicker, 1.4);
+par {
+  type(kicker, 1.4);
+  speak("Every world starts flat. Watch a map generate itself — cell by cell — until the islands lock.");
+}
 step("map") {
   par {
-    say(cap, "a 2D map, generated cell by cell…");
+    say(cap, "cell by cell…");
+    speak("This is Wave Function Collapse. Constraints push the grid toward a coherent coast.");
     run(world, 16, 3.0);
   }
 }
-wait(0.3);
+wait(0.25);
 
 // 2 — the same grid lifts into 3D (still near top-down, so it reads flat at first).
-step("lift") {
+mark("lift");
+step("height") {
   par {
-    say(cap, "…is secretly a 3D world");
+    say(cap, "same grid → 3D");
+    speak("Now lift the same grid into height. Nothing was redrawn — the cells became terrain.");
     fade(world.cells, 0.5); fade(world.lines, 0.5);
     show(land, 0.6);
   }
 }
 
 // 3 — pull back to see the WHOLE world.
-step("reveal") {
-  orbit3(25, 36, 30, 3.4, smooth);
+mark("reveal");
+step("pullback") {
+  par {
+    say(cap, "pull back");
+    speak("Pull the camera back. The flat map was hiding a whole landscape.");
+    orbit3(25, 36, 30, 3.4, smooth);
+  }
 }
-wait(0.3);
+wait(0.2);
 
 // 4 — rotate around it.
-step("rotate") {
-  seq {
-    par { say(cap, "one grid — 2D and 3D, bridged by Manic"); recolor(cap, cyan); }
+mark("rotate");
+step("orbit") {
+  par {
+    say(cap, "one grid, two worlds");
+    speak("One grid. Two readings — a 2D map for paths, a 3D world for place. Manic bridges them.");
+    recolor(cap, cyan);
     orbit3(185, 32, 30, 4.4, smooth);
   }
 }
 
 // 5 — fly in low over the peaks.
-step("zoom") {
-  orbit3(255, 15, 12, 3.8, smooth);
+mark("zoom");
+step("fly") {
+  par {
+    say(cap, "fly the ridges");
+    speak("Fly in low over the ridges. Every peak is computed from the map you just watched settle.");
+    orbit3(255, 15, 12, 3.8, smooth);
+  }
 }
-wait(0.6);
+wait(0.4);
 
-// 6 — END CARD.
+// 6 — MANIC PROMO: this video is the product.
+mark("manic");
+par {
+  fade(kicker, 0.35); fade(cap, 0.35); fade(me.footer, 0.35); fade(land, 0.45);
+}
+par {
+  say(cap, "made with Manic");
+  speak("And this whole Short was generated with Manic — a language for animated explainers.");
+  show(promo, 0.6);
+}
+wait(0.2);
+par {
+  say(cap, "plain text → motion");
+  speak("You write plain text. Manic turns it into grids, 3D, camera moves, and voice — no timeline editor.");
+  show(promoSub, 0.5);
+}
+wait(0.2);
+par {
+  say(cap, "8gwifi.org/manic");
+  speak("Learn more, try it free, and build your own explainers at eight g wifi dot org slash manic.");
+  show(promoUrl, 0.5); pulse(promoUrl, 0.8);
+}
+wait(0.5);
+
+// 7 — END CARD.
 mark("endcard");
 par {
-  fade(kicker, 0.4); fade(cap, 0.4); fade(me.footer, 0.4); fade(land, 0.5);
+  fade(cap, 0.4); fade(promo, 0.4); fade(promoSub, 0.4); fade(promoUrl, 0.4);
 }
 show(me.endcard, 0.6);
-wait(1.6);
+wait(1.8);

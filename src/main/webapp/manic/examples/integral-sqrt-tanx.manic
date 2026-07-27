@@ -1,0 +1,255 @@
+// ============================================================================
+//  integral-sqrt-tanx.manic — ∫ √(tan P) dP by PURE GEOMETRY
+//  Companion to sqrt-tanx.manic. Storyboard: the handwritten circle+hyperbola
+//  derivation (x²+y²=2 meets x²−y²=2; A(t)−H(t) recovers the integrand).
+// ----------------------------------------------------------------------------
+//  THE PROBLEM: √(tan P) is a length. What is its antiderivative?
+//
+//  THE GEOMETRY (one diagram, two curves of "radius" √2):
+//   · circle   x² + y² = 2     →   A(t) = arcsin(√2 sin t)
+//   · hyperbola x² − y² = 2    →   H(t) = arcosh(√2 cos t)
+//   · substitution  P = t + π/4  (so t ∈ (0, π/4) ⇒ P ∈ (π/4, π/2))
+//
+//  THE TRUTH:
+//      dA − dH  =  √2 · √(tan P) · dP
+//  therefore
+//      ∫ √(tan P) dP  =  (1/√2)(A(t) − H(t)) + C
+//
+//  Colours (expanded palette): teal = circle/A, coral = hyperbola/H,
+//  violet = the integral, mint = the moving point, gold = the hook.
+//
+//    manic examples/integral-sqrt-tanx.manic
+//    manic examples/integral-sqrt-tanx.manic --still 20
+// ============================================================================
+
+title("∫ √(tan P) dP — Circle Meets Hyperbola");
+canvas("16:9");
+template("blank");
+
+// ---- stage ----
+circle(well, (cx, 400), 360);
+filled(well);
+gradient(well, panel, void, radial);
+opacity(well, 0.5);
+
+// ============================================================================
+//  THE DIAGRAM — circle x²+y²=2 and hyperbola x²−y²=2
+//  Screen: origin at (ox,oy), scale s px per unit. Radius √2 ≈ 1.414.
+// ============================================================================
+let ox = 340;
+let oy = 400;
+let s = 130;                 // px per math-unit
+let R = s*sqrt(2);           // circle radius = √2
+// a friendly t inside (0, π/4): t = 0.40 rad ≈ 23°
+let t = 0.40;
+let P = t + pi/4;            // ≈ 1.185 rad ≈ 68°
+// point C on the circle: (√2 cos t, √2 sin t)
+let Cx = ox + s*sqrt(2)*cos(t);
+let Cy = oy - s*sqrt(2)*sin(t);
+// foot on the x-axis and the "hyperbola x" = √2 cosh u with cosh u = √2 cos t?
+// From notes: X = √2 cos t = cosh H, so the hyperbola vertex is at x=√2.
+// Point on right branch with x = √2 cos t... wait cosh H = √2 cos t, so
+// x_hyp = cosh H = √2 cos t (in math units where a=1 for cosh param form
+// of x²−y²=1). Our hyperbola is x²−y²=2 = (x/√2)² − (y/√2)², so
+// parametric: x = √2 cosh u, y = √2 sinh u. And cosh H = √2 cos t? Notes say
+// cosh(H) = X = √2 cos t — that would require cosh H ≤ √2, H = arcosh(√2 cos t).
+// For the diagram, mark the circle point and the matching hyperbola x.
+
+// axes
+line(axX, (ox - R - 40, oy), (ox + R + 120, oy));
+color(axX, dim); stroke(axX, 1.5); untraced(axX); hidden(axX);
+line(axY, (ox, oy + R + 50), (ox, oy - R - 60));
+color(axY, dim); stroke(axY, 1.5); untraced(axY); hidden(axY);
+
+// circle x² + y² = 2 — OUTLINED only. `circle` defaults to filled; a solid
+// disc hides axes and labels underneath (engine-test: never fill constructions).
+circle(circ, (ox, oy), R);
+outlined(circ); outline(circ, teal); stroke(circ, 3.5); untraced(circ); hidden(circ);
+
+// hyperbola x² − y² = 2  →  a = b = √2  (in math units) → a_px = R
+hyperbola(hyp, (ox, oy), R, R, 1.15);
+color(hyp, coral); stroke(hyp, 3); untraced(hyp);
+hidden(hyp.r); hidden(hyp.l);
+
+// origin: thin open ring (tiny r + thick stroke reads as a filled blob)
+circle(O, (ox, oy), 7);
+outlined(O); color(O, fg); stroke(O, 1.5); hidden(O);
+
+// contact point C: dashed open circle so circle + projections show through.
+// Keep radius >> stroke so the interior stays empty (textbook marker).
+circle(C, (Cx, Cy), 12);
+outlined(C); color(C, mint); stroke(C, 2); dashed(C, 3.5, 2.8); untraced(C); hidden(C);
+
+// radius toward C — a LINE, not an arrow: arrowheads are filled discs and
+// hide the open marker at the contact point (engine-test visibility rule)
+line(ray, (ox, oy), (Cx, Cy));
+color(ray, mint); stroke(ray, 2.5); untraced(ray); hidden(ray);
+
+// horizontal from C to y-axis? notes have Y = √2 sin t as height
+line(ht, (ox, Cy), (Cx, Cy));
+color(ht, violet); stroke(ht, 2); dashed(ht, 8, 6); untraced(ht); hidden(ht);
+// vertical drop to x-axis
+line(vt, (Cx, oy), (Cx, Cy));
+color(vt, teal); stroke(vt, 2); dashed(vt, 8, 6); untraced(vt); hidden(vt);
+
+// angle mark — textbook style: a thin ARC, never a filled disc (fills hide axes)
+arc(wedge, (ox, oy), R*0.38, 0, -t*180/pi);
+color(wedge, violet); stroke(wedge, 2.5); untraced(wedge); hidden(wedge);
+
+// labels on the diagram
+text(labO, (ox - 16, oy + 22), "O"); size(labO, 18); color(labO, dim); hidden(labO);
+text(labC, (Cx + 22, Cy - 22), "C(t)"); size(labC, 20); color(labC, mint); hidden(labC);
+text(labT, (ox + 42, oy - 22), "t"); size(labT, 22); color(labT, violet); hidden(labT);
+text(labCirc, (ox - 20, oy - R - 24), "x² + y² = 2"); size(labCirc, 20); color(labCirc, teal); hidden(labCirc);
+text(labHyp, (ox + R + 55, oy + 40), "x² − y² = 2"); size(labHyp, 20); color(labHyp, coral); hidden(labHyp);
+
+// region hint: dashed circle (not a filled disc, not just a short arc)
+circle(zone, (ox + R*0.42, oy - R*0.18), R*0.38);
+outlined(zone); color(zone, indigo); stroke(zone, 2); dashed(zone, 7, 5);
+untraced(zone); hidden(zone);
+
+// ============================================================================
+//  RIGHT — the algebraic spine, rewritten live
+// ============================================================================
+equation(eqP, (920, 150), `P=t+\tfrac{\pi}{4}`, 32);
+color(eqP, gold); hidden(eqP);
+
+equation(eqA, (920, 230), `A(t)=\sin^{-1}(\sqrt{2}\sin t)`, 28);
+color(eqA, teal); hidden(eqA);
+
+equation(eqH, (920, 300), `H(t)=\cosh^{-1}(\sqrt{2}\cos t)`, 28);
+color(eqH, coral); hidden(eqH);
+
+equation(eqD, (920, 390), `dA-dH=\sqrt{2}\,\sqrt{\tan P}\,dP`, 28);
+color(eqD, violet); hidden(eqD);
+
+equation(eqI, (920, 480), `\int\sqrt{\tan P}\,dP=\tfrac{1}{\sqrt{2}}(A-H)+C`, 30);
+color(eqI, mint); hidden(eqI);
+
+// final closed form (boxed punchline)
+equation(eqF, (920, 580), `\tfrac{1}{\sqrt{2}}\Big(\sin^{-1}(\sqrt{2}\sin(P-\tfrac{\pi}{4}))-\cosh^{-1}(\sqrt{2}\cos(P-\tfrac{\pi}{4}))\Big)+C`, 22);
+color(eqF, gold); hidden(eqF);
+
+// ============================================================================
+//  THE CURVE — √(tan x) on (π/4, ~1.4), then its antiderivative via ln-form of acosh
+// ============================================================================
+axes(ax, (920, 400), 300, 240);
+hidden(ax);
+// integrand (same spirit as the companion film)
+plot(integrand, (920, 400), 90, 70, "sqrt(tan(x))", (0.85, 1.45));
+stroke(integrand, 4); untraced(integrand); hidden(integrand);
+gradient(integrand, teal, violet, coral, 270);
+
+// antiderivative F(P) = (1/√2)(asin(√2 sin(P-π/4)) - acosh(√2 cos(P-π/4)))
+// acosh(u) = ln(u + sqrt(u*u - 1))
+plot(anti, (920, 400), 90, 55,
+  "(asin(sqrt(2)*sin(x-pi/4)) - ln(sqrt(2)*cos(x-pi/4) + sqrt(2*cos(x-pi/4)*cos(x-pi/4) - 1)))/sqrt(2)",
+  (0.85, 1.45));
+stroke(anti, 4); untraced(anti); hidden(anti);
+gradient(anti, mint, indigo, violet, 270);
+
+// ============================================================================
+//  TYPOGRAPHY
+// ============================================================================
+caption(q, "how do you integrate a square root of a tangent?", (cx, 52), 30, gold);
+equation(hook, (cx, 105), `\int\sqrt{\tan P}\,dP`, 42);
+color(hook, violet); hidden(hook);
+text(cap, (cx, h - 34), ""); size(cap, 20); color(cap, dim); display(cap);
+
+// ============================================================================
+//  SCRIPT
+// ============================================================================
+
+// 1 — HOOK
+say(cap, "√(tan P) is a length — we proved that. Now integrate it.", 0.4);
+wordpop(q, 0.14);
+wait(0.25);
+show(hook, 0.5);
+wait(0.6);
+
+// 2 — THE SUBSTITUTION
+say(cap, "one substitution opens the geometry: P = t + π/4", 0.4);
+show(eqP, 0.5);
+flash(eqP, gold);
+wait(0.7);
+
+// 3 — THE STAGE: two curves of the same "2"
+say(cap, "draw two curves that share the constant 2 — a circle and a hyperbola", 0.4);
+par { show(axX, 0.05); show(axY, 0.05); }
+par { draw(axX, 0.4); draw(axY, 0.4); }
+show(circ, 0.05); draw(circ, 1.0);
+show(labCirc, 0.3); show(O, 0.3); show(labO, 0.3);
+wait(0.3);
+show(hyp.r, 0.05); show(hyp.l, 0.05);
+draw(hyp.r, 1.0); draw(hyp.l, 1.0);
+show(labHyp, 0.3);
+wait(0.5);
+
+say(cap, "circle: x² + y² = 2.   hyperbola: x² − y² = 2.   Same 2 — intentional.", 0.4);
+pulse(circ); pulse(hyp.r);
+wait(0.7);
+
+// 4 — THE MOVING POINT
+say(cap, "park a point C(t) = (√2 cos t, √2 sin t) on the circle — t < π/4", 0.4);
+show(wedge, 0.05); draw(wedge, 0.45); show(labT, 0.3);
+show(ray, 0.05); draw(ray, 0.7);
+show(C, 0.05); draw(C, 0.4); show(labC, 0.3);
+show(ht, 0.05); show(vt, 0.05);
+draw(ht, 0.5); draw(vt, 0.5);
+show(zone, 0.05); draw(zone, 0.6);
+wait(0.6);
+
+// 5 — A(t) FROM THE CIRCLE
+say(cap, "from the y-coordinate: A(t) = arcsin(√2 sin t) — an angle on that circle", 0.4);
+show(eqA, 0.5);
+flash(eqA, teal);
+wait(0.8);
+
+// 6 — H(t) FROM THE HYPERBOLA
+say(cap, "from the x-coordinate: H(t) = arcosh(√2 cos t) — a hyperbolic angle", 0.4);
+show(eqH, 0.5);
+flash(eqH, coral);
+wait(0.8);
+
+// 7 — THE DIFFERENTIAL IDENTITY
+say(cap, "differentiate both — their difference IS the integrand", 0.4);
+show(eqD, 0.6);
+flash(eqD, violet);
+wait(0.5);
+say(cap, "dA − dH = √2 · √(tan P) · dP   — geometry differentiated", 0.4);
+wait(1.0);
+
+// 8 — INTEGRATE
+recolor(cap, mint);
+say(cap, "integrate both sides — the √2 cancels into the prefactor", 0.4);
+show(eqI, 0.6);
+pulse(eqI);
+wait(0.9);
+
+// 9 — CLOSED FORM
+recolor(cap, violet);
+say(cap, "substitute t = P − π/4 back — the antiderivative in closed form", 0.4);
+show(eqF, 0.7);
+flash(eqF, violet);
+wait(1.0);
+
+// 10 — SEE IT: integrand then antiderivative
+recolor(cap, dim);
+say(cap, "the integrand √(tan x) climbing toward π/2", 0.4);
+par {
+  fade(eqA, 0.35); fade(eqH, 0.35); fade(eqD, 0.35); fade(eqI, 0.35); fade(eqF, 0.35);
+  fade(eqP, 0.35);
+}
+show(ax, 0.4);
+show(integrand, 0.05); draw(integrand, 1.8);
+wait(0.5);
+
+say(cap, "and its antiderivative — (1/√2)(A − H) — the circle minus the hyperbola", 0.4);
+show(anti, 0.05); draw(anti, 2.0);
+flash(anti, mint);
+wait(0.8);
+
+// 11 — POINT
+recolor(cap, teal);
+say(cap, "a hard integral, solved because two curves of the same 2 were waiting", 0.4);
+wait(1.8);

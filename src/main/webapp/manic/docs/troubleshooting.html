@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a2c3446a.js";
+            window.path_to_searchindex_js = "searchindex-6cddf830.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e8fbc168.js"></script>
+        <script src="toc-c698a1f0.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -225,15 +225,15 @@ color(titel, cyan);
 color(title, cyan);
 </code></pre>
 <h3 id="5-unknown-colour--use-the-palette-or-hue"><a class="header" href="#5-unknown-colour--use-the-palette-or-hue">5. <code>unknown colour</code> — use the palette (or <code>hue</code>)</a></h3>
-<p>Only the named palette colours work — no <code>red</code>, no <code>#ff0000</code>.</p>
-<pre><code class="language-manic"># ❌  unknown colour `red`
-color(dot, red);
+<p>Only the named palette colours work — no <code>#ff0000</code>.</p>
+<pre><code class="language-manic"># ❌  unknown colour `chartreuse`
+color(dot, chartreuse);
 # ✅  a palette colour…
-color(dot, magenta);
+color(dot, coral);
 # ✅  …or a computed one, 0–360
 hue(dot, 210);
 </code></pre>
-<p>Palette: <code>cyan  magenta  lime  gold  fg  dim  void  panel</code>.</p>
+<p>Palette: <code>cyan  magenta  lime  gold  red  orange  blue  teal  violet  coral indigo  mint  fg  dim  void  panel</code>.</p>
 <h3 id="6-stroke-is-2d-only--a-2d-styler-on-a-3d-shape"><a class="header" href="#6-stroke-is-2d-only--a-2d-styler-on-a-3d-shape">6. <code>stroke is 2D-only</code> — a 2D styler on a 3D shape</a></h3>
 <p>Some styling is 2D-only. On 3D shapes use the 3D equivalent.</p>
 <pre><code class="language-manic">cube3(bx, (0, 0, 1), (2, 2, 2));

@@ -27,7 +27,7 @@
             + java.net.URLEncoder.encode(navRedirectPath, "UTF-8");
 
     // AI assistant context (billing + routing); see /modern/components/ai-assistant-*.inc.jsp
-    // Tiers: anonymous → guest, logged-in → free, premium (Pro subscription) → pro.
+    // Plan comes from ManicServlet entitlement (guest|free|pro|ultra) — not global is_premium.
     // requireSignIn=false so anonymous users get the guest tier instead of being blocked.
     request.setAttribute("aiToolId", "developer-tools/manic");
     request.setAttribute("aiRequireSignIn", "true");
@@ -64,6 +64,7 @@
     <span class="mp-tagline">Make awesome educational videos&nbsp;<b>✨</b>&nbsp;code it, render it, ship it</span>
     <span class="mp-spacer"></span>
     <span id="plan-info" class="mp-plan-info"></span>
+    <span id="voice-info" class="mp-plan-info mp-voice-info" title="Voice / TTS estimate from your script"></span>
     <label class="mp-plan-info" for="quality-select">quality</label>
     <select id="quality-select" class="mp-select" title="Render quality (from your plan)"></select>
     <button id="run-btn" class="mp-btn primary" title="Render (⌘/Ctrl+Enter)">Render</button>
@@ -114,6 +115,7 @@
                 <div class="mp-errpanel-foot">Click an error to jump to its line.</div>
             </div>
             <div id="output-placeholder">Write manic and press <b>Render</b> to produce a video.</div>
+            <div id="voice-banner" class="mp-voice-banner" hidden></div>
             <div id="video-wrap">
                 <video id="result-video" controls playsinline preload="metadata"></video>
                 <div class="mp-video-actions">
@@ -232,7 +234,10 @@
     wasmUrl: '<%=ctx%>/manic/wasm/manic_lang.js',
     docs: '<%=ctx%>/manic/docs/index.html',
     monacoBase: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs',
-    plan: 'free'
+    plan: 'free',
+    loggedIn: <%= navLoggedIn %>,
+    loginUrl: '<%= navLoginUrl %>',
+    toolId: 'developer-tools/manic'
   };
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>

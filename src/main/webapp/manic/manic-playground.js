@@ -43,9 +43,12 @@
   var plan = (CFG.plan || 'free');   // display only — the SERVER decides the real plan (loadLimits)
   var atLimit = false;   // usage quota exhausted
   var hasError = false;  // active file has error-severity diagnostics
+  var voiceBlocked = false; // client voice preflight denied (plan / provider / budget)
   var running = false;   // a render is in flight
   var errShown = false;  // status line currently shows an editor error
   var options = [];         // render tiers from the API
+  var voiceLimits = null;   // limits.voice from API (capability + remaining meters)
+  var lastVoiceDenial = null; // {code,message,details} when strip/gate is blocked
   var pollTimer = null;
   var currentJobId = null;
   var lastVideoUrl = null;   // signed URL of the most recent rendered mp4
@@ -59,6 +62,7 @@
     el = {
       editor: $('manic-editor'), fileList: $('file-list'), newFile: $('new-file-btn'),
       run: $('run-btn'), quality: $('quality-select'), planInfo: $('plan-info'),
+      voiceInfo: $('voice-info'), voiceBanner: $('voice-banner'),
       themeBtn: $('theme-btn'), status: $('status-line'), video: $('result-video'),
       videoWrap: $('video-wrap'), errorBox: $('error-box'), downloadBtn: $('download-btn'),
       toast: $('toast'), placeholder: $('output-placeholder'),
@@ -79,6 +83,7 @@
     if (el.renderHide) el.renderHide.onclick = hideRenderModal;
     if (el.autofixBtn) el.autofixBtn.onclick = runAutofix;
     if (el.btnShare) el.btnShare.onclick = shareCurrent;
+    if (el.voiceInfo) el.voiceInfo.onclick = onVoiceInfoClick;
     if (el.shareClose) el.shareClose.onclick = closeShareModal;
     if (el.shareOverlay) el.shareOverlay.addEventListener('click', function (e) {
       if (e.target === el.shareOverlay) closeShareModal();
@@ -571,8 +576,10 @@
       if (info.plan) plan = info.plan;
       if (info.user_id) userId = info.user_id;
       options = info.options || [];
+      voiceLimits = info.voice || null;
       fillQuality(options);
       showPlanInfo(info);
+      refreshVoiceStrip();
     } catch (e) { /* limits are optional; render still works */ }
   }
 
@@ -628,6 +635,18 @@
       toast('fix the ' + (errs.length === 1 ? 'error' : 'errors') + ' in your file first');
       return;
     }
+
+    // Voice gate (WASM voice_report + limits.voice) before hitting the server.
+    var voiceGate = preflightVoice(dsl);
+    refreshVoiceStrip(voiceGate.report);
+    if (!voiceGate.ok) {
+      voiceBlocked = true;
+      updateRunState();
+      showVoiceDenied(voiceGate.code, voiceGate.message, voiceGate.details || {});
+      return;
+    }
+    voiceBlocked = false;
+
     if (atLimit) { toast('render limit reached — upgrade or try again tomorrow'); return; }
     setRunning(true);
     setStatus('submitting…');
@@ -644,7 +663,12 @@
 
     var r;
     try { r = await api('submit', { method: 'POST', body: body }); }
-    catch (e) { setRunning(false); setStatus('network error', true); return; }
+    catch (e) {
+      setRunning(false);
+      setStatus('network error — try again', true);
+      showError('network_error', 'Could not reach the render service. Check your connection and retry.', {});
+      return;
+    }
 
     if (r.status === 202 && r.json && r.json.job_id) {
       if (r.json.user_id) userId = r.json.user_id;
@@ -677,6 +701,7 @@
         loadLimits();
       } else if (job.status === 'failed') {
         setRunning(false);
+        hideVoiceBanner();
         showError('render_failed', job.error || 'render failed', {});
         setStatus('failed', true);
       } else {
@@ -776,7 +801,8 @@
 
   // ── output rendering ───────────────────────────────────────────
   function clearOutput() {
-    if (el.errorBox) { el.errorBox.style.display = 'none'; el.errorBox.textContent = ''; }
+    if (el.errorBox) { el.errorBox.style.display = 'none'; el.errorBox.textContent = ''; el.errorBox.innerHTML = ''; }
+    hideVoiceBanner();
     if (el.errPanel) el.errPanel.classList.remove('show');
     if (el.videoWrap) el.videoWrap.style.display = 'none';
     if (el.placeholder) el.placeholder.style.display = 'none';
@@ -790,6 +816,14 @@
       el.video.src = lastVideoUrl;
       el.videoWrap.style.display = 'block';
       el.video.load();
+    }
+    var voice = job.voice || {};
+    if (voice.mode === 'soft_fail' || (voice.client_message && voice.mode && voice.mode !== 'allowed' && voice.mode !== 'none')) {
+      showVoiceBanner(voice.client_message || 'Video rendered, but narration was missing or partial.', 'soft');
+    } else if (voice.mode === 'allowed' && voice.speech === false && voice.client_message) {
+      showVoiceBanner(voice.client_message, 'soft');
+    } else {
+      hideVoiceBanner();
     }
   }
 
@@ -815,7 +849,76 @@
   function showError(code, message, details) {
     if (!el.errorBox) { toast(message); return; }
     el.errorBox.style.display = 'block';
+    el.errorBox.classList.remove('mp-error-upgrade');
     el.errorBox.textContent = message + (code ? ' (' + code + ')' : '');
+  }
+
+  function showVoiceBanner(msg, kind) {
+    if (!el.voiceBanner) { if (msg) toast(msg); return; }
+    el.voiceBanner.hidden = false;
+    el.voiceBanner.className = 'mp-voice-banner' + (kind === 'soft' ? ' soft' : '');
+    el.voiceBanner.textContent = msg || '';
+  }
+  function hideVoiceBanner() {
+    if (!el.voiceBanner) return;
+    el.voiceBanner.hidden = true;
+    el.voiceBanner.textContent = '';
+  }
+
+  // Denied voice: error panel + optional Upgrade CTA (login or AI billing).
+  function showVoiceDenied(code, message, details) {
+    details = details || {};
+    var upgrade = details.upgrade_plan || '';
+    lastVoiceDenial = { code: code, message: message, details: details };
+    setStatus(message || code, true);
+    toast(message || 'voice not allowed on this plan');
+    if (!el.errorBox) return;
+    el.errorBox.style.display = 'block';
+    el.errorBox.classList.add('mp-error-upgrade');
+    el.errorBox.innerHTML = '';
+    var p = document.createElement('div');
+    p.textContent = message + (code ? ' (' + code + ')' : '');
+    el.errorBox.appendChild(p);
+    var showCta = !!upgrade || code === 'voice_disabled_for_plan' ||
+      code === 'voice_provider_not_allowed' || code === 'voice_raw_id_not_allowed' ||
+      code === 'voice_limit_exceeded';
+    if (showCta) {
+      var cta = document.createElement('button');
+      cta.type = 'button';
+      cta.className = 'mp-btn primary mp-voice-upgrade';
+      cta.textContent = upgradeLabel(upgrade || details.upgrade_plan);
+      cta.onclick = function () { offerUpgrade(upgrade || details.upgrade_plan); };
+      el.errorBox.appendChild(cta);
+    }
+  }
+
+  function onVoiceInfoClick() {
+    if (!lastVoiceDenial) return;
+    showVoiceDenied(lastVoiceDenial.code, lastVoiceDenial.message, lastVoiceDenial.details || {});
+  }
+
+  function upgradeLabel(slug) {
+    if (!CFG.loggedIn) return 'Sign in to unlock voice';
+    if (slug === 'ultra') return 'Upgrade to Manic Ultra';
+    if (slug === 'pro') return 'Upgrade to Manic Pro';
+    if (slug === 'free') return 'Sign in / Free plan';
+    return 'Upgrade for voice';
+  }
+
+  function offerUpgrade(upgradePlan) {
+    if (!CFG.loggedIn) {
+      if (CFG.loginUrl) { window.location.href = CFG.loginUrl; return; }
+      toast('Sign in first to upgrade');
+      return;
+    }
+    var tier = upgradePlan && upgradePlan !== 'free' ? upgradePlan : 'Pro';
+    var msg = 'I need Manic ' + tier + ' for spoken narration on this script.';
+    if (window.manicAssistant && typeof window.manicAssistant.open === 'function') {
+      window.manicAssistant.open(msg, false);
+      toast('Open ✨ AI → upgrade for voice');
+      return;
+    }
+    toast('Use ✨ AI to upgrade to Manic ' + tier);
   }
 
   // ── API error catalog (MANIC_API.md) ───────────────────────────
@@ -839,9 +942,233 @@
         break;
       case 'render_queue_full':
         toast('busy — retrying shortly'); setTimeout(render, 3000); return;
+      case 'voice_disabled_for_plan':
+      case 'voice_provider_not_allowed':
+      case 'voice_raw_id_not_allowed':
+        voiceBlocked = true;
+        updateRunState();
+        showVoiceDenied(code, msg, d);
+        loadLimits();
+        return;
+      case 'voice_job_too_long':
+        toast('shorten your speak(...) lines');
+        showError(code, msg, d);
+        setStatus('voice too long', true);
+        return;
+      case 'voice_limit_exceeded':
+        toast('voice budget used up for this plan');
+        showVoiceDenied(code, msg, d);
+        loadLimits();
+        return;
+      case 'voice_dsl_invalid':
+        toast('fix voice(...) / speak(...) in your script');
+        showError(code, msg, d);
+        setStatus('voice DSL invalid', true);
+        return;
     }
     showError(code, msg, d);
     setStatus('error', true);
+  }
+
+  // ── Voice preflight (WASM first, then plan meters) ─────────────
+  function normalizeVoiceProvider(p) {
+    p = String(p || '').toLowerCase().trim();
+    if (p === 'sonic') return 'cartesia';
+    if (p === 'eleven' || p === '11labs') return 'elevenlabs';
+    if (p === 'google' || p === '') return 'gtts';
+    return p;
+  }
+
+  function creditsForProvider(provider, chars) {
+    chars = chars || 0;
+    switch (normalizeVoiceProvider(provider)) {
+      case 'elevenlabs': return chars * 2;
+      case 'cartesia': return chars;
+      default: return 0;
+    }
+  }
+
+  function looksLikeRawVoiceId(name) {
+    var n = String(name || '').trim();
+    if (!n) return false;
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(n)) return true;
+    if (n.length >= 20 && n.indexOf(' ') < 0 && /^[A-Za-z0-9_-]+$/.test(n)) return true;
+    return false;
+  }
+
+  // Raw id only when the authored voice name looks opaque — not catalog
+  // easy names ("katie") whose voice_id happens to be a UUID.
+  function reportUsesRawVoiceId(report) {
+    return !!(report && looksLikeRawVoiceId(report.voice));
+  }
+
+  function upgradeHint(planSlug, provider) {
+    switch (planSlug) {
+      case 'guest': return 'free';
+      case 'free': return 'pro';
+      case 'pro': return 'ultra';
+      default: return '';
+    }
+  }
+
+  function voiceReportNow(dsl) {
+    if (ME && typeof ME.voiceReport === 'function') return ME.voiceReport(dsl);
+    if (ME && ME.wasm && typeof ME.wasm.voice_report === 'function') {
+      try { return JSON.parse(ME.wasm.voice_report(dsl)); }
+      catch (e) { return { present: false, error: String(e) }; }
+    }
+    return { present: false };
+  }
+
+  // Evaluate a WASM voice report against cached limits.voice (server PreflightVoice mirror).
+  function evaluateVoiceGate(report, dsl) {
+    if (report && report.error && report.present !== true) {
+      if (dsl && /speak|voice\s*\(/i.test(dsl)) {
+        return {
+          ok: false, report: report, code: 'voice_dsl_invalid',
+          message: report.error || 'could not analyze voice in this script',
+          details: {}
+        };
+      }
+    }
+    if (!report || !report.present) {
+      return { ok: true, report: report || { present: false } };
+    }
+
+    var v = voiceLimits || {};
+    var provider = normalizeVoiceProvider(report.provider || 'gtts');
+    var chars = report.characters || 0;
+    var credits = creditsForProvider(provider, chars);
+    var allowed = v.providers_allowed || [];
+    var upgrade = upgradeHint(plan, provider);
+    var detailsBase = {
+      plan: plan, provider: provider, characters: chars,
+      manic_credits: credits, upgrade_plan: upgrade
+    };
+
+    // Before limits load, don't false-block — server remains authoritative.
+    if (!voiceLimits) {
+      return { ok: true, report: report, deferred: true, credits: credits };
+    }
+
+    if (!v.enabled) {
+      return {
+        ok: false, report: report, code: 'voice_disabled_for_plan',
+        message: 'spoken narration is not available on this plan',
+        details: detailsBase
+      };
+    }
+
+    if (allowed.length) {
+      var okProv = false;
+      for (var i = 0; i < allowed.length; i++) {
+        if (normalizeVoiceProvider(allowed[i]) === provider) { okProv = true; break; }
+      }
+      if (!okProv) {
+        return {
+          ok: false, report: report, code: 'voice_provider_not_allowed',
+          message: 'provider "' + provider + '" is not allowed on plan "' + plan + '"',
+          details: Object.assign({}, detailsBase, { providers_allowed: allowed })
+        };
+      }
+    }
+
+    var voiceName = report.voice || '';
+    if (reportUsesRawVoiceId(report) && !v.allow_raw_ids) {
+      return {
+        ok: false, report: report, code: 'voice_raw_id_not_allowed',
+        message: 'raw vendor voice ids require Ultra — use a named speaker instead',
+        details: Object.assign({}, detailsBase, { voice: voiceName, upgrade_plan: 'ultra' })
+      };
+    }
+
+    if (provider === 'gtts') {
+      var gDay = v.gtts_daily_chars_remaining;
+      var gMon = v.gtts_monthly_chars_remaining;
+      if ((typeof gDay === 'number' && chars > gDay) || (typeof gMon === 'number' && chars > gMon)) {
+        return {
+          ok: false, report: report, code: 'voice_limit_exceeded',
+          message: 'gTTS character budget exceeded',
+          details: Object.assign({}, detailsBase, {
+            daily_remaining: gDay, monthly_remaining: gMon
+          })
+        };
+      }
+    } else {
+      var maxJob = v.max_credits_per_job;
+      if (typeof maxJob === 'number' && maxJob > 0 && credits > maxJob) {
+        return {
+          ok: false, report: report, code: 'voice_job_too_long',
+          message: 'voice job needs ' + credits + ' credits; max per job is ' + maxJob,
+          details: Object.assign({}, detailsBase, { max: maxJob })
+        };
+      }
+      var dRem = v.daily_credits_remaining;
+      var mRem = v.monthly_credits_remaining;
+      var pack = v.pack_credits_remaining || 0;
+      if (typeof dRem === 'number' && typeof mRem === 'number') {
+        var budgetOk = (credits <= dRem || credits <= pack) && (credits <= mRem || credits <= pack);
+        if (!budgetOk) {
+          return {
+            ok: false, report: report, code: 'voice_limit_exceeded',
+            message: 'Manic voice credit budget exceeded',
+            details: Object.assign({}, detailsBase, {
+              daily_remaining: dRem, monthly_remaining: mRem, pack_credits_remaining: pack
+            })
+          };
+        }
+      }
+    }
+
+    return { ok: true, report: report, credits: credits };
+  }
+
+  function preflightVoice(dsl) {
+    return evaluateVoiceGate(voiceReportNow(dsl), dsl);
+  }
+
+  function refreshVoiceStrip(report) {
+    if (!el.voiceInfo) return;
+    if (!report) {
+      var dsl = (activeName && models[activeName]) ? models[activeName].getValue() : '';
+      report = dsl ? voiceReportNow(dsl) : { present: false };
+    }
+    if (!report || !report.present) {
+      el.voiceInfo.textContent = '';
+      el.voiceInfo.title = '';
+      el.voiceInfo.classList.remove('blocked');
+      lastVoiceDenial = null;
+      if (voiceBlocked) { voiceBlocked = false; updateRunState(); }
+      return;
+    }
+    var provider = normalizeVoiceProvider(report.provider || 'gtts');
+    var chars = report.characters || 0;
+    var credits = creditsForProvider(provider, chars);
+    var gate = evaluateVoiceGate(report);
+    var bits = [provider, chars + ' chars'];
+    if (credits > 0) bits.push('~' + credits + ' cr');
+    if (!gate.ok) bits.push('blocked');
+    el.voiceInfo.textContent = '🎙 ' + bits.join(' · ');
+    el.voiceInfo.title = gate.ok
+      ? (report.cost_note || 'Voice estimate from WASM')
+      : ((gate.message || 'Voice not allowed') + ' — click for details');
+    el.voiceInfo.classList.toggle('blocked', !gate.ok);
+    if (gate.ok) {
+      lastVoiceDenial = null;
+    } else {
+      lastVoiceDenial = {
+        code: gate.code || 'voice_denied',
+        message: gate.message || 'Voice not allowed on this plan',
+        details: gate.details || {}
+      };
+    }
+    var nextBlocked = !gate.ok;
+    if (voiceBlocked !== nextBlocked) {
+      voiceBlocked = nextBlocked;
+      updateRunState();
+    } else {
+      voiceBlocked = nextBlocked;
+    }
   }
 
   // ── helpers ────────────────────────────────────────────────────
@@ -883,6 +1210,7 @@
 
   function applyDiag(errorCount, firstErr) {
     hasError = errorCount > 0;
+    refreshVoiceStrip();
     updateRunState();
     if (hasError) {
       var at = firstErr && firstErr.line ? (' (line ' + firstErr.line + ')') : '';
@@ -967,12 +1295,16 @@
 
   function updateRunState() {
     if (!el.run) { console.warn('[manic] updateRunState: #run-btn not found'); return; }
+    // Do NOT disable Render for voiceBlocked — click must show the denial + upgrade CTA.
     el.run.disabled = running || atLimit || hasError;
     console.log('[manic] updateRunState → disabled=' + el.run.disabled +
-      ' {running:' + running + ', atLimit:' + atLimit + ', hasError:' + hasError + '}');
+      ' {running:' + running + ', atLimit:' + atLimit + ', hasError:' + hasError +
+      ', voiceBlocked:' + voiceBlocked + '}');
     el.run.classList.toggle('busy', running);
+    el.run.classList.toggle('voice-warn', !!voiceBlocked && !running && !hasError && !atLimit);
     el.run.textContent = running ? 'Rendering…' : 'Render';
     el.run.title = hasError ? 'Fix the errors in your file to render'
+      : voiceBlocked ? 'Voice blocked on this plan — click Render for upgrade options'
       : atLimit ? 'Daily / monthly render limit reached'
       : 'Render (⌘/Ctrl+Enter)';
   }
