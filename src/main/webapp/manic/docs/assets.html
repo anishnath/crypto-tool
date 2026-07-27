@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6cddf830.js";
+            window.path_to_searchindex_js = "searchindex-891a6e5e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c698a1f0.js"></script>
+        <script src="toc-f09026c8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -185,6 +185,7 @@ directory, the Docker image, or the production backend. No render flag is
 needed.</p>
 <pre><code class="language-manic">image(mark, (cx, 260), "asset:manic-logo.png", 180, 180);
 model3(beacon, "asset:models/manic-pyramid.obj", (0,0,0), 1);
+svg(logo, (cx, 480), "asset:svg/heart.svg", 320);
 </code></pre>
 <p>The same image URI can be used in a Creator profile:</p>
 <pre><code class="language-manic">creator(me, "@anish2good name=Manic logo=asset:manic-logo.png footer=signature");
@@ -199,19 +200,94 @@ socials(me);
 <tbody>
 <tr><td><code>asset:manic-logo.png</code></td><td>PNG</td><td><code>image(...)</code>, Creator <code>logo=</code>, a Manic-branded example</td></tr>
 <tr><td><code>asset:models/manic-pyramid.obj</code></td><td>Geometry-only OBJ</td><td><code>model3(...)</code>, a beacon, monument, marker, or placeholder model</td></tr>
+<tr><td><code>asset:svg/lucide/&lt;name&gt;.svg</code></td><td>SVG icons — Lucide (ISC)</td><td><code>svg(...)</code>, themeable line icons (recolour to taste)</td></tr>
+<tr><td><code>asset:svg/heroicons/&lt;name&gt;.svg</code></td><td>SVG icons — Heroicons (MIT)</td><td><code>svg(...)</code>, solid glyphs</td></tr>
+<tr><td><code>asset:svg/flags/&lt;cc&gt;.svg</code></td><td>SVG flags — flag-icons (MIT)</td><td><code>svg(...)</code>, country flags in real colours</td></tr>
+<tr><td><code>asset:svg/emoji/&lt;name-or-codepoint&gt;.svg</code></td><td>SVG emoji — Twemoji (CC-BY 4.0)</td><td><code>svg(...)</code>, flat colour emoji; <code>fire.svg</code>/<code>1f525.svg</code></td></tr>
+<tr><td><code>asset:svg/heart.svg</code> · <code>pin.svg</code> · <code>robot.svg</code> · <code>map-region.svg</code></td><td>SVG demo art (CC0)</td><td><code>svg(...)</code>, the import demos</td></tr>
 </tbody>
 </table>
 </div>
+<p>The SVG sets are a curated, permissively-licensed starter pack (see
+<code>assets/svg/LICENSES.md</code>). List what’s bundled — and what a file imports as — with
+<code>manic svgcheck assets/svg</code>.</p>
 <p>The catalog stays deliberately small. Do not invent an asset name that is not
 listed here. Manic reports a clear error if a bundled URI is missing, and it
 rejects <code>..</code> traversal. OBJ files also retain the normal file-size and geometry
 safety limits.</p>
+<h2 id="vector-import--svg-as-native-geometry"><a class="header" href="#vector-import--svg-as-native-geometry">Vector import — SVG as native geometry</a></h2>
+<p><code>svg()</code> brings vector artwork in as <strong>native path entities</strong> — not a texture. Each
+subpath of the SVG becomes a real <code>Polyline</code>/<code>Polygon</code> you can draw, morph, recolour,
+and animate exactly like a shape you authored by hand. It’s the 2D twin of <code>model3</code>’s
+OBJ import.</p>
+<pre><code class="language-manic">svg(logo, (cx, cy), "asset:svg/heart.svg", 320);
+</code></pre>
+<p><strong>Reposition</strong> — the second argument is the centre. Move it, or animate it; every
+piece follows because the whole drawing shares one tag:</p>
+<pre><code class="language-manic">svg(pin, (cx, cy), "asset:svg/pin.svg", 200);   // centred at (cx, cy)
+move(pin, (cx, cy - 200), 1.0);                  // glide the whole drawing up
+</code></pre>
+<p><strong>Resize</strong> — the last argument is the width in pixels; the height follows the
+artwork’s own aspect ratio:</p>
+<pre><code class="language-manic">svg(small, (300, cy), "asset:svg/robot.svg", 120);   // 120 px wide
+svg(big,   (800, cy), "asset:svg/robot.svg", 360);   // same file, 3× bigger — still crisp
+</code></pre>
+<p><strong>Recolour</strong> — imported fills reproduce <strong>faithfully</strong> (they are <em>not</em> re-themed by
+the template, even if a colour happens to match a palette name). Change them whenever
+you like:</p>
+<pre><code class="language-manic">recolor(logo, cyan);            // whole drawing → cyan
+hue(logo, 200, 0.9, 0.6);       // …or by HSL
+gradient(logo, gold, magenta);  // …or a gradient across it
+</code></pre>
+<p><strong>Animate</strong> — one verb drives the whole drawing (it is tagged with the <code>id</code>):</p>
+<pre><code class="language-manic">hidden(logo); show(logo, 0.8);  // reveal
+pulse(logo, 0.9);               // emphasise
+</code></pre>
+<p><strong>Address one piece</strong> — subpaths are named <code>{id}.p0</code>, <code>{id}.p1</code>, … in document
+order, so you can single one out:</p>
+<pre><code class="language-manic">recolor(pin.p1, gold);   // just the pin's inner hole
+</code></pre>
+<p><strong>Layering</strong> — imported art defaults to <code>z = 0</code>. Raise it above another layer
+(a grid, a backdrop) with <code>z</code>:</p>
+<pre><code class="language-manic">z(logo, 6);
+</code></pre>
+<h3 id="what-v1-imports-and-what-it-skips"><a class="header" href="#what-v1-imports-and-what-it-skips">What v1 imports (and what it skips)</a></h3>
+<p>Imported: paths plus the basic shapes (<code>rect</code>, <code>circle</code>, <code>ellipse</code>, <code>line</code>,
+<code>polygon</code>, <code>polyline</code>) with their transforms resolved, and <strong>solid</strong> <code>fill</code>/<code>stroke</code>
+colours. Curves are flattened to smooth polylines.</p>
+<p>Imported gradients: <strong>linear and radial fill gradients</strong> come in faithfully (mapped
+onto Manic’s <code>gradient()</code>, multi-stop ramps resampled) — so gradient icons,
+illustrations, and emblems keep their shading.</p>
+<p>Skipped for now: SVG <code>&lt;text&gt;</code> and embedded <code>&lt;image&gt;</code>, <code>clipPath</code>/<code>mask</code>, filters and
+blurs, <code>pattern</code> paint, and gradient <em>strokes</em> (fills are supported). Keep artwork
+reasonably simple — there’s a point-budget guard and the usual file-size limit.</p>
+<p>Two things worth knowing:</p>
+<ul>
+<li><strong><code>currentColor</code></strong> — most icon sets (Lucide, Heroicons, …) paint with
+<code>currentColor</code>, a host-themed placeholder. Manic imports those as <strong>themeable</strong>
+geometry: they take the entity’s own colour, so <code>recolor(icon, cyan)</code> just works.
+Artwork with real colours (flags, illustrations) keeps them faithfully.</li>
+<li><strong>Concave fills</strong> are triangulated (ear-clipping), so stars, notched glyphs, and
+blobs fill correctly — not just convex shapes.</li>
+</ul>
+<h3 id="screen-a-set-before-you-rely-on-it"><a class="header" href="#screen-a-set-before-you-rely-on-it">Screen a set before you rely on it</a></h3>
+<p>Downloaded a folder of SVGs? Vet them against the importer first:</p>
+<pre><code class="language-text">$ manic svgcheck assets/svg/lucide
+  ✓ rocket.svg — 4 paths, 199 pts, themeable (0 with fill/stroke)
+  ✓ map-pin.svg — 2 paths, 147 pts, themeable (0 with fill/stroke)
+  …
+</code></pre>
+<p>Each file reports its subpath/point count and whether it’s <code>themeable</code> (recolour it)
+or <code>coloured</code> (keeps its own colours); anything empty, over-budget, or unparseable is
+flagged with <code>✗</code>. <code>scripts/fetch-svg-assets.sh</code> vendors the bundled sets the same way.</p>
 <h2 id="your-own-images-and-models"><a class="header" href="#your-own-images-and-models">Your own images and models</a></h2>
 <p>Ordinary paths still work:</p>
 <pre><code class="language-manic">image(photo, (cx,cy), "uploads/my-photo.jpg", 720, 480);
 model3(product, "uploads/my-product.obj", (0,0,0), 1);
+svg(logo, (cx,cy), "uploads/my-logo.svg", 300);
 </code></pre>
-<p>The caller must make those files available to the renderer. This is the right
+<p>Bring in <strong>any</strong> SVG this way — an icon you downloaded, a logo, a map outline. The
+caller must make those files available to the renderer. This is the right
 choice for uploads and private brand assets; <code>asset:</code> is for the small catalog
 that ships with Manic.</p>
 <h2 id="adding-a-new-bundled-asset-to-manic"><a class="header" href="#adding-a-new-bundled-asset-to-manic">Adding a new bundled asset to Manic</a></h2>
@@ -239,7 +315,7 @@ different catalog root.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="elevating.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="svg-assets.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -253,7 +329,7 @@ different catalog root.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="elevating.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="svg-assets.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

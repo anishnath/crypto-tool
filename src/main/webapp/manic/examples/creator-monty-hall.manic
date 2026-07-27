@@ -1,0 +1,104 @@
+// creator-monty-hall.manic — a Creator v2 Short on the Monty Hall problem, one of
+// the most-searched (and most-argued) puzzles in probability, narrated with an
+// ElevenLabs voice story. The whole cast is imported SVG — three door emoji, a car,
+// goats, a party popper — and the teaching beat is visual: when the host opens a
+// goat door, its 1/3 chance visibly SLIDES onto the other door, making it 2/3. The
+// payoff `morph`s a goat into the car with a confetti `burst`. Problem → the
+// counter-intuitive solution → CTA, 9:16 shorts template, branded.
+//
+//   ELEVENLABS_API_KEY=... manic examples/creator-monty-hall.manic --record out.mp4
+//   speak("…") = voice only;  say(cap,"…") = on-screen caption.
+title("The Monty Hall Problem");
+canvas("9:16");
+template("shorts");
+voice("elevenlabs");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+watermark(manicMark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// --- header ---
+text(kick, (cx, h*0.10), "The Monty Hall Problem"); size(kick, 48); color(kick, fg); bold(kick); wrap(kick, w*0.86); hidden(kick);
+text(sub, (cx, h*0.155), "The puzzle that fooled even the pros"); size(sub, 29); color(sub, dim); wrap(sub, w*0.82); hidden(sub);
+
+// --- three doors (imported emoji), numbered, with a 1/3 odds chip each ---
+let dy = h*0.375;
+let dsz = w*0.185;
+let xL = w*0.22; let xM = w*0.50; let xR = w*0.78;
+svg(door1, (xL, dy), "asset:svg/emoji/door.svg", dsz); hidden(door1);
+svg(door2, (xM, dy), "asset:svg/emoji/door.svg", dsz); hidden(door2);
+svg(door3, (xR, dy), "asset:svg/emoji/door.svg", dsz); hidden(door3);
+text(t1, (xL, dy-dsz*0.66), "1"); size(t1, 32); color(t1, dim); bold(t1); hidden(t1);
+text(t2, (xM, dy-dsz*0.66), "2"); size(t2, 32); color(t2, dim); bold(t2); hidden(t2);
+text(t3, (xR, dy-dsz*0.66), "3"); size(t3, 32); color(t3, dim); bold(t3); hidden(t3);
+counter(chip1, (xL, dy+dsz*1.02), 33, 0, "", "%"); size(chip1, 44); color(chip1, dim); bold(chip1); hidden(chip1);
+counter(chip2, (xM, dy+dsz*1.02), 33, 0, "", "%"); size(chip2, 44); color(chip2, dim); bold(chip2); hidden(chip2);
+counter(chip3, (xR, dy+dsz*1.02), 33, 0, "", "%"); size(chip3, 44); color(chip3, dim); bold(chip3); hidden(chip3);
+
+// a selection ring for "your pick"
+circle(pick, (xL, dy), dsz*0.62); outlined(pick); outline(pick, cyan); stroke(pick, 5); glow(pick, 0.8); hidden(pick);
+
+// prizes hidden BEHIND each door (revealed when a door lifts)
+svg(goat1, (xL, dy), "asset:svg/emoji/goat.svg", dsz*0.86); z(goat1, -1); hidden(goat1);
+svg(goat3, (xR, dy), "asset:svg/emoji/goat.svg", dsz*0.86); z(goat3, -1); hidden(goat3);
+// behind door 2: a goat that MORPHS into the car (the payoff flourish)
+svg(goatH, (xM, dy), "asset:svg/emoji/goat.svg", dsz*0.92); z(goatH, -1); hidden(goatH);
+svg(carH,  (xM, dy), "asset:svg/emoji/car.svg",  dsz*1.02); z(carH, -1); hidden(carH);
+morph(goatH, carH);
+svg(party, (xM+dsz*0.9, dy-dsz*0.8), "asset:svg/emoji/party.svg", dsz*0.7); z(party, 6); hidden(party);
+circle(bcore, (xM, dy), 30); hidden(bcore);
+particles(sparks, bcore, 26, 8, 11, "random"); color(sparks, gold); glow(sparks, 0.9); z(sparks, 7); hidden(sparks);
+
+// one caption line, retexted through the story
+text(cap, (cx, h*0.66), ""); size(cap, 35); color(cap, dim); bold(cap); wrap(cap, w*0.86); hidden(cap);
+
+socials(me);
+endcard(me, "title=Always_Switch cta=8gwifi.org/manic");
+
+// ---------------- the story (voice leads; visuals punctuate) ----------------
+par { show(kick); show(sub); }
+stagger(0.16) { show(door1); show(door2); show(door3); }
+par { show(t1); show(t2); show(t3); show(chip1); show(chip2); show(chip3); }
+show(cap, 0.3); say(cap, "1 car, 2 goats — 1/3 each.");
+speak("Three doors. One car, two goats. You pick door one.");
+par { show(pick); pulse(door1); }
+say(cap, "You pick Door 1.");
+
+speak("Now the host, who knows, opens door three. A goat.");
+recolor(cap, dim); say(cap, "Host opens Door 3 — a goat.");
+show(goat3);
+par { move(door3, (xR, dy-h*0.30), 0.7, smooth); fade(door3); }
+
+speak("The twist: door three's odds don't vanish. They slide onto door two.");
+recolor(cap, cyan); say(cap, "Its 1/3 slides to Door 2.");
+par { move(chip3, (xM, dy+dsz*1.02), 0.8, smooth); fade(chip3); to(chip2, value, 67, 0.8); }
+par { recolor(chip2, cyan); recolor(chip1, magenta); }
+
+speak("Most people say fifty-fifty. It isn't.");
+recolor(cap, red); say(cap, "Feels like 50/50. It's not."); shake(cap);
+
+speak("Your door stays one-in-three. Door two? Two-in-three. Switching doubles it.");
+recolor(cap, gold); say(cap, "STAY 33%   ·   SWITCH 67%");
+par { pulse(chip2); pulse(door2); }
+
+speak("So you switch...");
+recolor(cap, dim); say(cap, "So you switch…");
+show(goatH);
+par { move(door2, (xM, dy-h*0.30), 0.7, smooth); fade(door2); fade(chip1); fade(chip2); }
+
+speak("...and the goat becomes a car.");
+to(goatH, morph, 1, 0.9, smooth);
+par { fade(goatH); show(carH); }
+recolor(cap, gold); say(cap, "…and win the car!");
+par { show(sparks, 0.05); burst(sparks, 1.1); show(party); pulse(carH); }
+wait(0.6);
+
+speak("Door one? A goat. Switching wins two out of three.");
+recolor(cap, dim); say(cap, "Door 1 was a goat.");
+show(goat1);
+par { move(door1, (xL, dy-h*0.30), 0.7, smooth); fade(door1); fade(pick); fade(party); }
+wait(0.4);
+
+speak("Always switch. One Manic script made this — turn any idea into a video at eight g wifi dot org slash manic.");
+par { fade(kick); fade(sub); fade(cap); fade(carH); fade(goat1); fade(goat3); fade(t1); fade(t2); fade(t3); fade(chip3); }
+show(me.endcard);
+wait(2.6);

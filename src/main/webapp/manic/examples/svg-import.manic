@@ -1,0 +1,18 @@
+// SVG vector import — bring artwork in as NATIVE path entities (not a texture).
+// Each subpath of heart.svg becomes a traceable Polyline / filled Polygon, fitted
+// to 320 px wide and centred; the pieces are tagged `heart`, so ONE verb animates
+// the whole drawing. Imported colours reproduce faithfully (the #ff2d95 fill is
+// kept literal, not re-themed). This is the 2D twin of `model3`'s OBJ import.
+title("SVG Vector Import");
+canvas("16:9");
+template("neon");
+
+svg(heart, (cx, cy), "asset:svg/heart.svg", 320);
+
+hidden(heart);
+show(heart, 0.8);          // reveal — real geometry, faithful colours
+wait(0.4);
+pulse(heart, 0.9);         // animate the whole drawing with one verb
+wait(0.6);
+recolor(heart, cyan);      // …and recolour it — imported vectors are first-class
+wait(1.2);

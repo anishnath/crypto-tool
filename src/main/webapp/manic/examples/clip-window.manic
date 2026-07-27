@@ -1,0 +1,34 @@
+// clip-window.manic — T1 rectangular clip: reveal-through-a-window / crop-to-panel.
+//
+// `clip(id, region)` scissors an entity (or a whole tagged group) to another
+// entity's rectangular bounds. The scissor is resolved every frame, so the window
+// FOLLOWS the region — move the window and the reveal tracks it. Here a spotlight
+// window sweeps across a big imported vector, revealing it piece by piece.
+//
+//   manic examples/clip-window.manic
+title("Clip — reveal through a window");
+canvas("16:9");
+template("blank");
+
+// a big imported vector that overflows what one window can show
+svg(art, (cx, cy), "asset:svg/flags/br.svg", 940);
+
+// the spotlight window — hollow frame so the clipped vector shows through
+// (declared BEFORE the clip that references it)
+rect(win, (cx - 380, cy), 320, 300); outlined(win); outline(win, fg); stroke(win, 5); glow(win, 0.7);
+
+// clip the whole vector to the window — nothing shows outside it
+clip(art, win);
+
+text(cap, (cx, h*0.9), "clip(id, window) — the scissor follows the window");
+size(cap, 26); color(cap, dim); display(cap);
+
+// sweep the window across → the flag is revealed only where the window is
+seq {
+  wait(0.4);
+  move(win, (cx + 380, cy), 2.4, smooth);
+  wait(0.3);
+  move(win, (cx, cy), 1.0, smooth);
+  pulse(win);
+  wait(0.6);
+}

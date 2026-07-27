@@ -1,0 +1,29 @@
+// morph-icons.manic — morph imported SVG vectors from one shape into another.
+//
+// `morph(a, b)` samples both outlines and blends `a` into `b`'s shape; drive it
+// with `to(a, morph, 1, dur)`. It now works on imported `svg()` art: a bare svg
+// tag resolves to its dominant path, filled Regions sample along their outer ring,
+// and the two loops are winding-matched + rotated for a clean shape-to-shape blend
+// (no tangle through the centre). Here one emoji reshapes into another and back.
+//
+//   manic examples/morph-icons.manic
+title("Morph — imported vectors reshape");
+canvas("16:9");
+template("blank");
+
+svg(heart, (cx, cy), "asset:svg/emoji/heart.svg", 260);
+svg(star,  (cx, cy), "asset:svg/emoji/star.svg", 260); hidden(star);
+
+text(cap, (cx, h*0.86), "morph(heart, star) — one imported icon reshapes into another");
+size(cap, 24); color(cap, dim); display(cap);
+
+// set the heart up to morph into the star's outline
+morph(heart, star);
+
+seq {
+  wait(0.5);
+  par { to(heart, morph, 1, 1.6, smooth); to(heart, color, gold, 1.6); }
+  wait(0.5);
+  par { to(heart, morph, 0, 1.6, smooth); to(heart, color, magenta, 1.6); }
+  wait(0.5);
+}

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6cddf830.js";
+            window.path_to_searchindex_js = "searchindex-891a6e5e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c698a1f0.js"></script>
+        <script src="toc-f09026c8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -261,6 +261,299 @@ draw(dart, 1.2);
 wait(1.2);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/S7XXwCyj_PY" title="Gradient Paint — The Color Is Computed, Not Painted — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="svg-import"><a class="header" href="#svg-import">svg-import</a></h2>
+<p>SVG vector import, the acceptance demo: <code>svg()</code> brings a heart (cubic béziers) and its
+highlight (a <code>&lt;circle&gt;</code> normalised to a path) in as NATIVE <code>Polyline</code>/<code>Polygon</code> entities —
+the <code>#ff2d95</code> fill kept LITERAL, not re-themed by the template — then <code>show</code>/<code>pulse</code>/<code>recolor</code>
+drive the whole drawing through its <code>{id}</code> tag. Geometry, not a texture; the 2D twin of
+<code>model3</code>’s OBJ import.</p>
+<pre><code class="language-manic">// SVG vector import — bring artwork in as NATIVE path entities (not a texture).
+// Each subpath of heart.svg becomes a traceable Polyline / filled Polygon, fitted
+// to 320 px wide and centred; the pieces are tagged `heart`, so ONE verb animates
+// the whole drawing. Imported colours reproduce faithfully (the #ff2d95 fill is
+// kept literal, not re-themed). This is the 2D twin of `model3`'s OBJ import.
+title("SVG Vector Import");
+canvas("16:9");
+template("neon");
+
+svg(heart, (cx, cy), "asset:svg/heart.svg", 320);
+
+hidden(heart);
+show(heart, 0.8);          // reveal — real geometry, faithful colours
+wait(0.4);
+pulse(heart, 0.9);         // animate the whole drawing with one verb
+wait(0.6);
+recolor(heart, cyan);      // …and recolour it — imported vectors are first-class
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5QY08VH5Yvc" title="Import Any SVG as Real, Animatable Geometry — Vector Import in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="svg-howto"><a class="header" href="#svg-howto">svg-howto</a></h2>
+<p>“Made of Emoji” — a vector spectacle showing the full power of <code>svg()</code>. Thirty rainbow heart
+emoji explode from one point into a ring, then snap into a beating HEART placed by the
+parametric heart curve — dozens of imported vectors choreographed by pure math. A rapid
+SAMPLER then riffles the bundled catalogue (icons · flags · emoji), flags and heroes rain in
+with <code>burst</code> confetti, and a rocket launches to the title. Every actor is one <code>svg()</code> line;
+the reveal is scale + computed motion + faithful colour, with optional ElevenLabs VO.</p>
+<pre><code class="language-manic">// ============================================================================
+//  svg-howto.manic — "MADE OF EMOJI"
+//
+//  Not a lecture — a spectacle. From one point, a storm of imported emoji
+//  explodes, swirls into a galaxy, then snaps into a beating heart — dozens of
+//  vectors choreographed by pure math, exploded again into a flag-lit finale.
+//  Every actor is an `svg()` import; nothing is a texture; it's all computed.
+//
+//    manic examples/svg-howto.manic
+//    manic examples/svg-howto.manic --record out --preset reel
+// ============================================================================
+
+title("Made of Emoji — a vector spectacle");
+canvas("16:9");
+template("blank");
+
+voice("elevenlabs");                       // promo narration (ELEVENLABS_API_KEY)
+// voice("elevenlabs", "alice");
+// voice("elevenlabs", "jessica");
+// voice("cartesia");  // voice("gtts");   // free fallback
+// speak("…") = voice only; say(sub, "…") = on-screen text; both can run together.
+
+// deep-space backdrop
+rect(space, (cx, cy), w*2, h*2); filled(space); gradient(space, void, indigo, radial);
+
+text(sub, (cx, h*0.9), ""); size(sub, 30); color(sub, fg); display(sub); glow(sub, 0.4);
+
+// ---- the swarm: 30 heart emoji, rainbow-hued, all born at the centre ----
+for i in 0..30 {
+  svg(sw{i}, (cx, cy), "asset:svg/emoji/heart.svg", 46);
+  hue(sw{i}, i*12);                 // rainbow, one hue apiece
+  tag(sw{i}, swarm); z(sw{i}, 5); hidden(sw{i});
+}
+
+// ---- burst engines (gold ignition, cyan confetti) ----
+rect(bseed, (cx, cy), 24, 24); hidden(bseed);
+particles(spark, bseed, 30, 6, 22, "random"); color(spark, gold); glow(spark, 0.9); hidden(spark);
+rect(cseed, (cx, cy), 24, 24); hidden(cseed);
+particles(conf, cseed, 30, 6, 22, "random"); color(conf, cyan); glow(conf, 0.9); hidden(conf);
+
+// ---- the finale cast (flags + hero emoji rain in) ----
+svg(rk,  (cx, h + 120), "asset:svg/emoji/rocket.svg", 120); z(rk, 9); hidden(rk);
+svg(hero0, (cx - 500, -80), "asset:svg/emoji/fire.svg",   80); hidden(hero0);
+svg(hero1, (cx - 250, -80), "asset:svg/emoji/star.svg",   80); hidden(hero1);
+svg(hero2, (cx + 250, -80), "asset:svg/emoji/party.svg",  80); hidden(hero2);
+svg(hero3, (cx + 500, -80), "asset:svg/emoji/trophy.svg", 80); hidden(hero3);
+svg(flag0, (cx - 420, -80), "asset:svg/flags/in.svg", 92); hidden(flag0);
+svg(flag1, (cx - 140, -80), "asset:svg/flags/br.svg", 92); hidden(flag1);
+svg(flag2, (cx + 140, -80), "asset:svg/flags/jp.svg", 92); hidden(flag2);
+svg(flag3, (cx + 420, -80), "asset:svg/flags/de.svg", 92); hidden(flag3);
+
+// ---- the sampler: a stack of diverse shapes to riffle through ----
+svg(smp0,  (cx, cy - 40), "asset:svg/emoji/rocket.svg",       220); hidden(smp0);
+svg(smp1,  (cx, cy - 40), "asset:svg/emoji/party.svg",        220); hidden(smp1);
+svg(smp2,  (cx, cy - 40), "asset:svg/emoji/brain.svg",        220); hidden(smp2);
+svg(smp3,  (cx, cy - 40), "asset:svg/flags/jp.svg",           240); hidden(smp3);
+svg(smp4,  (cx, cy - 40), "asset:svg/emoji/trophy.svg",       220); hidden(smp4);
+svg(smp5,  (cx, cy - 40), "asset:svg/lucide/cpu.svg",         200); hue(smp5, 190);  hidden(smp5);
+svg(smp6,  (cx, cy - 40), "asset:svg/flags/br.svg",           240); hidden(smp6);
+svg(smp7,  (cx, cy - 40), "asset:svg/emoji/fire.svg",         220); hidden(smp7);
+svg(smp8,  (cx, cy - 40), "asset:svg/heroicons/bolt.svg",     200); hue(smp8, 48);   hidden(smp8);
+svg(smp9,  (cx, cy - 40), "asset:svg/flags/in.svg",           240); hidden(smp9);
+svg(smp10, (cx, cy - 40), "asset:svg/emoji/star.svg",         220); hidden(smp10);
+svg(smp11, (cx, cy - 40), "asset:svg/lucide/globe.svg",       200); hue(smp11, 130); hidden(smp11);
+svg(smp12, (cx, cy - 40), "asset:svg/emoji/earth.svg",        220); hidden(smp12);
+svg(smp13, (cx, cy - 40), "asset:svg/flags/de.svg",           240); hidden(smp13);
+svg(smp14, (cx, cy - 40), "asset:svg/heroicons/beaker.svg",   200); hue(smp14, 300); hidden(smp14);
+svg(smp15, (cx, cy - 40), "asset:svg/emoji/heart.svg",        220); hidden(smp15);
+
+text(mark, (cx, cy - 20), "MANIC"); size(mark, 110); color(mark, gold); bold(mark); display(mark); glow(mark, 1.2); hidden(mark);
+text(tagl, (cx, cy + 78), "6,404 shapes · one file · all computed");
+size(tagl, 26); color(tagl, cyan); display(tagl); hidden(tagl);
+
+// ============================================================================
+//  THE SPECTACLE  (fast, punchy)
+// ============================================================================
+
+// 1 — SINGULARITY: everything waits in one blinding point.
+seq {
+  zoom(1.35, 0.01);
+  show(sw0, 0.3);
+  par { for i in 0..30 { show(sw{i}, 0.25); } }   // a tight rainbow knot at centre
+  pulse(sw0);
+  say(sub, "One line…", 0.25);
+  speak("This… is one line of Manic.");
+  wait(0.2);
+}
+
+// 2 — BIG BANG: the storm explodes outward into a ring.
+seq {
+  say(sub, "…one universe.", 0.25);
+  speak("From it, a whole universe of vectors explodes into being.");
+  show(spark, 0.05); burst(spark, 0.7);
+  par {
+    for i in 0..30 {
+      move(sw{i}, (cx + 300*cos(i*12*pi/180), cy + 300*sin(i*12*pi/180)), 0.7, out);
+    }
+    zoom(1.0, 0.7, smooth);
+  }
+  wait(0.15);
+}
+
+// 3 — GALAXY: the ring breathes (turn removed to test formation).
+seq {
+  say(sub, "computed — never drawn.", 0.3);
+  speak("Import any SVG — an icon, a flag, an emoji — as living geometry. Not a picture. Real shapes you can move and colour.");
+  par { for i in 0..30 { pulse(sw{i}); } }
+  wait(0.2);
+}
+
+// 4 — THE HEART: dozens of vectors snap into a single shape.
+seq {
+  say(sub, "shape them at will.", 0.3);
+  speak("Watch thirty of them snap into a single form — placed by pure math.");
+  par {
+    for i in 0..30 {
+      move(sw{i},
+        (cx + 208*sin(i*pi/15)*sin(i*pi/15)*sin(i*pi/15),
+         cy - (169*cos(i*pi/15) - 65*cos(2*i*pi/15) - 26*cos(3*i*pi/15) - 13*cos(4*i*pi/15)) + 40),
+        1.1, smooth);
+    }
+  }
+  par { for i in 0..30 { pulse(sw{i}); } }         // the heart beats
+  wait(0.4);
+}
+
+// 4.5 — THE LIBRARY: riffle the catalogue so they see the full range.
+seq {
+  say(sub, "and not just hearts — 6,404 shapes, one line each.", 0.3);
+  speak("And it's not just hearts. Six thousand four hundred shapes ship inside — every icon, every flag, every emoji — each one line away.");
+  par { for i in 0..30 { fade(sw{i}, 0.4); } }     // clear the heart
+  stagger(0.2) {
+    for i in 0..16 { seq { show(smp{i}, 0.14); fade(smp{i}, 0.3); } }
+  }
+  wait(0.2);
+}
+
+// 5 — CELEBRATION: flags and heroes rain in; confetti pops.
+seq {
+  say(sub, "every shape. every colour. one file.", 0.35);
+  speak("Faithful colours. Real vectors. Recolour them, move them, explode them — all from one text file.");
+  show(conf, 0.05); burst(conf, 0.9);
+  stagger(0.06) {
+    move(flag0, (cx - 420, cy - 250), 0.7, overshoot); show(flag0, 0.1);
+    move(hero0, (cx - 500, cy + 250), 0.7, overshoot); show(hero0, 0.1);
+    move(flag1, (cx - 140, cy - 250), 0.7, overshoot); show(flag1, 0.1);
+    move(hero1, (cx - 250, cy + 250), 0.7, overshoot); show(hero1, 0.1);
+    move(flag2, (cx + 140, cy - 250), 0.7, overshoot); show(flag2, 0.1);
+    move(hero2, (cx + 250, cy + 250), 0.7, overshoot); show(hero2, 0.1);
+    move(flag3, (cx + 420, cy - 250), 0.7, overshoot); show(flag3, 0.1);
+    move(hero3, (cx + 500, cy + 250), 0.7, overshoot); show(hero3, 0.1);
+  }
+  wait(0.4);
+}
+
+// 6 — FINALE: it all bursts apart; a rocket tears through to the title.
+seq {
+  say(sub, "", 0.1);
+  show(spark, 0.05); burst(spark, 0.8);
+  par {
+    fade(flag0, 0.5); fade(flag1, 0.5); fade(flag2, 0.5); fade(flag3, 0.5);
+    fade(hero0, 0.5); fade(hero1, 0.5); fade(hero2, 0.5); fade(hero3, 0.5);
+  }
+  show(rk, 0.2);
+  move(rk, (cx, cy + 40), 0.7, out);
+  par { flash(rk, cyan); pulse(rk); }
+  move(rk, (cx, -160), 0.6, in);                   // it launches off the top
+  par { show(mark, 0.5); show(tagl, 0.5); }
+  speak("This is Manic — turn plain text into vector spectacle. Try it free at eight g wifi dot org slash manic.");
+  flash(mark, gold);
+  wait(1.4);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GFr_NyVVSn4" title="Made of Emoji — 6,404 Vectors, One File, Choreographed Into a Heart in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="clip-window"><a class="header" href="#clip-window">clip-window</a></h2>
+<p>T1 rectangular clip: <code>clip(id, region)</code> scissors a big imported vector to another entity’s
+bounds, so a hollow spotlight window sweeps across a flag and reveals it piece by piece. The
+scissor is resolved every frame — <code>move</code> the window and the reveal tracks it. Reveal-through-a-
+window · crop-to-panel · region wipe · inset viewport, in one word.</p>
+<pre><code class="language-manic">// clip-window.manic — T1 rectangular clip: reveal-through-a-window / crop-to-panel.
+//
+// `clip(id, region)` scissors an entity (or a whole tagged group) to another
+// entity's rectangular bounds. The scissor is resolved every frame, so the window
+// FOLLOWS the region — move the window and the reveal tracks it. Here a spotlight
+// window sweeps across a big imported vector, revealing it piece by piece.
+//
+//   manic examples/clip-window.manic
+title("Clip — reveal through a window");
+canvas("16:9");
+template("blank");
+
+// a big imported vector that overflows what one window can show
+svg(art, (cx, cy), "asset:svg/flags/br.svg", 940);
+
+// the spotlight window — hollow frame so the clipped vector shows through
+// (declared BEFORE the clip that references it)
+rect(win, (cx - 380, cy), 320, 300); outlined(win); outline(win, fg); stroke(win, 5); glow(win, 0.7);
+
+// clip the whole vector to the window — nothing shows outside it
+clip(art, win);
+
+text(cap, (cx, h*0.9), "clip(id, window) — the scissor follows the window");
+size(cap, 26); color(cap, dim); display(cap);
+
+// sweep the window across → the flag is revealed only where the window is
+seq {
+  wait(0.4);
+  move(win, (cx + 380, cy), 2.4, smooth);
+  wait(0.3);
+  move(win, (cx, cy), 1.0, smooth);
+  pulse(win);
+  wait(0.6);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/1GkuaHm5qmc" title="Reveal Through a Window — Rectangular Clip That Follows the Frame — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="mask-lens"><a class="header" href="#mask-lens">mask-lens</a></h2>
+<p>T2 arbitrary-shape mask: <code>mask(id, region)</code> composites a vector through another entity’s
+SILHOUETTE — any shape masks any content (render-target multiply). A circular lens glides
+across a flag like a magnifier; swap the circle for a star or an imported outline and the
+reveal takes that shape. The general cousin of <code>clip</code> (rectangle-only). Lens · porthole ·
+spotlight · reveal-through-any-shape, and the mask follows the region every frame.</p>
+<pre><code class="language-manic">// mask-lens.manic — T2 arbitrary-shape mask: reveal-through-any-shape.
+//
+// `mask(id, region)` composites `id` through another entity's SILHOUETTE — any
+// shape (circle, polygon, star, an imported svg outline) masks any content. The
+// general cousin of `clip` (which is rectangle-only). The mask follows `region`
+// every frame, so a circular lens glides across a big vector like a magnifier.
+//
+//   manic examples/mask-lens.manic
+title("Mask — reveal through any shape");
+canvas("16:9");
+template("blank");
+
+// a big imported vector to peer into
+svg(art, (cx, cy), "asset:svg/flags/br.svg", 940);
+
+// a circular lens — its shape is the mask (declared BEFORE the mask call)
+circle(lens, (cx - 340, cy), 150); outlined(lens); outline(lens, fg); stroke(lens, 5); glow(lens, 0.8);
+
+// mask the whole vector to the lens — art shows only inside the circle
+mask(art, lens);
+
+text(cap, (cx, h*0.9), "mask(id, region) — any shape masks any content");
+size(cap, 26); color(cap, dim); display(cap);
+
+// glide the lens across → the flag is revealed only inside the moving circle
+seq {
+  wait(0.4);
+  move(lens, (cx + 340, cy), 2.4, smooth);
+  wait(0.3);
+  move(lens, (cx, cy), 1.0, smooth);
+  pulse(lens);
+  wait(0.6);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/FaJAPHQE6wE" title="Reveal Through Any Shape — Arbitrary-Shape Mask That Follows the Lens — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="motion-graphics-v2"><a class="header" href="#motion-graphics-v2">motion-graphics-v2</a></h2>
 <p>The generic Motion Graphics V2 acceptance scene: one persistent marker carries an attached
@@ -1146,6 +1439,43 @@ to(sh, morph, 1, 1.1, overshoot);   // and back, with a bounce
 wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/Y6kpE-ZT-T8" title="Morph One Shape Into Another — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="morph-icons"><a class="header" href="#morph-icons">morph-icons</a></h2>
+<p>Morph imported <code>svg()</code> vectors: one emoji reshapes into another and back. A bare svg tag
+resolves to its dominant path, filled Regions sample along their outer ring, and the two
+outlines are winding-matched + rotated for a clean shape-to-shape blend — no tangle through
+the centre. Paired with a colour tween so the heart warms to gold as it becomes a star.</p>
+<pre><code class="language-manic">// morph-icons.manic — morph imported SVG vectors from one shape into another.
+//
+// `morph(a, b)` samples both outlines and blends `a` into `b`'s shape; drive it
+// with `to(a, morph, 1, dur)`. It now works on imported `svg()` art: a bare svg
+// tag resolves to its dominant path, filled Regions sample along their outer ring,
+// and the two loops are winding-matched + rotated for a clean shape-to-shape blend
+// (no tangle through the centre). Here one emoji reshapes into another and back.
+//
+//   manic examples/morph-icons.manic
+title("Morph — imported vectors reshape");
+canvas("16:9");
+template("blank");
+
+svg(heart, (cx, cy), "asset:svg/emoji/heart.svg", 260);
+svg(star,  (cx, cy), "asset:svg/emoji/star.svg", 260); hidden(star);
+
+text(cap, (cx, h*0.86), "morph(heart, star) — one imported icon reshapes into another");
+size(cap, 24); color(cap, dim); display(cap);
+
+// set the heart up to morph into the star's outline
+morph(heart, star);
+
+seq {
+  wait(0.5);
+  par { to(heart, morph, 1, 1.6, smooth); to(heart, color, gold, 1.6); }
+  wait(0.5);
+  par { to(heart, morph, 0, 1.6, smooth); to(heart, color, magenta, 1.6); }
+  wait(0.5);
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/sEKDNuYGNe8" title="Morph One Imported Vector Into Another — SVG Shape Morphing in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="shapes-howto"><a class="header" href="#shapes-howto">shapes-howto</a></h2>
 <p>SHAPECRAFT — Manic shape power in one film: outlined vs filled (the axes trap),

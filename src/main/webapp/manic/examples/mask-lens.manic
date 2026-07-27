@@ -1,0 +1,33 @@
+// mask-lens.manic — T2 arbitrary-shape mask: reveal-through-any-shape.
+//
+// `mask(id, region)` composites `id` through another entity's SILHOUETTE — any
+// shape (circle, polygon, star, an imported svg outline) masks any content. The
+// general cousin of `clip` (which is rectangle-only). The mask follows `region`
+// every frame, so a circular lens glides across a big vector like a magnifier.
+//
+//   manic examples/mask-lens.manic
+title("Mask — reveal through any shape");
+canvas("16:9");
+template("blank");
+
+// a big imported vector to peer into
+svg(art, (cx, cy), "asset:svg/flags/br.svg", 940);
+
+// a circular lens — its shape is the mask (declared BEFORE the mask call)
+circle(lens, (cx - 340, cy), 150); outlined(lens); outline(lens, fg); stroke(lens, 5); glow(lens, 0.8);
+
+// mask the whole vector to the lens — art shows only inside the circle
+mask(art, lens);
+
+text(cap, (cx, h*0.9), "mask(id, region) — any shape masks any content");
+size(cap, 26); color(cap, dim); display(cap);
+
+// glide the lens across → the flag is revealed only inside the moving circle
+seq {
+  wait(0.4);
+  move(lens, (cx + 340, cy), 2.4, smooth);
+  wait(0.3);
+  move(lens, (cx, cy), 1.0, smooth);
+  pulse(lens);
+  wait(0.6);
+}

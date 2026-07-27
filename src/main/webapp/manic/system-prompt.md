@@ -235,7 +235,7 @@ or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` (filled disc — hides crossings; for textbook contacts use an outlined+dashed circle instead) · `circle(id,(x,y),r)` (**defaults filled+outlined**) · `rect(id,(x,y),w,h)` (**defaults filled+outlined**) ·
 `particles(id,container,count,[radius],[seed],["random|grid|ring"])` creates persistent
 seeded dots inside a circle/rectangle (`grid` is rectangular; `ring` is circular) ·
-`image(id,(x,y),"asset:manic-logo.png"|"path",[w],[h])` a raster image (PNG/JPG) from a documented bundled URI or provisioned file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing ordinary file → placeholder box, missing `asset:` → error (engine-only, no browser preview) ·
+`image(id,(x,y),"asset:manic-logo.png"|"path",[w],[h])` a raster image (PNG/JPG) from a documented bundled URI or provisioned file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing ordinary file → placeholder box, missing `asset:` → error (engine-only, no browser preview) · `svg(id,(x,y),"asset:name.svg"|"path",[size])` import VECTOR artwork as native path entities (2D twin of model3): each subpath → a traceable Polyline/filled Polygon, fitted to `size` px wide (default 240, aspect-preserved) and centred; solid fill/stroke colours kept LITERAL (faithful, not re-themed); pieces named {id}.p{i} + tagged {id} so draw/show/fade/hue/gradient/move broadcast over the whole drawing; v1 skips SVG text/image/clip/mask/filter/gradient-paint (engine-only, no browser preview) ·
 `equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work), while `\textcolor{cyan}{...}` colors individual terms semantically; `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
 `line(id,(x1,y1),(x2,y2))` (stroke only) · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts; **defaults filled+outlined**) · `arrow(id,(x1,y1),(x2,y2))` (stroke only; arrowhead is a filled tip — stop short of open markers) · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
 `brace(id,(x1,y1),(x2,y2),[depth])` (stroke only) · `bracelabel(id,(x1,y1),(x2,y2),"s",[depth])`
@@ -255,7 +255,7 @@ sim's `.path`, a `freekick` arc) by its TRUE local speed, slowest stop first —
 a build error on purely geometric paths; `"curvature"` colours any path by how
 hard it bends, straightest stop first. Palette names only, template-aware;
 composes with trace/dashed/glow/arrowheads; 2D shapes and strokes, not
-text/images; quantity modes stroke-only) · `glow(id,n)` · `z(id,n)` · `rot(id,deg)`
+text/images; quantity modes stroke-only) · `glow(id,n)` · `z(id,n)` · `clip(id,region)` (clip id/tag to another entity's rectangular bounds — reveal-through-a-window / crop-to-panel; `region` declared first; scissor follows it each frame) · `mask(id,region)` (clip id/tag to another entity's ARBITRARY shape — circle/polygon/star/svg-outline; lens / porthole / reveal-through-any-shape; general cousin of `clip`, follows region each frame) · `rot(id,deg)`
 · `bold` · `display` · `tag(id,name)` · `label(id,"s",[(dx,dy)])`.
 
 ### Verbs (timeline)
@@ -264,7 +264,7 @@ text/images; quantity modes stroke-only) · `glow(id,n)` · `z(id,n)` · `rot(id
 `grow(id,target,[d],[ease])` (line/arrow endpoint) · `draw(id,[d])` ·
 `travel(id,path,[d],[ease])` moves one persistent entity once along a line,
 arrow, curve, plot, spline, or arc and holds it at the endpoint ·
-`wander(particles,[d])` (contained ambient motion) ·
+`wander(particles,[d])` (contained ambient motion) · `burst(particles,[d])` (explode outward from the centre + fade — the impact/confetti/ignition beat; one word, no knobs) ·
 `arrange(particles,container,["random|grid|ring"],[d],[ease])` (preserve every dot id
 while expanding into a new container or moving among random, rectangular, and
 radial layouts; random transitions use independent seeded curved routes) ·
@@ -299,7 +299,9 @@ for straight paths; repeated calls compose) ·
 (For a `tangent`, `to(id, x, target, dur)` slides the touch point along its curve — the slope follows.)
 Shape morph: `morph(a, b, [spin])` (constructor — sets `a` up to morph into `b`'s
 outline; `spin` degrees winds the blend) then `to(a, morph, 1, dur)` to animate
-(open paths stay open; closed outlines stay closed; `a` becomes a polyline).
+(open paths stay open; closed outlines stay closed; `a` becomes a polyline). Works
+on imported `svg()` art too — a bare svg tag morphs its dominant path (filled
+Regions blend along their outer ring); `become(a, b)` resolves svg tags the same way.
 `copy(new, src)` duplicates an entity
 (standalone) — copy then morph/move it while the original stays.
 

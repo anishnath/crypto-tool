@@ -1,5 +1,5 @@
 {
-  "count": 258,
+  "count": 265,
   "categories": [
     {
       "slug": "algorithms",
@@ -1008,6 +1008,30 @@
           "desc": "Gradient paint, the acceptance demo: one word gradient(id, c1, c2, \u2026, [mode]) covers a radial well, a three-stop height-colored plot, a spline colored by \"curvature\", an RK4 free kick colored by \"speed\", and an arc-length arrow whose head takes the tip color."
         },
         {
+          "name": "svg-import",
+          "file": "svg-import.manic",
+          "title": "Svg import",
+          "desc": "SVG vector import, the acceptance demo: svg() brings a heart (cubic b\u00e9ziers) and its highlight (a <circle> normalised to a path) in as NATIVE Polyline/Polygon entities \u2014 the #ff2d95 fill kept LITERAL, not re-themed by the template \u2014 then show/pulse/recolor drive the whole drawing through its {id} tag."
+        },
+        {
+          "name": "svg-howto",
+          "file": "svg-howto.manic",
+          "title": "Svg howto",
+          "desc": "\"Made of Emoji\" \u2014 a vector spectacle showing the full power of svg()."
+        },
+        {
+          "name": "clip-window",
+          "file": "clip-window.manic",
+          "title": "Clip window",
+          "desc": "T1 rectangular clip: clip(id, region) scissors a big imported vector to another entity's bounds, so a hollow spotlight window sweeps across a flag and reveals it piece by piece."
+        },
+        {
+          "name": "mask-lens",
+          "file": "mask-lens.manic",
+          "title": "Mask lens",
+          "desc": "T2 arbitrary-shape mask: mask(id, region) composites a vector through another entity's SILHOUETTE \u2014 any shape masks any content (render-target multiply)."
+        },
+        {
           "name": "motion-graphics-v2",
           "file": "motion-graphics-v2.manic",
           "title": "Motion graphics v2",
@@ -1054,6 +1078,12 @@
           "file": "morph.manic",
           "title": "Morph",
           "desc": "A sampled-point shape morph from A to B."
+        },
+        {
+          "name": "morph-icons",
+          "file": "morph-icons.manic",
+          "title": "Morph icons",
+          "desc": "Morph imported svg() vectors: one emoji reshapes into another and back."
         },
         {
           "name": "shapes-howto",
@@ -1240,6 +1270,18 @@
           "file": "creator-free-kicks.manic",
           "title": "Creator free kicks",
           "desc": "Roberto Carlos' impossible free kick as a narrated Short: walk-in, Magnus with values, the RK4 freekick curls in for a GOAL while the zero-spin twin sails wide, then a cylinder flow explains the pressure difference."
+        },
+        {
+          "name": "creator-pathfinding",
+          "file": "creator-pathfinding.manic",
+          "title": "Creator pathfinding",
+          "desc": "The Shortest Path \u2014 a Short where imported VECTOR art poses the problem and a Manic algorithm solves it: an svg() robot and pin (crisp, faithful colours) mark the start and goal of a maze, a naive straight line cuts through the walls, then A* (gridastar) searches the grid cell-by-cell and traces the true shortest path around them."
+        },
+        {
+          "name": "creator-monty-hall",
+          "file": "creator-monty-hall.manic",
+          "title": "Creator monty hall",
+          "desc": "The Monty Hall Problem \u2014 the most-argued puzzle in probability, as an ElevenLabs-narrated 9:16 Short where imported SVG carries the whole story: three door emoji, a car, goats, a party popper."
         },
         {
           "name": "gradient-fastest-descent-shorts",

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6cddf830.js";
+            window.path_to_searchindex_js = "searchindex-891a6e5e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c698a1f0.js"></script>
+        <script src="toc-f09026c8.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -311,6 +311,46 @@ voice("gtts", "hi");
 the line finishes. A trailing <code>wait(0.3)</code> is only a pause <em>between</em> ideas —
 not a substitute for narration length.</p>
 <hr>
+<h2 id="pacing--budget-your-short-by-word-count"><a class="header" href="#pacing--budget-your-short-by-word-count">Pacing — budget your Short by word count</a></h2>
+<p>You don’t set timings by hand, but you <strong>can</strong> predict how long a narrated
+video will run: a spoken line lasts about <strong>2.5 words per second</strong> (≈150 words
+per minute — a natural narration pace).</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Target length</th><th>Budget for <code>speak</code></th></tr>
+</thead>
+<tbody>
+<tr><td>15s Short</td><td>~35–40 words</td></tr>
+<tr><td>30s Short</td><td>~75 words</td></tr>
+<tr><td>60s Short</td><td>~150 words</td></tr>
+</tbody>
+</table>
+</div>
+<p>So a Short that <em>feels</em> right on paper can quietly balloon: 150 words of
+narration is a <strong>full minute</strong>, even if the script looks short. If a video runs
+long, trim the words first — the motion follows the voice, not the other way
+round.</p>
+<p><strong>Preview pacing without an API key.</strong> Manic estimates each <code>speak</code> line’s
+length from its word count <em>even when text-to-speech is offline or no key is
+set</em> (the line is silent, but the timeline still reserves the time). That means
+<code>--still &lt;t&gt;</code> lands on the <strong>same beat it will at full voice</strong> — so you can
+check timing and framing before spending a single TTS call:</p>
+<pre><code class="language-sh">manic monty-hall.manic --still 15.6   # the frame the viewer sees at 15.6s
+</code></pre>
+<p>A few practicalities:</p>
+<ul>
+<li>Each line is clamped to <strong>0.8s–30s</strong> — one very long <code>speak</code> won’t stall
+forever, but split big paragraphs into separate lines anyway; they read better.</li>
+<li><code>wait(...)</code> adds <strong>on top</strong> of the spoken time. Since <code>speak</code> already paces
+the beat, keep waits small (<code>wait(0.3)</code>–<code>wait(0.6)</code>) — they’re breaths between
+ideas, not the pacing itself.</li>
+<li>Real TTS duration replaces the estimate when a voice key is present; it lands
+very close, so your <code>--still</code> preview stays accurate.</li>
+<li>Tip: to count your narration, add up the words inside every <code>speak("…")</code> and
+divide by 2.5 for a rough total in seconds.</li>
+</ul>
+<hr>
 <h2 id="math-in-spoken-lines"><a class="header" href="#math-in-spoken-lines">Math in spoken lines</a></h2>
 <p>Write symbols as you would on screen; Manic reads them naturally:</p>
 <pre><code class="language-manic">speak("The slope is √(tan θ).");
@@ -320,6 +360,9 @@ not a substitute for narration length.</p>
 <ul>
 <li><a href="ex-creator.html#creator-free-kicks">Roberto Carlos’ Banana Kick</a> — story VO + captions</li>
 <li><a href="ex-creator.html#creator-heightmap-world">Your Map Is a 3D World</a> — map → 3D with narration</li>
+<li><a href="ex-creator.html#creator-pathfinding">The Shortest Path</a> — vector maze + A* with problem→solve narration (ElevenLabs)</li>
+<li><a href="ex-transforms.html#svg-howto">Made of Emoji</a> — a vector spectacle with promo VO (ElevenLabs)</li>
+<li><a href="ex-transforms.html#creator-monty-hall">The Monty Hall Problem</a> — probability puzzle told in emoji, problem→solution→CTA narration (ElevenLabs)</li>
 </ul>
 <hr>
 <h2 id="quick-checklist"><a class="header" href="#quick-checklist">Quick checklist</a></h2>
@@ -328,6 +371,8 @@ not a substitute for narration length.</p>
 <li><input disabled="" type="checkbox"> Full sentences in <code>speak("…")</code></li>
 <li><input disabled="" type="checkbox"> Short on-screen lines in <code>say(cap, "…")</code></li>
 <li><input disabled="" type="checkbox"> Use <code>par { … }</code> when caption, voice, and motion should start together</li>
+<li><input disabled="" type="checkbox"> Budget length by word count (~2.5 words/sec) — ~75 words ≈ 30s</li>
+<li><input disabled="" type="checkbox"> Preview any beat with <code>--still &lt;t&gt;</code> (timing holds even with no TTS key)</li>
 <li><input disabled="" type="checkbox"> No voice? Omit <code>voice</code> / <code>speak</code> — <code>say</code> alone is fine</li>
 </ul>
 

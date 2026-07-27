@@ -1,0 +1,82 @@
+// The Shortest Path — a Short where VECTOR art poses the problem and a Manic
+// ALGORITHM solves it. An imported robot and pin (crisp `svg()` vectors) sit at the
+// start and goal of a maze; a naive straight line cuts through the walls; then A*
+// (`gridastar`) searches the space cell-by-cell and traces the true shortest route.
+// Vectors imported, path computed — Manic does both, in one branded 9:16 file.
+title("The Shortest Path");
+canvas("9:16");
+template("shorts");
+
+voice("elevenlabs");                       // promo narration (ELEVENLABS_API_KEY)
+// voice("elevenlabs", "alice");
+// voice("cartesia");  // voice("gtts");   // free fallback
+// speak("…") = voice only; say(cap, "…") = on-screen caption.
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_amazing_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+watermark(mk, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+// --- the maze grid + the cell geometry (so the vector icons land on cells) ---
+let cs = w*0.11;
+let gx = cx;
+let gy = h*0.43;
+let sx = gx - 2.5*cs;   let sy = gy - 3.5*cs;   // start cell (0,0) centre
+let px = gx + 2.5*cs;   let py = gy + 3.5*cs;   // goal  cell (5,7) centre
+
+grid(g, "@ . . . . . ; # # # # # . ; . . . . . . ; . # # # # # ; . . . . . . ; # # # # # . ; . . . . . . ; . # # # # *", (gx, gy), 6, 8, cs);
+neighbors(g, "4");
+
+// --- imported vector characters (faithful colours, crisp at any size) ---
+svg(bot, (sx, sy), "asset:svg/robot.svg", cs*0.8);   z(bot, 6);   hidden(bot);
+svg(dest, (px, py), "asset:svg/pin.svg", cs*0.8);    z(dest, 6);  hidden(dest);
+
+// the naive "just go straight" line — cuts across the walls
+line(naive, (sx, sy), (px, py)); color(naive, red); dashed(naive); z(naive, 4); hidden(naive);
+
+text(hook, (cx, h*0.12), "Can the robot reach the pin?");
+size(hook, 34); color(hook, gold); bold(hook); wrap(hook, w*0.82);
+text(cap, (cx, h*0.78), ""); size(cap, 30); color(cap, dim); wrap(cap, w*0.84);
+socials(me);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
+untraced(hook); cursor(hook);
+
+// 1 — HOOK
+mark("hook");
+type(hook, 1.2);
+speak("How does a robot find its way through a maze?");
+
+// 2 — BUILD: the maze is the world; the imported vectors are its characters
+show(cap, 0.3); say(cap, "a maze — the robot and pin are imported SVG vectors");
+speak("Drop in a robot and its goal — both imported as crisp SVG vectors.");
+par { show(bot, 0.5); show(dest, 0.5); }
+wait(0.6);
+
+// 3 — PROBLEM: the straight line fails
+fade(hook, 0.4); recolor(cap, red); say(cap, "a straight line? it cuts right through the walls");
+speak("The obvious answer — a straight line — slams right into the walls.");
+show(naive, 0.5); flash(naive, red);
+wait(0.9);
+
+// 4 — SOLVE: A* searches, then traces the real route
+fade(naive, 0.4); recolor(cap, dim); say(cap, "A* searches the space, cell by cell…");
+speak("So Manic runs A-star — searching the grid, cell by cell,");
+gridastar(g, (0,0), (5,7), manhattan);
+recolor(cap, gold); say(cap, "…and traces the true shortest path");
+speak("until it traces the true shortest path around every wall.");
+draw(g.path, 1.6);
+wait(0.6);
+
+// 5 — POINT
+recolor(cap, cyan); say(cap, "vectors imported, path computed — Manic does both");
+speak("Vectors imported, path computed — Manic does both. Turn plain text into animated explainers, free, at eight g wifi dot org slash manic.");
+wait(1.2);
+
+// 6 — END CARD — clear the maze, path, and characters so the CTA stands alone
+mark("endcard");
+par {
+  fade(cap, 0.4); fade(me.footer, 0.4);
+  fade(g.cells, 0.4); fade(g.lines, 0.4); fade(g.path, 0.4);
+  fade(g.frontier, 0.4); fade(g.visited, 0.4);
+  fade(bot, 0.4); fade(dest, 0.4);
+}
+show(me.endcard, 0.6);
+wait(1.6);
