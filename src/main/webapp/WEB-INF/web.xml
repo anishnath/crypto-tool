@@ -772,6 +772,10 @@
         <servlet-name>BillingGatewayProxyServlet</servlet-name>
         <url-pattern>/api/billing/plans</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BillingGatewayProxyServlet</servlet-name>
+        <url-pattern>/api/billing/entitlement</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>ToolGenerationsProxyServlet</servlet-name>
