@@ -855,17 +855,25 @@ func parsePlanOverrideRow(row map[string]interface{}) planOverride {
 }
 
 func (s *Service) productForKey(key string) string {
-	if key == "yearly" || key == "year" {
+	switch key {
+	case "yearly", "year":
 		return s.cfg.ProductYearly
+	case "monthly", "month":
+		return s.cfg.ProductMonthly
+	default:
+		// Tool-specific keys (ultra_monthly, …) must come from billing_plans —
+		// never silently charge the global Pro product.
+		return ""
 	}
-	return s.cfg.ProductMonthly
 }
 
 func intervalForKey(key string) string {
-	if key == "yearly" || key == "year" {
+	switch key {
+	case "yearly", "year", "ultra_yearly", "pro_yearly":
 		return "year"
+	default:
+		return "month"
 	}
-	return "month"
 }
 
 // rowStr coerces a D1 column value to a trimmed-friendly string.

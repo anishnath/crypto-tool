@@ -6,7 +6,7 @@ How Pro subscriptions, AI quotas, model routing, and the plan picker work — an
 
 | Doc | Purpose |
 |-----|---------|
-| [`TOOL_ENTITLEMENTS.md`](./TOOL_ENTITLEMENTS.md) | Tool-scoped plans, coverage (Manic Pro → cheaper tools), split with onecompiler meters |
+| [`TOOL_ENTITLEMENTS.md`](./TOOL_ENTITLEMENTS.md) | Tool-scoped plans; **§14 runbook** to add a new tool (Manic template) |
 | [`db/SUBSCRIPTIONS.md`](../db/SUBSCRIPTIONS.md) | D1 schema reference (columns, migrations) |
 | [`../../docs/DODO_BILLING_ENV.md`](../../docs/DODO_BILLING_ENV.md) | Env vars, network topology, webhook URL |
 | [`../README.md`](../README.md) | Gateway API, quota headers, frontend examples |
@@ -276,6 +276,9 @@ WHERE plan_id = 'pro';
 
 ### B. Per-tool pricing (~80% global, some tools cheaper)
 
+**Price override only** — user still unlocks via global `is_premium` after checkout.  
+For an **expensive tool that must not be unlocked by other-tool Pro** (Manic), use **pattern B** in [`TOOL_ENTITLEMENTS.md` §14](./TOOL_ENTITLEMENTS.md#14-runbook-add-a-tool-specific-plan-manic-template).
+
 **1.** Create tool-specific Dodo product(s).
 
 **2.** Insert tool rows (merge over global at read time):
@@ -308,6 +311,13 @@ await startCheckout(ctx, { plan: 'monthly', toolId, returnPath: location.pathnam
 Arduino adapter sets `toolId: 'electronics/arduino-simulator'` in `arduino-simulator-adapter.js`.
 
 **Important:** Display price in D1 must match the Dodo `product_id` on that row — otherwise users see one price and pay another.
+
+### B2. Tool-scoped entitlement (Manic-class tools)
+
+Do **not** follow §7.B alone. Full checklist (Dodo → `billing_plans` → entitlement → servlet → AI `resolvePlan` → meters):
+
+→ **[`TOOL_ENTITLEMENTS.md` §14 — Runbook](./TOOL_ENTITLEMENTS.md#14-runbook-add-a-tool-specific-plan-manic-template)**
+
 
 ### C. Tool-specific feature **copy** only (same Pro entitlement)
 

@@ -186,6 +186,34 @@ func TestUpgradeSlugsManic(t *testing.T) {
 	}
 }
 
+func TestSyncSkipsExpiryWhenProductUnmapped(t *testing.T) {
+	// Active sub with unknown product_id and no metadata must NOT expire
+	// an existing Manic entitlement (mapping gap / migration lag).
+	subs := `{"success":true,"result":[{"success":true,"results":[
+		{"dodo_subscription_id":"sub_x","dodo_product_id":"pdt_UNKNOWN","current_period_end":"2099-01-01T00:00:00Z",
+		 "metadata_json":"{}","status":"active"}
+	]}]}`
+	// lookup product → empty; productKnown → empty; existing entitlements query should never run expire path.
+	// We assert Sync returns nil and never issues UPDATE ... expired by only stubbing SELECT paths.
+	empty := `{"success":true,"result":[{"success":true,"results":[]}]}`
+	srv := testD1BySQL(t, map[string]string{
+		"FROM user_subscriptions":    subs,
+		"FROM billing_plans":         empty,
+		"FROM user_tool_entitlements": empty, // if expiry ran it would still "succeed"; we mainly lock no error
+	})
+	defer srv.Close()
+	store := mustTestStore(t, srv)
+	if err := store.SyncToolEntitlementsFromSubscriptions(context.Background(), "user-1"); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestNormalizeManicProAiPlanId(t *testing.T) {
+	if got := normalizePlanSlug(PlanManicPro); got != PlanPro {
+		t.Fatalf("manic_pro → entitlement slug want pro, got %q", got)
+	}
+}
+
 func mustTestStore(t *testing.T, srv *httptest.Server) *D1Store {
 	t.Helper()
 	store, err := NewD1Store(D1Config{

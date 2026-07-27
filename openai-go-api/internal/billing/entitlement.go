@@ -3,6 +3,7 @@ package billing
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"strings"
 	"time"
 )
@@ -299,6 +300,7 @@ func (s *D1Store) SyncToolEntitlementsFromSubscriptions(ctx context.Context, use
 	}
 
 	activeTools := map[string]bool{}
+	unmappedProducts := 0
 	for _, sub := range subs {
 		productID := strings.TrimSpace(d1Str(sub, "dodo_product_id"))
 		subID := strings.TrimSpace(d1Str(sub, "dodo_subscription_id"))
@@ -309,6 +311,12 @@ func (s *D1Store) SyncToolEntitlementsFromSubscriptions(ctx context.Context, use
 			toolID, planSlug = metaTool, metaPlan
 		}
 		if strings.TrimSpace(toolID) == "" {
+			// Global products (billing_plans.tool_id empty) are expected.
+			// Unknown product_id with no metadata is dangerous — skip the
+			// expiry pass so we never wipe a previously correct Manic row.
+			if productID != "" && !s.productKnownInCatalog(ctx, productID) && metaTool == "" {
+				unmappedProducts++
+			}
 			continue
 		}
 		if planSlug == "" {
@@ -318,6 +326,13 @@ func (s *D1Store) SyncToolEntitlementsFromSubscriptions(ctx context.Context, use
 			return err
 		}
 		activeTools[toolID] = true
+	}
+
+	if unmappedProducts > 0 {
+		// Fail closed on expiry only: upserts above still applied for mapped subs.
+		slog.Warn("entitlement sync: skipped tool expiry due to unmapped active products",
+			"user_id", userID, "unmapped_products", unmappedProducts)
+		return nil
 	}
 
 	existing, err := s.QueryRows(ctx,
@@ -340,6 +355,18 @@ func (s *D1Store) SyncToolEntitlementsFromSubscriptions(ctx context.Context, use
 		}
 	}
 	return nil
+}
+
+// productKnownInCatalog reports whether product_id exists in billing_plans
+// (active or not). Used to distinguish global products from missing mappings.
+func (s *D1Store) productKnownInCatalog(ctx context.Context, productID string) bool {
+	productID = strings.TrimSpace(productID)
+	if productID == "" {
+		return false
+	}
+	rows, err := s.QueryRows(ctx,
+		`SELECT 1 AS ok FROM billing_plans WHERE product_id = ? LIMIT 1`, productID)
+	return err == nil && len(rows) > 0
 }
 
 // lookupProductEntitlement maps a Dodo product_id to tool_id + ai_plan_id.
