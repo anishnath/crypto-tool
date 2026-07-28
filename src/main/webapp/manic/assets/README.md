@@ -12,6 +12,10 @@ with releases and can be addressed from a `.manic` file with a stable
 | `asset:models/manic-pyramid.obj` | geometry-only OBJ | A small generic pyramid for `model3` examples, prototypes, and spatial stories |
 | `asset:models/manic-console.obj` | grouped geometry-only OBJ | A small `base`/`screen`/`key` assembly for `assembly3`, part callouts, and staged technical stories |
 | `asset:svg/physics/effusion-reservoir.svg` | native vector SVG | A reusable thermal-reservoir/nozzle shell for process and statistical-mechanics stories |
+| `asset:svg/physics/rocket-cutaway.svg` | native vector SVG | An educational cutaway rocket with payload, propellant tanks, chamber, nozzle, and fins |
+| `asset:svg/physics/rocket-first-stage.svg` | native vector SVG | A reusable first-stage booster that can separate independently in launch stories |
+| `asset:svg/physics/rocket-second-stage.svg` | native vector SVG | A reusable second-stage body and engine assembly |
+| `asset:svg/physics/rocket-upper-stage.svg` | native vector SVG | A payload fairing and upper stage for multi-stage rocket explainers |
 | `asset:diagrams/aws/...` | PNG/SVG source package | Experimental Systems Kit PoC; official AWS Architecture Icons, accessed through stable kit names rather than authored paths |
 
 The Manic logo, pyramid, and console were authored for this project and are covered by

@@ -1,5 +1,5 @@
 {
-  "count": 289,
+  "count": 291,
   "categories": [
     {
       "slug": "algorithms",
@@ -1336,6 +1336,18 @@
           "file": "gradient-pendulum-shorts.manic",
           "title": "Gradient pendulum shorts",
           "desc": "Galileo's chandelier as a Short told THROUGH a \"speed\" gradient: an RK4 pendulum swings, then its arc is colored by true local speed \u2014 gold floods the bottom, blue pools at the tips."
+        },
+        {
+          "name": "creator-why-rockets-use-stages",
+          "file": "creator-why-rockets-use-stages.manic",
+          "title": "Creator why rockets use stages",
+          "desc": "Why rockets discard their own hardware, told as a vertical Creator Short."
+        },
+        {
+          "name": "creator-how-rocket-launch-works",
+          "file": "creator-how-rocket-launch-works.manic",
+          "title": "Creator how rocket launch works",
+          "desc": "How a rocket launches, told entirely through a reusable cutaway SVG and Manic motion."
         },
         {
           "name": "creator-v2-options-socials",
