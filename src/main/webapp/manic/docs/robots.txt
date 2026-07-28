@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://8gwifi.org/manic/docs/sitemap.xml

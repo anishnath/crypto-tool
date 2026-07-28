@@ -1,0 +1,198 @@
+// WHY ROCKETS USE STAGES — a 9:16 creator short built from three independently
+// movable physics SVGs. The velocity curve stays continuous at separation:
+// dropping an empty stage changes the following acceleration, not past speed.
+
+title("Why Do Rockets Use Stages?");
+canvas("9:16");
+template("shorts");
+voice("gtts");
+
+creator(me, "@anish2good name=Manic_Physics tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+socials(me);
+watermark(mark, (w*0.82, h*0.91), "Made With Manic");
+endcard(me, "title=Build_Physics_Stories cta=8gwifi.org/manic");
+
+// ---- headline and story caption ----
+text(kicker, (340, 122), "ROCKET SCIENCE · IN 30 SECONDS");
+text(headline, (340, 184), "Why throw parts of a rocket away?");
+text(caption, (cx, 1035), "At liftoff, every engine must accelerate the entire rocket.");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+size(headline, 38); bold(headline); wrap(headline, 590); hidden(headline);
+size(caption, 25); color(caption, dim); wrap(caption, 850); hidden(caption);
+sticky(kicker); sticky(headline); sticky(caption);
+sticky(mark); sticky(me.footer); sticky(me.endcard);
+
+// ---- one rocket, authored as three persistent SVG stages ----
+let rx = 805;
+svg(upper,   (rx, 420), "asset:svg/physics/rocket-upper-stage.svg", 160);
+svg(second,  (rx, 570), "asset:svg/physics/rocket-second-stage.svg", 145);
+svg(booster, (rx, 730), "asset:svg/physics/rocket-first-stage.svg", 155);
+hidden(upper); hidden(second); hidden(booster);
+z(upper, 8); z(second, 7); z(booster, 6);
+
+polygon(flame1, (rx-30, 820), (rx, 925), (rx+30, 820));
+gradient(flame1, gold, magenta, 90); filled(flame1); glow(flame1, 1.1); hidden(flame1);
+polygon(flame2, (rx-23, 660), (rx, 740), (rx+23, 660));
+gradient(flame2, cyan, magenta, 90); filled(flame2); glow(flame2, 0.9); hidden(flame2);
+polygon(flame3, (rx-19, 520), (rx, 585), (rx+19, 520));
+gradient(flame3, gold, cyan, 90); filled(flame3); glow(flame3, 0.9); hidden(flame3);
+
+// ---- a truthful, continuous velocity story ----
+let gx = 170;
+let gy = 1510;
+let sx = 120;
+let sy = 72;
+
+line(xaxis, (gx, gy), (930, gy)); color(xaxis, dim); stroke(xaxis, 3);
+line(yaxis, (gx, gy), (gx, 1180)); color(yaxis, dim); stroke(yaxis, 3);
+text(vlabel, (125, 1175), "velocity"); size(vlabel, 20); color(vlabel, dim);
+text(tlabel, (940, 1542), "time"); size(tlabel, 20); color(tlabel, dim);
+text(chartTitle, (cx, 1135), "VELOCITY KEEPS BUILDING");
+size(chartTitle, 22); bold(chartTitle); color(chartTitle, fg);
+
+plot(v1, (gx, gy), sx, sy, "0.18*x*x", (0,2));
+plot(v2, (gx, gy), sx, sy, "0.72 + 0.36*(x-2) + 0.16*(x-2)*(x-2)", (2,4));
+plot(v3, (gx, gy), sx, sy, "2.08 + 0.50*(x-4) + 0.20*(x-4)*(x-4)", (4,6));
+color(v1, gold); color(v2, magenta); color(v3, cyan);
+stroke(v1, 7); stroke(v2, 7); stroke(v3, 7);
+untraced(v1); untraced(v2); untraced(v3);
+
+line(sep1, (gx+2*sx, gy), (gx+2*sx, 1215)); dashed(sep1, 10, 9); color(sep1, dim);
+line(sep2, (gx+4*sx, gy), (gx+4*sx, 1215)); dashed(sep2, 10, 9); color(sep2, dim);
+text(sep1label, (gx+2*sx+55, 1240), "STAGE 1");
+text(sep2label, (gx+4*sx+55, 1240), "STAGE 2");
+size(sep1label, 18); size(sep2label, 18);
+color(sep1label, gold); color(sep2label, magenta);
+
+dot(join1, (gx+2*sx, gy-0.72*sy), 8); color(join1, gold);
+dot(join2, (gx+4*sx, gy-2.08*sy), 8); color(join2, magenta);
+
+hidden(xaxis); hidden(yaxis); hidden(vlabel); hidden(tlabel); hidden(chartTitle);
+hidden(sep1); hidden(sep2); hidden(sep1label); hidden(sep2label);
+hidden(join1); hidden(join2);
+
+// The chart is a screen-space instrument. Above it, the active vehicle keeps
+// climbing during every narration and separation beat.
+tag(xaxis, flightHud); tag(yaxis, flightHud);
+tag(vlabel, flightHud); tag(tlabel, flightHud); tag(chartTitle, flightHud);
+tag(v1, flightHud); tag(v2, flightHud); tag(v3, flightHud);
+tag(sep1, flightHud); tag(sep2, flightHud);
+tag(sep1label, flightHud); tag(sep2label, flightHud);
+tag(join1, flightHud); tag(join2, flightHud);
+sticky(flightHud);
+
+// ============================== STORY ==============================
+
+step("hook") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.50);
+    show(caption, 0.35);
+    stagger(0.10) {
+      show(upper, 0.35);
+      show(second, 0.35);
+      show(booster, 0.35);
+    }
+    speak("Why does a rocket throw away parts while it is still flying?");
+  }
+}
+wait(0.25);
+
+step("first-stage") {
+  par {
+    show(xaxis, 0.30); show(yaxis, 0.30);
+    show(vlabel, 0.25); show(tlabel, 0.25); show(chartTitle, 0.30);
+    show(flame1, 0.20);
+    draw(v1, 4.0);
+    shift(upper, (0,-80), 4.0, smooth);
+    shift(second, (0,-80), 4.0, smooth);
+    shift(booster, (0,-80), 4.0, smooth);
+    shift(flame1, (0,-80), 4.0, smooth);
+    shift(flame2, (0,-80), 4.0, smooth);
+    shift(flame3, (0,-80), 4.0, smooth);
+    say(caption, "Stage 1 burns hard—but it also carries tanks that will soon be empty.", 0.40);
+    speak("Stage one must push every tank and engine above it.");
+  }
+}
+
+step("drop-empty-mass") {
+  par {
+    show(sep1, 0.25); show(sep1label, 0.25); show(join1, 0.20);
+    fade(flame1, 0.18);
+    shift(booster, (-120,260), 1.05, in);
+    rotate(booster, -18, 1.05, smooth);
+    seq { wait(0.62); fade(booster, 0.35); }
+    shift(upper, (0,-45), 3.6, smooth);
+    shift(second, (0,-45), 3.6, smooth);
+    shift(flame2, (0,-45), 3.6, smooth);
+    shift(flame3, (0,-45), 3.6, smooth);
+    say(caption, "Separation does not add speed. It removes dead mass.", 0.35);
+    speak("Separation adds no speed. It only removes empty mass.");
+  }
+}
+cue(whoosh);
+
+step("second-stage") {
+  par {
+    show(flame2, 0.18);
+    draw(v2, 4.0);
+    shift(upper, (0,-70), 4.0, smooth);
+    shift(second, (0,-70), 4.0, smooth);
+    shift(flame2, (0,-70), 4.0, smooth);
+    shift(flame3, (0,-70), 4.0, smooth);
+    say(caption, "The lighter vehicle gains more velocity from its next engine.", 0.35);
+    speak("The next engine pushes less mass, so velocity builds faster.");
+  }
+}
+
+step("third-stage") {
+  par {
+    show(sep2, 0.25); show(sep2label, 0.25); show(join2, 0.20);
+    fade(flame2, 0.18);
+    shift(second, (125,235), 1.0, in);
+    rotate(second, 16, 1.0, smooth);
+    seq { wait(0.58); fade(second, 0.35); }
+    seq {
+      wait(0.28);
+      show(flame3, 0.18);
+      par {
+        draw(v3, 3.25);
+        shift(upper, (0,-50), 3.25, smooth);
+        shift(flame3, (0,-50), 3.25, smooth);
+      }
+    }
+    say(caption, "Each stage discards structure, then the next stage keeps accelerating.", 0.40);
+    speak("It repeats: less dead weight, more useful acceleration.");
+  }
+}
+cue(chime);
+
+step("answer") {
+  par {
+    fade(kicker, 0.30);
+    pulse(upper, 0.65);
+    flash(v3, cyan);
+    say(headline, "Stages turn fuel into velocity—not into dead weight.", 0.45);
+    say(caption, "The curve never jumps. Its steeper climb is the advantage.", 0.40);
+    speak("Staging does not teleport a rocket faster. It stops wasting thrust on empty tanks.");
+    shift(upper, (0,-55), 6.4, smooth);
+    shift(flame3, (0,-55), 6.4, smooth);
+  }
+}
+
+step("creator-cta") {
+  par {
+    fade(kicker, 0.30); fade(headline, 0.30); fade(caption, 0.30);
+    fade(upper, 0.30); fade(flame3, 0.30);
+    fade(xaxis, 0.30); fade(yaxis, 0.30);
+    fade(vlabel, 0.30); fade(tlabel, 0.30); fade(chartTitle, 0.30);
+    fade(v1, 0.30); fade(v2, 0.30); fade(v3, 0.30);
+    fade(sep1, 0.30); fade(sep2, 0.30);
+    fade(sep1label, 0.30); fade(sep2label, 0.30);
+    fade(join1, 0.30); fade(join2, 0.30);
+    fade(me.footer, 0.30);
+    fade(mark, 0.30);
+  }
+  show(me.endcard, 0.60);
+}
+wait(1.6);

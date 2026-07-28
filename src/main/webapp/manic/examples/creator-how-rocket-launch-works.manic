@@ -1,0 +1,192 @@
+// HOW A ROCKET LAUNCH WORKS — a 9:16 cutaway story.
+// The reusable SVG supplies the vehicle; Manic supplies the teaching:
+// callouts, chamber reaction, directional exhaust, thrust, motion, and CTA.
+
+title("How a Rocket Launch Works");
+canvas("9:16");
+template("shorts");
+voice("gtts");
+
+creator(me, "@anish2good name=Manic_Physics tagline=Physics_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=signature cta=Try_it_free safe=reels");
+socials(me);
+watermark(mark, (w*0.82, h*0.91), "Made With Manic");
+endcard(me, "title=Make_Science_Move cta=8gwifi.org/manic");
+
+text(kicker, (cx, 112), "ROCKET PHYSICS · CUTAWAY");
+text(headline, (cx, 174), "How does a rocket launch?");
+text(caption, (cx, 1440), "A rocket carries two ingredients—not just fuel.");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+size(headline, 40); bold(headline); wrap(headline, 850); hidden(headline);
+size(caption, 27); color(caption, dim); wrap(caption, 880); hidden(caption);
+
+// One importer-safe cutaway asset. Its internal sections remain crisp at any size.
+let rx = 540;
+let ry = 760;
+svg(rocket, (rx, ry), "asset:svg/physics/rocket-cutaway.svg", 300);
+hidden(rocket); z(rocket, 5);
+
+// Screen-authored highlights make each internal region independently teachable.
+polygon(payloadHi, (480, 430), (540, 395), (600, 430), (600, 550), (480, 550));
+rect(fuelHi, (540, 650), 120, 155);
+rect(oxidizerHi, (540, 815), 120, 140);
+polygon(chamberHi, (500, 900), (580, 900), (570, 955), (540, 980), (510, 955));
+polygon(nozzleHi, (515, 975), (565, 975), (590, 1115), (490, 1115));
+outlined(payloadHi); outlined(fuelHi); outlined(oxidizerHi); outlined(chamberHi); outlined(nozzleHi);
+outline(payloadHi, cyan); outline(fuelHi, gold); outline(oxidizerHi, blue);
+outline(chamberHi, magenta); outline(nozzleHi, fg);
+stroke(payloadHi, 5); stroke(fuelHi, 5); stroke(oxidizerHi, 5); stroke(chamberHi, 5); stroke(nozzleHi, 5);
+opacity(payloadHi, 0.9); opacity(fuelHi, 0.9); opacity(oxidizerHi, 0.9); opacity(chamberHi, 0.9); opacity(nozzleHi, 0.9);
+hidden(payloadHi); hidden(fuelHi); hidden(oxidizerHi); hidden(chamberHi); hidden(nozzleHi);
+
+// Clean callouts; the labels stay outside the vehicle silhouette.
+line(payloadLead, (605, 470), (770, 420));
+line(fuelLead, (600, 630), (790, 590));
+line(oxidizerLead, (480, 805), (285, 780));
+line(chamberLead, (500, 930), (280, 970));
+line(nozzleLead, (575, 1045), (790, 1090));
+color(payloadLead, cyan); color(fuelLead, gold); color(oxidizerLead, blue);
+color(chamberLead, magenta); color(nozzleLead, fg);
+stroke(payloadLead, 3); stroke(fuelLead, 3); stroke(oxidizerLead, 3); stroke(chamberLead, 3); stroke(nozzleLead, 3);
+
+text(payloadLabel, (845, 395), "PAYLOAD");
+text(fuelLabel, (855, 565), "FUEL");
+text(oxidizerLabel, (195, 755), "OXIDIZER");
+text(chamberLabel, (180, 950), "BURN");
+text(nozzleLabel, (850, 1070), "NOZZLE");
+size(payloadLabel, 22); size(fuelLabel, 22); size(oxidizerLabel, 22); size(chamberLabel, 22); size(nozzleLabel, 22);
+bold(payloadLabel); bold(fuelLabel); bold(oxidizerLabel); bold(chamberLabel); bold(nozzleLabel);
+color(payloadLabel, cyan); color(fuelLabel, gold); color(oxidizerLabel, blue);
+color(chamberLabel, magenta); color(nozzleLabel, fg);
+
+hidden(payloadLead); hidden(fuelLead); hidden(oxidizerLead); hidden(chamberLead); hidden(nozzleLead);
+hidden(payloadLabel); hidden(fuelLabel); hidden(oxidizerLabel); hidden(chamberLabel); hidden(nozzleLabel);
+
+// Reaction and force story.
+equation(reaction, (cx, 1195), `\text{fuel}+\text{oxidizer}\longrightarrow\text{hot gas}`);
+size(reaction, 34); hidden(reaction);
+
+arrow(gasDown, (225, 1070), (225, 1300));
+arrow(thrustUp, (850, 1120), (850, 880));
+color(gasDown, magenta); color(thrustUp, cyan);
+stroke(gasDown, 8); stroke(thrustUp, 8);
+hidden(gasDown); hidden(thrustUp);
+text(gasLabel, (170, 1320), "EXHAUST ↓");
+text(thrustLabel, (930, 900), "THRUST ↑");
+size(gasLabel, 22); size(thrustLabel, 22); bold(gasLabel); bold(thrustLabel);
+color(gasLabel, magenta); color(thrustLabel, cyan);
+hidden(gasLabel); hidden(thrustLabel);
+
+polygon(flame, (500, 1090), (540, 1260), (580, 1090));
+gradient(flame, gold, magenta, 90); filled(flame); glow(flame, 1.1); hidden(flame); z(flame, 4);
+
+circle(exhaustSeed, (540, 1180), 12); opacity(exhaustSeed, 0); hidden(exhaustSeed);
+particles(exhaust, exhaustSeed, 28, 6, 41, "random");
+color(exhaust, gold); glow(exhaust, 0.8); hidden(exhaust);
+line(exhaustPath, (540, 1170), (540, 1330)); opacity(exhaustPath, 0);
+
+tag(rocket, vehicle);
+tag(payloadHi, vehicle); tag(fuelHi, vehicle); tag(oxidizerHi, vehicle);
+tag(chamberHi, vehicle); tag(nozzleHi, vehicle); tag(flame, vehicle);
+
+// Creator chrome remains screen-safe while the vehicle moves.
+sticky(kicker); sticky(headline); sticky(caption); sticky(mark);
+sticky(me.footer); sticky(me.endcard);
+
+step("hook") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.50);
+    show(caption, 0.35);
+    show(rocket, 0.70);
+    speak("A rocket does not push against the ground. So what actually makes it rise?");
+  }
+}
+wait(0.35);
+
+step("inside-the-rocket") {
+  par {
+    stagger(0.16) {
+      par { show(payloadHi, 0.25); show(payloadLead, 0.25); show(payloadLabel, 0.25); }
+      par { show(fuelHi, 0.25); show(fuelLead, 0.25); show(fuelLabel, 0.25); }
+      par { show(oxidizerHi, 0.25); show(oxidizerLead, 0.25); show(oxidizerLabel, 0.25); }
+    }
+    say(caption, "Fuel stores energy. Oxidizer supplies the oxygen needed to release it.", 0.40);
+    speak("Inside are the payload, fuel, and oxidizer. The oxidizer is why a rocket can burn in space.");
+  }
+}
+wait(0.30);
+
+step("combustion") {
+  par {
+    show(chamberHi, 0.25); show(chamberLead, 0.25); show(chamberLabel, 0.25);
+    show(reaction, 0.50);
+    flash(chamberHi, magenta);
+    pulse(chamberHi, 0.80);
+    say(caption, "In the chamber, fuel and oxidizer become extremely hot, high-pressure gas.", 0.40);
+    speak("They burn together in the combustion chamber, creating hot, high pressure gas.");
+  }
+}
+cue(pop);
+wait(0.25);
+
+step("shape-the-exhaust") {
+  par {
+    fade(reaction, 0.25);
+    show(nozzleHi, 0.25); show(nozzleLead, 0.25); show(nozzleLabel, 0.25);
+    show(flame, 0.22);
+    show(exhaust, 0.15);
+    stream(exhaust, exhaustPath, 3.2, 34, smooth);
+    show(gasDown, 0.40); show(gasLabel, 0.30);
+    say(caption, "The nozzle accelerates that gas downward into a fast exhaust jet.", 0.40);
+    speak("The nozzle expands and accelerates the gas downward.");
+  }
+}
+cue(whoosh);
+
+step("equal-and-opposite") {
+  par {
+    fade(payloadHi, 0.25); fade(fuelHi, 0.25); fade(oxidizerHi, 0.25);
+    fade(chamberHi, 0.25); fade(nozzleHi, 0.25);
+    fade(payloadLead, 0.25); fade(fuelLead, 0.25); fade(oxidizerLead, 0.25);
+    fade(chamberLead, 0.25); fade(nozzleLead, 0.25);
+    fade(payloadLabel, 0.25); fade(fuelLabel, 0.25); fade(oxidizerLabel, 0.25);
+    fade(chamberLabel, 0.25); fade(nozzleLabel, 0.25);
+    fade(reaction, 0.25); fade(exhaust, 0.25);
+    show(thrustUp, 0.40); show(thrustLabel, 0.30);
+    flash(thrustUp, cyan);
+    say(headline, "Gas goes down. The rocket goes up.", 0.45);
+    say(caption, "Newton's third law turns downward exhaust momentum into upward thrust.", 0.40);
+    speak("Gas goes down. An equal and opposite force pushes the rocket up.");
+  }
+}
+wait(0.30);
+
+step("launch") {
+  par {
+    fade(kicker, 0.25); fade(headline, 0.25);
+    shift(vehicle, (0,-250), 4.0, smooth);
+    shift(thrustUp, (0,-180), 4.0, smooth);
+    shift(thrustLabel, (0,-180), 4.0, smooth);
+    stream(exhaust, exhaustPath, 4.0, 38, smooth);
+    fade(payloadLead, 0.25); fade(fuelLead, 0.25); fade(oxidizerLead, 0.25);
+    fade(chamberLead, 0.25); fade(nozzleLead, 0.25);
+    fade(payloadLabel, 0.25); fade(fuelLabel, 0.25); fade(oxidizerLabel, 0.25);
+    fade(chamberLabel, 0.25); fade(nozzleLabel, 0.25);
+    fade(reaction, 0.25); fade(gasDown, 0.25); fade(gasLabel, 0.25);
+    say(caption, "A rocket carries both sides of the reaction, so the process continues above the atmosphere.", 0.45);
+    speak("Because it carries its own oxidizer, the same thrust cycle keeps working in space.");
+  }
+}
+cue(chime);
+wait(0.55);
+
+step("creator-cta") {
+  par {
+    fade(kicker, 0.30); fade(headline, 0.30); fade(caption, 0.30);
+    fade(vehicle, 0.30); fade(exhaust, 0.30);
+    fade(thrustUp, 0.30); fade(thrustLabel, 0.30);
+    fade(me.footer, 0.30); fade(mark, 0.30);
+  }
+  show(me.endcard, 0.60);
+}
+wait(1.6);

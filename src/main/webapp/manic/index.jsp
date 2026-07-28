@@ -47,6 +47,10 @@
             <jsp:param name="toolImage" value="manic-og.png" />
         <jsp:param name="toolFeatures" value="Live semantic highlighting,Inline error checking with one-click fixes,Context-aware autocomplete,Multiple files in your workspace,Render your animation to MP4,Read the full language docs" />
     </jsp:include>
+    <link rel="icon" type="image/svg+xml" href="<%=ctx%>/manic/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="<%=ctx%>/manic/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<%=ctx%>/manic/favicon-16.png">
+    <link rel="apple-touch-icon" href="<%=ctx%>/manic/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/editor/editor.main.min.css">
     <link rel="stylesheet" href="<%=ctx%>/manic/manic.css">
     <%@ include file="/modern/components/ai-assistant-head.inc.jsp" %>
