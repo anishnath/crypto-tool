@@ -67,22 +67,26 @@
     </a>
     <span class="mp-tagline">Make awesome educational videos&nbsp;<b>✨</b>&nbsp;code it, render it, ship it</span>
     <span class="mp-spacer"></span>
-    <span id="plan-info" class="mp-plan-info"></span>
-    <span id="voice-info" class="mp-plan-info mp-voice-info" title="Voice / TTS estimate from your script"></span>
-    <label class="mp-plan-info" for="quality-select">quality</label>
-    <select id="quality-select" class="mp-select" title="Render quality (from your plan)"></select>
-    <button id="run-btn" class="mp-btn primary" title="Render (⌘/Ctrl+Enter)">Render</button>
-    <button type="button" id="btnManicAI" class="mp-btn ai" title="AI assistant — describe an animation (Ctrl+Shift+A)">✨ AI</button>
-    <button type="button" id="autofix-btn" class="mp-btn" title="Auto-fix — correct mechanical slips and remove stray tokens (undoable)">🔧 Auto-fix</button>
-    <button type="button" id="btn-share" class="mp-btn" title="Copy a link to the file open in the editor">🔗 Share</button>
-    <a id="docs-link" class="mp-link" href="<%=ctx%>/manic/docs/index.html" target="_blank" rel="noopener">Docs ↗</a>
-    <button id="help-btn" class="mp-btn mp-icon-btn" title="What is manic? — show the welcome">?</button>
-    <button id="theme-btn" class="mp-btn mp-icon-btn" title="Toggle theme">◐</button>
-    <% if (navLoggedIn) { %>
-    <a class="mp-link" href="<%=navLogoutUrl%>" title="Logout">Logout</a>
-    <% } else { %>
-    <a class="mp-link" href="<%=navLoginUrl%>" title="Login with Google">Login</a>
-    <% } %>
+    <button id="run-btn" class="mp-btn primary mp-run" title="Render (⌘/Ctrl+Enter)">Render</button>
+    <input type="checkbox" id="mp-menu-toggle" class="mp-menu-toggle" hidden>
+    <label for="mp-menu-toggle" class="mp-menu-btn mp-btn mp-icon-btn" title="More actions" aria-label="More actions">⋯</label>
+    <div class="mp-actions" id="mp-actions">
+        <span id="plan-info" class="mp-plan-info"></span>
+        <span id="voice-info" class="mp-plan-info mp-voice-info" title="Voice / TTS estimate from your script"></span>
+        <label class="mp-plan-info mp-quality-label" for="quality-select">quality</label>
+        <select id="quality-select" class="mp-select" title="Render quality (from your plan)"></select>
+        <button type="button" id="btnManicAI" class="mp-btn ai" title="AI assistant — describe an animation (Ctrl+Shift+A)">✨ AI</button>
+        <button type="button" id="autofix-btn" class="mp-btn" title="Auto-fix — correct mechanical slips and remove stray tokens (undoable)">🔧 Auto-fix</button>
+        <button type="button" id="btn-share" class="mp-btn" title="Copy a link to the file open in the editor">🔗 Share</button>
+        <a id="docs-link" class="mp-link" href="<%=ctx%>/manic/docs/index.html" target="_blank" rel="noopener">Docs ↗</a>
+        <button id="help-btn" class="mp-btn mp-icon-btn" title="What is manic? — show the welcome">?</button>
+        <button id="theme-btn" class="mp-btn mp-icon-btn" title="Toggle theme">◐</button>
+        <% if (navLoggedIn) { %>
+        <a class="mp-link" href="<%=navLogoutUrl%>" title="Logout">Logout</a>
+        <% } else { %>
+        <a class="mp-link" href="<%=navLoginUrl%>" title="Login with Google">Login</a>
+        <% } %>
+    </div>
 </header>
 
 <div class="mp-body">
@@ -260,6 +264,30 @@ window.manicAssistant = wireLazyAssistant({
   buttonId: 'btnManicAI',
   boot: aiAssistantBoot,
 });
+</script>
+<!-- mobile toolbar menu: close on action / outside tap / Esc, and keyboard toggle -->
+<script>
+(function(){
+  var t = document.getElementById('mp-menu-toggle'),
+      a = document.getElementById('mp-actions'),
+      b = document.querySelector('.mp-menu-btn');
+  if (!t || !a || !b) return;
+  b.setAttribute('role', 'button');
+  b.setAttribute('tabindex', '0');
+  b.setAttribute('aria-controls', 'mp-actions');
+  b.setAttribute('aria-expanded', 'false');
+  function set(v){ t.checked = v; b.setAttribute('aria-expanded', v ? 'true' : 'false'); }
+  b.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); set(!t.checked); }
+  });
+  t.addEventListener('change', function(){ b.setAttribute('aria-expanded', t.checked ? 'true' : 'false'); });
+  // tapping a real action (button / link) closes the menu; the quality <select> keeps it open
+  a.addEventListener('click', function(e){ if (e.target.closest('button, a[href]')) set(false); });
+  document.addEventListener('click', function(e){
+    if (t.checked && !a.contains(e.target) && !b.contains(e.target)) set(false);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && t.checked) set(false); });
+})();
 </script>
 <%@ include file="/modern/components/analytics.jsp" %>
 </body>

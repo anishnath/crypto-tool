@@ -392,3 +392,62 @@ body.mp-dragging { cursor: col-resize; user-select: none; }
 }
 .mp-share-net:hover { transform: translateY(-1px); filter: brightness(1.12); }
 .mp-share-net .mp-share-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.85); }
+
+/* ── mobile toolbar: collapse secondary actions into a ⋯ menu ─────── */
+/* Desktop: the actions flow straight into the bar (display:contents), and
+   flex `order` reproduces the original left-to-right sequence exactly, so the
+   ≥1041px layout is unchanged. The ⋯ button and toggle are hidden. */
+.mp-bar { position: relative; }               /* anchor for the dropdown */
+.mp-menu-btn { display: none; }
+.mp-actions { display: contents; }
+#plan-info        { order: 1; }
+#voice-info       { order: 2; }
+.mp-quality-label { order: 3; }
+#quality-select   { order: 4; }
+.mp-run           { order: 5; }
+#btnManicAI       { order: 6; }
+#autofix-btn      { order: 7; }
+#btn-share        { order: 8; }
+#docs-link        { order: 9; }
+#help-btn         { order: 10; }
+#theme-btn        { order: 11; }
+.mp-actions .mp-link { order: 12; }           /* login / logout */
+
+@media (max-width: 1040px) {
+  /* the full row would overflow here — show Render + a ⋯ menu instead */
+  .mp-menu-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; line-height: 1; padding: 8px 12px;
+  }
+  .mp-menu-toggle:checked ~ .mp-menu-btn { border-color: var(--cyan); color: var(--cyan); }
+  .mp-run { padding: 8px 14px; }
+  .mp-actions {
+    display: none;
+    position: absolute; top: calc(100% + 6px); right: 8px; z-index: 8000;
+    flex-direction: column; align-items: stretch; gap: 8px;
+    min-width: 210px; max-width: min(86vw, 300px); max-height: 78vh; overflow: auto;
+    padding: 10px; background: var(--bar);
+    border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: 0 18px 50px #000a, 0 0 40px -22px var(--cyan);
+  }
+  .mp-menu-toggle:checked ~ .mp-actions { display: flex; animation: mp-fade .14s ease; }
+  /* full-width, finger-sized targets inside the menu */
+  .mp-actions .mp-btn, .mp-actions .mp-link, .mp-actions .mp-select {
+    width: 100%; text-align: left; padding: 10px 12px; font-size: 14px;
+  }
+  .mp-actions .mp-icon-btn { text-align: center; }
+  .mp-actions .mp-plan-info { white-space: normal; padding: 2px 4px; }
+  .mp-actions .mp-plan-info:empty { display: none; }   /* drop empty plan/voice rows */
+}
+
+@media (max-width: 560px) {
+  .mp-bar { gap: 8px; padding: 8px 10px; }
+  .mp-title span { display: none; }             /* just “manic” on tiny screens */
+  .mp-editor-wrap { height: 50vh; }
+  /* roomier modals on small screens */
+  .mp-overlay { padding: 12px; }
+  .mp-sheet-head { padding: 14px 16px; }
+  .mp-sheet-body { padding: 12px 14px 18px; }
+  .mp-welcome-hero { padding: 18px 16px 4px; }
+  .mp-welcome-body { padding: 14px 16px 20px; }
+}
