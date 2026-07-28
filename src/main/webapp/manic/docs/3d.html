@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-566c6724.js";
+            window.path_to_searchindex_js = "searchindex-7b7e6410.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-74e98ac0.js"></script>
@@ -305,6 +305,124 @@ contour3(levelOne, bowl, 1);
 a <code>surface3</code> height field and extracts the requested <code>z</code> level. Use these words
 for geometry, vectors, optimization, fields, and engineering callouts—the
 engine owns the relationship while the author owns the story.</p>
+<h2 id="large-evolving-3d-stories"><a class="header" href="#large-evolving-3d-stories">Large evolving 3D stories</a></h2>
+<p>Four small foundations cover dependency clouds, articulated mechanisms,
+time-varying fields, and addressable model parts without exposing frame
+callbacks.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Intent</th><th>Manic words</th></tr>
+</thead>
+<tbody>
+<tr><td>many stable points</td><td><code>collection3</code></td></tr>
+<tr><td>relationships among them</td><td><code>links3</code>, <code>child3</code></td></tr>
+<tr><td>one dependent articulated chain</td><td><code>chain3</code>, <code>trail3</code></td></tr>
+<tr><td>a changing 3D field and its motion</td><td><code>vectorfield3</code>, <code>advect3</code></td></tr>
+<tr><td>a camera that follows one member</td><td><code>followshot3</code></td></tr>
+<tr><td>named parts inside one OBJ</td><td><code>assembly3</code></td></tr>
+<tr><td>a small offline sound beat</td><td><code>cue</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Here is the reusable field pattern:</p>
+<pre><code class="language-manic">camera3((8,-10,6), (0,0,0), 42);
+collection3(seeds, (-2,0,0), 48, 1.2, 21, 0.045);
+vectorfield3(flow, (0,0,0), 4,
+  "-y + 0.35*sin(2*pi*p)",
+  "x + 0.25*cos(2*pi*p)",
+  "0.25*sin(x+y+2*pi*p)", 5);
+
+child3(hero, seeds, 0, 0.08);
+trail3(history, seeds, 0, 0.025);
+par {
+  advect3(seeds, flow, 5, 0.45);
+  followshot3(hero);
+}
+followshot3(none);
+</code></pre>
+<p><code>p</code> is normalized absolute time from 0 to 1. Manic precompiles the RK4 paths,
+then samples those paths, the field arrows, the child proxy, the trail, and the
+camera target from the same timeline time. Scrubbing backward or jumping
+straight to the middle is therefore repeatable.</p>
+<p>Use <code>collection3</code> for a <strong>fixed-count</strong> repeated 3D cast. It renders as a batch,
+while <code>child3</code> exposes only the member that needs a label or camera. <code>links3</code>
+can create <code>chain</code>, <code>nearest</code>, or <code>all</code> relationships without hundreds of
+handwritten <code>link3</code> calls:</p>
+<pre><code class="language-manic">collection3(cloud, (0,0,0), 80, 3, 42);
+links3(neighborhood, cloud, nearest, 2);
+drift3(cloud, 4, 0.6);
+</code></pre>
+<p>For a dependent mechanism, every <code>chain3</code> endpoint starts where its predecessor
+ended. The history is taken from the real compiled endpoint route:</p>
+<pre><code class="language-manic">collection3(arm, (0,0,0), 4, 0, 7, 0.07);
+chain3(arm, "1.8 1.35 1.0", "1.0 -1.8 2.4", 6);
+links3(bones, arm, chain);
+ring3(firstOrbit, arm, 0, 72);
+ring3(secondOrbit, arm, 1, 72);
+trail3(tipHistory, arm, 3, 0.035);
+</code></pre>
+<p><code>ring3</code> does not approximate a separately animated circle. Its centre is the
+previous endpoint and its radius is the current distance to the chosen child,
+so it remains correct while the chain rotates, travels, seeks, or rewinds.</p>
+<p>Turn that same member history into a truthful screen-space plot with
+<code>historyplot</code>. Choose <code>x</code>, <code>y</code>, or <code>z</code>; Manic uses the complete compiled range
+for stable scaling and reveals only the history reached so far:</p>
+<pre><code class="language-manic">historyplot(wave, arm, 3, y, (540,1250), (820,320));
+</code></pre>
+<p>Use <code>historyplot3</code> when the trace belongs inside the 3-D world rather than the
+screen overlay. Its origin is a world coordinate and its size is measured in
+world units, so depth stacking, focus shots, orbiting, and follow cameras all
+remain coherent:</p>
+<pre><code class="language-manic">historyplot3(wave3, arm, 3, y, (-3,-4,2), (8,2.5));
+view3(wave3, "front", 1, smooth, 1.2);
+</code></pre>
+<p>Both forms are derived from the same compiled child motion. Use <code>historyplot</code>
+for a dashboard or fixed teaching panel; use <code>historyplot3</code> for layered
+Fourier constructions, spatial signal galleries, and camera-led explanations.</p>
+<p>For a procedural tree, <code>tree3</code> keeps authoring and rendering bounded. Each
+generation is one addressable edge batch, while leaves are one collection:</p>
+<pre><code class="language-manic">tree3(tree, (0,0,0), 2.1, 27, 0.72, 10, 42);
+for i in 0..10 { untraced(tree.d{i}); }
+stagger(0.12) { for i in 0..10 { draw(tree.d{i},0.5,smooth); } }
+view3(tree, "isometric", 1.0, smooth, 1.35);
+</code></pre>
+<p>This is the right tradeoff for creator files: a meaningful generated recipe,
+normal layers/tags and camera verbs, but no recursive user callback.</p>
+<p>For grouped assets, OBJ group names become safe part ids:</p>
+<pre><code class="language-manic">assembly3(console, "asset:models/manic-console.obj", (0,0,0), 1.4);
+text(screenLabel, (0,0), "signal");
+label3(screenLabel, console.screen, 0.28);
+cue(chime);
+</code></pre>
+<p>This is deliberately bounded: stable-count collections, formula fields, named
+OBJ groups, camera-facing labels, and four local cues. GLB node/material
+hierarchies, arbitrary SFX files, shader callbacks, count-changing children,
+and true occluding 3D glyph meshes remain future layers.</p>
+<p><strong>▶ Living dependency cloud:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nPVok5ERC-Q" title="A Living Dependency Cloud — Batched 3D Relationships in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Dependent chain and truthful history:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5dAczYdCWZ0" title="One Moving Chain, One Truthful History — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Fourier chain to live derived waveform:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ugxTVF9BqdE" title="A Wave Drawn by Rotating Circles — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Five depth-layered Fourier families (DefinedMotion <code>animation2.gif</code> test):</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/whoTuQ4oJOk" title="Five Fourier Worlds, One Continuous Camera — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Odd harmonics to square-wave partial sum:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qHi8M00c1-Q" title="How Odd Harmonics Build a Square Wave — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Batched fractal-tree growth:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ep25WinSHrk" title="One Rule Grows 1,023 Branches — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Time-varying field and follow shot:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/XRRe8pPEZ0Y" title="Follow One Particle Through a Changing 3D Field — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Addressable assembly, notation, cue, and particle punctuation:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Al8ox4cq6sY" title="A Technical Assembly With Addressable Parts and Sound — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="textbook-dimension-story-series"><a class="header" href="#textbook-dimension-story-series">Textbook dimension-story series</a></h2>
 <p>These portrait stories use the same 3D engine for a textbook-friendly purpose:
 start with one familiar object, preserve its identity, and let the next
@@ -346,6 +464,47 @@ use <code>param3</code>, which takes three formulas of <em>two</em> parameters, 
 <p><strong>One formula rule:</strong> always put <code>*</code> between names. Write <code>pi*t</code>, never <code>pit</code>
 (manic reads <code>pit</code> as one unknown word). Same for <code>v*v</code>, not <code>vv</code>.</p>
 </blockquote>
+<h3 id="make-the-same-generated-object-change"><a class="header" href="#make-the-same-generated-object-change">Make the same generated object change</a></h3>
+<p>Use an ordinary <code>parameter</code>, add <code>p</code> to the generated formula, and connect it
+with <code>bind</code>. Manic resamples the same object instead of replacing it:</p>
+<pre><code class="language-manic">parameter(shape, (640,620), 0, 0, 1, "shape", 2);
+
+surface3(world, "0.22*(x*x+y*y)", (-3,3), (-3,3), 34);
+bind(shape, world, formula, "0.22*x*x + 0.22*(1-2*p)*y*y");
+
+to(shape, value, 1, 3, smooth);
+</code></pre>
+<p>The same pattern works for every stable formula family:</p>
+<pre><code class="language-manic">bind(shape, helix, formula,
+  "(1+p)*cos(t)", "(1+p)*sin(t)", "0.3*t");
+
+bind(shape, torus, formula,
+  "(3+(0.2+p)*cos(v))*cos(u)",
+  "(3+(0.2+p)*cos(v))*sin(u)",
+  "(0.2+p)*sin(v)");
+</code></pre>
+<p>This is a useful creator distinction:</p>
+<ul>
+<li>use <strong><code>bind</code></strong> when one curve/surface remains the subject and its mathematical
+rule changes continuously;</li>
+<li>use <strong><code>morph3</code></strong> when one authored shape becomes a different authored shape.</li>
+</ul>
+<p>The bound object keeps its id, resolution, colour, material, transform, and
+timeline identity. Manic checks the declared parameter range at build time and
+rejects sampled non-finite formulas before recording. Topology and item count
+stay fixed, so this is not a per-vertex scripting API. Do not combine <code>morph3</code>
+and a generated-family binding on the same target. <code>gradient3</code>,
+<code>tangentplane3</code>, and <code>volume3</code> stay attached to that source and resample as it
+deforms, so the measurement and the surface cannot drift apart.</p>
+<p><strong>▶ General three-family reference:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/n-BU-2xfjr4" title="One Parameter, Three Continuous 3D Shapes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p><strong>▶ Creator Short — solve the bowl-to-saddle transition:</strong></p>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/w_aAXEGxIjM" title="When Does a Bowl Become a Saddle? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<p>Design tip: author the constructor formula to match the parameter’s initial
+value. Then the first reveal and the live journey share the same exact shape,
+with no opening jump.</p>
 <h3 id="textbook-sections-halves-quarters-and-the-remainder"><a class="header" href="#textbook-sections-halves-quarters-and-the-remainder">Textbook sections: halves, quarters, and the remainder</a></h3>
 <p><code>param3</code> is also the V2 route for an exact authored section of a curved solid.
 Bound one parameter to describe only the required half or quarter of the sphere,
@@ -419,6 +578,9 @@ texture scripts or arbitrary shaders.</li>
 <h2 id="controlled-obj-models"><a class="header" href="#controlled-obj-models">Controlled OBJ models</a></h2>
 <pre><code class="language-manic">model3(mark, "asset:models/manic-pyramid.obj", (0,0,1), 1.4);
 finish3(mark, "shading=smooth material=metal mesh=0.12");
+
+assembly3(console, "asset:models/manic-console.obj", (3,0,0), 1.2);
+show(console.screen, 0.4);
 </code></pre>
 <p><code>model3</code> reads geometry only: OBJ vertices, polygon faces (triangulated), and
 lines. It ignores material/script features and enforces file/geometry limits.
@@ -435,6 +597,7 @@ solids when they express the same idea—they remain the lightest option.</p>
 </thead>
 <tbody>
 <tr><td><code>asset:models/manic-pyramid.obj</code></td><td>Small generic pyramid OBJ</td><td>Learning <code>model3</code>, a beacon, marker, monument, or placeholder model</td></tr>
+<tr><td><code>asset:models/manic-console.obj</code></td><td>Grouped console OBJ (<code>base</code>, <code>screen</code>, <code>key</code>)</td><td>Learning <code>assembly3</code>, part callouts, staged reveals, and technical product stories</td></tr>
 </tbody>
 </table>
 </div>

@@ -1,0 +1,142 @@
+// EXPRESSIVE PROCESS V2 — MAXWELL–BOLTZMANN EFFUSION
+//
+// A polished 2.5D acceptance story inspired by engine-test-6.mov. The
+// apparatus is a bundled native SVG, while every molecule, detector bin,
+// arrival count, and empirical distribution remains a normal Manic entity.
+// `emit`, `collect`, and `observe` all read one deterministic process.
+
+title("Maxwell–Boltzmann Effusion — Motion Becomes Evidence");
+canvas("9:16");
+template("blank");
+watermark(mark, (150, 90), "Made With Manic");
+
+text(kicker, (540, 84), "STATISTICAL MECHANICS · EXPRESSIVE PROCESS V2");
+text(headline, (540, 142), "A distribution you can watch forming");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+equation(law, (540, 242),
+  `f(v)=4\pi\left(\frac{m}{2\pi k_BT}\right)^{3/2}v^2e^{-mv^2/(2k_BT)}`, 34);
+
+// The decorative shell is an asset; the changing evidence stays native.
+svg(apparatus, (240, 540), "asset:svg/physics/effusion-reservoir.svg", 330);
+text(reservoirLabel, (225, 705), "THERMAL RESERVOIR");
+size(reservoirLabel, 17); bold(reservoirLabel); color(reservoirLabel, gold);
+
+rect(detectorPanel, (730, 560), 570, 300);
+filled(detectorPanel); color(detectorPanel, panel); opacity(detectorPanel, 0.92);
+outlined(detectorPanel); outline(detectorPanel, dim); stroke(detectorPanel, 3);
+
+text(detectorTitle, (730, 382), "PARTICLE SPEED  v");
+size(detectorTitle, 18); bold(detectorTitle); color(detectorTitle, dim);
+
+// The invisible source is precisely at the SVG nozzle.
+circle(source, (348, 540), 20);
+opacity(source, 0);
+particles(molecules, source, 180, 3.2, 73);
+color(molecules, magenta); glow(molecules, 0.8); z(molecules, 8);
+
+// Individual lanes diverge around this authored route before being collected.
+spline(flight, (350, 540), (415, 500), (465, 515), (500, 545));
+hidden(flight);
+
+livehistogram(empirical, (730, 560), 0, 2.2, 14, 540, 240, cyan);
+z(empirical, 3); hidden(empirical.count);
+
+// Same horizontal range as the live histogram: 0 .. 4*scale = 2.2.
+distribution(theory, (730, 560), "maxwell", 0.55, 0, gold);
+hidden(theory.axis); hidden(theory.name);
+untraced(theory.curve); z(theory, 7);
+
+text(empiricalKey, (610, 750), "● empirical arrivals");
+text(theoryKey, (850, 750), "— theoretical curve");
+size(empiricalKey, 17); color(empiricalKey, cyan);
+size(theoryKey, 17); color(theoryKey, gold);
+
+counter(arrivals, (540, 850), 0, 0, "detected molecules  ", " / 180");
+size(arrivals, 24); color(arrivals, dim);
+
+text(caption, (540, 920),
+  "A thermal source emits many molecular speeds—not one average speed.");
+size(caption, 23); wrap(caption, 880); color(caption, dim);
+
+rect(evidencePanel, (540, 1110), 880, 230);
+filled(evidencePanel); color(evidencePanel, panel); opacity(evidencePanel, 0.95);
+outlined(evidencePanel); outline(evidencePanel, dim); stroke(evidencePanel, 2);
+text(evidenceTitle, (540, 1030), "ONE PROCESS · THREE VIEWS");
+size(evidenceTitle, 18); bold(evidenceTitle); color(evidenceTitle, dim);
+equation(processLaw, (540, 1100),
+  `\text{motion}\;\longrightarrow\;\text{arrival bin}\;\longrightarrow\;\hat f(v)`, 32);
+text(truth, (540, 1190),
+  "The dots, bars, and count are derived from the same seeded experiment.");
+size(truth, 20); color(truth, dim); wrap(truth, 790);
+
+hidden(apparatus); hidden(reservoirLabel); hidden(detectorPanel);
+hidden(detectorTitle); hidden(molecules); hidden(empirical);
+hidden(empiricalKey); hidden(theoryKey); hidden(arrivals);
+hidden(caption); hidden(evidencePanel); hidden(evidenceTitle);
+hidden(processLaw); hidden(truth);
+
+step("build-the-apparatus") {
+  par {
+    show(apparatus, 0.65);
+    show(reservoirLabel, 0.45);
+    show(detectorPanel, 0.55);
+    show(detectorTitle, 0.35);
+    show(empirical.axis, 0.55);
+    show(empirical.bars, 0.55);
+    show(empirical.min, 0.35);
+    show(empirical.max, 0.35);
+    show(empiricalKey, 0.35);
+    show(theoryKey, 0.35);
+    show(arrivals, 0.35);
+    show(caption, 0.40);
+  }
+}
+wait(0.45);
+
+step("the-prediction") {
+  par {
+    draw(theory.curve, 0.9, smooth);
+    say(caption,
+      "Maxwell predicts a characteristic spread with a most probable speed.",
+      0.40);
+    par {
+      cam((cx, cy), 0.75, smooth);
+      zoom(1.025, 0.75, smooth);
+    }
+  }
+}
+wait(0.35);
+
+step("run-the-experiment") {
+  par {
+    emit(molecules, flight, maxwell, 7.0, 48, smooth);
+    collect(empirical, molecules, speed, 0.48, smooth);
+    observe(empirical, molecules, speed);
+    observe(arrivals, molecules, arrived);
+    show(molecules, 0.15);
+    say(caption,
+      "Each molecule keeps its sampled speed. Faster molecules cross the apparatus sooner.",
+      0.45);
+  }
+}
+wait(0.55);
+
+step("motion-becomes-evidence") {
+  par {
+    pulse(empirical.bars, 0.8);
+    show(evidencePanel, 0.40);
+    show(evidenceTitle, 0.35);
+    show(processLaw, 0.45);
+    show(truth, 0.40);
+    say(caption,
+      "Collection does not fake the chart: every arrival lands in the bin selected by its speed.",
+      0.45);
+    par {
+      cam((cx, cy), 0.65, smooth);
+      zoom(1.0, 0.65, smooth);
+    }
+  }
+}
+wait(1.4);

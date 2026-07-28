@@ -1,0 +1,86 @@
+// MAXWELL–BOLTZMANN PROCESS FOUNDATION
+// First acceptance story for deterministic evolving collections. The emitted
+// particles, arrival count, and speed histogram all come from one compiled
+// process. The formula is authored truth; Manic is not pretending to be a CAS.
+
+title("Maxwell–Boltzmann — From Motion to Distribution");
+canvas("9:16");
+template("blank");
+watermark(mark, (155, 92), "Made With Manic");
+
+text(kicker, (540, 80), "STATISTICAL MECHANICS · PROCESS VIEW");
+text(headline, (540, 145), "How does molecular motion become a distribution?");
+size(kicker, 19); color(kicker, dim); bold(kicker);
+size(headline, 33); bold(headline); wrap(headline, 850);
+
+equation(law, (540, 245),
+  `f(v)=4\pi\left(\frac{m}{2\pi k_BT}\right)^{3/2}v^2e^{-mv^2/(2k_BT)}`, 36);
+
+rect(reservoir, (410, 500), 560, 330);
+outlined(reservoir); outline(reservoir, dim); stroke(reservoir, 4);
+line(divider, (630, 340), (630, 660));
+color(divider, dim); stroke(divider, 3);
+text(gasLabel, (330, 685), "seeded molecules");
+size(gasLabel, 20); color(gasLabel, dim);
+particles(molecules, reservoir, 72, 5, 29);
+
+// The route starts at the aperture and bends into the measurement region.
+spline(nozzle, (630, 500), (735, 430), (850, 570), (900, 735));
+stroke(nozzle, 4); color(nozzle, fg); untraced(nozzle);
+text(nozzleLabel, (850, 395), "effusive path");
+size(nozzleLabel, 19); color(nozzleLabel, dim);
+
+livehistogram(speedBins, (540, 1160), 0.35, 0.95, 14, 760, 300, cyan);
+text(histTitle, (540, 970), "EMPIRICAL SPEEDS");
+size(histTitle, 23); bold(histTitle);
+text(axisUnit, (540, 1355), "normalized path lengths per second");
+size(axisUnit, 18); color(axisUnit, dim);
+
+counter(arrived, (540, 1460), 0, 0, "detected molecules  ", " / 72");
+size(arrived, 24); color(arrived, dim);
+text(caption, (540, 1545),
+  "Each bar grows only when a molecule from the same process arrives.");
+size(caption, 22); color(caption, dim); wrap(caption, 820);
+
+hidden(molecules); hidden(speedBins); hidden(arrived); hidden(caption);
+hidden(nozzleLabel);
+
+step("reservoir") {
+  par {
+    show(molecules, 0.55);
+    show(speedBins, 0.45);
+    show(arrived, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.45);
+
+step("open-the-aperture") {
+  par {
+    draw(nozzle, 0.55);
+    show(nozzleLabel, 0.35);
+  }
+}
+wait(0.25);
+
+step("motion-becomes-data") {
+  par {
+    stream(molecules, nozzle, 5.2, 42, smooth);
+    observe(speedBins, molecules, speed);
+    observe(arrived, molecules, arrived);
+    say(caption,
+      "The motion and the distribution are two views of one deterministic experiment.",
+      0.45);
+  }
+}
+wait(0.7);
+
+step("takeaway") {
+  par {
+    pulse(speedBins.bars, 0.8);
+    say(caption,
+      "Manic can now connect a changing collection to measurements without frame callbacks.",
+      0.45);
+  }
+}
+wait(1.2);

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-566c6724.js";
+            window.path_to_searchindex_js = "searchindex-7b7e6410.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-74e98ac0.js"></script>
@@ -216,6 +216,192 @@ draw(rad, 1.2);
 wait(1.2);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/k79A0njUBr4" title="A Vector Field, Coloured by Force — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="parameterized-field-advection"><a class="header" href="#parameterized-field-advection">parameterized-field-advection</a></h2>
+<p>One parameter smoothly deforms a persistent vector field from steady wind into a vortex.
+The generic <code>advect</code> verb then moves real seeded tracers through that same settled field.</p>
+<pre><code class="language-manic">// PARAMETERIZED VECTOR FIELD — one value changes the whole field.
+// The same settled field then moves a persistent tracer collection. No frame
+// callbacks and no manually authored particle paths are involved.
+
+title("From Wind to Vortex");
+canvas("16:9");
+template("mono");
+watermark(mark, (170, 55), "Made With Manic");
+
+text(kicker, (640, 48), "MANIC · PARAMETERIZED FIELD");
+text(headline, (640, 94), "One parameter reshapes every arrow");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+rect(chamber, (640, 365), 780, 410);
+outlined(chamber); outline(chamber, dim); stroke(chamber, 3);
+
+// The initial named field supplies a clear first state. `bind` then gives it
+// formula components where x,y are field coordinates and p is the parameter.
+vectorfield(flow, (640, 365), 375, 190, uniform, 17);
+parameter(mix, (640, 610), 0, 0, 1, "vortex mix", 2);
+bind(mix, flow, formula, "(1-p)*1.15-p*y", "p*x");
+
+circle(seed, (640, 365), 128);
+outlined(seed); outline(seed, dim); dashed(seed, 10, 9);
+particles(tracers, seed, 32, 5, 31, "random");
+color(tracers, fg); glow(tracers, 0.55);
+
+text(caption, (640, 678), "p = 0: steady wind");
+size(caption, 20); color(caption, dim);
+
+untraced(flow); hidden(seed); hidden(tracers);
+
+step("reveal-the-field") {
+  par {
+    draw(flow, 0.9);
+    show(seed, 0.4);
+    show(tracers, 0.55);
+  }
+}
+wait(0.5);
+
+step("wind-becomes-vortex") {
+  par {
+    to(mix, value, 1, 2.5, smooth);
+    say(caption, "p = 1: the same field turns into a vortex", 0.4);
+  }
+}
+wait(0.55);
+
+step("release-tracers") {
+  par {
+    advect(tracers, flow, 4.4, 0.78);
+    say(caption, "The dots follow the settled field — their paths were never drawn.", 0.4);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Gt5YW7w7_qs" title="From Wind to Vortex — Parameterized Fields in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="gradient-descent-field"><a class="header" href="#gradient-descent-field">gradient-descent-field</a></h2>
+<p>Twelve imperfect guesses begin without the answer. A formula-authored negative-gradient
+field gives each one local corrections until their different journeys discover one shared
+minimum—then a creator CTA turns optimization into a complete learning story.</p>
+<pre><code class="language-manic">// GRADIENT DESCENT AS A LEARNING STORY
+// Twelve guesses begin without the answer. Every arrow supplies one local
+// correction, and the same authored field carries all of them to one minimum.
+
+title("How a Wrong Guess Learns");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"GRADIENT DESCENT · LEARNING AS MOTION");
+text(headline,(cx,h*0.125),"How does a wrong guess find the minimum?");
+text(chapter,(cx,h*0.265),"1 · START ANYWHERE");
+text(caption,(cx,h*0.78),"Twelve guesses begin with no map of the whole landscape.");
+text(result,(cx,h*0.715),"12 STARTING POINTS  →  1 SHARED MINIMUM");
+text(cta,(cx,h*0.91),"MAKE LEARNING VISIBLE → 8gwifi.org/manic");
+
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,32); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(chapter,19); color(chapter,cyan); bold(chapter); hidden(chapter);
+size(caption,21); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(result,19); color(result,lime); bold(result); hidden(result);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+equation(lossRule,(cx,h*0.205),`L(x,y)=\frac{1}{2}x^2+y^2`);
+size(lossRule,34); color(lossRule,fg); hidden(lossRule);
+
+let fieldY = h*0.49;
+rect(domain,(cx,fieldY),w*0.82,h*0.40);
+outlined(domain); outline(domain,dim); stroke(domain,3);
+hidden(domain);
+
+// -grad L = (-x,-2y). The gentler vertical coefficient keeps the motion
+// readable while preserving the elliptical convergence of the loss bowl.
+vectorfield(descent,(cx,fieldY),w*0.37,h*0.175,"-x","-1.6*y",17);
+untraced(descent);
+
+circle(starts,(cx,fieldY),w*0.255);
+outlined(starts); outline(starts,dim); dashed(starts,12,10);
+hidden(starts);
+
+particles(guesses,starts,12,8,73,"ring");
+color(guesses,magenta); glow(guesses,0.78);
+hidden(guesses);
+
+circle(minimum,(cx,fieldY),14);
+filled(minimum); color(minimum,lime); glow(minimum,1.0);
+hidden(minimum);
+
+circle(targetRing,(cx,fieldY),44);
+outlined(targetRing); outline(targetRing,lime); stroke(targetRing,3);
+hidden(targetRing);
+
+text(minLabel,(cx,fieldY+74),"minimum");
+size(minLabel,19); color(minLabel,lime); bold(minLabel); hidden(minLabel);
+
+step("begin with imperfect guesses") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(lossRule,0.45);
+    show(chapter,0.35);
+    show(caption,0.40);
+    show(domain,0.45);
+    show(starts,0.45);
+    show(guesses,0.60);
+  }
+}
+wait(0.65);
+
+step("reveal one local clue everywhere") {
+  par {
+    draw(descent,1.10);
+    fade(starts,0.45);
+    say(chapter,"2 · READ THE LOCAL SLOPE",0.35);
+    say(caption,"Every arrow gives one instruction: move opposite the local gradient.",0.42);
+  }
+}
+wait(0.55);
+
+step("improve one small step at a time") {
+  par {
+    advect(guesses,descent,6.80,0.32);
+    seq {
+      say(chapter,"3 · FOLLOW THE CORRECTIONS",0.35);
+      say(caption,"Far away, the correction is large. Near the bottom, each adjustment becomes smaller.",0.42);
+      wait(3.05);
+      say(caption,"Different starting points take different journeys—but obey the same rule.",0.42);
+    }
+  }
+}
+wait(0.55);
+
+step("discover the shared destination") {
+  par {
+    show(minimum,0.35);
+    show(targetRing,0.40);
+    show(minLabel,0.35);
+    show(result,0.45);
+    say(chapter,"4 · ARRIVE WITHOUT TELEPORTING",0.35);
+    say(caption,"Gradient descent is not a jump to the answer. It is repeated, measured improvement.",0.42);
+    seq {
+      pulse(targetRing,0.70);
+      pulse(guesses,0.70);
+    }
+  }
+}
+wait(0.75);
+
+step("create with Manic") {
+  par {
+    pulse(minimum,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the rule once. Manic keeps every guess, arrow, correction, and learning step connected.",0.45);
+  }
+}
+wait(1.45);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oeU7AUfIb80" title="How a Wrong Guess Learns — Gradient Descent in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="coordinates"><a class="header" href="#coordinates">coordinates</a></h2>
 <p>Axes, planes, number lines, polar &amp; complex planes.</p>

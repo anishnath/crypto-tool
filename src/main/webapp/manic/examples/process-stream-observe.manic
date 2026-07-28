@@ -1,0 +1,54 @@
+// PROCESS FOUNDATION — the smallest complete example.
+// A real persistent collection streams along a path. Both observers read the
+// compiled process measurements; neither is animated with guessed values.
+
+title("A Collection Becomes a Process");
+canvas("16:9");
+template("blank");
+watermark(mark, (170, 58), "Made With Manic");
+
+text(kicker, (640, 52), "MANIC · DETERMINISTIC PROCESS");
+text(headline, (640, 100), "One journey. Two truthful views.");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+rect(source, (170, 300), 210, 230);
+outlined(source); outline(source, dim); stroke(source, 3);
+text(sourceLabel, (170, 440), "persistent collection");
+size(sourceLabel, 18); color(sourceLabel, dim);
+particles(packets, source, 42, 5, 17);
+
+spline(route, (275, 300), (410, 140), (560, 470), (720, 285));
+stroke(route, 4); color(route, fg); untraced(route);
+
+livehistogram(speeds, (980, 335), 0.55, 1.05, 10, 430, 220, cyan);
+text(speedLabel, (980, 190), "normalized speed");
+size(speedLabel, 20); bold(speedLabel);
+
+counter(arrivals, (640, 610), 0, 0, "arrived ", " / 42");
+size(arrivals, 25); color(arrivals, dim);
+text(caption, (640, 665), "stream moves real objects · observe reads the same process");
+size(caption, 20); color(caption, dim);
+
+hidden(packets); hidden(speeds); hidden(arrivals); hidden(caption);
+
+step("introduce") {
+  par {
+    show(packets, 0.45);
+    draw(route, 0.65);
+    show(speeds, 0.45);
+    show(arrivals, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.35);
+
+step("stream-and-observe") {
+  par {
+    stream(packets, route, 4.2, 34, smooth);
+    observe(speeds, packets, speed);
+    observe(arrivals, packets, arrived);
+  }
+}
+wait(1.0);
+

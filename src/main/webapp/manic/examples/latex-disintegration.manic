@@ -1,0 +1,123 @@
+// A semantic LaTeX story: notation changes, meaning becomes position, and the
+// final symbols may disappear without taking the mathematical result with them.
+
+title("The Equation Disappears. The Roots Remain.");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.050),"Made With Manic");
+text(kicker,(cx,h*0.085),"ALGEBRA · SYMBOLS → STRUCTURE");
+text(headline,(cx,h*0.145),"What survives when an equation disappears?");
+text(caption,(cx,h*0.77),"Two solutions are hiding inside one quadratic.");
+text(cta,(cx,h*0.90),"MAKE MEANING MOVE → 8gwifi.org/manic");
+size(kicker,19); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,33); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.82); hidden(caption);
+size(cta,22); color(cta,cyan); bold(cta); hidden(cta);
+
+text(symbolLabel,(w*0.18,h*0.29),"THE SYMBOLS");
+text(meaningLabel,(w*0.18,h*0.54),"THE MEANING");
+size(symbolLabel,18); color(symbolLabel,dim); bold(symbolLabel); hidden(symbolLabel);
+size(meaningLabel,18); color(meaningLabel,dim); bold(meaningLabel); hidden(meaningLabel);
+
+equation(work,(cx,h*0.39),`x^2-5x+6=0`,66);
+hidden(work);
+
+let axisY = h*0.63;
+let axisLeft = w*0.16;
+let axisRight = w*0.84;
+let x0 = w*0.20;
+let dx = w*0.15;
+
+arrow(numberAxis,(axisLeft,axisY),(axisRight,axisY));
+color(numberAxis,dim); stroke(numberAxis,3);
+tag(numberAxis,numberLine);
+
+for i in 0..5 {
+  line(tick{i},(x0+i*dx,axisY-13),(x0+i*dx,axisY+13));
+  color(tick{i},dim); stroke(tick{i},3);
+  tag(tick{i},numberLine);
+}
+
+text(n0,(x0,axisY+42),"0");
+text(n1,(x0+dx,axisY+42),"1");
+text(n2,(x0+2*dx,axisY+42),"2");
+text(n3,(x0+3*dx,axisY+42),"3");
+text(n4,(x0+4*dx,axisY+42),"4");
+size(n0,18); size(n1,18); size(n2,18); size(n3,18); size(n4,18);
+color(n0,dim); color(n1,dim); color(n2,dim); color(n3,dim); color(n4,dim);
+tag(n0,numberLine); tag(n1,numberLine); tag(n2,numberLine);
+tag(n3,numberLine); tag(n4,numberLine);
+
+circle(root2,(x0+2*dx,axisY),15);
+circle(root3,(x0+3*dx,axisY),15);
+filled(root2); filled(root3);
+color(root2,cyan); color(root3,orange);
+glow(root2,0.72); glow(root3,0.72);
+tag(root2,solutions); tag(root3,solutions);
+
+equation(root2Label,(x0+2*dx,axisY-62),`x=2`,30);
+equation(root3Label,(x0+3*dx,axisY-62),`x=3`,30);
+color(root2Label,cyan); color(root3Label,orange);
+tag(root2Label,solutions); tag(root3Label,solutions);
+
+hidden(numberLine);
+hidden(solutions);
+
+step("find what is hiding") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(symbolLabel,0.35);
+    show(caption,0.40);
+    show(work,0.55);
+  }
+}
+wait(0.55);
+
+step("expose the two conditions") {
+  par {
+    rewrite(work,`\textcolor{cyan}{(x-2)}\textcolor{orange}{(x-3)}=0`,1.15,smooth);
+    say(caption,"Factoring reveals two independent ways for the product to become zero.",0.45);
+  }
+}
+wait(0.55);
+
+step("turn answers into positions") {
+  par {
+    rewrite(work,`\textcolor{cyan}{x=2}\qquad\text{or}\qquad\textcolor{orange}{x=3}`,1.05,smooth);
+    seq {
+      show(meaningLabel,0.30);
+      show(numberLine,0.55);
+      show(root2,0.35);
+      show(root2Label,0.30);
+      wait(0.18);
+      show(root3,0.35);
+      show(root3Label,0.30);
+    }
+    say(caption,"The answers are no longer only symbols—they now occupy exact locations.",0.45);
+  }
+}
+wait(0.70);
+
+step("remove the notation, keep the result") {
+  par {
+    disintegrate(work,1.60);
+    seq {
+      wait(0.35);
+      pulse(root2,0.60);
+      pulse(root3,0.60);
+    }
+    say(caption,"The notation can turn to dust. The two solutions remain exactly where they belong.",0.45);
+  }
+}
+wait(0.75);
+
+step("create explanations that preserve meaning") {
+  par {
+    pulse(solutions,0.75);
+    show(cta,0.45);
+    say(caption,"Great visual explanations do more than move symbols—they reveal what those symbols mean.",0.45);
+  }
+}
+wait(1.45);

@@ -1,0 +1,114 @@
+// A focused Fourier story: every orbit and every partial sum is generated from
+// the same live collection. The circles move; their histories become the wave.
+
+title("A Wave Drawn by Rotating Circles");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"FOURIER SERIES · LIVE DERIVED HISTORY");
+text(headline,(cx,h*0.115),"Can rotating circles draw a wave?");
+text(caption,(cx,h*0.18),"Every coloured trace is the real history of one moving endpoint.");
+text(cta,(cx,h*0.925),"BUILD YOUR OWN VISUAL STORY → 8gwifi.org/manic");
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,20); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-29,-25,43),(1,-2,0),42,orthographic);
+
+collection3(harmonics,(-3,5,0),12,(0,0,0),11,0.065);
+line3(sweep,(-3,5,0),(10,5,0)); hidden(sweep);
+links3(arms,harmonics,chain);
+child3(tip,harmonics,11,0.13);
+
+arrow3(chainX,(-11,5,0),(7,5,0));
+arrow3(chainY,(-3,-2,0),(-3,10.5,0));
+arrow3(plotX,(-7,-10.5,0),(12,-10.5,0));
+arrow3(plotY,(-7,-10.5,0),(-7,-4.2,0));
+
+point3(shotA,(-7.5,-11,0),0.01);
+point3(shotB,(8.5,10.5,0),0.01);
+tag(shotA,shot); tag(shotB,shot);
+hidden(shotA); hidden(shotB);
+
+tag(harmonics,construction); tag(arms,construction); tag(tip,construction);
+tag(chainX,construction); tag(chainY,construction);
+tag(plotX,construction); tag(plotY,construction);
+
+for i in 0..12 {
+  ring3(orbit{i},harmonics,i,72);
+  historyplot3(partial{i},harmonics,i,y,(-7,-10.5,0),(19,6));
+  thick(orbit{i},0.030);
+  thick(partial{i},0.020);
+  tag(orbit{i},construction);
+  tag(partial{i},construction);
+}
+
+equation(formula,(0,0),`f(t)=\sum_{n=1}^{12}\frac{2(-1)^{n+1}}{\pi n}\sin(nt)`,25);
+label3(formula,(-4,-2.7,0),0.82);
+tag(formula,construction);
+
+color(harmonics,fg); color(arms,fg); color(tip,fg);
+color(chainX,fg); color(chainY,fg); color(plotX,fg); color(plotY,fg);
+color(formula,fg);
+thick(chainX,0.016); thick(chainY,0.016);
+thick(plotX,0.016); thick(plotY,0.016);
+
+color(orbit0,lime);      color(partial0,lime);
+color(orbit1,gold);      color(partial1,gold);
+color(orbit2,orange);    color(partial2,orange);
+color(orbit3,coral);     color(partial3,coral);
+color(orbit4,red);       color(partial4,red);
+color(orbit5,magenta);   color(partial5,magenta);
+color(orbit6,violet);    color(partial6,violet);
+color(orbit7,indigo);    color(partial7,indigo);
+color(orbit8,blue);      color(partial8,blue);
+color(orbit9,cyan);      color(partial9,cyan);
+color(orbit10,mint);     color(partial10,mint);
+color(orbit11,fg);       color(partial11,fg);
+
+hidden(construction);
+
+step("ask the visual question") {
+  show(kicker,0.30);
+  show(headline,0.42);
+  show(caption,0.38);
+}
+wait(0.35);
+
+step("reveal one connected machine") {
+  par {
+    show(construction,0.85);
+    view3(shot,"top",1.35,smooth,1.08);
+    say(caption,"Each circle starts where the previous circle ends.",0.38);
+  }
+}
+wait(0.30);
+
+step("let motion become data") {
+  par {
+    // Doubling every angular rate makes the base harmonic complete exactly
+    // two revolutions while preserving all relative frequencies.
+    chain3(harmonics,"2.0372 -1.0186 0.6791 -0.5093 0.4074 -0.3395 0.2910 -0.2546 0.2264 -0.2037 0.1852 -0.1698","2 4 6 8 10 12 14 16 18 20 22 24",16.0);
+    travel3(harmonics,sweep,16.0,linear);
+    seq {
+      say(caption,"Cycle one: the broad motion appears, then smaller circles restore its detail.",0.40);
+      wait(6.10);
+      say(caption,"Cycle two: the same relationships repeat continuously—without a reset or jump.",0.40);
+      wait(5.20);
+      say(caption,"The endpoint histories now contain two complete periods of the signal.",0.40);
+    }
+  }
+}
+wait(0.35);
+
+step("create with Manic") {
+  par {
+    pulse(tip,0.75);
+    pulse(partial11,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the relationship. Manic keeps the circles, histories, motion, and camera together.",0.42);
+  }
+}
+wait(1.45);

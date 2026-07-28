@@ -1,0 +1,83 @@
+// PARAMETERIZED GENERATED FAMILIES — one ordinary parameter, three stable 3-D
+// objects. `p` changes sampled points; ids, materials, transforms, and sample
+// topology stay intact. No per-vertex scripting or snapshot replacement.
+
+title("Parameterized Generated Families");
+canvas("16:9");
+template("mono");
+watermark(mark, (170, 55), "Made With Manic");
+
+text(kicker, (640, 48), "MANIC · GENERATED 3-D FAMILIES");
+text(headline, (640, 92), "One parameter · three continuous shapes");
+text(caption, (640, 664), "curve3(t,p)  ·  surface3(x,y,p)  ·  param3(u,v,p)");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+size(caption, 19); color(caption, dim);
+
+parameter(shape, (640, 612), 0, 0, 1, "shape", 2);
+
+if h > 1.45*w {
+  camera3((0, -36, 8), (0, 0, 0.4), 40);
+}
+else {
+  camera3((10, -17, 9), (0, 0, 0.4), 40);
+}
+grid3(floor, (0, 0, -2.2), 8, 1);
+color(floor, dim); opacity(floor, 0.14);
+
+// A widening helix at the left.
+curve3(helix,
+  "-4 + cos(t)",
+  "sin(t)",
+  "-1.7 + 0.55*t",
+  (0, 6.2832));
+bind(shape, helix, formula,
+  "-4 + (1+0.45*p)*cos(t)",
+  "(1+0.45*p)*sin(t)",
+  "-1.7 + 0.55*t");
+color(helix, cyan); thick(helix, 0.065); untraced(helix);
+tag(helix, family);
+
+// A bowl that becomes a rippling field in the middle.
+surface3(land, "0.15*(x*x+y*y)", (-1.7,1.7), (-1.7,1.7), 28);
+bind(shape, land, formula,
+  "(1-p)*0.15*(x*x+y*y) + p*0.72*sin(1.7*x)*cos(1.7*y)");
+color(land, gold);
+finish3(land, "material=glass shading=smooth mesh=0.30 depth=0.28 shadow=0.12");
+tag(land, family);
+
+// A torus whose tube inflates at the right.
+param3(ring,
+  "4+(1.15+0.20*cos(v))*cos(u)",
+  "(1.15+0.20*cos(v))*sin(u)",
+  "0.20*sin(v)",
+  (0,6.2832), (0,6.2832), 28);
+bind(shape, ring, formula,
+  "4+(1.15+(0.20+0.52*p)*cos(v))*cos(u)",
+  "(1.15+(0.20+0.52*p)*cos(v))*sin(u)",
+  "(0.20+0.52*p)*sin(v)");
+color(ring, magenta);
+finish3(ring, "material=metal shading=smooth mesh=0.22 depth=0.30 shadow=0.16");
+tag(ring, family);
+
+hidden(helix); hidden(land); hidden(ring);
+
+step("reveal one stable family") {
+  par {
+    view3(family, "fit", 0.9, smooth, 1.55);
+    stagger(0.16) {
+      show(helix, 0.45);
+      show(land, 0.45);
+      show(ring, 0.45);
+    }
+  }
+}
+wait(0.45);
+
+step("change the shared parameter") {
+  par {
+    to(shape, value, 1, 3.4, smooth);
+    say(caption, "The same three objects are resampled smoothly from p = 0 to p = 1.", 0.45);
+  }
+}
+wait(1.2);

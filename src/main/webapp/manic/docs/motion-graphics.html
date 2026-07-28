@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-566c6724.js";
+            window.path_to_searchindex_js = "searchindex-7b7e6410.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-74e98ac0.js"></script>
@@ -199,12 +199,802 @@ the relationship only where the story needs it.</p>
 <tr><td>Send temporary or sustained path emphasis</td><td>`flow(path, dur, [forward</td><td>reverse</td></tr>
 <tr><td>Add contained ambient life</td><td><code>wander(particles, dur)</code></td><td>seeded, repeatable motion within the container</td></tr>
 <tr><td>Reorganize the same particles</td><td>`arrange(particles, region, “random</td><td>grid</td></tr>
+<tr><td>Progressively move a collection</td><td><code>stream(particles, path, dur, spread, ease)</code></td><td>seeded persistent items leave in a natural order and retain arrival/speed measurements</td></tr>
+<tr><td>Release particles with individual speeds</td><td><code>emit(particles, path, uniform|maxwell, dur, spread, ease)</code></td><td>every persistent item receives a deterministic sampled speed; faster items traverse sooner</td></tr>
+<tr><td>Follow a visual field</td><td><code>advect(particles, vectorfield, dur, rate)</code></td><td>every persistent item follows the same bounded formula field with seekable deterministic motion</td></tr>
+<tr><td>Route a collection through choices</td><td><code>branch(particles, path_tag, dur, ease)</code></td><td>every persistent item makes seeded choices in one authored acyclic network and retains destination/step/arrival measurements</td></tr>
+<tr><td>Catch particles by a real measurement</td><td><code>collect(livehistogram, particles, speed|arrival|outcome|steps, dur, ease)</code></td><td>each item visibly settles in the bin selected by the same measurement used by observers</td></tr>
+<tr><td>Show what the process measured</td><td><code>observe(counter_or_livehistogram, particles, arrived|speed|arrival|outcome|steps)</code></td><td>counters and bars stay connected to the same motion instead of being faked separately</td></tr>
 <tr><td>Change an ordinary property</td><td><code>to(id, property, value, dur, ease)</code></td><td>the general escape hatch remains available</td></tr>
 </tbody>
 </table>
 </div>
 <p>The three V2 words add relationships; they do not replace <code>move</code>, <code>travel</code>,
 <code>flow</code>, <code>arrange</code>, <code>spin</code>, <code>transform</code>, <code>rewrite</code>, or <code>morph</code>.</p>
+<h2 id="one-process-several-truthful-views"><a class="header" href="#one-process-several-truthful-views">One process, several truthful views</a></h2>
+<p>Use <code>stream</code> when the authored objects themselves should leave progressively.
+Use <code>flow</code> when only a temporary signal should pass. A process can drive more
+than one observer without manually synchronizing keyframes:</p>
+<pre><code class="language-manic">rect(source, (170,300), 210,230);
+particles(packets, source, 42, 5, 17);
+spline(route, (275,300), (410,140), (560,470), (720,285));
+
+livehistogram(speeds, (980,335), 0.55, 1.05, 10, 430, 220, cyan);
+counter(arrivals, (640,610), 0, 0, "arrived ", " / 42");
+
+par {
+  stream(packets, route, 4.2, 34, smooth);
+  observe(speeds, packets, speed);
+  observe(arrivals, packets, arrived);
+}
+</code></pre>
+<p>Source order inside the <code>par</code> matters only for the build contract: write
+<code>stream</code> first so the following observers can read its compiled measurements.
+Playback still starts all three clips together. Seeking remains deterministic;
+the collection seed reproduces the same start order, travel times, endpoints,
+counter, and histogram.</p>
+<p><code>speed</code> uses normalized authored-path lengths per second rather than screen
+pixels, so changing the canvas or render scale does not change the measurement.
+<code>arrival</code> is elapsed seconds inside the process beat. A <code>livehistogram</code> requires
+an explicit range; observations outside it clamp to the end bins instead of
+silently changing the axis.</p>
+<p>The minimal complete example is:</p>
+<pre><code class="language-manic">// PROCESS FOUNDATION — the smallest complete example.
+// A real persistent collection streams along a path. Both observers read the
+// compiled process measurements; neither is animated with guessed values.
+
+title("A Collection Becomes a Process");
+canvas("16:9");
+template("blank");
+watermark(mark, (170, 58), "Made With Manic");
+
+text(kicker, (640, 52), "MANIC · DETERMINISTIC PROCESS");
+text(headline, (640, 100), "One journey. Two truthful views.");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+rect(source, (170, 300), 210, 230);
+outlined(source); outline(source, dim); stroke(source, 3);
+text(sourceLabel, (170, 440), "persistent collection");
+size(sourceLabel, 18); color(sourceLabel, dim);
+particles(packets, source, 42, 5, 17);
+
+spline(route, (275, 300), (410, 140), (560, 470), (720, 285));
+stroke(route, 4); color(route, fg); untraced(route);
+
+livehistogram(speeds, (980, 335), 0.55, 1.05, 10, 430, 220, cyan);
+text(speedLabel, (980, 190), "normalized speed");
+size(speedLabel, 20); bold(speedLabel);
+
+counter(arrivals, (640, 610), 0, 0, "arrived ", " / 42");
+size(arrivals, 25); color(arrivals, dim);
+text(caption, (640, 665), "stream moves real objects · observe reads the same process");
+size(caption, 20); color(caption, dim);
+
+hidden(packets); hidden(speeds); hidden(arrivals); hidden(caption);
+
+step("introduce") {
+  par {
+    show(packets, 0.45);
+    draw(route, 0.65);
+    show(speeds, 0.45);
+    show(arrivals, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.35);
+
+step("stream-and-observe") {
+  par {
+    stream(packets, route, 4.2, 34, smooth);
+    observe(speeds, packets, speed);
+    observe(arrivals, packets, arrived);
+  }
+}
+wait(1.0);
+
+</code></pre>
+<h2 id="branching-networks-author-paths-keep-the-evidence"><a class="header" href="#branching-networks-author-paths-keep-the-evidence">Branching networks: author paths, keep the evidence</a></h2>
+<p><code>branch</code> is the reusable one-of-many process. Tag ordinary paths into one
+network; the first and last points establish each edge’s direction:</p>
+<pre><code class="language-manic">line(entry, (100,260), (250,260)); tag(entry, routes);
+line(a, (250,260), (430,120)); tag(a, routes);
+line(b, (250,260), (430,260)); tag(b, routes);
+line(c, (250,260), (430,400)); tag(c, routes);
+
+livehistogram(destinations, (680,300), 0, 3, 3, 300, 240, cyan);
+par {
+  branch(requests, routes, 4, smooth);
+  observe(destinations, requests, outcome);
+}
+</code></pre>
+<p>The network must be connected and acyclic, with one root and at least two
+terminals. Paths may converge before splitting again. Each item makes the same
+seeded uniform choices in preview, recording, and direct frame seeking.
+Terminals are numbered left-to-right, then top-to-bottom; <code>outcome</code> is that
+number and <code>steps</code> is the number of edges traversed.</p>
+<p>This is intentionally subject-neutral. The minimal example dispatches requests
+to workers; the polished example uses the same word for repeated left/right
+choices on a Galton board:</p>
+<pre><code class="language-manic">// GENERIC PROCESS BRANCHING — one source, three destinations.
+//
+// The paths carry no service semantics. `branch` only sees a directed acyclic
+// network and makes one deterministic uniform choice at every fork. The same
+// foundation drives the Galton-board example.
+
+title("Process Branching — One Source, Three Destinations");
+canvas("16:9");
+template("blank");
+watermark(mark, (145, 70), "Made With Manic");
+
+text(head, (cx, 72), "One collection · many truthful routes");
+text(sub, (cx, 112),
+  "Every request keeps its identity, destination, step count, and arrival time.");
+size(head, 32); bold(head);
+size(sub, 19); color(sub, dim);
+
+circle(source, (180, 340), 24);
+color(source, panel); outline(source, cyan); stroke(source, 3);
+particles(requests, source, 54, 4, 41);
+color(requests, cyan); glow(requests, 0.7); z(requests, 8);
+
+line(entry, (205, 340), (420, 340)); tag(entry, dispatchRoutes);
+spline(upper, (420, 340), (530, 190), (680, 185)); tag(upper, dispatchRoutes);
+line(middle, (420, 340), (680, 340)); tag(middle, dispatchRoutes);
+spline(lower, (420, 340), (530, 490), (680, 495)); tag(lower, dispatchRoutes);
+color(dispatchRoutes, dim); stroke(dispatchRoutes, 3); untraced(dispatchRoutes);
+
+rect(worker0, (735, 185), 150, 82);
+rect(worker1, (735, 340), 150, 82);
+rect(worker2, (735, 495), 150, 82);
+for i in 0..3 {
+  color(worker{i}, panel); outline(worker{i}, cyan); stroke(worker{i}, 2);
+}
+text(w0, (735, 185), "worker 0");
+text(w1, (735, 340), "worker 1");
+text(w2, (735, 495), "worker 2");
+size(w0, 18); size(w1, 18); size(w2, 18);
+
+livehistogram(destinations, (1030, 350), 0, 3, 3, 330, 300, magenta);
+text(histTitle, (1030, 170), "DESTINATION OUTCOME");
+size(histTitle, 19); bold(histTitle); color(histTitle, dim);
+counter(arrived, (1030, 555), 0, 0, "arrived  ", " / 54");
+size(arrived, 21); color(arrived, dim);
+
+text(caption, (cx, 650),
+  "The diagram and histogram are two views of the same seeded dispatch.");
+size(caption, 21); color(caption, dim);
+
+hidden(requests); hidden(destinations); hidden(arrived); hidden(caption);
+
+step("network") {
+  par {
+    draw(dispatchRoutes, 0.75);
+    show(requests, 0.35);
+    show(destinations, 0.45);
+    show(arrived, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.35);
+
+step("dispatch") {
+  par {
+    branch(requests, dispatchRoutes, 5.0, smooth);
+    observe(destinations, requests, outcome);
+    observe(arrived, requests, arrived);
+    flow(dispatchRoutes, 5.0, forward, continuous);
+  }
+}
+wait(1.0);
+</code></pre>
+<pre><code class="language-manic">// GALTON BOARD — RANDOM LOCALLY, PREDICTABLE GLOBALLY
+//
+// This is a probability story built from generic process vocabulary. Ordinary
+// tagged lines form the board; `branch` preserves each ball through eight
+// choices; `collect` and `observe` build the distribution from real arrivals.
+
+title("How Random Choices Become a Bell Curve");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.042),"Made With Manic");
+text(kicker,(cx,h*0.070),"PROBABILITY · RANDOM LOCALLY, ORDERED GLOBALLY");
+text(headline,(cx,h*0.115),"Can random choices create a predictable shape?");
+text(chapter,(cx,h*0.195),"1 · BEGIN WITH ONE FORK");
+text(caption,(cx,h*0.855),"One ball can land almost anywhere.");
+text(insight,(cx,h*0.815),"MORE ROUTES LEAD TO THE CENTER");
+text(cta,(cx,h*0.930),"MAKE PROBABILITY VISIBLE → 8gwifi.org/manic");
+
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(chapter,19); color(chapter,cyan); bold(chapter); hidden(chapter);
+size(caption,21); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(insight,19); color(insight,lime); bold(insight); hidden(insight);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+equation(law,(cx,h*0.158),`X\sim\operatorname{Binomial}\!\left(8,\frac12\right)`,29);
+hidden(law);
+
+let levels = 8;
+let boardX = cx;
+let topY = h*0.235;
+let dx = w*0.065;
+let dy = h*0.034;
+
+// Every directed edge joins one row to the next. Converging endpoints create
+// the ordinary rooted DAG followed by `branch`.
+for r in 0..levels {
+  for k in 0..r+1 {
+    let x1 = boardX + (k-r*0.5)*dx;
+    let y1 = topY + r*dy;
+    let xl = boardX + (k-(r+1)*0.5)*dx;
+    let xr = boardX + (k+1-(r+1)*0.5)*dx;
+    let y2 = topY + (r+1)*dy;
+
+    line(left{r}_{k},(x1,y1),(xl,y2));
+    line(right{r}_{k},(x1,y1),(xr,y2));
+    tag(left{r}_{k},boardRoutes); tag(right{r}_{k},boardRoutes);
+    color(left{r}_{k},dim); color(right{r}_{k},dim);
+    stroke(left{r}_{k},1.7); stroke(right{r}_{k},1.7);
+    opacity(left{r}_{k},0.30); opacity(right{r}_{k},0.30);
+
+    dot(peg{r}_{k},(x1,y1),4.8);
+    color(peg{r}_{k},fg); glow(peg{r}_{k},0.36); tag(peg{r}_{k},pegs);
+  }
+}
+untraced(boardRoutes);
+
+for k in 0..levels+1 {
+  let tx = boardX + (k-levels*0.5)*dx;
+  let ty = topY + levels*dy;
+  dot(exit{k},(tx,ty),5);
+  color(exit{k},gold); glow(exit{k},0.45); tag(exit{k},exits);
+  counter(bin{k},(tx,ty+28),k,0);
+  size(bin{k},15); color(bin{k},dim); tag(bin{k},exitLabels);
+}
+
+text(leftChoice,(boardX-dx*0.72,topY+dy*0.72),"LEFT");
+text(rightChoice,(boardX+dx*0.72,topY+dy*0.72),"RIGHT");
+size(leftChoice,15); size(rightChoice,15);
+color(leftChoice,cyan); color(rightChoice,magenta);
+hidden(leftChoice); hidden(rightChoice);
+
+circle(source,(boardX,topY),13);
+opacity(source,0);
+particles(balls,source,180,4.0,73);
+color(balls,cyan); glow(balls,0.78); z(balls,9);
+
+let histY = h*0.695;
+livehistogram(outcomes,(cx,histY),0,9,9,w*0.76,h*0.155,magenta);
+text(histTitle,(cx,h*0.595),"WHERE 180 BALLS ACTUALLY LANDED");
+size(histTitle,18); bold(histTitle); color(histTitle,dim);
+counter(landed,(cx,h*0.785),0,0,"landed  "," / 180");
+size(landed,21); color(landed,dim);
+
+hidden(pegs); hidden(exits); hidden(exitLabels);
+hidden(balls); hidden(outcomes); hidden(histTitle); hidden(landed);
+
+step("introduce one uncertain choice") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(law,0.45);
+    show(chapter,0.35);
+    show(caption,0.40);
+    draw(boardRoutes,0.90);
+    show(pegs,0.55);
+    show(exits,0.45);
+    show(exitLabels,0.45);
+    show(leftChoice,0.35);
+    show(rightChoice,0.35);
+  }
+}
+wait(0.60);
+
+step("repeat the choice eight times") {
+  par {
+    show(outcomes,0.50);
+    show(histTitle,0.35);
+    show(landed,0.35);
+    say(chapter,"2 · REPEAT LEFT OR RIGHT EIGHT TIMES",0.38);
+    say(caption,"At every peg, each ball makes another equally likely left-or-right choice.",0.44);
+  }
+}
+wait(0.55);
+
+step("let the crowd reveal the pattern") {
+  par {
+    branch(balls,boardRoutes,8.20,smooth);
+    collect(outcomes,balls,outcome,0.34,smooth);
+    observe(outcomes,balls,outcome);
+    observe(landed,balls,arrived);
+    show(balls,0.15);
+    seq {
+      say(chapter,"3 · WATCH 180 INDIVIDUAL JOURNEYS",0.38);
+      say(caption,"One route is unpredictable. The crowd begins to expose a stable pattern.",0.44);
+      wait(3.40);
+      say(caption,"Every bar is measured from the same balls you see falling—not animated separately.",0.44);
+    }
+  }
+}
+wait(0.65);
+
+step("explain why the center wins") {
+  par {
+    pulse(outcomes.bars,0.80);
+    show(insight,0.45);
+    say(chapter,"4 · ORDER EMERGES FROM MANY CHOICES",0.38);
+    say(caption,"Extreme bins need nearly all-left or all-right. Many more mixed sequences end near the center.",0.48);
+  }
+}
+wait(0.75);
+
+step("create with Manic") {
+  par {
+    pulse(outcomes.bars,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the choices once. Manic keeps every route, arrival, count, and live distribution connected.",0.45);
+  }
+}
+wait(1.45);
+</code></pre>
+<p>The first scientific acceptance story uses exactly the same generic words for
+molecular motion:</p>
+<pre><code class="language-manic">// MAXWELL–BOLTZMANN PROCESS FOUNDATION
+// First acceptance story for deterministic evolving collections. The emitted
+// particles, arrival count, and speed histogram all come from one compiled
+// process. The formula is authored truth; Manic is not pretending to be a CAS.
+
+title("Maxwell–Boltzmann — From Motion to Distribution");
+canvas("9:16");
+template("blank");
+watermark(mark, (155, 92), "Made With Manic");
+
+text(kicker, (540, 80), "STATISTICAL MECHANICS · PROCESS VIEW");
+text(headline, (540, 145), "How does molecular motion become a distribution?");
+size(kicker, 19); color(kicker, dim); bold(kicker);
+size(headline, 33); bold(headline); wrap(headline, 850);
+
+equation(law, (540, 245),
+  `f(v)=4\pi\left(\frac{m}{2\pi k_BT}\right)^{3/2}v^2e^{-mv^2/(2k_BT)}`, 36);
+
+rect(reservoir, (410, 500), 560, 330);
+outlined(reservoir); outline(reservoir, dim); stroke(reservoir, 4);
+line(divider, (630, 340), (630, 660));
+color(divider, dim); stroke(divider, 3);
+text(gasLabel, (330, 685), "seeded molecules");
+size(gasLabel, 20); color(gasLabel, dim);
+particles(molecules, reservoir, 72, 5, 29);
+
+// The route starts at the aperture and bends into the measurement region.
+spline(nozzle, (630, 500), (735, 430), (850, 570), (900, 735));
+stroke(nozzle, 4); color(nozzle, fg); untraced(nozzle);
+text(nozzleLabel, (850, 395), "effusive path");
+size(nozzleLabel, 19); color(nozzleLabel, dim);
+
+livehistogram(speedBins, (540, 1160), 0.35, 0.95, 14, 760, 300, cyan);
+text(histTitle, (540, 970), "EMPIRICAL SPEEDS");
+size(histTitle, 23); bold(histTitle);
+text(axisUnit, (540, 1355), "normalized path lengths per second");
+size(axisUnit, 18); color(axisUnit, dim);
+
+counter(arrived, (540, 1460), 0, 0, "detected molecules  ", " / 72");
+size(arrived, 24); color(arrived, dim);
+text(caption, (540, 1545),
+  "Each bar grows only when a molecule from the same process arrives.");
+size(caption, 22); color(caption, dim); wrap(caption, 820);
+
+hidden(molecules); hidden(speedBins); hidden(arrived); hidden(caption);
+hidden(nozzleLabel);
+
+step("reservoir") {
+  par {
+    show(molecules, 0.55);
+    show(speedBins, 0.45);
+    show(arrived, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.45);
+
+step("open-the-aperture") {
+  par {
+    draw(nozzle, 0.55);
+    show(nozzleLabel, 0.35);
+  }
+}
+wait(0.25);
+
+step("motion-becomes-data") {
+  par {
+    stream(molecules, nozzle, 5.2, 42, smooth);
+    observe(speedBins, molecules, speed);
+    observe(arrived, molecules, arrived);
+    say(caption,
+      "The motion and the distribution are two views of one deterministic experiment.",
+      0.45);
+  }
+}
+wait(0.7);
+
+step("takeaway") {
+  par {
+    pulse(speedBins.bars, 0.8);
+    say(caption,
+      "Manic can now connect a changing collection to measurements without frame callbacks.",
+      0.45);
+  }
+}
+wait(1.2);
+</code></pre>
+<h2 id="v2-emission-becomes-evidence"><a class="header" href="#v2-emission-becomes-evidence">V2: emission becomes evidence</a></h2>
+<p><code>stream</code> is ideal when a collection should share one authored journey. Use
+<code>emit</code> when individual sampled speeds are the explanation. Add <code>collect</code> when
+the particles themselves should settle into the measured bins:</p>
+<pre><code class="language-manic">particles(molecules, source, 180, 3.2, 73);
+livehistogram(empirical, (730,560), 0, 2.2, 14, 540, 240, cyan);
+
+par {
+  emit(molecules, flight, maxwell, 7.0, 48, smooth);
+  collect(empirical, molecules, speed, 0.48, smooth);
+  observe(empirical, molecules, speed);
+  observe(arrivals, molecules, arrived);
+}
+</code></pre>
+<p>The calls are written in dependency order because each later call reads the
+compiled process produced before it. They still play simultaneously inside the
+<code>par</code>. <code>maxwell</code> is a normalized speed profile, not a thermodynamics solver:
+the creator supplies temperature, units, and explanatory notation. Manic
+truthfully samples the distribution, preserves particle identity, makes faster
+samples travel sooner, catches each item in its matching bin, and reproduces
+the same result from the collection seed.</p>
+<p>Decorative fidelity remains separate from process truth. The acceptance story
+uses the bundled native-vector reservoir asset for the apparatus while its
+particles, theoretical curve, empirical bars, and counters remain ordinary
+Manic entities:</p>
+<pre><code class="language-manic">// EXPRESSIVE PROCESS V2 — MAXWELL–BOLTZMANN EFFUSION
+//
+// A polished 2.5D acceptance story inspired by engine-test-6.mov. The
+// apparatus is a bundled native SVG, while every molecule, detector bin,
+// arrival count, and empirical distribution remains a normal Manic entity.
+// `emit`, `collect`, and `observe` all read one deterministic process.
+
+title("Maxwell–Boltzmann Effusion — Motion Becomes Evidence");
+canvas("9:16");
+template("blank");
+watermark(mark, (150, 90), "Made With Manic");
+
+text(kicker, (540, 84), "STATISTICAL MECHANICS · EXPRESSIVE PROCESS V2");
+text(headline, (540, 142), "A distribution you can watch forming");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+equation(law, (540, 242),
+  `f(v)=4\pi\left(\frac{m}{2\pi k_BT}\right)^{3/2}v^2e^{-mv^2/(2k_BT)}`, 34);
+
+// The decorative shell is an asset; the changing evidence stays native.
+svg(apparatus, (240, 540), "asset:svg/physics/effusion-reservoir.svg", 330);
+text(reservoirLabel, (225, 705), "THERMAL RESERVOIR");
+size(reservoirLabel, 17); bold(reservoirLabel); color(reservoirLabel, gold);
+
+rect(detectorPanel, (730, 560), 570, 300);
+filled(detectorPanel); color(detectorPanel, panel); opacity(detectorPanel, 0.92);
+outlined(detectorPanel); outline(detectorPanel, dim); stroke(detectorPanel, 3);
+
+text(detectorTitle, (730, 382), "PARTICLE SPEED  v");
+size(detectorTitle, 18); bold(detectorTitle); color(detectorTitle, dim);
+
+// The invisible source is precisely at the SVG nozzle.
+circle(source, (348, 540), 20);
+opacity(source, 0);
+particles(molecules, source, 180, 3.2, 73);
+color(molecules, magenta); glow(molecules, 0.8); z(molecules, 8);
+
+// Individual lanes diverge around this authored route before being collected.
+spline(flight, (350, 540), (415, 500), (465, 515), (500, 545));
+hidden(flight);
+
+livehistogram(empirical, (730, 560), 0, 2.2, 14, 540, 240, cyan);
+z(empirical, 3); hidden(empirical.count);
+
+// Same horizontal range as the live histogram: 0 .. 4*scale = 2.2.
+distribution(theory, (730, 560), "maxwell", 0.55, 0, gold);
+hidden(theory.axis); hidden(theory.name);
+untraced(theory.curve); z(theory, 7);
+
+text(empiricalKey, (610, 750), "● empirical arrivals");
+text(theoryKey, (850, 750), "— theoretical curve");
+size(empiricalKey, 17); color(empiricalKey, cyan);
+size(theoryKey, 17); color(theoryKey, gold);
+
+counter(arrivals, (540, 850), 0, 0, "detected molecules  ", " / 180");
+size(arrivals, 24); color(arrivals, dim);
+
+text(caption, (540, 920),
+  "A thermal source emits many molecular speeds—not one average speed.");
+size(caption, 23); wrap(caption, 880); color(caption, dim);
+
+rect(evidencePanel, (540, 1110), 880, 230);
+filled(evidencePanel); color(evidencePanel, panel); opacity(evidencePanel, 0.95);
+outlined(evidencePanel); outline(evidencePanel, dim); stroke(evidencePanel, 2);
+text(evidenceTitle, (540, 1030), "ONE PROCESS · THREE VIEWS");
+size(evidenceTitle, 18); bold(evidenceTitle); color(evidenceTitle, dim);
+equation(processLaw, (540, 1100),
+  `\text{motion}\;\longrightarrow\;\text{arrival bin}\;\longrightarrow\;\hat f(v)`, 32);
+text(truth, (540, 1190),
+  "The dots, bars, and count are derived from the same seeded experiment.");
+size(truth, 20); color(truth, dim); wrap(truth, 790);
+
+hidden(apparatus); hidden(reservoirLabel); hidden(detectorPanel);
+hidden(detectorTitle); hidden(molecules); hidden(empirical);
+hidden(empiricalKey); hidden(theoryKey); hidden(arrivals);
+hidden(caption); hidden(evidencePanel); hidden(evidenceTitle);
+hidden(processLaw); hidden(truth);
+
+step("build-the-apparatus") {
+  par {
+    show(apparatus, 0.65);
+    show(reservoirLabel, 0.45);
+    show(detectorPanel, 0.55);
+    show(detectorTitle, 0.35);
+    show(empirical.axis, 0.55);
+    show(empirical.bars, 0.55);
+    show(empirical.min, 0.35);
+    show(empirical.max, 0.35);
+    show(empiricalKey, 0.35);
+    show(theoryKey, 0.35);
+    show(arrivals, 0.35);
+    show(caption, 0.40);
+  }
+}
+wait(0.45);
+
+step("the-prediction") {
+  par {
+    draw(theory.curve, 0.9, smooth);
+    say(caption,
+      "Maxwell predicts a characteristic spread with a most probable speed.",
+      0.40);
+    par {
+      cam((cx, cy), 0.75, smooth);
+      zoom(1.025, 0.75, smooth);
+    }
+  }
+}
+wait(0.35);
+
+step("run-the-experiment") {
+  par {
+    emit(molecules, flight, maxwell, 7.0, 48, smooth);
+    collect(empirical, molecules, speed, 0.48, smooth);
+    observe(empirical, molecules, speed);
+    observe(arrivals, molecules, arrived);
+    show(molecules, 0.15);
+    say(caption,
+      "Each molecule keeps its sampled speed. Faster molecules cross the apparatus sooner.",
+      0.45);
+  }
+}
+wait(0.55);
+
+step("motion-becomes-evidence") {
+  par {
+    pulse(empirical.bars, 0.8);
+    show(evidencePanel, 0.40);
+    show(evidenceTitle, 0.35);
+    show(processLaw, 0.45);
+    show(truth, 0.40);
+    say(caption,
+      "Collection does not fake the chart: every arrival lands in the bin selected by its speed.",
+      0.45);
+    par {
+      cam((cx, cy), 0.65, smooth);
+      zoom(1.0, 0.65, smooth);
+    }
+  }
+}
+wait(1.4);
+</code></pre>
+<h2 id="parameterized-fields-change-the-rule-then-release-the-tracers"><a class="header" href="#parameterized-fields-change-the-rule-then-release-the-tracers">Parameterized fields: change the rule, then release the tracers</a></h2>
+<p>A field is ordinary visible Manic geometry. Keep a familiar named field, or
+replace its components with formulas in mathematical coordinates:</p>
+<pre><code class="language-manic">vectorfield(flow, (640,365), 375,190, uniform, 17);
+parameter(mix, (640,610), 0, 0, 1, "vortex mix", 2);
+bind(mix, flow, formula, "(1-p)*1.15-p*y", "p*x");
+
+step("wind-becomes-vortex") {
+  to(mix, value, 1, 2.5, smooth);
+}
+step("release-tracers") {
+  advect(tracers, flow, 4.4, 0.78);
+}
+</code></pre>
+<p>Here <code>x</code> and <code>y</code> are field coordinates and <code>p</code> is the parameter. Every arrow
+updates from the same formula. <code>advect</code> then compiles each persistent tracer’s
+journey through the settled field, so preview, recording, and direct seeking
+agree. The optional rate controls distance travelled without changing the beat
+duration. Reaching the field boundary safely stops a tracer.</p>
+<p>This first slice intentionally does not infer fluid mechanics, collision
+behavior, obstacles, or domain meaning. It gives creators one reusable visual
+relationship.</p>
+<pre><code class="language-manic">// PARAMETERIZED VECTOR FIELD — one value changes the whole field.
+// The same settled field then moves a persistent tracer collection. No frame
+// callbacks and no manually authored particle paths are involved.
+
+title("From Wind to Vortex");
+canvas("16:9");
+template("mono");
+watermark(mark, (170, 55), "Made With Manic");
+
+text(kicker, (640, 48), "MANIC · PARAMETERIZED FIELD");
+text(headline, (640, 94), "One parameter reshapes every arrow");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+rect(chamber, (640, 365), 780, 410);
+outlined(chamber); outline(chamber, dim); stroke(chamber, 3);
+
+// The initial named field supplies a clear first state. `bind` then gives it
+// formula components where x,y are field coordinates and p is the parameter.
+vectorfield(flow, (640, 365), 375, 190, uniform, 17);
+parameter(mix, (640, 610), 0, 0, 1, "vortex mix", 2);
+bind(mix, flow, formula, "(1-p)*1.15-p*y", "p*x");
+
+circle(seed, (640, 365), 128);
+outlined(seed); outline(seed, dim); dashed(seed, 10, 9);
+particles(tracers, seed, 32, 5, 31, "random");
+color(tracers, fg); glow(tracers, 0.55);
+
+text(caption, (640, 678), "p = 0: steady wind");
+size(caption, 20); color(caption, dim);
+
+untraced(flow); hidden(seed); hidden(tracers);
+
+step("reveal-the-field") {
+  par {
+    draw(flow, 0.9);
+    show(seed, 0.4);
+    show(tracers, 0.55);
+  }
+}
+wait(0.5);
+
+step("wind-becomes-vortex") {
+  par {
+    to(mix, value, 1, 2.5, smooth);
+    say(caption, "p = 1: the same field turns into a vortex", 0.4);
+  }
+}
+wait(0.55);
+
+step("release-tracers") {
+  par {
+    advect(tracers, flow, 4.4, 0.78);
+    say(caption, "The dots follow the settled field — their paths were never drawn.", 0.4);
+  }
+}
+wait(1.2);
+</code></pre>
+<p>The same vocabulary can tell an optimization story without teaching the engine
+what “gradient descent” means:</p>
+<pre><code class="language-manic">// GRADIENT DESCENT AS A LEARNING STORY
+// Twelve guesses begin without the answer. Every arrow supplies one local
+// correction, and the same authored field carries all of them to one minimum.
+
+title("How a Wrong Guess Learns");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"GRADIENT DESCENT · LEARNING AS MOTION");
+text(headline,(cx,h*0.125),"How does a wrong guess find the minimum?");
+text(chapter,(cx,h*0.265),"1 · START ANYWHERE");
+text(caption,(cx,h*0.78),"Twelve guesses begin with no map of the whole landscape.");
+text(result,(cx,h*0.715),"12 STARTING POINTS  →  1 SHARED MINIMUM");
+text(cta,(cx,h*0.91),"MAKE LEARNING VISIBLE → 8gwifi.org/manic");
+
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,32); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(chapter,19); color(chapter,cyan); bold(chapter); hidden(chapter);
+size(caption,21); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(result,19); color(result,lime); bold(result); hidden(result);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+equation(lossRule,(cx,h*0.205),`L(x,y)=\frac{1}{2}x^2+y^2`);
+size(lossRule,34); color(lossRule,fg); hidden(lossRule);
+
+let fieldY = h*0.49;
+rect(domain,(cx,fieldY),w*0.82,h*0.40);
+outlined(domain); outline(domain,dim); stroke(domain,3);
+hidden(domain);
+
+// -grad L = (-x,-2y). The gentler vertical coefficient keeps the motion
+// readable while preserving the elliptical convergence of the loss bowl.
+vectorfield(descent,(cx,fieldY),w*0.37,h*0.175,"-x","-1.6*y",17);
+untraced(descent);
+
+circle(starts,(cx,fieldY),w*0.255);
+outlined(starts); outline(starts,dim); dashed(starts,12,10);
+hidden(starts);
+
+particles(guesses,starts,12,8,73,"ring");
+color(guesses,magenta); glow(guesses,0.78);
+hidden(guesses);
+
+circle(minimum,(cx,fieldY),14);
+filled(minimum); color(minimum,lime); glow(minimum,1.0);
+hidden(minimum);
+
+circle(targetRing,(cx,fieldY),44);
+outlined(targetRing); outline(targetRing,lime); stroke(targetRing,3);
+hidden(targetRing);
+
+text(minLabel,(cx,fieldY+74),"minimum");
+size(minLabel,19); color(minLabel,lime); bold(minLabel); hidden(minLabel);
+
+step("begin with imperfect guesses") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(lossRule,0.45);
+    show(chapter,0.35);
+    show(caption,0.40);
+    show(domain,0.45);
+    show(starts,0.45);
+    show(guesses,0.60);
+  }
+}
+wait(0.65);
+
+step("reveal one local clue everywhere") {
+  par {
+    draw(descent,1.10);
+    fade(starts,0.45);
+    say(chapter,"2 · READ THE LOCAL SLOPE",0.35);
+    say(caption,"Every arrow gives one instruction: move opposite the local gradient.",0.42);
+  }
+}
+wait(0.55);
+
+step("improve one small step at a time") {
+  par {
+    advect(guesses,descent,6.80,0.32);
+    seq {
+      say(chapter,"3 · FOLLOW THE CORRECTIONS",0.35);
+      say(caption,"Far away, the correction is large. Near the bottom, each adjustment becomes smaller.",0.42);
+      wait(3.05);
+      say(caption,"Different starting points take different journeys—but obey the same rule.",0.42);
+    }
+  }
+}
+wait(0.55);
+
+step("discover the shared destination") {
+  par {
+    show(minimum,0.35);
+    show(targetRing,0.40);
+    show(minLabel,0.35);
+    show(result,0.45);
+    say(chapter,"4 · ARRIVE WITHOUT TELEPORTING",0.35);
+    say(caption,"Gradient descent is not a jump to the answer. It is repeated, measured improvement.",0.42);
+    seq {
+      pulse(targetRing,0.70);
+      pulse(guesses,0.70);
+    }
+  }
+}
+wait(0.75);
+
+step("create with Manic") {
+  par {
+    pulse(minimum,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the rule once. Manic keeps every guess, arrow, correction, and learning step connected.",0.45);
+  }
+}
+wait(1.45);
+</code></pre>
 <h2 id="manic-does-not-infer-the-subject"><a class="header" href="#manic-does-not-infer-the-subject">Manic does not infer the subject</a></h2>
 <p>An icon, label, or filename never changes motion semantics. Manic does not know
 that an object represents a load balancer, queue, topic, photon, vehicle, blood
@@ -260,7 +1050,16 @@ geometry. Both paths settle on the exact target geometry and styling while the
 source id remains alive. A hidden blueprint does not make the transformed
 source disappear, and the blueprint’s own visibility is never changed.</p>
 <p>Use <code>rewrite</code> for equations because it understands matching LaTeX visual parts.
-Use <code>morph</code> plus <code>to(..., morph, ...)</code> when you explicitly need a fraction-driven
+After the mathematical transformation has settled, <code>disintegrate(eq, 1.2)</code> can
+release the rendered equation as deterministic dust. It samples the actual
+alpha silhouette; it is not a rectangular confetti overlay. The same treatment
+also works on images and vector shapes, so it remains motion-graphics
+vocabulary rather than a math-only effect.</p>
+<pre><code class="language-manic">equation(work,(cx,cy),`\int_0^1 3x^2\,dx`,64);
+rewrite(work,`\left[x^3\right]_0^1=1`,1.0,smooth);
+disintegrate(work,1.3);
+</code></pre>
+<p>Use <code>morph</code> plus <code>to(..., morph, ...)</code> when you explicitly need a fraction-driven
 point morph or winding angle.</p>
 <h2 id="turn--rotate-the-system-not-every-member"><a class="header" href="#turn--rotate-the-system-not-every-member"><code>turn</code> — rotate the system, not every member</a></h2>
 <pre><code class="language-manic">circle(orbit, (540,700), 220); hidden(orbit);

@@ -1,5 +1,5 @@
 {
-  "count": 271,
+  "count": 289,
   "categories": [
     {
       "slug": "algorithms",
@@ -504,6 +504,18 @@
           "desc": "Why entropy only grows, in five vignettes: gas particles mixing into far more microstates, heat flowing until two sides equalize, free expansion into new volume, a heat engine that must dump waste heat, and the reversible-vs-irreversible limit."
         },
         {
+          "name": "maxwell-boltzmann-process",
+          "file": "maxwell-boltzmann-process.manic",
+          "title": "Maxwell boltzmann process",
+          "desc": "A seeded reservoir releases persistent molecules along one authored path while the same compiled process grows an empirical speed histogram and arrival count."
+        },
+        {
+          "name": "maxwell-boltzmann-effusion-v2",
+          "file": "maxwell-boltzmann-effusion-v2.manic",
+          "title": "Maxwell boltzmann effusion v2",
+          "desc": "Expressive Process V2: 180 persistent molecules receive deterministic Maxwell-distributed speeds, traverse sooner when faster, and visibly settle into their measured bins."
+        },
+        {
           "name": "timing-v2-scene",
           "file": "timing-v2-scene.manic",
           "title": "Timing v2 scene",
@@ -930,6 +942,18 @@
           "desc": "A magnitude-coloured vector field."
         },
         {
+          "name": "parameterized-field-advection",
+          "file": "parameterized-field-advection.manic",
+          "title": "Parameterized field advection",
+          "desc": "One parameter smoothly deforms a persistent vector field from steady wind into a vortex."
+        },
+        {
+          "name": "gradient-descent-field",
+          "file": "gradient-descent-field.manic",
+          "title": "Gradient descent field",
+          "desc": "Twelve imperfect guesses begin without the answer."
+        },
+        {
           "name": "coordinates",
           "file": "coordinates.manic",
           "title": "Coordinates",
@@ -1168,6 +1192,24 @@
           "file": "particles-flow.manic",
           "title": "Particles flow",
           "desc": "Contained ambient motion and live curved connections in four generic words: particles, wander, link, and flow."
+        },
+        {
+          "name": "process-stream-observe",
+          "file": "process-stream-observe.manic",
+          "title": "Process stream observe",
+          "desc": "One deterministic collection journey drives two truthful views."
+        },
+        {
+          "name": "process-branching-dispatch",
+          "file": "process-branching-dispatch.manic",
+          "title": "Process branching dispatch",
+          "desc": "One source dispatches persistent requests through an authored one-of-three path network."
+        },
+        {
+          "name": "galton-board-process",
+          "file": "galton-board-process.manic",
+          "title": "Galton board process",
+          "desc": "One uncertain fork becomes eight left-or-right choices, then 180 persistent balls reveal why many more routes terminate near the center."
         },
         {
           "name": "hue_wave",
@@ -1450,6 +1492,72 @@
           "file": "three-d-v2-lab.manic",
           "title": "Three d v2 lab",
           "desc": "A creator-first spatial lab: safe-aware framing, rigid assembly, a live projection and edge, a moving route, surface contour, depth-scaled label, bounded finishes, variable tube, and controlled OBJ geometry in one continuous story."
+        },
+        {
+          "name": "parameterized-generated-families3",
+          "file": "parameterized-generated-families3.manic",
+          "title": "Parameterized generated families3",
+          "desc": "The compact generated-family reference: one ordinary parameter continuously changes a helix, height field, and torus while every object keeps its id, sample topology, material, and timeline identity."
+        },
+        {
+          "name": "creator-bowl-to-saddle",
+          "file": "creator-bowl-to-saddle.manic",
+          "title": "Creator bowl to saddle",
+          "desc": "A vertical calculus Short asks when a bowl loses one direction of curvature."
+        },
+        {
+          "name": "story-living-dependency-cloud",
+          "file": "story-living-dependency-cloud.manic",
+          "title": "Story living dependency cloud",
+          "desc": "A living dependency cloud grows, links itself by nearest neighbours, and drifts as one batched 3D cast."
+        },
+        {
+          "name": "story-dependent-chain-history",
+          "file": "story-dependent-chain-history.manic",
+          "title": "Story dependent chain history",
+          "desc": "An articulated signal arm is generated as one dependent chain: every endpoint begins at the previous endpoint, while the tip leaves a truthful history of its real route."
+        },
+        {
+          "name": "fourier-series-live-wave",
+          "file": "fourier-series-live-wave.manic",
+          "title": "Fourier series live wave",
+          "desc": "Twelve visible orbit rings form one epicycle chain while historyplot3 turns every endpoint's exact y-history into a coloured partial sum across two complete periods\u2014one continuous motion, one source of truth."
+        },
+        {
+          "name": "definedmotion-fourier-gallery",
+          "file": "definedmotion-fourier-gallery.manic",
+          "title": "Definedmotion fourier gallery",
+          "desc": "Five depth-stacked Fourier families rotate at once while twenty coloured ring3 orbits drive twenty world-space partial histories per family."
+        },
+        {
+          "name": "fourier-square-wave-live",
+          "file": "fourier-square-wave-live.manic",
+          "title": "Fourier square wave live",
+          "desc": "Thirteen orbit rings add odd harmonics 1 through 25."
+        },
+        {
+          "name": "growing-fractal-tree3",
+          "file": "growing-fractal-tree3.manic",
+          "title": "Growing fractal tree3",
+          "desc": "One seeded split-turn-shrink rule grows 1,023 branches."
+        },
+        {
+          "name": "latex-disintegration",
+          "file": "latex-disintegration.manic",
+          "title": "Latex disintegration",
+          "desc": "A quadratic factors into two solutions, then those symbols become persistent points at 2 and 3."
+        },
+        {
+          "name": "story-time-varying-field3",
+          "file": "story-time-varying-field3.manic",
+          "title": "Story time varying field3",
+          "desc": "A seed cloud enters a 3D vector field whose formula changes with normalized time."
+        },
+        {
+          "name": "story-addressable-asset-cues",
+          "file": "story-addressable-asset-cues.manic",
+          "title": "Story addressable asset cues",
+          "desc": "A grouped console OBJ becomes an addressable technical assembly."
         },
         {
           "name": "trapped-light-dimensions",

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-566c6724.js";
+            window.path_to_searchindex_js = "searchindex-7b7e6410.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-74e98ac0.js"></script>
@@ -379,6 +379,302 @@ par {
 }
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/kP9NDdzwoSA" title="Tiny Particles, Curved Links & Flow — Four Generic Words in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="process-stream-observe"><a class="header" href="#process-stream-observe">process-stream-observe</a></h2>
+<p>One deterministic collection journey drives two truthful views. <code>stream</code> progressively
+moves persistent objects; <code>observe</code> connects the same arrival/speed measurements to a
+counter and an initially empty <code>livehistogram</code> without callbacks or guessed keyframes.</p>
+<pre><code class="language-manic">// PROCESS FOUNDATION — the smallest complete example.
+// A real persistent collection streams along a path. Both observers read the
+// compiled process measurements; neither is animated with guessed values.
+
+title("A Collection Becomes a Process");
+canvas("16:9");
+template("blank");
+watermark(mark, (170, 58), "Made With Manic");
+
+text(kicker, (640, 52), "MANIC · DETERMINISTIC PROCESS");
+text(headline, (640, 100), "One journey. Two truthful views.");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+rect(source, (170, 300), 210, 230);
+outlined(source); outline(source, dim); stroke(source, 3);
+text(sourceLabel, (170, 440), "persistent collection");
+size(sourceLabel, 18); color(sourceLabel, dim);
+particles(packets, source, 42, 5, 17);
+
+spline(route, (275, 300), (410, 140), (560, 470), (720, 285));
+stroke(route, 4); color(route, fg); untraced(route);
+
+livehistogram(speeds, (980, 335), 0.55, 1.05, 10, 430, 220, cyan);
+text(speedLabel, (980, 190), "normalized speed");
+size(speedLabel, 20); bold(speedLabel);
+
+counter(arrivals, (640, 610), 0, 0, "arrived ", " / 42");
+size(arrivals, 25); color(arrivals, dim);
+text(caption, (640, 665), "stream moves real objects · observe reads the same process");
+size(caption, 20); color(caption, dim);
+
+hidden(packets); hidden(speeds); hidden(arrivals); hidden(caption);
+
+step("introduce") {
+  par {
+    show(packets, 0.45);
+    draw(route, 0.65);
+    show(speeds, 0.45);
+    show(arrivals, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.35);
+
+step("stream-and-observe") {
+  par {
+    stream(packets, route, 4.2, 34, smooth);
+    observe(speeds, packets, speed);
+    observe(arrivals, packets, arrived);
+  }
+}
+wait(1.0);
+
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/x0a0a25MG2M" title="One Journey, Two Truthful Views — Deterministic Processes in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="process-branching-dispatch"><a class="header" href="#process-branching-dispatch">process-branching-dispatch</a></h2>
+<p>One source dispatches persistent requests through an authored one-of-three path network.
+The destination histogram reads each request’s real seeded <code>outcome</code>; no service semantics
+or separately timed chart animation are hidden in the engine.</p>
+<pre><code class="language-manic">// GENERIC PROCESS BRANCHING — one source, three destinations.
+//
+// The paths carry no service semantics. `branch` only sees a directed acyclic
+// network and makes one deterministic uniform choice at every fork. The same
+// foundation drives the Galton-board example.
+
+title("Process Branching — One Source, Three Destinations");
+canvas("16:9");
+template("blank");
+watermark(mark, (145, 70), "Made With Manic");
+
+text(head, (cx, 72), "One collection · many truthful routes");
+text(sub, (cx, 112),
+  "Every request keeps its identity, destination, step count, and arrival time.");
+size(head, 32); bold(head);
+size(sub, 19); color(sub, dim);
+
+circle(source, (180, 340), 24);
+color(source, panel); outline(source, cyan); stroke(source, 3);
+particles(requests, source, 54, 4, 41);
+color(requests, cyan); glow(requests, 0.7); z(requests, 8);
+
+line(entry, (205, 340), (420, 340)); tag(entry, dispatchRoutes);
+spline(upper, (420, 340), (530, 190), (680, 185)); tag(upper, dispatchRoutes);
+line(middle, (420, 340), (680, 340)); tag(middle, dispatchRoutes);
+spline(lower, (420, 340), (530, 490), (680, 495)); tag(lower, dispatchRoutes);
+color(dispatchRoutes, dim); stroke(dispatchRoutes, 3); untraced(dispatchRoutes);
+
+rect(worker0, (735, 185), 150, 82);
+rect(worker1, (735, 340), 150, 82);
+rect(worker2, (735, 495), 150, 82);
+for i in 0..3 {
+  color(worker{i}, panel); outline(worker{i}, cyan); stroke(worker{i}, 2);
+}
+text(w0, (735, 185), "worker 0");
+text(w1, (735, 340), "worker 1");
+text(w2, (735, 495), "worker 2");
+size(w0, 18); size(w1, 18); size(w2, 18);
+
+livehistogram(destinations, (1030, 350), 0, 3, 3, 330, 300, magenta);
+text(histTitle, (1030, 170), "DESTINATION OUTCOME");
+size(histTitle, 19); bold(histTitle); color(histTitle, dim);
+counter(arrived, (1030, 555), 0, 0, "arrived  ", " / 54");
+size(arrived, 21); color(arrived, dim);
+
+text(caption, (cx, 650),
+  "The diagram and histogram are two views of the same seeded dispatch.");
+size(caption, 21); color(caption, dim);
+
+hidden(requests); hidden(destinations); hidden(arrived); hidden(caption);
+
+step("network") {
+  par {
+    draw(dispatchRoutes, 0.75);
+    show(requests, 0.35);
+    show(destinations, 0.45);
+    show(arrived, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.35);
+
+step("dispatch") {
+  par {
+    branch(requests, dispatchRoutes, 5.0, smooth);
+    observe(destinations, requests, outcome);
+    observe(arrived, requests, arrived);
+    flow(dispatchRoutes, 5.0, forward, continuous);
+  }
+}
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2hFNdjRjNxA" title="One Source, Three Destinations — Truthful Branching in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="galton-board-process"><a class="header" href="#galton-board-process">galton-board-process</a></h2>
+<p>One uncertain fork becomes eight left-or-right choices, then 180 persistent balls reveal
+why many more routes terminate near the center. The same real arrivals build the live
+bell-shaped histogram before a creator CTA closes the probability story.</p>
+<pre><code class="language-manic">// GALTON BOARD — RANDOM LOCALLY, PREDICTABLE GLOBALLY
+//
+// This is a probability story built from generic process vocabulary. Ordinary
+// tagged lines form the board; `branch` preserves each ball through eight
+// choices; `collect` and `observe` build the distribution from real arrivals.
+
+title("How Random Choices Become a Bell Curve");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.042),"Made With Manic");
+text(kicker,(cx,h*0.070),"PROBABILITY · RANDOM LOCALLY, ORDERED GLOBALLY");
+text(headline,(cx,h*0.115),"Can random choices create a predictable shape?");
+text(chapter,(cx,h*0.195),"1 · BEGIN WITH ONE FORK");
+text(caption,(cx,h*0.855),"One ball can land almost anywhere.");
+text(insight,(cx,h*0.815),"MORE ROUTES LEAD TO THE CENTER");
+text(cta,(cx,h*0.930),"MAKE PROBABILITY VISIBLE → 8gwifi.org/manic");
+
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(chapter,19); color(chapter,cyan); bold(chapter); hidden(chapter);
+size(caption,21); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(insight,19); color(insight,lime); bold(insight); hidden(insight);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+equation(law,(cx,h*0.158),`X\sim\operatorname{Binomial}\!\left(8,\frac12\right)`,29);
+hidden(law);
+
+let levels = 8;
+let boardX = cx;
+let topY = h*0.235;
+let dx = w*0.065;
+let dy = h*0.034;
+
+// Every directed edge joins one row to the next. Converging endpoints create
+// the ordinary rooted DAG followed by `branch`.
+for r in 0..levels {
+  for k in 0..r+1 {
+    let x1 = boardX + (k-r*0.5)*dx;
+    let y1 = topY + r*dy;
+    let xl = boardX + (k-(r+1)*0.5)*dx;
+    let xr = boardX + (k+1-(r+1)*0.5)*dx;
+    let y2 = topY + (r+1)*dy;
+
+    line(left{r}_{k},(x1,y1),(xl,y2));
+    line(right{r}_{k},(x1,y1),(xr,y2));
+    tag(left{r}_{k},boardRoutes); tag(right{r}_{k},boardRoutes);
+    color(left{r}_{k},dim); color(right{r}_{k},dim);
+    stroke(left{r}_{k},1.7); stroke(right{r}_{k},1.7);
+    opacity(left{r}_{k},0.30); opacity(right{r}_{k},0.30);
+
+    dot(peg{r}_{k},(x1,y1),4.8);
+    color(peg{r}_{k},fg); glow(peg{r}_{k},0.36); tag(peg{r}_{k},pegs);
+  }
+}
+untraced(boardRoutes);
+
+for k in 0..levels+1 {
+  let tx = boardX + (k-levels*0.5)*dx;
+  let ty = topY + levels*dy;
+  dot(exit{k},(tx,ty),5);
+  color(exit{k},gold); glow(exit{k},0.45); tag(exit{k},exits);
+  counter(bin{k},(tx,ty+28),k,0);
+  size(bin{k},15); color(bin{k},dim); tag(bin{k},exitLabels);
+}
+
+text(leftChoice,(boardX-dx*0.72,topY+dy*0.72),"LEFT");
+text(rightChoice,(boardX+dx*0.72,topY+dy*0.72),"RIGHT");
+size(leftChoice,15); size(rightChoice,15);
+color(leftChoice,cyan); color(rightChoice,magenta);
+hidden(leftChoice); hidden(rightChoice);
+
+circle(source,(boardX,topY),13);
+opacity(source,0);
+particles(balls,source,180,4.0,73);
+color(balls,cyan); glow(balls,0.78); z(balls,9);
+
+let histY = h*0.695;
+livehistogram(outcomes,(cx,histY),0,9,9,w*0.76,h*0.155,magenta);
+text(histTitle,(cx,h*0.595),"WHERE 180 BALLS ACTUALLY LANDED");
+size(histTitle,18); bold(histTitle); color(histTitle,dim);
+counter(landed,(cx,h*0.785),0,0,"landed  "," / 180");
+size(landed,21); color(landed,dim);
+
+hidden(pegs); hidden(exits); hidden(exitLabels);
+hidden(balls); hidden(outcomes); hidden(histTitle); hidden(landed);
+
+step("introduce one uncertain choice") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(law,0.45);
+    show(chapter,0.35);
+    show(caption,0.40);
+    draw(boardRoutes,0.90);
+    show(pegs,0.55);
+    show(exits,0.45);
+    show(exitLabels,0.45);
+    show(leftChoice,0.35);
+    show(rightChoice,0.35);
+  }
+}
+wait(0.60);
+
+step("repeat the choice eight times") {
+  par {
+    show(outcomes,0.50);
+    show(histTitle,0.35);
+    show(landed,0.35);
+    say(chapter,"2 · REPEAT LEFT OR RIGHT EIGHT TIMES",0.38);
+    say(caption,"At every peg, each ball makes another equally likely left-or-right choice.",0.44);
+  }
+}
+wait(0.55);
+
+step("let the crowd reveal the pattern") {
+  par {
+    branch(balls,boardRoutes,8.20,smooth);
+    collect(outcomes,balls,outcome,0.34,smooth);
+    observe(outcomes,balls,outcome);
+    observe(landed,balls,arrived);
+    show(balls,0.15);
+    seq {
+      say(chapter,"3 · WATCH 180 INDIVIDUAL JOURNEYS",0.38);
+      say(caption,"One route is unpredictable. The crowd begins to expose a stable pattern.",0.44);
+      wait(3.40);
+      say(caption,"Every bar is measured from the same balls you see falling—not animated separately.",0.44);
+    }
+  }
+}
+wait(0.65);
+
+step("explain why the center wins") {
+  par {
+    pulse(outcomes.bars,0.80);
+    show(insight,0.45);
+    say(chapter,"4 · ORDER EMERGES FROM MANY CHOICES",0.38);
+    say(caption,"Extreme bins need nearly all-left or all-right. Many more mixed sequences end near the center.",0.48);
+  }
+}
+wait(0.75);
+
+step("create with Manic") {
+  par {
+    pulse(outcomes.bars,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the choices once. Manic keeps every route, arrival, count, and live distribution connected.",0.45);
+  }
+}
+wait(1.45);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4BlFvp8yj2Q" title="How Random Choices Become a Bell Curve — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="hue_wave"><a class="header" href="#hue_wave">hue_wave</a></h2>
 <p>An animated hue wave across a grid.</p>

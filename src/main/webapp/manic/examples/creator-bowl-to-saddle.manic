@@ -1,0 +1,86 @@
+// CREATOR SHORT — a real calculus problem told through one continuously
+// deforming surface. The shape is not replaced between the bowl, threshold,
+// and saddle states.
+
+title("When Does a Bowl Become a Saddle?");
+canvas("9:16");
+template("paper");
+
+creator(me, "@anish2good name=Manic_Math tagline=Equations_that_move yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Create_your_own safe=reels");
+socials(me);
+watermark(mark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+text(kicker, (540, 164), "A 20-SECOND CALCULUS STORY");
+text(headline, (540, 226), "When does a bowl stop being a bowl?");
+text(problem, (540, 292), "Find the exact value of p where one curvature disappears.");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+size(headline, 38); bold(headline); wrap(headline, 880); hidden(headline);
+size(problem, 22); color(problem, dim); wrap(problem, 840); hidden(problem);
+
+equation(rule, (540, 378), `z=0.22x^2+0.22(1-2p)y^2`, 39);
+hidden(rule);
+
+parameter(mix, (540, 1270), 0, 0, 1, "p", 2);
+
+camera3((8.5, -11.5, 7.5), (0, 0, 0), 41);
+surface3(world, "0.22*(x*x+y*y)", (-3,3), (-3,3), 34);
+bind(mix, world, formula, "0.22*x*x + 0.22*(1-2*p)*y*y");
+color(world, cyan);
+finish3(world, "material=glass shading=smooth mesh=0.34 depth=0.34 shadow=0.16");
+hidden(world);
+
+text(chapter, (540, 1352), "p = 0 · positive curvature in both directions");
+text(insight, (540, 1422), "Watch the coefficient of y².");
+text(cta, (540, 1398), "Build the transformation, not the keyframes.");
+text(link, (540, 1452), "TRY MANIC → 8gwifi.org/manic");
+size(chapter, 23); bold(chapter); color(chapter, fg); wrap(chapter, 850); hidden(chapter);
+size(insight, 21); color(insight, dim); hidden(insight);
+size(cta, 23); bold(cta); hidden(cta);
+size(link, 20); bold(link); color(link, cyan); hidden(link);
+
+step("pose the problem") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.50);
+    show(problem, 0.45);
+    show(rule, 0.55);
+    show(world, 0.65);
+    show(chapter, 0.40);
+    show(insight, 0.40);
+    view3(world, "isometric", 0.9, smooth, 1.62);
+  }
+}
+wait(0.65);
+
+step("reach the turning point") {
+  par {
+    to(mix, value, 0.5, 2.8, smooth);
+    say(chapter, "p = ½ · the y² coefficient becomes zero", 0.45);
+    say(insight, "At this instant the bowl becomes a one-directional trough.", 0.45);
+    rewrite(rule, `p=\frac12\quad\Longrightarrow\quad z=0.22x^2`, 1.10, smooth);
+    orbit3(-45, 28, 16.2, 2.8, smooth);
+  }
+}
+wait(0.75);
+
+step("cross into a saddle") {
+  par {
+    to(mix, value, 1, 2.8, smooth);
+    say(chapter, "p > ½ · one curvature turns negative", 0.45);
+    say(insight, "The same persistent surface is now a saddle.", 0.45);
+    rewrite(rule, `p=1\quad\Longrightarrow\quad z=0.22(x^2-y^2)`, 1.10, smooth);
+    orbit3(-62, 25, 16.2, 2.8, smooth);
+  }
+}
+wait(0.65);
+
+step("answer and invite") {
+  par {
+    say(problem, "Answer: p = ½ is the exact transition.", 0.50);
+    fade(chapter, 0.35);
+    fade(insight, 0.35);
+    show(cta, 0.45);
+    show(link, 0.45);
+  }
+}
+wait(1.8);

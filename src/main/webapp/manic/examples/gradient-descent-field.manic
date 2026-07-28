@@ -1,0 +1,116 @@
+// GRADIENT DESCENT AS A LEARNING STORY
+// Twelve guesses begin without the answer. Every arrow supplies one local
+// correction, and the same authored field carries all of them to one minimum.
+
+title("How a Wrong Guess Learns");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"GRADIENT DESCENT · LEARNING AS MOTION");
+text(headline,(cx,h*0.125),"How does a wrong guess find the minimum?");
+text(chapter,(cx,h*0.265),"1 · START ANYWHERE");
+text(caption,(cx,h*0.78),"Twelve guesses begin with no map of the whole landscape.");
+text(result,(cx,h*0.715),"12 STARTING POINTS  →  1 SHARED MINIMUM");
+text(cta,(cx,h*0.91),"MAKE LEARNING VISIBLE → 8gwifi.org/manic");
+
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,32); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(chapter,19); color(chapter,cyan); bold(chapter); hidden(chapter);
+size(caption,21); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(result,19); color(result,lime); bold(result); hidden(result);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+equation(lossRule,(cx,h*0.205),`L(x,y)=\frac{1}{2}x^2+y^2`);
+size(lossRule,34); color(lossRule,fg); hidden(lossRule);
+
+let fieldY = h*0.49;
+rect(domain,(cx,fieldY),w*0.82,h*0.40);
+outlined(domain); outline(domain,dim); stroke(domain,3);
+hidden(domain);
+
+// -grad L = (-x,-2y). The gentler vertical coefficient keeps the motion
+// readable while preserving the elliptical convergence of the loss bowl.
+vectorfield(descent,(cx,fieldY),w*0.37,h*0.175,"-x","-1.6*y",17);
+untraced(descent);
+
+circle(starts,(cx,fieldY),w*0.255);
+outlined(starts); outline(starts,dim); dashed(starts,12,10);
+hidden(starts);
+
+particles(guesses,starts,12,8,73,"ring");
+color(guesses,magenta); glow(guesses,0.78);
+hidden(guesses);
+
+circle(minimum,(cx,fieldY),14);
+filled(minimum); color(minimum,lime); glow(minimum,1.0);
+hidden(minimum);
+
+circle(targetRing,(cx,fieldY),44);
+outlined(targetRing); outline(targetRing,lime); stroke(targetRing,3);
+hidden(targetRing);
+
+text(minLabel,(cx,fieldY+74),"minimum");
+size(minLabel,19); color(minLabel,lime); bold(minLabel); hidden(minLabel);
+
+step("begin with imperfect guesses") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(lossRule,0.45);
+    show(chapter,0.35);
+    show(caption,0.40);
+    show(domain,0.45);
+    show(starts,0.45);
+    show(guesses,0.60);
+  }
+}
+wait(0.65);
+
+step("reveal one local clue everywhere") {
+  par {
+    draw(descent,1.10);
+    fade(starts,0.45);
+    say(chapter,"2 · READ THE LOCAL SLOPE",0.35);
+    say(caption,"Every arrow gives one instruction: move opposite the local gradient.",0.42);
+  }
+}
+wait(0.55);
+
+step("improve one small step at a time") {
+  par {
+    advect(guesses,descent,6.80,0.32);
+    seq {
+      say(chapter,"3 · FOLLOW THE CORRECTIONS",0.35);
+      say(caption,"Far away, the correction is large. Near the bottom, each adjustment becomes smaller.",0.42);
+      wait(3.05);
+      say(caption,"Different starting points take different journeys—but obey the same rule.",0.42);
+    }
+  }
+}
+wait(0.55);
+
+step("discover the shared destination") {
+  par {
+    show(minimum,0.35);
+    show(targetRing,0.40);
+    show(minLabel,0.35);
+    show(result,0.45);
+    say(chapter,"4 · ARRIVE WITHOUT TELEPORTING",0.35);
+    say(caption,"Gradient descent is not a jump to the answer. It is repeated, measured improvement.",0.42);
+    seq {
+      pulse(targetRing,0.70);
+      pulse(guesses,0.70);
+    }
+  }
+}
+wait(0.75);
+
+step("create with Manic") {
+  par {
+    pulse(minimum,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the rule once. Manic keeps every guess, arrow, correction, and learning step connected.",0.45);
+  }
+}
+wait(1.45);

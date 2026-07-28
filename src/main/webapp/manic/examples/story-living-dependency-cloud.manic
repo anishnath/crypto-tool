@@ -1,0 +1,50 @@
+title("The Dependency Cloud That Refuses to Freeze");
+canvas("9:16");
+template("paper");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · BATCHED RELATIONSHIPS");
+text(headline, (cx, h*0.13), "Can 180 dependencies move as one idea?");
+text(caption, (cx, h*0.82), "One collection. Stable children. Every relationship stays truthful.");
+size(kicker, 20); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+camera3((14,-20,13),(0,0,0),46);
+collection3(services,(0,0,0),180,(4.2,2.6,2.2),41,0.055);
+links3(dependencies,services,nearest,2);
+color(services,cyan);
+color(dependencies,dim);
+hidden(services);
+hidden(dependencies);
+
+step("the-problem") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+}
+wait(0.45);
+
+step("the-system-awakens") {
+  par {
+    show(services,0.65);
+    show(dependencies,0.85);
+    say(caption,"The engine batches the repeated geometry but preserves every indexed identity.",0.45);
+  }
+}
+wait(0.35);
+
+step("relationships-remain-live") {
+  par {
+    drift3(services,6.0,0.42);
+    orbit3(35,24,28.0,6.0,smooth);
+    say(caption,"As the nodes drift, the nearest-neighbour graph is derived again from the same state.",0.45);
+  }
+}
+wait(0.45);
+
+step("takeaway") {
+  pulse(services,0.7);
+  say(caption,"Large dependency scenes become one creator intention—not hundreds of scripts.",0.45);
+}
+wait(1.2);

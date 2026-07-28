@@ -10,9 +10,11 @@ with releases and can be addressed from a `.manic` file with a stable
 |---|---|---|
 | `asset:manic-logo.png` | PNG | The Manic mark in `image(...)` scenes or a Creator `logo=` field |
 | `asset:models/manic-pyramid.obj` | geometry-only OBJ | A small generic pyramid for `model3` examples, prototypes, and spatial stories |
+| `asset:models/manic-console.obj` | grouped geometry-only OBJ | A small `base`/`screen`/`key` assembly for `assembly3`, part callouts, and staged technical stories |
+| `asset:svg/physics/effusion-reservoir.svg` | native vector SVG | A reusable thermal-reservoir/nozzle shell for process and statistical-mechanics stories |
 | `asset:diagrams/aws/...` | PNG/SVG source package | Experimental Systems Kit PoC; official AWS Architecture Icons, accessed through stable kit names rather than authored paths |
 
-The Manic logo and pyramid were authored for this project and are covered by
+The Manic logo, pyramid, and console were authored for this project and are covered by
 the repository license. The AWS package is third-party official diagram artwork;
 see `diagrams/aws/README.md` for provenance and usage constraints. OBJ imports
 remain subject to Manic's file-size and geometry limits. Files under `fonts/`

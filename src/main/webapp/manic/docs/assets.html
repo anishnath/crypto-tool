@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-566c6724.js";
+            window.path_to_searchindex_js = "searchindex-7b7e6410.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-74e98ac0.js"></script>
@@ -185,6 +185,7 @@ directory, the Docker image, or the production backend. No render flag is
 needed.</p>
 <pre><code class="language-manic">image(mark, (cx, 260), "asset:manic-logo.png", 180, 180);
 model3(beacon, "asset:models/manic-pyramid.obj", (0,0,0), 1);
+assembly3(console, "asset:models/manic-console.obj", (3,0,0), 1);
 svg(logo, (cx, 480), "asset:svg/heart.svg", 320);
 </code></pre>
 <p>The same image URI can be used in a Creator profile:</p>
@@ -200,11 +201,13 @@ socials(me);
 <tbody>
 <tr><td><code>asset:manic-logo.png</code></td><td>PNG</td><td><code>image(...)</code>, Creator <code>logo=</code>, a Manic-branded example</td></tr>
 <tr><td><code>asset:models/manic-pyramid.obj</code></td><td>Geometry-only OBJ</td><td><code>model3(...)</code>, a beacon, monument, marker, or placeholder model</td></tr>
+<tr><td><code>asset:models/manic-console.obj</code></td><td>Grouped geometry-only OBJ</td><td><code>assembly3(...)</code>, addressable <code>base</code>/<code>screen</code>/<code>key</code> parts, staged technical stories</td></tr>
 <tr><td><code>asset:svg/lucide/&lt;name&gt;.svg</code></td><td>SVG icons — Lucide (ISC)</td><td><code>svg(...)</code>, themeable line icons (recolour to taste)</td></tr>
 <tr><td><code>asset:svg/heroicons/&lt;name&gt;.svg</code></td><td>SVG icons — Heroicons (MIT)</td><td><code>svg(...)</code>, solid glyphs</td></tr>
 <tr><td><code>asset:svg/flags/&lt;cc&gt;.svg</code></td><td>SVG flags — flag-icons (MIT)</td><td><code>svg(...)</code>, country flags in real colours</td></tr>
 <tr><td><code>asset:svg/emoji/&lt;name-or-codepoint&gt;.svg</code></td><td>SVG emoji — Twemoji (CC-BY 4.0)</td><td><code>svg(...)</code>, flat colour emoji; <code>fire.svg</code>/<code>1f525.svg</code></td></tr>
 <tr><td><code>asset:svg/heart.svg</code> · <code>pin.svg</code> · <code>robot.svg</code> · <code>map-region.svg</code></td><td>SVG demo art (CC0)</td><td><code>svg(...)</code>, the import demos</td></tr>
+<tr><td><code>asset:svg/physics/effusion-reservoir.svg</code></td><td>SVG scientific apparatus (CC0)</td><td>reusable thermal-reservoir/nozzle shell for process stories</td></tr>
 </tbody>
 </table>
 </div>

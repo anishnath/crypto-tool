@@ -1,0 +1,57 @@
+// PARAMETERIZED VECTOR FIELD — one value changes the whole field.
+// The same settled field then moves a persistent tracer collection. No frame
+// callbacks and no manually authored particle paths are involved.
+
+title("From Wind to Vortex");
+canvas("16:9");
+template("mono");
+watermark(mark, (170, 55), "Made With Manic");
+
+text(kicker, (640, 48), "MANIC · PARAMETERIZED FIELD");
+text(headline, (640, 94), "One parameter reshapes every arrow");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+
+rect(chamber, (640, 365), 780, 410);
+outlined(chamber); outline(chamber, dim); stroke(chamber, 3);
+
+// The initial named field supplies a clear first state. `bind` then gives it
+// formula components where x,y are field coordinates and p is the parameter.
+vectorfield(flow, (640, 365), 375, 190, uniform, 17);
+parameter(mix, (640, 610), 0, 0, 1, "vortex mix", 2);
+bind(mix, flow, formula, "(1-p)*1.15-p*y", "p*x");
+
+circle(seed, (640, 365), 128);
+outlined(seed); outline(seed, dim); dashed(seed, 10, 9);
+particles(tracers, seed, 32, 5, 31, "random");
+color(tracers, fg); glow(tracers, 0.55);
+
+text(caption, (640, 678), "p = 0: steady wind");
+size(caption, 20); color(caption, dim);
+
+untraced(flow); hidden(seed); hidden(tracers);
+
+step("reveal-the-field") {
+  par {
+    draw(flow, 0.9);
+    show(seed, 0.4);
+    show(tracers, 0.55);
+  }
+}
+wait(0.5);
+
+step("wind-becomes-vortex") {
+  par {
+    to(mix, value, 1, 2.5, smooth);
+    say(caption, "p = 1: the same field turns into a vortex", 0.4);
+  }
+}
+wait(0.55);
+
+step("release-tracers") {
+  par {
+    advect(tracers, flow, 4.4, 0.78);
+    say(caption, "The dots follow the settled field — their paths were never drawn.", 0.4);
+  }
+}
+wait(1.2);

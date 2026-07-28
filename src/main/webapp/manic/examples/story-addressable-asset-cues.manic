@@ -1,0 +1,71 @@
+title("An Asset Becomes a Story");
+canvas("9:16");
+template("mono");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · ASSETS, LABELS & CUES");
+text(headline, (cx, h*0.15), "An imported object should still be explainable");
+text(caption, (cx, h*0.82), "Groups become addressable parts—then motion, notation, sound, and effects compose normally.");
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,21); color(caption,dim); wrap(caption,w*0.82); hidden(caption);
+
+camera3((16,-22,15),(0,0,0),46);
+assembly3(console,"asset:models/manic-console.obj",(0,0,0),1.35);
+color(console.base,dim);
+color(console.screen,cyan);
+color(console.key,magenta);
+text(screenNote,(0,0),"world-sized display");
+text(keyNote,(0,0),"addressable input");
+size(screenNote,22); color(screenNote,cyan); hidden(screenNote);
+size(keyNote,22); color(keyNote,magenta); hidden(keyNote);
+label3(screenNote,console.screen,0.82);
+label3(keyNote,console.key,0.82);
+hidden(console);
+
+circle(effectBox,(cx,h*0.70),72);
+particles(sparks,effectBox,34,4,19);
+color(sparks,gold);
+hidden(effectBox); hidden(sparks);
+
+step("import") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+  show(console,0.75);
+  cue(whoosh);
+}
+wait(0.35);
+
+step("address-the-parts") {
+  seq {
+    show(screenNote,0.35);
+    pulse(console.screen,0.65);
+    fade(screenNote,0.25);
+    show(keyNote,0.35);
+    pulse(console.key,0.65);
+  }
+  say(caption,"OBJ groups arrive as console.base, console.screen, and console.key.",0.42);
+  cue(tick);
+}
+wait(0.35);
+
+step("compose-the-explanation") {
+  par {
+    turn3(console,(0,0,0),z,22,1.4,smooth);
+    orbit3(30,28,30,1.4,smooth);
+    say(caption,"Depth-scaled labels remain crisp while the grouped asset moves.",0.40);
+  }
+}
+wait(0.30);
+
+step("finish-with-a-beat") {
+  show(sparks,0.15);
+  par {
+    burst(sparks,0.9);
+    pulse(console.key,0.65);
+    say(caption,"A reusable cue and the existing generic burst add the final editorial beat.",0.40);
+  }
+  cue(pop);
+}
+wait(1.2);

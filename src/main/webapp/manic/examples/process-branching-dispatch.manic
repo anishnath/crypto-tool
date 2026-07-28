@@ -1,0 +1,71 @@
+// GENERIC PROCESS BRANCHING — one source, three destinations.
+//
+// The paths carry no service semantics. `branch` only sees a directed acyclic
+// network and makes one deterministic uniform choice at every fork. The same
+// foundation drives the Galton-board example.
+
+title("Process Branching — One Source, Three Destinations");
+canvas("16:9");
+template("blank");
+watermark(mark, (145, 70), "Made With Manic");
+
+text(head, (cx, 72), "One collection · many truthful routes");
+text(sub, (cx, 112),
+  "Every request keeps its identity, destination, step count, and arrival time.");
+size(head, 32); bold(head);
+size(sub, 19); color(sub, dim);
+
+circle(source, (180, 340), 24);
+color(source, panel); outline(source, cyan); stroke(source, 3);
+particles(requests, source, 54, 4, 41);
+color(requests, cyan); glow(requests, 0.7); z(requests, 8);
+
+line(entry, (205, 340), (420, 340)); tag(entry, dispatchRoutes);
+spline(upper, (420, 340), (530, 190), (680, 185)); tag(upper, dispatchRoutes);
+line(middle, (420, 340), (680, 340)); tag(middle, dispatchRoutes);
+spline(lower, (420, 340), (530, 490), (680, 495)); tag(lower, dispatchRoutes);
+color(dispatchRoutes, dim); stroke(dispatchRoutes, 3); untraced(dispatchRoutes);
+
+rect(worker0, (735, 185), 150, 82);
+rect(worker1, (735, 340), 150, 82);
+rect(worker2, (735, 495), 150, 82);
+for i in 0..3 {
+  color(worker{i}, panel); outline(worker{i}, cyan); stroke(worker{i}, 2);
+}
+text(w0, (735, 185), "worker 0");
+text(w1, (735, 340), "worker 1");
+text(w2, (735, 495), "worker 2");
+size(w0, 18); size(w1, 18); size(w2, 18);
+
+livehistogram(destinations, (1030, 350), 0, 3, 3, 330, 300, magenta);
+text(histTitle, (1030, 170), "DESTINATION OUTCOME");
+size(histTitle, 19); bold(histTitle); color(histTitle, dim);
+counter(arrived, (1030, 555), 0, 0, "arrived  ", " / 54");
+size(arrived, 21); color(arrived, dim);
+
+text(caption, (cx, 650),
+  "The diagram and histogram are two views of the same seeded dispatch.");
+size(caption, 21); color(caption, dim);
+
+hidden(requests); hidden(destinations); hidden(arrived); hidden(caption);
+
+step("network") {
+  par {
+    draw(dispatchRoutes, 0.75);
+    show(requests, 0.35);
+    show(destinations, 0.45);
+    show(arrived, 0.35);
+    show(caption, 0.35);
+  }
+}
+wait(0.35);
+
+step("dispatch") {
+  par {
+    branch(requests, dispatchRoutes, 5.0, smooth);
+    observe(destinations, requests, outcome);
+    observe(arrived, requests, arrived);
+    flow(dispatchRoutes, 5.0, forward, continuous);
+  }
+}
+wait(1.0);

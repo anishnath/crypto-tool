@@ -1,0 +1,56 @@
+title("How Rotations Become a Drawing");
+canvas("9:16");
+template("blank");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · DEPENDENT CHAINS");
+text(headline, (cx, h*0.13), "A drawing can hide inside rotating links");
+text(caption, (cx, h*0.83), "Each endpoint begins where the previous endpoint finishes.");
+size(kicker,20); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.80); hidden(caption);
+
+camera3((0,-18,13),(0,0,0),46);
+collection3(harmonics,(0,0,0),7,(0,0,0),7,0.10);
+links3(arms,harmonics,chain);
+trail3(memory,harmonics,6,0.035);
+child3(tip,harmonics,6,0.14);
+color(harmonics,cyan);
+color(arms,magenta);
+color(memory,gold);
+color(tip,gold);
+hidden(harmonics); hidden(arms); hidden(memory); hidden(tip);
+
+step("question") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+}
+wait(0.35);
+
+step("build-the-chain") {
+  par {
+    show(harmonics,0.55);
+    show(arms,0.65);
+    show(memory,0.45);
+    show(tip,0.45);
+    cue(tick);
+    say(caption,"Seven stable links share one generated dependency chain.",0.40);
+  }
+}
+wait(0.30);
+
+step("remember-the-tip") {
+  par {
+    chain3(harmonics,"2.2 1.1 0.72 0.52 0.40 0.32 0.26","1 -3 5 -7 9 -11 13",8.0);
+    say(caption,"Only the moving tip writes history; the rest remain a readable mechanism.",0.45);
+  }
+}
+wait(0.45);
+
+step("takeaway") {
+  cue(chime);
+  pulse(tip,0.7);
+  say(caption,"The same foundation serves epicycles, linkages, robot arms, and live derived plots.",0.45);
+}
+wait(1.2);

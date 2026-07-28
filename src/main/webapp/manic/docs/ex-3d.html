@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-566c6724.js";
+            window.path_to_searchindex_js = "searchindex-7b7e6410.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-74e98ac0.js"></script>
@@ -458,6 +458,1064 @@ step("one bounded finish") {
 }
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/qjfpKwnn7Go" title="3D Relationships, Not Keyframes — Manic Spatial Lab" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="parameterized-generated-families3"><a class="header" href="#parameterized-generated-families3">parameterized-generated-families3</a></h2>
+<p>The compact generated-family reference: one ordinary parameter continuously changes
+a helix, height field, and torus while every object keeps its id, sample topology,
+material, and timeline identity.</p>
+<pre><code class="language-manic">// PARAMETERIZED GENERATED FAMILIES — one ordinary parameter, three stable 3-D
+// objects. `p` changes sampled points; ids, materials, transforms, and sample
+// topology stay intact. No per-vertex scripting or snapshot replacement.
+
+title("Parameterized Generated Families");
+canvas("16:9");
+template("mono");
+watermark(mark, (170, 55), "Made With Manic");
+
+text(kicker, (640, 48), "MANIC · GENERATED 3-D FAMILIES");
+text(headline, (640, 92), "One parameter · three continuous shapes");
+text(caption, (640, 664), "curve3(t,p)  ·  surface3(x,y,p)  ·  param3(u,v,p)");
+size(kicker, 18); color(kicker, dim); bold(kicker);
+size(headline, 34); bold(headline);
+size(caption, 19); color(caption, dim);
+
+parameter(shape, (640, 612), 0, 0, 1, "shape", 2);
+
+if h &gt; 1.45*w {
+  camera3((0, -36, 8), (0, 0, 0.4), 40);
+}
+else {
+  camera3((10, -17, 9), (0, 0, 0.4), 40);
+}
+grid3(floor, (0, 0, -2.2), 8, 1);
+color(floor, dim); opacity(floor, 0.14);
+
+// A widening helix at the left.
+curve3(helix,
+  "-4 + cos(t)",
+  "sin(t)",
+  "-1.7 + 0.55*t",
+  (0, 6.2832));
+bind(shape, helix, formula,
+  "-4 + (1+0.45*p)*cos(t)",
+  "(1+0.45*p)*sin(t)",
+  "-1.7 + 0.55*t");
+color(helix, cyan); thick(helix, 0.065); untraced(helix);
+tag(helix, family);
+
+// A bowl that becomes a rippling field in the middle.
+surface3(land, "0.15*(x*x+y*y)", (-1.7,1.7), (-1.7,1.7), 28);
+bind(shape, land, formula,
+  "(1-p)*0.15*(x*x+y*y) + p*0.72*sin(1.7*x)*cos(1.7*y)");
+color(land, gold);
+finish3(land, "material=glass shading=smooth mesh=0.30 depth=0.28 shadow=0.12");
+tag(land, family);
+
+// A torus whose tube inflates at the right.
+param3(ring,
+  "4+(1.15+0.20*cos(v))*cos(u)",
+  "(1.15+0.20*cos(v))*sin(u)",
+  "0.20*sin(v)",
+  (0,6.2832), (0,6.2832), 28);
+bind(shape, ring, formula,
+  "4+(1.15+(0.20+0.52*p)*cos(v))*cos(u)",
+  "(1.15+(0.20+0.52*p)*cos(v))*sin(u)",
+  "(0.20+0.52*p)*sin(v)");
+color(ring, magenta);
+finish3(ring, "material=metal shading=smooth mesh=0.22 depth=0.30 shadow=0.16");
+tag(ring, family);
+
+hidden(helix); hidden(land); hidden(ring);
+
+step("reveal one stable family") {
+  par {
+    view3(family, "fit", 0.9, smooth, 1.55);
+    stagger(0.16) {
+      show(helix, 0.45);
+      show(land, 0.45);
+      show(ring, 0.45);
+    }
+  }
+}
+wait(0.45);
+
+step("change the shared parameter") {
+  par {
+    to(shape, value, 1, 3.4, smooth);
+    say(caption, "The same three objects are resampled smoothly from p = 0 to p = 1.", 0.45);
+  }
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/n-BU-2xfjr4" title="One Parameter, Three Continuous 3D Shapes — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="creator-bowl-to-saddle"><a class="header" href="#creator-bowl-to-saddle">creator-bowl-to-saddle</a></h2>
+<p>A vertical calculus Short asks when a bowl loses one direction of curvature. One
+persistent surface passes through the exact p=1/2 threshold and becomes a saddle,
+then closes with a creator CTA.</p>
+<pre><code class="language-manic">// CREATOR SHORT — a real calculus problem told through one continuously
+// deforming surface. The shape is not replaced between the bowl, threshold,
+// and saddle states.
+
+title("When Does a Bowl Become a Saddle?");
+canvas("9:16");
+template("paper");
+
+creator(me, "@anish2good name=Manic_Math tagline=Equations_that_move yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Create_your_own safe=reels");
+socials(me);
+watermark(mark, (w*0.955-100, h*0.045+24), "Made With Manic");
+
+text(kicker, (540, 164), "A 20-SECOND CALCULUS STORY");
+text(headline, (540, 226), "When does a bowl stop being a bowl?");
+text(problem, (540, 292), "Find the exact value of p where one curvature disappears.");
+size(kicker, 21); bold(kicker); color(kicker, cyan); hidden(kicker);
+size(headline, 38); bold(headline); wrap(headline, 880); hidden(headline);
+size(problem, 22); color(problem, dim); wrap(problem, 840); hidden(problem);
+
+equation(rule, (540, 378), `z=0.22x^2+0.22(1-2p)y^2`, 39);
+hidden(rule);
+
+parameter(mix, (540, 1270), 0, 0, 1, "p", 2);
+
+camera3((8.5, -11.5, 7.5), (0, 0, 0), 41);
+surface3(world, "0.22*(x*x+y*y)", (-3,3), (-3,3), 34);
+bind(mix, world, formula, "0.22*x*x + 0.22*(1-2*p)*y*y");
+color(world, cyan);
+finish3(world, "material=glass shading=smooth mesh=0.34 depth=0.34 shadow=0.16");
+hidden(world);
+
+text(chapter, (540, 1352), "p = 0 · positive curvature in both directions");
+text(insight, (540, 1422), "Watch the coefficient of y².");
+text(cta, (540, 1398), "Build the transformation, not the keyframes.");
+text(link, (540, 1452), "TRY MANIC → 8gwifi.org/manic");
+size(chapter, 23); bold(chapter); color(chapter, fg); wrap(chapter, 850); hidden(chapter);
+size(insight, 21); color(insight, dim); hidden(insight);
+size(cta, 23); bold(cta); hidden(cta);
+size(link, 20); bold(link); color(link, cyan); hidden(link);
+
+step("pose the problem") {
+  par {
+    show(kicker, 0.35);
+    show(headline, 0.50);
+    show(problem, 0.45);
+    show(rule, 0.55);
+    show(world, 0.65);
+    show(chapter, 0.40);
+    show(insight, 0.40);
+    view3(world, "isometric", 0.9, smooth, 1.62);
+  }
+}
+wait(0.65);
+
+step("reach the turning point") {
+  par {
+    to(mix, value, 0.5, 2.8, smooth);
+    say(chapter, "p = ½ · the y² coefficient becomes zero", 0.45);
+    say(insight, "At this instant the bowl becomes a one-directional trough.", 0.45);
+    rewrite(rule, `p=\frac12\quad\Longrightarrow\quad z=0.22x^2`, 1.10, smooth);
+    orbit3(-45, 28, 16.2, 2.8, smooth);
+  }
+}
+wait(0.75);
+
+step("cross into a saddle") {
+  par {
+    to(mix, value, 1, 2.8, smooth);
+    say(chapter, "p &gt; ½ · one curvature turns negative", 0.45);
+    say(insight, "The same persistent surface is now a saddle.", 0.45);
+    rewrite(rule, `p=1\quad\Longrightarrow\quad z=0.22(x^2-y^2)`, 1.10, smooth);
+    orbit3(-62, 25, 16.2, 2.8, smooth);
+  }
+}
+wait(0.65);
+
+step("answer and invite") {
+  par {
+    say(problem, "Answer: p = ½ is the exact transition.", 0.50);
+    fade(chapter, 0.35);
+    fade(insight, 0.35);
+    show(cta, 0.45);
+    show(link, 0.45);
+  }
+}
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/w_aAXEGxIjM" title="When Does a Bowl Become a Saddle? — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="story-living-dependency-cloud"><a class="header" href="#story-living-dependency-cloud">story-living-dependency-cloud</a></h2>
+<p>A living dependency cloud grows, links itself by nearest neighbours, and drifts as
+one batched 3D cast. The relationships stay attached without hand-authoring dozens
+of nodes or links.</p>
+<pre><code class="language-manic">title("The Dependency Cloud That Refuses to Freeze");
+canvas("9:16");
+template("paper");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · BATCHED RELATIONSHIPS");
+text(headline, (cx, h*0.13), "Can 180 dependencies move as one idea?");
+text(caption, (cx, h*0.82), "One collection. Stable children. Every relationship stays truthful.");
+size(kicker, 20); color(kicker, dim); bold(kicker); hidden(kicker);
+size(headline, 34); bold(headline); wrap(headline, w*0.82); hidden(headline);
+size(caption, 22); color(caption, dim); wrap(caption, w*0.78); hidden(caption);
+
+camera3((14,-20,13),(0,0,0),46);
+collection3(services,(0,0,0),180,(4.2,2.6,2.2),41,0.055);
+links3(dependencies,services,nearest,2);
+color(services,cyan);
+color(dependencies,dim);
+hidden(services);
+hidden(dependencies);
+
+step("the-problem") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+}
+wait(0.45);
+
+step("the-system-awakens") {
+  par {
+    show(services,0.65);
+    show(dependencies,0.85);
+    say(caption,"The engine batches the repeated geometry but preserves every indexed identity.",0.45);
+  }
+}
+wait(0.35);
+
+step("relationships-remain-live") {
+  par {
+    drift3(services,6.0,0.42);
+    orbit3(35,24,28.0,6.0,smooth);
+    say(caption,"As the nodes drift, the nearest-neighbour graph is derived again from the same state.",0.45);
+  }
+}
+wait(0.45);
+
+step("takeaway") {
+  pulse(services,0.7);
+  say(caption,"Large dependency scenes become one creator intention—not hundreds of scripts.",0.45);
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nPVok5ERC-Q" title="A Living Dependency Cloud — Batched 3D Relationships in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="story-dependent-chain-history"><a class="header" href="#story-dependent-chain-history">story-dependent-chain-history</a></h2>
+<p>An articulated signal arm is generated as one dependent chain: every endpoint begins
+at the previous endpoint, while the tip leaves a truthful history of its real route.</p>
+<pre><code class="language-manic">title("How Rotations Become a Drawing");
+canvas("9:16");
+template("blank");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · DEPENDENT CHAINS");
+text(headline, (cx, h*0.13), "A drawing can hide inside rotating links");
+text(caption, (cx, h*0.83), "Each endpoint begins where the previous endpoint finishes.");
+size(kicker,20); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.80); hidden(caption);
+
+camera3((0,-18,13),(0,0,0),46);
+collection3(harmonics,(0,0,0),7,(0,0,0),7,0.10);
+links3(arms,harmonics,chain);
+trail3(memory,harmonics,6,0.035);
+child3(tip,harmonics,6,0.14);
+color(harmonics,cyan);
+color(arms,magenta);
+color(memory,gold);
+color(tip,gold);
+hidden(harmonics); hidden(arms); hidden(memory); hidden(tip);
+
+step("question") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+}
+wait(0.35);
+
+step("build-the-chain") {
+  par {
+    show(harmonics,0.55);
+    show(arms,0.65);
+    show(memory,0.45);
+    show(tip,0.45);
+    cue(tick);
+    say(caption,"Seven stable links share one generated dependency chain.",0.40);
+  }
+}
+wait(0.30);
+
+step("remember-the-tip") {
+  par {
+    chain3(harmonics,"2.2 1.1 0.72 0.52 0.40 0.32 0.26","1 -3 5 -7 9 -11 13",8.0);
+    say(caption,"Only the moving tip writes history; the rest remain a readable mechanism.",0.45);
+  }
+}
+wait(0.45);
+
+step("takeaway") {
+  cue(chime);
+  pulse(tip,0.7);
+  say(caption,"The same foundation serves epicycles, linkages, robot arms, and live derived plots.",0.45);
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5dAczYdCWZ0" title="One Moving Chain, One Truthful History — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="fourier-series-live-wave"><a class="header" href="#fourier-series-live-wave">fourier-series-live-wave</a></h2>
+<p>Twelve visible orbit rings form one epicycle chain while <code>historyplot3</code> turns every
+endpoint’s exact y-history into a coloured partial sum across two complete periods—one
+continuous motion, one source of truth.</p>
+<pre><code class="language-manic">// A focused Fourier story: every orbit and every partial sum is generated from
+// the same live collection. The circles move; their histories become the wave.
+
+title("A Wave Drawn by Rotating Circles");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"FOURIER SERIES · LIVE DERIVED HISTORY");
+text(headline,(cx,h*0.115),"Can rotating circles draw a wave?");
+text(caption,(cx,h*0.18),"Every coloured trace is the real history of one moving endpoint.");
+text(cta,(cx,h*0.925),"BUILD YOUR OWN VISUAL STORY → 8gwifi.org/manic");
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,20); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-29,-25,43),(1,-2,0),42,orthographic);
+
+collection3(harmonics,(-3,5,0),12,(0,0,0),11,0.065);
+line3(sweep,(-3,5,0),(10,5,0)); hidden(sweep);
+links3(arms,harmonics,chain);
+child3(tip,harmonics,11,0.13);
+
+arrow3(chainX,(-11,5,0),(7,5,0));
+arrow3(chainY,(-3,-2,0),(-3,10.5,0));
+arrow3(plotX,(-7,-10.5,0),(12,-10.5,0));
+arrow3(plotY,(-7,-10.5,0),(-7,-4.2,0));
+
+point3(shotA,(-7.5,-11,0),0.01);
+point3(shotB,(8.5,10.5,0),0.01);
+tag(shotA,shot); tag(shotB,shot);
+hidden(shotA); hidden(shotB);
+
+tag(harmonics,construction); tag(arms,construction); tag(tip,construction);
+tag(chainX,construction); tag(chainY,construction);
+tag(plotX,construction); tag(plotY,construction);
+
+for i in 0..12 {
+  ring3(orbit{i},harmonics,i,72);
+  historyplot3(partial{i},harmonics,i,y,(-7,-10.5,0),(19,6));
+  thick(orbit{i},0.030);
+  thick(partial{i},0.020);
+  tag(orbit{i},construction);
+  tag(partial{i},construction);
+}
+
+equation(formula,(0,0),`f(t)=\sum_{n=1}^{12}\frac{2(-1)^{n+1}}{\pi n}\sin(nt)`,25);
+label3(formula,(-4,-2.7,0),0.82);
+tag(formula,construction);
+
+color(harmonics,fg); color(arms,fg); color(tip,fg);
+color(chainX,fg); color(chainY,fg); color(plotX,fg); color(plotY,fg);
+color(formula,fg);
+thick(chainX,0.016); thick(chainY,0.016);
+thick(plotX,0.016); thick(plotY,0.016);
+
+color(orbit0,lime);      color(partial0,lime);
+color(orbit1,gold);      color(partial1,gold);
+color(orbit2,orange);    color(partial2,orange);
+color(orbit3,coral);     color(partial3,coral);
+color(orbit4,red);       color(partial4,red);
+color(orbit5,magenta);   color(partial5,magenta);
+color(orbit6,violet);    color(partial6,violet);
+color(orbit7,indigo);    color(partial7,indigo);
+color(orbit8,blue);      color(partial8,blue);
+color(orbit9,cyan);      color(partial9,cyan);
+color(orbit10,mint);     color(partial10,mint);
+color(orbit11,fg);       color(partial11,fg);
+
+hidden(construction);
+
+step("ask the visual question") {
+  show(kicker,0.30);
+  show(headline,0.42);
+  show(caption,0.38);
+}
+wait(0.35);
+
+step("reveal one connected machine") {
+  par {
+    show(construction,0.85);
+    view3(shot,"top",1.35,smooth,1.08);
+    say(caption,"Each circle starts where the previous circle ends.",0.38);
+  }
+}
+wait(0.30);
+
+step("let motion become data") {
+  par {
+    // Doubling every angular rate makes the base harmonic complete exactly
+    // two revolutions while preserving all relative frequencies.
+    chain3(harmonics,"2.0372 -1.0186 0.6791 -0.5093 0.4074 -0.3395 0.2910 -0.2546 0.2264 -0.2037 0.1852 -0.1698","2 4 6 8 10 12 14 16 18 20 22 24",16.0);
+    travel3(harmonics,sweep,16.0,linear);
+    seq {
+      say(caption,"Cycle one: the broad motion appears, then smaller circles restore its detail.",0.40);
+      wait(6.10);
+      say(caption,"Cycle two: the same relationships repeat continuously—without a reset or jump.",0.40);
+      wait(5.20);
+      say(caption,"The endpoint histories now contain two complete periods of the signal.",0.40);
+    }
+  }
+}
+wait(0.35);
+
+step("create with Manic") {
+  par {
+    pulse(tip,0.75);
+    pulse(partial11,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the relationship. Manic keeps the circles, histories, motion, and camera together.",0.42);
+  }
+}
+wait(1.45);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ugxTVF9BqdE" title="A Wave Drawn by Rotating Circles — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="definedmotion-fourier-gallery"><a class="header" href="#definedmotion-fourier-gallery">definedmotion-fourier-gallery</a></h2>
+<p>Five depth-stacked Fourier families rotate at once while twenty coloured <code>ring3</code>
+orbits drive twenty world-space partial histories per family. Focus and overview cameras
+observe the same compiled motion before a creator CTA closes the Short.</p>
+<pre><code class="language-manic">// Visual acceptance story for DefinedMotion resources/animation2.gif.
+// Twenty visible orbit rings create each relation. Every coloured partial-sum
+// history is derived from the exact endpoint that draws it.
+
+title("Fourier Series — Rotations Become Waves");
+canvas("9:16");
+template("mono");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(chapter,(cx,h*0.075),"FOURIER SERIES · FIVE RELATIONS");
+text(caption,(cx,h*0.85),"Twenty rotating circles. One continuously derived signal.");
+text(cta,(cx,h*0.925),"BUILD VISUAL EXPLANATIONS → 8gwifi.org/manic");
+size(chapter,18); color(chapter,dim); bold(chapter); hidden(chapter);
+size(caption,20); color(caption,dim); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-31,-25,44),(1,-2,0),42,orthographic);
+
+def relation(k,zv) {
+  // The chain, its two local axes, and the waveform axes all share one layer.
+  collection3(series{k},(-3,5,zv),20,(0,0,0),11,0.055);
+  line3(sweep{k},(-3,5,zv),(10,5,zv));
+  hidden(sweep{k});
+  links3(arms{k},series{k},chain);
+  child3(tip{k},series{k},19,0.12);
+  arrow3(chainX{k},(-11,5,zv),(7,5,zv));
+  arrow3(chainY{k},(-3,-3,zv),(-3,13,zv));
+  arrow3(plotX{k},(-7,-12,zv),(12,-12,zv));
+  arrow3(plotY{k},(-7,-12,zv),(-7,-3,zv));
+  // A cinematic crop: the axes may continue beyond the frame, as in the
+  // reference, while the active rings and the growing history stay dominant.
+  point3(shot{k}A,(-7.5,-10,zv),0.01);
+  point3(shot{k}B,(8.5,10,zv),0.01);
+  tag(shot{k}A,shot{k}); tag(shot{k}B,shot{k});
+  hidden(shot{k}A); hidden(shot{k}B);
+
+  tag(series{k},layer{k}); tag(arms{k},layer{k}); tag(tip{k},layer{k});
+  tag(chainX{k},layer{k}); tag(chainY{k},layer{k});
+  tag(plotX{k},layer{k}); tag(plotY{k},layer{k});
+  tag(layer{k},stack);
+
+  for i in 0..20 {
+    ring3(orbit{k}_{i},series{k},i,72);
+    historyplot3(wave{k}_{i},series{k},i,y,(-7,-12,zv),(19,8.5));
+    thick(orbit{k}_{i},0.022);
+    thick(wave{k}_{i},0.014);
+    tag(orbit{k}_{i},layer{k}); tag(wave{k}_{i},layer{k});
+  }
+
+  color(series{k},fg); color(arms{k},fg); color(tip{k},fg);
+  color(chainX{k},fg); color(chainY{k},fg);
+  color(plotX{k},fg); color(plotY{k},fg);
+  thick(chainX{k},0.016); thick(chainY{k},0.016);
+  thick(plotX{k},0.016); thick(plotY{k},0.016);
+
+  color(orbit{k}_0,lime);       color(wave{k}_0,lime);
+  color(orbit{k}_1,gold);       color(wave{k}_1,gold);
+  color(orbit{k}_2,gold);       color(wave{k}_2,gold);
+  color(orbit{k}_3,magenta);    color(wave{k}_3,magenta);
+  color(orbit{k}_4,coral);      color(wave{k}_4,coral);
+  color(orbit{k}_5,red);        color(wave{k}_5,red);
+  color(orbit{k}_6,orange);     color(wave{k}_6,orange);
+  color(orbit{k}_7,magenta);    color(wave{k}_7,magenta);
+  color(orbit{k}_8,violet);     color(wave{k}_8,violet);
+  color(orbit{k}_9,indigo);     color(wave{k}_9,indigo);
+  color(orbit{k}_10,cyan);      color(wave{k}_10,cyan);
+  color(orbit{k}_11,blue);      color(wave{k}_11,blue);
+  color(orbit{k}_12,mint);      color(wave{k}_12,mint);
+  color(orbit{k}_13,lime);      color(wave{k}_13,lime);
+  color(orbit{k}_14,gold);      color(wave{k}_14,gold);
+  color(orbit{k}_15,cyan);      color(wave{k}_15,cyan);
+  color(orbit{k}_16,lime);      color(wave{k}_16,lime);
+  color(orbit{k}_17,magenta);   color(wave{k}_17,magenta);
+  color(orbit{k}_18,coral);     color(wave{k}_18,coral);
+  color(orbit{k}_19,cyan);      color(wave{k}_19,cyan);
+}
+
+relation(0,-20);
+relation(1,-10);
+relation(2,0);
+relation(3,10);
+relation(4,20);
+point3(overviewA,(-11,-12,-20),0.01);
+point3(overviewB,(12,13,20),0.01);
+tag(overviewA,overviewShot); tag(overviewB,overviewShot);
+hidden(overviewA); hidden(overviewB);
+
+equation(formula0,(0,0),`\sum_{n=1}^{N}\frac{4}{\pi(2n-1)}\sin((2n-1)t)`,26);
+equation(formula1,(0,0),`\sum_{n=1}^{N}\frac{2(-1)^{n+1}}{\pi n}\sin(nt)`,26);
+equation(formula2,(0,0),`\sum_{n=1}^{N}\frac{2w_n}{\pi n}\sin(nt)`,26);
+equation(formula3,(0,0),`\sum_{n=1}^{N}\frac{2}{\pi n}\sin(n^2t)`,26);
+equation(formula4,(0,0),`\sum_{n=1}^{N}\frac{2r_n}{\pi n}\sin(nt)`,26);
+label3(formula0,(-8,-2,-20),0.82);
+label3(formula1,(-8,-2,-10),0.82);
+label3(formula2,(-8,-2,0),0.82);
+label3(formula3,(-8,-2,10),0.82);
+label3(formula4,(-8,-2,20),0.82);
+for i in 0..5 {
+  tag(formula{i},layer{i}); tag(formula{i},stack); color(formula{i},fg);
+}
+
+hidden(stack);
+
+step("enter the Fourier world") {
+  show(chapter,0.30);
+  show(caption,0.35);
+  show(stack,0.85);
+}
+wait(0.35);
+
+step("twenty circles write five signals") {
+  par {
+    chain3(series0,"4.0744 1.3581 0.8149 0.5821 0.4527 0.3704 0.3134 0.2716 0.2397 0.2144 0.1940 0.1771 0.1630 0.1509 0.1405 0.1314 0.1235 0.1164 0.1101 0.1045","1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39",17.0);
+    chain3(series1,"2.0372 -1.0186 0.6791 -0.5093 0.4074 -0.3395 0.2910 -0.2546 0.2264 -0.2037 0.1852 -0.1698 0.1567 -0.1455 0.1358 -0.1273 0.1198 -0.1132 0.1072 -0.1019","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",17.0);
+    chain3(series2,"0 0.0276 0.0716 0.1154 0.1537 0.1838 0.2040 0.2136 0.2127 0.2023 0.1839 0.1595 0.1314 0.1020 0.0735 0.0480 0.0271 0.0119 0.0029 0","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",17.0);
+    chain3(series3,"2.0372 1.0186 0.6791 0.5093 0.4074 0.3395 0.2910 0.2546 0.2264 0.2037 0.1852 0.1698 0.1567 0.1455 0.1358 0.1273 0.1198 0.1132 0.1072 0.1019","1 4 9 16 25 36 49 64 81 100 121 144 169 196 225 256 289 324 361 400",17.0);
+    chain3(series4,"1.3334 0.0973 0.0648 0.3333 0.4074 0.2222 0.0278 0.0243 0.1482 0.2037 0.1212 0.0162 0.0150 0.0952 0.1358 0.0833 0.0114 0.0108 0.0702 0.1019","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",17.0);
+    travel3(series0,sweep0,17.0,linear);
+    travel3(series1,sweep1,17.0,linear);
+    travel3(series2,sweep2,17.0,linear);
+    travel3(series3,sweep3,17.0,linear);
+    travel3(series4,sweep4,17.0,linear);
+
+    seq {
+      wait(0.45);
+      par {
+        fade(layer1,0.80); fade(layer2,0.80); fade(layer3,0.80); fade(layer4,0.80);
+        view3(shot0,"isometric",1.45,smooth,1.08);
+        say(caption,"Square wave — odd harmonics sharpen every corner.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer0,0.65); show(layer1,0.65);
+        view3(shot1,"isometric",1.35,smooth,1.08);
+        say(caption,"Sawtooth — every harmonic joins with alternating direction.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer1,0.65); show(layer2,0.65);
+        view3(shot2,"isometric",1.35,smooth,1.08);
+        say(caption,"Hann window — the outer harmonics taper away.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer2,0.65); show(layer3,0.65);
+        view3(shot3,"isometric",1.35,smooth,1.08);
+        say(caption,"Quadratic chirp — frequency accelerates as n squared.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer3,0.65); show(layer4,0.65);
+        view3(shot4,"isometric",1.35,smooth,1.08);
+        say(caption,"Envelope ripple — selected harmonics breathe in and out.",0.35);
+      }
+      wait(1.55);
+      par {
+        show(layer0,0.55); show(layer1,0.55); show(layer2,0.55); show(layer3,0.55);
+        view3(overviewShot,"isometric",1.5,smooth,1.30);
+        say(caption,"One relationship engine. Five very different signals.",0.35);
+      }
+    }
+  }
+}
+wait(0.35);
+
+step("create with Manic") {
+  show(cta,0.45);
+  pulse(stack,0.75);
+  say(caption,"Describe the relationship; Manic keeps every ring, endpoint, history, and camera together.",0.40);
+}
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/whoTuQ4oJOk" title="Five Fourier Worlds, One Continuous Camera — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="fourier-square-wave-live"><a class="header" href="#fourier-square-wave-live">fourier-square-wave-live</a></h2>
+<p>Thirteen orbit rings add odd harmonics 1 through 25. Their live partial histories show
+the plateaus flatten and the corners sharpen across two uninterrupted square-wave cycles
+before a creator CTA closes the Short.</p>
+<pre><code class="language-manic">// Odd harmonics build a square wave. Every partial sum is a live history of
+// the corresponding endpoint, so the corners emerge from the geometry itself.
+
+title("How Odd Harmonics Build a Square Wave");
+canvas("9:16");
+template("paper");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"FOURIER · ODD HARMONICS");
+text(headline,(cx,h*0.115),"Watch a square wave find its corners");
+text(caption,(cx,h*0.18),"Start with n = 1. Then add 3, 5, 7 … all the way to 25.");
+text(cta,(cx,h*0.925),"TURN IDEAS INTO ANIMATION → 8gwifi.org/manic");
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,20); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-29,-25,43),(1,-2,0),42,orthographic);
+
+collection3(series,(-3,5,0),13,(0,0,0),11,0.065);
+line3(sweep,(-3,5,0),(10,5,0)); hidden(sweep);
+links3(arms,series,chain);
+child3(tip,series,12,0.13);
+
+arrow3(chainX,(-11,5,0),(7,5,0));
+arrow3(chainY,(-3,-2,0),(-3,10.5,0));
+arrow3(plotX,(-7,-10.5,0),(12,-10.5,0));
+arrow3(plotY,(-7,-10.5,0),(-7,-4.2,0));
+
+point3(shotA,(-7.5,-11,0),0.01);
+point3(shotB,(8.5,10.5,0),0.01);
+tag(shotA,shot); tag(shotB,shot);
+hidden(shotA); hidden(shotB);
+
+tag(series,construction); tag(arms,construction); tag(tip,construction);
+tag(chainX,construction); tag(chainY,construction);
+tag(plotX,construction); tag(plotY,construction);
+
+for i in 0..13 {
+  ring3(orbit{i},series,i,72);
+  historyplot3(partial{i},series,i,y,(-7,-10.5,0),(19,6));
+  thick(orbit{i},0.030);
+  thick(partial{i},0.020);
+  tag(orbit{i},construction);
+  tag(partial{i},construction);
+}
+
+equation(formula,(0,0),`S_{13}(t)=\sum_{k=0}^{12}\frac{4}{\pi(2k+1)}\sin((2k+1)t)`,24);
+label3(formula,(-4,-2.7,0),0.80);
+tag(formula,construction);
+
+color(series,fg); color(arms,fg); color(tip,fg);
+color(chainX,fg); color(chainY,fg); color(plotX,fg); color(plotY,fg);
+color(formula,fg);
+thick(chainX,0.016); thick(chainY,0.016);
+thick(plotX,0.016); thick(plotY,0.016);
+
+color(orbit0,lime);      color(partial0,lime);
+color(orbit1,gold);      color(partial1,gold);
+color(orbit2,orange);    color(partial2,orange);
+color(orbit3,coral);     color(partial3,coral);
+color(orbit4,red);       color(partial4,red);
+color(orbit5,magenta);   color(partial5,magenta);
+color(orbit6,violet);    color(partial6,violet);
+color(orbit7,indigo);    color(partial7,indigo);
+color(orbit8,blue);      color(partial8,blue);
+color(orbit9,cyan);      color(partial9,cyan);
+color(orbit10,mint);     color(partial10,mint);
+color(orbit11,lime);     color(partial11,lime);
+color(orbit12,fg);       color(partial12,fg);
+
+hidden(construction);
+
+step("begin with one sine wave") {
+  show(kicker,0.30);
+  show(headline,0.42);
+  show(caption,0.38);
+}
+wait(0.35);
+
+step("reveal the odd-harmonic chain") {
+  par {
+    show(construction,0.85);
+    view3(shot,"top",1.35,smooth,1.08);
+    say(caption,"Every smaller orbit contributes the next odd frequency.",0.38);
+  }
+}
+wait(0.30);
+
+step("build the corners live") {
+  par {
+    // Two complete base cycles: all odd harmonic rates are doubled together.
+    chain3(series,"4.0744 1.3581 0.8149 0.5821 0.4527 0.3704 0.3134 0.2716 0.2397 0.2144 0.1940 0.1771 0.1630","2 6 10 14 18 22 26 30 34 38 42 46 50",16.0);
+    travel3(series,sweep,16.0,linear);
+    seq {
+      say(caption,"Cycle one: odd harmonics flatten the plateaus and steepen both sides.",0.40);
+      wait(6.10);
+      say(caption,"Cycle two: every orbit closes and the square-wave pattern returns continuously.",0.40);
+      wait(5.20);
+      say(caption,"Two complete periods make the repeating structure impossible to miss.",0.40);
+    }
+  }
+}
+wait(0.35);
+
+step("create with Manic") {
+  par {
+    pulse(tip,0.75);
+    pulse(partial12,0.75);
+    show(cta,0.45);
+    say(caption,"One declarative chain becomes circles, partial sums, a live waveform, and a complete visual story.",0.42);
+  }
+}
+wait(1.45);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/qHi8M00c1-Q" title="How Odd Harmonics Build a Square Wave — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="growing-fractal-tree3"><a class="header" href="#growing-fractal-tree3">growing-fractal-tree3</a></h2>
+<p>One seeded split-turn-shrink rule grows 1,023 branches. <code>tree3</code> keeps each generation
+renderer-batched while progressive draw and a bounds-aware camera reveal the canopy.</p>
+<pre><code class="language-manic">title("One Rule Grows a Forest");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.055),"Made With Manic");
+text(kicker,(cx,h*0.085),"FRACTAL TREE · BATCHED GENERATIONS");
+text(headline,(cx,h*0.13),"How can one branch become 1,023?");
+text(caption,(cx,h*0.84),"Repeat one rule: split, turn, shrink—and keep every generation readable.");
+text(cta,(cx,h*0.91),"CREATE YOUR OWN → 8gwifi.org/manic");
+size(kicker,20); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.82); hidden(caption);
+size(cta,22); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((9,-13,8),(0,0,3.2),43);
+tree3(tree,(0,0,-3.2),2.1,27,0.72,10,42);
+for i in 0..10 { untraced(tree.d{i}); hidden(tree.d{i}); }
+hidden(tree.leaves);
+
+step("the seed") {
+  show(kicker,0.3); show(headline,0.45); show(caption,0.4);
+  view3(tree,"isometric",0.7,smooth,1.42);
+}
+wait(0.35);
+
+step("grow by generation") {
+  par {
+    stagger(0.16) {
+      for i in 0..10 {
+        par { show(tree.d{i},0.22); draw(tree.d{i},0.58,smooth); }
+      }
+    }
+    say(caption,"Each depth is one renderer batch, even when it contains hundreds of branches.",0.45);
+    view3(tree,"isometric",1.1,smooth,1.48);
+  }
+}
+wait(0.4);
+
+step("find the canopy") {
+  par {
+    show(tree.leaves,0.65);
+    seq {
+      orbit3(42,24,21.0,2.1,smooth);
+      view3(tree,"isometric",0.9,smooth,1.42);
+    }
+    say(caption,"A semantic camera journey reveals the rule first, then the whole canopy.",0.45);
+  }
+}
+wait(0.5);
+
+step("takeaway") {
+  par {
+    pulse(tree.leaves,0.7);
+    say(caption,"Deep procedural geometry stays simple to author, deterministic, and smooth to seek.",0.45);
+    show(cta,0.45);
+  }
+}
+wait(1.3);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/ep25WinSHrk" title="One Rule Grows 1,023 Branches — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="latex-disintegration"><a class="header" href="#latex-disintegration">latex-disintegration</a></h2>
+<p>A quadratic factors into two solutions, then those symbols become persistent points at
+2 and 3. Semantic <code>rewrite</code> preserves the algebra; <code>disintegrate</code> removes the notation
+while the mathematical meaning remains visibly in place.</p>
+<pre><code class="language-manic">// A semantic LaTeX story: notation changes, meaning becomes position, and the
+// final symbols may disappear without taking the mathematical result with them.
+
+title("The Equation Disappears. The Roots Remain.");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.050),"Made With Manic");
+text(kicker,(cx,h*0.085),"ALGEBRA · SYMBOLS → STRUCTURE");
+text(headline,(cx,h*0.145),"What survives when an equation disappears?");
+text(caption,(cx,h*0.77),"Two solutions are hiding inside one quadratic.");
+text(cta,(cx,h*0.90),"MAKE MEANING MOVE → 8gwifi.org/manic");
+size(kicker,19); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,33); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.82); hidden(caption);
+size(cta,22); color(cta,cyan); bold(cta); hidden(cta);
+
+text(symbolLabel,(w*0.18,h*0.29),"THE SYMBOLS");
+text(meaningLabel,(w*0.18,h*0.54),"THE MEANING");
+size(symbolLabel,18); color(symbolLabel,dim); bold(symbolLabel); hidden(symbolLabel);
+size(meaningLabel,18); color(meaningLabel,dim); bold(meaningLabel); hidden(meaningLabel);
+
+equation(work,(cx,h*0.39),`x^2-5x+6=0`,66);
+hidden(work);
+
+let axisY = h*0.63;
+let axisLeft = w*0.16;
+let axisRight = w*0.84;
+let x0 = w*0.20;
+let dx = w*0.15;
+
+arrow(numberAxis,(axisLeft,axisY),(axisRight,axisY));
+color(numberAxis,dim); stroke(numberAxis,3);
+tag(numberAxis,numberLine);
+
+for i in 0..5 {
+  line(tick{i},(x0+i*dx,axisY-13),(x0+i*dx,axisY+13));
+  color(tick{i},dim); stroke(tick{i},3);
+  tag(tick{i},numberLine);
+}
+
+text(n0,(x0,axisY+42),"0");
+text(n1,(x0+dx,axisY+42),"1");
+text(n2,(x0+2*dx,axisY+42),"2");
+text(n3,(x0+3*dx,axisY+42),"3");
+text(n4,(x0+4*dx,axisY+42),"4");
+size(n0,18); size(n1,18); size(n2,18); size(n3,18); size(n4,18);
+color(n0,dim); color(n1,dim); color(n2,dim); color(n3,dim); color(n4,dim);
+tag(n0,numberLine); tag(n1,numberLine); tag(n2,numberLine);
+tag(n3,numberLine); tag(n4,numberLine);
+
+circle(root2,(x0+2*dx,axisY),15);
+circle(root3,(x0+3*dx,axisY),15);
+filled(root2); filled(root3);
+color(root2,cyan); color(root3,orange);
+glow(root2,0.72); glow(root3,0.72);
+tag(root2,solutions); tag(root3,solutions);
+
+equation(root2Label,(x0+2*dx,axisY-62),`x=2`,30);
+equation(root3Label,(x0+3*dx,axisY-62),`x=3`,30);
+color(root2Label,cyan); color(root3Label,orange);
+tag(root2Label,solutions); tag(root3Label,solutions);
+
+hidden(numberLine);
+hidden(solutions);
+
+step("find what is hiding") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(symbolLabel,0.35);
+    show(caption,0.40);
+    show(work,0.55);
+  }
+}
+wait(0.55);
+
+step("expose the two conditions") {
+  par {
+    rewrite(work,`\textcolor{cyan}{(x-2)}\textcolor{orange}{(x-3)}=0`,1.15,smooth);
+    say(caption,"Factoring reveals two independent ways for the product to become zero.",0.45);
+  }
+}
+wait(0.55);
+
+step("turn answers into positions") {
+  par {
+    rewrite(work,`\textcolor{cyan}{x=2}\qquad\text{or}\qquad\textcolor{orange}{x=3}`,1.05,smooth);
+    seq {
+      show(meaningLabel,0.30);
+      show(numberLine,0.55);
+      show(root2,0.35);
+      show(root2Label,0.30);
+      wait(0.18);
+      show(root3,0.35);
+      show(root3Label,0.30);
+    }
+    say(caption,"The answers are no longer only symbols—they now occupy exact locations.",0.45);
+  }
+}
+wait(0.70);
+
+step("remove the notation, keep the result") {
+  par {
+    disintegrate(work,1.60);
+    seq {
+      wait(0.35);
+      pulse(root2,0.60);
+      pulse(root3,0.60);
+    }
+    say(caption,"The notation can turn to dust. The two solutions remain exactly where they belong.",0.45);
+  }
+}
+wait(0.75);
+
+step("create explanations that preserve meaning") {
+  par {
+    pulse(solutions,0.75);
+    show(cta,0.45);
+    say(caption,"Great visual explanations do more than move symbols—they reveal what those symbols mean.",0.45);
+  }
+}
+wait(1.45);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/itz9rHzeZUA" title="The Equation Disappears. The Roots Remain. — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="story-time-varying-field3"><a class="header" href="#story-time-varying-field3">story-time-varying-field3</a></h2>
+<p>A seed cloud enters a 3D vector field whose formula changes with normalized time.
+Deterministic advection, live arrows, one addressable particle, its trail, and a
+follow camera all sample the same seekable timeline.</p>
+<pre><code class="language-manic">title("The Current Changes While We Travel");
+canvas("9:16");
+template("blank");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · LIVE 3D FIELDS");
+text(headline, (cx, h*0.13), "What if the current changes mid-flight?");
+text(caption, (cx, h*0.83), "The arrows and particles sample the same field at the same story time.");
+size(kicker,20); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.80); hidden(caption);
+
+camera3((16,-20,14),(0,0,0),46);
+vectorfield3(current,(0,0,0),(4.2,3.2,2.6),"-y + 0.7*sin(p*tau)","x + 0.35*cos(p*tau)","0.45*sin(z+p*tau)",6);
+collection3(tracers,(0,0,0),90,(2.5,1.8,1.5),73,0.065);
+child3(hero,tracers,0,0.14);
+trail3(route,tracers,0,0.032);
+color(current,dim);
+color(tracers,cyan);
+color(hero,gold);
+color(route,gold);
+hidden(current); hidden(tracers); hidden(hero); hidden(route);
+
+step("question") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+}
+wait(0.35);
+
+step("reveal-the-current") {
+  par {
+    show(current,0.70);
+    show(tracers,0.55);
+    show(hero,0.45);
+    show(route,0.45);
+    say(caption,"A bounded formula declares x, y, z and normalized time p.",0.40);
+  }
+}
+wait(0.30);
+
+step("flow-and-follow") {
+  followshot3(hero,(0,0,0.15));
+  par {
+    advect3(tracers,current,7.0,1.15);
+    orbit3(55,26,29.0,7.0,smooth);
+    say(caption,"Deterministic RK4 moves every tracer while the camera follows one stable child.",0.45);
+  }
+  followshot3(none);
+}
+wait(0.45);
+
+step("takeaway") {
+  cue(chime);
+  say(caption,"Field, motion, trail, and shot now tell one synchronized truth.",0.45);
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/XRRe8pPEZ0Y" title="Follow One Particle Through a Changing 3D Field — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="story-addressable-asset-cues"><a class="header" href="#story-addressable-asset-cues">story-addressable-asset-cues</a></h2>
+<p>A grouped console OBJ becomes an addressable technical assembly. Its base, screen,
+and key reveal as named parts with projected notation, a local procedural cue, and
+particle punctuation—no remote asset or callback.</p>
+<pre><code class="language-manic">title("An Asset Becomes a Story");
+canvas("9:16");
+template("mono");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · ASSETS, LABELS &amp; CUES");
+text(headline, (cx, h*0.15), "An imported object should still be explainable");
+text(caption, (cx, h*0.82), "Groups become addressable parts—then motion, notation, sound, and effects compose normally.");
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,21); color(caption,dim); wrap(caption,w*0.82); hidden(caption);
+
+camera3((16,-22,15),(0,0,0),46);
+assembly3(console,"asset:models/manic-console.obj",(0,0,0),1.35);
+color(console.base,dim);
+color(console.screen,cyan);
+color(console.key,magenta);
+text(screenNote,(0,0),"world-sized display");
+text(keyNote,(0,0),"addressable input");
+size(screenNote,22); color(screenNote,cyan); hidden(screenNote);
+size(keyNote,22); color(keyNote,magenta); hidden(keyNote);
+label3(screenNote,console.screen,0.82);
+label3(keyNote,console.key,0.82);
+hidden(console);
+
+circle(effectBox,(cx,h*0.70),72);
+particles(sparks,effectBox,34,4,19);
+color(sparks,gold);
+hidden(effectBox); hidden(sparks);
+
+step("import") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+  show(console,0.75);
+  cue(whoosh);
+}
+wait(0.35);
+
+step("address-the-parts") {
+  seq {
+    show(screenNote,0.35);
+    pulse(console.screen,0.65);
+    fade(screenNote,0.25);
+    show(keyNote,0.35);
+    pulse(console.key,0.65);
+  }
+  say(caption,"OBJ groups arrive as console.base, console.screen, and console.key.",0.42);
+  cue(tick);
+}
+wait(0.35);
+
+step("compose-the-explanation") {
+  par {
+    turn3(console,(0,0,0),z,22,1.4,smooth);
+    orbit3(30,28,30,1.4,smooth);
+    say(caption,"Depth-scaled labels remain crisp while the grouped asset moves.",0.40);
+  }
+}
+wait(0.30);
+
+step("finish-with-a-beat") {
+  show(sparks,0.15);
+  par {
+    burst(sparks,0.9);
+    pulse(console.key,0.65);
+    say(caption,"A reusable cue and the existing generic burst add the final editorial beat.",0.40);
+  }
+  cue(pop);
+}
+wait(1.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Al8ox4cq6sY" title="A Technical Assembly With Addressable Parts and Sound — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="trapped-light-dimensions"><a class="header" href="#trapped-light-dimensions">trapped-light-dimensions</a></h2>
 <p>A photon escapes one dimension at a time: first a 5-unit line, then the 5–12–13

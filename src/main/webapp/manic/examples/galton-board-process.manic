@@ -1,0 +1,150 @@
+// GALTON BOARD — RANDOM LOCALLY, PREDICTABLE GLOBALLY
+//
+// This is a probability story built from generic process vocabulary. Ordinary
+// tagged lines form the board; `branch` preserves each ball through eight
+// choices; `collect` and `observe` build the distribution from real arrivals.
+
+title("How Random Choices Become a Bell Curve");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.042),"Made With Manic");
+text(kicker,(cx,h*0.070),"PROBABILITY · RANDOM LOCALLY, ORDERED GLOBALLY");
+text(headline,(cx,h*0.115),"Can random choices create a predictable shape?");
+text(chapter,(cx,h*0.195),"1 · BEGIN WITH ONE FORK");
+text(caption,(cx,h*0.855),"One ball can land almost anywhere.");
+text(insight,(cx,h*0.815),"MORE ROUTES LEAD TO THE CENTER");
+text(cta,(cx,h*0.930),"MAKE PROBABILITY VISIBLE → 8gwifi.org/manic");
+
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(chapter,19); color(chapter,cyan); bold(chapter); hidden(chapter);
+size(caption,21); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(insight,19); color(insight,lime); bold(insight); hidden(insight);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+equation(law,(cx,h*0.158),`X\sim\operatorname{Binomial}\!\left(8,\frac12\right)`,29);
+hidden(law);
+
+let levels = 8;
+let boardX = cx;
+let topY = h*0.235;
+let dx = w*0.065;
+let dy = h*0.034;
+
+// Every directed edge joins one row to the next. Converging endpoints create
+// the ordinary rooted DAG followed by `branch`.
+for r in 0..levels {
+  for k in 0..r+1 {
+    let x1 = boardX + (k-r*0.5)*dx;
+    let y1 = topY + r*dy;
+    let xl = boardX + (k-(r+1)*0.5)*dx;
+    let xr = boardX + (k+1-(r+1)*0.5)*dx;
+    let y2 = topY + (r+1)*dy;
+
+    line(left{r}_{k},(x1,y1),(xl,y2));
+    line(right{r}_{k},(x1,y1),(xr,y2));
+    tag(left{r}_{k},boardRoutes); tag(right{r}_{k},boardRoutes);
+    color(left{r}_{k},dim); color(right{r}_{k},dim);
+    stroke(left{r}_{k},1.7); stroke(right{r}_{k},1.7);
+    opacity(left{r}_{k},0.30); opacity(right{r}_{k},0.30);
+
+    dot(peg{r}_{k},(x1,y1),4.8);
+    color(peg{r}_{k},fg); glow(peg{r}_{k},0.36); tag(peg{r}_{k},pegs);
+  }
+}
+untraced(boardRoutes);
+
+for k in 0..levels+1 {
+  let tx = boardX + (k-levels*0.5)*dx;
+  let ty = topY + levels*dy;
+  dot(exit{k},(tx,ty),5);
+  color(exit{k},gold); glow(exit{k},0.45); tag(exit{k},exits);
+  counter(bin{k},(tx,ty+28),k,0);
+  size(bin{k},15); color(bin{k},dim); tag(bin{k},exitLabels);
+}
+
+text(leftChoice,(boardX-dx*0.72,topY+dy*0.72),"LEFT");
+text(rightChoice,(boardX+dx*0.72,topY+dy*0.72),"RIGHT");
+size(leftChoice,15); size(rightChoice,15);
+color(leftChoice,cyan); color(rightChoice,magenta);
+hidden(leftChoice); hidden(rightChoice);
+
+circle(source,(boardX,topY),13);
+opacity(source,0);
+particles(balls,source,180,4.0,73);
+color(balls,cyan); glow(balls,0.78); z(balls,9);
+
+let histY = h*0.695;
+livehistogram(outcomes,(cx,histY),0,9,9,w*0.76,h*0.155,magenta);
+text(histTitle,(cx,h*0.595),"WHERE 180 BALLS ACTUALLY LANDED");
+size(histTitle,18); bold(histTitle); color(histTitle,dim);
+counter(landed,(cx,h*0.785),0,0,"landed  "," / 180");
+size(landed,21); color(landed,dim);
+
+hidden(pegs); hidden(exits); hidden(exitLabels);
+hidden(balls); hidden(outcomes); hidden(histTitle); hidden(landed);
+
+step("introduce one uncertain choice") {
+  par {
+    show(kicker,0.30);
+    show(headline,0.45);
+    show(law,0.45);
+    show(chapter,0.35);
+    show(caption,0.40);
+    draw(boardRoutes,0.90);
+    show(pegs,0.55);
+    show(exits,0.45);
+    show(exitLabels,0.45);
+    show(leftChoice,0.35);
+    show(rightChoice,0.35);
+  }
+}
+wait(0.60);
+
+step("repeat the choice eight times") {
+  par {
+    show(outcomes,0.50);
+    show(histTitle,0.35);
+    show(landed,0.35);
+    say(chapter,"2 · REPEAT LEFT OR RIGHT EIGHT TIMES",0.38);
+    say(caption,"At every peg, each ball makes another equally likely left-or-right choice.",0.44);
+  }
+}
+wait(0.55);
+
+step("let the crowd reveal the pattern") {
+  par {
+    branch(balls,boardRoutes,8.20,smooth);
+    collect(outcomes,balls,outcome,0.34,smooth);
+    observe(outcomes,balls,outcome);
+    observe(landed,balls,arrived);
+    show(balls,0.15);
+    seq {
+      say(chapter,"3 · WATCH 180 INDIVIDUAL JOURNEYS",0.38);
+      say(caption,"One route is unpredictable. The crowd begins to expose a stable pattern.",0.44);
+      wait(3.40);
+      say(caption,"Every bar is measured from the same balls you see falling—not animated separately.",0.44);
+    }
+  }
+}
+wait(0.65);
+
+step("explain why the center wins") {
+  par {
+    pulse(outcomes.bars,0.80);
+    show(insight,0.45);
+    say(chapter,"4 · ORDER EMERGES FROM MANY CHOICES",0.38);
+    say(caption,"Extreme bins need nearly all-left or all-right. Many more mixed sequences end near the center.",0.48);
+  }
+}
+wait(0.75);
+
+step("create with Manic") {
+  par {
+    pulse(outcomes.bars,0.75);
+    show(cta,0.45);
+    say(caption,"Describe the choices once. Manic keeps every route, arrival, count, and live distribution connected.",0.45);
+  }
+}
+wait(1.45);

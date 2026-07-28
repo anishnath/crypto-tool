@@ -226,6 +226,13 @@ log10 log2 sqrt abs floor ceil round sign`. Id interpolation: `name{expr}`.
 `parameter(id,(x,y),initial,min,max,["label"],[decimals])` creates a visible
 bounded value (readout + track/dot, tagged `{id}.widget`) ·
 `bind(parameter,target,property,"formula")` connects live `p` to `x|y|opacity|scale|angle|hue|value|trace|formula`; a plot formula also has coordinate `x` ·
+`bind(parameter,vectorfield,formula,"u(x,y,p)","v(x,y,p)")` smoothly deforms
+an existing bounded field while preserving its identity and arrow count ·
+`bind(parameter,curve3,formula,"x(t,p)","y(t,p)","z(t,p)")` ·
+`bind(parameter,surface3,formula,"z(x,y,p)")` ·
+`bind(parameter,param3,formula,"x(u,v,p)","y(u,v,p)","z(u,v,p)")` regenerate
+one stable 3-D family from live `p` while preserving id, sample topology, and
+styling; use bounded finite formulas and do not combine that target with `morph3` ·
 `bind(parameter,target,property,from,to)` maps parameter min/max to two output
 endpoints (use responsive `w`/`h` expressions for positions) ·
 `caption(id,"the words",(x,y),[size],[color])` (word row → `{id}.w0…`, tagged bare
@@ -235,6 +242,9 @@ or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` (filled disc — hides crossings; for textbook contacts use an outlined+dashed circle instead) · `circle(id,(x,y),r)` (**defaults filled+outlined**) · `rect(id,(x,y),w,h)` (**defaults filled+outlined**) ·
 `particles(id,container,count,[radius],[seed],["random|grid|ring"])` creates persistent
 seeded dots inside a circle/rectangle (`grid` is rectangular; `ring` is circular) ·
+`livehistogram(id,(cx,cy),min,max,bins,[width],[height],[color])` creates an
+initially empty bounded histogram for `observe`; bars are `{id}.bar{k}` and
+tagged `{id}.bars`, while `{id}.count` is its optional count readout ·
 `image(id,(x,y),"asset:manic-logo.png"|"path",[w],[h])` a raster image (PNG/JPG) from a documented bundled URI or provisioned file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing ordinary file → placeholder box, missing `asset:` → error (engine-only, no browser preview) · `svg(id,(x,y),"asset:name.svg"|"path",[size])` import VECTOR artwork as native path entities (2D twin of model3): each subpath → a traceable Polyline/filled Polygon, fitted to `size` px wide (default 240, aspect-preserved) and centred; solid fill/stroke colours kept LITERAL (faithful, not re-themed); pieces named {id}.p{i} + tagged {id} so draw/show/fade/hue/gradient/move broadcast over the whole drawing; v1 skips SVG text/image/clip/mask/filter/gradient-paint (engine-only, no browser preview) ·
 `equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work), while `\textcolor{cyan}{...}` colors individual terms semantically; `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
 `line(id,(x1,y1),(x2,y2))` (stroke only) · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts; **defaults filled+outlined**) · `arrow(id,(x1,y1),(x2,y2))` (stroke only; arrowhead is a filled tip — stop short of open markers) · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
@@ -264,10 +274,32 @@ text/images; quantity modes stroke-only) · `glow(id,n)` · `z(id,n)` · `clip(i
 `grow(id,target,[d],[ease])` (line/arrow endpoint) · `draw(id,[d])` ·
 `travel(id,path,[d],[ease])` moves one persistent entity once along a line,
 arrow, curve, plot, spline, or arc and holds it at the endpoint ·
+`cue(tick|pop|whoosh|chime)` schedules one short local procedural sound at the
+current beat; never invent a remote SFX URL ·
 `wander(particles,[d])` (contained ambient motion) · `burst(particles,[d])` (explode outward from the centre + fade — the impact/confetti/ignition beat; one word, no knobs) ·
 `arrange(particles,container,["random|grid|ring"],[d],[ease])` (preserve every dot id
 while expanding into a new container or moving among random, rectangular, and
 radial layouts; random transitions use independent seeded curved routes) ·
+`stream(particles,path,d,[spread],[ease])` progressively sends a persistent
+collection along one authored path and records arrival + normalized path speed ·
+`emit(particles,path,uniform|maxwell,d,[spread],[ease])` releases persistent
+particles with deterministic individual normalized speeds; faster samples
+traverse sooner ·
+`advect(particles,vectorfield,d,[rate])` moves persistent dots through a bounded
+named/formula field with deterministic seekable integration; it samples a
+preceding parameter journey after that beat settles ·
+`branch(particles,path_tag,d,[ease])` sends every persistent child through one
+authored directed acyclic path network. Path direction comes from authored
+start→end points; the graph needs one root and 2+ terminals; seeded uniform
+choices preserve identity through forks and convergences and expose `outcome`,
+`steps`, and `arrival` ·
+`collect(livehistogram,particles,speed|arrival|outcome|steps,[d],[ease])`
+catches every particle in the bin selected by its real process measurement ·
+`observe(target,particles,speed|arrival|outcome|steps|arrived)` drives a live
+histogram or counter from that same compiled process. Inside one `par`, write
+dependency order `emit/stream/branch` → optional `collect` → `observe`;
+playback still begins together. Never hand-animate a histogram that claims to
+measure the particles ·
 `attach(child,target,[(dx,dy)])` keeps an existing 2-D child pinned to the
 target after all ordinary motion resolves; `attach(child,none)` releases it at
 the settled position ·
@@ -285,6 +317,9 @@ emphasis; continuous uses finite complete cycles and drains cleanly) ·
 `` rewrite(id, `latex`, [d], [ease]) `` (existing `equation` only: smoothly match
 unchanged RaTeX parts into the next author-supplied formula; Manic animates the
 states but does not solve/verify them; chain calls on the same id) ·
+`disintegrate(id,[d])` (generic deterministic silhouette dissolve for equations,
+images, and vector shapes; use after `rewrite` when semantic continuity should
+settle before the visual turns to dust) ·
 `flash(id,[name])` · `pulse(id,[d])` · `shake(id,[d])` ·
 `scale(id,f,[d],[ease])` · `rotate(id,deg,[d],[ease])` · `spin(id,deg,[d],[ease])`
 · `cam((x,y),[d],[ease])` · `zoom(f,[d],[ease])` ·
@@ -311,6 +346,9 @@ and decorative spark are all ordinary creator-authored entities. Use `travel`
 for persistent object identity, `flow` for identity-free path activity, `seq`
 for authored order, `par` for simultaneous paths, and tags for grouped paths.
 `flow` does not require a connected graph or endpoints.
+Use `advect(particles,field,duration,[rate])` when persistent dots should follow
+a settled bounded vector field. It is deterministic and seekable, stops at the
+field boundary, and does not imply collisions or fluid physics.
 
 Easings: `smooth linear in out overshoot bounce elastic`.
 
@@ -319,7 +357,9 @@ Easings: `smooth linear in out overshoot bounce elastic`.
 · `plot(id,(cx,cy),sx,sy,fn,[domain|(x0,x1)])` where `fn` is a named function
 (`sin cos tan asin acos atan parabola cubic line abs exp sqrt log recip gauss sinc sigmoid relu step`) or a
 **formula string** `"cos(x)+0.5*sin(3*x)"` · **curve-analysis family** (all take a `plot` id and animate the moving param `x` via `to(id,x,target,dur)`): `tangent(id,curve,x,[len])` tangent line + contact dot (slope read from the function; only the dot shows at a corner/asymptote) · `normal(id,curve,x,[len])` the perpendicular line + dot · `slope(id,curve,x,[(dx,dy)])` a live slope NUMBER riding the point · `area(id,curve,a,b,[n])` filled region under the curve from `a` to `b` (sweep it open with `to(id,x,b,dur)` after starting collapsed `area(r,f,1,1)`) · `integral(id,curve,a,b,[(px,py)])` a live NUMBER of the integral a→b (animate `to(id,x,b,dur)` in step with an `area` sweep and it climbs to the true value) · `roots(id,curve,[color])` a dot at every zero-crossing (children `{id}0..`, tag `id`) · `newton(id,curve,x0,[steps])` Newton's-method zig-zag from guess `x0` converging on a root — declare `untraced(id)` then `draw(id,dur)` to animate the walk · `deriv(id,curve,[color])` the derivative f' drawn as its own curve (itself a graph) · `accum(id,curve,[a],[color])` the accumulation function ∫ₐˣ f drawn as a curve — `deriv(accum(f))` traces back onto f (the Fundamental Theorem) · `extrema(id,curve,[color])` dots at maxima/minima (slope 0) · `inflections(id,curve,[color])` dots where concavity flips (f''=0) · `band(id,top,bottom,[color])` the filled region between two curves · `taylor(id,curve,a,n,[color])` the degree-n Taylor polynomial about `a` as its own curve (reveal n=1,3,5 to show convergence) · `limit(id,curve,a,[color])` visualises lim(x→a) f: open circle at the value approached + guides + an approaching dot (`to(id,x,a,dur)`); works at a removable hole. `a` may be `inf`/`-inf` → auto-detects + draws the horizontal asymptote `y=L` (`inf`/`infinity` is a numeric constant = ∞) · `spline(id,p0,p1,…)` a smooth Catmull-Rom curve through the given points (knots `{id}.k0..`, tag `{id}.knots`); `untraced`+`draw` to trace · `trajectory(id,"dx/dt","dy/dt",(x0,y0),(cx,cy),scale,[steps])` an ODE path (RK4) from math `(x0,y0)` drawn as `(cx+x*scale,cy-y*scale)` — orbits/spirals/phase portraits (for `dy/dx=f`, pass `"1"`,`"f(x,y)"`); `untraced`+`draw` to flow · `vector(id,(cx,cy),(dx,dy),[color])`
-· `numberline` · `arc`/`sector`/`annulus`/`pie` · `arrowfield`/`vectorfield` ·
+· `numberline` · `arc`/`sector`/`annulus`/`pie` ·
+`arrowfield(id,(cx,cy),halfw,halfh,named,[density])` ·
+`vectorfield(id,(cx,cy),halfw,halfh,"u(x,y)","v(x,y)",[density])` ·
 `matrix(id,"a b; c d",(cx,cy),[cw],[ch])` (entry `{id}.r{i}c{j}`, tags
 `{id}.row{i}`/`{id}.col{j}`/`{id}.entries`) · `table(id,"a b; c d",(cx,cy),[cw],
 [ch],["col labels"],["row labels"])` (grid lines `{id}.hlines`/`{id}.vlines`).
@@ -486,6 +526,23 @@ numbers) · `pin3(label,(x,y,z)|entity3)` (glue a 2D label to a 3D point) ·
 `link3(id,a,b,[trim])` (live edge) · `project3(id,source,"xy|xz|yz")` (live
 orthogonal projection) · `contour3(id,surface,level)` ·
 `label3(label,target,[world_height])` (projected label; optional natural depth scaling) ·
+`collection3(id,center,count,spread,seed,[radius])` (fixed-count seeded batched
+3D points) · `chain3(collection,"lengths","rates",duration)` (dependent
+endpoint chain) · `links3(id,collection,chain|nearest|all,[neighbors])` (live
+batched relationships) · `trail3(id,collection,[child],[thickness])` (compiled
+history of one member) ·
+`ring3(id,collection,child,[segments])` (live orbit ring centred on one chain
+segment; combine several coloured rings with `chain3` for epicycles) ·
+`historyplot(id,collection,child,x|y|z,center,size)` (screen-space 2-D history
+derived from that exact compiled member; never hand-animate a claimed waveform) ·
+`historyplot3(id,collection,child,x|y|z,origin,size)` (world-space,
+depth-tested derived history; use when the plot must travel with a 3-D layer or
+camera) ·
+`tree3(id,root,length,angle,shrink,depth,seed)` (seeded fractal hierarchy,
+batched one entity per generation; address layers as `{id}.dN` and leaves as
+`{id}.leaves`) · `child3(id,collection,index,[radius])` (addressable
+member proxy) · `vectorfield3(id,center,half,"u(x,y,z,p)","v(x,y,z,p)",
+"w(x,y,z,p)",[density])` (bounded formula field; normalized time `p`) ·
 `curve3(id,"x(t)","y(t)","z(t)",[(t0,t1)])` (parametric 3D curve) ·
 `surface3(id,"z(x,y)",(x0,x1),(y0,y1),[res])` (z=f(x,y) filled, flat-shaded surface; formulas may use `x` and `y`) ·
 `param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) · `heightmap3(id,grid,"z(x,y,h)",[size])` (**Grid→3D bridge:** lift a grid-kit `grid` into a terrain mesh — `h`=1 for a filled/`wall`/alive cell else 0, latest CA/WFC frame if run; `"h*1.6"` raises walls, add `fbm(x,y)` for organic roll; the grid kit stays 3D-unaware) · **procedural noise in ANY formula string** (plot/surface3/heightmap3/bind): `noise(x,y)` (smooth value noise) and `fbm(x,y)` (fractal Brownian motion) — both ~[-1,1], deterministic; e.g. `surface3(land,"fbm(x*0.9,y*0.9)*2.4",(-4,4),(-4,4),72)` is a fractal landscape. Formula strings also take 2-arg `atan2/hypot/min/max/mod` · **multivariable calculus on a `surface3`:** `gradient3(id,surface,x,y,[color])` steepest-ascent arrow · `tangentplane3(id,surface,x,y,[color])` the tangent plane patch · `volume3(id,surface,[res],[color])` the volume under it as a column grid (double integral) ·
@@ -497,16 +554,22 @@ orthogonal projection) · `contour3(id,surface,level)` ·
 `thick(id,radius)` (constant-width tube; `0` = thin line) ·
 `tube3(id,path,"radius(t)",[sides])` (variable-radius tube) ·
 `model3(id,"asset:models/manic-pyramid.obj"|"file.obj",center,[scale])` (geometry-only OBJ, 16 MB + geometry limits; `asset:` is production-bundled, ordinary paths must be provisioned) ·
+`assembly3(id,"asset:models/manic-console.obj"|"file.obj",center,[scale])`
+(named OBJ groups become addressable `{id}.group` entities tagged `id`; no GLB
+nodes or material scripts) ·
 `finish3(id,"shading=smooth material=metal texture=checker scale=4 mesh=0.2 depth=0.2 shadow=0.2")`
 (one bounded, opt-in render finish; defaults preserve the standard diagram look).
-For `model3`, prefer a documented bundled URI when it fits. The currently
-available bundled model is `asset:models/manic-pyramid.obj`; never invent an
-asset name or remote URL. Use an ordinary OBJ path only when the user/backend
-will provide that file.
+For `model3`/`assembly3`, prefer a documented bundled URI when it fits. The
+currently available bundled models are `asset:models/manic-pyramid.obj` and
+`asset:models/manic-console.obj`; never invent an asset name or remote URL. Use
+an ordinary OBJ path only when the user/backend will provide that file.
 Use `thick` for 3D line/arrow/curve width; `stroke` is 2D-only and errors on 3D entities.
 On 3D entities `to(id,prop,target,[dur],[ease])` animates `morph`, `opacity`, `scale`, `trace`, or `color` (use move3/shift3/rotate3/grow3 for position, rotation, and size).
 Timeline: `move3(id,to,[d],[ease])` · `shift3(id,delta,[d],[ease])` ·
 `rotate3(id,(xdeg,ydeg,zdeg),[d],[ease])` · `grow3(id,to,[d],[ease])` ·
+`drift3(collection,d,[amount])` ·
+`advect3(collection,vectorfield3,d,[rate])` (deterministic RK4) ·
+`followshot3(child|none)` ·
 `orbit3(azimuth,elevation,radius,[d],[ease])` · `roll3(degrees,[d],[ease])` ·
 `look3(target,[d],[ease])`. **Creator-first 3D V2:**
 `view3(id_or_tag,"front|side|top|isometric|fit",[d],[ease],[margin])` frames
@@ -795,7 +858,7 @@ Wave-Function-Collapse settling (deterministic per seed); then `run(id, [gens],
 examples/grid-astar.manic, grid-life.manic, grid-wfc.manic.
 
 ### Stats kit
-`histogram(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — bins a number list into bars (the shape of the data). Bars are `{id}.bar{k}` (exactly `bins`, tagged `{id}.bars`) so `stagger(dt){ for k in 0..bins { draw(id.bar{k}) } }` builds them up; `{id}.meanline`/`{id}.mean` mark the mean, `{id}.min`/`{id}.max` the range. Data is a plain number list, like `leastsquares`. Pass `rainbow` as the colour to give every bar its own hue. · `summary(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — describe a dataset: mean(gold)/median(magenta)/mode(lime) markers + ±1σ band + n/range/variance/std readout, on a number line of dots. · `skew(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — histogram + mean(gold)/median(magenta) markers + labelled skewness (right/left/symmetric). · `boxplot(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — five-number summary box-and-whisker: box = Q1→Q3 (IQR), median line, whiskers to non-outliers, `{id}.outliers` dots beyond 1.5·IQR. · `correlation(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — scatter + best-fit line + the Pearson correlation r (strong/moderate/weak, positive/negative); x & y share `unit`. · `bellcurve(id,(cx,cy),mu,sigma,[unit],[color])` (alias `gaussian`) — the normal bell curve with the 68-95-99.7 rule shaded (nested ±1σ/±2σ/±3σ bands `{id}.band1/2/3`, mean line, % labels, value ticks). NOT `normal` (that's the calculus perpendicular-line builtin). · `hypothesis(id,(cx,cy),z,[alpha],[unit])` — significance test: standard-normal null, tails beyond ±z shaded = p-value vs alpha, with verdict. · `covariance(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — covariance as signed-area rectangles about the mean cross (cyan agree / magenta disagree). · `bayes(id,(cx,cy),heads,tails,[width],[height])` — Bayesian updating: prior + likelihood → posterior for a coin's bias. · `distribution(id,(cx,cy),"uniform|exponential|binomial|poisson",a,[b],[color])` — a named distribution (curve or bars). · `confidence(id,(cx,cy),mean,sd,n,[level],[width])` — a confidence interval (estimate ± z·sd/√n). · `montecarlo(id,(cx,cy),points,[seed],[size])` — estimate π by darts (seeded). · `randomwalk(id,(cx,cy),steps,[seed],[scale])` — a 2D random-walk path (seeded). · `lln(id,(cx,cy),trials,[seed],[width],[height])` — Law of Large Numbers: running proportion of coin flips settling onto 0.5 (`{id}.curve` + reference); seeded. · `clt(id,(cx,cy),samplesize,trials,[seed],[width],[height],[color])` — the Central Limit Theorem: histograms the averages of `samplesize` dice over `trials` runs (`{id}.bar{k}` ×30, `{id}.bars`) + the normal they converge to (`{id}.curve`); seeded/deterministic. **All bar builtins (histogram/distribution/skew/clt) accept `rainbow` as the colour for per-bar hues.**
+`histogram(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — bins a number list into bars (the shape of the data). Bars are `{id}.bar{k}` (exactly `bins`, tagged `{id}.bars`) so `stagger(dt){ for k in 0..bins { draw(id.bar{k}) } }` builds them up; `{id}.meanline`/`{id}.mean` mark the mean, `{id}.min`/`{id}.max` the range. Data is a plain number list, like `leastsquares`. Pass `rainbow` as the colour to give every bar its own hue. · `summary(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — describe a dataset: mean(gold)/median(magenta)/mode(lime) markers + ±1σ band + n/range/variance/std readout, on a number line of dots. · `skew(id,(cx,cy),"v1 v2 v3 ...",[bins],[width],[height],[color])` — histogram + mean(gold)/median(magenta) markers + labelled skewness (right/left/symmetric). · `boxplot(id,(cx,cy),"v1 v2 v3 ...",[width],[color])` — five-number summary box-and-whisker: box = Q1→Q3 (IQR), median line, whiskers to non-outliers, `{id}.outliers` dots beyond 1.5·IQR. · `correlation(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — scatter + best-fit line + the Pearson correlation r (strong/moderate/weak, positive/negative); x & y share `unit`. · `bellcurve(id,(cx,cy),mu,sigma,[unit],[color])` (alias `gaussian`) — the normal bell curve with the 68-95-99.7 rule shaded (nested ±1σ/±2σ/±3σ bands `{id}.band1/2/3`, mean line, % labels, value ticks). NOT `normal` (that's the calculus perpendicular-line builtin). · `hypothesis(id,(cx,cy),z,[alpha],[unit])` — significance test: standard-normal null, tails beyond ±z shaded = p-value vs alpha, with verdict. · `covariance(id,(cx,cy),unit,"x1 y1 x2 y2 ...",[color])` — covariance as signed-area rectangles about the mean cross (cyan agree / magenta disagree). · `bayes(id,(cx,cy),heads,tails,[width],[height])` — Bayesian updating: prior + likelihood → posterior for a coin's bias. · `distribution(id,(cx,cy),"uniform|exponential|maxwell|binomial|poisson",a,[b],[color])` — a named distribution (curve or bars); Maxwell uses scale `a` and spans `0..4a`. · `confidence(id,(cx,cy),mean,sd,n,[level],[width])` — a confidence interval (estimate ± z·sd/√n). · `montecarlo(id,(cx,cy),points,[seed],[size])` — estimate π by darts (seeded). · `randomwalk(id,(cx,cy),steps,[seed],[scale])` — a 2D random-walk path (seeded). · `lln(id,(cx,cy),trials,[seed],[width],[height])` — Law of Large Numbers: running proportion of coin flips settling onto 0.5 (`{id}.curve` + reference); seeded. · `clt(id,(cx,cy),samplesize,trials,[seed],[width],[height],[color])` — the Central Limit Theorem: histograms the averages of `samplesize` dice over `trials` runs (`{id}.bar{k}` ×30, `{id}.bars`) + the normal they converge to (`{id}.curve`); seeded/deterministic. **All bar builtins (histogram/distribution/skew/clt) accept `rainbow` as the colour for per-bar hues.**
 
 ### Charts kit
 Animated **race charts** — ranked bars/columns/lines that reorder over time as the data changes (the viral data-viz format), true to the numbers. Flow: a container + a pasted data block + one driver verb. · `racechart(id, "bar"|"column"|"line", "P0 P1 P2 …", [title])` — declare a race: layout, the period labels that tick as it plays (usually years), optional title. · `racedata(parent, "block")` — THE data: one row per entity, `label [icon] v0 v1 …` (a value per period); rows split on newline or `;`, cells on comma/tab/whitespace, so a CSV/spreadsheet pastes straight in. The optional `icon` is an SVG shorthand (`us`→a flag, `rocket`→an emoji) or a full `asset:…svg` path — the flag/logo rides the bar. Missing cells = 0. · `raceseries(parent, "label", ["icon"], "v0 v1 …")` — add ONE entity (the computed/loop sibling: `for i { raceseries(g, name{i}, vals{i}) }`). · `raceline(parent, ["label"], ["v0 v1 …"])` — a companion LINE across the top of a bar race (auto-summed running total, or an explicit metric). · `racepanel(parent)` — a multi-line HISTORY panel below a bar race (every series a line, revealed to a moving time-cursor — the bar+line combo). · `race(parent, [dur], [ease])` — PLAY it: interpolate between periods, re-rank, slide bars to their new slots (the reorder IS the race), rescale the axis (with gridlines + a Total readout), tick the year + values. One verb, no per-frame work. Bars are rounded gradient rects; every piece is tagged `{parent}` so `show`/`fade` broadcast. Examples: `charts-gdp-race` (bar+flags), `charts-column-race` (column), `charts-line-race` (line), `charts-bar-line` (bar+total line), `charts-german-elections` (bar+history panel, real CSV), `creator-race-quiz` (a voiced quiz a race proves).

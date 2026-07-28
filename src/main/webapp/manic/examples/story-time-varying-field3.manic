@@ -1,0 +1,57 @@
+title("The Current Changes While We Travel");
+canvas("9:16");
+template("blank");
+
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+text(kicker, (cx, h*0.085), "ENGINE FOUNDATION · LIVE 3D FIELDS");
+text(headline, (cx, h*0.13), "What if the current changes mid-flight?");
+text(caption, (cx, h*0.83), "The arrows and particles sample the same field at the same story time.");
+size(kicker,20); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.80); hidden(caption);
+
+camera3((16,-20,14),(0,0,0),46);
+vectorfield3(current,(0,0,0),(4.2,3.2,2.6),"-y + 0.7*sin(p*tau)","x + 0.35*cos(p*tau)","0.45*sin(z+p*tau)",6);
+collection3(tracers,(0,0,0),90,(2.5,1.8,1.5),73,0.065);
+child3(hero,tracers,0,0.14);
+trail3(route,tracers,0,0.032);
+color(current,dim);
+color(tracers,cyan);
+color(hero,gold);
+color(route,gold);
+hidden(current); hidden(tracers); hidden(hero); hidden(route);
+
+step("question") {
+  show(kicker,0.35);
+  show(headline,0.45);
+  show(caption,0.40);
+}
+wait(0.35);
+
+step("reveal-the-current") {
+  par {
+    show(current,0.70);
+    show(tracers,0.55);
+    show(hero,0.45);
+    show(route,0.45);
+    say(caption,"A bounded formula declares x, y, z and normalized time p.",0.40);
+  }
+}
+wait(0.30);
+
+step("flow-and-follow") {
+  followshot3(hero,(0,0,0.15));
+  par {
+    advect3(tracers,current,7.0,1.15);
+    orbit3(55,26,29.0,7.0,smooth);
+    say(caption,"Deterministic RK4 moves every tracer while the camera follows one stable child.",0.45);
+  }
+  followshot3(none);
+}
+wait(0.45);
+
+step("takeaway") {
+  cue(chime);
+  say(caption,"Field, motion, trail, and shot now tell one synchronized truth.",0.45);
+}
+wait(1.2);

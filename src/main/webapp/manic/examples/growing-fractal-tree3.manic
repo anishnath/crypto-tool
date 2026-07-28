@@ -1,0 +1,58 @@
+title("One Rule Grows a Forest");
+canvas("9:16");
+template("blank");
+
+watermark(mark,(w*0.16,h*0.055),"Made With Manic");
+text(kicker,(cx,h*0.085),"FRACTAL TREE · BATCHED GENERATIONS");
+text(headline,(cx,h*0.13),"How can one branch become 1,023?");
+text(caption,(cx,h*0.84),"Repeat one rule: split, turn, shrink—and keep every generation readable.");
+text(cta,(cx,h*0.91),"CREATE YOUR OWN → 8gwifi.org/manic");
+size(kicker,20); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,34); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,22); color(caption,dim); wrap(caption,w*0.82); hidden(caption);
+size(cta,22); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((9,-13,8),(0,0,3.2),43);
+tree3(tree,(0,0,-3.2),2.1,27,0.72,10,42);
+for i in 0..10 { untraced(tree.d{i}); hidden(tree.d{i}); }
+hidden(tree.leaves);
+
+step("the seed") {
+  show(kicker,0.3); show(headline,0.45); show(caption,0.4);
+  view3(tree,"isometric",0.7,smooth,1.42);
+}
+wait(0.35);
+
+step("grow by generation") {
+  par {
+    stagger(0.16) {
+      for i in 0..10 {
+        par { show(tree.d{i},0.22); draw(tree.d{i},0.58,smooth); }
+      }
+    }
+    say(caption,"Each depth is one renderer batch, even when it contains hundreds of branches.",0.45);
+    view3(tree,"isometric",1.1,smooth,1.48);
+  }
+}
+wait(0.4);
+
+step("find the canopy") {
+  par {
+    show(tree.leaves,0.65);
+    seq {
+      orbit3(42,24,21.0,2.1,smooth);
+      view3(tree,"isometric",0.9,smooth,1.42);
+    }
+    say(caption,"A semantic camera journey reveals the rule first, then the whole canopy.",0.45);
+  }
+}
+wait(0.5);
+
+step("takeaway") {
+  par {
+    pulse(tree.leaves,0.7);
+    say(caption,"Deep procedural geometry stays simple to author, deterministic, and smooth to seek.",0.45);
+    show(cta,0.45);
+  }
+}
+wait(1.3);

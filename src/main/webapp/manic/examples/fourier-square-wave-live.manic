@@ -1,0 +1,114 @@
+// Odd harmonics build a square wave. Every partial sum is a live history of
+// the corresponding endpoint, so the corners emerge from the geometry itself.
+
+title("How Odd Harmonics Build a Square Wave");
+canvas("9:16");
+template("paper");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(kicker,(cx,h*0.075),"FOURIER · ODD HARMONICS");
+text(headline,(cx,h*0.115),"Watch a square wave find its corners");
+text(caption,(cx,h*0.18),"Start with n = 1. Then add 3, 5, 7 … all the way to 25.");
+text(cta,(cx,h*0.925),"TURN IDEAS INTO ANIMATION → 8gwifi.org/manic");
+size(kicker,18); color(kicker,dim); bold(kicker); hidden(kicker);
+size(headline,31); bold(headline); wrap(headline,w*0.84); hidden(headline);
+size(caption,20); color(caption,dim); wrap(caption,w*0.84); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-29,-25,43),(1,-2,0),42,orthographic);
+
+collection3(series,(-3,5,0),13,(0,0,0),11,0.065);
+line3(sweep,(-3,5,0),(10,5,0)); hidden(sweep);
+links3(arms,series,chain);
+child3(tip,series,12,0.13);
+
+arrow3(chainX,(-11,5,0),(7,5,0));
+arrow3(chainY,(-3,-2,0),(-3,10.5,0));
+arrow3(plotX,(-7,-10.5,0),(12,-10.5,0));
+arrow3(plotY,(-7,-10.5,0),(-7,-4.2,0));
+
+point3(shotA,(-7.5,-11,0),0.01);
+point3(shotB,(8.5,10.5,0),0.01);
+tag(shotA,shot); tag(shotB,shot);
+hidden(shotA); hidden(shotB);
+
+tag(series,construction); tag(arms,construction); tag(tip,construction);
+tag(chainX,construction); tag(chainY,construction);
+tag(plotX,construction); tag(plotY,construction);
+
+for i in 0..13 {
+  ring3(orbit{i},series,i,72);
+  historyplot3(partial{i},series,i,y,(-7,-10.5,0),(19,6));
+  thick(orbit{i},0.030);
+  thick(partial{i},0.020);
+  tag(orbit{i},construction);
+  tag(partial{i},construction);
+}
+
+equation(formula,(0,0),`S_{13}(t)=\sum_{k=0}^{12}\frac{4}{\pi(2k+1)}\sin((2k+1)t)`,24);
+label3(formula,(-4,-2.7,0),0.80);
+tag(formula,construction);
+
+color(series,fg); color(arms,fg); color(tip,fg);
+color(chainX,fg); color(chainY,fg); color(plotX,fg); color(plotY,fg);
+color(formula,fg);
+thick(chainX,0.016); thick(chainY,0.016);
+thick(plotX,0.016); thick(plotY,0.016);
+
+color(orbit0,lime);      color(partial0,lime);
+color(orbit1,gold);      color(partial1,gold);
+color(orbit2,orange);    color(partial2,orange);
+color(orbit3,coral);     color(partial3,coral);
+color(orbit4,red);       color(partial4,red);
+color(orbit5,magenta);   color(partial5,magenta);
+color(orbit6,violet);    color(partial6,violet);
+color(orbit7,indigo);    color(partial7,indigo);
+color(orbit8,blue);      color(partial8,blue);
+color(orbit9,cyan);      color(partial9,cyan);
+color(orbit10,mint);     color(partial10,mint);
+color(orbit11,lime);     color(partial11,lime);
+color(orbit12,fg);       color(partial12,fg);
+
+hidden(construction);
+
+step("begin with one sine wave") {
+  show(kicker,0.30);
+  show(headline,0.42);
+  show(caption,0.38);
+}
+wait(0.35);
+
+step("reveal the odd-harmonic chain") {
+  par {
+    show(construction,0.85);
+    view3(shot,"top",1.35,smooth,1.08);
+    say(caption,"Every smaller orbit contributes the next odd frequency.",0.38);
+  }
+}
+wait(0.30);
+
+step("build the corners live") {
+  par {
+    // Two complete base cycles: all odd harmonic rates are doubled together.
+    chain3(series,"4.0744 1.3581 0.8149 0.5821 0.4527 0.3704 0.3134 0.2716 0.2397 0.2144 0.1940 0.1771 0.1630","2 6 10 14 18 22 26 30 34 38 42 46 50",16.0);
+    travel3(series,sweep,16.0,linear);
+    seq {
+      say(caption,"Cycle one: odd harmonics flatten the plateaus and steepen both sides.",0.40);
+      wait(6.10);
+      say(caption,"Cycle two: every orbit closes and the square-wave pattern returns continuously.",0.40);
+      wait(5.20);
+      say(caption,"Two complete periods make the repeating structure impossible to miss.",0.40);
+    }
+  }
+}
+wait(0.35);
+
+step("create with Manic") {
+  par {
+    pulse(tip,0.75);
+    pulse(partial12,0.75);
+    show(cta,0.45);
+    say(caption,"One declarative chain becomes circles, partial sums, a live waveform, and a complete visual story.",0.42);
+  }
+}
+wait(1.45);
