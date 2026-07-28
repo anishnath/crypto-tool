@@ -317,6 +317,7 @@ export function bootstrap(ctx) {
     let net = null;
     let cube3d = null;
     let cube3dPending = false;                 // mountCubeNxN is async — gate concurrent mounts
+    let cube3dDirty = false;                   // a newer mount was requested mid-flight → rebuild after
     let trefoil = null;                        // 2-D trefoil projection (third view)
     let solution = null;                       // {moves, breakdown, meta, elapsedMs}
     let stepIdx = 0;                           // moves applied to `state` from `originalState`
@@ -413,22 +414,34 @@ export function bootstrap(ctx) {
     }
 
     async function mount3D() {
-        if (!ui.cube3dHost || cube3dPending) return;
+        if (!ui.cube3dHost) return;
+        // A mount is already in flight (mountCubeNxN is async). Don't drop this
+        // request — mark it dirty so the running mount rebuilds with the LATEST
+        // size/state when it finishes. Without this, a size change during an
+        // in-flight mount (e.g. setSize(4) from a shared-URL load while the
+        // initial setSize(3) mount is still awaiting) is silently lost and the
+        // 3-D cube stays the old size while net/trefoil update correctly.
+        if (cube3dPending) { cube3dDirty = true; return; }
         cube3dPending = true;
         try {
-            if (cube3d) { cube3d.dispose(); cube3d = null; }
-            cube3d = await mountCubeNxN(ui.cube3dHost, size, state);
-            // `state` may have changed while the (async) mount was in flight —
-            // e.g. a shared cube applied from the URL on load.  Re-sync so the
-            // 3-D cube matches the net/trefoil instead of showing the stale
-            // state captured when mountCubeNxN was called.
-            cube3d.setState(state);
-            if (cube3d.setOnMove) {
-                cube3d.setOnMove((move) => {
-                    clearSolution();
-                    applyOne(move);
-                });
-            }
+            do {
+                cube3dDirty = false;
+                if (cube3d) { cube3d.dispose(); cube3d = null; }
+                const built = await mountCubeNxN(ui.cube3dHost, size, state);
+                // If size/state changed during this async build (e.g. a shared
+                // 4×4 loaded while the initial 3×3 mount was in flight), this
+                // build is stale — throw it away and rebuild at the new size
+                // rather than calling setState() with a mismatched-length state.
+                if (cube3dDirty) { try { built.dispose(); } catch (e) { /* noop */ } continue; }
+                cube3d = built;
+                cube3d.setState(state);
+                if (cube3d.setOnMove) {
+                    cube3d.setOnMove((move) => {
+                        clearSolution();
+                        applyOne(move);
+                    });
+                }
+            } while (cube3dDirty);
         } catch (err) {
             console.error('3D mount failed:', err);
             ui.cube3dHost.innerHTML =
@@ -436,6 +449,7 @@ export function bootstrap(ctx) {
                 '3D preview unavailable: ' + (err.message || err) + '</div>';
         } finally {
             cube3dPending = false;
+            cube3dDirty = false;
         }
     }
 
