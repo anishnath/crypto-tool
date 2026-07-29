@@ -1,0 +1,182 @@
+// A complete textbook problem told with three truthful presentations:
+// 2D isolates the useful right triangle, textbook 3D builds the cuboid cleanly,
+// and spatial 3D confirms that the final segment really crosses the volume.
+
+title("The 3–4–12 Box — Find the Space Diagonal");
+canvas("9:16");
+template("paper");
+
+creator(me,"@anish2good name=Manic_Geometry tagline=Textbooks_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact safe=clean");
+socials(me);
+watermark(manicMark,(w*0.17,h*0.065),"Made With Manic");
+endcard(me,"title=Make_Math_Move cta=8gwifi.org/manic");
+
+let u = (w+h-abs(w-h))/2160;
+text(kicker,(cx,h*0.075),"MANIC · PYTHAGORAS IN 3D"); size(kicker,22*u); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(cx,h*0.13),"A box is 3 × 4 × 12. Find its space diagonal."); size(headline,36*u); bold(headline); wrap(headline,w*0.82); hidden(headline);
+text(chapter,(cx,h*0.205),"THE PROBLEM"); size(chapter,23*u); bold(chapter); color(chapter,gold); hidden(chapter);
+text(caption,(cx,h*0.805),"Connect one corner to the opposite corner—through the box."); size(caption,24*u); bold(caption); wrap(caption,w*0.78); hidden(caption);
+text(note,(cx,h*0.855),"Hint: solve one right triangle at a time."); size(note,21*u); color(note,dim); wrap(note,w*0.78); hidden(note);
+equation(work,(cx,h*0.735),`D=?`,43*u); hidden(work);
+
+// ---------------------------------------------------------------------------
+// 2D: isolate the 3 × 4 floor. This is the truthful view for the first triangle.
+// ---------------------------------------------------------------------------
+let lx = w*0.24;
+let rx = w*0.76;
+let ty = h*0.36;
+let by = h*0.60;
+
+line(floorBottom,(lx,by),(rx,by)); color(floorBottom,cyan); stroke(floorBottom,4*u); untraced(floorBottom); hidden(floorBottom); tag(floorBottom,floor2d);
+line(floorRight,(rx,by),(rx,ty)); color(floorRight,magenta); stroke(floorRight,4*u); untraced(floorRight); hidden(floorRight); tag(floorRight,floor2d);
+line(floorTop,(rx,ty),(lx,ty)); color(floorTop,cyan); stroke(floorTop,4*u); untraced(floorTop); hidden(floorTop); tag(floorTop,floor2d);
+line(floorLeft,(lx,ty),(lx,by)); color(floorLeft,magenta); stroke(floorLeft,4*u); untraced(floorLeft); hidden(floorLeft); tag(floorLeft,floor2d);
+line(floorDiagonal2,(lx,by),(rx,ty)); color(floorDiagonal2,gold); stroke(floorDiagonal2,6*u); untraced(floorDiagonal2); hidden(floorDiagonal2); tag(floorDiagonal2,floor2d);
+
+dot(A2,(lx,by),9*u); filled(A2); color(A2,fg); hidden(A2); tag(A2,floor2d);
+dot(C2,(rx,ty),9*u); filled(C2); color(C2,fg); hidden(C2); tag(C2,floor2d);
+text(a2,(lx-22*u,by+24*u),"A"); size(a2,22*u); bold(a2); hidden(a2); tag(a2,floor2d);
+text(c2,(rx+22*u,ty-20*u),"C"); size(c2,22*u); bold(c2); hidden(c2); tag(c2,floor2d);
+text(side4,(cx,by+32*u),"4"); size(side4,24*u); bold(side4); color(side4,cyan); hidden(side4); tag(side4,floor2d);
+text(side3,(rx+30*u,(ty+by)/2),"3"); size(side3,24*u); bold(side3); color(side3,magenta); hidden(side3); tag(side3,floor2d);
+text(base5,(cx+22*u,(ty+by)/2-18*u),"5"); size(base5,25*u); bold(base5); color(base5,gold); hidden(base5); tag(base5,floor2d);
+
+// ---------------------------------------------------------------------------
+// 3D: the scientific frame retains the real 0..4, 0..3, 0..12 coordinates.
+// Its display cube is intentionally balanced; the numbered axes keep the data
+// honest while the space-diagonal geometry stays readable on a phone.
+// ---------------------------------------------------------------------------
+camera3((9,-11,8),(0,0,0),17,orthographic);
+frame3(boxFrame,(0,0,0),(6,6,6),"x=0..4 y=0..3 z=0..12 xmajor=1 ymajor=1 zmajor=4 planes=xy:min,xz:min,yz:min mode=textbook");
+hidden(boxFrame);
+
+// Data-to-display corners of frame3:
+// (0,0,0) -> (-3,-3,-3), (4,3,0) -> (3,3,-3), (4,3,12) -> (3,3,3).
+point3(A3,(-3,-3,-3),0.15); color(A3,fg); hidden(A3); tag(A3,boxStory);
+point3(C3,(3,3,-3),0.15); color(C3,gold); hidden(C3); tag(C3,boxStory);
+point3(B3,(3,3,3),0.18); color(B3,lime); hidden(B3); tag(B3,boxStory);
+line3(floorDiagonal3,(-3,-3,-3),(3,3,-3)); color(floorDiagonal3,gold); thick(floorDiagonal3,0.075); untraced(floorDiagonal3); hidden(floorDiagonal3); tag(floorDiagonal3,boxStory);
+line3(height3,(3,3,-3),(3,3,3)); color(height3,magenta); thick(height3,0.075); untraced(height3); hidden(height3); tag(height3,boxStory);
+line3(spaceDiagonal,(-3,-3,-3),(3,3,3)); color(spaceDiagonal,lime); thick(spaceDiagonal,0.105); untraced(spaceDiagonal); hidden(spaceDiagonal); tag(spaceDiagonal,boxStory);
+
+text(a3,(0,0),"A"); size(a3,24*u); bold(a3); hidden(a3); pin3(a3,A3,(-18,16)); tag(a3,boxStory);
+text(c3,(0,0),"C"); size(c3,24*u); bold(c3); color(c3,gold); hidden(c3); pin3(c3,C3,(16,14)); tag(c3,boxStory);
+text(b3,(0,0),"B"); size(b3,24*u); bold(b3); color(b3,lime); hidden(b3); pin3(b3,B3,(16,-14)); tag(b3,boxStory);
+point3(floorMid,(0,0,-3),0.01); hidden(floorMid);
+point3(heightMid,(3,3,0),0.01); hidden(heightMid);
+point3(spaceMid,(0,0,0),0.01); hidden(spaceMid);
+text(floorLabel,(0,0),"AC = 5"); size(floorLabel,21*u); bold(floorLabel); color(floorLabel,gold); hidden(floorLabel); pin3(floorLabel,floorMid,(10,18)); tag(floorLabel,boxStory);
+text(heightLabel,(0,0),"CB = 12"); size(heightLabel,21*u); bold(heightLabel); color(heightLabel,magenta); hidden(heightLabel); pin3(heightLabel,heightMid,(18,0)); tag(heightLabel,boxStory);
+text(spaceLabel,(0,0),"AB = 13"); size(spaceLabel,22*u); bold(spaceLabel); color(spaceLabel,lime); hidden(spaceLabel); pin3(spaceLabel,spaceMid,(-18,-22)); tag(spaceLabel,boxStory);
+
+// ---------------------------------------------------------------------------
+// THE SOLUTION
+// ---------------------------------------------------------------------------
+step("pose the box problem") {
+  seq {
+    par { show(kicker,0.35); show(headline,0.50); show(chapter,0.40); show(caption,0.45); show(note,0.40); show(work,0.40); }
+    view3(boxFrame,"isometric",0.80,smooth,1.35);
+    show(boxFrame,0.75);
+    stagger(0.10) { show(A3,0.25); show(a3,0.25); show(B3,0.25); show(b3,0.25); }
+    par { show(spaceDiagonal,0.15); draw(spaceDiagonal,1.20,smooth); }
+    pulse(spaceDiagonal,0.65);
+    wait(0.60);
+  }
+}
+
+step("find the hidden floor diagonal") {
+  seq {
+    par {
+      fade(boxFrame,0.50);
+      fade(boxStory,0.50);
+      say(chapter,"1 · SOLVE THE 2D FLOOR",0.40,smooth);
+      say(caption,"The floor is a 3 × 4 rectangle. Its diagonal is the first hypotenuse.",0.50,smooth);
+      say(note,"This part is planar—so 2D is the clearest explanation.",0.45,smooth);
+      rewrite(work,`AC^2=3^2+4^2`,0.65,smooth);
+    }
+    stagger(0.10) {
+      show(floorBottom,0.10); draw(floorBottom,0.55,smooth);
+      show(floorRight,0.10); draw(floorRight,0.45,smooth);
+      show(floorTop,0.10); draw(floorTop,0.55,smooth);
+      show(floorLeft,0.10); draw(floorLeft,0.45,smooth);
+      show(A2,0.20); show(a2,0.20); show(C2,0.20); show(c2,0.20);
+      show(side4,0.25); show(side3,0.25);
+    }
+    par {
+      show(floorDiagonal2,0.10);
+      draw(floorDiagonal2,1.10,smooth);
+      rewrite(work,`AC=\sqrt{3^2+4^2}=\sqrt{25}=\textcolor{gold}{5}`,1.15,smooth);
+    }
+    show(base5,0.30);
+    pulse(floorDiagonal2,0.65);
+    wait(0.65);
+  }
+}
+
+step("use that answer inside the box") {
+  seq {
+    par {
+      fade(floor2d,0.50);
+      say(chapter,"2 · BUILD THE 3D RIGHT TRIANGLE",0.40,smooth);
+      say(caption,"Now AC = 5 meets the 12-unit height at a right angle.",0.50,smooth);
+      say(note,"The same coordinates return as a clean textbook projection.",0.45,smooth);
+      rewrite(work,`AB^2=AC^2+CB^2`,0.70,smooth);
+    }
+    view3(boxFrame,"isometric",0.75,smooth,1.35);
+    show(boxFrame,0.70);
+    stagger(0.10) {
+      show(A3,0.20); show(a3,0.20);
+      show(C3,0.20); show(c3,0.20);
+      show(floorDiagonal3,0.10); draw(floorDiagonal3,0.90,smooth); show(floorLabel,0.25);
+      show(height3,0.10); draw(height3,0.90,smooth); show(heightLabel,0.25);
+      show(B3,0.20); show(b3,0.20);
+    }
+    wait(0.35);
+  }
+}
+
+step("solve the space diagonal") {
+  seq {
+    par {
+      show(spaceDiagonal,0.10);
+      draw(spaceDiagonal,1.25,smooth);
+      rewrite(work,`AB=\sqrt{\textcolor{gold}{5^2}+\textcolor{magenta}{12^2}}`,0.95,smooth);
+      say(caption,"Pythagoras works again—this time across the volume.",0.45,smooth);
+    }
+    rewrite(work,`AB=\sqrt{25+144}=\sqrt{169}`,0.85,smooth);
+    par {
+      rewrite(work,`\boxed{AB=\textcolor{lime}{13}}`,0.75,smooth);
+      show(spaceLabel,0.30);
+      pulse(spaceDiagonal,0.80);
+      say(note,"Two right triangles · one exact answer",0.40,smooth);
+    }
+    wait(0.80);
+  }
+}
+
+step("see why the answer is spatial") {
+  seq {
+    par {
+      present3(boxFrame,spatial,0.70,smooth);
+      say(chapter,"3 · REVEAL THE SPATIAL TRUTH",0.40,smooth);
+      say(caption,"Orbit the same construction: AB crosses all three dimensions.",0.50,smooth);
+      say(note,"2D to calculate · textbook 3D to explain · spatial 3D to understand",0.50,smooth);
+    }
+    par { orbit3(48,26,12,1.80,smooth); pulse(spaceDiagonal,0.70); }
+    par { orbit3(132,34,12,1.80,smooth); pulse(boxFrame.axes,0.70); }
+    wait(0.85);
+  }
+}
+
+step("creator call to action") {
+  par {
+    fade(boxFrame,0.45);
+    fade(boxStory,0.45);
+    fade(work,0.35);
+    fade(chapter,0.35);
+    fade(caption,0.35);
+    fade(note,0.35);
+    show(me.endcard,0.60);
+  }
+  wait(1.80);
+}

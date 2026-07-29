@@ -10,8 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-e96d0476.css">
         <link rel="stylesheet" href="css/chrome-d279d366.css">
@@ -34,10 +34,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de24f8dc.js";
+            window.path_to_searchindex_js = "searchindex-d497fd61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-74e98ac0.js"></script>
+        <script src="toc-683d253c.js"></script>
             <!-- seo:begin -->
 <meta name="description" content="A template controls the background, semantic palette, glow character and any page chrome for the entire movie. Choose it once near the top of the file:">
 <link rel="canonical" href="https://8gwifi.org/manic/docs/templates.html">
@@ -52,7 +52,7 @@
 <meta name="twitter:title" content="Templates — choose the whole visual system - manic — the manual">
 <meta name="twitter:description" content="A template controls the background, semantic palette, glow character and any page chrome for the entire movie. Choose it once near the top of the file:">
 <meta name="twitter:image" content="https://i.ytimg.com/vi/8R1BOiFmzJo/maxresdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/templates.html#page","url":"https://8gwifi.org/manic/docs/templates.html","name":"Templates — choose the whole visual system - manic — the manual","headline":"Templates — choose the whole visual system - manic — the manual","description":"A template controls the background, semantic palette, glow character and any page chrome for the entire movie. Choose it once near the top of the file:","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Templates — choose the whole visual system"}]},{"@type":"VideoObject","name":"Black & White by Default — manic's Mono Template","description":"A template controls the background, semantic palette, glow character and any page chrome for the entire movie. Choose it once near the top of the file:","thumbnailUrl":["https://i.ytimg.com/vi/8R1BOiFmzJo/maxresdefault.jpg"],"uploadDate":"2026-07-28","embedUrl":"https://www.youtube.com/embed/8R1BOiFmzJo","contentUrl":"https://www.youtube.com/watch?v=8R1BOiFmzJo","publisher":{"@type":"Organization","name":"manic"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/templates.html#page","url":"https://8gwifi.org/manic/docs/templates.html","name":"Templates — choose the whole visual system - manic — the manual","headline":"Templates — choose the whole visual system - manic — the manual","description":"A template controls the background, semantic palette, glow character and any page chrome for the entire movie. Choose it once near the top of the file:","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Templates — choose the whole visual system"}]},{"@type":"VideoObject","name":"Black & White by Default — manic's Mono Template","description":"A template controls the background, semantic palette, glow character and any page chrome for the entire movie. Choose it once near the top of the file:","thumbnailUrl":["https://i.ytimg.com/vi/8R1BOiFmzJo/maxresdefault.jpg"],"uploadDate":"2026-07-29","embedUrl":"https://www.youtube.com/embed/8R1BOiFmzJo","contentUrl":"https://www.youtube.com/watch?v=8R1BOiFmzJo","publisher":{"@type":"Organization","name":"manic"}}]}</script>
 <!-- seo:end -->
     </head>
     <body>
@@ -196,10 +196,10 @@
 <p>A template controls the background, semantic palette, glow character and any
 page chrome for the entire movie. Choose it once near the top of the file:</p>
 <pre><code class="language-manic">canvas("9:16");
-template("mono");
+template("black");
 </code></pre>
-<p><code>mono</code> is the default. If a DSL file does not call <code>template(...)</code>, it renders
-exactly as if <code>template("mono")</code> had been written. Keeping the call explicit is
+<p><code>black</code> is the default. If a DSL file does not call <code>template(...)</code>, it renders
+exactly as if <code>template("black")</code> had been written. Keeping the call explicit is
 useful in shared examples; omitting it is convenient for ordinary authoring.</p>
 <h2 id="available-templates"><a class="header" href="#available-templates">Available templates</a></h2>
 <div class="table-wrapper">
@@ -208,8 +208,9 @@ useful in shared examples; omitting it is convenient for ordinary authoring.</p>
 <tr><th>template</th><th>best for</th><th>character</th></tr>
 </thead>
 <tbody>
+<tr><td><code>black</code></td><td>creator stories, vivid explainers and general authoring</td><td>exact <code>#000000</code> canvas, full semantic colour, no chrome</td></tr>
 <tr><td><code>mono</code></td><td>professional explainers, proofs and restrained Reels</td><td>black-and-white editorial surface, clear luminance hierarchy, subtle glow</td></tr>
-<tr><td><code>plain</code></td><td>legacy or intentionally colourful scenes</td><td>original neon semantic colours on near-black</td></tr>
+<tr><td><code>plain</code> (alias <code>blank</code>)</td><td>dark indigo neon scenes</td><td>original neon semantic colours on a subtly tinted near-black surface</td></tr>
 <tr><td><code>terminal</code></td><td>code, algorithms and technical demos</td><td>neon terminal frame and stronger chrome</td></tr>
 <tr><td><code>paper</code></td><td>textbook figures, worksheets and print</td><td>white page, dark ink, crisp low-glow rendering</td></tr>
 <tr><td><code>blueprint</code></td><td>geometry, engineering and construction</td><td>cyan/white drafting marks on deep navy</td></tr>
@@ -218,7 +219,11 @@ useful in shared examples; omitting it is convenient for ordinary authoring.</p>
 </table>
 </div>
 <p>Useful aliases are <code>monochrome</code>, <code>blackwhite</code>, <code>black-white</code>, and <code>bw</code> for
-<code>mono</code>; <code>light</code> and <code>print</code> for <code>paper</code>; and <code>blue</code> for <code>blueprint</code>.</p>
+<code>mono</code>; <code>blank</code> and <code>clean</code> for <code>plain</code>; <code>light</code> and <code>print</code> for <code>paper</code>; and
+<code>blue</code> for <code>blueprint</code>.</p>
+<p><code>black</code> and <code>plain</code> are intentionally different. <code>black</code> is a truly black,
+chrome-free creator canvas; <code>plain</code> retains Manic’s original indigo-black neon
+surface.</p>
 <h2 id="mono-in-practice"><a class="header" href="#mono-in-practice">Mono in practice</a></h2>
 <pre><code class="language-manic">// Mono is the default; keep this line explicit when teaching or sharing.
 title("Mono template");
@@ -279,23 +284,24 @@ manic scene.manic --record out --template paper
 run. This is a quick way to proof the same semantic scene on mono, paper and
 blueprint without editing the source.</p>
 <h2 id="creator-and-reel-guidance"><a class="header" href="#creator-and-reel-guidance">Creator and Reel guidance</a></h2>
-<p>Start with mono for a polished black-and-white identity. It works especially
-well for mathematics, question cards, native social icons and technical timers:</p>
+<p>Start with black when colour is part of the explanation. It gives Creator
+stories a clean, cinema-dark canvas while preserving semantic accents:</p>
 <pre><code class="language-manic">canvas("9:16");
-// template("mono") is optional because mono is the default.
+// template("black") is optional because black is the default.
 creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social");
 quiz(q, "Which statement is true?");
 </code></pre>
-<p>Switch to <code>shorts</code> when accent hue communicates part of the channel identity,
-or to <code>paper</code> for an exam-sheet or textbook treatment. Template choice does not
-change Creator layout, safe areas, timing, option labels or social-platform
-selection—it changes only their visual system.</p>
+<p>Choose <code>mono</code> for an intentionally black-and-white identity, <code>shorts</code> for a
+tinted studio surface, or <code>paper</code> for an exam-sheet or textbook treatment.
+Template choice does not change Creator layout, safe areas, timing, option
+labels or social-platform selection—it changes only their visual system.</p>
 <h2 id="practical-checks"><a class="header" href="#practical-checks">Practical checks</a></h2>
 <ul>
 <li>Review one reading frame and one reveal frame at phone size.</li>
+<li>On black, inspect dim lines and labels as well as bright accents.</li>
 <li>In mono, check luminance contrast rather than relying on colour names.</li>
 <li>Prefer one semantic accent role; do not make every object equally bright.</li>
-<li>Use <code>plain</code> when migrating an older example that must preserve its neon hue.</li>
+<li>Use <code>plain</code> when you specifically want the original indigo-neon surface.</li>
 <li>Use <code>paper</code> or <code>blueprint</code> to test whether a construction remains legible on a
 very different surface.</li>
 </ul>

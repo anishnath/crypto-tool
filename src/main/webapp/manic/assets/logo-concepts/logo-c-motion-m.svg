@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="540" viewBox="0 0 540 540">
+  <rect width="540" height="540" rx="76" fill="#0B0E17"/>
+  <g transform="translate(120,54) scale(2.5)">
+    <path d="M26 88 L26 54 C26 43 43 43 43 54 L43 88 M43 54 C43 43 60 43 60 54 L60 88"
+          fill="none" stroke="#00E5FF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#FF2D95" stroke="#0B0E17" stroke-width="2">
+      <circle cx="26" cy="54" r="5.5"/><circle cx="43" cy="54" r="5.5"/><circle cx="60" cy="54" r="5.5"/>
+    </g>
+    <g fill="#FFD166">
+      <circle cx="26" cy="88" r="4"/><circle cx="43" cy="88" r="4"/><circle cx="60" cy="88" r="4"/>
+    </g>
+  </g>
+  <text x="270" y="470" text-anchor="middle" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-weight="600" font-size="80" letter-spacing="-2">
+    <tspan fill="#E8ECF4">man</tspan><tspan fill="#FF2D95">i</tspan><tspan fill="#E8ECF4">c</tspan></text>
+</svg>

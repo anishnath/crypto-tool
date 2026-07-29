@@ -1,0 +1,836 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>API reference — every builtin - manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-d497fd61.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-683d253c.js"></script>
+            <!-- seo:begin -->
+<meta name="description" content="This page is generated from manic-lang ’s builtin catalog , the same source used by parsing, editor highlighting, autocomplete, and engine/catalog…">
+<link rel="canonical" href="https://8gwifi.org/manic/docs/API.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="manic — the manual">
+<meta property="og:type" content="article">
+<meta property="og:title" content="API reference — every builtin - manic — the manual">
+<meta property="og:description" content="This page is generated from manic-lang ’s builtin catalog , the same source used by parsing, editor highlighting, autocomplete, and engine/catalog…">
+<meta property="og:url" content="https://8gwifi.org/manic/docs/API.html">
+<meta property="og:image" content="https://8gwifi.org/manic/manic-logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="API reference — every builtin - manic — the manual">
+<meta name="twitter:description" content="This page is generated from manic-lang ’s builtin catalog , the same source used by parsing, editor highlighting, autocomplete, and engine/catalog…">
+<meta name="twitter:image" content="https://8gwifi.org/manic/manic-logo.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/API.html#page","url":"https://8gwifi.org/manic/docs/API.html","name":"API reference — every builtin - manic — the manual","headline":"API reference — every builtin - manic — the manual","description":"This page is generated from manic-lang ’s builtin catalog , the same source used by parsing, editor highlighting, autocomplete, and engine/catalog…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"API reference — every builtin"}]}]}</script>
+<!-- seo:end -->
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://8gwifi.org/manic" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <!-- GENERATED by scripts/gen-api.py; do not edit by hand. -->
+<h1 id="manic-api-reference"><a class="header" href="#manic-api-reference">Manic API reference</a></h1>
+<p>This page is generated from <a href="https://github.com/anishnath/manic/blob/main/crates/manic-lang/src/catalog.rs"><code>manic-lang</code>’s builtin catalog</a>, the same source used by parsing, editor highlighting, autocomplete, and engine/catalog regression tests. It currently lists <strong>391 builtins across 16 kits</strong>.</p>
+<p>Run <code>python3 scripts/gen-api.py</code> after changing the catalog. Run <code>python3 scripts/gen-api.py --check</code> to verify that this committed page is current.</p>
+<h2 id="reading-a-signature"><a class="header" href="#reading-a-signature">Reading a signature</a></h2>
+<ul>
+<li><code>new id</code> is the name created by a constructor.</li>
+<li><code>id or tag</code> targets an existing entity, generated part, or group.</li>
+<li>Parameters inside brackets are optional.</li>
+<li><code>…</code> means the builtin is catalogued, but its detailed parameter metadata still lives in the linked topic guide or <code>LANGUAGE.md</code>.</li>
+<li>This is the exhaustive name index; the topic chapters remain the best place to learn composition, constraints, and examples.</li>
+</ul>
+<h2 id="standard-shapes-styling-and-motion"><a class="header" href="#standard-shapes-styling-and-motion">Standard shapes, styling, and motion</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>circle(id: new id, center: (x, y), r: number)</code></td><td>constructor / setup</td><td>a circle</td></tr>
+<tr><td><code>rect(id: new id, center: (x, y), w: number, h: number)</code></td><td>constructor / setup</td><td>a rectangle</td></tr>
+<tr><td><code>image(id: new id, center: (x, y), path: string, [w: number], [h: number])</code></td><td>constructor / setup</td><td>a raster image (PNG/JPG) from a bundled asset: URI or file path, centred at a point (w×h px)</td></tr>
+<tr><td><code>svg(id: new id, center: (x, y), path: string, [size: number])</code></td><td>constructor / setup</td><td>import VECTOR artwork from an asset: URI or file path as native path entities (each subpath a traceable Polyline/Polygon), fitted to <code>size</code> px wide and centred; pieces are tagged {id} so draw/show/fade/hue/gradient/move broadcast</td></tr>
+<tr><td><code>equation(id: new id, center: (x, y), latex: string, [size: number])</code></td><td>constructor / setup</td><td>typeset a LaTeX math string centred at a point; standard \textcolor{cyan}{…} gives individual terms semantic Manic colours that follow the template. Put LaTeX in BACKTICKS; animate with show/fade/move/scale (image, not draw-on)</td></tr>
+<tr><td><code>line(id: new id, from: (x, y), to: (x, y))</code></td><td>constructor / setup</td><td>a line segment</td></tr>
+<tr><td><code>link(id: new id, from: id or tag, to: id or tag, [bend: number])</code></td><td>constructor / setup</td><td>a straight or bent edge that follows two moving entities</td></tr>
+<tr><td><code>arrow(id: new id, from: (x, y), to: (x, y))</code></td><td>constructor / setup</td><td>an arrow</td></tr>
+<tr><td><code>polygon(…)</code></td><td>constructor / setup</td><td>a filled polygon: polygon(id, (x1,y1), (x2,y2), (x3,y3), …, [color])</td></tr>
+<tr><td><code>dot(id: new id, at: (x, y), [r: number])</code></td><td>constructor / setup</td><td>a small filled dot</td></tr>
+<tr><td><code>particles(id: new id, container: id or tag, count: number, [radius: number], [seed: number], [layout: string])</code></td><td>constructor / setup</td><td>deterministic small dots inside a circle or rectangle; optional random/grid/ring layout</td></tr>
+<tr><td><code>text(id: new id, at: (x, y), text: string)</code></td><td>constructor / setup</td><td>a text label</td></tr>
+<tr><td><code>label(…)</code></td><td>constructor / setup</td><td>a label pinned to an entity</td></tr>
+<tr><td><code>caption(id: new id, words: string, at: (x, y), [size: number], [color: colour])</code></td><td>constructor / setup</td><td>a row of caption words (karaoke/pop)</td></tr>
+<tr><td><code>support(id: new id, center: (x, y), [len: number], [dir: string])</code></td><td>constructor / setup</td><td>a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; dir = open side</td></tr>
+<tr><td><code>counter(id: new id, at: (x, y), value: number, [decimals: number], [prefix: string], [suffix: string])</code></td><td>constructor / setup</td><td>a live numeric readout</td></tr>
+<tr><td><code>parameter(id: new id, at: (x, y), initial: number, min: number, max: number, [label: string], [decimals: number])</code></td><td>constructor / setup</td><td>a visible bounded value for a smooth multi-visual journey</td></tr>
+<tr><td><code>bind(parameter: id or tag, target: id or tag, property: new id, formula_or_from: string, [to: number], [formula_component_3: string])</code></td><td>constructor / setup</td><td>connect a parameter to a property, plot/field formula, or stable generated 3-D family</td></tr>
+<tr><td><code>cursor(id: id or tag)</code></td><td>constructor / setup</td><td>give a text entity a typewriter cursor</td></tr>
+<tr><td><code>sticky(id: id or tag)</code></td><td>constructor / setup</td><td>pin an entity to the screen so it stays fixed through cam/zoom (HUD overlay)</td></tr>
+<tr><td><code>morph(…)</code></td><td>constructor / setup</td><td>sampled-point shape morph a-&gt;b</td></tr>
+<tr><td><code>invertpath(id: new id, source: id or tag, center: id or tag, radius: number, [samples: number])</code></td><td>constructor / setup</td><td>live whole-outline inversion about a named center</td></tr>
+<tr><td><code>reflectpath(id: new id, source: id or tag, mirror: id or tag, [samples: number])</code></td><td>constructor / setup</td><td>live whole-outline reflection across a named line</td></tr>
+<tr><td><code>copy(new: new id, src: id or tag)</code></td><td>constructor / setup</td><td>duplicate an entity</td></tr>
+<tr><td><code>color(id: id or tag, color: colour)</code></td><td>constructor / setup</td><td>set fill/stroke colour</td></tr>
+<tr><td><code>outline(id: id or tag, color: colour)</code></td><td>constructor / setup</td><td>set outline colour</td></tr>
+<tr><td><code>size(id: id or tag, size: number)</code></td><td>constructor / setup</td><td>set text size</td></tr>
+<tr><td><code>wrap(id: id or tag, width: number)</code></td><td>constructor / setup</td><td>wrap a text/caption/$…$ label to a width (px), breaking at word boundaries; inline math stays atomic</td></tr>
+<tr><td><code>stroke(id: id or tag, width: number)</code></td><td>constructor / setup</td><td>set stroke width</td></tr>
+<tr><td><code>dashed(id: id or tag, [dash: number], [gap: number])</code></td><td>constructor / setup</td><td>use a repeating dash/gap stroke on a path-like entity</td></tr>
+<tr><td><code>gradient(…)</code></td><td>constructor / setup</td><td>multi-stop gradient on the primary paint: gradient(id, c1, c2, …, [mode]) — along a path stroke by arc length, a linear (angle°) / radial fill, or a computed “speed”/“curvature” quantity on strokes</td></tr>
+<tr><td><code>glow(id: id or tag, amount: number)</code></td><td>constructor / setup</td><td>set neon glow amount</td></tr>
+<tr><td><code>opacity(id: id or tag, value: number)</code></td><td>constructor / setup</td><td>set opacity 0..1</td></tr>
+<tr><td><code>hue(id: id or tag, degrees: number, [s: number], [l: number])</code></td><td>constructor / setup</td><td>drive colour by an HSL hue</td></tr>
+<tr><td><code>rot(id: id or tag, degrees: number)</code></td><td>constructor / setup</td><td>set rotation (degrees)</td></tr>
+<tr><td><code>z(id: id or tag, z: number)</code></td><td>constructor / setup</td><td>set draw order</td></tr>
+<tr><td><code>clip(id: id or tag, region: id or tag)</code></td><td>constructor / setup</td><td>clip an entity (or tagged group) to another entity’s rectangular bounds — reveal-through-a-window / crop-to-panel / region-wipe; the scissor follows the region each frame</td></tr>
+<tr><td><code>mask(id: id or tag, region: id or tag)</code></td><td>constructor / setup</td><td>clip an entity (or tagged group) to another entity’s ARBITRARY shape (circle, polygon, star, an imported svg outline) — reveal-through-any-shape / lens / porthole / spotlight; masks any content and follows the region each frame</td></tr>
+<tr><td><code>tag(id: id or tag, tag: new id)</code></td><td>constructor / setup</td><td>add a group tag</td></tr>
+<tr><td><code>bold(id: id or tag)</code></td><td>constructor / setup</td><td>use the bold mono font</td></tr>
+<tr><td><code>display(id: id or tag)</code></td><td>constructor / setup</td><td>mark visible</td></tr>
+<tr><td><code>hidden(id: id or tag)</code></td><td>constructor / setup</td><td>start hidden (opacity 0)</td></tr>
+<tr><td><code>filled(id: id or tag)</code></td><td>constructor / setup</td><td>turn the fill on</td></tr>
+<tr><td><code>outlined(id: id or tag)</code></td><td>constructor / setup</td><td>turn the outline on</td></tr>
+<tr><td><code>untraced(id: id or tag)</code></td><td>constructor / setup</td><td>start undrawn, ready for draw-on</td></tr>
+<tr><td><code>union(…)</code></td><td>constructor / setup</td><td>boolean union of two shapes</td></tr>
+<tr><td><code>intersect(…)</code></td><td>constructor / setup</td><td>boolean intersection</td></tr>
+<tr><td><code>intersection(…)</code></td><td>constructor / setup</td><td>boolean intersection</td></tr>
+<tr><td><code>difference(…)</code></td><td>constructor / setup</td><td>boolean difference a-b</td></tr>
+<tr><td><code>subtract(…)</code></td><td>constructor / setup</td><td>boolean difference a-b</td></tr>
+<tr><td><code>exclusion(…)</code></td><td>constructor / setup</td><td>boolean symmetric difference</td></tr>
+<tr><td><code>xor(…)</code></td><td>constructor / setup</td><td>boolean symmetric difference</td></tr>
+<tr><td><code>brace(…)</code></td><td>constructor / setup</td><td>a curly brace</td></tr>
+<tr><td><code>bracelabel(…)</code></td><td>constructor / setup</td><td>a brace with a label</td></tr>
+<tr><td><code>bracetext(…)</code></td><td>constructor / setup</td><td>a brace’s text label</td></tr>
+<tr><td><code>draw(id: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>trace a stroke on</td></tr>
+<tr><td><code>flow(path: id or tag, [dur: number], [direction: id or tag], [mode: id or tag])</code></td><td>animation verb</td><td>send a directional luminous pulse or finite continuous stream over a path</td></tr>
+<tr><td><code>erase(id: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>reverse of draw</td></tr>
+<tr><td><code>show(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>fade in</td></tr>
+<tr><td><code>fade(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>fade out</td></tr>
+<tr><td><code>flash(id: id or tag, [color: colour], [dur: number], [ease: easing])</code></td><td>animation verb</td><td>flash a colour, then restore</td></tr>
+<tr><td><code>recolor(id: id or tag, color: colour, [dur: number])</code></td><td>animation verb</td><td>permanently change colour</td></tr>
+<tr><td><code>pulse(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>grow-and-settle attention pulse</td></tr>
+<tr><td><code>shake(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>horizontal shake (error gesture)</td></tr>
+<tr><td><code>spin(id: id or tag, [degrees: number], [dur: number])</code></td><td>animation verb</td><td>spin about the centre</td></tr>
+<tr><td><code>move(id: id or tag, to: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>move to an absolute point</td></tr>
+<tr><td><code>wander(particles: id or tag, [dur: number])</code></td><td>animation verb</td><td>gently move a particle group inside its source container</td></tr>
+<tr><td><code>burst(particles: id or tag, [dur: number])</code></td><td>animation verb</td><td>explode a particle group outward from its container centre, decelerating and fading — the impulse/impact/confetti/ignition beat</td></tr>
+<tr><td><code>arrange(particles: id or tag, container: id or tag, [layout: string], [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>move persistent particles into a deterministic random, grid, or ring layout; random uses stable organic curved routes</td></tr>
+<tr><td><code>travel(entity: id or tag, path: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>move one persistent entity once along an existing path and stop at its endpoint</td></tr>
+<tr><td><code>attach(child: id or tag, target: id or tag, [offset: (x, y)])</code></td><td>state-changing verb</td><td>keep an entity pinned to another entity plus an optional offset; use target <code>none</code> to release</td></tr>
+<tr><td><code>become(source: id or tag, target: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>transform one entity into a declared visual blueprint while retaining the source id</td></tr>
+<tr><td><code>turn(id_or_tag: id or tag, pivot: (x, y), degrees: number, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>rotate one entity or tagged arrangement rigidly around a shared pivot</td></tr>
+<tr><td><code>disintegrate(entity: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>dissolve an entity’s actual silhouette into deterministic seekable particles</td></tr>
+<tr><td><code>shift(id: id or tag, by: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>move by a delta</td></tr>
+<tr><td><code>grow(id: id or tag, to: (x, y), [dur: number])</code></td><td>animation verb</td><td>animate a line/arrow endpoint</td></tr>
+<tr><td><code>scale(id: id or tag, factor: number, [dur: number])</code></td><td>animation verb</td><td>animate scale to a factor</td></tr>
+<tr><td><code>rotate(id: id or tag, degrees: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>animate rotation</td></tr>
+<tr><td><code>say(id: id or tag, text: string, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>crossfade text to new content</td></tr>
+<tr><td><code>speak(…)</code></td><td>animation verb</td><td>narrate with TTS; service from voice(“gtts”|“cartesia”|“elevenlabs”) (default gTTS); speak(“text”) or speak(caption, “text”); duration is the voice length</td></tr>
+<tr><td><code>cue(sound: id or tag)</code></td><td>animation verb</td><td>play a deterministic procedural sound beat: tick, pop, whoosh, or chime</td></tr>
+<tr><td><code>rewrite(equation: id or tag, latex: string, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>smoothly transform one authored LaTeX equation state into the next while matching unchanged visual parts; this animates supplied math and does not solve it</td></tr>
+<tr><td><code>type(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>typewriter reveal</td></tr>
+<tr><td><code>to(id: id or tag, prop: new id, value: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>animate any property to a value</td></tr>
+<tr><td><code>set(id: id or tag, prop: new id, value: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>alias of <code>to</code></td></tr>
+<tr><td><code>transform(id: id or tag, origin: (x, y), a: number, b: number, c: number, d: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>apply a 2x2 matrix (ApplyMatrix)</td></tr>
+<tr><td><code>swap(a: id or tag, b: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>swap two entities, or array slots i,j</td></tr>
+<tr><td><code>cycle(…)</code></td><td>state-changing verb</td><td>move entities cyclically into one another’s positions along an optional arc</td></tr>
+<tr><td><code>cam(to: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>pan the camera to a point</td></tr>
+<tr><td><code>zoom(factor: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>zoom the camera</td></tr>
+<tr><td><code>karaoke(…)</code></td><td>animation verb</td><td>highlight caption words in sequence</td></tr>
+<tr><td><code>wordpop(…)</code></td><td>animation verb</td><td>pop caption words in one at a time</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="generative"><a class="header" href="#generative">Generative</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>lsystem(id: new id, center: (x, y), size: number, axiom: string, rules: string, [options: string])</code></td><td>constructor / setup</td><td>a fitted, batched curve L-system with turtle turns, continuous draw-on, and optional closed concave fill</td></tr>
+<tr><td><code>repeat(id: new id, motif: id or tag, options: string)</code></td><td>constructor / setup</td><td>repeat one entity or tagged motif as a stable hex, grid, or radial arrangement</td></tr>
+<tr><td><code>ifs2(id: new id, center: (x, y), size: (x, y), count: number, seed: number, rules: string, [options: string])</code></td><td>constructor / setup</td><td>a deterministic batched affine iterated-function system</td></tr>
+<tr><td><code>mandelbrot(id: new id, center: (x, y), size: (x, y), xrange: (x, y), yrange: (x, y), iterations: number, [columns: number])</code></td><td>constructor / setup</td><td>a batched escape-time Mandelbrot field</td></tr>
+<tr><td><code>polarpath(id: new id, center: (x, y), scale: number, formula: string, range: (x, y), [samples: number], [closed: number])</code></td><td>constructor / setup</td><td>a sampled polar formula path</td></tr>
+<tr><td><code>hull2(id: new id, cloud: id or tag, [depth: number], [pivot: number])</code></td><td>constructor / setup</td><td>an onion-depth hull derived from a batched point cloud</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="process"><a class="header" href="#process">Process</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>livehistogram(id: new id, center: (x, y), min: number, max: number, bins: number, [width: number], [height: number], [color: colour])</code></td><td>constructor / setup</td><td>an initially empty histogram driven by real measurements from a deterministic collection process</td></tr>
+<tr><td><code>stream(particles: id or tag, path: id or tag, dur: number, [spread: number], [ease: easing])</code></td><td>state-changing verb</td><td>progressively send a persistent particle collection along a path and retain truthful arrival/speed measurements</td></tr>
+<tr><td><code>emit(particles: id or tag, path: id or tag, profile: id or tag, dur: number, [spread: number], [ease: easing])</code></td><td>state-changing verb</td><td>release a persistent particle collection with deterministic individual speeds sampled from a named profile</td></tr>
+<tr><td><code>advect(particles: id or tag, field: id or tag, duration: number, [rate: number])</code></td><td>state-changing verb</td><td>move a persistent particle collection through a bounded vector field using deterministic seekable integration</td></tr>
+<tr><td><code>branch(particles: id or tag, paths: id or tag, dur: number, [ease: easing])</code></td><td>state-changing verb</td><td>send every persistent item through one seeded route in a tagged directed acyclic path network</td></tr>
+<tr><td><code>collect(histogram: id or tag, particles: id or tag, measurement: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>catch processed particles in the live-histogram bins selected by their real speed, arrival, outcome, or step measurement</td></tr>
+<tr><td><code>observe(target: id or tag, particles: id or tag, measurement: id or tag)</code></td><td>animation verb</td><td>drive a counter or live histogram from measurements produced by the latest stream, emit, or branch process</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="charts"><a class="header" href="#charts">Charts</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>racechart(id: new id, layout: string, periods: string, [title: string])</code></td><td>constructor / setup</td><td>declare an animated race chart: layout “bar” (v1), a period-label list that ticks as it plays, and an optional title; feed rows with racedata, then play with race</td></tr>
+<tr><td><code>racedata(parent: new id, block: string)</code></td><td>constructor / setup</td><td>paste the data for a race chart — one row per entity: <code>label [icon] v0 v1 …</code>; rows split on newline or <code>;</code>, cells on comma/tab/whitespace; the optional icon is an SVG shorthand (<code>us</code> → a flag) or a full asset path</td></tr>
+<tr><td><code>raceseries(parent: new id, label: string, icon_or_values: string, [values: string])</code></td><td>constructor / setup</td><td>add ONE entity to a race chart (the per-series sibling of racedata, for the computed/loop path): <code>raceseries(parent, "label", ["icon"], "v0 v1 …")</code></td></tr>
+<tr><td><code>raceline(parent: new id, [label: string], [values: string])</code></td><td>constructor / setup</td><td>add a companion LINE across the top of a bar race — a running total (auto-summed from the bars) or an explicit tracked metric: <code>raceline(parent, ["label"], ["v0 v1 …"])</code></td></tr>
+<tr><td><code>racepanel(parent: new id)</code></td><td>constructor / setup</td><td>add a multi-line HISTORY panel at the bottom of a bar race — every series drawn as a line up to a moving time-cursor, synced to the race (the classic bar+line combo): <code>racepanel(parent)</code></td></tr>
+<tr><td><code>race(parent: new id, [dur: number], [ease: new id])</code></td><td>animation verb</td><td>play the whole race: interpolate each series between periods, re-rank, slide bars to their new slots (the reorder IS the race), rescale to the running max, and tick the period + value counters</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="math"><a class="header" href="#math">Math</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>axes(id: new id, center: (x, y), halfw: number, halfh: number, [unit: number])</code></td><td>constructor / setup</td><td>a coordinate frame (optional tick spacing in px)</td></tr>
+<tr><td><code>plot(id: new id, center: (x, y), sx: number, sy: number, formula: function or formula, [domain: number])</code></td><td>constructor / setup</td><td>y = f(x) as a curve</td></tr>
+<tr><td><code>normal(id: new id, curve: new id, x: number, [len: number])</code></td><td>constructor / setup</td><td>the normal (perpendicular) line to a curve at x</td></tr>
+<tr><td><code>slope(id: new id, curve: new id, x: number, [offset: (x, y)])</code></td><td>constructor / setup</td><td>a live readout of a curve’s slope at x</td></tr>
+<tr><td><code>area(id: new id, curve: new id, a: number, b: number, [n: number])</code></td><td>constructor / setup</td><td>the filled region under a curve from a to b</td></tr>
+<tr><td><code>integral(id: new id, curve: new id, a: number, b: number, [at: (x, y)])</code></td><td>constructor / setup</td><td>a live readout of the integral of a curve from a to b</td></tr>
+<tr><td><code>roots(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots where a curve crosses zero</td></tr>
+<tr><td><code>deriv(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>the derivative f’ of a curve, drawn as its own curve</td></tr>
+<tr><td><code>accum(id: new id, curve: new id, [a: number], [color: colour])</code></td><td>constructor / setup</td><td>the accumulation function integral(a..x) of a curve</td></tr>
+<tr><td><code>extrema(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots at a curve’s maxima and minima (slope = 0)</td></tr>
+<tr><td><code>inflections(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots where a curve changes concavity (f’’ = 0)</td></tr>
+<tr><td><code>band(id: new id, top: new id, bottom: new id, [color: colour])</code></td><td>constructor / setup</td><td>the filled region between two curves</td></tr>
+<tr><td><code>taylor(id: new id, curve: new id, a: number, n: number, [color: colour])</code></td><td>constructor / setup</td><td>the degree-n Taylor polynomial of a curve about a</td></tr>
+<tr><td><code>limit(id: new id, curve: new id, a: number, [color: colour])</code></td><td>constructor / setup</td><td>visualise lim(x-&gt;a) f(x): the value approached, with an approaching dot</td></tr>
+<tr><td><code>newton(id: new id, curve: new id, x0: number, [steps: number])</code></td><td>constructor / setup</td><td>Newton’s method zig-zag from a starting guess</td></tr>
+<tr><td><code>spline(…)</code></td><td>constructor / setup</td><td>a smooth curve through a list of points</td></tr>
+<tr><td><code>trajectory(id: new id, dx/dt: string, dy/dt: string, start: (x, y), center: (x, y), scale: number, [steps: number])</code></td><td>constructor / setup</td><td>an ODE path: dx/dt, dy/dt integrated from a start point</td></tr>
+<tr><td><code>linmap(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [span: number])</code></td><td>constructor / setup</td><td>a 2x2 matrix applied to the plane (grid + basis)</td></tr>
+<tr><td><code>determinant(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>the unit square mapped to a parallelogram; area = det</td></tr>
+<tr><td><code>eigen(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>a matrix’s real eigenvector directions (with eigenvalues)</td></tr>
+<tr><td><code>diagonalise(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>A = P D P^-1: in the eigenbasis the matrix is a pure stretch</td></tr>
+<tr><td><code>diagonalize(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>A = P D P^-1: in the eigenbasis the matrix is a pure stretch</td></tr>
+<tr><td><code>rref(id: new id, data: string, center: (x, y), [cellw: number], [rowh: number])</code></td><td>constructor / setup</td><td>animated Gaussian elimination to reduced row-echelon form</td></tr>
+<tr><td><code>project(id: new id, center: (x, y), unit: number, b: (x, y), a: (x, y), [color: colour])</code></td><td>constructor / setup</td><td>orthogonal projection of a vector onto a line (subspace)</td></tr>
+<tr><td><code>leastsquares(id: new id, center: (x, y), unit: number, data: string, [color: colour])</code></td><td>constructor / setup</td><td>the best-fit line through a point cloud (linear regression)</td></tr>
+<tr><td><code>linsolve(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, e: number, f: number, [span: number])</code></td><td>constructor / setup</td><td>the row picture of Ax=b: two lines meeting at the solution</td></tr>
+<tr><td><code>span(id: new id, center: (x, y), unit: number, v: (x, y), [w: (x, y)], [color: colour])</code></td><td>constructor / setup</td><td>the span of one or two vectors (a line, or the whole plane)</td></tr>
+<tr><td><code>vector(id: new id, origin: (x, y), delta: (x, y), [color: colour])</code></td><td>constructor / setup</td><td>an arrow from an origin</td></tr>
+<tr><td><code>numberline(…)</code></td><td>constructor / setup</td><td>a labelled number line</td></tr>
+<tr><td><code>numberplane(…)</code></td><td>constructor / setup</td><td>a gridded coordinate plane</td></tr>
+<tr><td><code>plane(…)</code></td><td>constructor / setup</td><td>a coordinate plane</td></tr>
+<tr><td><code>complexplane(…)</code></td><td>constructor / setup</td><td>the complex plane</td></tr>
+<tr><td><code>polarplane(…)</code></td><td>constructor / setup</td><td>a polar grid</td></tr>
+<tr><td><code>matrix(id: new id, data: string, center: (x, y), [colw: number], [rowh: number])</code></td><td>constructor / setup</td><td>a bracketed matrix</td></tr>
+<tr><td><code>table(id: new id, data: string, center: (x, y), [colw: number], [rowh: number], [cols: string], [rows: string])</code></td><td>constructor / setup</td><td>a ruled table</td></tr>
+<tr><td><code>mathtable(…)</code></td><td>constructor / setup</td><td>a table of math expressions</td></tr>
+<tr><td><code>integertable(…)</code></td><td>constructor / setup</td><td>a table of integers</td></tr>
+<tr><td><code>decimaltable(…)</code></td><td>constructor / setup</td><td>a table of decimals</td></tr>
+<tr><td><code>arc(…)</code></td><td>constructor / setup</td><td>a circular arc</td></tr>
+<tr><td><code>sector(…)</code></td><td>constructor / setup</td><td>a pie sector</td></tr>
+<tr><td><code>annulus(…)</code></td><td>constructor / setup</td><td>a ring / annular sector</td></tr>
+<tr><td><code>pie(…)</code></td><td>constructor / setup</td><td>a pie chart</td></tr>
+<tr><td><code>arrowfield(…)</code></td><td>constructor / setup</td><td>a named or formula-authored bounded vector field</td></tr>
+<tr><td><code>vectorfield(…)</code></td><td>constructor / setup</td><td>a named or formula-authored bounded vector field</td></tr>
+<tr><td><code>tangent(…)</code></td><td>constructor / setup</td><td>tangent line to a curve at x (or tangent points to a circle)</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="systems"><a class="header" href="#systems">Systems</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>architecture(id: new id, [center: (x, y)], [width: number], [height: number])</code></td><td>constructor / setup</td><td>an automatically laid-out diagram canvas; geometry is optional and auto-fits the canvas when omitted</td></tr>
+<tr><td><code>flowchart(id: new id, [direction: id or tag], [max_nodes: number])</code></td><td>constructor / setup</td><td>an edge-ranked flowchart canvas (Mermaid graph TD/LR); with no direction it auto-orients TD/LR to fit and re-decides as nodes are added; reuses the architecture layout/ports/scale-to-fit. Optional max_nodes is the readability split limit (default 6 top-down, 12 left-right) — over it, check warns to split into linked sub-flows</td></tr>
+<tr><td><code>c4(id: new id, [level: id or tag])</code></td><td>constructor / setup</td><td>a C4-model diagram canvas (Context/Container/Component); inside it node kinds read as C4 elements (person/system/container/component/external) with name/[type: tech]/description</td></tr>
+<tr><td><code>node(id: new id, parent: id or tag, kind: string, label: string, [description: string], [technology: string])</code></td><td>constructor / setup</td><td>a component inside an architecture/cluster/c4/flowchart; kind is a provider icon, native archetype, flowchart shape, or C4 element. In a c4 diagram the extra args are the box’s description and technology</td></tr>
+<tr><td><code>cluster(id: new id, parent: id or tag, label: string, [legacy_members: string])</code></td><td>constructor / setup</td><td>a labelled responsive ownership group; children name it as their parent</td></tr>
+<tr><td><code>connect(id: new id, from: id or tag, to: id or tag, [routing: routing], [from_port: port], [to_port: port])</code></td><td>constructor / setup</td><td>a dashed directed possibility with an optional bend or port-aware orthogonal route</td></tr>
+<tr><td><code>annotate(edge: id or tag, text: string)</code></td><td>constructor / setup</td><td>a small caption at a connection’s midpoint (a decision’s yes/no, or any edge annotation)</td></tr>
+<tr><td><code>message(id: new id, source: id or tag, label: string)</code></td><td>constructor / setup</td><td>a persistent generic message starting at one system node</td></tr>
+<tr><td><code>request(id: new id, source: id or tag, label: string)</code></td><td>constructor / setup</td><td>a persistent labelled request starting at one system node</td></tr>
+<tr><td><code>route(message: id or tag, connection: id or tag, [duration: number], [ease: easing])</code></td><td>state-changing verb</td><td>move one persistent message through a continuous named connection and illuminate its selected lane</td></tr>
+<tr><td><code>hotpath(message: id or tag, [duration: number], [seed: number])</code></td><td>state-changing verb</td><td>move one persistent message end-to-end over a seeded valid path, choosing one lane at each fan-out</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="geometry"><a class="header" href="#geometry">Geometry</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>point(id: new id, at: (x, y), [label: string])</code></td><td>constructor / setup</td><td>a labelled point</td></tr>
+<tr><td><code>segment(id: new id, a: id or tag, b: id or tag)</code></td><td>constructor / setup</td><td>segment between two points</td></tr>
+<tr><td><code>midpoint(id: new id, a: id or tag, b: id or tag)</code></td><td>constructor / setup</td><td>midpoint of two points</td></tr>
+<tr><td><code>centroid(…)</code></td><td>constructor / setup</td><td>centroid of a triangle</td></tr>
+<tr><td><code>circumcenter(…)</code></td><td>constructor / setup</td><td>circumcentre</td></tr>
+<tr><td><code>incenter(…)</code></td><td>constructor / setup</td><td>incentre</td></tr>
+<tr><td><code>orthocenter(…)</code></td><td>constructor / setup</td><td>orthocentre</td></tr>
+<tr><td><code>foot(…)</code></td><td>constructor / setup</td><td>foot of a perpendicular</td></tr>
+<tr><td><code>meet(…)</code></td><td>constructor / setup</td><td>line-line intersection</td></tr>
+<tr><td><code>linecircle(…)</code></td><td>constructor / setup</td><td>line-circle intersection</td></tr>
+<tr><td><code>circlecircle(…)</code></td><td>constructor / setup</td><td>circle-circle intersection</td></tr>
+<tr><td><code>commontangent(id: new id, oA: id or tag, aOn: id or tag, oB: id or tag, bOn: id or tag, [type: string])</code></td><td>constructor / setup</td><td>a common tangent to two circles (each = centre + a point on it): segment {id} between the touch points {id}.a/{id}.b; type external/direct (default) or internal/transverse</td></tr>
+<tr><td><code>reflect(…)</code></td><td>constructor / setup</td><td>reflect a point over a line</td></tr>
+<tr><td><code>bisector(…)</code></td><td>constructor / setup</td><td>angle bisector</td></tr>
+<tr><td><code>rotpoint(…)</code></td><td>constructor / setup</td><td>rotate a point about another</td></tr>
+<tr><td><code>between(…)</code></td><td>constructor / setup</td><td>a point between two others</td></tr>
+<tr><td><code>anglepoint(…)</code></td><td>constructor / setup</td><td>a point at an angle</td></tr>
+<tr><td><code>circumcircle(…)</code></td><td>constructor / setup</td><td>circumscribed circle</td></tr>
+<tr><td><code>incircle(…)</code></td><td>constructor / setup</td><td>inscribed circle</td></tr>
+<tr><td><code>circle2(…)</code></td><td>constructor / setup</td><td>circle from centre + a point on it</td></tr>
+<tr><td><code>ellipse(…)</code></td><td>constructor / setup</td><td>an ellipse</td></tr>
+<tr><td><code>parabola(…)</code></td><td>constructor / setup</td><td>a parabola</td></tr>
+<tr><td><code>hyperbola(…)</code></td><td>constructor / setup</td><td>a hyperbola</td></tr>
+<tr><td><code>fullline(…)</code></td><td>constructor / setup</td><td>an infinite line through two points</td></tr>
+<tr><td><code>anglemark(…)</code></td><td>constructor / setup</td><td>an angle arc mark</td></tr>
+<tr><td><code>rightangle(…)</code></td><td>constructor / setup</td><td>a right-angle square mark</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="algorithms-and-data-structures"><a class="header" href="#algorithms-and-data-structures">Algorithms and data structures</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>graph(id: new id, verts: string, edges: string, layout: new id, center: (x, y), scale: number, [radius: number])</code></td><td>constructor / setup</td><td>a node/edge graph (weights via a-b:w)</td></tr>
+<tr><td><code>array(id: new id, vals: string, center: (x, y), [cw: number], [ch: number])</code></td><td>constructor / setup</td><td>a row of value cells in slot boxes</td></tr>
+<tr><td><code>list(id: new id, vals: string, center: (x, y), [kind: new id], [cw: number], [ch: number])</code></td><td>constructor / setup</td><td>a linked list (singly/doubly/circular)</td></tr>
+<tr><td><code>stack(id: new id, center: (x, y), [cw: number], [ch: number])</code></td><td>constructor / setup</td><td>a stack (LIFO, grows up)</td></tr>
+<tr><td><code>queue(id: new id, center: (x, y), [cw: number], [ch: number])</code></td><td>constructor / setup</td><td>a queue (FIFO, grows right)</td></tr>
+<tr><td><code>hashmap(id: new id, n: number, center: (x, y), [ew: number], [ch: number])</code></td><td>constructor / setup</td><td>n buckets with separate chaining</td></tr>
+<tr><td><code>pointer(id: new id, arr: id or tag, slot: number, [label: string])</code></td><td>constructor / setup</td><td>an index caret under an array slot</td></tr>
+<tr><td><code>caret(id: new id, at: (x, y), label: string, [dir: new id])</code></td><td>constructor / setup</td><td>a labelled triangle marker</td></tr>
+<tr><td><code>compare(arr: id or tag, i: number, j: number, [color: colour])</code></td><td>animation verb</td><td>flash the values in two array slots</td></tr>
+<tr><td><code>pointat(id: id or tag, arr: id or tag, slot: number, [dur: number])</code></td><td>animation verb</td><td>slide an index pointer to a slot</td></tr>
+<tr><td><code>push(id: id or tag, value: string, [dur: number])</code></td><td>state-changing verb</td><td>push onto a stack</td></tr>
+<tr><td><code>pop(id: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>pop the top of a stack</td></tr>
+<tr><td><code>enqueue(id: id or tag, value: string, [dur: number])</code></td><td>state-changing verb</td><td>enqueue at the back</td></tr>
+<tr><td><code>dequeue(id: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>dequeue from the front</td></tr>
+<tr><td><code>insert(id: id or tag, after: number, value: string, [dur: number])</code></td><td>state-changing verb</td><td>splice a node into a list</td></tr>
+<tr><td><code>remove(id: id or tag, index: number, [dur: number])</code></td><td>state-changing verb</td><td>unlink a list node</td></tr>
+<tr><td><code>put(id: id or tag, key: string, val: string, [dur: number])</code></td><td>state-changing verb</td><td>hash a key into a bucket + chain</td></tr>
+<tr><td><code>get(id: id or tag, key: string, [dur: number])</code></td><td>animation verb</td><td>scan a bucket’s chain for a key</td></tr>
+<tr><td><code>bfs(g: id or tag, start: id or tag)</code></td><td>state-changing verb</td><td>breadth-first traversal (queue)</td></tr>
+<tr><td><code>dfs(g: id or tag, start: id or tag)</code></td><td>state-changing verb</td><td>depth-first traversal (stack)</td></tr>
+<tr><td><code>dijkstra(g: id or tag, start: id or tag)</code></td><td>state-changing verb</td><td>single-source shortest paths</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="grid"><a class="header" href="#grid">Grid</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>grid(id: new id, [center: (x, y)], [cols: number], [rows: number], [cellsize: number], [seeded_cellsize: number])</code></td><td>constructor / setup</td><td>a 2D cell grid (arg1 a “# . @ *” spec seeds it, else it is the centre)</td></tr>
+<tr><td><code>neighbors(id: id or tag, mode: string)</code></td><td>constructor / setup</td><td>grid connectivity: “4” (default) or “8” (diagonals)</td></tr>
+<tr><td><code>setcell(id: id or tag, r: number, c: number, kind: id or tag)</code></td><td>constructor / setup</td><td>set one cell’s kind (wall/open/start/goal)</td></tr>
+<tr><td><code>walls(id: id or tag, cells: string)</code></td><td>constructor / setup</td><td>batch-set several cells to wall: “r,c r,c …”</td></tr>
+<tr><td><code>gridbfs(id: id or tag, start: (x, y), goal: (x, y))</code></td><td>state-changing verb</td><td>unweighted BFS over open cells (spatial sibling of bfs)</td></tr>
+<tr><td><code>gridastar(id: id or tag, start: (x, y), goal: (x, y), [heuristic: id or tag])</code></td><td>state-changing verb</td><td>A* pathfinding with a heuristic (manhattan/euclidean/diagonal)</td></tr>
+<tr><td><code>evolve(id: id or tag, rule: string)</code></td><td>constructor / setup</td><td>pre-simulate one CA generation (“life” or a Golly rulestring)</td></tr>
+<tr><td><code>collapse(id: id or tag, tileset: string, [seed: number])</code></td><td>constructor / setup</td><td>pre-simulate a seeded Wave-Function-Collapse settling</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="3d"><a class="header" href="#3d">3D</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>camera3(eye: (x, y, z), target: (x, y, z), [fov: number], [projection: id or tag])</code></td><td>constructor / setup</td><td>a Z-up orbit camera</td></tr>
+<tr><td><code>point3(id: new id, at: (x, y, z), [radius: number])</code></td><td>constructor / setup</td><td>a point in 3D space</td></tr>
+<tr><td><code>line3(id: new id, from: (x, y, z), to: (x, y, z))</code></td><td>constructor / setup</td><td>a 3D line segment</td></tr>
+<tr><td><code>arrow3(id: new id, from: (x, y, z), to: (x, y, z))</code></td><td>constructor / setup</td><td>a 3D vector arrow</td></tr>
+<tr><td><code>cube3(id: new id, center: (x, y, z), size: (x, y, z))</code></td><td>constructor / setup</td><td>a rotatable 3D cuboid</td></tr>
+<tr><td><code>linmap3(id: new id, center: (x, y, z), a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, [color: colour])</code></td><td>constructor / setup</td><td>a 3x3 matrix deforming the unit cube; volume = determinant</td></tr>
+<tr><td><code>eigen3(id: new id, center: (x, y, z), a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, [color: colour])</code></td><td>constructor / setup</td><td>the real eigenvector directions of a 3x3 matrix (invariant lines)</td></tr>
+<tr><td><code>sphere3(id: new id, center: (x, y, z), radius: number)</code></td><td>constructor / setup</td><td>a 3D sphere</td></tr>
+<tr><td><code>collection3(id: new id, center: (x, y, z), count: number, spread: (x, y, z), seed: number, [radius: number])</code></td><td>constructor / setup</td><td>renderer-batched repeated 3D points with stable indexed children</td></tr>
+<tr><td><code>collection3data(id: new id, center: (x, y, z), points: string, [radius: number])</code></td><td>constructor / setup</td><td>renderer-batched explicit 3D coordinates with stable indexed children</td></tr>
+<tr><td><code>links3(id: new id, collection: id or tag, mode: id or tag, [neighbors: number])</code></td><td>constructor / setup</td><td>live relationship mesh over a collection3: chain, nearest, or all</td></tr>
+<tr><td><code>links3data(id: new id, collection: id or tag, edges: string)</code></td><td>constructor / setup</td><td>an explicit arbitrary edge list that follows a 3D collection</td></tr>
+<tr><td><code>trail3(id: new id, collection: id or tag, [child: number], [thickness: number])</code></td><td>constructor / setup</td><td>live history path for one stable indexed child of a collection3</td></tr>
+<tr><td><code>ring3(id: new id, collection: id or tag, child: number, [segments: number])</code></td><td>constructor / setup</td><td>live orbit ring derived from one segment of a collection3 chain</td></tr>
+<tr><td><code>historyplot(id: new id, collection: id or tag, child: number, component: id or tag, center: (x, y), size: (x, y))</code></td><td>constructor / setup</td><td>screen-space 2D component history derived from one compiled collection3 child</td></tr>
+<tr><td><code>historyplot3(id: new id, collection: id or tag, child: number, component: id or tag, origin: (x, y, z), size: (x, y))</code></td><td>constructor / setup</td><td>world-space 3D component history derived from one compiled collection3 child</td></tr>
+<tr><td><code>child3(id: new id, collection: id or tag, index: number, [radius: number])</code></td><td>constructor / setup</td><td>addressable proxy for one stable indexed child of a collection3</td></tr>
+<tr><td><code>tree3(id: new id, root: (x, y, z), length: number, angle: number, shrink: number, depth: number, seed: number)</code></td><td>constructor / setup</td><td>seeded fractal tree batched as one edge mesh per generation</td></tr>
+<tr><td><code>vectorfield3(id: new id, center: (x, y, z), half: (x, y, z), u: string, v: string, w: string, [density: number])</code></td><td>constructor / setup</td><td>bounded batched 3D vector field from x/y/z/p component formulas</td></tr>
+<tr><td><code>grid3(id: new id, center: (x, y, z), half: number, [spacing: number])</code></td><td>constructor / setup</td><td>an XY ground grid</td></tr>
+<tr><td><code>axes3(id: new id, origin: (x, y, z), length: number, [step: number])</code></td><td>constructor / setup</td><td>three colored coordinate axes with ticks + numbers</td></tr>
+<tr><td><code>frame3(id: new id, center: (x, y, z), size: (x, y, z), [options: string])</code></td><td>constructor / setup</td><td>bounded scientific axes and selectable XY/XZ/YZ grid planes</td></tr>
+<tr><td><code>randomwalk3(id: new id, center: (x, y, z), steps: number, [seed: number], [options: string])</code></td><td>constructor / setup</td><td>a deterministic batched 3D axis or turtle walk with optional direction color and depth shading</td></tr>
+<tr><td><code>hilbert3(id: new id, center: (x, y, z), size: number, order: number, [options: string])</code></td><td>constructor / setup</td><td>a bounded batched 3D Hilbert curve that visits every lattice cell once</td></tr>
+<tr><td><code>present3(frame: id or tag, mode: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>restyle one frame3 as textbook linework or spatial color</td></tr>
+<tr><td><code>move3(id: id or tag, to: (x, y, z), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>move a 3D entity</td></tr>
+<tr><td><code>shift3(id: id or tag, by: (x, y, z), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>shift a 3D entity</td></tr>
+<tr><td><code>rotate3(id: id or tag, degrees: (x, y, z), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>rotate to Euler angles</td></tr>
+<tr><td><code>grow3(id: id or tag, to: (x, y, z), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>retarget a 3D line or arrow</td></tr>
+<tr><td><code>orbit3(azimuth: number, elevation: number, radius: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>orbit the 3D camera</td></tr>
+<tr><td><code>roll3(degrees: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>roll the 3D camera around its viewing direction</td></tr>
+<tr><td><code>look3(target: (x, y, z), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>move the 3D camera target</td></tr>
+<tr><td><code>drift3(collection: id or tag, dur: number, [amount: number])</code></td><td>state-changing verb</td><td>compile deterministic bounded ambient motion for a collection3</td></tr>
+<tr><td><code>chain3(collection: id or tag, lengths: string, rates: string, dur: number)</code></td><td>state-changing verb</td><td>animate a generated dependent chain from per-link lengths and rotation rates</td></tr>
+<tr><td><code>advect3(collection: id or tag, field: id or tag, dur: number, [rate: number])</code></td><td>state-changing verb</td><td>advect a collection3 through a time-varying vectorfield3 with deterministic RK4</td></tr>
+<tr><td><code>followshot3(target: id or tag, [offset: (x, y, z)])</code></td><td>state-changing verb</td><td>make the 3D camera target follow an entity, or release with none</td></tr>
+<tr><td><code>view3(target: id or tag, view: string, [dur: number], [ease: easing], [margin: number])</code></td><td>state-changing verb</td><td>smoothly frame a 3D entity or tagged group from a named view</td></tr>
+<tr><td><code>travel3(entity: id or tag, path: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>move a persistent 3D entity along a line, arrow, or curve</td></tr>
+<tr><td><code>attach3(child: id or tag, target: id or tag, [offset: (x, y, z)], [mode: id or tag])</code></td><td>state-changing verb</td><td>attach one 3D entity to another, or release it with none</td></tr>
+<tr><td><code>become3(source: id or tag, blueprint: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>transform a persistent 3D entity into a blueprint</td></tr>
+<tr><td><code>turn3(target: id or tag, pivot: (x, y, z), axis: id or tag, degrees: number, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>turn a 3D entity or tagged group around a world-space pivot and axis</td></tr>
+<tr><td><code>pin3(label: id or tag, at: (x, y, z), [offset: (x, y)])</code></td><td>constructor / setup</td><td>glue a 2D label to a 3D point with an optional screen-space offset</td></tr>
+<tr><td><code>follow3(id: id or tag, target: id or tag, [offset: (x, y, z)])</code></td><td>constructor / setup</td><td>track another 3D entity + offset each frame</td></tr>
+<tr><td><code>midpoint3(id: new id, a: id or tag, b: id or tag)</code></td><td>constructor / setup</td><td>a point at the midpoint of two 3D entities</td></tr>
+<tr><td><code>link3(id: new id, a: id or tag, b: id or tag, [trim: number])</code></td><td>constructor / setup</td><td>a live 3D edge between two moving entities</td></tr>
+<tr><td><code>project3(id: new id, source: id or tag, plane: string)</code></td><td>constructor / setup</td><td>live orthogonal projection of a 3D entity onto xy, xz, or yz</td></tr>
+<tr><td><code>projectpath3(id: new id, source: id or tag, plane: id or tag)</code></td><td>constructor / setup</td><td>live orthogonal projection of a complete changing 3D path</td></tr>
+<tr><td><code>contour3(id: new id, surface: id or tag, level: number)</code></td><td>constructor / setup</td><td>a level curve on a surface3 height field</td></tr>
+<tr><td><code>label3(label: id or tag, target: id or tag, [world_height: number])</code></td><td>constructor / setup</td><td>projected label with optional world-space height</td></tr>
+<tr><td><code>curve3(id: new id, x: string, y: string, z: string, [domain: (x, y)])</code></td><td>constructor / setup</td><td>parametric 3D curve from x(t)/y(t)/z(t) formulas</td></tr>
+<tr><td><code>surface3(id: new id, z: string, xdom: (x, y), ydom: (x, y), [res: number])</code></td><td>constructor / setup</td><td>filled, flat-shaded height-field surface z = f(x,y)</td></tr>
+<tr><td><code>implicit3(id: new id, formula: string, xdom: (x, y), ydom: (x, y), zdom: (x, y), [level: number], [resolution: number])</code></td><td>constructor / setup</td><td>an isosurface extracted from a bounded 3D scalar field</td></tr>
+<tr><td><code>lsystem3(id: new id, origin: (x, y, z), step: number, angle: number, iterations: number, axiom: string, rules: string, [max_symbols: number])</code></td><td>constructor / setup</td><td>a bounded deterministic branching 3D turtle grammar</td></tr>
+<tr><td><code>heightmap3(id: new id, grid: id or tag, z: string, [size: number])</code></td><td>constructor / setup</td><td>lift a 2D grid into a 3D terrain mesh: z(x,y,h), h=cell value</td></tr>
+<tr><td><code>gradient3(id: new id, surface: new id, x: number, y: number, [color: colour])</code></td><td>constructor / setup</td><td>steepest-ascent arrow on a surface3 at (x,y)</td></tr>
+<tr><td><code>tangentplane3(id: new id, surface: new id, x: number, y: number, [color: colour])</code></td><td>constructor / setup</td><td>the plane tangent to a surface3 at (x,y)</td></tr>
+<tr><td><code>volume3(id: new id, surface: new id, [res: number], [color: colour])</code></td><td>constructor / setup</td><td>the volume under a surface3 as a grid of columns</td></tr>
+<tr><td><code>param3(id: new id, x: string, y: string, z: string, udom: (x, y), vdom: (x, y), [res: number])</code></td><td>constructor / setup</td><td>parametric surface x(u,v),y(u,v),z(u,v) — tori, shells, Möbius</td></tr>
+<tr><td><code>prism3(id: new id, center: (x, y, z), sides: number, radius: number, height: number)</code></td><td>constructor / setup</td><td>regular n-gon prism (many sides ≈ cylinder)</td></tr>
+<tr><td><code>pyramid3(id: new id, center: (x, y, z), sides: number, radius: number, height: number)</code></td><td>constructor / setup</td><td>regular n-gon pyramid (many sides ≈ cone)</td></tr>
+<tr><td><code>revolve3(id: new id, center: (x, y, z), profile: string, tdom: (x, y), [sides: number])</code></td><td>constructor / setup</td><td>solid of revolution from a radius profile r(t)</td></tr>
+<tr><td><code>extrude3(id: new id, source: id or tag, height: number, [center: (x, y, z)])</code></td><td>constructor / setup</td><td>extrude a 2D shape or boolean region into a solid prism (CSG)</td></tr>
+<tr><td><code>morph3(a: id or tag, b: id or tag, [spin: number])</code></td><td>constructor / setup</td><td>set 3D entity a up to morph into b’s shape (animate with <code>to(a, morph, 1, dur)</code>)</td></tr>
+<tr><td><code>thick(id: id or tag, radius: number)</code></td><td>constructor / setup</td><td>render a 3D curve3/line3/arrow3 as a tube of the given world radius</td></tr>
+<tr><td><code>finish3(id: id or tag, spec: string)</code></td><td>constructor / setup</td><td>bounded 3D shading, material, texture, mesh, depth, and shadow finish</td></tr>
+<tr><td><code>model3(id: new id, path: string, center: (x, y, z), [scale: number])</code></td><td>constructor / setup</td><td>load deterministic geometry from a bundled asset: URI or safety-limited OBJ path</td></tr>
+<tr><td><code>assembly3(id: new id, path: string, center: (x, y, z), [scale: number])</code></td><td>constructor / setup</td><td>load grouped OBJ geometry as addressable id.group entities sharing one id tag</td></tr>
+<tr><td><code>tube3(id: new id, path: id or tag, radius: string, [sides: number])</code></td><td>constructor / setup</td><td>variable-radius tube around a line3, arrow3, or curve3</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="brand"><a class="header" href="#brand">Brand</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>banner(id: new id, center: (x, y), [scale: number])</code></td><td>constructor / setup</td><td>the manic logo/banner</td></tr>
+<tr><td><code>watermark(id: new id, [at: (x, y)], [text: string])</code></td><td>constructor / setup</td><td>a screen-fixed watermark; omit the point for responsive bottom-right placement or pass an exact point</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="stats"><a class="header" href="#stats">Stats</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>histogram(id: new id, center: (x, y), data: string, [bins: number], [width: number], [height: number], [color: colour])</code></td><td>constructor / setup</td><td>bin a dataset into bars — the shape of the data</td></tr>
+<tr><td><code>summary(id: new id, center: (x, y), data: string, [width: number], [color: colour])</code></td><td>constructor / setup</td><td>describe a dataset: mean/median/mode markers, spread, and readouts</td></tr>
+<tr><td><code>correlation(id: new id, center: (x, y), unit: number, data: string, [color: colour])</code></td><td>constructor / setup</td><td>scatter + best-fit line + the Pearson correlation r</td></tr>
+<tr><td><code>skew(id: new id, center: (x, y), data: string, [bins: number], [width: number], [height: number], [color: colour])</code></td><td>constructor / setup</td><td>a histogram labelled with its skewness (left / right / symmetric)</td></tr>
+<tr><td><code>boxplot(id: new id, center: (x, y), data: string, [width: number], [color: colour])</code></td><td>constructor / setup</td><td>five-number summary as a box-and-whisker (box = IQR)</td></tr>
+<tr><td><code>hypothesis(id: new id, center: (x, y), z: number, [alpha: number], [unit: number])</code></td><td>constructor / setup</td><td>a two-tailed significance test: p-value as shaded normal tails</td></tr>
+<tr><td><code>covariance(id: new id, center: (x, y), unit: number, data: string, [color: colour])</code></td><td>constructor / setup</td><td>covariance as signed-area rectangles about the mean cross</td></tr>
+<tr><td><code>bayes(id: new id, center: (x, y), heads: number, tails: number, [width: number], [height: number])</code></td><td>constructor / setup</td><td>Bayesian updating: prior + likelihood -&gt; posterior for a coin’s bias</td></tr>
+<tr><td><code>distribution(id: new id, center: (x, y), kind: string, a: number, [b: number], [color: colour])</code></td><td>constructor / setup</td><td>a named distribution: uniform / exponential / maxwell / binomial / poisson</td></tr>
+<tr><td><code>confidence(id: new id, center: (x, y), mean: number, sd: number, n: number, [level: number], [width: number])</code></td><td>constructor / setup</td><td>a confidence interval for a mean: estimate + z*sd/sqrt(n) error bar</td></tr>
+<tr><td><code>montecarlo(id: new id, center: (x, y), points: number, [seed: number], [size: number])</code></td><td>constructor / setup</td><td>estimate pi by darts: random points in a square vs the circle</td></tr>
+<tr><td><code>randomwalk(id: new id, center: (x, y), steps: number, [seed: number], [scale: number])</code></td><td>constructor / setup</td><td>a 2D random walk path from the centre</td></tr>
+<tr><td><code>bellcurve(id: new id, center: (x, y), mu: number, sigma: number, [unit: number], [color: colour])</code></td><td>constructor / setup</td><td>the normal/Gaussian bell curve with the 68-95-99.7 rule shaded</td></tr>
+<tr><td><code>gaussian(id: new id, center: (x, y), mu: number, sigma: number, [unit: number], [color: colour])</code></td><td>constructor / setup</td><td>the normal/Gaussian bell curve with the 68-95-99.7 rule shaded</td></tr>
+<tr><td><code>lln(id: new id, center: (x, y), trials: number, [seed: number], [width: number], [height: number])</code></td><td>constructor / setup</td><td>Law of Large Numbers: a running proportion settling onto the truth</td></tr>
+<tr><td><code>clt(id: new id, center: (x, y), samplesize: number, trials: number, [seed: number], [width: number], [height: number], [color: colour])</code></td><td>constructor / setup</td><td>Central Limit Theorem: sample means of dice pile into a bell</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="physics"><a class="header" href="#physics">Physics</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>freekick(id: new id, center: (x, y), speed: number, angle: number, spin: number, [scale: number], [steps: number])</code></td><td>constructor / setup</td><td>an RK4 free-kick trajectory under drag + the Magnus force (sidespin curves it); draw {id}, run(id) flies the ball</td></tr>
+<tr><td><code>pendulum(id: new id, [center: (x, y)], [length: number], [angle0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a swinging pendulum (pre-simulated); animate with swing(id)</td></tr>
+<tr><td><code>spring(id: new id, [center: (x, y)], [stiffness: number], [x0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a mass on a spring (pre-simulated); animate with run(id)</td></tr>
+<tr><td><code>doublependulum(id: new id, [center: (x, y)], [angle1: number], [angle2: number], [unit: number])</code></td><td>constructor / setup</td><td>the chaotic double pendulum (pre-simulated); animate with run(id)</td></tr>
+<tr><td><code>springpendulum(id: new id, [center: (x, y)], [angle0: number], [stretch0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>an elastic pendulum (swings + bounces); animate with run(id)</td></tr>
+<tr><td><code>kapitza(id: new id, [center: (x, y)], [angle0: number], [vibeamp: number], [unit: number])</code></td><td>constructor / setup</td><td>a Kapitza pendulum — fast vibration stabilises the inverted position</td></tr>
+<tr><td><code>cartpendulum(id: new id, [center: (x, y)], [angle0: number], [unit: number])</code></td><td>constructor / setup</td><td>a pendulum on a spring-mounted cart (control-theory system)</td></tr>
+<tr><td><code>comparependulum(id: new id, [center: (x, y)], [angle0: number], [unit: number])</code></td><td>constructor / setup</td><td>two chaotic pendulums a hair apart — sensitive dependence</td></tr>
+<tr><td><code>verticalspring(id: new id, [center: (x, y)], [stretch0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a mass bobbing on a vertical spring under gravity</td></tr>
+<tr><td><code>springincline(id: new id, [center: (x, y)], [angle: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a mass on a spring on an inclined plane</td></tr>
+<tr><td><code>bungee(id: new id, [center: (x, y)], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a bungee jump — free-fall then a one-sided elastic cord</td></tr>
+<tr><td><code>resonance(id: new id, [center: (x, y)], [drivefreq: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a driven spring — amplitude peaks near the natural frequency</td></tr>
+<tr><td><code>doublespring(id: new id, [center: (x, y)], [unit: number])</code></td><td>constructor / setup</td><td>two masses coupled by springs — beating / normal modes</td></tr>
+<tr><td><code>seriesparallel(id: new id, [center: (x, y)], [unit: number])</code></td><td>constructor / setup</td><td>springs in series vs parallel — soft/slow vs stiff/fast</td></tr>
+<tr><td><code>carsuspension(id: new id, [center: (x, y)], [unit: number])</code></td><td>constructor / setup</td><td>a quarter-car riding a scrolling road (bump/washboard/pothole)</td></tr>
+<tr><td><code>piston(id: new id, [center: (x, y)], [rpm: number], [unit: number])</code></td><td>constructor / setup</td><td>an engine piston — a spinning crank drives a slider in a cylinder</td></tr>
+<tr><td><code>molecule(id: new id, [center: (x, y)], [atoms: number], [unit: number])</code></td><td>constructor / setup</td><td>N atoms bonded by springs, vibrating about their shape</td></tr>
+<tr><td><code>robotarm(id: new id, [center: (x, y)], [mode: number], [unit: number])</code></td><td>constructor / setup</td><td>a two-link robot arm tracking a target by inverse kinematics (mode 1=circle, 2=figure-8, 0=fixed)</td></tr>
+<tr><td><code>pulley(id: new id, [center: (x, y)], [m1: number], [m2: number], [unit: number])</code></td><td>constructor / setup</td><td>a vertical Atwood machine — two masses over one pulley</td></tr>
+<tr><td><code>pulleyscale(id: new id, [center: (x, y)], [m1: number], [m2: number], [unit: number])</code></td><td>constructor / setup</td><td>an Atwood machine with an in-line spring scale reading the rope tension</td></tr>
+<tr><td><code>blocktackle(id: new id, [center: (x, y)], [load: number], [effort: number], [strands: number], [unit: number])</code></td><td>constructor / setup</td><td>a compound pulley (block &amp; tackle): N strands give a mechanical advantage of N</td></tr>
+<tr><td><code>compoundpulley(id: new id, [center: (x, y)], [mA: number], [mB: number], [mC: number], [unit: number])</code></td><td>constructor / setup</td><td>a compound pulley: a fixed pulley + a movable pulley with three masses A, B, C (static when mA = mB+mC)</td></tr>
+<tr><td><code>ramp(id: new id, [center: (x, y)], [angle: number], [mass: number], [applied: number], [unit: number])</code></td><td>constructor / setup</td><td>a block sliding on an inclined plane with friction</td></tr>
+<tr><td><code>dropmass(id: new id, [center: (x, y)], [dropheight: number], [unit: number])</code></td><td>constructor / setup</td><td>a mass dropped onto a spring-block — inelastic collision, energy lost</td></tr>
+<tr><td><code>inclinepulley(id: new id, [center: (x, y)], [angle: number], [m1: number], [m2: number], [unit: number])</code></td><td>constructor / setup</td><td>a block on an incline tied over a top pulley to a hanging mass (incline-Atwood)</td></tr>
+<tr><td><code>doubleincline(id: new id, [center: (x, y)], [angle1: number], [angle2: number], [m1: number], [m2: number], [unit: number])</code></td><td>constructor / setup</td><td>two blocks on a wedge’s two slopes, tied over an apex pulley (right slope rough)</td></tr>
+<tr><td><code>inclinebumper(id: new id, [center: (x, y)], [angle: number], [mass: number], [stiffness: number], [unit: number])</code></td><td>constructor / setup</td><td>a block slides down an incline into a spring bumper at the base, then bounces back</td></tr>
+<tr><td><code>springchain(id: new id, [center: (x, y)], [angle: number], [unit: number])</code></td><td>constructor / setup</td><td>three blocks joined by two springs on an incline — coupled oscillators / normal modes</td></tr>
+<tr><td><code>looptrack(id: new id, [center: (x, y)], [radius: number], [height: number], [unit: number])</code></td><td>constructor / setup</td><td>a ball rolls down a ramp and around a vertical loop-the-loop (curved track)</td></tr>
+<tr><td><code>collideblocks(id: new id, [center: (x, y)], [m1: number], [m2: number], [restitution: number], [unit: number])</code></td><td>constructor / setup</td><td>two blocks collide on a frictionless track with elastic walls (restitution e)</td></tr>
+<tr><td><code>bulletblock(id: new id, [center: (x, y)], [bulletmass: number], [speed: number], [blockmass: number], [unit: number])</code></td><td>constructor / setup</td><td>a bullet fired into a block embeds (perfectly inelastic — most kinetic energy lost)</td></tr>
+<tr><td><code>newtonscradle(id: new id, [center: (x, y)], [balls: number], [pulled: number])</code></td><td>constructor / setup</td><td>Newton’s cradle — pull N balls, N swing out (event-driven elastic collisions)</td></tr>
+<tr><td><code>stringwave(id: new id, [center: (x, y)], [width: number], [amp: number], [pluck: number])</code></td><td>constructor / setup</td><td>a wave on a plucked string (N masses on springs, fixed ends) — the wave equation</td></tr>
+<tr><td><code>raft(id: new id, [center: (x, y)], [personmass: number], [raftmass: number], [unit: number])</code></td><td>constructor / setup</td><td>a person walking on a floating raft — centre of mass stays fixed</td></tr>
+<tr><td><code>brachistochrone(id: new id, [center: (x, y)], [unit: number])</code></td><td>constructor / setup</td><td>four beads race down different curves under gravity — the cycloid wins</td></tr>
+<tr><td><code>run(id: id or tag, [dur_or_gens: number], [dur: number])</code></td><td>animation verb</td><td>replay a sim’s motion over [dur] s (or a grid’s frames: run(grid, [gens], [dur]))</td></tr>
+<tr><td><code>swing(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>replay a pendulum’s motion over [dur] seconds (alias of run)</td></tr>
+<tr><td><code>forces(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>reveal a sim’s free-body force diagram (ramp: gravity, normal, friction, a)</td></tr>
+<tr><td><code>phase(id: id or tag, center: (x, y), [size: number])</code></td><td>constructor / setup</td><td>a sim’s phase portrait (e.g. θ vs ω); animates with swing</td></tr>
+<tr><td><code>well(id: id or tag, center: (x, y), [size: number])</code></td><td>constructor / setup</td><td>a sim’s potential-energy well with the body as a rolling ball</td></tr>
+<tr><td><code>timegraph(id: id or tag, center: (x, y), [size: number])</code></td><td>constructor / setup</td><td>a sim’s phase variables as curves over time (with a sweep line)</td></tr>
+<tr><td><code>energygraph(id: id or tag, center: (x, y), [size: number])</code></td><td>constructor / setup</td><td>KE/PE/total energy as curves over time (with a sweep line)</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="machine-learning"><a class="header" href="#machine-learning">Machine learning</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>network(id: new id, center: (x, y), layers: string, activations: string, [width: number], [height: number], [seed: number])</code></td><td>constructor / setup</td><td>a deterministic feed-forward neural network with responsive layered layout and stable node/edge tags</td></tr>
+<tr><td><code>activation(id: new id, center: (x, y), function: id or tag, [width: number], [height: number])</code></td><td>constructor / setup</td><td>a truthful plot of linear, ReLU, sigmoid, or tanh</td></tr>
+<tr><td><code>forward(network: id or tag, input: string, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>compute and progressively reveal one feed-forward pass with real activations and output values</td></tr>
+<tr><td><code>loss(network: id or tag, target: string, [kind: id or tag], [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>compare the latest network output with a target using cross-entropy or mean-squared error</td></tr>
+<tr><td><code>backward(network: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>compute exact reverse-mode gradients and reveal them from output to input</td></tr>
+<tr><td><code>update(network: id or tag, [learning_rate: number], [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>apply one gradient-descent parameter update and recompute the prediction and loss</td></tr>
+<tr><td><code>checkpoint(id: new id, network: id or tag)</code></td><td>state-changing verb</td><td>save one network’s exact parameters, prediction, target, and loss for a later rollback</td></tr>
+<tr><td><code>restore(network: id or tag, checkpoint: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>animate and exactly restore a checkpointed network state; this is rollback, not dataset-level unlearning</td></tr>
+<tr><td><code>tensor(id: new id, center: (x, y), values: string, [cell: number], [color: colour])</code></td><td>constructor / setup</td><td>a finite numeric grid; semicolons separate rows and vertical bars separate channels</td></tr>
+<tr><td><code>kernel(id: new id, center: (x, y), values: string, [cell: number], [color: colour])</code></td><td>constructor / setup</td><td>a finite convolution kernel with one grid per input channel</td></tr>
+<tr><td><code>convolve(id: new id, input: id or tag, kernel: id or tag, center: (x, y), [stride: number], [padding: number], [bias: number], [activation: id or tag], [cell: number])</code></td><td>constructor / setup</td><td>compute a feature map from an input tensor and kernel with validated stride, padding, bias, and activation</td></tr>
+<tr><td><code>pool(id: new id, input: id or tag, center: (x, y), kind: id or tag, [window: number], [stride: number], [padding: number], [cell: number])</code></td><td>constructor / setup</td><td>compute deterministic max or average pooling independently across tensor channels</td></tr>
+<tr><td><code>scan(output: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>coordinate the receptive field, operator, arithmetic, and destination cell of a convolution or pool</td></tr>
+<tr><td><code>tokenize(id: new id, center: (x, y), text: string, [mode: id or tag], [width: number])</code></td><td>constructor / setup</td><td>split text into a small deterministic token sequence using authored, word, or character boundaries</td></tr>
+<tr><td><code>embedding(id: new id, tokens: id or tag, center: (x, y), vectors: string, [position: id or tag], [width: number], [height: number])</code></td><td>constructor / setup</td><td>turn a token sequence into explicit or seeded educational vectors and add sinusoidal or no positional encoding</td></tr>
+<tr><td><code>transformer(id: new id, embedding: id or tag, center: (x, y), config: string, [width: number], [height: number])</code></td><td>constructor / setup</td><td>compute and draw a complete deterministic transformer block from an ML5 embedding and a compact heads/mask/MLP/norm/dropout specification</td></tr>
+<tr><td><code>encode(transformer: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>reveal a transformer block through heads, masking, concatenation, residuals, normalization, MLP, dropout, and output</td></tr>
+<tr><td><code>logits(id: new id, transformer: id or tag, token: number, center: (x, y), labels: string, [temperature: number], [width: number], [height: number], [seed: number])</code></td><td>constructor / setup</td><td>project one transformer hidden row into an authored educational vocabulary and compute the full temperature-scaled softmax</td></tr>
+<tr><td><code>sample(logits: id or tag, strategy: string, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>filter, renormalize, and deterministically select from a logits view using greedy, categorical, top-k, or top-p decoding</td></tr>
+<tr><td><code>attention(id: new id, center: (x, y), tokens: string, embeddings: string, [width: number], [height: number], [seed: number])</code></td><td>constructor / setup</td><td>compute and draw one deterministic scaled dot-product self-attention head from explicit token embeddings</td></tr>
+<tr><td><code>attend(attention: id or tag, token: number, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>focus one 1-based query token and reveal its Q/K matches, softmax row, weighted V mix, and residual lane</td></tr>
+<tr><td><code>topk(id: new id, attention: id or tag, token: number, center: (x, y), labels: string, [k: number], [width: number], [height: number], [seed: number])</code></td><td>constructor / setup</td><td>project one attention residual into an authored candidate vocabulary and draw the exact top-k softmax probabilities</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="optics"><a class="header" href="#optics">Optics</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>refract(id: new id, [center: (x, y)], [n1: number], [n2: number], [angle: number])</code></td><td>constructor / setup</td><td>a light ray bending across a boundary (Snell’s law); run(id) sweeps the angle, showing total internal reflection</td></tr>
+<tr><td><code>lens(id: new id, [center: (x, y)], [focal: number], [aperture: number])</code></td><td>constructor / setup</td><td>a converging lens focusing parallel rays to a focal point; run(id) sweeps the focal length so the focus slides</td></tr>
+<tr><td><code>prism(id: new id, [center: (x, y)], [glass: string])</code></td><td>constructor / setup</td><td>white light splitting into a spectrum through a prism (real Sellmeier dispersion); run(id) sweeps the incidence angle</td></tr>
+<tr><td><code>achromat(id: new id, [center: (x, y)], [aperture: number])</code></td><td>constructor / setup</td><td>chromatic aberration (red &amp; blue focus apart) and its fix; run(id) sweeps in the achromatic doublet, merging the foci</td></tr>
+<tr><td><code>lenssystem(id: new id, [center: (x, y)], [preset: string], [object: number])</code></td><td>constructor / setup</td><td>a real multi-element lens ray-traced through its spherical/aspheric surfaces (named preset OR a custom prescription string); draw(id.rays) sketches rays, run(id) sweeps a focus sensor + spot read-out. Optional finite object distance (px).</td></tr>
+<tr><td><code>rayfan(id: new id, [center: (x, y)], [preset: string])</code></td><td>constructor / setup</td><td>the ray-fan aberration plot of a lens preset (transverse ray error vs pupil height); draw(id.curve) sketches the spherical-aberration S-curve</td></tr>
+<tr><td><code>spotdiagram(id: new id, [center: (x, y)], [preset: string])</code></td><td>constructor / setup</td><td>the spot diagram of a lens preset at best focus (rays land in a blur disc — spherical aberration), with an RMS read-out and the ideal point focus</td></tr>
+<tr><td><code>fieldspot(id: new id, [center: (x, y)], [preset: string], [field: number])</code></td><td>constructor / setup</td><td>the off-axis spot diagram (3-D pupil trace at a field angle) — a coma comet / astigmatic blur off-axis, with an Airy-disk diffraction-limit overlay</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="creator"><a class="header" href="#creator">Creator</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>creator(id: new id, spec: string)</code></td><td>constructor / setup</td><td>a reusable v2 creator profile: handle/platforms plus name, tagline, logo, palette, footer, CTA and safe-area keys</td></tr>
+<tr><td><code>socials(id: id or tag, [at: (x, y)])</code></td><td>constructor / setup</td><td>draw the creator profile’s responsive footer; social mode uses normalized native YouTube/X/Instagram/TikTok/Facebook/LinkedIn/GitHub/web/email icons</td></tr>
+<tr><td><code>quiz(id: new id, question: string, [style: string])</code></td><td>constructor / setup</td><td>start a responsive quiz: studio default; optional skin/reveal/layout/density/labels/timer/pace/seconds/motion/safe/accent controls</td></tr>
+<tr><td><code>option(id: id or tag, text: string, [correct: id or tag])</code></td><td>constructor / setup</td><td>add one of up to six fitted answer cards with stable A–F semantic tags; a trailing <code>correct</code> marks the right one</td></tr>
+<tr><td><code>timing(…)</code></td><td>constructor / setup</td><td>generic named-phase timing controller (optional position) or quiz-specific pace/phase configuration; use generic controllers with timed/during</td></tr>
+<tr><td><code>timerstyle(…)</code></td><td>constructor / setup</td><td>style a quiz or generic timing controller: optional generic position plus native look, number, direction, size, colours, label and finish</td></tr>
+<tr><td><code>safezone(id: new id, [inset: number])</code></td><td>constructor / setup</td><td>a responsive safe-area guide; optional numeric inset or shorts/reels/tiktok/clean profile</td></tr>
+<tr><td><code>countdown(id: new id, [at: (x, y)], [secs: number], [style: string])</code></td><td>constructor / setup</td><td>a standalone Timing v2 widget sharing the quiz timer looks and style controls; play with run(id, secs)</td></tr>
+<tr><td><code>figure(target: id or tag, [center: (x, y)], [size: (x, y)])</code></td><td>constructor / setup</td><td>fit a complete tagged group into the responsive media region, including text/images/equations and live-dependency checks</td></tr>
+<tr><td><code>explain(quiz: id or tag, text: string, [source: string])</code></td><td>constructor / setup</td><td>attach optional author-supplied answer context and source to a quiz reveal</td></tr>
+<tr><td><code>endcard(profile: id or tag, [spec: string])</code></td><td>constructor / setup</td><td>build a hidden responsive creator end card; reveal profile.endcard at the final beat</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="fixed-language-vocabularies"><a class="header" href="#fixed-language-vocabularies">Fixed language vocabularies</a></h2>
+<h3 id="colours"><a class="header" href="#colours">Colours</a></h3>
+<p><code>fg</code>, <code>void</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, <code>blue</code>, <code>teal</code>, <code>violet</code>, <code>coral</code>, <code>indigo</code>, <code>mint</code>, <code>dim</code>, <code>panel</code>, <code>rainbow</code></p>
+<h3 id="easings"><a class="header" href="#easings">Easings</a></h3>
+<p><code>linear</code>, <code>smooth</code>, <code>inout</code>, <code>in</code>, <code>out</code>, <code>overshoot</code>, <code>back</code>, <code>bounce</code>, <code>elastic</code>, <code>spring</code></p>
+<h3 id="named-plot-functions"><a class="header" href="#named-plot-functions">Named plot functions</a></h3>
+<p><code>sin</code>, <code>cos</code>, <code>tan</code>, <code>asin</code>, <code>arcsin</code>, <code>acos</code>, <code>arccos</code>, <code>atan</code>, <code>arctan</code>, <code>parabola</code>, <code>sq</code>, <code>square</code>, <code>cubic</code>, <code>cube</code>, <code>line</code>, <code>id</code>, <code>identity</code>, <code>abs</code>, <code>exp</code>, <code>sqrt</code>, <code>log</code>, <code>ln</code>, <code>recip</code>, <code>inv</code>, <code>gauss</code>, <code>bell</code>, <code>sinc</code>, <code>sigmoid</code>, <code>logistic</code>, <code>relu</code>, <code>step</code>, <code>heaviside</code></p>
+<h3 id="canvas-presets"><a class="header" href="#canvas-presets">Canvas presets</a></h3>
+<p><code>16:9</code>, <code>1080p</code>, <code>4k</code>, <code>square</code>, <code>portrait</code>, <code>4:5</code>, <code>4:3</code>, <code>widescreen</code>, <code>landscape</code>, <code>720p</code>, <code>fullhd</code>, <code>hd</code>, <code>2160p</code>, <code>1:1</code>, <code>9:16</code>, <code>vertical</code>, <code>story</code>, <code>reel</code>, <code>feed</code></p>
+<h3 id="templates-and-aliases"><a class="header" href="#templates-and-aliases">Templates and aliases</a></h3>
+<p><code>black</code>, <code>mono</code>, <code>plain</code>, <code>terminal</code>, <code>paper</code>, <code>blueprint</code>, <code>shorts</code>, <code>monochrome</code>, <code>blackwhite</code>, <code>black-white</code>, <code>bw</code>, <code>blank</code>, <code>clean</code>, <code>neon</code>, <code>shell</code>, <code>print</code>, <code>light</code>, <code>blue</code>, <code>short</code>, <code>punch</code></p>
+<h3 id="language-keywords"><a class="header" href="#language-keywords">Language keywords</a></h3>
+<p><code>let</code>, <code>for</code>, <code>if</code>, <code>else</code>, <code>def</code>, <code>in</code>, <code>sum</code>, <code>prod</code>, <code>min</code>, <code>max</code></p>
+<h3 id="reserved-variables"><a class="header" href="#reserved-variables">Reserved variables</a></h3>
+<p><code>w</code>, <code>h</code>, <code>cx</code>, <code>cy</code>, <code>pi</code>, <code>e</code>, <code>tau</code>, <code>inf</code>, <code>infinity</code></p>
+<h3 id="systems-routing-and-ports"><a class="header" href="#systems-routing-and-ports">Systems routing and ports</a></h3>
+<p>Routing: <code>orthogonal</code></p>
+<p>Ports: <code>auto</code>, <code>left</code>, <code>right</code>, <code>top</code>, <code>bottom</code></p>
+<h3 id="speech-services-and-curated-cartesia-voices"><a class="header" href="#speech-services-and-curated-cartesia-voices">Speech services and curated Cartesia voices</a></h3>
+<p>Services: <code>gtts</code>, <code>google</code>, <code>cartesia</code>, <code>elevenlabs</code>, <code>11labs</code></p>
+<p>Cartesia voices: <code>katie</code>, <code>skylar</code>, <code>jameson</code>, <code>gemma</code>, <code>archie</code></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="language-layer.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ml.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="language-layer.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ml.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

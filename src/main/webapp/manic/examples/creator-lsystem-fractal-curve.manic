@@ -1,0 +1,121 @@
+// Creator story: one seven-segment rewriting rule grows from a square into a
+// 9,604-segment space-filling curve. The rule is the story—not implementation.
+
+title("How One Line Learns to Fill Space");
+canvas("9:16");
+template("mono");
+
+creator(me, "@anish2good name=Manic_Geometry tagline=Rules_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Animate_your_idea safe=clean");
+socials(me);
+watermark(manicMark, (w*0.15, h*0.06), "Made With Manic");
+endcard(me, "title=Turn_Rules_Into_Stories cta=8gwifi.org/manic");
+
+let u = (w+h-abs(w-h))/1080;
+text(kicker, (cx, h*0.14), "MANIC · GENERATIVE GEOMETRY");
+text(headline, (cx, h*0.24), "One rule. 9,604 lines.");
+text(caption, (cx, h*0.79), "Start with a square.");
+text(generation, (cx, h*0.69), "GENERATION 0 · 4 SEGMENTS");
+text(rule, (cx, h*0.30), "F  →  FF + F + F + F + FF");
+size(kicker, 20*u); bold(kicker); color(kicker, cyan);
+size(headline, 30*u); bold(headline); wrap(headline, w*0.78);
+size(caption, 23*u); bold(caption); wrap(caption, w*0.74);
+size(generation, 20*u); bold(generation); color(generation, dim);
+size(rule, 25*u); bold(rule); color(rule, gold);
+
+let stageSize = (w+h-abs(w-h))*0.28;
+let stageY = h*0.49;
+
+lsystem(curve, (cx, stageY), stageSize,
+  "F+F+F+F", "F=FF+F+F+F+FF",
+  "angle=90 iterations=0");
+color(curve, cyan); stroke(curve, 5);
+
+lsystem(gen1, (cx, stageY), stageSize,
+  "F+F+F+F", "F=FF+F+F+F+FF",
+  "angle=90 iterations=1");
+color(gen1, cyan); stroke(gen1, 4); hidden(gen1);
+
+lsystem(gen2, (cx, stageY), stageSize,
+  "F+F+F+F", "F=FF+F+F+F+FF",
+  "angle=90 iterations=2");
+color(gen2, cyan); stroke(gen2, 3.5); hidden(gen2);
+
+lsystem(gen3, (cx, stageY), stageSize,
+  "F+F+F+F", "F=FF+F+F+F+FF",
+  "angle=90 iterations=3");
+color(gen3, magenta); stroke(gen3, 3); hidden(gen3);
+
+lsystem(finalCurve, (cx, stageY), stageSize,
+  "F+F+F+F", "F=FF+F+F+F+FF",
+  "angle=90 iterations=4");
+gradient(finalCurve, cyan, magenta, gold);
+stroke(finalCurve, 2.2); untraced(finalCurve); hidden(finalCurve);
+
+hidden(kicker); hidden(headline); hidden(rule);
+
+step("ask the impossible question") {
+  seq {
+    par {
+      show(kicker, 0.35);
+      show(headline, 0.50);
+      show(rule, 0.50);
+      show(curve, 0.40);
+    }
+    pulse(curve, 0.60);
+  }
+}
+wait(0.45);
+
+step("rewrite every forward move") {
+  seq {
+    say(caption, "Replace every F with seven smaller forward moves.", 0.45, smooth);
+    par {
+      become(curve, gen1, 0.85, smooth);
+      say(generation, "GENERATION 1 · 28 SEGMENTS", 0.35, smooth);
+    }
+    par {
+      become(curve, gen2, 0.95, smooth);
+      say(generation, "GENERATION 2 · 196 SEGMENTS", 0.35, smooth);
+    }
+    par {
+      become(curve, gen3, 1.05, smooth);
+      say(generation, "GENERATION 3 · 1,372 SEGMENTS", 0.35, smooth);
+    }
+  }
+}
+wait(0.50);
+
+step("let the path fill space") {
+  seq {
+    par {
+      fade(curve, 0.35);
+      say(caption, "Repeat once more. The same rule now draws 9,604 connected segments.", 0.45, smooth);
+      say(generation, "GENERATION 4 · 9,604 SEGMENTS", 0.35, smooth);
+    }
+    show(finalCurve, 0.05);
+    draw(finalCurve, 3.20, smooth);
+    pulse(finalCurve, 0.80);
+  }
+}
+wait(0.75);
+
+step("the idea is the animation") {
+  seq {
+    say(caption, "In Manic, creators describe the rule. The engine makes it move.", 0.45, smooth);
+    par {
+      recolor(headline, gold, 0.50);
+      pulse(finalCurve, 0.85);
+    }
+  }
+}
+wait(1.00);
+
+step("creator call to action") {
+  par {
+    fade(kicker, 0.35); fade(headline, 0.35); fade(rule, 0.35);
+    fade(caption, 0.35); fade(generation, 0.35); fade(finalCurve, 0.45);
+    fade(me.footer, 0.35);
+    show(me.endcard, 0.60);
+  }
+}
+wait(1.80);

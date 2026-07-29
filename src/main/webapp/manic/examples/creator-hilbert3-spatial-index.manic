@@ -1,0 +1,203 @@
+// A different use of hilbert3: spatial indexing, not curve refinement.
+// Sixty-four 3D voxels receive one continuous address order. A moving cache
+// window shows why axis-adjacent visits preserve useful spatial locality.
+
+title("A 3D Volume, One Sortable Address");
+canvas("9:16");
+template("black");
+
+creator(me,"@anish2good name=Manic_Data tagline=Spatial_ideas_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=gold footer=compact cta=Animate_the_algorithm safe=clean");
+socials(me);
+watermark(mark,(w*0.18,h*0.08),"Made With Manic");
+endcard(me,"title=Turn_Data_Into_A_Story cta=8gwifi.org/manic");
+
+let u=(w+h-abs(w-h))/1080;
+
+text(kicker,(cx,h*0.14),"MANIC · SPATIAL INDEXING");
+text(head,(cx,h*0.24),"How do you sort a 3D world?");
+text(caption,(cx,h*0.82),"First, capture a world made from 64 separate voxels.");
+counter(address,(cx,h*0.72),0,0,"VOXEL  "," / 63");
+equation(keyLaw,(cx,h*0.71),`H(x,y,z)=d`,30*u);
+text(volumeReadout,(cx,h*0.72),"64 VOXELS · 3 COORDINATES");
+text(jumpWarning,(cx,h*0.665),"NON-LOCAL ORDER · DISTANCE SPIKES");
+text(localResult,(cx,h*0.72),"63 / 63 STEPS STAY FACE-ADJACENT");
+text(probeLabel,(0,0),"ACTIVE CACHE");
+
+size(kicker,20*u); bold(kicker); color(kicker,cyan);
+size(head,31*u); bold(head); wrap(head,w*0.80);
+size(caption,21*u); bold(caption); color(caption,dim); wrap(caption,w*0.76);
+size(address,23*u); bold(address); color(address,gold);
+size(volumeReadout,21*u); bold(volumeReadout); color(volumeReadout,dim);
+size(jumpWarning,21*u); bold(jumpWarning); color(jumpWarning,red);
+size(localResult,21*u); bold(localResult); color(localResult,lime);
+size(probeLabel,17*u); bold(probeLabel); color(probeLabel,gold);
+
+camera3((16,-18,14),(0,0,0),42);
+
+// A 4×4×4 voxel volume. The centers match the order-2 Hilbert lattice:
+// -2.1, -0.7, 0.7, 2.1 on each axis.
+for z in 0..4 {
+  for y in 0..4 {
+    for x in 0..4 {
+      cube3(voxel{x}{y}{z},
+        ((x-1.5)*1.4,(y-1.5)*1.4,(z-1.5)*1.4),
+        (1.12,1.12,1.12));
+      opacity(voxel{x}{y}{z},0.11);
+      hidden(voxel{x}{y}{z});
+      tag(voxel{x}{y}{z},voxels);
+      tag(voxel{x}{y}{z},layer{z});
+    }
+  }
+}
+color(layer0,blue);
+color(layer1,cyan);
+color(layer2,magenta);
+color(layer3,gold);
+
+// A cinematic acquisition plane sweeps upward while the volume resolves one
+// layer at a time.
+cube3(scanPlane,(0,0,-3.0),(5.6,5.6,0.07));
+color(scanPlane,cyan); opacity(scanPlane,0.28); hidden(scanPlane);
+
+// The route is used once as an address order—there is no recursive
+// refinement and no "line fills a cube" reproduction.
+hilbert3(route,(0,0,0),4.2,2,"color=gradient shade=depth");
+thick(route,0.040);
+hidden(route); untraced(route);
+
+sphere3(scanner,(-2.1,-2.1,-2.1),0.19);
+color(scanner,fg); hidden(scanner);
+finish3(scanner,"shading=smooth material=metal mesh=0.18 shadow=0.75");
+
+// A translucent neighborhood travels with the current address. It represents
+// the small spatial working set a cache or chunked volume reader wants nearby.
+cube3(cacheWindow,(-2.1,-2.1,-2.1),(1.34,1.34,1.34));
+color(cacheWindow,gold); opacity(cacheWindow,0.16); hidden(cacheWindow);
+finish3(cacheWindow,"shading=smooth material=glass mesh=0.10 depth=0.72 shadow=0.18");
+
+// A deliberately poor address order: three long diagonals tear across the
+// volume. It is visually dramatic because consecutive addresses are not
+// spatial neighbours.
+arrow3(jump0,(-2.1,-2.1,-2.1),(2.1,2.1,2.1));
+arrow3(jump1,(2.1,2.1,2.1),(-2.1,2.1,-2.1));
+arrow3(jump2,(-2.1,2.1,-2.1),(2.1,-2.1,2.1));
+color(jump0,red); color(jump1,coral); color(jump2,red);
+thick(jump0,0.045); thick(jump1,0.045); thick(jump2,0.045);
+hidden(jump0); hidden(jump1); hidden(jump2);
+untraced(jump0); untraced(jump1); untraced(jump2);
+tag(jump0,badOrder); tag(jump1,badOrder); tag(jump2,badOrder);
+
+pin3(probeLabel,scanner,(18,-18));
+
+hidden(kicker); hidden(head); hidden(caption); hidden(address);
+hidden(keyLaw); hidden(volumeReadout); hidden(jumpWarning); hidden(localResult);
+hidden(probeLabel);
+
+step("the world becomes data") {
+  par {
+    show(kicker,0.30); show(head,0.45); show(caption,0.40);
+  }
+  view3(voxels,"isometric",0.90,smooth,1.45);
+  cue(whoosh);
+  show(scanPlane,0.25);
+  show(volumeReadout,0.30);
+  par {
+    move3(scanPlane,(0,0,3.0),2.35,smooth);
+    stagger(0.46) {
+      show(layer0,0.34); show(layer1,0.34); show(layer2,0.34); show(layer3,0.34);
+    }
+    say(caption,"A scan resolves the physical world one layer at a time.",0.45,smooth);
+  }
+  fade(scanPlane,0.25);
+}
+wait(0.50);
+
+step("the wrong order tears space apart") {
+  par {
+    fade(volumeReadout,0.25);
+    show(scanner,0.25); show(address,0.30); show(jumpWarning,0.30);
+    say(head,"A bad index destroys locality.",0.45,smooth);
+    say(caption,"Consecutive keys can jump from one corner of the volume to another.",0.45,smooth);
+  }
+  cue(whoosh);
+  par {
+    draw(jump0,0.80,smooth);
+    travel3(scanner,jump0,0.80,smooth);
+    to(address,value,63,0.80,smooth);
+  }
+  cue(whoosh);
+  par {
+    draw(jump1,0.70,smooth);
+    travel3(scanner,jump1,0.70,smooth);
+    to(address,value,3,0.70,smooth);
+  }
+  cue(whoosh);
+  par {
+    draw(jump2,0.75,smooth);
+    travel3(scanner,jump2,0.75,smooth);
+    to(address,value,60,0.75,smooth);
+  }
+  shake(jumpWarning,0.45);
+}
+wait(0.55);
+
+step("hilbert order restores locality") {
+  par {
+    fade(badOrder,0.35); fade(jumpWarning,0.25);
+    move3(scanner,(-2.1,-2.1,-2.1),0.65,smooth);
+    to(address,value,0,0.65,smooth);
+    say(head,"One route restores locality.",0.45,smooth);
+    say(caption,"Hilbert order makes every next address share a face with the last.",0.45,smooth);
+  }
+  cue(chime);
+  par {
+    show(route,0.20); draw(route,1.80,smooth);
+    show(cacheWindow,0.30); show(probeLabel,0.30);
+  }
+  pulse(scanner,0.55);
+}
+wait(0.45);
+
+step("one uninterrupted spatial journey") {
+  attach3(cacheWindow,scanner,(0,0,0));
+  par {
+    travel3(scanner,route,7.20,linear);
+    to(address,value,63,7.20,linear);
+    orbit3(132,30,29.0,7.20,smooth);
+    say(caption,"The cache window, address and camera now travel as one synchronized shot.",0.48,smooth);
+  }
+  attach3(cacheWindow,none);
+}
+wait(0.55);
+
+step("the payoff") {
+  par {
+    fade(address,0.25); fade(probeLabel,0.25); fade(cacheWindow,0.30);
+    show(localResult,0.35);
+    pulse(route,0.80);
+    say(head,"Locality wins.",0.45,smooth);
+    say(caption,"All 64 voxels are visited—and all 63 transitions stay face-adjacent.",0.50,smooth);
+  }
+}
+wait(1.00);
+
+step("turn location into a key") {
+  par {
+    fade(localResult,0.25);
+    show(keyLaw,0.40);
+    pulse(route,0.80);
+    say(head,"Three coordinates become one sortable key.",0.45,smooth);
+    say(caption,"One idea powers medical volumes, spatial databases, simulations and maps.",0.50,smooth);
+  }
+}
+wait(1.35);
+
+step("creator call to action") {
+  par {
+    fade(kicker,0.30); fade(head,0.30); fade(caption,0.30); fade(keyLaw,0.30);
+    fade(scanner,0.30); fade(route,0.40); fade(voxels,0.40); fade(badOrder,0.30);
+    fade(volumeReadout,0.25); fade(jumpWarning,0.25); fade(localResult,0.25);
+    fade(me.footer,0.30); show(me.endcard,0.60);
+  }
+}
+wait(2.00);

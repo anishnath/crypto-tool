@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="540" viewBox="0 0 540 540">
+  <rect width="540" height="540" rx="76" fill="#0B0E17"/>
+  <g transform="translate(120,54) scale(2.5)">
+    <g stroke-linecap="round" stroke-width="4">
+      <line x1="16" y1="46" x2="34" y2="46" stroke="#3f4a63"/>
+      <line x1="16" y1="60" x2="40" y2="60" stroke="#00E5FF"/>
+      <line x1="16" y1="74" x2="30" y2="74" stroke="#3f4a63"/>
+    </g>
+    <rect x="44" y="55" width="5" height="10" fill="#00E5FF"/>
+    <g stroke="#7CFF6B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <line x1="55" y1="60" x2="70" y2="60"/>
+      <polyline points="65,54 71,60 65,66"/>
+    </g>
+    <g fill="none" stroke-width="4" stroke-linejoin="round">
+      <rect x="82" y="42" width="30" height="30" rx="3" stroke="#FF2D95"/>
+      <rect x="86" y="46" width="22" height="22" rx="3" stroke="#FFD166" transform="rotate(18 97 57)"/>
+      <rect x="90" y="50" width="14" height="14" rx="2" stroke="#7CFF6B" transform="rotate(36 97 57)"/>
+    </g>
+  </g>
+  <text x="270" y="470" text-anchor="middle" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-weight="600" font-size="80" letter-spacing="-2">
+    <tspan fill="#E8ECF4">man</tspan><tspan fill="#FF2D95">i</tspan><tspan fill="#E8ECF4">c</tspan></text>
+</svg>

@@ -1,0 +1,117 @@
+// Engine Test 7 — a 3D Hilbert curve refines from 7 to 32,767 segments.
+// One generated path keeps its identity while become3, draw, and orbit3 tell
+// the story. The curve is exact: each order visits every lattice cell once.
+
+title("Hilbert Curve in 3D");
+canvas("16:9");
+template("black");
+
+creator(me,"@anish2good name=Manic_Math tagline=Space_filling_curves_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=magenta secondary=cyan footer=compact cta=Animate_the_infinite safe=clean");
+watermark(mark,(105,52),"Made With Manic");
+endcard(me,"title=Make_Fractals_Move cta=Create_with_Manic");
+
+text(kicker,(cx,46),"HILBERT CURVE IN 3D");
+text(head,(cx,86),"How can one line fill a cube?");
+text(caption,(cx,626),"Begin with one continuous route through all eight octants.");
+text(orderLabel,(cx,668),"ORDER 1  ·  7 SEGMENTS");
+size(kicker,20); bold(kicker); color(kicker,magenta);
+size(head,34); bold(head);
+size(caption,21); color(caption,dim);
+size(orderLabel,19); bold(orderLabel);
+
+camera3((13,-15,11),(0,0,0),42);
+
+// A quiet wireframe establishes the volume before the curve enters it.
+line3(e0,(-3,-3,-3),(3,-3,-3)); line3(e1,(3,-3,-3),(3,3,-3));
+line3(e2,(3,3,-3),(-3,3,-3)); line3(e3,(-3,3,-3),(-3,-3,-3));
+line3(e4,(-3,-3,3),(3,-3,3)); line3(e5,(3,-3,3),(3,3,3));
+line3(e6,(3,3,3),(-3,3,3)); line3(e7,(-3,3,3),(-3,-3,3));
+line3(e8,(-3,-3,-3),(-3,-3,3)); line3(e9,(3,-3,-3),(3,-3,3));
+line3(e10,(3,3,-3),(3,3,3)); line3(e11,(-3,3,-3),(-3,3,3));
+tag(e0,bounds); tag(e1,bounds); tag(e2,bounds); tag(e3,bounds);
+tag(e4,bounds); tag(e5,bounds); tag(e6,bounds); tag(e7,bounds);
+tag(e8,bounds); tag(e9,bounds); tag(e10,bounds); tag(e11,bounds);
+color(bounds,dim); opacity(bounds,0.34); thick(bounds,0.012);
+hidden(bounds); untraced(bounds);
+
+// The five exact refinements. Hidden curves are blueprints for become3.
+hilbert3(curve,(0,0,0),5.65,1);
+hilbert3(order2,(0,0,0),5.65,2);
+hilbert3(order3,(0,0,0),5.65,3);
+hilbert3(order4,(0,0,0),5.65,4);
+hilbert3(order5,(0,0,0),5.65,5);
+hidden(curve); untraced(curve);
+hidden(order2); hidden(order3); hidden(order4); hidden(order5);
+
+hidden(kicker); hidden(head); hidden(caption); hidden(orderLabel);
+
+step("pose the question") {
+  par {
+    show(kicker,0.30);
+    show(head,0.45);
+    show(caption,0.40);
+    show(orderLabel,0.35);
+    show(bounds,0.35);
+    draw(bounds,1.25,smooth);
+  }
+}
+wait(0.45);
+
+step("visit the eight octants") {
+  par {
+    show(curve,0.30);
+    draw(curve,1.65,smooth);
+    orbit3(54,25,16.2,1.65,smooth);
+  }
+}
+wait(0.45);
+
+step("refine the route") {
+  par {
+    seq {
+      par {
+        become3(curve,order2,1.30,smooth);
+        say(orderLabel,"ORDER 2  ·  63 SEGMENTS",0.35,smooth);
+        say(caption,"Replace every visit with a smaller, rotated copy—without breaking the line.",0.45,smooth);
+      }
+      wait(0.35);
+      par {
+        become3(curve,order3,1.55,smooth);
+        say(orderLabel,"ORDER 3  ·  511 SEGMENTS",0.35,smooth);
+        say(caption,"The gaps shrink while continuity survives every refinement.",0.45,smooth);
+      }
+      wait(0.35);
+      par {
+        become3(curve,order4,1.90,smooth);
+        say(orderLabel,"ORDER 4  ·  4,095 SEGMENTS",0.35,smooth);
+        say(caption,"One path now threads through thousands of cells in the cube.",0.45,smooth);
+      }
+      wait(0.35);
+      par {
+        become3(curve,order5,2.40,smooth);
+        say(orderLabel,"ORDER 5  ·  32,767 SEGMENTS",0.35,smooth);
+        say(caption,"In the limit, the continuous curve reaches every point in the volume.",0.50,smooth);
+      }
+    }
+    orbit3(186,31,17.8,8.55,linear);
+  }
+}
+wait(0.80);
+
+step("takeaway") {
+  par {
+    pulse(curve,0.80);
+    say(head,"A one-dimensional path can fill 3D space.",0.50,smooth);
+    say(caption,"Refinement adds detail—not disconnected pieces.",0.45,smooth);
+  }
+}
+wait(1.35);
+
+step("cta") {
+  par {
+    fade(kicker,0.30); fade(head,0.30); fade(caption,0.30);
+    fade(orderLabel,0.30); fade(bounds,0.40); fade(curve,0.45);
+    show(me.endcard,0.60);
+  }
+}
+wait(2.00);

@@ -1,0 +1,167 @@
+// A pure-3D textbook problem. Every geometric object stays spatial:
+// a point, a plane, its normal, the perpendicular foot, and the shortest path.
+
+title("Shortest Distance from a Point to a Plane");
+canvas("9:16");
+template("neon");
+
+creator(me,"@anish2good name=Manic_Geometry tagline=3D_math_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact safe=clean");
+socials(me);
+watermark(manicMark,(w*0.17,h*0.065),"Made With Manic");
+endcard(me,"title=Make_3D_Math_Move cta=8gwifi.org/manic");
+
+let u = (w+h-abs(w-h))/2160;
+text(kicker,(cx,h*0.075),"MANIC · VECTOR GEOMETRY"); size(kicker,22*u); bold(kicker); color(kicker,cyan); hidden(kicker);
+text(headline,(cx,h*0.125),"How far is a point from a plane?"); size(headline,38*u); bold(headline); wrap(headline,w*0.82); hidden(headline);
+text(chapter,(cx,h*0.185),"THE SHORTEST PATH MUST BE PERPENDICULAR"); size(chapter,22*u); bold(chapter); color(chapter,gold); wrap(chapter,w*0.82); hidden(chapter);
+equation(problem,(cx,h*0.235),`P=(2,2,5),\qquad \Pi:x+y+z=3`,36*u); hidden(problem);
+
+equation(work,(cx,h*0.745),`d(P,\Pi)=?`,43*u); hidden(work);
+text(caption,(cx,h*0.815),"A slanted route is longer. The normal reveals the minimum."); size(caption,24*u); bold(caption); wrap(caption,w*0.80); hidden(caption);
+text(note,(cx,h*0.86),"Find the direction · locate the foot · measure the segment"); size(note,21*u); color(note,dim); wrap(note,w*0.80); hidden(note);
+
+// The frame uses the same physical coordinates as the problem:
+// x,y in [-3,3] and z in [0,6] map one-to-one into a 6-unit display cube.
+// A perspective three-quarter view balances both facts: the plane reads as a
+// full surface, while its perpendicular keeps enough screen length to remain
+// obvious. This story never switches to an orthographic/textbook projection.
+camera3((20,-5,17),(0,0,2.8),42);
+frame3(world,(0,0,3),(6,6,6),"x=-3..3 y=-3..3 z=0..6 xmajor=1 ymajor=1 zmajor=2 planes=xy:min mode=spatial");
+hidden(world);
+
+// Pi: x+y+z=3, rendered as z=3-x-y over a bounded patch.
+surface3(plane,"3-x-y",(-1.5,1.5),(-1.5,1.5),20);
+color(plane,cyan);
+finish3(plane,"material=glass shading=flat mesh=0.38 depth=0.32 shadow=0.12");
+hidden(plane);
+
+// Crisp boundary keeps the translucent plane readable on a phone.
+line3(edge0,(-1.5,-1.5,6),(1.5,-1.5,3)); color(edge0,cyan); thick(edge0,0.045); untraced(edge0); hidden(edge0); tag(edge0,planeEdge);
+line3(edge1,(1.5,-1.5,3),(1.5,1.5,0)); color(edge1,cyan); thick(edge1,0.045); untraced(edge1); hidden(edge1); tag(edge1,planeEdge);
+line3(edge2,(1.5,1.5,0),(-1.5,1.5,3)); color(edge2,cyan); thick(edge2,0.045); untraced(edge2); hidden(edge2); tag(edge2,planeEdge);
+line3(edge3,(-1.5,1.5,3),(-1.5,-1.5,6)); color(edge3,cyan); thick(edge3,0.045); untraced(edge3); hidden(edge3); tag(edge3,planeEdge);
+
+// P is the given point. Q is its perpendicular projection onto Pi.
+point3(P,(2,2,5),0.20); color(P,magenta); hidden(P); tag(P,geometry);
+point3(Q,(0,0,3),0.18); color(Q,gold); hidden(Q); tag(Q,geometry);
+text(pLabel,(0,0),"P (2, 2, 5)"); size(pLabel,22*u); bold(pLabel); color(pLabel,magenta); hidden(pLabel); pin3(pLabel,P,(20,-18)); tag(pLabel,geometry);
+text(qLabel,(0,0),"Q (0, 0, 3)"); size(qLabel,22*u); bold(qLabel); color(qLabel,gold); hidden(qLabel); pin3(qLabel,Q,(-24,20)); tag(qLabel,geometry);
+
+// The gradient of x+y+z-3 is n=(1,1,1).
+arrow3(normal,(0,0,3),(1.15,1.15,4.15)); color(normal,gold); thick(normal,0.075); untraced(normal); hidden(normal);
+point3(nTip,(1.15,1.15,4.15),0.01); hidden(nTip);
+text(nLabel,(0,0),"n = (1, 1, 1)"); size(nLabel,21*u); bold(nLabel); color(nLabel,gold); hidden(nLabel); pin3(nLabel,nTip,(18,-14));
+
+// The minimum-distance segment is parallel to n and ends at Q.
+line3(distanceLine,(0,0,3),(2,2,5)); color(distanceLine,lime); thick(distanceLine,0.105); untraced(distanceLine); hidden(distanceLine); tag(distanceLine,geometry);
+point3(distanceMid,(1,1,4),0.01); hidden(distanceMid);
+text(distanceLabel,(0,0),"d = 2√3"); size(distanceLabel,23*u); bold(distanceLabel); color(distanceLabel,lime); hidden(distanceLabel); pin3(distanceLabel,distanceMid,(-22,-20)); tag(distanceLabel,geometry);
+
+// A small spatial right-angle mark: one side lies in Pi, one follows n.
+line3(right0,(0,0,3),(0.45,-0.45,3)); color(right0,fg); thick(right0,0.045); untraced(right0); hidden(right0); tag(right0,rightMark);
+line3(right1,(0.45,-0.45,3),(0.70,-0.20,3.25)); color(right1,fg); thick(right1,0.045); untraced(right1); hidden(right1); tag(right1,rightMark);
+line3(right2,(0.70,-0.20,3.25),(0.25,0.25,3.25)); color(right2,fg); thick(right2,0.045); untraced(right2); hidden(right2); tag(right2,rightMark);
+
+step("pose the spatial problem") {
+  seq {
+    par {
+      show(kicker,0.35); show(headline,0.50); show(chapter,0.45);
+      show(problem,0.55); show(work,0.40); show(caption,0.45); show(note,0.40);
+    }
+    show(world,0.70);
+    par {
+      show(plane,0.75);
+      show(edge0,0.10); draw(edge0,0.70,smooth);
+      show(edge1,0.10); draw(edge1,0.70,smooth);
+      show(edge2,0.10); draw(edge2,0.70,smooth);
+      show(edge3,0.10); draw(edge3,0.70,smooth);
+    }
+    stagger(0.12) { show(P,0.25); show(pLabel,0.30); pulse(P,0.60); }
+    wait(0.65);
+  }
+}
+
+step("read the plane normal") {
+  seq {
+    par {
+      say(chapter,"1 · READ THE NORMAL FROM THE PLANE",0.40,smooth);
+      say(caption,"The coefficients of x, y, and z point perpendicular to Π.",0.50,smooth);
+      say(note,"For ax + by + cz + d = 0, the normal is (a,b,c).",0.45,smooth);
+      rewrite(work,`\Pi:x+y+z-3=0`,0.65,smooth);
+      fade(pLabel,0.30);
+    }
+    par {
+      show(Q,0.25);
+      show(normal,0.10); draw(normal,1.10,smooth);
+      show(nLabel,0.35);
+      rewrite(work,`\mathbf n=(1,1,1)`,0.80,smooth);
+    }
+    pulse(normal,0.65);
+    wait(0.60);
+  }
+}
+
+step("locate the perpendicular foot") {
+  seq {
+    par {
+      fade(normal,0.35); fade(nLabel,0.35);
+      say(chapter,"2 · DROP THE PERPENDICULAR",0.40,smooth);
+      say(caption,"Move from P opposite the normal until the plane equation becomes true.",0.50,smooth);
+      say(note,"Q = P − t n must lie on Π.",0.40,smooth);
+      rewrite(work,`Q=(2,2,5)-t(1,1,1)`,0.80,smooth);
+    }
+    rewrite(work,`(2-t)+(2-t)+(5-t)=3\Rightarrow t=2`,1.00,smooth);
+    par {
+      show(distanceLine,0.10); draw(distanceLine,1.20,smooth);
+      show(right0,0.10); draw(right0,0.55,smooth);
+      show(right1,0.10); draw(right1,0.45,smooth);
+      show(right2,0.10); draw(right2,0.55,smooth);
+      rewrite(work,`Q=(0,0,3)`,0.75,smooth);
+    }
+    pulse(Q,0.65);
+    wait(0.65);
+  }
+}
+
+step("measure the shortest segment") {
+  seq {
+    par {
+      say(chapter,"3 · MEASURE THE NORMAL SEGMENT",0.40,smooth);
+      say(caption,"The point-to-plane formula measures exactly the green segment PQ.",0.50,smooth);
+      say(note,"Absolute value gives distance; the denominator normalizes n.",0.45,smooth);
+      rewrite(work,`d=\frac{|2+2+5-3|}{\sqrt{1^2+1^2+1^2}}`,1.05,smooth);
+    }
+    rewrite(work,`d=\frac{6}{\sqrt3}=\textcolor{lime}{2\sqrt3}`,0.90,smooth);
+    par {
+      rewrite(work,`\boxed{d(P,\Pi)=\textcolor{lime}{2\sqrt3}}`,0.75,smooth);
+      show(distanceLabel,0.30);
+      pulse(distanceLine,0.80);
+    }
+    wait(0.75);
+  }
+}
+
+step("orbit the proof") {
+  seq {
+    par {
+      say(chapter,"THE ANSWER IS A SPATIAL RELATIONSHIP",0.45,smooth);
+      say(caption,"Orbit the proof: PQ stays normal to Π from every viewpoint.",0.50,smooth);
+      say(note,"One plane · one projection · one shortest path",0.45,smooth);
+      fade(pLabel,0.35); fade(qLabel,0.35);
+    }
+    par { orbit3(38,28,24,1.80,smooth); pulse(distanceLine,0.70); }
+    par { orbit3(68,30,24,1.80,smooth); pulse(plane,0.70); }
+    wait(0.80);
+  }
+}
+
+step("creator call to action") {
+  par {
+    fade(world,0.45); fade(plane,0.45); fade(planeEdge,0.45);
+    fade(geometry,0.45); fade(rightMark,0.45);
+    fade(problem,0.35); fade(work,0.35); fade(chapter,0.35);
+    fade(caption,0.35); fade(note,0.35);
+    show(me.endcard,0.60);
+  }
+  wait(1.80);
+}

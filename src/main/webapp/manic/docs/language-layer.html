@@ -10,8 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-e96d0476.css">
         <link rel="stylesheet" href="css/chrome-d279d366.css">
@@ -34,10 +34,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de24f8dc.js";
+            window.path_to_searchindex_js = "searchindex-d497fd61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-74e98ac0.js"></script>
+        <script src="toc-683d253c.js"></script>
             <!-- seo:begin -->
 <meta name="description" content="Everything so far has been static text. manic also has a small computation layer that runs before the animation — variables, arithmetic, loops, and…">
 <link rel="canonical" href="https://8gwifi.org/manic/docs/language-layer.html">
@@ -52,7 +52,7 @@
 <meta name="twitter:title" content="The language layer - manic — the manual">
 <meta name="twitter:description" content="Everything so far has been static text. manic also has a small computation layer that runs before the animation — variables, arithmetic, loops, and…">
 <meta name="twitter:image" content="https://i.ytimg.com/vi/m-l37juylp8/maxresdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/language-layer.html#page","url":"https://8gwifi.org/manic/docs/language-layer.html","name":"The language layer - manic — the manual","headline":"The language layer - manic — the manual","description":"Everything so far has been static text. manic also has a small computation layer that runs before the animation — variables, arithmetic, loops, and…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"The language layer"}]},{"@type":"VideoObject","name":"One Loop → a Full Rainbow (manic)","description":"Everything so far has been static text. manic also has a small computation layer that runs before the animation — variables, arithmetic, loops, and…","thumbnailUrl":["https://i.ytimg.com/vi/m-l37juylp8/maxresdefault.jpg"],"uploadDate":"2026-07-28","embedUrl":"https://www.youtube.com/embed/m-l37juylp8","contentUrl":"https://www.youtube.com/watch?v=m-l37juylp8","publisher":{"@type":"Organization","name":"manic"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/language-layer.html#page","url":"https://8gwifi.org/manic/docs/language-layer.html","name":"The language layer - manic — the manual","headline":"The language layer - manic — the manual","description":"Everything so far has been static text. manic also has a small computation layer that runs before the animation — variables, arithmetic, loops, and…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"The language layer"}]},{"@type":"VideoObject","name":"One Loop → a Full Rainbow (manic)","description":"Everything so far has been static text. manic also has a small computation layer that runs before the animation — variables, arithmetic, loops, and…","thumbnailUrl":["https://i.ytimg.com/vi/m-l37juylp8/maxresdefault.jpg"],"uploadDate":"2026-07-29","embedUrl":"https://www.youtube.com/embed/m-l37juylp8","contentUrl":"https://www.youtube.com/watch?v=m-l37juylp8","publisher":{"@type":"Organization","name":"manic"}}]}</script>
 <!-- seo:end -->
     </head>
     <body>
@@ -260,6 +260,65 @@ in the gallery is one page of code:</p>
 }
 branch(1, cx, h - 40, 1.5708, 150, 12);
 </code></pre>
+<h2 id="curve-l-systems--one-rule-one-path"><a class="header" href="#curve-l-systems--one-rule-one-path">Curve L-systems — one rule, one path</a></h2>
+<p>For deterministic textbook curves, use <code>lsystem</code> instead of manually recursing
+into thousands of separate lines:</p>
+<pre><code class="language-manic">lsystem(carpet, (cx,cy), 620,
+  "F+F+F+F",
+  "F=FF+F+F+F+FF",
+  "angle=90 heading=0 iterations=4");
+
+gradient(carpet, cyan, magenta, gold);
+stroke(carpet, 2);
+untraced(carpet);
+draw(carpet, 3, smooth);
+</code></pre>
+<p>The six arguments are:</p>
+<ol>
+<li>id, centre, and fitted square size;</li>
+<li>the starting string (<strong>axiom</strong>);</li>
+<li>semicolon-separated rewrite rules such as <code>"X=...;Y=..."</code>;</li>
+<li>one short options string.</li>
+</ol>
+<p>In the generated program, <code>+</code> turns left by <code>angle</code>, <code>-</code> turns right, <code>|</code>
+turns around, and every symbol listed by <code>draw=F</code> moves forward while drawing.
+<code>heading</code> sets the first direction, <code>iterations</code> controls detail, and <code>padding</code>
+keeps the result away from its fitted edge.</p>
+<p>Use <code>closed=true fill=true</code> when the grammar describes a closed boundary; Manic
+triangulates it into one concave region. Keep <code>fill=false</code> for line curves. The
+constructor deliberately does not interpret branch brackets: use a recursive
+<code>def</code> or <code>tree3</code> for branching plants. This separation keeps curve stories
+simple and makes invalid input easy to repair.</p>
+<p><strong>Practical tips</strong></p>
+<ul>
+<li>Increase <code>iterations</code> one step at a time: rewrite systems grow exponentially.</li>
+<li>Keep the curve as one entity, then use ordinary <code>draw</code>, <code>gradient</code>, <code>move</code>,
+<code>become</code>, <code>step</code>, and camera verbs.</li>
+<li>For a lesson, show generations 0 → 1 → 2 before revealing the detailed curve.</li>
+<li>See <code>lsystem-asymptote-curves.manic</code> for four canonical grammars and
+<code>creator-lsystem-fractal-curve.manic</code> for a complete creator Short.</li>
+</ul>
+<h2 id="repeated-motifs--one-design-many-placements"><a class="header" href="#repeated-motifs--one-design-many-placements">Repeated motifs — one design, many placements</a></h2>
+<p>Use <code>repeat</code> when the visual idea is “this motif forms a field,” not “write a
+loop that manually copies every part.”</p>
+<pre><code class="language-manic">polygon(tile, (cx-12,cy+10), (cx+12,cy+10), (cx,cy-14));
+repeat(field, tile, "layout=hex rings=4 spacing=42 rotate=30 scale=0.8");
+untraced(field);
+draw(field, 2, smooth);
+</code></pre>
+<p>The motif can be one entity or a tag containing several entities. Choose:</p>
+<ul>
+<li><code>layout=hex rings=N spacing=S</code>;</li>
+<li><code>layout=grid rows=R cols=C spacing=S</code> (or separate <code>gapx</code> / <code>gapy</code>);</li>
+<li><code>layout=radial count=N radius=R face=same|out</code>.</li>
+</ul>
+<p><code>rotate</code> turns the arrangement and <code>scale</code> sizes each instance. Every output is
+tagged with the destination id; stable instances are <code>{id}.i0</code>, <code>{id}.i1</code>, …
+The output of one <code>repeat</code> can itself be the motif of another, which is how
+nested textbook tilings stay short. Use normal <code>color</code>, <code>gradient</code>, <code>mask</code>,
+<code>untraced</code>, <code>draw</code>, and <code>stagger</code> afterward.</p>
+<p>See <code>asymptote-tiling-reference.manic</code> for hex/grid/radial/nested coverage and
+<code>creator-one-tile-pattern-story.manic</code> for the creator treatment.</p>
 <h2 id="reductions"><a class="header" href="#reductions">Reductions</a></h2>
 <p>Fold a range into one number with <code>sum</code>, <code>prod</code>, <code>min</code>, <code>max</code>:</p>
 <pre><code class="language-manic">let n = 6;
@@ -276,7 +335,7 @@ figures → <a href="kits.html">Kits</a>.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="ml.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="API.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -290,7 +349,7 @@ figures → <a href="kits.html">Kits</a>.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="ml.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="API.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

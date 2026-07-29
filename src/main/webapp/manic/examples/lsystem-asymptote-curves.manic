@@ -1,0 +1,81 @@
+// Four classic deterministic curves from the Asymptote example corpus.
+// Each figure is one fitted, traceable Manic entity—even the 9,604-segment curve.
+
+title("Four Rules, Four Infinite-Looking Curves");
+canvas("16:9");
+template("mono");
+
+watermark(mark, (w*0.105, h*0.08), "Made With Manic");
+text(kicker, (cx, h*0.075), "GENERATIVE GEOMETRY · L-SYSTEMS");
+text(headline, (cx, h*0.135), "A tiny rewriting rule becomes a continuous path");
+text(caption, (cx, h*0.92), "One path per curve · auto-fitted · continuously drawable");
+size(kicker, 20); bold(kicker); color(kicker, dim);
+size(headline, 34); bold(headline);
+size(caption, 20); color(caption, dim);
+
+let left = w*0.275;
+let right = w*0.725;
+let upper = h*0.37;
+let lower = h*0.70;
+let cell = h*0.27;
+
+lsystem(sierpinski, (left, upper), cell,
+  "YF", "X=YF+XF+Y;Y=XF-YF-X",
+  "angle=60 heading=0 iterations=7");
+color(sierpinski, cyan); stroke(sierpinski, 2.5); untraced(sierpinski);
+
+lsystem(gosper, (right, upper), cell,
+  "FX", "X=X+YF++YF-FX--FXFX-YF+;Y=-FX+YFYF++YF+FX--FX-Y",
+  "angle=60 heading=0 iterations=4");
+color(gosper, magenta); stroke(gosper, 2.5); untraced(gosper);
+
+lsystem(squareCurve, (left, lower), cell,
+  "F+XF+F+XF", "X=XF-F+F-XF+F+XF-F+F-X",
+  "angle=90 heading=45 iterations=5 closed=true fill=true");
+color(squareCurve, gold); opacity(squareCurve, 0.70); stroke(squareCurve, 2.0); untraced(squareCurve);
+
+lsystem(carpet, (right, lower), cell,
+  "F+F+F+F", "F=FF+F+F+F+FF",
+  "angle=90 heading=0 iterations=4");
+color(carpet, lime); stroke(carpet, 2.0); untraced(carpet);
+
+text(l1, (left, h*0.205), "SIERPINSKI CURVE · 2,187 SEGMENTS");
+text(l2, (right, h*0.205), "PEANO–GOSPER · 2,401 SEGMENTS");
+text(l3, (left, h*0.535), "SQUARE CURVE · 5,460 SEGMENTS");
+text(l4, (right, h*0.535), "CARPET CURVE · 9,604 SEGMENTS");
+size(l1, 18); size(l2, 18); size(l3, 18); size(l4, 18);
+bold(l1); bold(l2); bold(l3); bold(l4);
+color(l1, cyan); color(l2, magenta); color(l3, gold); color(l4, lime);
+hidden(l1); hidden(l2); hidden(l3); hidden(l4);
+
+step("one rule becomes a curve") {
+  par {
+    show(l1, 0.35);
+    draw(sierpinski, 1.8, smooth);
+  }
+}
+wait(0.30);
+
+step("change the grammar") {
+  par {
+    show(l2, 0.35);
+    draw(gosper, 1.8, smooth);
+  }
+}
+wait(0.30);
+
+step("close and fill the boundary") {
+  par {
+    show(l3, 0.35);
+    draw(squareCurve, 1.8, smooth);
+  }
+}
+wait(0.30);
+
+step("thousands of segments stay one path") {
+  par {
+    show(l4, 0.35);
+    draw(carpet, 2.2, smooth);
+  }
+}
+wait(1.20);

@@ -1,0 +1,72 @@
+// Creator short: many random decisions do not create visual noise only—the
+// choice model leaves a characteristic 3D signature.
+
+title("Can Randomness Have a Shape?");
+canvas("9:16");
+template("paper");
+
+creator(me, "@anish2good name=Manic_Generative tagline=Randomness_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Animate_the_invisible safe=clean");
+socials(me);
+watermark(mark, (w*0.16,h*0.055), "Made With Manic");
+endcard(me, "title=Make_Invisible_Systems_Visible cta=8gwifi.org/manic");
+
+let u = (w+h-abs(w-h))/1080;
+text(kicker, (cx,h*0.11), "MANIC · RANDOM SYSTEMS");
+text(headline, (cx,h*0.18), "Can randomness have a shape?");
+text(caption, (cx,h*0.77), "Start at one point. Choose one of six directions.");
+text(count, (cx,h*0.70), "100 STEPS");
+size(kicker,20*u); bold(kicker); color(kicker,cyan);
+size(headline,31*u); bold(headline); wrap(headline,w*0.78);
+size(caption,23*u); bold(caption); wrap(caption,w*0.75);
+size(count,20*u); bold(count); color(count,gold);
+
+camera3((9,-12,8),(0,0,0),38,orthographic);
+randomwalk3(w100,(0,0,0),100,42,"mode=axis color=direction scale=0.25");
+randomwalk3(w1000,(0,0,0),1000,42,"mode=axis color=direction shade=depth scale=0.16");
+randomwalk3(w10000,(0,0,0),10000,42,"mode=axis color=direction shade=depth scale=0.09");
+untraced(w100); untraced(w1000); untraced(w10000);
+hidden(w1000); hidden(w10000);
+hidden(kicker); hidden(headline); hidden(caption); hidden(count);
+
+step("one random journey") {
+  par {
+    show(kicker,0.35); show(headline,0.45); show(caption,0.40); show(count,0.35);
+    draw(w100,1.25,smooth); view3(w100,"fit",0.55,smooth,1.35);
+  }
+}
+wait(0.55);
+
+step("the cloud begins to emerge") {
+  par {
+    fade(w100,0.35); show(w1000,0.05);
+    say(count,"1,000 STEPS",0.30);
+    say(caption,"More choices reveal a spreading 3D cloud.",0.40);
+  }
+  par { draw(w1000,1.75,smooth); view3(w1000,"fit",0.55,smooth,1.35); }
+}
+wait(0.60);
+
+step("scale exposes the law") {
+  par {
+    fade(w1000,0.35); show(w10000,0.05);
+    say(count,"10,000 STEPS · SAME SEED",0.30);
+    say(caption,"The individual turns are random. The large-scale diffusion is not.",0.45);
+  }
+  par { draw(w10000,2.30,smooth); view3(w10000,"fit",0.60,smooth,1.35); }
+  orbit3(112,30,11,1.70,smooth);
+}
+wait(0.85);
+
+step("creator takeaway") {
+  say(caption,"Manic turns a model and a seed into a camera-ready explanation.",0.45);
+  recolor(headline,gold,0.45);
+}
+wait(1.00);
+
+step("call to action") {
+  par {
+    fade(kicker,0.30); fade(headline,0.30); fade(caption,0.30); fade(count,0.30);
+    fade(w10000,0.40); fade(me.footer,0.30); show(me.endcard,0.60);
+  }
+}
+wait(1.80);

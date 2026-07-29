@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="540" viewBox="0 0 540 540">
+  <rect width="540" height="540" rx="76" fill="#0B0E17"/>
+  <g transform="translate(120,54) scale(2.5)">
+    <g fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <g stroke="#00E5FF" opacity="0.28" transform="translate(-16 0)"><path d="M32 86 L32 52 C32 44 52 44 52 52 L52 86 M52 52 C52 44 72 44 72 52 L72 86"/></g>
+      <g stroke="#7CFF6B" opacity="0.45" transform="translate(-10 0)"><path d="M32 86 L32 52 C32 44 52 44 52 52 L52 86 M52 52 C52 44 72 44 72 52 L72 86"/></g>
+      <g stroke="#FFD166" opacity="0.70" transform="translate(-5 0)"><path d="M32 86 L32 52 C32 44 52 44 52 52 L52 86 M52 52 C52 44 72 44 72 52 L72 86"/></g>
+      <g stroke="#FF2D95"><path d="M32 86 L32 52 C32 44 52 44 52 52 L52 86 M52 52 C52 44 72 44 72 52 L72 86"/></g>
+    </g>
+  </g>
+  <text x="270" y="470" text-anchor="middle" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-weight="600" font-size="80" letter-spacing="-2">
+    <tspan fill="#E8ECF4">man</tspan><tspan fill="#FF2D95">i</tspan><tspan fill="#E8ECF4">c</tspan></text>
+</svg>

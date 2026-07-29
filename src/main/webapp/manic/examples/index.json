@@ -1,5 +1,5 @@
 {
-  "count": 291,
+  "count": 304,
   "categories": [
     {
       "slug": "algorithms",
@@ -1176,6 +1176,30 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "lsystem-asymptote-curves",
+          "file": "lsystem-asymptote-curves.manic",
+          "title": "Lsystem asymptote curves",
+          "desc": "Four canonical Asymptote rewriting systems become fitted, continuously drawable Manic paths\u2014including a concave filled boundary and a 9,604-segment carpet curve."
+        },
+        {
+          "name": "creator-lsystem-fractal-curve",
+          "file": "creator-lsystem-fractal-curve.manic",
+          "title": "Creator lsystem fractal curve",
+          "desc": "A creator Short follows one seven-segment rule from a four-edge square to a 9,604-segment space-filling curve, then closes with the Manic CTA."
+        },
+        {
+          "name": "asymptote-tiling-reference",
+          "file": "asymptote-tiling-reference.manic",
+          "title": "Asymptote tiling reference",
+          "desc": "One two-dimensional motif becomes hex rings, a rotated grid, an outward-facing radial system, and a nested motif-of-motifs\u2014all through the generic repeat foundation."
+        },
+        {
+          "name": "creator-one-tile-pattern-story",
+          "file": "creator-one-tile-pattern-story.manic",
+          "title": "Creator one tile pattern story",
+          "desc": "A creator problem asks how many tiles lie in three complete hexagonal rings."
+        },
+        {
           "name": "gun-shot",
           "file": "gun-shot.manic",
           "title": "Gun shot",
@@ -1350,6 +1374,24 @@
           "desc": "How a rocket launches, told entirely through a reusable cutaway SVG and Manic motion."
         },
         {
+          "name": "creator-geometry-morph-promo",
+          "file": "creator-geometry-morph-promo.manic",
+          "title": "Creator geometry morph promo",
+          "desc": "One persistent twelve-vertex actor becomes a triangle, square, diamond, hexagon, star, hourglass, arrow, heart, bolt and crown."
+        },
+        {
+          "name": "creator-geometry-language-showcase",
+          "file": "creator-geometry-language-showcase.manic",
+          "title": "Creator geometry language showcase",
+          "desc": "How much olympiad geometry lives in one triangle? Four coloured midpoint regions prove an exact quarter-area identity; three altitude feet join the three side midpoints on the dashed nine-point circle; centroid, circumcenter, incenter, orthocenter and Euler line complete the story."
+        },
+        {
+          "name": "creator-hilbert3-spatial-index",
+          "file": "creator-hilbert3-spatial-index.manic",
+          "title": "Creator hilbert3 spatial index",
+          "desc": "A cinematic use for hilbert3, unrelated to recursive cube filling: a scan plane resolves 64 translucent voxels, three red corner-to-corner jumps expose a poor address order, and one fixed Hilbert route restores locality."
+        },
+        {
           "name": "creator-v2-options-socials",
           "file": "creator-v2-options-socials.manic",
           "title": "Creator v2 options socials",
@@ -1506,6 +1548,36 @@
           "desc": "A creator-first spatial lab: safe-aware framing, rigid assembly, a live projection and edge, a moving route, surface contour, depth-scaled label, bounded finishes, variable tube, and controlled OBJ geometry in one continuous story."
         },
         {
+          "name": "creator-coordinate-worlds",
+          "file": "creator-coordinate-worlds.manic",
+          "title": "Creator coordinate worlds",
+          "desc": "Solve the classic 3 \u00d7 4 \u00d7 12 cuboid diagonal as a complete creator story: isolate the 3 \u00d7 4 floor in native 2D, reuse its 5-unit diagonal in textbook-projected 3D, derive the 13-unit answer, then orbit the same retained frame3 in spatial 3D."
+        },
+        {
+          "name": "creator-point-to-plane-distance",
+          "file": "creator-point-to-plane-distance.manic",
+          "title": "Creator point to plane distance",
+          "desc": "A pure-3D vector-geometry Short: read the normal of x+y+z=3, project P=(2,2,5) onto the plane, construct the spatial right angle, derive the exact distance 2\u221a3, and orbit the persistent point-plane proof."
+        },
+        {
+          "name": "frame3-grid-policies",
+          "file": "frame3-grid-policies.manic",
+          "title": "Frame3 grid policies",
+          "desc": "The six Asymptote-inspired scientific grid policies in one review: lower walls, a logarithmic axis, top and explicit planes, coloured parallel sections, major/minor grids, and independent per-axis intervals."
+        },
+        {
+          "name": "asymptote-randomwalk3-reference",
+          "file": "asymptote-randomwalk3-reference.manic",
+          "title": "Asymptote randomwalk3 reference",
+          "desc": "The recurring Asymptote 3D random-walk families reduced to two readable models: world-axis choices and a local turtle frame with 90\u00b0/60\u00b0 turns."
+        },
+        {
+          "name": "creator-randomwalk3-diffusion",
+          "file": "creator-randomwalk3-diffusion.manic",
+          "title": "Creator randomwalk3 diffusion",
+          "desc": "A creator Short grows the same seeded 3D walk from 100 to 10,000 decisions and reveals the large-scale shape hiding inside random local choices."
+        },
+        {
           "name": "parameterized-generated-families3",
           "file": "parameterized-generated-families3.manic",
           "title": "Parameterized generated families3",
@@ -1552,6 +1624,12 @@
           "file": "growing-fractal-tree3.manic",
           "title": "Growing fractal tree3",
           "desc": "One seeded split-turn-shrink rule grows 1,023 branches."
+        },
+        {
+          "name": "hilbert-curve3-space-filling",
+          "file": "hilbert-curve3-space-filling.manic",
+          "title": "Hilbert curve3 space filling",
+          "desc": "One continuous 3D Hilbert path refines from 7 to 32,767 segments while keeping its identity, arc-length colour, cube bounds, and uninterrupted orbit camera."
         },
         {
           "name": "latex-disintegration",

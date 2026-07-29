@@ -1,0 +1,48 @@
+// Review file for the six Asymptote grid3 policies that motivated frame3.
+// Each chapter is a normal frame3 declaration, not a renderer special case.
+
+title("Scientific Grid Planes — Asymptote Parity");
+canvas("16:9");
+template("mono");
+watermark(manicMark,(170,70),"Made With Manic");
+
+text(titleText,(640,68),"One frame vocabulary · six grid policies"); size(titleText,30); bold(titleText);
+text(caption,(640,670),"Three lower walls"); size(caption,24); bold(caption); color(caption,gold);
+
+camera3((10,-12,8),(0,0,0),15,orthographic);
+
+frame3(walls,(0,0,0),(8,8,6),"x=-2..2 y=-2..2 z=-1..3 planes=xy:min,xz:min,yz:min major=1 mode=textbook");
+frame3(logWalls,(0,0,0),(8,8,6),"x=0..4 y=0..4 z=0.1..100 planes=xy:min,xz:min zscale=log major=1 mode=textbook");
+frame3(positioned,(0,0,0),(8,8,6),"x=-2..2 y=-2..2 z=-2..2 planes=xy:max,xz:0 major=1 mode=textbook");
+frame3(parallel,(0,0,0),(8,8,6),"x=-2..2 y=-2..2 z=-2..2 planes=xy:-0.5@cyan,xy:1.5@magenta major=1 mode=textbook");
+frame3(majorMinor,(0,0,0),(8,8,6),"x=-2..2 y=-2..2 z=-1..2 planes=xy:min major=1 minor=0.5 mode=textbook");
+frame3(axisPolicy,(0,0,0),(8,8,6),"x=-2..2 y=-2..2 z=-2..2 planes=xy:min,yz:min xmajor=0.5 ymajor=1 zmajor=2 mode=textbook");
+
+hidden(logWalls); hidden(positioned); hidden(parallel); hidden(majorMinor); hidden(axisPolicy);
+
+step("three lower walls") {
+  show(walls,0.65);
+  wait(0.70);
+}
+step("linear floor with logarithmic height") {
+  par { fade(walls,0.45); show(logWalls,0.60); say(caption,"Linear floor · logarithmic z",0.40,smooth); }
+  wait(0.70);
+}
+step("top and explicit-position planes") {
+  par { fade(logWalls,0.45); show(positioned,0.60); say(caption,"XY at max · XZ at y=0",0.40,smooth); }
+  wait(0.70);
+}
+step("parallel colored sections") {
+  par { fade(positioned,0.45); show(parallel,0.60); say(caption,"Two parallel XY sections",0.40,smooth); }
+  wait(0.70);
+}
+step("major and minor lines") {
+  par { fade(parallel,0.45); show(majorMinor,0.60); say(caption,"Major ticks derive the major grid",0.40,smooth); }
+  wait(0.70);
+}
+step("independent axis policy") {
+  par { fade(majorMinor,0.45); show(axisPolicy,0.60); say(caption,"Each axis chooses its own interval",0.40,smooth); }
+  present3(axisPolicy,spatial,0.70,smooth);
+  orbit3(118,30,12,2.10,smooth);
+  wait(1.40);
+}

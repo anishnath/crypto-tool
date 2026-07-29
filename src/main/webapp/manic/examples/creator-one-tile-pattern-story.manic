@@ -1,0 +1,169 @@
+// Creator problem: count a hexagonal mosaic without counting 37 tiles one by
+// one. `repeat` constructs the exact layers; counters and semantic LaTeX turn
+// the geometry into a short visual proof.
+
+title("How Many Tiles Are in Three Hexagonal Rings?");
+canvas("9:16");
+template("blank");
+
+creator(me, "@anish2good name=Manic_Geometry tagline=Patterns_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Create_without_keyframes safe=clean");
+socials(me);
+watermark(mark, (w*0.16, h*0.055), "Made With Manic");
+endcard(me, "title=Turn_Patterns_Into_Proofs cta=8gwifi.org/manic");
+
+let u = (w+h-abs(w-h))/1080;
+let boardY = h*0.43;
+let tileR = 19*u;
+
+text(kicker, (cx,h*0.105), "MANIC · VISUAL COUNTING");
+text(headline, (cx,h*0.17), "Three rings surround one tile.");
+text(question, (cx,h*0.235), "How many tiles are there altogether?");
+text(caption, (cx,h*0.77), "Do not count one by one. Count what each ring adds.");
+size(kicker, 20*u); bold(kicker); color(kicker, cyan);
+size(headline, 31*u); bold(headline); wrap(headline,w*0.80);
+size(question, 25*u); bold(question); wrap(question,w*0.78); color(question,gold);
+size(caption, 22*u); bold(caption); wrap(caption,w*0.78); color(caption,dim);
+
+// One regular hexagonal tile is the only authored artwork.
+polygon(tile,
+  (cx,boardY-tileR),
+  (cx+0.866*tileR,boardY-0.5*tileR),
+  (cx+0.866*tileR,boardY+0.5*tileR),
+  (cx,boardY+tileR),
+  (cx-0.866*tileR,boardY+0.5*tileR),
+  (cx-0.866*tileR,boardY-0.5*tileR));
+color(tile, gold); glow(tile, 0.75);
+
+// The question silhouette: all 37 tiles, deliberately subdued.
+repeat(questionField, tile,
+  "layout=hex rings=4 spacing=39 rotate=30 scale=0.90");
+color(questionField, dim); opacity(questionField,0.30);
+untraced(questionField);
+
+// Declare largest first and smallest last. When all four groups are visible,
+// the later cumulative layers cover their shared interior, leaving each newly
+// added ring in its own semantic colour.
+repeat(layer4, tile,
+  "layout=hex rings=4 spacing=39 rotate=30 scale=0.90");
+color(layer4,lime); hidden(layer4); untraced(layer4);
+
+repeat(layer3, tile,
+  "layout=hex rings=3 spacing=39 rotate=30 scale=0.90");
+color(layer3,magenta); hidden(layer3); untraced(layer3);
+
+repeat(layer2, tile,
+  "layout=hex rings=2 spacing=39 rotate=30 scale=0.90");
+color(layer2,cyan); hidden(layer2); untraced(layer2);
+
+repeat(layer1, tile,
+  "layout=hex rings=1 spacing=39 rotate=30 scale=0.90");
+color(layer1,gold); hidden(layer1); untraced(layer1);
+
+hidden(tile);
+
+counter(total, (cx,h*0.655), 1, 0, "TOTAL  ", "  TILES");
+size(total,25*u); bold(total); color(total,gold); hidden(total);
+
+equation(work, (cx,h*0.70),
+  `N=\textcolor{gold}{1}+\textcolor{cyan}{6}+\textcolor{magenta}{12}+\textcolor{lime}{18}`,
+  31*u);
+hidden(work);
+
+hidden(kicker); hidden(headline); hidden(question); hidden(caption);
+
+step("pose the mosaic problem") {
+  par {
+    show(kicker,0.35);
+    show(headline,0.50);
+    show(question,0.45);
+    show(caption,0.40);
+    draw(questionField,1.25,smooth);
+  }
+}
+wait(1.10);
+
+step("focus on the construction") {
+  par {
+    fade(questionField,0.35);
+    say(caption,"Begin with the single centre tile.",0.40);
+    cam((cx,boardY),0.45,smooth);
+    zoom(1.10,0.45,smooth);
+    show(total,0.35);
+  }
+  show(layer1,0.05);
+  draw(layer1,0.45,smooth);
+  pulse(layer1,0.55);
+}
+wait(0.40);
+
+step("the first ring adds six") {
+  par {
+    show(layer2,0.05);
+    to(total,value,7,0.55,smooth);
+    say(caption,"Ring 1 adds 6 tiles: one on each side.",0.40);
+  }
+  stagger(0.055) {
+    for i in 0..7 { draw(layer2.i{i},0.28,smooth); }
+  }
+}
+wait(0.35);
+
+step("the second ring adds twelve") {
+  par {
+    show(layer3,0.05);
+    to(total,value,19,0.65,smooth);
+    say(caption,"Ring 2 has twice as many positions, so it adds 12.",0.45);
+  }
+  stagger(0.035) {
+    for i in 0..19 { draw(layer3.i{i},0.22,smooth); }
+  }
+}
+wait(0.35);
+
+step("the third ring adds eighteen") {
+  par {
+    show(layer4,0.05);
+    to(total,value,37,0.75,smooth);
+    say(caption,"Ring 3 adds 18 more. Every new ring contributes another six.",0.45);
+  }
+  stagger(0.022) {
+    for i in 0..37 { draw(layer4.i{i},0.18,smooth); }
+  }
+}
+wait(0.55);
+
+step("write what the colors counted") {
+  par {
+    show(work,0.50);
+    say(caption,"The colored layers give the sum directly.",0.40);
+    cam((cx,cy),0.45,smooth);
+    zoom(1.0,0.45,smooth);
+  }
+}
+wait(0.55);
+
+step("recognize the pattern") {
+  rewrite(work, `N=1+6(1+2+3)`,0.80,smooth);
+  say(caption,"Factor out six: the ring numbers form a triangular sum.",0.45);
+}
+wait(0.55);
+
+step("solve") {
+  par {
+    rewrite(work, `N=\textcolor{lime}{37}`,0.85,smooth);
+    say(caption,"So the mosaic contains exactly 37 tiles.",0.45);
+    pulse(total,0.80);
+    recolor(headline,gold,0.50);
+  }
+}
+wait(1.10);
+
+step("call to action") {
+  par {
+    fade(kicker,0.30); fade(headline,0.30); fade(question,0.30);
+    fade(caption,0.30); fade(total,0.30); fade(work,0.30);
+    fade(layer1,0.35); fade(layer2,0.35); fade(layer3,0.35); fade(layer4,0.35);
+    fade(me.footer,0.30); show(me.endcard,0.60);
+  }
+}
+wait(1.80);

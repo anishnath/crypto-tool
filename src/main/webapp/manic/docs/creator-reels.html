@@ -10,8 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-e96d0476.css">
         <link rel="stylesheet" href="css/chrome-d279d366.css">
@@ -34,10 +34,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de24f8dc.js";
+            window.path_to_searchindex_js = "searchindex-d497fd61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-74e98ac0.js"></script>
+        <script src="toc-683d253c.js"></script>
             <!-- seo:begin -->
 <meta name="description" content="Creator Kit v2 is the fastest path from an idea to a finished vertical video. It owns the responsive layout, safe areas, question hierarchy, answer cards…">
 <link rel="canonical" href="https://8gwifi.org/manic/docs/creator-reels.html">
@@ -52,7 +52,7 @@
 <meta name="twitter:title" content="Create a polished Reel - manic — the manual">
 <meta name="twitter:description" content="Creator Kit v2 is the fastest path from an idea to a finished vertical video. It owns the responsive layout, safe areas, question hierarchy, answer cards…">
 <meta name="twitter:image" content="https://i.ytimg.com/vi/_FAxmFXPEbU/maxresdefault.jpg">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/creator-reels.html#page","url":"https://8gwifi.org/manic/docs/creator-reels.html","name":"Create a polished Reel - manic — the manual","headline":"Create a polished Reel - manic — the manual","description":"Creator Kit v2 is the fastest path from an idea to a finished vertical video. It owns the responsive layout, safe areas, question hierarchy, answer cards…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Create a polished Reel"}]},{"@type":"VideoObject","name":"Make a Perfect Math Reel From One Script — manic","description":"Creator Kit v2 is the fastest path from an idea to a finished vertical video. It owns the responsive layout, safe areas, question hierarchy, answer cards…","thumbnailUrl":["https://i.ytimg.com/vi/_FAxmFXPEbU/maxresdefault.jpg"],"uploadDate":"2026-07-28","embedUrl":"https://www.youtube.com/embed/_FAxmFXPEbU","contentUrl":"https://www.youtube.com/watch?v=_FAxmFXPEbU","publisher":{"@type":"Organization","name":"manic"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/creator-reels.html#page","url":"https://8gwifi.org/manic/docs/creator-reels.html","name":"Create a polished Reel - manic — the manual","headline":"Create a polished Reel - manic — the manual","description":"Creator Kit v2 is the fastest path from an idea to a finished vertical video. It owns the responsive layout, safe areas, question hierarchy, answer cards…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Create a polished Reel"}]},{"@type":"VideoObject","name":"Make a Perfect Math Reel From One Script — manic","description":"Creator Kit v2 is the fastest path from an idea to a finished vertical video. It owns the responsive layout, safe areas, question hierarchy, answer cards…","thumbnailUrl":["https://i.ytimg.com/vi/_FAxmFXPEbU/maxresdefault.jpg"],"uploadDate":"2026-07-29","embedUrl":"https://www.youtube.com/embed/_FAxmFXPEbU","contentUrl":"https://www.youtube.com/watch?v=_FAxmFXPEbU","publisher":{"@type":"Organization","name":"manic"}}]}</script>
 <!-- seo:end -->
     </head>
     <body>
@@ -207,7 +207,7 @@ how restrained or energetic it should feel.</p>
 </thead>
 <tbody>
 <tr><td>Format</td><td><code>canvas("9:16")</code></td><td>native vertical composition</td></tr>
-<tr><td>Surface</td><td>omit the call or use <code>template("mono")</code></td><td>professional black-and-white default; use <code>shorts</code> when accent hue matters</td></tr>
+<tr><td>Surface</td><td>omit the call or use <code>template("black")</code></td><td>exact-black full-colour default; use <code>mono</code> for intentional grayscale</td></tr>
 <tr><td>Safe area</td><td><code>safe=reels</code> on the creator and quiz</td><td>protects important content from platform UI</td></tr>
 <tr><td>Hierarchy</td><td><code>studio layout=media-first density=comfortable</code></td><td>question first, one focal visual, readable answers</td></tr>
 <tr><td>Motion</td><td><code>motion=calm</code> or <code>motion=studio</code></td><td>purposeful movement without visual noise</td></tr>
@@ -256,7 +256,7 @@ after the important result, and place any related plot or diagram motion beside
 the rewrite in <code>par</code>.</p>
 <h2 id="2-let-the-format-own-layout"><a class="header" href="#2-let-the-format-own-layout">2. Let the format own layout</a></h2>
 <pre><code class="language-manic">canvas("9:16");
-template("mono"); // optional: mono is the DSL default
+template("black"); // optional: black is the DSL default
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove \
 yt=zarigatongy x=@anish2good web=8gwifi.org/manic \
@@ -298,6 +298,11 @@ content, then reveal it for about one second or more.</p>
 creator profile is reusable across a whole series, so brand decisions live in
 one line rather than every scene. Inside a profile spec, use underscores where
 a value needs spaces: <code>name=Proof_Daily cta=Save_and_share</code>.</p>
+<p>The endcard deliberately uses an editorial action row rather than a fully
+neon-filled button: a quiet inset surface keeps the creator name and final idea
+dominant, while a small two-colour rail and arrow chip carry the accent palette.
+On a black template, reserve bright colour for those details and keep CTA copy
+short enough to read in one glance.</p>
 <p>For a channel-link row without external assets, choose <code>footer=social</code> and set
 the platform values directly: <code>yt=zarigatongy x=@anish2good web=8gwifi.org/manic</code>. Manic draws matching normalized icons and keeps the text
 inside the responsive footer. Use two or three identities for the clearest

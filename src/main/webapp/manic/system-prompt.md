@@ -2,9 +2,11 @@
 
 You write **manic** animation scripts (`.manic`). manic is a small text DSL for
 2D and foundational 3D math/algorithm animations. The default look is a
-**monochrome editorial screen** (`template("mono")`: near-black, white/grey
-content, no chrome); colour templates (`plain`/`terminal`/`paper`/`blueprint`/
-`shorts`) are opt-in. Output **only valid manic source** unless asked otherwise.
+**full-colour black screen** (`template("black")`: exact black, semantic colour,
+no chrome). A **monochrome editorial screen** (`template("mono")`: near-black,
+white/grey content, no chrome) and the other colour templates
+(`plain`/`terminal`/`paper`/`blueprint`/`shorts`) are opt-in. Output **only valid
+manic source** unless asked otherwise.
 This document is the authoritative spec for generation; follow it exactly.
 
 ---
@@ -198,8 +200,10 @@ Constructors and timeline may be written in any order.
 
 ### Setup / structure
 `title("s")` · `canvas(w,h)` or `canvas("16:9"|"square"|"portrait"|"4:5"|"1080p"|"4k"|"4:3")`
-· `template("mono")` (default when omitted: black-and-white editorial) /
-`"plain"` (original neon, no chrome) / `"terminal"` (neon window chrome) /
+· `template("black")` (default when omitted: full semantic colour on exact black,
+no chrome) / `"mono"` (intentional black-and-white editorial) /
+`"plain"` (original neon on indigo-black, no chrome; aliases `"blank"`/`"clean"`) /
+`"terminal"` (neon window chrome) /
 `"paper"` (ink on cream) / `"blueprint"` (white-cyan on navy) /
 `"shorts"` (dark creator studio) — each retints named colours ·
 `masthead("left",["right"])` (optional header text; empty by default) ·
@@ -247,7 +251,7 @@ initially empty bounded histogram for `observe`; bars are `{id}.bar{k}` and
 tagged `{id}.bars`, while `{id}.count` is its optional count readout ·
 `image(id,(x,y),"asset:manic-logo.png"|"path",[w],[h])` a raster image (PNG/JPG) from a documented bundled URI or provisioned file, centred, w×h px (default 300 square; h defaults to w) — loaded once at render start, animates like any entity; missing ordinary file → placeholder box, missing `asset:` → error (engine-only, no browser preview) · `svg(id,(x,y),"asset:name.svg"|"path",[size])` import VECTOR artwork as native path entities (2D twin of model3): each subpath → a traceable Polyline/filled Polygon, fitted to `size` px wide (default 240, aspect-preserved) and centred; solid fill/stroke colours kept LITERAL (faithful, not re-themed); pieces named {id}.p{i} + tagged {id} so draw/show/fade/hue/gradient/move broadcast over the whole drawing; v1 skips SVG text/image/clip/mask/filter/gradient-paint (engine-only, no browser preview) ·
 `equation(id,(x,y),`latex`,[size])` typeset a **LaTeX math** string (real fractions/roots/exponents/Greek, KaTeX-grade) centred, `size` = em height px (default 48); LaTeX goes in **backticks** so `\`-commands survive; takes the template colour (`color`/`recolor` work), while `\textcolor{cyan}{...}` colors individual terms semantically; `show`/`fade`/`move`/`scale` animate it (image, so no `draw`). E.g. `` equation(f,(cx,320),`\int_0^1 x^2\,dx=\tfrac13`,60) `` ·
-`line(id,(x1,y1),(x2,y2))` (stroke only) · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts; **defaults filled+outlined**) · `arrow(id,(x1,y1),(x2,y2))` (stroke only; arrowhead is a filled tip — stop short of open markers) · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
+`line(id,(x1,y1),(x2,y2))` (stroke only) · `polygon(id,(x1,y1),(x2,y2),(x3,y3),...,[color])` filled region (≥3 pts; **defaults filled+outlined**) · `lsystem(id,(cx,cy),size,"axiom","A=...;B=...",["angle=90 heading=0 iterations=4 draw=F padding=.04 closed=false fill=false"])` turns one deterministic rewriting grammar into one auto-fitted traceable curve (`+`/`-` turn, `|` reverses; use recursive `def`/`tree3` for branching `[`/`]`) · `repeat(id,motif,"layout=hex rings=4 spacing=42 rotate=30 scale=.8")` clones one entity or tagged composition into a stable `hex`, `grid`, or `radial` arrangement (`grid`: rows/cols/spacing or gapx/gapy; `radial`: count/radius/face=same|out); generated instances are tagged `{id}.iN`, can be nested, and remain normal Manic entities—prefer this to manual copy loops when the story is a reusable visual motif · `arrow(id,(x1,y1),(x2,y2))` (stroke only; arrowhead is a filled tip — stop short of open markers) · `support(id,(cx,cy),[len],["dir"])` a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; `"dir"` = open side `"down"`(ceiling, default)/`"up"`(floor)/`"left"`/`"right"`; pair with `template("paper")` for a textbook look ·
 `brace(id,(x1,y1),(x2,y2),[depth])` (stroke only) · `bracelabel(id,(x1,y1),(x2,y2),"s",[depth])`
 · booleans `union/intersect/difference/exclusion(id, a, b)` (filled regions).
 
@@ -520,8 +524,18 @@ tokenizer.
 `point3(id,(x,y,z),[r])` · `line3(id,from,to)` · `arrow3(id,from,to)` ·
 `cube3(id,center,(sx,sy,sz))` · `sphere3(id,center,r)` ·
 `linmap3(id,(cx,cy,cz),a,b,c,d,e,f,g,h,i,[color])` (a 3×3 matrix deforming the unit cube into a parallelepiped; basis arrows i/j/k on its columns, enclosed volume = the determinant — the 3-D echo of linmap/determinant) · `eigen3(id,(cx,cy,cz),a,b,c,d,e,f,g,h,i,[color])` (the real eigenvector directions of a 3×3 matrix as invariant lines + λ labels; complex eigenvalues noted — 3-D echo of eigen) ·
-`grid3(id,center,half,[spacing])` · `axes3(id,origin,length,[step])` (ticks +
-numbers) · `pin3(label,(x,y,z)|entity3)` (glue a 2D label to a 3D point) ·
+`grid3(id,center,half,[spacing])` · `axes3(id,origin,length,[step])` (simple
+positive axes with ticks + numbers) ·
+`frame3(id,center,(sx,sy,sz),["x=-2..2 y=-2..2 z=0.1..100 planes=xy:min,xz:min,yz:min major=1 minor=0.5 zscale=log mode=textbook"])`
+(bounded scientific coordinate frame; planes may repeat and use min/max/origin/a
+numeric level plus optional `@color`; shared or per-axis major/minor/scale) ·
+`present3(frame,textbook|spatial,[dur],[ease])` (change presentation, never
+coordinates or identity) · `pin3(label,(x,y,z)|entity3,[(dx,dy)])` (glue a 2D label to a 3D point with an optional screen-space offset) ·
+`randomwalk3(id,center,steps,[seed],["mode=axis|turtle distribution=uniform|gaussian angle=60 scale=0.1 color=single|direction shade=none|depth"])` (one deterministic seekable 3D path through at most 50,000 steps; use axis for ±x/±y/±z and turtle for a local turning frame) ·
+`hilbert3(id,center,size,order,["color=gradient|single shade=none|depth"])`
+(one exact batched 3D Hilbert path; order 1–5 visits every lattice cell once,
+giving 7 through 32,767 axis-adjacent segments; use hidden higher-order
+blueprints with `become3` for continuous refinement) ·
 `follow3(id,target,[(dx,dy,dz)])` · `midpoint3(id,a,b)` ·
 `link3(id,a,b,[trim])` (live edge) · `project3(id,source,"xy|xz|yz")` (live
 orthogonal projection) · `contour3(id,surface,level)` ·
@@ -873,8 +887,9 @@ Light as geometry with the REAL physics underneath (Snell's law today; Sellmeier
 **Use this kit whenever the user asks for social video — a Short, Reel, TikTok,
 YouTube Short, a vertical/quiz video, or "content for my channel".** Creator Kit
 v2 is responsive: the same source adapts to 9:16, 4:5, 1:1 and 16:9 with
-platform-safe regions. `template("mono")` is the global black/white default;
-`template("shorts")` remains an optional coloured studio surface.
+platform-safe regions. `template("black")` is the global exact-black,
+full-colour default; `template("mono")` is an intentional black/white treatment
+and `template("shorts")` remains an optional coloured studio surface.
 
 `creator(id,"spec")` stores a reusable brand profile. Existing handle/platform
 keys remain; v2 keys are `name=`, `tagline=`, `logo=`, `accent=`, `secondary=`,
@@ -975,7 +990,7 @@ automatically on export (branded presets); branding is not part of the DSL.
   `anglemark`/`rightangle`/… off them; reveal with `draw`/`show`.
 - **Social video → creator kit**: if the request is a **Short / Reel / TikTok /
   YouTube Short / vertical / quiz video** (anything phrased as social content),
-  reach for the **creator kit** — start `canvas("9:16"); template("mono");`, use
+  reach for the **creator kit** — start `canvas("9:16"); template("black");`, use
   `quiz`/`option`/`run` for a quiz format (usually just `quiz(q,"...")` — see the
   style note below), add a `creator(...)`+`socials(...)` footer, and drop any
   illustration in with `figure(...)` (auto-fit). Don't hand-build a generic 16:9

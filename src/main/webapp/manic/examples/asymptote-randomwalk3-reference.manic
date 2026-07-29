@@ -1,0 +1,58 @@
+// The seven Asymptote randomwalk examples reduce to two reusable models:
+// six world-axis choices, or a local 3D turtle that turns by 90°/60°.
+
+title("Deterministic 3D Random Walks");
+canvas("16:9");
+template("mono");
+
+watermark(mark, (w*0.11,h*0.075), "Made With Manic");
+text(kicker, (cx,h*0.07), "GENERATIVE 3D · RANDOMWALK3");
+text(headline, (cx,h*0.13), "The seed fixes the journey. The model changes its shape.");
+text(caption, (cx,h*0.91), "Axis walk · uniform choices · direction colour · camera-aware depth");
+size(kicker,19); bold(kicker); color(kicker,dim);
+size(headline,32); bold(headline);
+size(caption,20); bold(caption); color(caption,gold);
+
+camera3((12,-15,10),(0,0,0),38,orthographic);
+
+randomwalk3(axisWalk, (0,0,0), 12000, 21,
+  "mode=axis distribution=uniform color=direction shade=depth scale=0.12");
+untraced(axisWalk);
+
+randomwalk3(turtle90, (0,0,0), 9000, 21,
+  "mode=turtle angle=90 distribution=gaussian color=turn shade=depth scale=0.12");
+untraced(turtle90); hidden(turtle90);
+
+randomwalk3(turtle60, (0,0,0), 9000, 21,
+  "mode=turtle angle=60 distribution=uniform color=turn shade=depth scale=0.12");
+untraced(turtle60); hidden(turtle60);
+
+step("six world directions") {
+  par { draw(axisWalk,2.20,smooth); view3(axisWalk,"fit",0.60,smooth,1.20); }
+}
+wait(0.65);
+
+step("the frame can turn with the walker") {
+  par {
+    fade(axisWalk,0.40);
+    show(turtle90,0.05);
+    say(caption,"Turtle frame · Gaussian choices · 90° turns",0.40);
+  }
+  par { draw(turtle90,2.20,smooth); view3(turtle90,"fit",0.60,smooth,1.20); }
+}
+wait(0.65);
+
+step("change one angle") {
+  par {
+    fade(turtle90,0.40);
+    show(turtle60,0.05);
+    say(caption,"Turtle frame · uniform choices · 60° turns",0.40);
+  }
+  par { draw(turtle60,2.20,smooth); view3(turtle60,"fit",0.60,smooth,1.20); }
+}
+wait(0.70);
+
+step("inspect the structure") {
+  orbit3(115,28,13,2.10,smooth);
+}
+wait(1.20);

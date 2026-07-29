@@ -10,8 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-e96d0476.css">
         <link rel="stylesheet" href="css/chrome-d279d366.css">
@@ -34,25 +34,25 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de24f8dc.js";
+            window.path_to_searchindex_js = "searchindex-d497fd61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-74e98ac0.js"></script>
+        <script src="toc-683d253c.js"></script>
             <!-- seo:begin -->
-<meta name="description" content="manic uses a small set of semantic colour names. The default mono template maps all of them to distinct black-and-white luminance levels; choose plain or…">
+<meta name="description" content="manic uses a small set of semantic colour names. The default black template shows their full hues on an exact black canvas. Choose mono when the scene…">
 <link rel="canonical" href="https://8gwifi.org/manic/docs/colour.html">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:site_name" content="manic — the manual">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Colour &amp; style - manic — the manual">
-<meta property="og:description" content="manic uses a small set of semantic colour names. The default mono template maps all of them to distinct black-and-white luminance levels; choose plain or…">
+<meta property="og:description" content="manic uses a small set of semantic colour names. The default black template shows their full hues on an exact black canvas. Choose mono when the scene…">
 <meta property="og:url" content="https://8gwifi.org/manic/docs/colour.html">
 <meta property="og:image" content="https://8gwifi.org/manic/manic-logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Colour &amp; style - manic — the manual">
-<meta name="twitter:description" content="manic uses a small set of semantic colour names. The default mono template maps all of them to distinct black-and-white luminance levels; choose plain or…">
+<meta name="twitter:description" content="manic uses a small set of semantic colour names. The default black template shows their full hues on an exact black canvas. Choose mono when the scene…">
 <meta name="twitter:image" content="https://8gwifi.org/manic/manic-logo.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/colour.html#page","url":"https://8gwifi.org/manic/docs/colour.html","name":"Colour & style - manic — the manual","headline":"Colour & style - manic — the manual","description":"manic uses a small set of semantic colour names. The default mono template maps all of them to distinct black-and-white luminance levels; choose plain or…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Colour & style"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/colour.html#page","url":"https://8gwifi.org/manic/docs/colour.html","name":"Colour & style - manic — the manual","headline":"Colour & style - manic — the manual","description":"manic uses a small set of semantic colour names. The default black template shows their full hues on an exact black canvas. Choose mono when the scene…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Colour & style"}]}]}</script>
 <!-- seo:end -->
     </head>
     <body>
@@ -194,9 +194,9 @@
                     <main>
                         <h1 id="colour--style"><a class="header" href="#colour--style">Colour &amp; style</a></h1>
 <h2 id="the-palette"><a class="header" href="#the-palette">The palette</a></h2>
-<p>manic uses a small set of semantic colour names. The default <code>mono</code> template
-maps all of them to distinct black-and-white luminance levels; choose <code>plain</code>
-or another colour template when hue should carry meaning. Their original neon
+<p>manic uses a small set of semantic colour names. The default <code>black</code> template
+shows their full hues on an exact black canvas. Choose <code>mono</code> when the scene
+should communicate through black-and-white luminance instead. The semantic
 roles are:</p>
 <div class="table-wrapper">
 <table>
@@ -297,8 +297,9 @@ template("paper");     // a flat white exam-paper page
 <tr><th>template</th><th>look</th></tr>
 </thead>
 <tbody>
-<tr><td><code>mono</code> (aliases <code>monochrome</code>, <code>bw</code>)</td><td><strong>default</strong> — black-and-white editorial, near-black page, subtle glow</td></tr>
-<tr><td><code>plain</code></td><td>original neon palette on near-black, no chrome</td></tr>
+<tr><td><code>black</code></td><td><strong>default</strong> — full semantic colour on exact black, no chrome</td></tr>
+<tr><td><code>mono</code> (aliases <code>monochrome</code>, <code>bw</code>)</td><td>black-and-white editorial, near-black page, subtle glow</td></tr>
+<tr><td><code>plain</code> (aliases <code>blank</code>, <code>clean</code>)</td><td>original neon palette on an indigo-black surface, no chrome</td></tr>
 <tr><td><code>terminal</code></td><td>the neon-terminal frame (border, title, masthead)</td></tr>
 <tr><td><code>paper</code> (aliases <code>light</code>, <code>print</code>)</td><td>white page, dark ink — for print / textbook figures</td></tr>
 <tr><td><code>blueprint</code> (alias <code>blue</code>)</td><td>white &amp; cyan lines on deep navy</td></tr>
@@ -306,8 +307,9 @@ template("paper");     // a flat white exam-paper page
 </tbody>
 </table>
 </div>
-<p>Omitting <code>template(...)</code> is exactly the same as selecting <code>template("mono")</code>.
-Use explicit <code>plain</code> when an older scene should keep the original neon colours.</p>
+<p>Omitting <code>template(...)</code> is exactly the same as selecting <code>template("black")</code>.
+Use <code>mono</code> deliberately for grayscale and <code>plain</code> for the original tinted neon
+surface.</p>
 <p>The clever part is the <strong>palette remap</strong>: a template doesn’t just change the
 background, it re-maps every named palette colour to that template’s role. So
 on <code>mono</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, and <code>blue</code> become

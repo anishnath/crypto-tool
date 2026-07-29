@@ -10,8 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon-de23e50b.svg">
-        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
         <link rel="stylesheet" href="css/variables-8adf115d.css">
         <link rel="stylesheet" href="css/general-e96d0476.css">
         <link rel="stylesheet" href="css/chrome-d279d366.css">
@@ -34,25 +34,25 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-de24f8dc.js";
+            window.path_to_searchindex_js = "searchindex-d497fd61.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-74e98ac0.js"></script>
+        <script src="toc-683d253c.js"></script>
             <!-- seo:begin -->
-<meta name="description" content="manic is a tiny language for making animations. You write a short text file; manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by…">
+<meta name="description" content="manic is a declarative language for visual explanation. You write a readable text file; Manic turns it into a smooth, deterministic animation. No timeline…">
 <link rel="canonical" href="https://8gwifi.org/manic/docs/introduction.html">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:site_name" content="manic — the manual">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Introduction - manic — the manual">
-<meta property="og:description" content="manic is a tiny language for making animations. You write a short text file; manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by…">
+<meta property="og:description" content="manic is a declarative language for visual explanation. You write a readable text file; Manic turns it into a smooth, deterministic animation. No timeline…">
 <meta property="og:url" content="https://8gwifi.org/manic/docs/introduction.html">
 <meta property="og:image" content="https://8gwifi.org/manic/manic-logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Introduction - manic — the manual">
-<meta name="twitter:description" content="manic is a tiny language for making animations. You write a short text file; manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by…">
+<meta name="twitter:description" content="manic is a declarative language for visual explanation. You write a readable text file; Manic turns it into a smooth, deterministic animation. No timeline…">
 <meta name="twitter:image" content="https://8gwifi.org/manic/manic-logo.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/introduction.html#page","url":"https://8gwifi.org/manic/docs/introduction.html","name":"Introduction - manic — the manual","headline":"Introduction - manic — the manual","description":"manic is a tiny language for making animations. You write a short text file; manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Introduction"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://8gwifi.org/manic/docs/introduction.html#page","url":"https://8gwifi.org/manic/docs/introduction.html","name":"Introduction - manic — the manual","headline":"Introduction - manic — the manual","description":"manic is a declarative language for visual explanation. You write a readable text file; Manic turns it into a smooth, deterministic animation. No timeline…","isPartOf":{"@type":"WebSite","url":"https://8gwifi.org/manic/docs/","name":"manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://8gwifi.org/manic/docs/"},{"@type":"ListItem","position":2,"name":"Introduction"}]}]}</script>
 <!-- seo:end -->
     </head>
     <body>
@@ -193,13 +193,28 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="manic--the-manual"><a class="header" href="#manic--the-manual">manic — the manual</a></h1>
-<p><strong>manic is a tiny language for making animations.</strong> You write a short text file;
-manic renders a smooth, glowing video. No timeline scrubbing, no keyframes by
-hand — you <em>describe</em> what’s on screen and <em>when things happen</em>, and the engine
-does the rest, deterministically.</p>
-<p>It’s built for <strong>explainer videos</strong> — math, algorithms, data structures, or
-anything you can draw — and it’s designed so a non-programmer can read and write
-it. It draws in <strong>2D</strong> and, when you want depth, in <strong><a href="3d.html">3D</a></strong> too.</p>
+<p><strong>manic is a declarative language for visual explanation.</strong> You write a readable
+text file; Manic turns it into a smooth, deterministic animation. No timeline
+scrubbing and no hand-managed keyframes — you describe the objects, the
+relationships, and the story beats while the engine handles motion, continuity,
+layout, rendering, and repeatable output.</p>
+<p>Manic powers <strong>visual explanations, animated lessons, simulations, technical
+diagrams, and creator-ready videos</strong> from one readable language. Use it for
+mathematics, olympiad geometry, calculus, linear algebra, statistics,
+probability, algorithms and data structures; physics and optics; machine
+learning and transformer internals; systems architecture and flowcharts;
+fractals, tilings, fields, and particle processes; SVG artwork and bundled
+assets; narrated lessons; or polished Reels and Shorts. The same language moves
+naturally between responsive <strong>2D</strong>, textbook-style spatial diagrams, and
+genuine <strong><a href="3d.html">3D</a></strong> scenes.</p>
+<p>The vocabulary is broad, but the mental model stays deliberately small enough
+for a non-programmer to read: name what exists, state what it depends on, and
+describe what should happen. Creators can begin with a circle and a caption,
+then keep the same model as they progress to live proofs, simulations, neural
+networks, or cinematic 3D stories.</p>
+<p>Manic was created by <strong>Anish Nath</strong>. Follow its development, examples, and new
+visual-language experiments on X:
+<strong><a href="https://x.com/anish2good">@anish2good</a></strong>.</p>
 <h2 id="the-whole-idea-in-30-seconds"><a class="header" href="#the-whole-idea-in-30-seconds">The whole idea in 30 seconds</a></h2>
 <p>A manic file has two parts:</p>
 <ol>
@@ -217,9 +232,10 @@ color(sun, cyan);
 show(sun, 0.6);                 // the script: fade it in over 0.6s
 pulse(sun);                     // then give it a little pulse
 </code></pre>
-<p>That’s the entire model. The rest of this guide walks through the vocabulary —
-one small, runnable example at a time — so by the end you can storyboard a video
-in your head and type it out.</p>
+<p>That’s the entire model. The rest of this guide builds outward from it—first
+ordinary shapes and motion, then reactive relationships, creator production,
+specialist kits, systems, simulations, and 3D. The complete generated vocabulary
+is available in the <strong><a href="API.html">API reference</a></strong>.</p>
 <h2 id="how-to-read-this-book"><a class="header" href="#how-to-read-this-book">How to read this book</a></h2>
 <p>Every section has a <strong>runnable sample</strong> and a short <strong>video</strong> of it playing, so
 you see exactly what each word does. Copy any sample into a <code>.manic</code> file and:</p>
@@ -229,8 +245,8 @@ manic yourfile.manic --record out # render to out/out.mp4
 <p>Ready? <a href="getting-started.html">Start with your first animation →</a></p>
 <p>Making vertical social content? Take the production path directly:
 <a href="creator-reels.html">Create a polished Reel →</a></p>
-<p>Choosing the visual surface? Manic defaults to the professional black-and-white
-<code>mono</code> look; compare every option in <a href="templates.html">Templates →</a>.</p>
+<p>Choosing the visual surface? Manic defaults to full semantic colour on an exact
+black canvas; compare every option in <a href="templates.html">Templates →</a>.</p>
 
                     </main>
 

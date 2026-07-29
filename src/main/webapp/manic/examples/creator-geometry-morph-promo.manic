@@ -1,0 +1,151 @@
+// Creator promo: one persistent twelve-vertex actor becomes ten readable
+// silhouettes. Equal point counts make every transition a true geometric
+// interpolation rather than a cut between unrelated drawings.
+
+title("Geometry Never Sits Still");
+canvas("9:16");
+template("black");
+
+creator(me, "@anish2good name=Manic_Geometry tagline=Geometry_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Make_geometry_move safe=clean");
+socials(me);
+watermark(mark, (w*0.18, h*0.08), "Made With Manic");
+endcard(me, "title=Give_Your_Ideas_Motion cta=8gwifi.org/manic");
+
+let u = (w+h-abs(w-h))/1080;
+let ox = cx;
+let oy = h*0.47;
+let r = 205*u;
+
+text(kicker, (cx,h*0.12), "MANIC · GEOMETRY IN MOTION");
+text(head, (cx,h*0.21), "One shape. Endless ideas.");
+text(shapeName, (cx,h*0.70), "DODECAGON");
+text(caption, (cx,h*0.84), "The identity stays. Only the geometry changes.");
+size(kicker,20*u); bold(kicker); color(kicker,cyan);
+size(head,31*u); bold(head); wrap(head,w*0.78);
+size(shapeName,23*u); bold(shapeName); color(shapeName,gold);
+size(caption,20*u); bold(caption); color(caption,dim); wrap(caption,w*0.72);
+
+// Twelve points in every blueprint: direct, continuous vertex motion.
+polygon(hero,
+  (ox,oy-r), (ox+r*0.50,oy-r*0.866), (ox+r*0.866,oy-r*0.50),
+  (ox+r,oy), (ox+r*0.866,oy+r*0.50), (ox+r*0.50,oy+r*0.866),
+  (ox,oy+r), (ox-r*0.50,oy+r*0.866), (ox-r*0.866,oy+r*0.50),
+  (ox-r,oy), (ox-r*0.866,oy-r*0.50), (ox-r*0.50,oy-r*0.866));
+gradient(hero, cyan, magenta, gold, 35); stroke(hero,4); glow(hero,0.22);
+
+// Four copies of each corner preserve the twelve-point topology.
+polygon(triangleForm,
+  (ox,oy-r), (ox,oy-r), (ox,oy-r), (ox,oy-r),
+  (ox+r*0.92,oy+r*0.72), (ox+r*0.92,oy+r*0.72), (ox+r*0.92,oy+r*0.72), (ox+r*0.92,oy+r*0.72),
+  (ox-r*0.92,oy+r*0.72), (ox-r*0.92,oy+r*0.72), (ox-r*0.92,oy+r*0.72), (ox-r*0.92,oy+r*0.72));
+color(triangleForm,magenta); stroke(triangleForm,4); glow(triangleForm,0.18); hidden(triangleForm);
+
+polygon(squareForm,
+  (ox-r*0.82,oy-r*0.82), (ox-r*0.82,oy-r*0.82), (ox-r*0.82,oy-r*0.82),
+  (ox+r*0.82,oy-r*0.82), (ox+r*0.82,oy-r*0.82), (ox+r*0.82,oy-r*0.82),
+  (ox+r*0.82,oy+r*0.82), (ox+r*0.82,oy+r*0.82), (ox+r*0.82,oy+r*0.82),
+  (ox-r*0.82,oy+r*0.82), (ox-r*0.82,oy+r*0.82), (ox-r*0.82,oy+r*0.82));
+color(squareForm,blue); stroke(squareForm,4); glow(squareForm,0.18); hidden(squareForm);
+
+polygon(diamondForm,
+  (ox,oy-r), (ox,oy-r), (ox,oy-r),
+  (ox+r,oy), (ox+r,oy), (ox+r,oy),
+  (ox,oy+r), (ox,oy+r), (ox,oy+r),
+  (ox-r,oy), (ox-r,oy), (ox-r,oy));
+color(diamondForm,gold); stroke(diamondForm,4); glow(diamondForm,0.18); hidden(diamondForm);
+
+polygon(hexagonForm,
+  (ox-r*0.52,oy-r*0.90), (ox-r*0.52,oy-r*0.90),
+  (ox+r*0.52,oy-r*0.90), (ox+r*0.52,oy-r*0.90),
+  (ox+r,oy), (ox+r,oy),
+  (ox+r*0.52,oy+r*0.90), (ox+r*0.52,oy+r*0.90),
+  (ox-r*0.52,oy+r*0.90), (ox-r*0.52,oy+r*0.90),
+  (ox-r,oy), (ox-r,oy));
+color(hexagonForm,cyan); stroke(hexagonForm,4); glow(hexagonForm,0.18); hidden(hexagonForm);
+
+polygon(starForm,
+  (ox,oy-r), (ox+r*0.23,oy-r*0.40), (ox+r*0.87,oy-r*0.50),
+  (ox+r*0.46,oy), (ox+r*0.87,oy+r*0.50), (ox+r*0.23,oy+r*0.40),
+  (ox,oy+r), (ox-r*0.23,oy+r*0.40), (ox-r*0.87,oy+r*0.50),
+  (ox-r*0.46,oy), (ox-r*0.87,oy-r*0.50), (ox-r*0.23,oy-r*0.40));
+color(starForm,magenta); stroke(starForm,4); glow(starForm,0.22); hidden(starForm);
+
+polygon(hourglassForm,
+  (ox-r*0.85,oy-r*0.90), (ox,oy-r*0.55), (ox+r*0.85,oy-r*0.90),
+  (ox+r*0.48,oy-r*0.20), (ox+r*0.16,oy), (ox+r*0.48,oy+r*0.20),
+  (ox+r*0.85,oy+r*0.90), (ox,oy+r*0.55), (ox-r*0.85,oy+r*0.90),
+  (ox-r*0.48,oy+r*0.20), (ox-r*0.16,oy), (ox-r*0.48,oy-r*0.20));
+color(hourglassForm,violet); stroke(hourglassForm,4); glow(hourglassForm,0.18); hidden(hourglassForm);
+
+polygon(arrowForm,
+  (ox-r,oy-r*0.28), (ox+r*0.18,oy-r*0.28), (ox+r*0.18,oy-r*0.62),
+  (ox+r,oy), (ox+r,oy), (ox+r,oy),
+  (ox+r*0.18,oy+r*0.62), (ox+r*0.18,oy+r*0.28), (ox-r,oy+r*0.28),
+  (ox-r,oy+r*0.10), (ox-r,oy), (ox-r,oy-r*0.10));
+color(arrowForm,lime); stroke(arrowForm,4); glow(arrowForm,0.18); hidden(arrowForm);
+
+polygon(heartForm,
+  (ox,oy+r), (ox-r*0.82,oy+r*0.15), (ox-r,oy-r*0.38),
+  (ox-r*0.70,oy-r*0.82), (ox-r*0.24,oy-r*0.78), (ox,oy-r*0.42),
+  (ox+r*0.24,oy-r*0.78), (ox+r*0.70,oy-r*0.82), (ox+r,oy-r*0.38),
+  (ox+r*0.82,oy+r*0.15), (ox+r*0.38,oy+r*0.62), (ox,oy+r));
+color(heartForm,coral); stroke(heartForm,4); glow(heartForm,0.22); hidden(heartForm);
+
+polygon(boltForm,
+  (ox+r*0.18,oy-r), (ox-r*0.62,oy+r*0.08), (ox-r*0.14,oy+r*0.02),
+  (ox-r*0.48,oy+r), (ox+r*0.62,oy-r*0.24), (ox+r*0.16,oy-r*0.18),
+  (ox+r*0.48,oy-r*0.76), (ox+r*0.34,oy-r*0.54), (ox+r*0.28,oy-r*0.36),
+  (ox+r*0.24,oy-r*0.20), (ox+r*0.21,oy-r*0.08), (ox+r*0.18,oy-r));
+color(boltForm,gold); stroke(boltForm,4); glow(boltForm,0.22); hidden(boltForm);
+
+polygon(crownForm,
+  (ox-r,oy+r*0.60), (ox-r*0.92,oy-r*0.45), (ox-r*0.46,oy+r*0.05),
+  (ox-r*0.30,oy-r), (ox,oy-r*0.18), (ox+r*0.30,oy-r),
+  (ox+r*0.46,oy+r*0.05), (ox+r*0.92,oy-r*0.45), (ox+r,oy+r*0.60),
+  (ox+r*0.42,oy+r*0.76), (ox-r*0.42,oy+r*0.76), (ox-r,oy+r*0.60));
+color(crownForm,cyan); stroke(crownForm,4); glow(crownForm,0.22); hidden(crownForm);
+
+hidden(kicker); hidden(head); hidden(shapeName); hidden(caption); hidden(hero);
+
+step("one persistent shape") {
+  par {
+    show(kicker,0.30); show(head,0.45); show(shapeName,0.30);
+    show(caption,0.35); show(hero,0.55);
+  }
+  pulse(hero,0.55);
+}
+wait(0.30);
+
+step("geometry keeps becoming") {
+  seq {
+    par { become(hero,triangleForm,0.62,smooth); say(shapeName,"TRIANGLE",0.22); }
+    par { become(hero,squareForm,0.62,smooth); say(shapeName,"SQUARE",0.22); spin(hero,45,0.62,smooth); }
+    par { become(hero,diamondForm,0.58,smooth); say(shapeName,"DIAMOND",0.22); }
+    par { become(hero,hexagonForm,0.62,smooth); say(shapeName,"HEXAGON",0.22); }
+    par { become(hero,starForm,0.70,smooth); say(shapeName,"STAR",0.22); spin(hero,30,0.70,smooth); }
+    par { become(hero,hourglassForm,0.66,smooth); say(shapeName,"HOURGLASS",0.22); }
+    par { become(hero,arrowForm,0.66,smooth); say(shapeName,"DIRECTION",0.22); }
+    par { become(hero,heartForm,0.72,smooth); say(shapeName,"HEART",0.22); }
+    par { become(hero,boltForm,0.66,smooth); say(shapeName,"ENERGY",0.22); }
+    par { become(hero,crownForm,0.72,smooth); say(shapeName,"STORY",0.22); }
+  }
+}
+wait(0.45);
+
+step("the object never resets") {
+  par {
+    pulse(hero,0.80);
+    say(head,"Describe change—not keyframes.",0.40,smooth);
+    say(caption,"become · spin · recolor · pulse — one actor, one continuous idea.",0.45,smooth);
+  }
+}
+wait(1.00);
+
+step("creator call to action") {
+  par {
+    fade(kicker,0.30); fade(head,0.30); fade(shapeName,0.30);
+    fade(caption,0.30); fade(hero,0.40); fade(me.footer,0.30);
+    show(me.endcard,0.60);
+  }
+}
+wait(2.00);

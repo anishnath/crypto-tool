@@ -1,0 +1,65 @@
+// The recurring structure behind Asymptote's tiling examples:
+// author one motif, then arrange it as a hex field, grid, radial ring, or a
+// repeated composition. Every generated tile remains a normal Manic entity.
+
+title("One Motif, Four Tiling Systems");
+canvas("16:9");
+template("mono");
+
+watermark(mark, (w*0.11, h*0.075), "Made With Manic");
+text(kicker, (cx, h*0.07), "GENERATIVE GEOMETRY · REPEAT");
+text(headline, (cx, h*0.13), "Build the motif once. Compose the field.");
+size(kicker, 19); bold(kicker); color(kicker, dim);
+size(headline, 34); bold(headline);
+
+let lx = w*0.27;
+let rx = w*0.73;
+let uy = h*0.37;
+let ly = h*0.73;
+
+// Hex rings: a small two-part diamond becomes a honeycomb field.
+polygon(hexBody, (lx,uy-16), (lx+15,uy), (lx,uy+16), (lx-15,uy));
+circle(hexCore, (lx,uy), 4);
+color(hexBody, cyan); color(hexCore, gold);
+tag(hexBody, hexMotif); tag(hexCore, hexMotif);
+repeat(hexField, hexMotif, "layout=hex rings=4 spacing=30 rotate=30 scale=0.82");
+hidden(hexMotif); untraced(hexField);
+
+// Grid: a deliberately asymmetric motif proves orientation is retained.
+line(gridStem, (rx-15,uy+12), (rx+14,uy-12));
+circle(gridTip, (rx+14,uy-12), 5);
+color(gridStem, magenta); color(gridTip, lime);
+stroke(gridStem, 3);
+tag(gridStem, gridMotif); tag(gridTip, gridMotif);
+repeat(gridField, gridMotif, "layout=grid rows=5 cols=7 gapx=48 gapy=42 rotate=-8");
+hidden(gridMotif); untraced(gridField);
+
+// Radial: each arrow-shaped wedge faces away from the common centre.
+polygon(ray, (lx,ly-22), (lx+9,ly-5), (lx,ly+4), (lx-9,ly-5));
+color(ray, gold); tag(ray, rayMotif);
+repeat(sun, rayMotif, "layout=radial count=18 radius=112 face=out rotate=10 scale=0.85");
+hidden(rayMotif); untraced(sun);
+
+// Nested composition: repeat a 2x2 micro-pattern as one larger radial motif.
+polygon(seed, (rx-7,ly+7), (rx+7,ly+7), (rx,ly-8));
+color(seed, cyan);
+repeat(micro, seed, "layout=grid rows=2 cols=2 gapx=20 gapy=20 scale=0.70");
+repeat(nested, micro, "layout=radial count=10 radius=105 face=out rotate=18 scale=0.82");
+hidden(seed); hidden(micro); untraced(nested);
+
+text(l1, (lx,h*0.205), "HEX RINGS · 37 MOTIFS");
+text(l2, (rx,h*0.205), "ROTATED GRID · 35 MOTIFS");
+text(l3, (lx,h*0.565), "RADIAL · FACE OUT");
+text(l4, (rx,h*0.565), "NESTED · MOTIFS OF MOTIFS");
+size(l1,17); size(l2,17); size(l3,17); size(l4,17);
+bold(l1); bold(l2); bold(l3); bold(l4);
+color(l1,cyan); color(l2,magenta); color(l3,gold); color(l4,lime);
+
+step("hexagonal rings") { draw(hexField, 1.40, smooth); }
+wait(0.25);
+step("rectangular repetition") { draw(gridField, 1.40, smooth); }
+wait(0.25);
+step("radial orientation") { draw(sun, 1.20, smooth); }
+wait(0.25);
+step("composition remains reusable") { draw(nested, 1.60, smooth); }
+wait(1.30);
