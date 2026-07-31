@@ -1,0 +1,307 @@
+// One live angle drives three unit-circle constructions, graph traces,
+// markers, projections, and numerical readouts. Tangent is deliberately split
+// into branches so the animation never lies across an asymptote.
+
+title("One Angle Creates Three Functions");
+canvas("9:16");
+template("black");
+
+creator(me,"@anish2good name=Manic_Geometry tagline=Relationships_made_visible yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=compact cta=Animate_the_relationship safe=clean");
+socials(me);
+watermark(mark,(w*0.18,h*0.065),"Made With Manic");
+endcard(me,"title=Make_Math_Move cta=8gwifi.org/manic");
+
+let u=(w+h-abs(w-h))/1080;
+
+text(kicker,(cx,h*0.095),"MANIC · LIVE TRIGONOMETRY");
+text(head,(cx,h*0.145),"One angle. Three different measurements.");
+equation(identity,(cx,h*0.205),
+  `\textcolor{cyan}{y=\sin\alpha}\qquad
+   \textcolor{magenta}{y=\cos\alpha}\qquad
+   \textcolor{lime}{y=\tan\alpha}`,22*u);
+counter(degrees,(w*0.33,h*0.255),20,0,"α = ","°");
+counter(radians,(w*0.69,h*0.255),0.35,2,"α = "," rad");
+text(caption,(cx,h*0.835),"Rotate one radius. Watch three graphs respond.");
+
+size(kicker,19*u); bold(kicker); color(kicker,cyan);
+size(head,29*u); bold(head); wrap(head,w*0.84);
+size(degrees,20*u); bold(degrees); color(degrees,gold);
+size(radians,20*u); bold(radians); color(radians,gold);
+size(caption,20*u); bold(caption); color(caption,dim); wrap(caption,w*0.80);
+
+// One authored angle is the only changing input in the entire construction.
+// Two rotations are available: the first teaches, the second becomes a
+// continuous performance pass. Circle formulas are naturally periodic; graph
+// markers and public readouts wrap back into [0,2pi).
+parameter(alpha,(cx,h*0.885),0.35,0.02,12.54,"ANGLE α",2);
+color(alpha,cyan);
+bind(alpha,degrees,value,"(p-6.283185*floor(p/6.283185))*180/pi");
+bind(alpha,radians,value,"p-6.283185*floor(p/6.283185)");
+
+// Shared portrait geometry.
+let circleX=w*0.265;
+let graphX=w*0.535;
+let radius=w*0.092;
+let graphSX=w*0.050;
+let graphSY=radius;
+let graphRight=graphX+graphSX*6.283;
+let row1=h*0.385;
+let row2=h*0.565;
+let row3=h*0.745;
+
+// ---------------------------------------------------------------------------
+// SIN — the rotating point's height.
+// ---------------------------------------------------------------------------
+circle(sinCircle,(circleX,row1),radius);
+outlined(sinCircle); outline(sinCircle,fg);
+line(sinCX,(circleX-radius*1.22,row1),(circleX+radius*1.22,row1));
+line(sinCY,(circleX,row1-radius*1.22),(circleX,row1+radius*1.22));
+point(sinO,(circleX,row1));
+point(sinP,(circleX+radius*cos(0.35),row1-radius*sin(0.35)));
+point(sinHeight,(circleX,row1-radius*sin(0.35)));
+segment(sinRay,sinO,sinP);
+segment(sinGuide,sinP,sinHeight);
+anglemark(sinAngle,sinHeight,sinO,sinP);
+
+bind(alpha,sinP,x,"286.2+99.4*cos(p)");
+bind(alpha,sinP,y,"739.2-99.4*sin(p)");
+bind(alpha,sinHeight,y,"739.2-99.4*sin(p)");
+
+line(sinGX,(graphX,row1),(graphRight,row1));
+line(sinGY,(graphX,row1-graphSY*1.28),(graphX,row1+graphSY*1.28));
+plot(sinCurve,(graphX,row1),graphSX,graphSY,"sin(x)",(0,6.283));
+point(sinDot,(graphX+graphSX*0.35,row1-graphSY*sin(0.35)));
+point(sinFoot,(graphX+graphSX*0.35,row1));
+segment(sinDrop,sinDot,sinFoot);
+bind(alpha,sinCurve,trace,"p/6.283185");
+bind(alpha,sinDot,x,"577.8+54*(p-6.283185*floor(p/6.283185))");
+bind(alpha,sinDot,y,"739.2-99.4*sin(p)");
+bind(alpha,sinFoot,x,"577.8+54*(p-6.283185*floor(p/6.283185))");
+text(sinLabel,(graphX+graphSX*2.2,row1-radius*1.45),"y = sin(α) · height");
+
+color(sinCircle,fg); color(sinCX,dim); color(sinCY,dim);
+color(sinRay,cyan); color(sinGuide,cyan); color(sinAngle,cyan);
+color(sinP,cyan); color(sinHeight,cyan); color(sinO,fg);
+color(sinGX,dim); color(sinGY,dim); color(sinCurve,cyan);
+color(sinDot,fg); color(sinFoot,fg); color(sinDrop,cyan); color(sinLabel,cyan);
+dashed(sinGuide,8,6); dashed(sinDrop,8,6);
+stroke(sinCircle,3); stroke(sinRay,4); stroke(sinGuide,3); stroke(sinCurve,5);
+size(sinLabel,18*u); bold(sinLabel);
+
+// ---------------------------------------------------------------------------
+// COS — the rotating point's horizontal reach.
+// ---------------------------------------------------------------------------
+circle(cosCircle,(circleX,row2),radius);
+outlined(cosCircle); outline(cosCircle,fg);
+line(cosCX,(circleX-radius*1.22,row2),(circleX+radius*1.22,row2));
+line(cosCY,(circleX,row2-radius*1.22),(circleX,row2+radius*1.22));
+point(cosO,(circleX,row2));
+point(cosP,(circleX+radius*cos(0.35),row2-radius*sin(0.35)));
+point(cosReach,(circleX+radius*cos(0.35),row2));
+segment(cosRay,cosO,cosP);
+segment(cosGuide,cosP,cosReach);
+
+bind(alpha,cosP,x,"286.2+99.4*cos(p)");
+bind(alpha,cosP,y,"1084.8-99.4*sin(p)");
+bind(alpha,cosReach,x,"286.2+99.4*cos(p)");
+
+line(cosGX,(graphX,row2),(graphRight,row2));
+line(cosGY,(graphX,row2-graphSY*1.28),(graphX,row2+graphSY*1.28));
+plot(cosCurve,(graphX,row2),graphSX,graphSY,"cos(x)",(0,6.283));
+point(cosDot,(graphX+graphSX*0.35,row2-graphSY*cos(0.35)));
+point(cosFoot,(graphX+graphSX*0.35,row2));
+segment(cosDrop,cosDot,cosFoot);
+bind(alpha,cosCurve,trace,"p/6.283185");
+bind(alpha,cosDot,x,"577.8+54*(p-6.283185*floor(p/6.283185))");
+bind(alpha,cosDot,y,"1084.8-99.4*cos(p)");
+bind(alpha,cosFoot,x,"577.8+54*(p-6.283185*floor(p/6.283185))");
+text(cosLabel,(graphX+graphSX*2.2,row2-radius*1.45),"y = cos(α) · reach");
+
+color(cosCircle,fg); color(cosCX,dim); color(cosCY,dim);
+color(cosRay,magenta); color(cosGuide,magenta);
+color(cosP,magenta); color(cosReach,magenta); color(cosO,fg);
+color(cosGX,dim); color(cosGY,dim); color(cosCurve,magenta);
+color(cosDot,fg); color(cosFoot,fg); color(cosDrop,magenta); color(cosLabel,magenta);
+dashed(cosGuide,8,6); dashed(cosDrop,8,6);
+stroke(cosCircle,3); stroke(cosRay,4); stroke(cosGuide,3); stroke(cosCurve,5);
+size(cosLabel,18*u); bold(cosLabel);
+
+// ---------------------------------------------------------------------------
+// TAN — where the radius meets the tangent x=1. Its graph uses three separate
+// branches; no path is ever drawn through pi/2 or 3pi/2.
+// ---------------------------------------------------------------------------
+circle(tanCircle,(circleX,row3),radius);
+outlined(tanCircle); outline(tanCircle,fg);
+line(tanCX,(circleX-radius*1.22,row3),(circleX+radius*1.38,row3));
+line(tanCY,(circleX,row3-radius*1.22),(circleX,row3+radius*1.22));
+line(tangentWall,(circleX+radius,row3-radius*1.28),(circleX+radius,row3+radius*1.28));
+point(tanO,(circleX,row3));
+point(tanP,(circleX+radius*cos(0.35),row3-radius*sin(0.35)));
+point(tanHit,(circleX+radius,row3-radius*tan(0.35)));
+point(tanBase,(circleX+radius,row3));
+segment(tanRay,tanO,tanHit);
+segment(tanLength,tanBase,tanHit);
+
+bind(alpha,tanP,x,"286.2+99.4*cos(p)");
+bind(alpha,tanP,y,"1430.4-99.4*sin(p)");
+bind(alpha,tanHit,y,"1430.4-99.4*min(1.28,max(-1.28,tan(p)))");
+bind(alpha,tanHit,opacity,"min(1,abs(cos(p))*7)");
+bind(alpha,tanRay,opacity,"min(1,abs(cos(p))*7)");
+bind(alpha,tanLength,opacity,"min(1,abs(cos(p))*7)");
+
+line(tanGX,(graphX,row3),(graphRight,row3));
+line(tanGY,(graphX,row3-graphSY*1.28),(graphX,row3+graphSY*1.28));
+// Stop each sampled branch exactly at the visible y-range. The mathematical
+// branch continues toward infinity; the empty gaps remain truthful.
+plot(tanA,(graphX,row3),graphSX,graphSY,"tan(x)",(0.02,0.907));
+plot(tanB,(graphX,row3),graphSX,graphSY,"tan(x)",(2.235,4.049));
+plot(tanC,(graphX,row3),graphSX,graphSY,"tan(x)",(5.377,6.26));
+point(tanDot,(graphX+graphSX*0.35,row3-graphSY*tan(0.35)));
+point(tanFoot,(graphX+graphSX*0.35,row3));
+segment(tanDrop,tanDot,tanFoot);
+bind(alpha,tanA,trace,"min(1,p/0.907)");
+bind(alpha,tanB,trace,"min(1,max(0,(p-2.235)/1.814))");
+bind(alpha,tanC,trace,"min(1,max(0,(p-5.377)/0.883))");
+bind(alpha,tanDot,x,"577.8+54*(p-6.283185*floor(p/6.283185))");
+bind(alpha,tanDot,y,"1430.4-99.4*min(1.28,max(-1.28,tan(p)))");
+bind(alpha,tanDot,opacity,"min(1,abs(cos(p))*7)");
+bind(alpha,tanFoot,x,"577.8+54*(p-6.283185*floor(p/6.283185))");
+bind(alpha,tanDrop,opacity,"min(1,abs(cos(p))*7)");
+text(tanLabel,(graphX+graphSX*2.2,row3-radius*1.45),"y = tan(α) · tangent length");
+
+color(tanCircle,fg); color(tanCX,dim); color(tanCY,dim); color(tangentWall,lime);
+color(tanRay,lime); color(tanLength,lime); color(tanP,lime);
+color(tanHit,fg); color(tanBase,fg); color(tanO,fg);
+color(tanGX,dim); color(tanGY,dim);
+color(tanA,lime); color(tanB,lime); color(tanC,lime);
+color(tanDot,fg); color(tanFoot,fg); color(tanDrop,lime); color(tanLabel,lime);
+dashed(tanDrop,8,6);
+stroke(tanCircle,3); stroke(tanRay,4); stroke(tanLength,5);
+stroke(tanA,5); stroke(tanB,5); stroke(tanC,5);
+size(tanLabel,18*u); bold(tanLabel);
+
+tag(sinCircle,trigWorld); tag(sinCX,trigWorld); tag(sinCY,trigWorld);
+tag(sinO,trigWorld); tag(sinP,trigWorld); tag(sinHeight,trigWorld);
+tag(sinRay,trigWorld); tag(sinGuide,trigWorld); tag(sinAngle,trigWorld);
+tag(sinGX,trigWorld); tag(sinGY,trigWorld); tag(sinCurve,trigWorld);
+tag(sinDot,trigWorld); tag(sinFoot,trigWorld); tag(sinDrop,trigWorld); tag(sinLabel,trigWorld);
+tag(cosCircle,trigWorld); tag(cosCX,trigWorld); tag(cosCY,trigWorld);
+tag(cosO,trigWorld); tag(cosP,trigWorld); tag(cosReach,trigWorld);
+tag(cosRay,trigWorld); tag(cosGuide,trigWorld);
+tag(cosGX,trigWorld); tag(cosGY,trigWorld); tag(cosCurve,trigWorld);
+tag(cosDot,trigWorld); tag(cosFoot,trigWorld); tag(cosDrop,trigWorld); tag(cosLabel,trigWorld);
+tag(tanCircle,trigWorld); tag(tanCX,trigWorld); tag(tanCY,trigWorld); tag(tangentWall,trigWorld);
+tag(tanO,trigWorld); tag(tanP,trigWorld); tag(tanHit,trigWorld); tag(tanBase,trigWorld);
+tag(tanRay,trigWorld); tag(tanLength,trigWorld);
+tag(tanGX,trigWorld); tag(tanGY,trigWorld); tag(tanA,trigWorld); tag(tanB,trigWorld); tag(tanC,trigWorld);
+tag(tanDot,trigWorld); tag(tanFoot,trigWorld); tag(tanDrop,trigWorld); tag(tanLabel,trigWorld);
+
+hidden(kicker); hidden(head); hidden(identity); hidden(degrees); hidden(radians);
+hidden(caption); hidden(alpha); hidden(trigWorld);
+untraced(sinCurve); untraced(cosCurve); untraced(tanA); untraced(tanB); untraced(tanC);
+
+step("one angle enters three worlds") {
+  par {
+    show(kicker,0.30); show(head,0.45); show(identity,0.45);
+    show(degrees,0.30); show(radians,0.30); show(caption,0.40);
+    show(alpha,0.35);
+  }
+  stagger(0.04) {
+    show(trigWorld,0.30);
+  }
+}
+wait(0.60);
+
+step("height becomes sine") {
+  par {
+    to(alpha,value,1.05,2.20,smooth);
+    say(head,"Sine records the rotating point's height.",0.45,smooth);
+    say(caption,"The cyan projection and cyan graph are the same number.",0.45,smooth);
+    pulse(sinGuide,0.70); pulse(sinCurve,0.70);
+  }
+}
+wait(0.55);
+
+step("reach becomes cosine") {
+  par {
+    to(alpha,value,2.35,2.30,smooth);
+    say(head,"Cosine records its horizontal reach.",0.45,smooth);
+    say(caption,"Past 90°, the point moves left—so cosine becomes negative.",0.48,smooth);
+    pulse(cosGuide,0.70); pulse(cosCurve,0.70);
+  }
+}
+wait(0.55);
+
+step("tangent breaks at the asymptote") {
+  par {
+    to(alpha,value,1.56,1.70,smooth);
+    say(head,"Tangent races toward infinity.",0.40,smooth);
+    say(caption,"At π/2 the radius is parallel to the tangent line. There is no intersection.",0.50,smooth);
+    pulse(tangentWall,0.70);
+  }
+  cue(whoosh);
+  par {
+    to(alpha,value,1.82,1.10,smooth);
+    say(head,"It does not cross. A new branch begins.",0.40,smooth);
+    say(caption,"Manic leaves the discontinuity empty instead of drawing a false connection.",0.50,smooth);
+  }
+}
+wait(0.65);
+
+step("one rotation reveals every sign") {
+  par {
+    to(alpha,value,3.75,3.10,smooth);
+    say(head,"One angle controls every sign and every value.",0.45,smooth);
+    say(caption,"At 215°: sine and cosine are negative, while tangent is positive.",0.50,smooth);
+  }
+}
+wait(0.70);
+
+step("complete the cycle") {
+  par {
+    to(alpha,value,6.25,4.00,smooth);
+    say(head,"Three graphs. One rotating radius.",0.45,smooth);
+    say(caption,"The unit circle is not a mnemonic—it is the machine generating all three functions.",0.52,smooth);
+  }
+}
+
+step("keep the mathematics running") {
+  par {
+    // No hold between cycles: the angle keeps moving while the camera turns
+    // three stacked diagrams into one continuous cinematic inspection.
+    to(alpha,value,12.53,7.60,linear);
+    fade(alpha,0.30);
+    say(head,"Now let the mathematics keep running.",0.45,smooth);
+    say(caption,"The camera can move because every relationship remains alive.",0.48,smooth);
+    seq {
+      par {
+        cam((cx,row1),1.00,smooth);
+        zoom(1.28,1.00,smooth);
+      }
+      wait(1.00);
+      cam((cx,row2),1.00,smooth);
+      wait(1.00);
+      par {
+        // Aim slightly above the tangent row so its graph, explanation, and
+        // creator identity share the frame instead of leaving a dead lower half.
+        cam((cx,h*0.50),1.00,smooth);
+        zoom(1.24,1.00,smooth);
+      }
+      wait(1.40);
+      par {
+        cam((cx,cy),1.20,smooth);
+        zoom(1.00,1.20,smooth);
+      }
+    }
+  }
+}
+
+step("creator call to action") {
+  par {
+    fade(kicker,0.30); fade(head,0.30); fade(identity,0.30);
+    fade(degrees,0.30); fade(radians,0.30); fade(caption,0.30);
+    fade(alpha,0.30); fade(trigWorld,0.45); fade(me.footer,0.30);
+    show(me.endcard,0.60);
+  }
+}
+wait(2.00);

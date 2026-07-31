@@ -1,0 +1,37 @@
+// wireframe-spheres — a drifting field of triangulated wireframe spheres, each
+// BREATHING (radius oscillating) with a phase tied to its index, so the field
+// pulses like a shoal of soap bubbles. The breathing is the 3-D echo of the 2-D
+// `wheel-radial` wave; `finish3(id, "wire=1")` renders any solid as its bright
+// triangulated wireframe with no filled faces (works on cube/prism/pyramid too).
+//
+//   manic examples/wireframe-spheres.manic
+canvas(1080, 1080);
+template("black");
+camera3((0, -15, 1.5), (0, 0, 0), 56);
+
+let m = 66;
+
+for i in 0..m {
+  let x = 9.5 * sin(i * 2.399 + 0.5);
+  let y = 8.5 * sin(i * 1.13 + 1.7);
+  let z = 6.5 * sin(i * 3.11 + 0.3);
+  let r = 0.5 + 0.85 * sin(i * 1.7) * sin(i * 1.7);
+
+  sphere3(s{i}, (x, y, z), r);
+  finish3(s{i}, "wire=1");
+  hue(s{i}, 360 * i / m);          // a computed rainbow — hue works on 3D now
+}
+
+// every sphere breathes at once, but each with its OWN amplitude, period and
+// phase (deterministic pseudo-random from the index — manic has no rand()), so
+// the bubbles pulse by different amounts instead of in lockstep.
+par {
+  for i in 0..m {
+    let ra = 0.5 + 0.5 * sin(i * 12.9 + 0.5);   // 0..1 pseudo-random
+    let rb = 0.5 + 0.5 * sin(i * 7.7 + 2.3);
+    let rc = 0.5 + 0.5 * sin(i * 5.3 + 4.1);
+    let amp = 0.28 + 0.55 * ra * ra;             // breath size: ~0.28..0.83
+    let per = 2.0 + 2.2 * rb;                     // breath rate: 2.0..4.2 s
+    breathe(s{i}, per, amp, rc, 14);
+  }
+}

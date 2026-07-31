@@ -1,5 +1,5 @@
 {
-  "count": 304,
+  "count": 308,
   "categories": [
     {
       "slug": "algorithms",
@@ -142,6 +142,12 @@
           "file": "sine_wave.manic",
           "title": "Sine wave",
           "desc": "axes + plot, a curve traced on, then vectors."
+        },
+        {
+          "name": "creator-trigonometry-one-angle",
+          "file": "creator-trigonometry-one-angle.manic",
+          "title": "Creator trigonometry one angle",
+          "desc": "One reactive angle drives three synchronized unit circles, degree/radian readouts, projection measurements, graph markers and progressive sine/cosine/tangent traces."
         },
         {
           "name": "function_graph",
@@ -1176,6 +1182,18 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "string-art-breath",
+          "file": "string-art-breath.manic",
+          "title": "String art breath",
+          "desc": "190 straight chords (point i to point 2i) whose envelope is a cardioid caustic \u2014 an 'eye'."
+        },
+        {
+          "name": "wheel-radial",
+          "file": "wheel-radial.manic",
+          "title": "Wheel radial",
+          "desc": "Sixty hollow rings breathe in a travelling wave while the whole wheel spins steady->fast->slow and the wordmark cycles the palette \u2014 one par composing breathe + eased turn + recolor; a #hex hollow-fill trick."
+        },
+        {
           "name": "lsystem-asymptote-curves",
           "file": "lsystem-asymptote-curves.manic",
           "title": "Lsystem asymptote curves",
@@ -1529,6 +1547,12 @@
       "slug": "threed",
       "title": "3D scenes",
       "examples": [
+        {
+          "name": "wireframe-spheres",
+          "file": "wireframe-spheres.manic",
+          "title": "Wireframe spheres",
+          "desc": "A drifting field of triangulated wireframe spheres, each breathe-ing with a per-index phase so the field pulses like soap bubbles."
+        },
         {
           "name": "three-d-v2",
           "file": "three-d-v2.manic",

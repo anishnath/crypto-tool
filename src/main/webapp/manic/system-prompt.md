@@ -97,11 +97,16 @@ Constructors and timeline may be written in any order.
      function). ALWAYS write the `*`: `cx + r*cos(t)`, `cy + r*sin(t)`. Same for
      any `<var><fn>` shape (`acos`/`asin`/`atan` ARE real, but `xcos`, `ksin`,
      `rtan` are not — write `x*cos`, `k*sin`, `r*tan`).
-4. **Colors are a fixed palette**: `fg`, `void`, `cyan`, `magenta`, `lime`,
-   `gold`, `red`, `orange`, `blue`, `teal`, `violet`, `coral`, `indigo`, `mint`,
-   `dim`, `panel` (aliases: `pink`→magenta, `green`→lime, `yellow`/`amber`→gold,
-   `purple`→violet, `turquoise`→teal, `salmon`→coral, `seafoam`→mint, …). No
-   hex/RGB and no other names. For a computed/per-item colour use
+4. **Colors are a named palette, plus hex**: `fg`, `void`, `black`/`ink`,
+   `cyan`, `magenta`, `lime`, `gold`, `red`, `orange`, `blue`, `teal`, `violet`,
+   `coral`, `indigo`, `mint`, `dim`, `panel` (aliases: `pink`→magenta,
+   `green`→lime, `yellow`/`amber`→gold, `purple`→violet, `turquoise`→teal,
+   `salmon`→coral, `seafoam`→mint, `charcoal`/`slate`/`silver` greys, …). **Any
+   `#rrggbb` hex literal also works** anywhere a colour is expected —
+   `color(a, #ff2d95)`, `gradient(f, #12c98b, #0d1b2a)` — with `#rgb`, `#rgba`
+   and `#rrggbbaa` (alpha) short/long forms. Prefer named palette colours so
+   scenes stay template-aware; reach for hex for exact brand/ink colours. For a
+   computed/per-item colour use
    `hue(id, degrees)` (0–360). For a colour that *reads a quantity* (height,
    arc length, speed, curvature) use `gradient(id, c1, c2, …, [mode])` —
    multi-stop, template-aware; modes: omitted / angle° / `radial` / `"speed"`
@@ -324,7 +329,7 @@ states but does not solve/verify them; chain calls on the same id) ·
 `disintegrate(id,[d])` (generic deterministic silhouette dissolve for equations,
 images, and vector shapes; use after `rewrite` when semantic continuity should
 settle before the visual turns to dust) ·
-`flash(id,[name])` · `pulse(id,[d])` · `shake(id,[d])` ·
+`flash(id,[name])` · `pulse(id,[d])` · `shake(id,[d])` · `oscillate(id,prop,period,amp,[phase],[dur])` (continuous sine on size|opacity|x|y|hue; alias `breathe(id,period,amp,…)` for size) — put many in a `par{}` with `phase=i/n` for a TRAVELLING wave (breathing rings, equalizers, ripples, bobbing) ·
 `scale(id,f,[d],[ease])` · `rotate(id,deg,[d],[ease])` · `spin(id,deg,[d],[ease])`
 · `cam((x,y),[d],[ease])` · `zoom(f,[d],[ease])` ·
 `transform(id,(ox,oy),a,b,c,d,[d],[ease])` (apply 2×2 matrix about origin;
@@ -571,8 +576,8 @@ member proxy) · `vectorfield3(id,center,half,"u(x,y,z,p)","v(x,y,z,p)",
 `assembly3(id,"asset:models/manic-console.obj"|"file.obj",center,[scale])`
 (named OBJ groups become addressable `{id}.group` entities tagged `id`; no GLB
 nodes or material scripts) ·
-`finish3(id,"shading=smooth material=metal texture=checker scale=4 mesh=0.2 depth=0.2 shadow=0.2")`
-(one bounded, opt-in render finish; defaults preserve the standard diagram look).
+`finish3(id,"shading=smooth material=metal texture=checker scale=4 mesh=0.2 wire=0..1 depth=0.2 shadow=0.2")`
+(one bounded, opt-in render finish; defaults preserve the standard diagram look). **`wire=1`** renders ANY solid (sphere/cube/prism/pyramid/extrude/surface) as a bright triangulated WIREFRAME with no filled faces — pair with `breathe` (`par{}` + per-index phase) for a field of pulsing wire-spheres.
 For `model3`/`assembly3`, prefer a documented bundled URI when it fits. The
 currently available bundled models are `asset:models/manic-pyramid.obj` and
 `asset:models/manic-console.obj`; never invent an asset name or remote URL. Use
@@ -603,8 +608,10 @@ rotate3 for shots where exact coordinates are themselves meaningful.
 **Which shared modifiers/verbs work on 3D entities (this list is exhaustive):**
 `color`, `opacity`, `hidden`, `untraced`, `tag`, `thick`; verbs `show`, `fade`,
 `draw`, `flash`, `pulse`, `recolor`, `scale`, and `to(id, morph|opacity|scale|trace|color, …)`.
-**2D-only — do NOT use these on a 3D entity (they error):** `hue` (no 3D hue —
-use `color` with a palette name), `stroke` (use `thick`), `glow`, `z`, `size`,
+`color` and **`hue`** both work on 3D entities (`hue(s{i}, 360*i/n)` gives a
+computed rainbow across a 3D loop — the computed-colour twin of `color`, which
+also takes `#hex`). **2D-only — do NOT use these on a 3D entity (they error):**
+`stroke` (use `thick`), `glow`, `z`, `size`, `gradient`,
 `bold`, `outlined`/`filled`/`outline`, `transform` (2D matrix), `morph` (use
 `morph3`), `rot`/`spin` (use `rotate3`), `cam`/`zoom` (use `camera3`/`orbit3`).
 3D draws below ordinary 2D text/chrome; for a stable-size label use 2D `text` +

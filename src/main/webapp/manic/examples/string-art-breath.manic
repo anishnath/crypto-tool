@@ -1,0 +1,70 @@
+// string-art-breath — a breathing string-art caustic (the "eye"), with an arc.
+//
+// 190 straight chords join point i to point 2i; their envelope is a cardioid
+// caustic — an "eye" — and `link` keeps each string on its two anchors. Winding an
+// anchor by an amount proportional to its index (a differential turn, not a rigid
+// spin) grows and shrinks the caustic. The show: the eye BLOOMS from nothing,
+// BREATHES with a quickening tempo up to a CLIMAX (flushing crimson), settles, then
+// DISSOLVES back to nothing — every string dead straight the whole time.
+//
+//   manic examples/string-art-breath.manic
+canvas(1000, 1000);
+template("paper");
+
+let n   = 190;
+let cx  = 500;
+let cy  = 500;
+let rr  = 430;
+let pi  = 3.14159265;
+
+for i in 0..n {
+  let a = i * 2 * pi / n;
+  dot(o{i}, (cx + rr * cos(a), cy + rr * sin(a)), 1); hidden(o{i});
+  dot(p{i}, (cx + rr * cos(a), cy + rr * sin(a)), 1); hidden(p{i});   // starts unwound -> blank
+  link(s{i}, o{i}, p{i});
+  color(s{i}, #101010);
+  stroke(s{i}, 0.5);
+  tag(s{i}, strings);
+}
+
+// the wordmark, waiting in the wings for the finale
+text(word, (cx, cy), "manic"); size(word, 104); color(word, #101010); hidden(word);
+
+par {
+  // the breath: bloom -> breathe (quickening) -> climax -> settle -> dissolve.
+  // every turn is on one anchor by an index-proportional amount, so the caustic
+  // grows and shrinks as one.
+  for i in 0..n {
+    let f = i * 360 / n;      // full wind: takes point i to point 2i (the eye forms)
+    let d = f * 0.45;         // breath depth
+    seq {
+      turn(p{i}, (cx, cy),  f,       4.0, out);      // BLOOM into the eye
+      turn(p{i}, (cx, cy), -d,       3.0, smooth);   // breathe open
+      turn(p{i}, (cx, cy),  d,       3.0, smooth);   // close
+      turn(p{i}, (cx, cy), -d * 1.2, 2.0, smooth);   // deeper, quicker
+      turn(p{i}, (cx, cy),  d * 1.2, 2.0, smooth);
+      turn(p{i}, (cx, cy), -d * 1.45, 1.4, smooth);  // CLIMAX
+      turn(p{i}, (cx, cy),  d * 1.45, 1.4, smooth);
+      turn(p{i}, (cx, cy), -d,       3.2, smooth);   // settle
+      turn(p{i}, (cx, cy),  d,       3.2, smooth);
+      turn(p{i}, (cx, cy), -f,       4.5, in);       // DISSOLVE back to nothing
+    }
+  }
+  // colour drama: an ink eye that flushes crimson through the climax, then cools,
+  // and finally fades right out so no wire is left for the finale.
+  seq {
+    wait(9.0);
+    recolor(strings, #a80028, 3.0);   // blood rushes in as it quickens
+    recolor(strings, #101010, 6.0);   // cools back to ink
+    wait(6.5);
+    fade(strings, 3.0);               // every string gone by ~27.5s
+  }
+  // finale: once the wires are gone, the wordmark rises
+  seq {
+    wait(27.5);
+    show(word, 1.4);
+    recolor(word, #ff2d95, 0.8);      // a brand-magenta beat
+    pulse(word);
+    wait(1.4);
+  }
+}

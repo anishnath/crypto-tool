@@ -1,0 +1,78 @@
+// wheel-radial — a breathing radial burst that also spins with a tempo arc.
+//
+// 60 fixed spokes tipped with HOLLOW rings. Two things happen at once, in a
+// `par { }` block:
+//   1. every ring BREATHES (radius oscillates) with a phase = its position, so
+//      the size-wave travels around the ring (the reference-clip illusion);
+//   2. the whole wheel TURNS about its centre with a steady -> fast -> slow
+//      tempo (three eased `turn`s), and the wordmark cycles through the palette.
+// The breathing period is fixed, so the *speed* change comes from the rotation —
+// `breathe` drives scale, `turn` drives position, so they compose cleanly.
+//
+// Rings are made truly hollow by filling them with the exact paper colour.
+//
+//   manic examples/wheel-radial.manic
+canvas(1080, 1080);
+template("paper");
+
+let n     = 60;
+let cx    = 540;
+let cy    = 540;
+let rin   = 250;      // inner radius
+let len   = 190;      // spoke length -> outer radius = rin + len
+let pi     = 3.14159265;
+let lobes   = 5;       // how many fat arcs travel around at once
+
+// 1) the frame: spokes + hollow rings, all tagged `wheel` so `turn` spins them
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let ix = cx + rin * cos(ang);
+  let iy = cy + rin * sin(ang);
+  let ox = cx + (rin + len) * cos(ang);
+  let oy = cy + (rin + len) * sin(ang);
+
+  line(spoke{i}, (ix, iy), (ox, oy));
+  stroke(spoke{i}, 1.2);
+  color(spoke{i}, #3a3a4a);
+  tag(spoke{i}, wheel);
+  tag(spoke{i}, spokes);
+
+  circle(cin{i}, (ix, iy), 5);
+  stroke(cin{i}, 2);
+  color(cin{i}, #f5f2e5);        // hollow: fill matches the paper background
+  tag(cin{i}, wheel);
+
+  circle(cout{i}, (ox, oy), 12);
+  stroke(cout{i}, 2.5);
+  color(cout{i}, #f5f2e5);
+  tag(cout{i}, wheel);
+}
+
+// the centre hub stays still, with the wordmark inside it
+circle(hub, (cx, cy), 150);
+stroke(hub, 2.5);
+color(hub, #f5f2e5);
+text(word, (cx, cy), "manic");
+size(word, 66);
+color(word, #ff2d95);
+
+par {
+  // rings breathe at once, phase = position -> the wave travels
+  for i in 0..n {
+    let ph = lobes * i / n;
+    breathe(cin{i},  2.4, 0.85, ph, 18);
+    breathe(cout{i}, 2.4, 0.92, ph, 18);
+  }
+  // the wheel spins: steady, then fast, then easing to a slow stop
+  seq {
+    turn(wheel, (cx, cy), 100, 6, linear);   // steady
+    turn(wheel, (cx, cy), 320, 4, in);        // accelerate -> fast
+    turn(wheel, (cx, cy), 150, 8, out);       // decelerate -> slow stop
+  }
+  // and the wordmark cycles through the palette on the way
+  seq {
+    wait(6);  recolor(word, #00e6ff, 1.2);  recolor(spokes, #00e6ff, 1.6);
+    wait(4);  recolor(word, #7cff6b, 1.2);
+    wait(3);  recolor(word, #ffd166, 1.2);
+  }
+}
