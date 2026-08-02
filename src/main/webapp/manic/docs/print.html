@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9d54f219.js";
+            window.path_to_searchindex_js = "searchindex-6c2c0399.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-683d253c.js"></script>
@@ -8030,10 +8030,10 @@ shape (with a message that names the 3D replacement):</p>
 <ul>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
 <li><a href="#graphs">Graphs</a> — 5 examples</li>
-<li><a href="#grids--pathfinding--automata">Grids — pathfinding &amp; automata</a> — 4 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 25 examples</li>
+<li><a href="#grids--pathfinding--automata">Grids — pathfinding &amp; automata</a> — 5 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 28 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 13 examples</li>
-<li><a href="#statistics--probability">Statistics &amp; probability</a> — 13 examples</li>
+<li><a href="#statistics--probability">Statistics &amp; probability</a> — 14 examples</li>
 <li><a href="#machine-learning-1">Machine learning</a> — 9 examples</li>
 <li><a href="#physics--simulations">Physics — simulations</a> — 58 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
@@ -8041,7 +8041,7 @@ shape (with a message that names the 3D replacement):</p>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 8 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 19 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 21 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
@@ -9006,6 +9006,41 @@ run(life, 6, 5.0);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/NzGi-U6AOZI" title="Conway's Game of Life — A Glider, Built From One Grid in manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="grid-life-soup"><a class="header" href="#grid-life-soup">grid-life-soup</a></h2>
+<p>Game of Life at scale: a 40x40 grid seeded with a pseudo-random soup (a shader-style hash, since manic has no rand()), 30 generations <code>evolve</code>d then <code>run</code> — the chaos settles into gliders, blinkers and still lifes.</p>
+<pre><code class="language-manic">// grid-life-soup — Conway's Game of Life from a random soup, on the grid kit.
+//
+// A 40x40 cellular automaton seeded with a pseudo-random field (manic has no
+// rand(), so a shader-style hash stands in), then evolved: each
+// `evolve(life,"life")` pre-simulates one Conway generation at build time
+// (alive = a filled `wall` cell, B3/S23, 8-neighbourhood), and `run` replays
+// the 30 stored generations — the soup settles into gliders, blinkers and still lifes.
+//
+//   manic examples/grid-life-soup.manic
+title("Conway's Life — a random soup");
+canvas(1080, 1080);
+template("paper");
+
+let cols = 40;
+let rows = 40;
+let cell = 25;
+grid(life, (540, 540), cols, rows, cell);
+
+// seed ~45% of cells at random (the hash keeps it reproducible)
+for r in 0..rows {
+  for c in 0..cols {
+    if sin((r * 12.9898 + c * 78.233) * 43758.5453) &gt; 0.1 {
+      setcell(life, r, c, wall);
+    }
+  }
+}
+
+// pre-simulate 30 generations, then replay them over 8s
+for g in 0..30 { evolve(life, "life"); }
+run(life, 30, 8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/XDBgjRJWt0Q" title="Conway's Game of Life from a Random Soup — manic grid kit" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="grid-wfc"><a class="header" href="#grid-wfc">grid-wfc</a></h2>
 <p>Wave Function Collapse: <code>collapse</code> pre-simulates a seeded, neighbour-constrained settling row by row, then <code>run</code> replays the grid resolving from empty into a finished maze — deterministic, so the same seed always settles the same way.</p>
 <pre><code class="language-manic">title("Wave Function Collapse — A Maze, Settling");
@@ -9216,6 +9251,755 @@ fade(capi, 0.4);
 show(endcap, 0.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/UrOdi_iLt_k" title="Calculus in One Scene: the Derivative & the Integral — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="calculus-one"><a class="header" href="#calculus-one">calculus-one</a></h2>
+<p>Calculus I end to end in one continuous scene: limits (a curve with a hole), the derivative (secants
+collapsing onto the tangent), curve shape, and the integral + Fundamental Theorem — chapter wipes between.</p>
+<pre><code class="language-manic">title("Calculus I, End to End");
+canvas("16:9");
+template("black");
+
+// ================= HUD (sticky: survives every camera move) =================
+text(head, (cx, 60), "Calculus I, End to End"); display(head); cursor(head); sticky(head);
+text(h1, (cx, 148), "1. Limits - getting close without arriving"); size(h1, 28); color(h1, cyan); hidden(h1); sticky(h1);
+text(h2, (cx, 148), "2. The derivative - a slope caught in the act"); size(h2, 28); color(h2, magenta); hidden(h2); sticky(h2);
+text(h3, (cx, 148), "3. What f' knows about the shape of f"); size(h3, 28); color(h3, lime); hidden(h3); sticky(h3);
+text(h4, (cx, 148), "4. The integral - area, one strip at a time"); size(h4, 28); color(h4, gold); hidden(h4); sticky(h4);
+text(h5, (cx, 148), "5. The Fundamental Theorem - the bridge"); size(h5, 28); hidden(h5); sticky(h5);
+text(cap, (cx, h - 42), ""); size(cap, 26); sticky(cap);
+
+caption(menu, "limits - slopes - shapes - areas - the bridge", (cx, cy), 34, gold); hidden(menu);
+
+// chapter wipes, tinted to the incoming chapter
+line(w2, (-40, 140), (-40, h - 90)); stroke(w2, 4); color(w2, magenta); glow(w2, 14);
+line(w3, (-40, 140), (-40, h - 90)); stroke(w3, 4); color(w3, lime); glow(w3, 14);
+line(w4, (-40, 140), (-40, h - 90)); stroke(w4, 4); color(w4, gold); glow(w4, 14);
+line(w5, (-40, 140), (-40, h - 90)); stroke(w5, 4); glow(w5, 14);
+
+// ================= ch 1 cast: LIMITS =================
+// example A: f(x) = (x^3 - x)/(x - 1) = x(x+1) away from the hole at x = 1
+// example B: a limit at infinity - the sigmoid hugging its asymptote
+let gx1 = cx + 34;
+let gy = 560;
+arrow(x1a, (cx - 380, gy), (cx + 390, gy)); untraced(x1a); stroke(x1a, 3); tag(x1a, c1);
+arrow(y1a, (gx1, gy), (gx1, 235)); untraced(y1a); stroke(y1a, 3); tag(y1a, c1);
+plot(p1, (gx1, gy), 170, 60, "x^2+x", (-2.2, 1.8));
+untraced(p1); stroke(p1, 4); gradient(p1, blue, cyan, gold, 270); tag(p1, c1);
+dot(rider, (gx1, gy), 7); color(rider, gold); glow(rider, 8); hidden(rider); tag(rider, c1);
+limit(lm, p1, 1, gold); hidden(lm); tag(lm, c1);
+plot(p1b, (gx1, gy), 170, 60, "4/(1+exp(-2.2*x))", (-2.2, 1.8));
+untraced(p1b); stroke(p1b, 4); color(p1b, teal); tag(p1b, c1);
+limit(lmb, p1b, inf, cyan); hidden(lmb); tag(lmb, c1);
+equation(eq1, (cx, 230), `\lim_{x\to 1}\frac{x^3-x}{x-1}`, 40); hidden(eq1); sticky(eq1);
+
+// ================= ch 2 cast: THE DERIVATIVE =================
+// example A: f(x) = x^2/2, secants through (1, 0.5) collapse onto the tangent
+// example B: sine's recorded slope is cosine
+let gx2 = cx - 170;
+arrow(x2a, (cx - 312, gy), (cx + 322, gy)); untraced(x2a); stroke(x2a, 3); tag(x2a, c2);
+arrow(y2a, (gx2, gy), (gx2, 240)); untraced(y2a); stroke(y2a, 3); tag(y2a, c2);
+plot(p2, (gx2, gy), 170, 80, "0.5*x^2", (-0.6, 2.6));
+untraced(p2); stroke(p2, 4); gradient(p2, blue, magenta, 270); tag(p2, c2);
+dot(anch, (gx2 + 170, gy - 40), 7); color(anch, gold); glow(anch, 8); hidden(anch); tag(anch, c2);
+for k in 0..3 {
+  let hh = 1.5 - 0.6*k;
+  let mm = 1 + hh/2;
+  let ya = 0.5 - 0.9*mm;
+  let yb = 0.5 + 1.4*mm;
+  line(sec{k}, (gx2 + 17, gy - ya*80), (gx2 + 408, gy - yb*80));
+  stroke(sec{k}, 3); color(sec{k}, teal); opacity(sec{k}, 0.45 + 0.2*k); hidden(sec{k}); tag(sec{k}, c2);
+  dot(sd{k}, (gx2 + (1 + hh)*170, gy - ((1 + hh)^2/2)*80), 6);
+  color(sd{k}, teal); hidden(sd{k}); tag(sd{k}, c2);
+}
+tangent(tg2, p2, 1, 280); hidden(tg2); tag(tg2, c2);
+slope(sl2, p2, 1); hidden(sl2); tag(sl2, c2);
+deriv(dv2, p2, magenta); untraced(dv2); tag(dv2, c2);
+line(bl2, (gx2 - 90, 445), (gx2 + 445, 445)); dashed(bl2); stroke(bl2, 2); color(bl2, dim); hidden(bl2); tag(bl2, c2);
+plot(p2s, (gx2, 445), 170, 80, "1.1*sin(1.8*x)", (-0.5, 2.6));
+untraced(p2s); stroke(p2s, 4); color(p2s, cyan); tag(p2s, c2);
+deriv(dvs, p2s, magenta); untraced(dvs); dashed(dvs, 12, 9); tag(dvs, c2);
+equation(eq2, (cx, 230), `f'(1) \;=\; \lim_{h\to 0}\frac{f(1+h)-f(1)}{h}`, 38); hidden(eq2); sticky(eq2);
+
+// ================= ch 3 cast: SHAPE =================
+// f(x) = x^3/3 - x : turning points at x = -1, 1; concavity flips at 0
+// (one horizontal axis only - no vertical line slicing through the curve)
+let gy3 = 420;
+arrow(x3a, (cx - 436, gy3), (cx + 446, gy3)); untraced(x3a); stroke(x3a, 3); tag(x3a, c3);
+plot(p3, (cx, gy3), 180, 150, "x^3/3-x", (-2.2, 2.2));
+untraced(p3); stroke(p3, 4); gradient(p3, blue, lime, gold, 270); tag(p3, c3);
+tangent(tg3, p3, -2.1, 300); hidden(tg3); tag(tg3, c3);
+slope(sl3, p3, -2.1); hidden(sl3); tag(sl3, c3);
+extrema(ex3, p3, gold); hidden(ex3); tag(ex3, c3);
+inflections(if3, p3, magenta); hidden(if3); tag(if3, c3);
+equation(eq3, (cx, 230), `f'(x)=x^2-1`, 38); hidden(eq3); sticky(eq3);
+
+// ================= ch 4 + 5 cast: INTEGRAL and the FTC =================
+// example A: f(x) = 0.3 x (4 - x), area 0..4 is exactly 3.2
+// example B: a sine arch whose signed area cancels to zero
+let gx4 = cx - 340;
+arrow(x4a, (gx4 - 40, gy), (gx4 + 730, gy)); untraced(x4a); stroke(x4a, 3); tag(x4a, c4);
+arrow(y4a, (gx4, gy), (gx4, 240)); untraced(y4a); stroke(y4a, 3); tag(y4a, c4);
+plot(p4, (gx4, gy), 170, 80, "0.3*x*(4-x)", (0, 4));
+untraced(p4); stroke(p4, 4); gradient(p4, blue, gold, 270); tag(p4, c4);
+for i in 0..8 {
+  let xm = (i + 0.5)*0.5;
+  let hgt = 0.3*xm*(4 - xm);
+  rect(rs{i}, (gx4 + xm*170, gy - hgt*80/2 + 24), 0.5*170 - 3, hgt*80);
+  color(rs{i}, gold); opacity(rs{i}, 0.55); tag(rs{i}, rstrips);
+}
+hidden(rstrips);
+area(ar4, p4, 0, 0); color(ar4, gold); opacity(ar4, 0.3);
+integral(int4, p4, 0, 0, (gx4 + 640, 300)); hidden(int4);
+plot(p4b, (gx4, gy), 170, 80, "1.2*sin(1.5708*x)", (0, 4));
+untraced(p4b); stroke(p4b, 4); color(p4b, teal);
+area(arb, p4b, 0, 0); color(arb, teal); opacity(arb, 0.3);
+integral(intb, p4b, 0, 0, (gx4 + 640, 350)); hidden(intb);
+equation(eq4, (cx, 230), `A \;\approx\; \sum_i \textcolor{gold}{f(x_i)}\,\Delta x`, 38); hidden(eq4); sticky(eq4);
+
+// FTC: the accumulation A(x) drawn as its own curve, then ITS derivative
+accum(acF, p4, 0, gold); untraced(acF);
+deriv(dfF, acF, magenta); untraced(dfF); dashed(dfF, 12, 9);
+text(alab, (gx4 + 700, 296), "A(x) - area so far"); size(alab, 24); color(alab, gold); hidden(alab);
+text(flab, (cx, 430), "f(x)"); size(flab, 24); color(flab, cyan); hidden(flab);
+equation(eqF, (cx, 230), `A(x) \;=\; \int_0^x f(t)\,dt`, 40); hidden(eqF); sticky(eqF); z(eqF, 10);
+
+// finale
+circle(confbox, (cx, 230), 80); hidden(confbox);
+particles(conf, confbox, 22, 4, 9, "ring"); color(conf, gold); hidden(conf);
+caption(r1, "zoom in: the derivative is the slope of a moment", (cx, 400), 28, magenta); hidden(r1);
+caption(r2, "add up: the integral is the area of a journey", (cx, 455), 28, gold); hidden(r2);
+caption(r3, "the Fundamental Theorem: each undoes the other", (cx, 510), 28); hidden(r3);
+
+// ================= timeline =================
+
+// ---- cold open
+type(head, 1.2);
+wordpop(menu, 0.07);
+wait(1.0);
+fade(menu, 0.5);
+
+// ---- ch 1: LIMITS ------------------------------------------------------
+mark("limits");
+cue(whoosh);
+show(h1, 0.5);
+par { draw(x1a, 0.6); draw(y1a, 0.6); }
+show(rider, 0.2);
+par { draw(p1, 1.4); travel(rider, p1, 1.4, smooth); }
+fade(rider, 0.3);
+show(eq1, 0.6);
+say(cap, "At x = 1 this formula divides zero by zero - the curve has a HOLE", 0.5);
+show(lm, 0.6);
+cue(tick);
+rewrite(eq1, `\lim_{x\to 1}\frac{x^3-x}{x-1} \;=\; \lim_{x\to 1}\,x(x+1)`, 0.9);
+par { cam((gx1 + 170, 470), 1.2, smooth); zoom(1.8, 1.2, smooth); }
+say(cap, "The limit asks: where were you HEADING? Watch the dot commit", 0.5);
+to(lm, x, 1, 2.6, smooth);
+cue(tick);
+rewrite(eq1, `\lim_{x\to 1}\frac{x^3-x}{x-1} \;=\; 2`, 0.9);
+flash(lm, cyan);
+wait(0.8);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// second example: chasing x to infinity
+say(cap, "Limits also ask where the ROAD ends: chase x toward infinity", 0.5);
+par { fade(p1, 0.5); fade(lm, 0.5); }
+draw(p1b, 1.2);
+show(lmb, 0.5);
+to(lmb, x, 1.8, 2.0, smooth);
+cue(tick);
+rewrite(eq1, `\lim_{x\to\infty}\frac{4}{1+e^{-2.2x}} \;=\; 4`, 0.9);
+wait(0.7);
+par { shift(w2, (w + 80, 0), 0.7, linear); fade(c1, 0.6); disintegrate(eq1, 0.8); fade(h1, 0.5); }
+
+// ---- ch 2: THE DERIVATIVE ----------------------------------------------
+mark("derivative");
+cue(whoosh);
+show(h2, 0.5);
+par { draw(x2a, 0.6); draw(y2a, 0.6); }
+draw(p2, 1.2);
+show(anch, 0.4);
+show(eq2, 0.6);
+say(cap, "Pin one point. A SECANT through a neighbour measures average slope", 0.5);
+par { cam((gx2 + 200, 470), 1.0, smooth); zoom(1.35, 1.0, smooth); }
+par { show(sec0, 0.4); show(sd0, 0.4); }
+cue(tick);
+rewrite(eq2, `\frac{\Delta y}{\Delta x} \;=\; 1+\tfrac{h}{2} \;=\; 1.75`, 0.8);
+par { fade(sec0, 0.4); fade(sd0, 0.4); show(sec1, 0.4); show(sd1, 0.4); }
+cue(tick);
+rewrite(eq2, `\frac{\Delta y}{\Delta x} \;=\; 1+\tfrac{h}{2} \;=\; 1.45`, 0.8);
+par { fade(sec1, 0.4); fade(sd1, 0.4); show(sec2, 0.4); show(sd2, 0.4); }
+cue(tick);
+rewrite(eq2, `\frac{\Delta y}{\Delta x} \;=\; 1+\tfrac{h}{2} \;=\; 1.15`, 0.8);
+say(cap, "Slide the neighbour home: the secants collapse onto ONE line", 0.5);
+par { fade(sec2, 0.5); fade(sd2, 0.5); show(tg2, 0.5); show(sl2, 0.5); }
+flash(tg2, gold);
+cue(pop);
+cue(tick);
+rewrite(eq2, `f'(1) \;=\; 1`, 0.9);
+wait(0.6);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// now do it EVERYWHERE: the tangent glides, recording f' as a new curve
+say(cap, "Do it at every point - and record the answer as a NEW curve", 0.5);
+par { to(tg2, x, -0.4, 0.7, smooth); to(sl2, x, -0.4, 0.7, smooth); }
+par { to(tg2, x, 2.3, 2.6, smooth); to(sl2, x, 2.3, 2.6, smooth); draw(dv2, 2.6); }
+cue(tick);
+rewrite(eq2, `f'(x) \;=\; x`, 0.9);
+wait(0.6);
+
+// second example: every curve carries its shadow
+say(cap, "It works for EVERY curve: sine's recorded slope is cosine", 0.5);
+par { fade(p2, 0.5); fade(dv2, 0.5); fade(tg2, 0.5); fade(sl2, 0.5); fade(anch, 0.4); }
+par { show(bl2, 0.4); draw(p2s, 1.2); }
+draw(dvs, 1.6);
+cue(tick);
+rewrite(eq2, `\big(\sin x\big)' \;=\; \cos x`, 0.9);
+wait(0.7);
+par { shift(w3, (w + 80, 0), 0.7, linear); fade(c2, 0.6); disintegrate(eq2, 0.8); fade(h2, 0.5); }
+
+// ---- ch 3: SHAPE -------------------------------------------------------
+mark("shape");
+cue(whoosh);
+show(h3, 0.5);
+draw(x3a, 0.7);
+draw(p3, 1.4);
+show(eq3, 0.6);
+say(cap, "The derivative is a story about SHAPE. Ride the tangent and listen", 0.5);
+par { show(tg3, 0.5); show(sl3, 0.5); }
+par { to(tg3, x, -1, 1.6, smooth); to(sl3, x, -1, 1.6, smooth); }
+cue(pop);
+show(ex3, 0.4); pulse(ex3, 0.8);
+say(cap, "Slope zero: the curve turns. A peak - then a valley", 0.5);
+par { to(tg3, x, 0, 1.2, smooth); to(sl3, x, 0, 1.2, smooth); }
+show(if3, 0.4); flash(if3, magenta);
+say(cap, "Here the BEND flips: concave down becomes concave up - an inflection", 0.5);
+par { to(tg3, x, 1, 1.2, smooth); to(sl3, x, 1, 1.2, smooth); }
+pulse(ex3, 0.8);
+par { to(tg3, x, 2.1, 1.2, smooth); to(sl3, x, 2.1, 1.2, smooth); }
+cue(tick);
+rewrite(eq3, `f'=0:\ \text{turning}\qquad f''=0:\ \text{bending flips}`, 0.9);
+wait(1.0);
+par { shift(w4, (w + 80, 0), 0.7, linear); fade(c3, 0.6); disintegrate(eq3, 0.8); fade(h3, 0.5); }
+
+// ---- ch 4: THE INTEGRAL ------------------------------------------------
+mark("integral");
+cue(whoosh);
+show(h4, 0.5);
+par { draw(x4a, 0.6); draw(y4a, 0.6); }
+draw(p4, 1.3);
+show(eq4, 0.6);
+say(cap, "The other question: how much accumulates? Slice it into strips", 0.5);
+stagger(0.08) { for i in 0..8 { par { show(rs{i}, 0.3); shift(rs{i}, (0, -24), 0.4, out); } } }
+wait(0.8);
+say(cap, "Thinner and thinner strips: the sum becomes the exact area", 0.5);
+show(int4, 0.3);
+par { fade(rstrips, 1.1); to(ar4, x, 4, 2.2, smooth); to(int4, x, 4, 2.2, smooth); }
+flash(int4, gold);
+cue(tick);
+rewrite(eq4, `A \;=\; \int_0^4 f\,dx \;=\; 3.2`, 0.9);
+wait(0.8);
+
+// second example: signed area - the hill cancels the valley
+say(cap, "One warning: below the axis, area counts NEGATIVE", 0.5);
+par { fade(p4, 0.5); fade(ar4, 0.5); fade(int4, 0.5); }
+draw(p4b, 1.2);
+show(intb, 0.3);
+par { to(arb, x, 4, 2.0, smooth); to(intb, x, 4, 2.0, smooth); }
+flash(intb, teal);
+cue(tick);
+rewrite(eq4, `\int_0^4 \sin\!\Big(\frac{\pi x}{2}\Big)dx \;=\; 0`, 0.9);
+say(cap, "The hill above cancels the valley below - signed area", 0.5);
+wait(0.6);
+par { fade(p4b, 0.5); fade(arb, 0.5); fade(intb, 0.4); show(p4, 0.5); }
+par { shift(w5, (w + 80, 0), 0.7, linear); disintegrate(eq4, 0.8); fade(h4, 0.5); }
+
+// ---- ch 5: THE FUNDAMENTAL THEOREM --------------------------------------
+mark("ftc");
+cue(whoosh);
+show(h5, 0.5);
+say(cap, "Rewind. This time, GRAPH the running total as you sweep", 0.5);
+show(ar4, 0.4);
+to(ar4, x, 0, 0.7, smooth);
+show(eqF, 0.7);
+par { to(ar4, x, 4, 2.8, smooth); draw(acF, 2.8); }
+show(alab, 0.5); show(flab, 0.5);
+say(cap, "Now take the DERIVATIVE of that gold curve - the slope of the total", 0.5);
+cue(tick);
+rewrite(eqF, `\frac{d}{dx}A(x) \;=\; \;?`, 0.8);
+draw(dfF, 2.2);
+flash(p4, magenta);
+cue(chime);
+say(cap, "It lands EXACTLY on f. Accumulating, then differentiating, is a round trip", 0.5);
+cue(tick);
+rewrite(eqF, `\boxed{\;\frac{d}{dx}\int_0^x f(t)\,dt \;=\; f(x)\;}`, 1.0);
+wait(1.2);
+
+// ---- finale
+par { fade(c4, 0.7); fade(ar4, 0.7); fade(acF, 0.7); fade(dfF, 0.7); fade(alab, 0.5); fade(flab, 0.5); fade(h5, 0.5); }
+seq { show(conf, 0.1); burst(conf, 1.4); }
+par {
+  breathe(eqF, 3, 0.05, 0, 7);
+  seq { stagger(0.4) { wordpop(r1, 0.05); wordpop(r2, 0.05); wordpop(r3, 0.05); } }
+}
+say(cap, "Calculus I: zoom in, add up - and the bridge between", 0.6);
+wait(2.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/rUZmizhXswM" title="Calculus I End to End — Limits, Derivatives, Integrals in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="integrals"><a class="header" href="#integrals">integrals</a></h2>
+<p>Three views of the integral on one bump: coarse Riemann strips rise into place with the
+sample dots f(x*) riding the curve, refine to 32, then the true area sweeps open — glowing act-wipes between.</p>
+<pre><code class="language-manic">title("Ways to Integrate");
+canvas(1000, 1000);
+template("black");
+
+// ---------- layout constants ----------
+let gx = cx - 340;   // graph origin (math x = 0)
+let gy = h - 160;    // graph baseline (math y = 0)
+let sx = 170;        // px per x-unit
+let sy = 100;        // px per y-unit
+
+// ---------- HUD: headings &amp; captions (sticky = survive camera moves) ----------
+text(head, (cx, 60), "Ways to Integrate"); display(head); cursor(head); sticky(head);
+text(t1, (cx, 122), "1. Riemann - slice the domain"); size(t1, 30); color(t1, cyan); hidden(t1); sticky(t1);
+text(t2, (cx, 122), "2. Lebesgue - slice the range"); size(t2, 30); color(t2, gold); hidden(t2); sticky(t2);
+text(t3, (cx, 122), "3. Henstock-Kurzweil - slice with a gauge"); size(t3, 30); color(t3, magenta); hidden(t3); sticky(t3);
+
+caption(in1, "Riemann - vertical strips of equal width", (cx, cy - 70), 32, cyan); hidden(in1);
+caption(in2, "Lebesgue - horizontal layers weighed by measure", (cx, cy), 32, gold); hidden(in2);
+caption(in3, "Henstock-Kurzweil - strip widths set by a gauge", (cx, cy + 70), 32, magenta); hidden(in3);
+
+text(cap, (cx, h - 42), ""); size(cap, 26); sticky(cap);
+
+// ---------- act wipes: glowing verticals that sweep the frame between acts ----------
+line(wipe1, (-40, 140), (-40, h - 90)); stroke(wipe1, 4); color(wipe1, gold); glow(wipe1, 14);
+line(wipe2, (-40, 140), (-40, h - 90)); stroke(wipe2, 4); color(wipe2, magenta); glow(wipe2, 14);
+line(wipe3, (-40, 140), (-40, h - 90)); stroke(wipe3, 4); glow(wipe3, 14);
+
+// ---------- axes ----------
+arrow(xax, (gx - 30, gy), (gx + 4*sx + 50, gy)); untraced(xax); stroke(xax, 3);
+arrow(yax, (gx, gy + 30), (gx, 175)); untraced(yax); stroke(yax, 3);
+text(xl0, (gx, gy + 26), "0"); size(xl0, 22); color(xl0, dim); hidden(xl0);
+text(xl4, (gx + 4*sx, gy + 26), "4"); size(xl4, 22); color(xl4, dim); hidden(xl4);
+
+// ---------- the smooth bump (acts 1 &amp; 2) ----------
+plot(fplot, (gx, gy), sx, sy, "3*exp(-((x-2)^2))", (0, 4));
+untraced(fplot); stroke(fplot, 4); gradient(fplot, blue, cyan, gold, 270);
+dot(rider, (gx, gy), 7); color(rider, gold); glow(rider, 8); hidden(rider);
+
+// Riemann: 8 coarse strips (declared 26px low, they RISE into place)
+// + the SAMPLE DOTS f(x_i*) riding the curve top - the star of the definition
+for i in 0..8 {
+  let xm = (i + 0.5)*0.5;
+  let hgt = 3*exp(-((xm - 2)^2));
+  rect(rc{i}, (gx + xm*sx, gy - hgt*sy/2 + 26), 0.5*sx - 3, hgt*sy);
+  color(rc{i}, cyan); opacity(rc{i}, 0.55); tag(rc{i}, coarse);
+  dot(sm{i}, (gx + xm*sx, gy - hgt*sy), 5);
+  color(sm{i}, cyan); glow(sm{i}, 6); tag(sm{i}, samples);
+}
+hidden(coarse); hidden(samples);
+
+// Riemann: 32 fine strips
+for i in 0..32 {
+  let xm = (i + 0.5)*0.125;
+  let hgt = 3*exp(-((xm - 2)^2));
+  rect(rf{i}, (gx + xm*sx, gy - hgt*sy/2), 0.125*sx - 2, hgt*sy);
+  color(rf{i}, cyan); opacity(rf{i}, 0.7); tag(rf{i}, fine);
+}
+hidden(fine);
+
+// the limit: swept exact area + live integral readout
+area(ar, fplot, 0, 0); color(ar, cyan); opacity(ar, 0.35);
+integral(intg, fplot, 0, 0, (gx + 4*sx - 40, 265)); hidden(intg);
+
+// the pivot strip: one vertical slice that ROTATES into a horizontal one
+rect(pv, (gx + 2*sx, gy - 1.5*sy), 42, 3*sy); color(pv, cyan); opacity(pv, 0.7); hidden(pv);
+
+// Lebesgue: 10 horizontal layers (declared offset sideways, they SLIDE in alternating)
+for j in 0..10 {
+  let ym = (j + 0.5)*0.3;
+  let hf = sqrt(ln(3/ym));
+  let jm = j - 2*floor(j/2);
+  let xoff = 180*jm - 90;
+  rect(ls{j}, (gx + 2*sx - xoff, gy - ym*sy), 2*hf*sx, 0.3*sy - 2);
+  color(ls{j}, gold); opacity(ls{j}, 0.55); tag(ls{j}, layers);
+}
+hidden(layers);
+// the level scanner: a dashed line that sweeps UP through the layers
+line(lev, (gx, gy - 0.15*sy), (gx + 4*sx, gy - 0.15*sy));
+dashed(lev); color(lev, gold); stroke(lev, 2); hidden(lev);
+
+// ---------- the spiky function (act 3) ----------
+plot(gplot, (gx, gy), sx, sy, "1.1+1.7*exp(-40*((x-3)^2))", (0, 4));
+untraced(gplot); stroke(gplot, 4); gradient(gplot, teal, magenta, 270);
+dot(rider2, (gx, gy), 7); color(rider2, magenta); glow(rider2, 8); hidden(rider2);
+
+// the gauge ITSELF, drawn as a real function: delta(x) dips where f spikes
+plot(dplot, (gx, gy), sx, 60, "0.55-0.45*exp(-20*((x-3)^2))", (0, 4));
+untraced(dplot); dashed(dplot); stroke(dplot, 2); color(dplot, magenta); opacity(dplot, 0.7);
+text(dlab, (gx + 4*sx + 34, gy - 33), `$\delta(x)$`); size(dlab, 24); color(dlab, magenta); hidden(dlab);
+
+// uniform cells first (they rise in) - two of them will FAIL at the spike
+for i in 0..8 {
+  let xm = (i + 0.5)*0.5;
+  let hgt = 1.1 + 1.7*exp(-40*((xm - 3)^2));
+  rect(hku{i}, (gx + xm*sx, gy - hgt*sy/2 + 26), 0.5*sx - 3, hgt*sy);
+  color(hku{i}, teal); opacity(hku{i}, 0.5); tag(hku{i}, hk);
+}
+hidden(hk);
+
+// gauge-fine cells + their TAG POINTS t_i pinned on the curve
+for i in 0..10 {
+  let xm = 2.5 + (i + 0.5)*0.1;
+  let hgt = 1.1 + 1.7*exp(-40*((xm - 3)^2));
+  rect(nk{i}, (gx + xm*sx, gy - hgt*sy/2), 0.1*sx - 2, hgt*sy);
+  color(nk{i}, magenta); opacity(nk{i}, 0.75); tag(nk{i}, gauge); tag(nk{i}, hk);
+  dot(tg{i}, (gx + xm*sx, gy - hgt*sy), 3);
+  color(tg{i}, magenta); glow(tg{i}, 5); tag(tg{i}, tgd);
+}
+hidden(gauge); hidden(tgd);
+bracelabel(bnar, (gx + 2.5*sx, gy + 16), (gx + 3.5*sx, gy + 16), `gauge $\delta(x)$ shrinks here`, 14);
+color(bnar, magenta); hidden(bnar);
+
+// ---------- equations (each one LIVES: it rewrites, then turns to dust) ----------
+equation(eqR, (cx, 190), `S_{8} \;=\; \sum_{i=1}^{8} f(x_i^{*})\,\textcolor{cyan}{\Delta x}`, 40); hidden(eqR); sticky(eqR);
+equation(eqL, (cx, 190), `\text{layer}_j \;=\; \textcolor{gold}{\mu\{\,f &gt; t_j\,\}}\cdot\Delta t`, 40); hidden(eqL); sticky(eqL);
+equation(eqH, (cx, 190), `\sum_i f(\textcolor{magenta}{t_i})\,\Delta x_i`, 38); hidden(eqH); sticky(eqH);
+equation(eqS, (cx, 250), `\textcolor{cyan}{\text{Riemann}} \;\subsetneq\; \textcolor{gold}{\text{Lebesgue}} \;\subsetneq\; \textcolor{magenta}{\text{Henstock-Kurzweil}}`, 44); hidden(eqS); sticky(eqS); z(eqS, 10);
+
+// ---------- finale confetti + triptych reprise of the three motifs ----------
+circle(confbox, (cx, 290), 90); hidden(confbox);
+particles(conf, confbox, 24, 4, 11, "ring"); color(conf, gold); hidden(conf);
+
+let mxr = cx - 380;
+let mxh = cx + 380;
+let myb = 490;
+// mini Riemann: a tiny staircase of vertical strips
+for i in 0..6 {
+  let xm = (i + 0.5)/3;
+  let hgt = 76*exp(-2*((xm - 1)^2));
+  rect(mr{i}, (mxr - 110 + xm*110, myb - hgt/2), 34, hgt);
+  color(mr{i}, cyan); opacity(mr{i}, 0.6); tag(mr{i}, minir);
+}
+// mini Lebesgue: a tiny layer cake
+for j in 0..5 {
+  let wd = 200 - 34*j;
+  rect(ml{j}, (cx, myb - 9 - j*17), wd, 14);
+  color(ml{j}, gold); opacity(ml{j}, 0.6); tag(ml{j}, minil);
+}
+// mini Henstock-Kurzweil: coarse cells, then a burst of fine ones at the spike
+for i in 0..3 {
+  rect(mw{i}, (mxh - 90 + i*42, myb - 19), 40, 38);
+  color(mw{i}, teal); opacity(mw{i}, 0.6); tag(mw{i}, minih);
+}
+for k in 0..5 {
+  let hgt = 38 + 52*exp(-0.7*((k - 2)^2));
+  rect(mn{k}, (mxh + 10 + (k + 0.5)*11, myb - hgt/2), 9, hgt);
+  color(mn{k}, magenta); opacity(mn{k}, 0.75); tag(mn{k}, minih);
+}
+rect(mt, (mxh + 88, myb - 19), 40, 38); color(mt, teal); opacity(mt, 0.6); tag(mt, minih);
+hidden(minir); hidden(minil); hidden(minih);
+
+caption(ms1, "slice the domain", (mxr, 560), 26, cyan); hidden(ms1);
+caption(ms2, "slice the range", (cx, 560), 26, gold); hidden(ms2);
+caption(ms3, "slice by a gauge", (mxh, 560), 26, magenta); hidden(ms3);
+
+// ================= timeline =================
+
+// ---- cold open: title types on, the three names POP word by word
+type(head, 1.2);
+stagger(0.5) { wordpop(in1, 0.05); wordpop(in2, 0.05); wordpop(in3, 0.05); }
+wait(1.2);
+par { fade(in1, 0.4); fade(in2, 0.4); fade(in3, 0.4); }
+
+// ---- act 1: RIEMANN ----------------------------------------------------
+cue(whoosh);
+show(t1, 0.5);
+par { draw(xax, 0.6); draw(yax, 0.6); show(xl0, 0.6); show(xl4, 0.6); }
+show(rider, 0.2);
+par { draw(fplot, 1.5); travel(rider, fplot, 1.5, smooth); }
+fade(rider, 0.3);
+say(cap, "Slice the domain into equal strips; each SAMPLE DOT sets its strip's height", 0.5);
+stagger(0.08) { for i in 0..8 { par { show(rc{i}, 0.3); shift(rc{i}, (0, -26), 0.4, out); show(sm{i}, 0.3); } } }
+show(eqR, 0.6);
+wait(1.2);
+
+// push IN while the strips refine, equation rewrites underneath
+say(cap, "Refine: quadruple the strips - the staircase hugs the curve", 0.5);
+par { cam((cx, gy - 1.2*sy), 1.1, smooth); zoom(1.45, 1.1, smooth); }
+par { fade(coarse, 0.5); fade(samples, 0.5); stagger(0.02) { for i in 0..32 { show(rf{i}, 0.22); } } }
+cue(tick);
+rewrite(eqR, `S_{32} \;=\; \sum_{i=1}^{32} f(x_i^{*})\,\textcolor{cyan}{\Delta x}`, 0.8);
+wait(0.9);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// the limit: strips dissolve into the EXACT swept area, the number climbs
+cue(tick);
+rewrite(eqR, `\int_0^{4} f\,dx \;=\; \lim_{n\to\infty} S_n`, 0.9);
+say(cap, "In the limit, the sum becomes the exact area", 0.5);
+show(intg, 0.3);
+par { fade(fine, 1.2); to(ar, x, 4, 2.2, smooth); to(intg, x, 4, 2.2, smooth); }
+flash(intg, gold);
+wait(1.0);
+par { shift(wipe1, (w + 80, 0), 0.7, linear); fade(ar, 0.5); fade(intg, 0.5); disintegrate(eqR, 0.8); fade(t1, 0.5); }
+
+// ---- act 2: LEBESGUE ---------------------------------------------------
+cue(whoosh);
+show(t2, 0.5);
+say(cap, "Turn the slicing sideways: cut the range, not the domain", 0.5);
+show(pv, 0.3);
+par { rotate(pv, 90, 0.9, smooth); recolor(pv, gold, 0.9); }
+fade(pv, 0.4);
+show(eqL, 0.6);
+show(lev, 0.3);
+par {
+  stagger(0.1) { for j in 0..10 { par { show(ls{j}, 0.35); shift(ls{j}, (180*(j - 2*floor(j/2)) - 90, 0), 0.5, out); } } }
+  shift(lev, (0, -2.7*sy), 1.9, smooth);
+  zoom(1.06, 2.2, smooth);
+}
+// the stack breathes: a travelling wave rolls up through the layers
+par { for j in 0..10 { oscillate(ls{j}, y, 2.4, 3, j/10, 3.2); } pulse(ls4, 0.9); }
+say(cap, "A layer at height t sits over the set where f &gt; t; its width is that set's measure", 0.5);
+cue(tick);
+rewrite(eqL, `\int f\,d\mu \;=\; \int_0^{\infty}\textcolor{gold}{\mu\{\,f &gt; t\,\}}\,dt`, 0.9);
+wait(1.2);
+fade(lev, 0.4);
+par { shift(wipe2, (w + 80, 0), 0.7, linear); fade(layers, 0.5); disintegrate(eqL, 0.8); fade(t2, 0.5); fade(fplot, 0.5); zoom(1, 0.8, smooth); }
+
+// ---- act 3: HENSTOCK-KURZWEIL ------------------------------------------
+cue(whoosh);
+show(t3, 0.5);
+show(rider2, 0.2);
+par { draw(gplot, 1.4); travel(rider2, gplot, 1.4, smooth); }
+fade(rider2, 0.3);
+say(cap, "New function, old recipe: equal strips again...", 0.5);
+stagger(0.07) { for i in 0..8 { par { show(hku{i}, 0.3); shift(hku{i}, (0, -26), 0.4, out); } } }
+show(eqH, 0.6);
+wait(0.5);
+
+// push in on the spike: the uniform cells FAIL, flash red, shake, shatter
+par { cam((gx + 3*sx, gy - 1.3*sy), 1.1, smooth); zoom(1.6, 1.1, smooth); }
+say(cap, "The spike slips between samples - equal widths are too coarse here", 0.5);
+par { recolor(hku5, red, 0.3); recolor(hku6, red, 0.3); shake(hku5, 0.8); shake(hku6, 0.8); }
+cue(pop);
+par { disintegrate(hku5, 0.8); disintegrate(hku6, 0.8); }
+
+// the gauge appears AS A FUNCTION: it dips exactly where f is dangerous
+say(cap, `The gauge $\delta(x)$ is itself a function - watch it dip where f spikes`, 0.5);
+par { draw(dplot, 1.0); show(dlab, 0.6); }
+say(cap, `Tiny slices where f is wild - and every slice carries its tag point $t_i$`, 0.5);
+stagger(0.05) { for i in 0..10 { par { show(nk{i}, 0.22); show(tg{i}, 0.22); } } }
+show(bnar, 0.5);
+wait(0.8);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+cue(tick);
+rewrite(eqH, `\Delta x_i &lt; \textcolor{magenta}{\delta(t_i)} \;\Longrightarrow\; \Big|\sum_i f(t_i)\,\Delta x_i - A\Big| &lt; \varepsilon`, 0.9);
+flow(gplot, 1.5, forward, once);
+wait(1.2);
+
+// ---- finale: wipe to black, hierarchy + confetti + triptych reprise ------
+par {
+  shift(wipe3, (w + 80, 0), 0.7, linear);
+  fade(hk, 0.5); fade(tgd, 0.5); fade(gplot, 0.5); fade(dplot, 0.5); fade(dlab, 0.5);
+  fade(xax, 0.5); fade(yax, 0.5); fade(xl0, 0.5); fade(xl4, 0.5);
+  disintegrate(eqH, 0.8); fade(bnar, 0.5); fade(t3, 0.5);
+}
+cue(chime);
+show(eqS, 0.8);
+par {
+  breathe(eqS, 3, 0.05, 0, 7);
+  seq { show(conf, 0.1); burst(conf, 1.4); }
+  seq {
+    stagger(0.35) {
+      stagger(0.05) { for i in 0..6 { show(mr{i}, 0.25); } }
+      stagger(0.06) { for j in 0..5 { show(ml{j}, 0.25); } }
+      seq { stagger(0.04) { for i in 0..3 { show(mw{i}, 0.2); } } stagger(0.04) { for k in 0..5 { show(mn{k}, 0.2); } } show(mt, 0.2); }
+    }
+    stagger(0.3) { wordpop(ms1, 0.06); wordpop(ms2, 0.06); wordpop(ms3, 0.06); }
+  }
+}
+say(cap, "One area - three philosophies of slicing", 0.6);
+wait(2.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xUy-oAf9_-U" title="Three Ways to See an Integral — Riemann Sums to Area in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="disc-integration"><a class="header" href="#disc-integration">disc-integration</a></h2>
+<p>A flat 2D region spins up into a 3D solid of revolution: one living equation rewrites from the
+profile r=√z to the volume ∫πr² dz, a single strip lifts into a disc, and a live volume readout climbs.</p>
+<pre><code class="language-manic">title("Disc Integration");
+canvas(1000, 1000);
+template("black");
+
+// ================= HUD (2D always draws above the 3D world) =================
+text(head, (cx, 60), "Disc Integration"); display(head); cursor(head);
+text(t1, (cx, 122), "1. A region under a curve"); size(t1, 30); color(t1, gold); hidden(t1);
+text(t2, (cx, 122), "2. Spin it - every strip sweeps a disc"); size(t2, 30); color(t2, cyan); hidden(t2);
+text(t3, (cx, 122), "3. Stack the discs - integrate"); size(t3, 30); color(t3, magenta); hidden(t3);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+
+// one living equation: it rewrites its way from the curve to the volume
+equation(eqM, (cx, 190), `y=\sqrt{x}\quad(0\le x\le 4)`, 40); hidden(eqM);
+
+// live volume readout
+counter(vol, (w - 185, 300), 0, 2, "V = ", ""); hidden(vol);
+
+// ================= act 1 cast: the flat 2D region =================
+let gx = cx - 300;
+let gy = 520;
+let s2 = 140;
+
+arrow(xax2, (gx - 30, gy), (gx + 4*s2 + 50, gy)); untraced(xax2); stroke(xax2, 3); tag(xax2, d2);
+arrow(yax2, (gx, gy + 30), (gx, gy - 2.4*s2)); untraced(yax2); stroke(yax2, 3); tag(yax2, d2);
+text(x0b, (gx, gy + 26), "0"); size(x0b, 22); color(x0b, dim); hidden(x0b); tag(x0b, d2);
+text(x4b, (gx + 4*s2, gy + 26), "4"); size(x4b, 22); color(x4b, dim); hidden(x4b); tag(x4b, d2);
+
+plot(rplot, (gx, gy), s2, s2, "sqrt(x)", (0, 4));
+untraced(rplot); stroke(rplot, 4); gradient(rplot, blue, cyan, gold, 270); tag(rplot, d2);
+dot(rider, (gx, gy), 7); color(rider, gold); glow(rider, 8); hidden(rider); tag(rider, d2);
+area(ar2, rplot, 0, 0); color(ar2, cyan); opacity(ar2, 0.3); tag(ar2, d2);
+
+// the one strip we will follow into 3D (x = 2.25 - remember it)
+rect(strip, (gx + 2.25*s2, gy - sqrt(2.25)*s2/2), 66, sqrt(2.25)*s2);
+color(strip, cyan); opacity(strip, 0.75); hidden(strip); tag(strip, d2);
+
+// ================= act 2-3 cast: the 3D world (right-handed, Z-up) ==========
+camera3((8.2, -9.5, 5.0), (0, 0, 1.9), 42);
+axes3(ax3, (0, 0, 0), 4.6, 1); hidden(ax3);
+
+// the spin axis, called out explicitly
+line3(spinax, (0, 0, -0.3), (0, 0, 4.6)); thick(spinax, 0.015); color(spinax, dim); hidden(spinax);
+text(zlab, (cx, cy), "spin axis"); size(zlab, 22); color(zlab, dim); hidden(zlab);
+pin3(zlab, (0, 0, 4.55), (0, -16));
+
+// the profile curve, stood upright: r = sqrt(z)
+curve3(prof, "sqrt(t)", "0", "t", (0, 4)); untraced(prof); thick(prof, 0.04); color(prof, gold);
+
+// ghost of the swept surface: bright wireframe revolve
+revolve3(ghost, (0, 0, 0), "sqrt(t)", (0, 4), 64);
+finish3(ghost, "wire=1"); color(ghost, teal); opacity(ghost, 0.4); untraced(ghost);
+
+// 8 coarse discs (thin cylinders = many-sided prisms), declared low so they RISE
+for i in 0..8 {
+  let zc = (i + 0.5)*0.5;
+  prism3(dc{i}, (0, 0, zc - 0.45), 48, sqrt(zc), 0.48);
+  color(dc{i}, cyan); opacity(dc{i}, 0.85); tag(dc{i}, coarse3);
+}
+hidden(coarse3);
+
+// 20 fine discs
+for i in 0..20 {
+  let zc = (i + 0.5)*0.2;
+  prism3(df{i}, (0, 0, zc - 0.3), 48, sqrt(zc), 0.19);
+  color(df{i}, cyan); opacity(df{i}, 0.9); tag(df{i}, fine3);
+}
+hidden(fine3);
+
+// radius callout for the pulled-out disc (z = 2.25, r = 1.5, pulled to x + 3)
+arrow3(rarr, (3.0, 0, 2.62), (4.5, 0, 2.62)); thick(rarr, 0.03); color(rarr, gold); untraced(rarr);
+text(rlab, (cx, cy), `$r = \sqrt{z}$`); size(rlab, 26); color(rlab, gold); hidden(rlab);
+pin3(rlab, (3.75, 0, 2.62), (0, -30));
+
+// the exact solid, and the vase it will morph into ("any profile, same recipe")
+revolve3(solid, (0, 0, 0), "sqrt(t)", (0, 4), 64);
+finish3(solid, "shading=smooth depth=0.2 shadow=0.2"); color(solid, cyan); hidden(solid);
+revolve3(vase, (0, 0, 0), "1.1+0.55*sin(1.7*t-0.9)", (0, 4), 64); hidden(vase);
+morph3(solid, vase);
+
+// ================= timeline =================
+
+// ---- cold open
+type(head, 1.1);
+
+// ---- act 1: the flat region
+cue(whoosh);
+show(t1, 0.5);
+par { draw(xax2, 0.6); draw(yax2, 0.6); show(x0b, 0.6); show(x4b, 0.6); }
+show(rider, 0.2);
+par { draw(rplot, 1.4); travel(rider, rplot, 1.4, smooth); }
+fade(rider, 0.3);
+show(eqM, 0.6);
+say(cap, "Take the region under the curve...", 0.5);
+to(ar2, x, 4, 1.6, smooth);
+say(cap, "...and keep your eye on this one strip", 0.5);
+show(strip, 0.4);
+pulse(strip, 0.9);
+wait(0.8);
+
+// ---- the pivot: leave flatland
+say(cap, "Now stand the region upright - and SPIN it around the axis", 0.5);
+cue(whoosh);
+fade(d2, 0.8);
+show(t2, 0.5); fade(t1, 0.3);
+par { show(ax3, 0.8); show(spinax, 0.8); show(zlab, 0.8); }
+draw(prof, 1.2);
+flash(spinax, magenta);
+
+// THE MONEY SHOT: the profile curve physically sweeps 360 degrees
+// around the axis while the wireframe surface traces on beneath it
+par {
+  turn3(prof, (0, 0, 2), z, 360, 2.6, smooth);
+  draw(ghost, 2.6);
+  orbit3(-20, 18, 12.0, 2.6, smooth);
+}
+cue(tick);
+rewrite(eqM, `dV \;=\; \pi\,\textcolor{cyan}{r^2}\,dz`, 0.9);
+say(cap, "Every strip of area sweeps a thin DISC of volume", 0.5);
+
+// ---- act 3: the disc stack rises
+show(t3, 0.5); fade(t2, 0.3);
+stagger(0.09) { for i in 0..8 { par { show(dc{i}, 0.3); shift3(dc{i}, (0, 0, 0.45), 0.4, out); } } }
+wait(0.4);
+
+// pull ONE disc out of the stack - the same strip from act 1
+say(cap, "That same strip from before - now a cylinder: radius sqrt(z), thickness dz", 0.5);
+cue(pop);
+shift3(dc4, (3.0, 0, 0), 0.9, smooth);
+par { draw(rarr, 0.5); show(rlab, 0.5); }
+wait(1.2);
+par { fade(rarr, 0.4); fade(rlab, 0.4); shift3(dc4, (-3.0, 0, 0), 0.9, smooth); }
+cue(tick);
+rewrite(eqM, `V \;\approx\; \sum_i \pi\,r(z_i)^2\,\Delta z`, 0.9);
+wait(0.8);
+
+// refine: thinner discs, camera drifts around the stack
+say(cap, "Slice thinner - the stack hugs the surface", 0.5);
+par {
+  fade(coarse3, 0.6);
+  stagger(0.04) { for i in 0..20 { show(df{i}, 0.22); } }
+  orbit3(35, 24, 11.0, 2.2, smooth);
+}
+cue(tick);
+rewrite(eqM, `V \;=\; \pi\!\int_0^{4}(\sqrt{z}\,)^2\,dz \;=\; \pi\!\int_0^{4} z\,dz`, 0.9);
+wait(0.8);
+
+// the limit: discs dissolve into the exact smooth solid, the number climbs
+say(cap, "In the limit: the exact solid of revolution", 0.5);
+show(vol, 0.3);
+par { fade(fine3, 1.2); fade(ghost, 1.2); show(solid, 1.4); to(vol, value, 25.13, 2.2); }
+flash(vol, gold);
+cue(tick);
+rewrite(eqM, `V \;=\; \pi\cdot\tfrac{16}{2} \;=\; 8\pi \;\approx\; 25.13`, 0.9);
+par { orbit3(90, 20, 10.5, 2.6, smooth); }
+wait(0.6);
+
+// ---- flourish: ANY profile, same recipe - the solid becomes a vase
+say(cap, "Any profile, same recipe - just change r(z)", 0.5);
+cue(whoosh);
+par {
+  to(solid, morph, 1, 2.6, smooth);
+  fade(vol, 0.8);
+  rewrite(eqM, `V \;=\; \pi\int_a^b r(z)^2\,dz`, 1.2);
+  orbit3(160, 16, 10.5, 2.6, smooth);
+}
+cue(chime);
+par {
+  breathe(eqM, 3, 0.05, 0, 6);
+  orbit3(200, 14, 11.0, 6, smooth);
+}
+say(cap, "Area swept in a circle - volume, one disc at a time", 0.6);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/lQOizsntsvw" title="Disc Integration — a Region Becomes a Solid of Revolution in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="reactive-integral"><a class="header" href="#reactive-integral">reactive-integral</a></h2>
 <p>The reactive-math gold example: integration by parts stays one continuous equation,
@@ -12865,6 +13649,105 @@ show(bp.outliers, 0.4); pulse(bp.outliers);
 wait(1.9);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/RstqImgruIU" title="Box-and-Whisker Plots & Outliers, Explained — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="boxplot-wave"><a class="header" href="#boxplot-wave">boxplot-wave</a></h2>
+<p>Reading a box plot, on a labelled chart: eight months of daily-rainfall box plots JUMP up from below into
+their true medians (building the seasonal wave), a dashed trend line draws through them, then manic signs off.</p>
+<pre><code class="language-manic">// boxplot-wave — reading a box plot: the seasonal rainfall wave, built by jumps.
+//
+// Eight months of daily-rainfall box plots. They start below the frame and JUMP
+// up (springy `shift`) into their true medians on the mm axis — staggered, so the
+// seasonal wave assembles month by month. A dashed trend line then draws through
+// the medians, and the manic wordmark signs off. Educational (labelled axes, a
+// real seasonal pattern, how to read a box plot) and lively.
+//
+//   manic examples/boxplot-wave.manic
+title("Monthly rainfall through the year");
+canvas(1600, 1000);
+template("paper");
+
+let ybase = 850;   // y of 0 mm
+let sc    = 9;      // pixels per mm
+let start = 1060;   // off-screen below: the boxes launch from here
+
+// headings
+text(hdr, (830, 66), "Monthly rainfall through the year");
+size(hdr, 40); color(hdr, #222222);
+text(sub, (830, 112), "each box = a month of daily rainfall  ·  line = median, box = middle 50% (IQR), whiskers = range, dot = a storm");
+size(sub, 21); color(sub, #7f8aa3);
+
+// ---- y axis (rainfall, mm) ----
+line(yax, (200, 300), (200, ybase)); stroke(yax, 2.5); color(yax, #444444);
+for k in 0..4 {
+  let mm = k * 20;
+  let yv = ybase - mm * sc;
+  line(ytk{k}, (192, yv), (208, yv)); stroke(ytk{k}, 2); color(ytk{k}, #444444);
+  counter(ytl{k}, (160, yv), mm, 0); size(ytl{k}, 22); color(ytl{k}, #555555);
+}
+text(ytit, (205, 270), "mm"); size(ytit, 22); color(ytit, #7f8aa3);
+
+// ---- x axis (month) ----
+line(xax, (220, ybase), (1470, ybase)); stroke(xax, 2.5); color(xax, #444444);
+text(xtit, (845, 958), "month"); size(xtit, 24); color(xtit, #7f8aa3);
+
+// ---- the eight monthly box plots, created OFF-SCREEN BELOW (they jump up) ----
+boxplot(m0, (290,  start), "0 1 2 3 4 5 8",            72);
+boxplot(m1, (450,  start), "1 3 4 5 6 8 11",           72);
+boxplot(m2, (610,  start), "5 8 10 12 14 18 24",       72);
+boxplot(m3, (770,  start), "14 20 26 30 34 40 52",     72);
+boxplot(m4, (930,  start), "18 26 30 35 39 46 60 82",  72);
+boxplot(m5, (1090, start), "10 16 20 22 25 30 40",     72);
+boxplot(m6, (1250, start), "4 7 9 11 13 17 24",        72);
+boxplot(m7, (1410, start), "0 2 3 4 5 7 10",           72);
+
+// month labels
+text(x0, (290, 900), "Jan"); text(x1, (450, 900), "Feb"); text(x2, (610, 900), "Apr");
+text(x3, (770, 900), "Jun"); text(x4, (930, 900), "Jul"); text(x5, (1090, 900), "Sep");
+text(x6, (1250, 900), "Oct"); text(x7, (1410, 900), "Dec");
+size(x0, 22); size(x1, 22); size(x2, 22); size(x3, 22); size(x4, 22); size(x5, 22); size(x6, 22); size(x7, 22);
+color(x0, #555555); color(x1, #555555); color(x2, #555555); color(x3, #555555);
+color(x4, #555555); color(x5, #555555); color(x6, #555555); color(x7, #555555);
+
+// hide each plot's own number labels — the shared axis carries the values now
+hidden(m0.iqr); hidden(m0.lmin); hidden(m0.lmed); hidden(m0.lmax); hidden(m0.lq1); hidden(m0.lq3);
+hidden(m1.iqr); hidden(m1.lmin); hidden(m1.lmed); hidden(m1.lmax); hidden(m1.lq1); hidden(m1.lq3);
+hidden(m2.iqr); hidden(m2.lmin); hidden(m2.lmed); hidden(m2.lmax); hidden(m2.lq1); hidden(m2.lq3);
+hidden(m3.iqr); hidden(m3.lmin); hidden(m3.lmed); hidden(m3.lmax); hidden(m3.lq1); hidden(m3.lq3);
+hidden(m4.iqr); hidden(m4.lmin); hidden(m4.lmed); hidden(m4.lmax); hidden(m4.lq1); hidden(m4.lq3);
+hidden(m5.iqr); hidden(m5.lmin); hidden(m5.lmed); hidden(m5.lmax); hidden(m5.lq1); hidden(m5.lq3);
+hidden(m6.iqr); hidden(m6.lmin); hidden(m6.lmed); hidden(m6.lmax); hidden(m6.lq1); hidden(m6.lq3);
+hidden(m7.iqr); hidden(m7.lmin); hidden(m7.lmed); hidden(m7.lmax); hidden(m7.lq1); hidden(m7.lq3);
+
+// the trend line through the medians (drawn in after the boxes land)
+line(t0, (290,  ybase-3*sc),  (450,  ybase-5*sc));  tag(t0, trend);
+line(t1, (450,  ybase-5*sc),  (610,  ybase-12*sc)); tag(t1, trend);
+line(t2, (610,  ybase-12*sc), (770,  ybase-30*sc)); tag(t2, trend);
+line(t3, (770,  ybase-30*sc), (930,  ybase-35*sc)); tag(t3, trend);
+line(t4, (930,  ybase-35*sc), (1090, ybase-22*sc)); tag(t4, trend);
+line(t5, (1090, ybase-22*sc), (1250, ybase-11*sc)); tag(t5, trend);
+line(t6, (1250, ybase-11*sc), (1410, ybase-4*sc));  tag(t6, trend);
+stroke(trend, 2.5); color(trend, #ff2d95); dashed(trend); untraced(trend);
+
+// the wordmark, waiting for the sign-off
+text(word, (1400, 210), "manic"); size(word, 46); color(word, #ff2d95); hidden(word);
+
+// ---- the show ----
+// 1) each month JUMPS up into place (springy), building the seasonal wave
+stagger(0.26) {
+  shift(m0, (0, -(start - (ybase - 3  * sc))), 1.3, overshoot);
+  shift(m1, (0, -(start - (ybase - 5  * sc))), 1.3, overshoot);
+  shift(m2, (0, -(start - (ybase - 12 * sc))), 1.3, overshoot);
+  shift(m3, (0, -(start - (ybase - 30 * sc))), 1.3, overshoot);
+  shift(m4, (0, -(start - (ybase - 35 * sc))), 1.3, overshoot);
+  shift(m5, (0, -(start - (ybase - 22 * sc))), 1.3, overshoot);
+  shift(m6, (0, -(start - (ybase - 11 * sc))), 1.3, overshoot);
+  shift(m7, (0, -(start - (ybase - 4  * sc))), 1.3, overshoot);
+}
+// 2) draw the seasonal trend, then 3) sign off
+draw(trend, 2.5);
+show(word, 0.9); pulse(word);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/dg93jhkzIeg" title="Box Plots Bumping in a Wave — the manic stats kit" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="skew"><a class="header" href="#skew">skew</a></h2>
 <p>Which way does the tail point? A histogram with the mean and median marked and a
@@ -20841,6 +21724,192 @@ par {
 }
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/1yFFSPdSH7Q" title="A Radial Wheel from One Loop — Generative Motion in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="wheel-square"><a class="header" href="#wheel-square">wheel-square</a></h2>
+<p>The square sibling of wheel-radial on black — hollow SQUARES on a square. It starts DEAD STILL (the
+travelling breath-wave fakes rotation), then after ~6s really spins counter-clockwise; sized to stay in-frame when spun.</p>
+<pre><code class="language-manic">// wheel-square — the square sibling of wheel-radial: a breathing burst whose rings
+// sit on a SQUARE, on black.
+//
+// The reveal: it starts DEAD STILL — only the rings breathe, and because each ring's
+// phase = its position, the size-wave travels and FAKES a rotation though nothing
+// moves. After ~6s the trick is dropped and the whole burst actually spins
+// COUNTER-CLOCKWISE (steady -&gt; fast -&gt; slow), the wordmark cycling colour.
+//
+// Each spoke's tip is projected onto a square instead of a circle: a ray at angle
+// `ang` hits a square of half-width R at distance R / max(|cos|,|sin|).
+//
+//   manic examples/wheel-square.manic
+canvas(1080, 1080);
+template("mono");
+
+let n     = 64;
+let cx    = 540;
+let cy    = 540;
+let rin   = 195;      // inner square half-width
+let len    = 145;      // spoke length -&gt; outer square half-width = rin + len
+let pi     = 3.14159265;
+let lobes   = 5;
+// sized so the corners (at rout*sqrt(2)) stay inside the frame even when spun
+
+// 1) the frame: spokes + hollow SQUARES on a square, tagged `wheel` so `turn` spins them
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let c  = cos(ang);
+  let s  = sin(ang);
+  let ca = abs(c);
+  let sa = abs(s);
+  let m  = 0.5 * (ca + sa + abs(ca - sa));   // = max(|cos|,|sin|): ray -&gt; square edge
+  let ix = cx + (rin / m) * c;
+  let iy = cy + (rin / m) * s;
+  let ox = cx + ((rin + len) / m) * c;
+  let oy = cy + ((rin + len) / m) * s;
+
+  line(spoke{i}, (ix, iy), (ox, oy));
+  stroke(spoke{i}, 1.2);
+  color(spoke{i}, #55607a);
+  tag(spoke{i}, wheel);
+  tag(spoke{i}, spokes);
+
+  rect(cin{i}, (ix, iy), 9, 9);
+  stroke(cin{i}, 2);
+  color(cin{i}, #000000);        // hollow: fill matches the black background
+  tag(cin{i}, wheel);
+
+  rect(cout{i}, (ox, oy), 22, 22);
+  stroke(cout{i}, 2.5);
+  color(cout{i}, #000000);
+  tag(cout{i}, wheel);
+}
+
+// the centre hub stays still, with the wordmark inside it (a square frame too)
+rect(hub, (cx, cy), 300, 300);
+stroke(hub, 2.5);
+color(hub, #000000);
+text(word, (cx, cy), "manic");
+size(word, 66);
+color(word, #ff2d95);
+
+par {
+  // rings breathe the WHOLE time, phase = position -&gt; the wave travels
+  for i in 0..n {
+    let ph = lobes * i / n;
+    breathe(cin{i},  2.4, 0.85, ph, 24);
+    breathe(cout{i}, 2.4, 0.92, ph, 24);
+  }
+  // hold still for the illusion, THEN spin COUNTER-CLOCKWISE: steady -&gt; fast -&gt; slow
+  seq {
+    wait(6);                                   // just the breathing fakes rotation
+    turn(wheel, (cx, cy), -100, 6, linear);    // now it really turns: steady
+    turn(wheel, (cx, cy), -320, 4, in);         // accelerate -&gt; fast
+    turn(wheel, (cx, cy), -150, 8, out);        // decelerate -&gt; slow stop
+  }
+  // the wordmark cycles through the palette once the spin begins
+  seq {
+    wait(6);  recolor(word, #00e6ff, 1.2);  recolor(spokes, #00e6ff, 1.6);
+    wait(5);  recolor(word, #7cff6b, 1.2);
+    wait(4);  recolor(word, #ffd166, 1.2);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/82HG5Uxec-s" title="A Breathing Square Burst, Spinning Counter-Clockwise — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="wheel-duo"><a class="header" href="#wheel-duo">wheel-duo</a></h2>
+<p>Four breathing bursts in a 2x2 on black with HUE’d rainbow spokes, spinning forever: circle &amp; square
+rigid (top), and circle &amp; square counter-spinning (bottom) — the rainbow <code>link</code>s twist into a spirograph eye.</p>
+<pre><code class="language-manic">// wheel-duo — four breathing bursts in a 2x2 grid on black, spinning forever.
+//
+//   top row    : normal spin (inner+outer together) — circle | square
+//   bottom row : COUNTER-spin (outer clockwise, inner counter-clockwise) — circle | square
+//
+// The spokes are `link`s that follow their two dots, so counter-rotation twists them
+// into a spirograph "eye". Each spoke is HUE'd by its angle -&gt; a rainbow wheel; the
+// continuous rotation carries the rainbow around and never stops. Every burst
+// breathes, holds still (the breath-wave fakes rotation), then keeps spinning.
+//
+//   manic examples/wheel-duo.manic
+canvas(1600, 1600);
+template("black");
+
+let n     = 44;
+let rin   = 125;
+let len    = 85;       // outer = rin + len = 210
+let pi     = 3.14159265;
+let lobes   = 4;
+
+// ---- A: circle, top-left (normal spin) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let ix = 440 + rin * cos(ang);        let iy = 440 + rin * sin(ang);
+  let ox = 440 + (rin + len) * cos(ang); let oy = 440 + (rin + len) * sin(ang);
+  circle(a_ci{i}, (ix, iy), 5);  stroke(a_ci{i}, 1.8); color(a_ci{i}, #000000); tag(a_ci{i}, a_all);
+  circle(a_co{i}, (ox, oy), 10); stroke(a_co{i}, 2.2); color(a_co{i}, #000000); tag(a_co{i}, a_all);
+  link(a_sp{i}, a_ci{i}, a_co{i}); hue(a_sp{i}, 360 * i / n); stroke(a_sp{i}, 1.3);
+}
+
+// ---- B: square, top-right (normal spin) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let c = cos(ang); let s = sin(ang);
+  let m = 0.5 * (abs(c) + abs(s) + abs(abs(c) - abs(s)));   // max(|cos|,|sin|)
+  let ix = 1160 + (rin / m) * c;        let iy = 440 + (rin / m) * s;
+  let ox = 1160 + ((rin + len) / m) * c; let oy = 440 + ((rin + len) / m) * s;
+  rect(b_ci{i}, (ix, iy), 9, 9);   stroke(b_ci{i}, 1.8); color(b_ci{i}, #000000); tag(b_ci{i}, b_all);
+  rect(b_co{i}, (ox, oy), 19, 19); stroke(b_co{i}, 2.2); color(b_co{i}, #000000); tag(b_co{i}, b_all);
+  link(b_sp{i}, b_ci{i}, b_co{i}); hue(b_sp{i}, 360 * i / n); stroke(b_sp{i}, 1.3);
+}
+
+// ---- C: circle, bottom-left (COUNTER: outer cw, inner ccw) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let ix = 440 + rin * cos(ang);        let iy = 1160 + rin * sin(ang);
+  let ox = 440 + (rin + len) * cos(ang); let oy = 1160 + (rin + len) * sin(ang);
+  circle(c_ci{i}, (ix, iy), 5);  stroke(c_ci{i}, 1.8); color(c_ci{i}, #000000); tag(c_ci{i}, c_in);
+  circle(c_co{i}, (ox, oy), 10); stroke(c_co{i}, 2.2); color(c_co{i}, #000000); tag(c_co{i}, c_out);
+  link(c_sp{i}, c_ci{i}, c_co{i}); hue(c_sp{i}, 360 * i / n); stroke(c_sp{i}, 1.3);
+}
+
+// ---- D: square, bottom-right (COUNTER: outer cw, inner ccw) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let c = cos(ang); let s = sin(ang);
+  let m = 0.5 * (abs(c) + abs(s) + abs(abs(c) - abs(s)));
+  let ix = 1160 + (rin / m) * c;        let iy = 1160 + (rin / m) * s;
+  let ox = 1160 + ((rin + len) / m) * c; let oy = 1160 + ((rin + len) / m) * s;
+  rect(d_ci{i}, (ix, iy), 9, 9);   stroke(d_ci{i}, 1.8); color(d_ci{i}, #000000); tag(d_ci{i}, d_in);
+  rect(d_co{i}, (ox, oy), 19, 19); stroke(d_co{i}, 2.2); color(d_co{i}, #000000); tag(d_co{i}, d_out);
+  link(d_sp{i}, d_ci{i}, d_co{i}); hue(d_sp{i}, 360 * i / n); stroke(d_sp{i}, 1.3);
+}
+
+// labels + centre title
+text(title, (800, 800), "manic"); size(title, 62); color(title, #ff2d95);
+text(la, (440, 720),  "circle");         size(la, 26); color(la, #7f8aa3);
+text(lb, (1160, 720), "square");         size(lb, 26); color(lb, #7f8aa3);
+text(lc, (440, 1500),  "circle counter"); size(lc, 26); color(lc, #7f8aa3);
+text(ld, (1160, 1500), "square counter"); size(ld, 26); color(ld, #7f8aa3);
+
+par {
+  // all four bursts breathe the whole time
+  for i in 0..n {
+    let ph = lobes * i / n;
+    breathe(a_ci{i}, 2.4, 0.85, ph, 38); breathe(a_co{i}, 2.4, 0.92, ph, 38);
+    breathe(b_ci{i}, 2.4, 0.85, ph, 38); breathe(b_co{i}, 2.4, 0.92, ph, 38);
+    breathe(c_ci{i}, 2.4, 0.85, ph, 38); breathe(c_co{i}, 2.4, 0.92, ph, 38);
+    breathe(d_ci{i}, 2.4, 0.85, ph, 38); breathe(d_co{i}, 2.4, 0.92, ph, 38);
+  }
+
+  // hold still, ease in, then spin CONTINUOUSLY (never stops). top: rigid; bottom: counter.
+  seq { wait(5); turn(a_all, (440, 440),   90, 3, in); turn(a_all, (440, 440),   1800, 30, linear); }
+  seq { wait(5); turn(b_all, (1160, 440), -90, 3, in); turn(b_all, (1160, 440), -1800, 30, linear); }
+
+  seq { wait(5); turn(c_out, (440, 1160),  90, 3, in); turn(c_out, (440, 1160),  1800, 30, linear); }
+  seq { wait(5); turn(c_in,  (440, 1160), -90, 3, in); turn(c_in,  (440, 1160), -1800, 30, linear); }
+
+  seq { wait(5); turn(d_out, (1160, 1160),  90, 3, in); turn(d_out, (1160, 1160),  1800, 30, linear); }
+  seq { wait(5); turn(d_in,  (1160, 1160), -90, 3, in); turn(d_in,  (1160, 1160), -1800, 30, linear); }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/mvBLjOtmw74" title="Radial vs Square — Two Breathing Bursts Side by Side in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="lsystem-asymptote-curves"><a class="header" href="#lsystem-asymptote-curves">lsystem-asymptote-curves</a></h2>
 <p>Four canonical Asymptote rewriting systems become fitted, continuously drawable Manic

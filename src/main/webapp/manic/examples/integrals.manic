@@ -1,0 +1,271 @@
+title("Ways to Integrate");
+canvas(1000, 1000);
+template("black");
+
+// ---------- layout constants ----------
+let gx = cx - 340;   // graph origin (math x = 0)
+let gy = h - 160;    // graph baseline (math y = 0)
+let sx = 170;        // px per x-unit
+let sy = 100;        // px per y-unit
+
+// ---------- HUD: headings & captions (sticky = survive camera moves) ----------
+text(head, (cx, 60), "Ways to Integrate"); display(head); cursor(head); sticky(head);
+text(t1, (cx, 122), "1. Riemann - slice the domain"); size(t1, 30); color(t1, cyan); hidden(t1); sticky(t1);
+text(t2, (cx, 122), "2. Lebesgue - slice the range"); size(t2, 30); color(t2, gold); hidden(t2); sticky(t2);
+text(t3, (cx, 122), "3. Henstock-Kurzweil - slice with a gauge"); size(t3, 30); color(t3, magenta); hidden(t3); sticky(t3);
+
+caption(in1, "Riemann - vertical strips of equal width", (cx, cy - 70), 32, cyan); hidden(in1);
+caption(in2, "Lebesgue - horizontal layers weighed by measure", (cx, cy), 32, gold); hidden(in2);
+caption(in3, "Henstock-Kurzweil - strip widths set by a gauge", (cx, cy + 70), 32, magenta); hidden(in3);
+
+text(cap, (cx, h - 42), ""); size(cap, 26); sticky(cap);
+
+// ---------- act wipes: glowing verticals that sweep the frame between acts ----------
+line(wipe1, (-40, 140), (-40, h - 90)); stroke(wipe1, 4); color(wipe1, gold); glow(wipe1, 14);
+line(wipe2, (-40, 140), (-40, h - 90)); stroke(wipe2, 4); color(wipe2, magenta); glow(wipe2, 14);
+line(wipe3, (-40, 140), (-40, h - 90)); stroke(wipe3, 4); glow(wipe3, 14);
+
+// ---------- axes ----------
+arrow(xax, (gx - 30, gy), (gx + 4*sx + 50, gy)); untraced(xax); stroke(xax, 3);
+arrow(yax, (gx, gy + 30), (gx, 175)); untraced(yax); stroke(yax, 3);
+text(xl0, (gx, gy + 26), "0"); size(xl0, 22); color(xl0, dim); hidden(xl0);
+text(xl4, (gx + 4*sx, gy + 26), "4"); size(xl4, 22); color(xl4, dim); hidden(xl4);
+
+// ---------- the smooth bump (acts 1 & 2) ----------
+plot(fplot, (gx, gy), sx, sy, "3*exp(-((x-2)^2))", (0, 4));
+untraced(fplot); stroke(fplot, 4); gradient(fplot, blue, cyan, gold, 270);
+dot(rider, (gx, gy), 7); color(rider, gold); glow(rider, 8); hidden(rider);
+
+// Riemann: 8 coarse strips (declared 26px low, they RISE into place)
+// + the SAMPLE DOTS f(x_i*) riding the curve top - the star of the definition
+for i in 0..8 {
+  let xm = (i + 0.5)*0.5;
+  let hgt = 3*exp(-((xm - 2)^2));
+  rect(rc{i}, (gx + xm*sx, gy - hgt*sy/2 + 26), 0.5*sx - 3, hgt*sy);
+  color(rc{i}, cyan); opacity(rc{i}, 0.55); tag(rc{i}, coarse);
+  dot(sm{i}, (gx + xm*sx, gy - hgt*sy), 5);
+  color(sm{i}, cyan); glow(sm{i}, 6); tag(sm{i}, samples);
+}
+hidden(coarse); hidden(samples);
+
+// Riemann: 32 fine strips
+for i in 0..32 {
+  let xm = (i + 0.5)*0.125;
+  let hgt = 3*exp(-((xm - 2)^2));
+  rect(rf{i}, (gx + xm*sx, gy - hgt*sy/2), 0.125*sx - 2, hgt*sy);
+  color(rf{i}, cyan); opacity(rf{i}, 0.7); tag(rf{i}, fine);
+}
+hidden(fine);
+
+// the limit: swept exact area + live integral readout
+area(ar, fplot, 0, 0); color(ar, cyan); opacity(ar, 0.35);
+integral(intg, fplot, 0, 0, (gx + 4*sx - 40, 265)); hidden(intg);
+
+// the pivot strip: one vertical slice that ROTATES into a horizontal one
+rect(pv, (gx + 2*sx, gy - 1.5*sy), 42, 3*sy); color(pv, cyan); opacity(pv, 0.7); hidden(pv);
+
+// Lebesgue: 10 horizontal layers (declared offset sideways, they SLIDE in alternating)
+for j in 0..10 {
+  let ym = (j + 0.5)*0.3;
+  let hf = sqrt(ln(3/ym));
+  let jm = j - 2*floor(j/2);
+  let xoff = 180*jm - 90;
+  rect(ls{j}, (gx + 2*sx - xoff, gy - ym*sy), 2*hf*sx, 0.3*sy - 2);
+  color(ls{j}, gold); opacity(ls{j}, 0.55); tag(ls{j}, layers);
+}
+hidden(layers);
+// the level scanner: a dashed line that sweeps UP through the layers
+line(lev, (gx, gy - 0.15*sy), (gx + 4*sx, gy - 0.15*sy));
+dashed(lev); color(lev, gold); stroke(lev, 2); hidden(lev);
+
+// ---------- the spiky function (act 3) ----------
+plot(gplot, (gx, gy), sx, sy, "1.1+1.7*exp(-40*((x-3)^2))", (0, 4));
+untraced(gplot); stroke(gplot, 4); gradient(gplot, teal, magenta, 270);
+dot(rider2, (gx, gy), 7); color(rider2, magenta); glow(rider2, 8); hidden(rider2);
+
+// the gauge ITSELF, drawn as a real function: delta(x) dips where f spikes
+plot(dplot, (gx, gy), sx, 60, "0.55-0.45*exp(-20*((x-3)^2))", (0, 4));
+untraced(dplot); dashed(dplot); stroke(dplot, 2); color(dplot, magenta); opacity(dplot, 0.7);
+text(dlab, (gx + 4*sx + 34, gy - 33), `$\delta(x)$`); size(dlab, 24); color(dlab, magenta); hidden(dlab);
+
+// uniform cells first (they rise in) - two of them will FAIL at the spike
+for i in 0..8 {
+  let xm = (i + 0.5)*0.5;
+  let hgt = 1.1 + 1.7*exp(-40*((xm - 3)^2));
+  rect(hku{i}, (gx + xm*sx, gy - hgt*sy/2 + 26), 0.5*sx - 3, hgt*sy);
+  color(hku{i}, teal); opacity(hku{i}, 0.5); tag(hku{i}, hk);
+}
+hidden(hk);
+
+// gauge-fine cells + their TAG POINTS t_i pinned on the curve
+for i in 0..10 {
+  let xm = 2.5 + (i + 0.5)*0.1;
+  let hgt = 1.1 + 1.7*exp(-40*((xm - 3)^2));
+  rect(nk{i}, (gx + xm*sx, gy - hgt*sy/2), 0.1*sx - 2, hgt*sy);
+  color(nk{i}, magenta); opacity(nk{i}, 0.75); tag(nk{i}, gauge); tag(nk{i}, hk);
+  dot(tg{i}, (gx + xm*sx, gy - hgt*sy), 3);
+  color(tg{i}, magenta); glow(tg{i}, 5); tag(tg{i}, tgd);
+}
+hidden(gauge); hidden(tgd);
+bracelabel(bnar, (gx + 2.5*sx, gy + 16), (gx + 3.5*sx, gy + 16), `gauge $\delta(x)$ shrinks here`, 14);
+color(bnar, magenta); hidden(bnar);
+
+// ---------- equations (each one LIVES: it rewrites, then turns to dust) ----------
+equation(eqR, (cx, 190), `S_{8} \;=\; \sum_{i=1}^{8} f(x_i^{*})\,\textcolor{cyan}{\Delta x}`, 40); hidden(eqR); sticky(eqR);
+equation(eqL, (cx, 190), `\text{layer}_j \;=\; \textcolor{gold}{\mu\{\,f > t_j\,\}}\cdot\Delta t`, 40); hidden(eqL); sticky(eqL);
+equation(eqH, (cx, 190), `\sum_i f(\textcolor{magenta}{t_i})\,\Delta x_i`, 38); hidden(eqH); sticky(eqH);
+equation(eqS, (cx, 250), `\textcolor{cyan}{\text{Riemann}} \;\subsetneq\; \textcolor{gold}{\text{Lebesgue}} \;\subsetneq\; \textcolor{magenta}{\text{Henstock-Kurzweil}}`, 44); hidden(eqS); sticky(eqS); z(eqS, 10);
+
+// ---------- finale confetti + triptych reprise of the three motifs ----------
+circle(confbox, (cx, 290), 90); hidden(confbox);
+particles(conf, confbox, 24, 4, 11, "ring"); color(conf, gold); hidden(conf);
+
+let mxr = cx - 380;
+let mxh = cx + 380;
+let myb = 490;
+// mini Riemann: a tiny staircase of vertical strips
+for i in 0..6 {
+  let xm = (i + 0.5)/3;
+  let hgt = 76*exp(-2*((xm - 1)^2));
+  rect(mr{i}, (mxr - 110 + xm*110, myb - hgt/2), 34, hgt);
+  color(mr{i}, cyan); opacity(mr{i}, 0.6); tag(mr{i}, minir);
+}
+// mini Lebesgue: a tiny layer cake
+for j in 0..5 {
+  let wd = 200 - 34*j;
+  rect(ml{j}, (cx, myb - 9 - j*17), wd, 14);
+  color(ml{j}, gold); opacity(ml{j}, 0.6); tag(ml{j}, minil);
+}
+// mini Henstock-Kurzweil: coarse cells, then a burst of fine ones at the spike
+for i in 0..3 {
+  rect(mw{i}, (mxh - 90 + i*42, myb - 19), 40, 38);
+  color(mw{i}, teal); opacity(mw{i}, 0.6); tag(mw{i}, minih);
+}
+for k in 0..5 {
+  let hgt = 38 + 52*exp(-0.7*((k - 2)^2));
+  rect(mn{k}, (mxh + 10 + (k + 0.5)*11, myb - hgt/2), 9, hgt);
+  color(mn{k}, magenta); opacity(mn{k}, 0.75); tag(mn{k}, minih);
+}
+rect(mt, (mxh + 88, myb - 19), 40, 38); color(mt, teal); opacity(mt, 0.6); tag(mt, minih);
+hidden(minir); hidden(minil); hidden(minih);
+
+caption(ms1, "slice the domain", (mxr, 560), 26, cyan); hidden(ms1);
+caption(ms2, "slice the range", (cx, 560), 26, gold); hidden(ms2);
+caption(ms3, "slice by a gauge", (mxh, 560), 26, magenta); hidden(ms3);
+
+// ================= timeline =================
+
+// ---- cold open: title types on, the three names POP word by word
+type(head, 1.2);
+stagger(0.5) { wordpop(in1, 0.05); wordpop(in2, 0.05); wordpop(in3, 0.05); }
+wait(1.2);
+par { fade(in1, 0.4); fade(in2, 0.4); fade(in3, 0.4); }
+
+// ---- act 1: RIEMANN ----------------------------------------------------
+cue(whoosh);
+show(t1, 0.5);
+par { draw(xax, 0.6); draw(yax, 0.6); show(xl0, 0.6); show(xl4, 0.6); }
+show(rider, 0.2);
+par { draw(fplot, 1.5); travel(rider, fplot, 1.5, smooth); }
+fade(rider, 0.3);
+say(cap, "Slice the domain into equal strips; each SAMPLE DOT sets its strip's height", 0.5);
+stagger(0.08) { for i in 0..8 { par { show(rc{i}, 0.3); shift(rc{i}, (0, -26), 0.4, out); show(sm{i}, 0.3); } } }
+show(eqR, 0.6);
+wait(1.2);
+
+// push IN while the strips refine, equation rewrites underneath
+say(cap, "Refine: quadruple the strips - the staircase hugs the curve", 0.5);
+par { cam((cx, gy - 1.2*sy), 1.1, smooth); zoom(1.45, 1.1, smooth); }
+par { fade(coarse, 0.5); fade(samples, 0.5); stagger(0.02) { for i in 0..32 { show(rf{i}, 0.22); } } }
+cue(tick);
+rewrite(eqR, `S_{32} \;=\; \sum_{i=1}^{32} f(x_i^{*})\,\textcolor{cyan}{\Delta x}`, 0.8);
+wait(0.9);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// the limit: strips dissolve into the EXACT swept area, the number climbs
+cue(tick);
+rewrite(eqR, `\int_0^{4} f\,dx \;=\; \lim_{n\to\infty} S_n`, 0.9);
+say(cap, "In the limit, the sum becomes the exact area", 0.5);
+show(intg, 0.3);
+par { fade(fine, 1.2); to(ar, x, 4, 2.2, smooth); to(intg, x, 4, 2.2, smooth); }
+flash(intg, gold);
+wait(1.0);
+par { shift(wipe1, (w + 80, 0), 0.7, linear); fade(ar, 0.5); fade(intg, 0.5); disintegrate(eqR, 0.8); fade(t1, 0.5); }
+
+// ---- act 2: LEBESGUE ---------------------------------------------------
+cue(whoosh);
+show(t2, 0.5);
+say(cap, "Turn the slicing sideways: cut the range, not the domain", 0.5);
+show(pv, 0.3);
+par { rotate(pv, 90, 0.9, smooth); recolor(pv, gold, 0.9); }
+fade(pv, 0.4);
+show(eqL, 0.6);
+show(lev, 0.3);
+par {
+  stagger(0.1) { for j in 0..10 { par { show(ls{j}, 0.35); shift(ls{j}, (180*(j - 2*floor(j/2)) - 90, 0), 0.5, out); } } }
+  shift(lev, (0, -2.7*sy), 1.9, smooth);
+  zoom(1.06, 2.2, smooth);
+}
+// the stack breathes: a travelling wave rolls up through the layers
+par { for j in 0..10 { oscillate(ls{j}, y, 2.4, 3, j/10, 3.2); } pulse(ls4, 0.9); }
+say(cap, "A layer at height t sits over the set where f > t; its width is that set's measure", 0.5);
+cue(tick);
+rewrite(eqL, `\int f\,d\mu \;=\; \int_0^{\infty}\textcolor{gold}{\mu\{\,f > t\,\}}\,dt`, 0.9);
+wait(1.2);
+fade(lev, 0.4);
+par { shift(wipe2, (w + 80, 0), 0.7, linear); fade(layers, 0.5); disintegrate(eqL, 0.8); fade(t2, 0.5); fade(fplot, 0.5); zoom(1, 0.8, smooth); }
+
+// ---- act 3: HENSTOCK-KURZWEIL ------------------------------------------
+cue(whoosh);
+show(t3, 0.5);
+show(rider2, 0.2);
+par { draw(gplot, 1.4); travel(rider2, gplot, 1.4, smooth); }
+fade(rider2, 0.3);
+say(cap, "New function, old recipe: equal strips again...", 0.5);
+stagger(0.07) { for i in 0..8 { par { show(hku{i}, 0.3); shift(hku{i}, (0, -26), 0.4, out); } } }
+show(eqH, 0.6);
+wait(0.5);
+
+// push in on the spike: the uniform cells FAIL, flash red, shake, shatter
+par { cam((gx + 3*sx, gy - 1.3*sy), 1.1, smooth); zoom(1.6, 1.1, smooth); }
+say(cap, "The spike slips between samples - equal widths are too coarse here", 0.5);
+par { recolor(hku5, red, 0.3); recolor(hku6, red, 0.3); shake(hku5, 0.8); shake(hku6, 0.8); }
+cue(pop);
+par { disintegrate(hku5, 0.8); disintegrate(hku6, 0.8); }
+
+// the gauge appears AS A FUNCTION: it dips exactly where f is dangerous
+say(cap, `The gauge $\delta(x)$ is itself a function - watch it dip where f spikes`, 0.5);
+par { draw(dplot, 1.0); show(dlab, 0.6); }
+say(cap, `Tiny slices where f is wild - and every slice carries its tag point $t_i$`, 0.5);
+stagger(0.05) { for i in 0..10 { par { show(nk{i}, 0.22); show(tg{i}, 0.22); } } }
+show(bnar, 0.5);
+wait(0.8);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+cue(tick);
+rewrite(eqH, `\Delta x_i < \textcolor{magenta}{\delta(t_i)} \;\Longrightarrow\; \Big|\sum_i f(t_i)\,\Delta x_i - A\Big| < \varepsilon`, 0.9);
+flow(gplot, 1.5, forward, once);
+wait(1.2);
+
+// ---- finale: wipe to black, hierarchy + confetti + triptych reprise ------
+par {
+  shift(wipe3, (w + 80, 0), 0.7, linear);
+  fade(hk, 0.5); fade(tgd, 0.5); fade(gplot, 0.5); fade(dplot, 0.5); fade(dlab, 0.5);
+  fade(xax, 0.5); fade(yax, 0.5); fade(xl0, 0.5); fade(xl4, 0.5);
+  disintegrate(eqH, 0.8); fade(bnar, 0.5); fade(t3, 0.5);
+}
+cue(chime);
+show(eqS, 0.8);
+par {
+  breathe(eqS, 3, 0.05, 0, 7);
+  seq { show(conf, 0.1); burst(conf, 1.4); }
+  seq {
+    stagger(0.35) {
+      stagger(0.05) { for i in 0..6 { show(mr{i}, 0.25); } }
+      stagger(0.06) { for j in 0..5 { show(ml{j}, 0.25); } }
+      seq { stagger(0.04) { for i in 0..3 { show(mw{i}, 0.2); } } stagger(0.04) { for k in 0..5 { show(mn{k}, 0.2); } } show(mt, 0.2); }
+    }
+    stagger(0.3) { wordpop(ms1, 0.06); wordpop(ms2, 0.06); wordpop(ms3, 0.06); }
+  }
+}
+say(cap, "One area - three philosophies of slicing", 0.6);
+wait(2.5);

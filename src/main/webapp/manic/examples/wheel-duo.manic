@@ -1,0 +1,91 @@
+// wheel-duo — four breathing bursts in a 2x2 grid on black, spinning forever.
+//
+//   top row    : normal spin (inner+outer together) — circle | square
+//   bottom row : COUNTER-spin (outer clockwise, inner counter-clockwise) — circle | square
+//
+// The spokes are `link`s that follow their two dots, so counter-rotation twists them
+// into a spirograph "eye". Each spoke is HUE'd by its angle -> a rainbow wheel; the
+// continuous rotation carries the rainbow around and never stops. Every burst
+// breathes, holds still (the breath-wave fakes rotation), then keeps spinning.
+//
+//   manic examples/wheel-duo.manic
+canvas(1600, 1600);
+template("black");
+
+let n     = 44;
+let rin   = 125;
+let len    = 85;       // outer = rin + len = 210
+let pi     = 3.14159265;
+let lobes   = 4;
+
+// ---- A: circle, top-left (normal spin) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let ix = 440 + rin * cos(ang);        let iy = 440 + rin * sin(ang);
+  let ox = 440 + (rin + len) * cos(ang); let oy = 440 + (rin + len) * sin(ang);
+  circle(a_ci{i}, (ix, iy), 5);  stroke(a_ci{i}, 1.8); color(a_ci{i}, #000000); tag(a_ci{i}, a_all);
+  circle(a_co{i}, (ox, oy), 10); stroke(a_co{i}, 2.2); color(a_co{i}, #000000); tag(a_co{i}, a_all);
+  link(a_sp{i}, a_ci{i}, a_co{i}); hue(a_sp{i}, 360 * i / n); stroke(a_sp{i}, 1.3);
+}
+
+// ---- B: square, top-right (normal spin) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let c = cos(ang); let s = sin(ang);
+  let m = 0.5 * (abs(c) + abs(s) + abs(abs(c) - abs(s)));   // max(|cos|,|sin|)
+  let ix = 1160 + (rin / m) * c;        let iy = 440 + (rin / m) * s;
+  let ox = 1160 + ((rin + len) / m) * c; let oy = 440 + ((rin + len) / m) * s;
+  rect(b_ci{i}, (ix, iy), 9, 9);   stroke(b_ci{i}, 1.8); color(b_ci{i}, #000000); tag(b_ci{i}, b_all);
+  rect(b_co{i}, (ox, oy), 19, 19); stroke(b_co{i}, 2.2); color(b_co{i}, #000000); tag(b_co{i}, b_all);
+  link(b_sp{i}, b_ci{i}, b_co{i}); hue(b_sp{i}, 360 * i / n); stroke(b_sp{i}, 1.3);
+}
+
+// ---- C: circle, bottom-left (COUNTER: outer cw, inner ccw) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let ix = 440 + rin * cos(ang);        let iy = 1160 + rin * sin(ang);
+  let ox = 440 + (rin + len) * cos(ang); let oy = 1160 + (rin + len) * sin(ang);
+  circle(c_ci{i}, (ix, iy), 5);  stroke(c_ci{i}, 1.8); color(c_ci{i}, #000000); tag(c_ci{i}, c_in);
+  circle(c_co{i}, (ox, oy), 10); stroke(c_co{i}, 2.2); color(c_co{i}, #000000); tag(c_co{i}, c_out);
+  link(c_sp{i}, c_ci{i}, c_co{i}); hue(c_sp{i}, 360 * i / n); stroke(c_sp{i}, 1.3);
+}
+
+// ---- D: square, bottom-right (COUNTER: outer cw, inner ccw) ----
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let c = cos(ang); let s = sin(ang);
+  let m = 0.5 * (abs(c) + abs(s) + abs(abs(c) - abs(s)));
+  let ix = 1160 + (rin / m) * c;        let iy = 1160 + (rin / m) * s;
+  let ox = 1160 + ((rin + len) / m) * c; let oy = 1160 + ((rin + len) / m) * s;
+  rect(d_ci{i}, (ix, iy), 9, 9);   stroke(d_ci{i}, 1.8); color(d_ci{i}, #000000); tag(d_ci{i}, d_in);
+  rect(d_co{i}, (ox, oy), 19, 19); stroke(d_co{i}, 2.2); color(d_co{i}, #000000); tag(d_co{i}, d_out);
+  link(d_sp{i}, d_ci{i}, d_co{i}); hue(d_sp{i}, 360 * i / n); stroke(d_sp{i}, 1.3);
+}
+
+// labels + centre title
+text(title, (800, 800), "manic"); size(title, 62); color(title, #ff2d95);
+text(la, (440, 720),  "circle");         size(la, 26); color(la, #7f8aa3);
+text(lb, (1160, 720), "square");         size(lb, 26); color(lb, #7f8aa3);
+text(lc, (440, 1500),  "circle counter"); size(lc, 26); color(lc, #7f8aa3);
+text(ld, (1160, 1500), "square counter"); size(ld, 26); color(ld, #7f8aa3);
+
+par {
+  // all four bursts breathe the whole time
+  for i in 0..n {
+    let ph = lobes * i / n;
+    breathe(a_ci{i}, 2.4, 0.85, ph, 38); breathe(a_co{i}, 2.4, 0.92, ph, 38);
+    breathe(b_ci{i}, 2.4, 0.85, ph, 38); breathe(b_co{i}, 2.4, 0.92, ph, 38);
+    breathe(c_ci{i}, 2.4, 0.85, ph, 38); breathe(c_co{i}, 2.4, 0.92, ph, 38);
+    breathe(d_ci{i}, 2.4, 0.85, ph, 38); breathe(d_co{i}, 2.4, 0.92, ph, 38);
+  }
+
+  // hold still, ease in, then spin CONTINUOUSLY (never stops). top: rigid; bottom: counter.
+  seq { wait(5); turn(a_all, (440, 440),   90, 3, in); turn(a_all, (440, 440),   1800, 30, linear); }
+  seq { wait(5); turn(b_all, (1160, 440), -90, 3, in); turn(b_all, (1160, 440), -1800, 30, linear); }
+
+  seq { wait(5); turn(c_out, (440, 1160),  90, 3, in); turn(c_out, (440, 1160),  1800, 30, linear); }
+  seq { wait(5); turn(c_in,  (440, 1160), -90, 3, in); turn(c_in,  (440, 1160), -1800, 30, linear); }
+
+  seq { wait(5); turn(d_out, (1160, 1160),  90, 3, in); turn(d_out, (1160, 1160),  1800, 30, linear); }
+  seq { wait(5); turn(d_in,  (1160, 1160), -90, 3, in); turn(d_in,  (1160, 1160), -1800, 30, linear); }
+}

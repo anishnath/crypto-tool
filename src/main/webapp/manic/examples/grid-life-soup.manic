@@ -1,0 +1,30 @@
+// grid-life-soup — Conway's Game of Life from a random soup, on the grid kit.
+//
+// A 40x40 cellular automaton seeded with a pseudo-random field (manic has no
+// rand(), so a shader-style hash stands in), then evolved: each
+// `evolve(life,"life")` pre-simulates one Conway generation at build time
+// (alive = a filled `wall` cell, B3/S23, 8-neighbourhood), and `run` replays
+// the 30 stored generations — the soup settles into gliders, blinkers and still lifes.
+//
+//   manic examples/grid-life-soup.manic
+title("Conway's Life — a random soup");
+canvas(1080, 1080);
+template("paper");
+
+let cols = 40;
+let rows = 40;
+let cell = 25;
+grid(life, (540, 540), cols, rows, cell);
+
+// seed ~45% of cells at random (the hash keeps it reproducible)
+for r in 0..rows {
+  for c in 0..cols {
+    if sin((r * 12.9898 + c * 78.233) * 43758.5453) > 0.1 {
+      setcell(life, r, c, wall);
+    }
+  }
+}
+
+// pre-simulate 30 generations, then replay them over 8s
+for g in 0..30 { evolve(life, "life"); }
+run(life, 30, 8);

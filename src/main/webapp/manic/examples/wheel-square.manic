@@ -1,0 +1,83 @@
+// wheel-square — the square sibling of wheel-radial: a breathing burst whose rings
+// sit on a SQUARE, on black.
+//
+// The reveal: it starts DEAD STILL — only the rings breathe, and because each ring's
+// phase = its position, the size-wave travels and FAKES a rotation though nothing
+// moves. After ~6s the trick is dropped and the whole burst actually spins
+// COUNTER-CLOCKWISE (steady -> fast -> slow), the wordmark cycling colour.
+//
+// Each spoke's tip is projected onto a square instead of a circle: a ray at angle
+// `ang` hits a square of half-width R at distance R / max(|cos|,|sin|).
+//
+//   manic examples/wheel-square.manic
+canvas(1080, 1080);
+template("mono");
+
+let n     = 64;
+let cx    = 540;
+let cy    = 540;
+let rin   = 195;      // inner square half-width
+let len    = 145;      // spoke length -> outer square half-width = rin + len
+let pi     = 3.14159265;
+let lobes   = 5;
+// sized so the corners (at rout*sqrt(2)) stay inside the frame even when spun
+
+// 1) the frame: spokes + hollow SQUARES on a square, tagged `wheel` so `turn` spins them
+for i in 0..n {
+  let ang = i * 2 * pi / n;
+  let c  = cos(ang);
+  let s  = sin(ang);
+  let ca = abs(c);
+  let sa = abs(s);
+  let m  = 0.5 * (ca + sa + abs(ca - sa));   // = max(|cos|,|sin|): ray -> square edge
+  let ix = cx + (rin / m) * c;
+  let iy = cy + (rin / m) * s;
+  let ox = cx + ((rin + len) / m) * c;
+  let oy = cy + ((rin + len) / m) * s;
+
+  line(spoke{i}, (ix, iy), (ox, oy));
+  stroke(spoke{i}, 1.2);
+  color(spoke{i}, #55607a);
+  tag(spoke{i}, wheel);
+  tag(spoke{i}, spokes);
+
+  rect(cin{i}, (ix, iy), 9, 9);
+  stroke(cin{i}, 2);
+  color(cin{i}, #000000);        // hollow: fill matches the black background
+  tag(cin{i}, wheel);
+
+  rect(cout{i}, (ox, oy), 22, 22);
+  stroke(cout{i}, 2.5);
+  color(cout{i}, #000000);
+  tag(cout{i}, wheel);
+}
+
+// the centre hub stays still, with the wordmark inside it (a square frame too)
+rect(hub, (cx, cy), 300, 300);
+stroke(hub, 2.5);
+color(hub, #000000);
+text(word, (cx, cy), "manic");
+size(word, 66);
+color(word, #ff2d95);
+
+par {
+  // rings breathe the WHOLE time, phase = position -> the wave travels
+  for i in 0..n {
+    let ph = lobes * i / n;
+    breathe(cin{i},  2.4, 0.85, ph, 24);
+    breathe(cout{i}, 2.4, 0.92, ph, 24);
+  }
+  // hold still for the illusion, THEN spin COUNTER-CLOCKWISE: steady -> fast -> slow
+  seq {
+    wait(6);                                   // just the breathing fakes rotation
+    turn(wheel, (cx, cy), -100, 6, linear);    // now it really turns: steady
+    turn(wheel, (cx, cy), -320, 4, in);         // accelerate -> fast
+    turn(wheel, (cx, cy), -150, 8, out);        // decelerate -> slow stop
+  }
+  // the wordmark cycles through the palette once the spin begins
+  seq {
+    wait(6);  recolor(word, #00e6ff, 1.2);  recolor(spokes, #00e6ff, 1.6);
+    wait(5);  recolor(word, #7cff6b, 1.2);
+    wait(4);  recolor(word, #ffd166, 1.2);
+  }
+}

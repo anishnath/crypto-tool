@@ -1,5 +1,5 @@
 {
-  "count": 308,
+  "count": 315,
   "categories": [
     {
       "slug": "algorithms",
@@ -96,6 +96,12 @@
           "desc": "Conway's Game of Life: a glider seeded with setcell, then evolve pre-simulates six generations at build time (alive = a filled cell, Conway's B3/S23) and run replays them \u2014 the glider walks diagonally across the grid."
         },
         {
+          "name": "grid-life-soup",
+          "file": "grid-life-soup.manic",
+          "title": "Grid life soup",
+          "desc": "Game of Life at scale: a 40x40 grid seeded with a pseudo-random soup (a shader-style hash, since manic has no rand()), 30 generations evolved then run \u2014 the chaos settles into gliders, blinkers and still lifes."
+        },
+        {
           "name": "grid-wfc",
           "file": "grid-wfc.manic",
           "title": "Grid wfc",
@@ -118,6 +124,24 @@
           "file": "calculus-demo.manic",
           "title": "Calculus demo",
           "desc": "The flagship: two big ideas on one curve."
+        },
+        {
+          "name": "calculus-one",
+          "file": "calculus-one.manic",
+          "title": "Calculus one",
+          "desc": "Calculus I end to end in one continuous scene: limits (a curve with a hole), the derivative (secants collapsing onto the tangent), curve shape, and the integral + Fundamental Theorem \u2014 chapter wipes between."
+        },
+        {
+          "name": "integrals",
+          "file": "integrals.manic",
+          "title": "Integrals",
+          "desc": "Three views of the integral on one bump: coarse Riemann strips rise into place with the sample dots f(x*) riding the curve, refine to 32, then the true area sweeps open \u2014 glowing act-wipes between."
+        },
+        {
+          "name": "disc-integration",
+          "file": "disc-integration.manic",
+          "title": "Disc integration",
+          "desc": "A flat 2D region spins up into a 3D solid of revolution: one living equation rewrites from the profile r=\u221az to the volume \u222b\u03c0r\u00b2 dz, a single strip lifts into a disc, and a live volume readout climbs."
         },
         {
           "name": "reactive-integral",
@@ -376,6 +400,12 @@
           "file": "boxplot.manic",
           "title": "Boxplot",
           "desc": "The five-number summary as a box-and-whisker: the box spans Q1\u2192Q3 (its width is the interquartile range), a line marks the median, the whiskers reach the rest, and a value far outside is flagged as an outlier (boxplot)."
+        },
+        {
+          "name": "boxplot-wave",
+          "file": "boxplot-wave.manic",
+          "title": "Boxplot wave",
+          "desc": "Reading a box plot, on a labelled chart: eight months of daily-rainfall box plots JUMP up from below into their true medians (building the seasonal wave), a dashed trend line draws through them, then manic signs off."
         },
         {
           "name": "skew",
@@ -1192,6 +1222,18 @@
           "file": "wheel-radial.manic",
           "title": "Wheel radial",
           "desc": "Sixty hollow rings breathe in a travelling wave while the whole wheel spins steady->fast->slow and the wordmark cycles the palette \u2014 one par composing breathe + eased turn + recolor; a #hex hollow-fill trick."
+        },
+        {
+          "name": "wheel-square",
+          "file": "wheel-square.manic",
+          "title": "Wheel square",
+          "desc": "The square sibling of wheel-radial on black \u2014 hollow SQUARES on a square."
+        },
+        {
+          "name": "wheel-duo",
+          "file": "wheel-duo.manic",
+          "title": "Wheel duo",
+          "desc": "Four breathing bursts in a 2x2 on black with HUE'd rainbow spokes, spinning forever: circle & square rigid (top), and circle & square counter-spinning (bottom) \u2014 the rainbow links twist into a spirograph eye."
         },
         {
           "name": "lsystem-asymptote-curves",

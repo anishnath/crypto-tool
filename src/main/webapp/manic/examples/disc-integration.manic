@@ -1,0 +1,172 @@
+title("Disc Integration");
+canvas(1000, 1000);
+template("black");
+
+// ================= HUD (2D always draws above the 3D world) =================
+text(head, (cx, 60), "Disc Integration"); display(head); cursor(head);
+text(t1, (cx, 122), "1. A region under a curve"); size(t1, 30); color(t1, gold); hidden(t1);
+text(t2, (cx, 122), "2. Spin it - every strip sweeps a disc"); size(t2, 30); color(t2, cyan); hidden(t2);
+text(t3, (cx, 122), "3. Stack the discs - integrate"); size(t3, 30); color(t3, magenta); hidden(t3);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+
+// one living equation: it rewrites its way from the curve to the volume
+equation(eqM, (cx, 190), `y=\sqrt{x}\quad(0\le x\le 4)`, 40); hidden(eqM);
+
+// live volume readout
+counter(vol, (w - 185, 300), 0, 2, "V = ", ""); hidden(vol);
+
+// ================= act 1 cast: the flat 2D region =================
+let gx = cx - 300;
+let gy = 520;
+let s2 = 140;
+
+arrow(xax2, (gx - 30, gy), (gx + 4*s2 + 50, gy)); untraced(xax2); stroke(xax2, 3); tag(xax2, d2);
+arrow(yax2, (gx, gy + 30), (gx, gy - 2.4*s2)); untraced(yax2); stroke(yax2, 3); tag(yax2, d2);
+text(x0b, (gx, gy + 26), "0"); size(x0b, 22); color(x0b, dim); hidden(x0b); tag(x0b, d2);
+text(x4b, (gx + 4*s2, gy + 26), "4"); size(x4b, 22); color(x4b, dim); hidden(x4b); tag(x4b, d2);
+
+plot(rplot, (gx, gy), s2, s2, "sqrt(x)", (0, 4));
+untraced(rplot); stroke(rplot, 4); gradient(rplot, blue, cyan, gold, 270); tag(rplot, d2);
+dot(rider, (gx, gy), 7); color(rider, gold); glow(rider, 8); hidden(rider); tag(rider, d2);
+area(ar2, rplot, 0, 0); color(ar2, cyan); opacity(ar2, 0.3); tag(ar2, d2);
+
+// the one strip we will follow into 3D (x = 2.25 - remember it)
+rect(strip, (gx + 2.25*s2, gy - sqrt(2.25)*s2/2), 66, sqrt(2.25)*s2);
+color(strip, cyan); opacity(strip, 0.75); hidden(strip); tag(strip, d2);
+
+// ================= act 2-3 cast: the 3D world (right-handed, Z-up) ==========
+camera3((8.2, -9.5, 5.0), (0, 0, 1.9), 42);
+axes3(ax3, (0, 0, 0), 4.6, 1); hidden(ax3);
+
+// the spin axis, called out explicitly
+line3(spinax, (0, 0, -0.3), (0, 0, 4.6)); thick(spinax, 0.015); color(spinax, dim); hidden(spinax);
+text(zlab, (cx, cy), "spin axis"); size(zlab, 22); color(zlab, dim); hidden(zlab);
+pin3(zlab, (0, 0, 4.55), (0, -16));
+
+// the profile curve, stood upright: r = sqrt(z)
+curve3(prof, "sqrt(t)", "0", "t", (0, 4)); untraced(prof); thick(prof, 0.04); color(prof, gold);
+
+// ghost of the swept surface: bright wireframe revolve
+revolve3(ghost, (0, 0, 0), "sqrt(t)", (0, 4), 64);
+finish3(ghost, "wire=1"); color(ghost, teal); opacity(ghost, 0.4); untraced(ghost);
+
+// 8 coarse discs (thin cylinders = many-sided prisms), declared low so they RISE
+for i in 0..8 {
+  let zc = (i + 0.5)*0.5;
+  prism3(dc{i}, (0, 0, zc - 0.45), 48, sqrt(zc), 0.48);
+  color(dc{i}, cyan); opacity(dc{i}, 0.85); tag(dc{i}, coarse3);
+}
+hidden(coarse3);
+
+// 20 fine discs
+for i in 0..20 {
+  let zc = (i + 0.5)*0.2;
+  prism3(df{i}, (0, 0, zc - 0.3), 48, sqrt(zc), 0.19);
+  color(df{i}, cyan); opacity(df{i}, 0.9); tag(df{i}, fine3);
+}
+hidden(fine3);
+
+// radius callout for the pulled-out disc (z = 2.25, r = 1.5, pulled to x + 3)
+arrow3(rarr, (3.0, 0, 2.62), (4.5, 0, 2.62)); thick(rarr, 0.03); color(rarr, gold); untraced(rarr);
+text(rlab, (cx, cy), `$r = \sqrt{z}$`); size(rlab, 26); color(rlab, gold); hidden(rlab);
+pin3(rlab, (3.75, 0, 2.62), (0, -30));
+
+// the exact solid, and the vase it will morph into ("any profile, same recipe")
+revolve3(solid, (0, 0, 0), "sqrt(t)", (0, 4), 64);
+finish3(solid, "shading=smooth depth=0.2 shadow=0.2"); color(solid, cyan); hidden(solid);
+revolve3(vase, (0, 0, 0), "1.1+0.55*sin(1.7*t-0.9)", (0, 4), 64); hidden(vase);
+morph3(solid, vase);
+
+// ================= timeline =================
+
+// ---- cold open
+type(head, 1.1);
+
+// ---- act 1: the flat region
+cue(whoosh);
+show(t1, 0.5);
+par { draw(xax2, 0.6); draw(yax2, 0.6); show(x0b, 0.6); show(x4b, 0.6); }
+show(rider, 0.2);
+par { draw(rplot, 1.4); travel(rider, rplot, 1.4, smooth); }
+fade(rider, 0.3);
+show(eqM, 0.6);
+say(cap, "Take the region under the curve...", 0.5);
+to(ar2, x, 4, 1.6, smooth);
+say(cap, "...and keep your eye on this one strip", 0.5);
+show(strip, 0.4);
+pulse(strip, 0.9);
+wait(0.8);
+
+// ---- the pivot: leave flatland
+say(cap, "Now stand the region upright - and SPIN it around the axis", 0.5);
+cue(whoosh);
+fade(d2, 0.8);
+show(t2, 0.5); fade(t1, 0.3);
+par { show(ax3, 0.8); show(spinax, 0.8); show(zlab, 0.8); }
+draw(prof, 1.2);
+flash(spinax, magenta);
+
+// THE MONEY SHOT: the profile curve physically sweeps 360 degrees
+// around the axis while the wireframe surface traces on beneath it
+par {
+  turn3(prof, (0, 0, 2), z, 360, 2.6, smooth);
+  draw(ghost, 2.6);
+  orbit3(-20, 18, 12.0, 2.6, smooth);
+}
+cue(tick);
+rewrite(eqM, `dV \;=\; \pi\,\textcolor{cyan}{r^2}\,dz`, 0.9);
+say(cap, "Every strip of area sweeps a thin DISC of volume", 0.5);
+
+// ---- act 3: the disc stack rises
+show(t3, 0.5); fade(t2, 0.3);
+stagger(0.09) { for i in 0..8 { par { show(dc{i}, 0.3); shift3(dc{i}, (0, 0, 0.45), 0.4, out); } } }
+wait(0.4);
+
+// pull ONE disc out of the stack - the same strip from act 1
+say(cap, "That same strip from before - now a cylinder: radius sqrt(z), thickness dz", 0.5);
+cue(pop);
+shift3(dc4, (3.0, 0, 0), 0.9, smooth);
+par { draw(rarr, 0.5); show(rlab, 0.5); }
+wait(1.2);
+par { fade(rarr, 0.4); fade(rlab, 0.4); shift3(dc4, (-3.0, 0, 0), 0.9, smooth); }
+cue(tick);
+rewrite(eqM, `V \;\approx\; \sum_i \pi\,r(z_i)^2\,\Delta z`, 0.9);
+wait(0.8);
+
+// refine: thinner discs, camera drifts around the stack
+say(cap, "Slice thinner - the stack hugs the surface", 0.5);
+par {
+  fade(coarse3, 0.6);
+  stagger(0.04) { for i in 0..20 { show(df{i}, 0.22); } }
+  orbit3(35, 24, 11.0, 2.2, smooth);
+}
+cue(tick);
+rewrite(eqM, `V \;=\; \pi\!\int_0^{4}(\sqrt{z}\,)^2\,dz \;=\; \pi\!\int_0^{4} z\,dz`, 0.9);
+wait(0.8);
+
+// the limit: discs dissolve into the exact smooth solid, the number climbs
+say(cap, "In the limit: the exact solid of revolution", 0.5);
+show(vol, 0.3);
+par { fade(fine3, 1.2); fade(ghost, 1.2); show(solid, 1.4); to(vol, value, 25.13, 2.2); }
+flash(vol, gold);
+cue(tick);
+rewrite(eqM, `V \;=\; \pi\cdot\tfrac{16}{2} \;=\; 8\pi \;\approx\; 25.13`, 0.9);
+par { orbit3(90, 20, 10.5, 2.6, smooth); }
+wait(0.6);
+
+// ---- flourish: ANY profile, same recipe - the solid becomes a vase
+say(cap, "Any profile, same recipe - just change r(z)", 0.5);
+cue(whoosh);
+par {
+  to(solid, morph, 1, 2.6, smooth);
+  fade(vol, 0.8);
+  rewrite(eqM, `V \;=\; \pi\int_a^b r(z)^2\,dz`, 1.2);
+  orbit3(160, 16, 10.5, 2.6, smooth);
+}
+cue(chime);
+par {
+  breathe(eqM, 3, 0.05, 0, 6);
+  orbit3(200, 14, 11.0, 6, smooth);
+}
+say(cap, "Area swept in a circle - volume, one disc at a time", 0.6);
+wait(2.0);

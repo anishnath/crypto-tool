@@ -1,0 +1,288 @@
+title("Calculus I, End to End");
+canvas("16:9");
+template("black");
+
+// ================= HUD (sticky: survives every camera move) =================
+text(head, (cx, 60), "Calculus I, End to End"); display(head); cursor(head); sticky(head);
+text(h1, (cx, 148), "1. Limits - getting close without arriving"); size(h1, 28); color(h1, cyan); hidden(h1); sticky(h1);
+text(h2, (cx, 148), "2. The derivative - a slope caught in the act"); size(h2, 28); color(h2, magenta); hidden(h2); sticky(h2);
+text(h3, (cx, 148), "3. What f' knows about the shape of f"); size(h3, 28); color(h3, lime); hidden(h3); sticky(h3);
+text(h4, (cx, 148), "4. The integral - area, one strip at a time"); size(h4, 28); color(h4, gold); hidden(h4); sticky(h4);
+text(h5, (cx, 148), "5. The Fundamental Theorem - the bridge"); size(h5, 28); hidden(h5); sticky(h5);
+text(cap, (cx, h - 42), ""); size(cap, 26); sticky(cap);
+
+caption(menu, "limits - slopes - shapes - areas - the bridge", (cx, cy), 34, gold); hidden(menu);
+
+// chapter wipes, tinted to the incoming chapter
+line(w2, (-40, 140), (-40, h - 90)); stroke(w2, 4); color(w2, magenta); glow(w2, 14);
+line(w3, (-40, 140), (-40, h - 90)); stroke(w3, 4); color(w3, lime); glow(w3, 14);
+line(w4, (-40, 140), (-40, h - 90)); stroke(w4, 4); color(w4, gold); glow(w4, 14);
+line(w5, (-40, 140), (-40, h - 90)); stroke(w5, 4); glow(w5, 14);
+
+// ================= ch 1 cast: LIMITS =================
+// example A: f(x) = (x^3 - x)/(x - 1) = x(x+1) away from the hole at x = 1
+// example B: a limit at infinity - the sigmoid hugging its asymptote
+let gx1 = cx + 34;
+let gy = 560;
+arrow(x1a, (cx - 380, gy), (cx + 390, gy)); untraced(x1a); stroke(x1a, 3); tag(x1a, c1);
+arrow(y1a, (gx1, gy), (gx1, 235)); untraced(y1a); stroke(y1a, 3); tag(y1a, c1);
+plot(p1, (gx1, gy), 170, 60, "x^2+x", (-2.2, 1.8));
+untraced(p1); stroke(p1, 4); gradient(p1, blue, cyan, gold, 270); tag(p1, c1);
+dot(rider, (gx1, gy), 7); color(rider, gold); glow(rider, 8); hidden(rider); tag(rider, c1);
+limit(lm, p1, 1, gold); hidden(lm); tag(lm, c1);
+plot(p1b, (gx1, gy), 170, 60, "4/(1+exp(-2.2*x))", (-2.2, 1.8));
+untraced(p1b); stroke(p1b, 4); color(p1b, teal); tag(p1b, c1);
+limit(lmb, p1b, inf, cyan); hidden(lmb); tag(lmb, c1);
+equation(eq1, (cx, 230), `\lim_{x\to 1}\frac{x^3-x}{x-1}`, 40); hidden(eq1); sticky(eq1);
+
+// ================= ch 2 cast: THE DERIVATIVE =================
+// example A: f(x) = x^2/2, secants through (1, 0.5) collapse onto the tangent
+// example B: sine's recorded slope is cosine
+let gx2 = cx - 170;
+arrow(x2a, (cx - 312, gy), (cx + 322, gy)); untraced(x2a); stroke(x2a, 3); tag(x2a, c2);
+arrow(y2a, (gx2, gy), (gx2, 240)); untraced(y2a); stroke(y2a, 3); tag(y2a, c2);
+plot(p2, (gx2, gy), 170, 80, "0.5*x^2", (-0.6, 2.6));
+untraced(p2); stroke(p2, 4); gradient(p2, blue, magenta, 270); tag(p2, c2);
+dot(anch, (gx2 + 170, gy - 40), 7); color(anch, gold); glow(anch, 8); hidden(anch); tag(anch, c2);
+for k in 0..3 {
+  let hh = 1.5 - 0.6*k;
+  let mm = 1 + hh/2;
+  let ya = 0.5 - 0.9*mm;
+  let yb = 0.5 + 1.4*mm;
+  line(sec{k}, (gx2 + 17, gy - ya*80), (gx2 + 408, gy - yb*80));
+  stroke(sec{k}, 3); color(sec{k}, teal); opacity(sec{k}, 0.45 + 0.2*k); hidden(sec{k}); tag(sec{k}, c2);
+  dot(sd{k}, (gx2 + (1 + hh)*170, gy - ((1 + hh)^2/2)*80), 6);
+  color(sd{k}, teal); hidden(sd{k}); tag(sd{k}, c2);
+}
+tangent(tg2, p2, 1, 280); hidden(tg2); tag(tg2, c2);
+slope(sl2, p2, 1); hidden(sl2); tag(sl2, c2);
+deriv(dv2, p2, magenta); untraced(dv2); tag(dv2, c2);
+line(bl2, (gx2 - 90, 445), (gx2 + 445, 445)); dashed(bl2); stroke(bl2, 2); color(bl2, dim); hidden(bl2); tag(bl2, c2);
+plot(p2s, (gx2, 445), 170, 80, "1.1*sin(1.8*x)", (-0.5, 2.6));
+untraced(p2s); stroke(p2s, 4); color(p2s, cyan); tag(p2s, c2);
+deriv(dvs, p2s, magenta); untraced(dvs); dashed(dvs, 12, 9); tag(dvs, c2);
+equation(eq2, (cx, 230), `f'(1) \;=\; \lim_{h\to 0}\frac{f(1+h)-f(1)}{h}`, 38); hidden(eq2); sticky(eq2);
+
+// ================= ch 3 cast: SHAPE =================
+// f(x) = x^3/3 - x : turning points at x = -1, 1; concavity flips at 0
+// (one horizontal axis only - no vertical line slicing through the curve)
+let gy3 = 420;
+arrow(x3a, (cx - 436, gy3), (cx + 446, gy3)); untraced(x3a); stroke(x3a, 3); tag(x3a, c3);
+plot(p3, (cx, gy3), 180, 150, "x^3/3-x", (-2.2, 2.2));
+untraced(p3); stroke(p3, 4); gradient(p3, blue, lime, gold, 270); tag(p3, c3);
+tangent(tg3, p3, -2.1, 300); hidden(tg3); tag(tg3, c3);
+slope(sl3, p3, -2.1); hidden(sl3); tag(sl3, c3);
+extrema(ex3, p3, gold); hidden(ex3); tag(ex3, c3);
+inflections(if3, p3, magenta); hidden(if3); tag(if3, c3);
+equation(eq3, (cx, 230), `f'(x)=x^2-1`, 38); hidden(eq3); sticky(eq3);
+
+// ================= ch 4 + 5 cast: INTEGRAL and the FTC =================
+// example A: f(x) = 0.3 x (4 - x), area 0..4 is exactly 3.2
+// example B: a sine arch whose signed area cancels to zero
+let gx4 = cx - 340;
+arrow(x4a, (gx4 - 40, gy), (gx4 + 730, gy)); untraced(x4a); stroke(x4a, 3); tag(x4a, c4);
+arrow(y4a, (gx4, gy), (gx4, 240)); untraced(y4a); stroke(y4a, 3); tag(y4a, c4);
+plot(p4, (gx4, gy), 170, 80, "0.3*x*(4-x)", (0, 4));
+untraced(p4); stroke(p4, 4); gradient(p4, blue, gold, 270); tag(p4, c4);
+for i in 0..8 {
+  let xm = (i + 0.5)*0.5;
+  let hgt = 0.3*xm*(4 - xm);
+  rect(rs{i}, (gx4 + xm*170, gy - hgt*80/2 + 24), 0.5*170 - 3, hgt*80);
+  color(rs{i}, gold); opacity(rs{i}, 0.55); tag(rs{i}, rstrips);
+}
+hidden(rstrips);
+area(ar4, p4, 0, 0); color(ar4, gold); opacity(ar4, 0.3);
+integral(int4, p4, 0, 0, (gx4 + 640, 300)); hidden(int4);
+plot(p4b, (gx4, gy), 170, 80, "1.2*sin(1.5708*x)", (0, 4));
+untraced(p4b); stroke(p4b, 4); color(p4b, teal);
+area(arb, p4b, 0, 0); color(arb, teal); opacity(arb, 0.3);
+integral(intb, p4b, 0, 0, (gx4 + 640, 350)); hidden(intb);
+equation(eq4, (cx, 230), `A \;\approx\; \sum_i \textcolor{gold}{f(x_i)}\,\Delta x`, 38); hidden(eq4); sticky(eq4);
+
+// FTC: the accumulation A(x) drawn as its own curve, then ITS derivative
+accum(acF, p4, 0, gold); untraced(acF);
+deriv(dfF, acF, magenta); untraced(dfF); dashed(dfF, 12, 9);
+text(alab, (gx4 + 700, 296), "A(x) - area so far"); size(alab, 24); color(alab, gold); hidden(alab);
+text(flab, (cx, 430), "f(x)"); size(flab, 24); color(flab, cyan); hidden(flab);
+equation(eqF, (cx, 230), `A(x) \;=\; \int_0^x f(t)\,dt`, 40); hidden(eqF); sticky(eqF); z(eqF, 10);
+
+// finale
+circle(confbox, (cx, 230), 80); hidden(confbox);
+particles(conf, confbox, 22, 4, 9, "ring"); color(conf, gold); hidden(conf);
+caption(r1, "zoom in: the derivative is the slope of a moment", (cx, 400), 28, magenta); hidden(r1);
+caption(r2, "add up: the integral is the area of a journey", (cx, 455), 28, gold); hidden(r2);
+caption(r3, "the Fundamental Theorem: each undoes the other", (cx, 510), 28); hidden(r3);
+
+// ================= timeline =================
+
+// ---- cold open
+type(head, 1.2);
+wordpop(menu, 0.07);
+wait(1.0);
+fade(menu, 0.5);
+
+// ---- ch 1: LIMITS ------------------------------------------------------
+mark("limits");
+cue(whoosh);
+show(h1, 0.5);
+par { draw(x1a, 0.6); draw(y1a, 0.6); }
+show(rider, 0.2);
+par { draw(p1, 1.4); travel(rider, p1, 1.4, smooth); }
+fade(rider, 0.3);
+show(eq1, 0.6);
+say(cap, "At x = 1 this formula divides zero by zero - the curve has a HOLE", 0.5);
+show(lm, 0.6);
+cue(tick);
+rewrite(eq1, `\lim_{x\to 1}\frac{x^3-x}{x-1} \;=\; \lim_{x\to 1}\,x(x+1)`, 0.9);
+par { cam((gx1 + 170, 470), 1.2, smooth); zoom(1.8, 1.2, smooth); }
+say(cap, "The limit asks: where were you HEADING? Watch the dot commit", 0.5);
+to(lm, x, 1, 2.6, smooth);
+cue(tick);
+rewrite(eq1, `\lim_{x\to 1}\frac{x^3-x}{x-1} \;=\; 2`, 0.9);
+flash(lm, cyan);
+wait(0.8);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// second example: chasing x to infinity
+say(cap, "Limits also ask where the ROAD ends: chase x toward infinity", 0.5);
+par { fade(p1, 0.5); fade(lm, 0.5); }
+draw(p1b, 1.2);
+show(lmb, 0.5);
+to(lmb, x, 1.8, 2.0, smooth);
+cue(tick);
+rewrite(eq1, `\lim_{x\to\infty}\frac{4}{1+e^{-2.2x}} \;=\; 4`, 0.9);
+wait(0.7);
+par { shift(w2, (w + 80, 0), 0.7, linear); fade(c1, 0.6); disintegrate(eq1, 0.8); fade(h1, 0.5); }
+
+// ---- ch 2: THE DERIVATIVE ----------------------------------------------
+mark("derivative");
+cue(whoosh);
+show(h2, 0.5);
+par { draw(x2a, 0.6); draw(y2a, 0.6); }
+draw(p2, 1.2);
+show(anch, 0.4);
+show(eq2, 0.6);
+say(cap, "Pin one point. A SECANT through a neighbour measures average slope", 0.5);
+par { cam((gx2 + 200, 470), 1.0, smooth); zoom(1.35, 1.0, smooth); }
+par { show(sec0, 0.4); show(sd0, 0.4); }
+cue(tick);
+rewrite(eq2, `\frac{\Delta y}{\Delta x} \;=\; 1+\tfrac{h}{2} \;=\; 1.75`, 0.8);
+par { fade(sec0, 0.4); fade(sd0, 0.4); show(sec1, 0.4); show(sd1, 0.4); }
+cue(tick);
+rewrite(eq2, `\frac{\Delta y}{\Delta x} \;=\; 1+\tfrac{h}{2} \;=\; 1.45`, 0.8);
+par { fade(sec1, 0.4); fade(sd1, 0.4); show(sec2, 0.4); show(sd2, 0.4); }
+cue(tick);
+rewrite(eq2, `\frac{\Delta y}{\Delta x} \;=\; 1+\tfrac{h}{2} \;=\; 1.15`, 0.8);
+say(cap, "Slide the neighbour home: the secants collapse onto ONE line", 0.5);
+par { fade(sec2, 0.5); fade(sd2, 0.5); show(tg2, 0.5); show(sl2, 0.5); }
+flash(tg2, gold);
+cue(pop);
+cue(tick);
+rewrite(eq2, `f'(1) \;=\; 1`, 0.9);
+wait(0.6);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// now do it EVERYWHERE: the tangent glides, recording f' as a new curve
+say(cap, "Do it at every point - and record the answer as a NEW curve", 0.5);
+par { to(tg2, x, -0.4, 0.7, smooth); to(sl2, x, -0.4, 0.7, smooth); }
+par { to(tg2, x, 2.3, 2.6, smooth); to(sl2, x, 2.3, 2.6, smooth); draw(dv2, 2.6); }
+cue(tick);
+rewrite(eq2, `f'(x) \;=\; x`, 0.9);
+wait(0.6);
+
+// second example: every curve carries its shadow
+say(cap, "It works for EVERY curve: sine's recorded slope is cosine", 0.5);
+par { fade(p2, 0.5); fade(dv2, 0.5); fade(tg2, 0.5); fade(sl2, 0.5); fade(anch, 0.4); }
+par { show(bl2, 0.4); draw(p2s, 1.2); }
+draw(dvs, 1.6);
+cue(tick);
+rewrite(eq2, `\big(\sin x\big)' \;=\; \cos x`, 0.9);
+wait(0.7);
+par { shift(w3, (w + 80, 0), 0.7, linear); fade(c2, 0.6); disintegrate(eq2, 0.8); fade(h2, 0.5); }
+
+// ---- ch 3: SHAPE -------------------------------------------------------
+mark("shape");
+cue(whoosh);
+show(h3, 0.5);
+draw(x3a, 0.7);
+draw(p3, 1.4);
+show(eq3, 0.6);
+say(cap, "The derivative is a story about SHAPE. Ride the tangent and listen", 0.5);
+par { show(tg3, 0.5); show(sl3, 0.5); }
+par { to(tg3, x, -1, 1.6, smooth); to(sl3, x, -1, 1.6, smooth); }
+cue(pop);
+show(ex3, 0.4); pulse(ex3, 0.8);
+say(cap, "Slope zero: the curve turns. A peak - then a valley", 0.5);
+par { to(tg3, x, 0, 1.2, smooth); to(sl3, x, 0, 1.2, smooth); }
+show(if3, 0.4); flash(if3, magenta);
+say(cap, "Here the BEND flips: concave down becomes concave up - an inflection", 0.5);
+par { to(tg3, x, 1, 1.2, smooth); to(sl3, x, 1, 1.2, smooth); }
+pulse(ex3, 0.8);
+par { to(tg3, x, 2.1, 1.2, smooth); to(sl3, x, 2.1, 1.2, smooth); }
+cue(tick);
+rewrite(eq3, `f'=0:\ \text{turning}\qquad f''=0:\ \text{bending flips}`, 0.9);
+wait(1.0);
+par { shift(w4, (w + 80, 0), 0.7, linear); fade(c3, 0.6); disintegrate(eq3, 0.8); fade(h3, 0.5); }
+
+// ---- ch 4: THE INTEGRAL ------------------------------------------------
+mark("integral");
+cue(whoosh);
+show(h4, 0.5);
+par { draw(x4a, 0.6); draw(y4a, 0.6); }
+draw(p4, 1.3);
+show(eq4, 0.6);
+say(cap, "The other question: how much accumulates? Slice it into strips", 0.5);
+stagger(0.08) { for i in 0..8 { par { show(rs{i}, 0.3); shift(rs{i}, (0, -24), 0.4, out); } } }
+wait(0.8);
+say(cap, "Thinner and thinner strips: the sum becomes the exact area", 0.5);
+show(int4, 0.3);
+par { fade(rstrips, 1.1); to(ar4, x, 4, 2.2, smooth); to(int4, x, 4, 2.2, smooth); }
+flash(int4, gold);
+cue(tick);
+rewrite(eq4, `A \;=\; \int_0^4 f\,dx \;=\; 3.2`, 0.9);
+wait(0.8);
+
+// second example: signed area - the hill cancels the valley
+say(cap, "One warning: below the axis, area counts NEGATIVE", 0.5);
+par { fade(p4, 0.5); fade(ar4, 0.5); fade(int4, 0.5); }
+draw(p4b, 1.2);
+show(intb, 0.3);
+par { to(arb, x, 4, 2.0, smooth); to(intb, x, 4, 2.0, smooth); }
+flash(intb, teal);
+cue(tick);
+rewrite(eq4, `\int_0^4 \sin\!\Big(\frac{\pi x}{2}\Big)dx \;=\; 0`, 0.9);
+say(cap, "The hill above cancels the valley below - signed area", 0.5);
+wait(0.6);
+par { fade(p4b, 0.5); fade(arb, 0.5); fade(intb, 0.4); show(p4, 0.5); }
+par { shift(w5, (w + 80, 0), 0.7, linear); disintegrate(eq4, 0.8); fade(h4, 0.5); }
+
+// ---- ch 5: THE FUNDAMENTAL THEOREM --------------------------------------
+mark("ftc");
+cue(whoosh);
+show(h5, 0.5);
+say(cap, "Rewind. This time, GRAPH the running total as you sweep", 0.5);
+show(ar4, 0.4);
+to(ar4, x, 0, 0.7, smooth);
+show(eqF, 0.7);
+par { to(ar4, x, 4, 2.8, smooth); draw(acF, 2.8); }
+show(alab, 0.5); show(flab, 0.5);
+say(cap, "Now take the DERIVATIVE of that gold curve - the slope of the total", 0.5);
+cue(tick);
+rewrite(eqF, `\frac{d}{dx}A(x) \;=\; \;?`, 0.8);
+draw(dfF, 2.2);
+flash(p4, magenta);
+cue(chime);
+say(cap, "It lands EXACTLY on f. Accumulating, then differentiating, is a round trip", 0.5);
+cue(tick);
+rewrite(eqF, `\boxed{\;\frac{d}{dx}\int_0^x f(t)\,dt \;=\; f(x)\;}`, 1.0);
+wait(1.2);
+
+// ---- finale
+par { fade(c4, 0.7); fade(ar4, 0.7); fade(acF, 0.7); fade(dfF, 0.7); fade(alab, 0.5); fade(flab, 0.5); fade(h5, 0.5); }
+seq { show(conf, 0.1); burst(conf, 1.4); }
+par {
+  breathe(eqF, 3, 0.05, 0, 7);
+  seq { stagger(0.4) { wordpop(r1, 0.05); wordpop(r2, 0.05); wordpop(r3, 0.05); } }
+}
+say(cap, "Calculus I: zoom in, add up - and the bridge between", 0.6);
+wait(2.5);
