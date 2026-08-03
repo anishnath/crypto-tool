@@ -1,0 +1,49 @@
+// cloud-phoenix — another @yuruyurau art-tweet, reimagined in ONE `cloud`. 10,000
+// points flow into a living, wing-like form and morph over time. The original
+// packs a conditional into the amplitude ((y<9?9:5)); manic formulas have no
+// ternary, so it's written with sign():  amp = 7 + 2*sign(9 - s). Coloured per
+// point and bloomed from the centre on a 9:16 Short — every point a pure function
+// of (i, t), so it scrubs and records (the p5 original can't).
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau) — a prolific poster of
+// these tiny p5.js/dwitter art formulas. This is our own hue'd, annotated take.
+//
+//   manic examples/cloud-phoenix.manic
+title("One formula becomes a phoenix");
+canvas("9:16");
+template("black");
+
+cloud(bird, 10000, #ffffff, 0.72) {
+  let s = i / 353;                          // the reference's "y" parameter
+  let amp = 7 + 2*sign(9 - s);              // (y<9?9:5), written with sign()
+  let k = (amp + cos(s*31 - t)) * cos(i/44);
+  let e = s/9 - 14;
+  let d = hypot(k, e) / 1.6;
+  let c = d - t/2;
+  // raw coords (centred at 0), then bloom + scale onto the 1080x1920 frame
+  let px = (d*9 + k*k)*cos(c);
+  let py = (55 + d*9)*sin(c/3) + 4*sin(k*2) + s/29*k*(e + 3*sin(e*4 - d*4 + t*3));
+  let grow = tanh(t * 0.5 + 0.12);
+  let x = 540 + px * 2.6 * grow;
+  let y = 960 + (py - 120) * 2.6 * grow;   // -120 recentres the form's DC offset
+  let r = 1.4;
+  let hue = mod(s * 13 + t * 16, 360);     // a rainbow flowing along the form
+}
+
+// ---- textbook annotations ----
+caption(head, "One formula becomes a phoenix", (540, 132), 38);
+caption(sub, "10,000 points, no simulation", (540, 200), 24);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p_i = f(i,\; t)`, 46);
+caption(lab, "each point placed by its index i and time t", (540, 1786), 22);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(27);

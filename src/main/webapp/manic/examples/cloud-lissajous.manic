@@ -20,4 +20,4 @@ cloud(liss, 600, #46e2c8, 0.95) {
   let hue = mod(180 + u * 57 * spread + t * 35, 360);
 }
 
-wait(20);
+wait(25);

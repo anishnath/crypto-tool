@@ -1,0 +1,51 @@
+// cloud-koi — another @yuruyurau art-tweet in ONE `cloud`: 10,000 points in two
+// layers (`mod(i,2)`) swirl into koi-like forms chasing each other, rippling over
+// time. A polar plot (radius `q`, angle `c`); `cos(i+t/4)` on the raw index gives
+// the fine scale texture. One JS-ism: the original's `y^9` is bitwise XOR (a
+// per-band scramble), which manic has no operator for — approximated here with
+// `noise()`, visually equivalent. `mag` = `hypot`; parameter renamed `s`.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau). Our hue'd, annotated
+// take — pure in (i, t), so it scrubs and records; the p5 original can't.
+//
+//   manic examples/cloud-koi.manic
+title("Two koi from one formula");
+canvas("9:16");
+template("black");
+
+cloud(koi, 10000, #ffffff, 0.6) {
+  let s = i/790;
+  let m = mod(i, 2);
+  let sw = 0.5*(1 + sign(8 - s));                 // (y<8 ? … : …)
+  let scr = noise(s*2, 0);                         // ~ the JS y^9 XOR scramble
+  let kbase = sw*(9 + scr*6) + (1 - sw)*(4 + cos(s));
+  let k = kbase * cos(i + t/4);
+  let e = s/3 - 13;
+  let d = hypot(k, e) + cos(e + t*2 + m*4);
+  let q = s*k/5*(2 + sin(d*2 + s - t*4)) + 80;
+  let c = d/4 - t/2 + m*3;
+  let px = q*cos(c);
+  let py = q*sin(c) + d*9 - 130;                   // recentre the d*9+60 offset
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.1 * grow;
+  let y = 960 + py * 2.1 * grow;
+  let hue = mod(m*90 + i*0.03 + t*14, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "Two koi from one formula", (540, 138), 36);
+caption(sub, "10,000 points, no simulation", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\cos c,\;\; q\sin c)`, 32);
+caption(lab, "a polar plot: radius q, angle c, per point", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);

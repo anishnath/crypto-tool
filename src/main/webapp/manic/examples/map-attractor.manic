@@ -1,0 +1,45 @@
+// map-attractor — a discrete 2-D strange attractor, via the new `cloud … from
+// map(...)` source: the discrete twin of `from flow`. `map` ITERATES a 2-D map
+// (x,y) -> (x',y') 40,000 times (a stateful recurrence clouds alone can't do) and
+// hands each point the i-th state as hx/hy; the cloud's formulas project it.
+// Covers the whole Gumowski-Mira / Clifford / de Jong / Hénon family. Most maps
+// take both formulas from the OLD state (clean); THIS one is sequential
+// (y' uses x'), so x' is inlined into y' below.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau). Our hue'd, annotated,
+// bloomed take on a 9:16 Short — pure in (i, t), so it scrubs and records.
+//
+//   manic examples/map-attractor.manic
+title("A strange attractor from one map");
+canvas("9:16");
+template("black");
+
+cloud(atr, 40000, #ffffff, 0.5)
+  from map("(y+(1-0.06*y*y)*0.003*y-0.8*x+3.6*x*x/(1+x*x))", "-0.8*(y+(1-0.06*y*y)*0.003*y-0.8*x+3.6*x*x/(1+x*x))+3.6*(y+(1-0.06*y*y)*0.003*y-0.8*x+3.6*x*x/(1+x*x))*(y+(1-0.06*y*y)*0.003*y-0.8*x+3.6*x*x/(1+x*x))/(1+(y+(1-0.06*y*y)*0.003*y-0.8*x+3.6*x*x/(1+x*x))*(y+(1-0.06*y*y)*0.003*y-0.8*x+3.6*x*x/(1+x*x)))-x", (1, 1)) {
+  // hx, hy = the i-th iterated state; project it through a polar lens
+  let c = t - hypot(hx, hy)/4;
+  let px = hy*(5*sin(c) + 11);
+  let py = hx*(2*cos(c) + 7) + 9*sin(hy/4 + t);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.3 * grow;
+  let y = 980 + py * 2.3 * grow;
+  let hue = mod(hypot(hx, hy)*24 + t*14, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "A strange attractor from one map", (540, 140), 34);
+caption(sub, "40,000 iterations, no simulation loop", (540, 208), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `(x,y)\;\to\;(x',\,y')`, 38);
+caption(lab, "iterate a discrete map, then project it", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(30);

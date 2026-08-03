@@ -1,0 +1,43 @@
+// lorenz-shells — the Lorenz attractor through a different lens, via the same
+// `cloud … from flow(...)` bridge (σ=9, ρ=28, β=2). `flow` integrates the 3D ODE
+// and hands each of 30,000 points the i-th state as hx/hy/hz; the cloud projects
+// (hx, hz) through a polar lens fanned into 3 layers (mod i,3) into flowing shell
+// forms. One bridge, endless dynamical-system art.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau). Our hue'd, annotated
+// take on a 9:16 Short — pure in (i, t), so it scrubs and records.
+//
+//   manic examples/lorenz-shells.manic
+title("The Lorenz flow, in shells");
+canvas("9:16");
+template("black");
+
+cloud(shells, 30000, #ffffff, 0.55)
+  from flow("9*(y - x)", "x*(28 - z) - y", "x*y - 2*z", (6, 6, 6), 0.001) {
+  let q = hx*(sin(t*pi/80 - hx*hx/89 + mod(i,3))*0.8 + 1.2)*2 + 99;
+  let k = hz/39 + t*pi/960 + mod(i,3)*2;
+  let px = q*sin(k);
+  let py = q*cos(k);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.2 * grow;
+  let y = 960 + py * 2.2 * grow;
+  let hue = mod(mod(i,3)*90 + hz*4 + t*14, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "The Lorenz flow, in shells", (540, 140), 36);
+caption(sub, "integrate chaos, then project it", (540, 208), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `\dot x=\sigma(y{-}x),\;\; \dot y=x(\rho{-}z){-}y,\;\; \dot z=xy-\beta z`, 24);
+caption(lab, "same flow as lorenz-attractor, a new lens", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(20);

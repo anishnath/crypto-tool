@@ -1,0 +1,55 @@
+// lorenz-attractor — the classic strange attractor, drawn by the new
+// `trajectory3`: a 3-D ODE integrated with RK4 into a single stateful path, hued
+// by speed and orbited by the camera. This is NOT a `cloud` (those are pure
+// f(i,t) fields with no memory); an attractor is a recurrence — each point
+// depends on every step before it — which is exactly what `trajectory3` adds.
+//
+// The Lorenz system (Edward Lorenz, 1963): ẋ=σ(y−x), ẏ=x(ρ−z)−y, ż=xy−βz,
+// with σ=10, ρ=28, β=8/3 — the birthplace of "the butterfly effect". Reproduced
+// from a p5 art-tweet by @yuruyurau (https://x.com/yuruyurau); our own 3-D,
+// speed-hued, annotated take.
+//
+//   manic examples/lorenz-attractor.manic
+title("The Lorenz attractor");
+canvas("9:16");
+template("black");
+
+camera3((10, -10, 6), (0, 0, 0), 30, perspective);
+
+// integrate the 3-D flow with RK4; coloured by speed automatically
+trajectory3(butterfly,
+  "10*(y - x)",          // ẋ = σ(y − x)
+  "x*(28 - z) - y",      // ẏ = x(ρ − z) − y
+  "x*y - 2.667*z",       // ż = xy − βz
+  (0.1, 0, 0), 13000);
+untraced(butterfly);
+
+// ---- textbook annotations ----
+caption(head, "The Lorenz attractor", (540, 150), 40);
+caption(sub, "deterministic chaos — one 3D flow", (540, 220), 24);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1660),
+  `\dot x=\sigma(y{-}x),\;\; \dot y=x(\rho{-}z){-}y,\;\; \dot z=xy-\beta z`, 26);
+caption(lab, "σ=10, ρ=28, β=8/3 — integrated by RK4", (540, 1746), 22);
+hidden(eq);
+hidden(lab);
+
+// ---- run it: the path draws on while the camera orbits, annotations reveal ----
+par {
+  seq {
+    orbit3(45, 26, 11, 0.05, linear);       // snap to a start view
+    orbit3(405, 26, 11, 22, linear);        // then a full slow revolution
+  }
+  draw(butterfly, 12);                        // the attractor traces itself on
+  seq {
+    wait(0.6);
+    show(head);
+    wait(1.6);
+    show(sub);
+    wait(2.0);
+    show(eq);
+    show(lab);
+    wait(25);
+  }
+}

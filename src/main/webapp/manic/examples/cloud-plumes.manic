@@ -1,0 +1,47 @@
+// cloud-plumes — another @yuruyurau art-tweet in ONE `cloud`: 30,000 points in
+// two mirrored layers (`mod(i,2)`) drift into flowing frond/plume forms and morph
+// over time. A polar plot — radius `q`, angle `c` — coloured per point and
+// bloomed from the centre on a 9:16 Short. `mag(k,e)^2` becomes `k*k+e*e`, and
+// the canvas `w` (=400) is folded into the constant `i/1200`.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau) — a prolific poster of
+// tiny p5.js/dwitter art formulas. Our own hue'd, annotated take. Pure in (i, t),
+// so it scrubs and records; the p5 original can't.
+//
+//   manic examples/cloud-plumes.manic
+title("Two fronds from one formula");
+canvas("9:16");
+template("black");
+
+cloud(fronds, 30000, #ffffff, 0.6) {
+  let m = mod(i, 2) * 3;            // two layers: 0, 3
+  let k = 14*cos(i/39);
+  let e = i/1200 - 13;
+  let d = (k*k + e*e)/59 + 1;
+  let q = 89 - sin(k)*d + k*(8/d + sin(d*3 + e/9 - t));
+  let c = d*0.45 - sin(t - d)/8 - t/8 + m;
+  let px = q*sin(c);
+  let py = (q + 40 + 30*sin(c*2 + m))*cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.0 * grow;
+  let y = 960 + py * 2.0 * grow;
+  let hue = mod(m*70 + i*0.03 + t*15, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "Two fronds from one formula", (540, 138), 36);
+caption(sub, "30,000 points, no simulation", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q{+}\Delta)\cos c)`, 30);
+caption(lab, "a polar plot: radius q, angle c, per point", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);

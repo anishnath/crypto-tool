@@ -1,0 +1,48 @@
+// cloud-jellyfish — another @yuruyurau art-tweet in ONE `cloud`: 20,000 points in
+// two layers (`mod(i,2)`) drift into jellyfish-like bells with trailing tendrils
+// and pulse over time. A polar plot (radius `q`, angle `c`) with a nested
+// `sin(sin(...))` that gives the bell its soft ripple; coloured per point and
+// bloomed from the centre on a 9:16 Short. `mag(k,e)^2` → `k*k+e*e`; the
+// parameter is renamed `s` (the required output is `y`).
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau). Our hue'd, annotated
+// take — pure in (i, t), so it scrubs and records; the p5 original can't.
+//
+//   manic examples/cloud-jellyfish.manic
+title("Two jellyfish from one formula");
+canvas("9:16");
+template("black");
+
+cloud(jelly, 20000, #ffffff, 0.6) {
+  let s = i/99;                 // reference's "y" parameter
+  let m = mod(i, 2) * 3;        // two layers
+  let k = 9*cos(s*2);
+  let e = s/8 - 12;
+  let d = (k*k + e*e)/79 + 1;
+  let q = 79 - e*sin(k) + k/d*(8 + 4*sin(sin(d*d + e/9 - t)));
+  let c = d/2 - cos(d*2)/5 - t/16 + m;
+  let px = q*sin(c);
+  let py = (q + 40)*cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.2 * grow;
+  let y = 960 + py * 2.2 * grow;
+  let hue = mod(m*70 + i*0.05 + t*15, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "Two jellyfish from one formula", (540, 138), 34);
+caption(sub, "20,000 points, no simulation", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q{+}40)\cos c)`, 30);
+caption(lab, "a polar plot: radius q, angle c, per point", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);

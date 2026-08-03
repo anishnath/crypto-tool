@@ -1,0 +1,50 @@
+// cloud-feathers — another @yuruyurau art-tweet in ONE `cloud`: 20,000 points in
+// FOUR layers (`mod(i,4)`) fan into feathery plumes that flutter over time. A
+// polar plot (radius `q`, angle `c`) whose amplitude switches on a conditional —
+// the original's `(y<5 ? … : 11)` becomes a `sign()` blend, since cloud formulas
+// have no ternary. `mag(k,e)` here (not squared); coloured per point and bloomed
+// on a 9:16 Short. The parameter is renamed `s` (the required output is `y`).
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau). Our hue'd, annotated
+// take — pure in (i, t), so it scrubs and records; the p5 original can't.
+//
+//   manic examples/cloud-feathers.manic
+title("Four feathers from one formula");
+canvas("9:16");
+template("black");
+
+cloud(feathers, 20000, #ffffff, 0.6) {
+  let s = i/500;                          // reference's "y"
+  let m = mod(i, 4) * 8;                  // four layers
+  let sw = 0.5*(1 + sign(5 - s));         // (y<5 ? … : …) via sign
+  let kamp = sw*(sin(t/8 + s)*35) + (1 - sw)*11;
+  let k = cos(s*9) * kamp;
+  let e = s/8 - 13;
+  let o = hypot(k, e)/6;
+  let q = k*s/19 + 49 + k*sin(s)*sin(o*2 - e/5 - t);
+  let c = o/3 - e/5 - t/8 + m;
+  let px = q*sin(c) - 79*cos(c/3);
+  let py = (q + 70)*cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 1.9 * grow;
+  let y = 960 + py * 1.9 * grow;
+  let hue = mod(m*45 + i*0.04 + t*14, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "Four feathers from one formula", (540, 138), 34);
+caption(sub, "20,000 points, no simulation", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q{+}70)\cos c)`, 30);
+caption(lab, "a polar plot in four layers (mod i,4)", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);

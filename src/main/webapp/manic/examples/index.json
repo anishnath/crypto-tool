@@ -1,5 +1,5 @@
 {
-  "count": 324,
+  "count": 338,
   "categories": [
     {
       "slug": "algorithms",
@@ -1212,6 +1212,78 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "tree-of-leaves",
+          "file": "tree-of-leaves.manic",
+          "title": "Tree of leaves",
+          "desc": "A seed becomes a tree over one year \u2014 entirely from cloud particles."
+        },
+        {
+          "name": "map-attractor",
+          "file": "map-attractor.manic",
+          "title": "Map attractor",
+          "desc": "A discrete 2D strange attractor via cloud \u2026 from map(...) \u2014 the discrete twin of from flow."
+        },
+        {
+          "name": "lorenz-shells",
+          "file": "lorenz-shells.manic",
+          "title": "Lorenz shells",
+          "desc": "The Lorenz attractor through a different lens, same cloud \u2026 from flow(...) bridge (\u03c3=9, \u03c1=28, \u03b2=2): the integrated state projected via a polar lens fanned into 3 layers into flowing shell forms."
+        },
+        {
+          "name": "flow-lorenz",
+          "file": "flow-lorenz.manic",
+          "title": "Flow lorenz",
+          "desc": "The Lorenz attractor through an artist's lens, via cloud \u2026 from flow(...): flow integrates the 3D Lorenz ODE (a stateful system clouds alone can't do) and hands each point the i-th state as hx/hy/hz; the cloud's formulas project it \u2014 here a polar lens fanned into 9 layers."
+        },
+        {
+          "name": "cloud-phoenix",
+          "file": "cloud-phoenix.manic",
+          "title": "Cloud phoenix",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: 10,000 points flow into a living, wing-like form and morph over time."
+        },
+        {
+          "name": "cloud-kaleidoscope",
+          "file": "cloud-kaleidoscope.manic",
+          "title": "Cloud kaleidoscope",
+          "desc": "A 14-fold kaleidoscope mandala in ONE cloud."
+        },
+        {
+          "name": "cloud-medusae",
+          "file": "cloud-medusae.manic",
+          "title": "Cloud medusae",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: 30,000 points in interleaved layers (mod(i,5/4/2)) swirl into a ring of tailed medusae."
+        },
+        {
+          "name": "cloud-koi",
+          "file": "cloud-koi.manic",
+          "title": "Cloud koi",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: 10,000 points in two layers (mod(i,2)) swirl into koi-like forms chasing each other."
+        },
+        {
+          "name": "cloud-feathers",
+          "file": "cloud-feathers.manic",
+          "title": "Cloud feathers",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: 20,000 points in FOUR layers (mod(i,4)) fan into feathery plumes that flutter \u2014 a polar plot whose amplitude switches on a conditional (the p5 ternary becomes a sign() blend, since cloud formulas have none)."
+        },
+        {
+          "name": "cloud-jellyfish",
+          "file": "cloud-jellyfish.manic",
+          "title": "Cloud jellyfish",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: 20,000 points in two layers (mod(i,2)) drift into jellyfish-like bells with trailing tendrils and pulse over time \u2014 a polar plot with a nested sin(sin(...)) ripple, hue-coloured and bloomed on a 9:16 Short."
+        },
+        {
+          "name": "cloud-plumes",
+          "file": "cloud-plumes.manic",
+          "title": "Cloud plumes",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: 30,000 points in two mirrored layers (mod(i,2)) drift into flowing frond/plume forms and morph over time \u2014 a polar plot (radius q, angle c), hue-gradient coloured and bloomed on a 9:16 Short."
+        },
+        {
+          "name": "cloud-shells",
+          "file": "cloud-shells.manic",
+          "title": "Cloud shells",
+          "desc": "A tiny art-tweet by @yuruyurau, reimagined in ONE cloud: 10,000 points in three layers (mod(i,3)) placed by a polar formula (radius q, angle c), hue-gradient coloured and bloomed out of the centre on a 9:16 Short."
+        },
+        {
           "name": "popkorn-field",
           "file": "popkorn-field.manic",
           "title": "Popkorn field",
@@ -1632,6 +1704,12 @@
       "title": "3D scenes",
       "examples": [
         {
+          "name": "lorenz-attractor",
+          "file": "lorenz-attractor.manic",
+          "title": "Lorenz attractor",
+          "desc": "The classic strange attractor, drawn by trajectory3 \u2014 a 3D ODE integrated with RK4 into a single stateful path (each point depends on every step before it, so it's NOT a memoryless cloud), speed-hued and orbited by the camera."
+        },
+        {
           "name": "cloud3-sphere",
           "file": "cloud3-sphere.manic",
           "title": "Cloud3 sphere",
@@ -1816,6 +1894,12 @@
           "file": "textbook-watermelon-sections.manic",
           "title": "Textbook watermelon sections",
           "desc": "A paper-style spatial lesson that turns sphere sections into a continuous story: horizontal and vertical great-circle cuts make two halves, then perpendicular cuts separate one quarter from the three-quarter remainder."
+        },
+        {
+          "name": "hotdog-taco",
+          "file": "hotdog-taco.manic",
+          "title": "Hotdog taco",
+          "desc": "A topology lesson disguised as a proof that a hotdog is a taco: the two hallmarks of textbook rigour \u2014 a stated \\textbf{Theorem}, a \\blacksquare QED, the homeomorphism DEFINITION ($f, f^{-1}$ continuous) and the genus INVARIANT ($g(\\text{bagel})=1\\ne0=g(\\text{taco})$, $\\chi=2-2g$) \u2014 carried by live geometry."
         },
         {
           "name": "three_d",

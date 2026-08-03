@@ -1,0 +1,48 @@
+// cloud-kaleidoscope — a 14-fold kaleidoscope in ONE `cloud`. The @yuruyurau
+// original uses canvas FEEDBACK (get() + rotate + image()) — a raster/Droste
+// trick manic doesn't have (it's vector & deterministic). But the OUTCOME is a
+// 14-fold rotational symmetry, which `cloud` gets by layer-replication: one base
+// field, copied at 14 angles via a layer index `L = floor(i/bn)` and rotated by
+// `L·π/7`. So the picture is the same, but it scrubs and records (the p5 can't).
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau). Our hue'd, annotated take.
+//
+//   manic examples/cloud-kaleidoscope.manic
+title("A kaleidoscope from one formula");
+canvas("9:16");
+template("black");
+
+cloud(kaleido, 56000, #ffffff, 0.6) {
+  let bn = 4000;                        // points per copy (14 copies = 56k, smooth)
+  let L = floor(i / bn);                // copy 0..13
+  let j = mod(i, bn);                   // base index
+  let k = mod(j, 50) - 25;
+  let e = j/222;
+  let d = 5*cos(hypot(k, e) - t + mod(j, 2));
+  let bx = k + k*d/6*sin(d + e/3 + t);
+  let by = 90 + e*d - e/d*2*cos(d + t);
+  let ang = L * pi/7;                    // 14-fold rotation of the base field
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + (bx*cos(ang) - by*sin(ang)) * 2.2 * grow;
+  let y = 960 + (bx*sin(ang) + by*cos(ang)) * 2.2 * grow;
+  let r = 0.8;
+  let hue = mod(L*26 + by*2 + t*12, 360);   // a colour per sector + radial
+}
+
+// ---- textbook annotations ----
+caption(head, "A kaleidoscope from one formula", (540, 138), 34);
+caption(sub, "one field, copied at 14 angles", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `\vec p_L = R\!\left(L\tfrac{2\pi}{14}\right)\,\vec p_0`, 34);
+caption(lab, "14-fold symmetry, no mirrors — pure rotation", (540, 1786), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);

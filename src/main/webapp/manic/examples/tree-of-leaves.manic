@@ -1,0 +1,215 @@
+// tree-of-leaves — the full lifecycle cut. One seed, one year, one clock.
+// Everything is still a pure function of index i and time t (scrub-safe, no
+// state): four clouds now tell a complete story --
+//   stars  (220)   - twinkling night sky
+//   wood   (1,500) - trunk + five branches, grown by a front after the seed lands
+//   leaves (5,500) - golden-angle canopy; each leaf POPS (spring), flutters,
+//                    turns autumn-coloured on its own clock, FALLS in the gust,
+//                    fades into the soil over winter... and RETURNS, green again
+//   bloom  (1,200) - blossoms that open on the young canopy, shed their petals
+//                    in a slow petal-snow, and bloom once more at the end
+// 8,420 points - one small formula each.
+// Idioms: max(0,s) = 0.5*(s+abs(s));  min(a,b) = a - max(0, a-b);
+//         hash(i)  = mod(abs(sin(i*12.9898)*43758.55), 1)
+//
+//   manic tree-of-leaves.manic
+title("A Seed, a Tree, a Year");
+canvas("9:16");
+template("black");
+
+// ---------- HUD ----------
+text(head, (540, 150), "A Seed, a Tree, a Year"); display(head); cursor(head);
+text(season, (540, 330), ""); size(season, 34); color(season, lime);
+text(cap, (540, 1800), ""); size(cap, 30);
+counter(nlv, (540, 255), 0, 0, "leaves ", ""); color(nlv, lime); hidden(nlv);
+
+// ---------- stage ----------
+circle(moon, (880, 235), 62); color(moon, #f6e7c0); glow(moon, 20); hidden(moon);
+line(gnd, (60, 1668), (1020, 1668)); stroke(gnd, 3); color(gnd, dim); untraced(gnd);
+dot(seed, (540, 290), 9); color(seed, gold); glow(seed, 10); hidden(seed);
+
+// ---------- the night sky: 220 twinkling stars ----------
+cloud(stars, 220, #ffffff, 0.5) {
+  let rn = mod(abs(sin(i * 91.17) * 4375.8), 1);
+  let rn2 = mod(abs(sin(i * 45.7) * 7919.3), 1);
+  let x = 40 + rn * 1000;
+  let y = 60 + rn2 * 500;
+  let tw = 0.5 + 0.5 * sin(2 * t + i * 1.3);
+  let r = (0.6 + rn * 1.2) * tw * tanh(t) + 0.3;
+  let hue = 200 + rn * 40;
+}
+
+// ---------- the wood: grows out of the planted seed (front starts t~3.6) ----
+cloud(wood, 1500, #ffffff, 0.5) {
+  let p = i / 1500;
+  let b = mod(i, 5);
+  let rn = mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let rn2 = mod(abs(sin(i * 78.233) * 12543.7), 1);
+  let q = 0.5 * ((2 * p - 1) + abs(2 * p - 1));
+  let pt = 2 * p - q;
+  let tx = 540 + (b - 2) * 175;
+  let ty = 800 + abs(b - 2) * 95;
+  let sx = 540 + 18 * sin(3.1 * pt) + (tx - 540) * q + 12 * sin(3.14159 * q) * (b - 2) * 0.3;
+  let sy = 1660 - 510 * pt + (ty - 1150) * q;
+  let wid = 26 * (1 - 0.7 * pt) * (1 - 0.55 * q) + 3;
+  let jx = (rn - 0.5) * 2 * wid;
+  let jy = (rn2 - 0.5) * 14;
+  // wind, with the cold gust that strips the tree near t = 19
+  let hgt = (1660 - sy) / 900;
+  let gd = t - 19;
+  let gust = 1 + 1.3 * exp(-0.4 * gd * gd);
+  let wind = 14 * sin(0.9 * t + 0.004 * sy) * hgt * hgt * gust;
+  // growth front: sweeps p = 0..1 starting when the seed has been planted
+  let sv = tanh((0.3 * (t - 3.6) - p) * 5);
+  let vfront = 0.5 * (sv + abs(sv));
+  let x = sx + jx + wind;
+  let y = sy + jy;
+  let r = (2.2 + 2.2 * (1 - pt) * (1 - q)) * vfront;
+  let hue = 22 + rn * 14;
+}
+
+// ---------- the leaves: pop, flutter, turn, fall, fade... and RETURN --------
+cloud(leaves, 5500, #ffffff, 0.5) {
+  let b = mod(i, 5);
+  let k = floor(i / 5);
+  let rn = mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let rn2 = mod(abs(sin(i * 78.233) * 12543.7), 1);
+  let tx = 540 + (b - 2) * 175;
+  let ty = 800 + abs(b - 2) * 95;
+  let th = k * 2.39996;
+  let rad = 10.5 * sqrt(mod(k, 210)) + 8 * rn;
+  let bx = tx + rad * cos(th);
+  let by = ty + 0.78 * rad * sin(th) - 25;
+  let px = bx + (540 - bx) * 0.10;
+  let py = by + (860 - by) * 0.10;
+  // spring: each leaf unfurls on its own delay (t ~ 6.4 .. 8.8)
+  let ap0 = tanh((t - 6.4 - 2.4 * rn) * 2.2);
+  let ap = 0.5 * (ap0 + abs(ap0));
+  // wind + flutter, gusting near t = 19
+  let hgt = (1660 - py) / 900;
+  let gd = t - 19;
+  let gust = 1 + 1.3 * exp(-0.4 * gd * gd);
+  let wind = 26 * sin(0.9 * t + 0.004 * py + 2 * rn) * hgt * hgt * gust;
+  let fl = 4 * sin(2.3 * t + 1.7 * i);
+  // autumn: green -> gold/red, each leaf at its own pace (t ~ 16 .. 20)
+  let au0 = (t - 16 - 2.2 * rn) * 0.5;
+  let au1 = 0.5 * (au0 + abs(au0));
+  let au = au1 - 0.5 * ((au1 - 1) + abs(au1 - 1));
+  // the fall: EVERY leaf lets go this time (t ~ 19.5 .. 23), sways down, lands
+  let s2 = t - 19.5 - 3.5 * rn2;
+  let dt = 0.5 * (s2 + abs(s2));
+  let yfree = py + 55 * dt * dt;
+  let yg = 1665 + 20 * rn;
+  let yfall = yfree - 0.5 * ((yfree - yg) + abs(yfree - yg));
+  let sway = 30 * sin(2.2 * dt + i) * tanh(dt) * exp(-0.10 * dt);
+  // winter: the fallen fade into the soil (t ~ 24.5 .. 27.5)
+  let go0 = tanh((t - 24.5 - 1.6 * rn) * 1.6);
+  let gone = 0.5 * (go0 + abs(go0));
+  // spring again: a NEW leaf opens at the same spot on the branch (t ~ 27 .. 30)
+  let rb0 = tanh((t - 27 - 2.2 * rn) * 2.0);
+  let rb = 0.5 * (rb0 + abs(rb0));
+  // two position tracks, blended: the falling track and the fresh canopy track
+  let xfall = px + wind * (1 - tanh(2 * dt)) + fl + sway;
+  let xcan = px + wind + fl;
+  let x = xfall * (1 - rb) + xcan * rb;
+  let y = yfall * (1 - rb) + py * rb;
+  let r = (2.6 + 1.8 * rn2) * (ap * (1 - gone) + rb);
+  // hue: green, autumn-shifted, reset to green by rebirth
+  let hgr = 96 + 36 * rn;
+  let hau = 18 + 34 * rn2;
+  let hue = hgr + (hau - hgr) * au * (1 - rb);
+}
+
+// ---------- the blossoms: open on the young tree, shed petal-snow, return ---
+cloud(bloom, 1200, #ffffff, 0.5) {
+  let b = mod(i, 5);
+  let k = floor(i / 5);
+  let rn = mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let rn2 = mod(abs(sin(i * 78.233) * 12543.7), 1);
+  let tx = 540 + (b - 2) * 175;
+  let ty = 800 + abs(b - 2) * 95;
+  let th = k * 2.39996 + 1.3;
+  let rad = 21 * sqrt(mod(k, 48)) + 6 * rn;
+  let bx = tx + rad * cos(th);
+  let by = ty + 0.78 * rad * sin(th) - 25;
+  let px = bx + (540 - bx) * 0.10;
+  let py = by + (860 - by) * 0.10;
+  // first bloom: t ~ 9 .. 11.3
+  let bp0 = tanh((t - 9 - 1.8 * rn) * 2.4);
+  let bp = 0.5 * (bp0 + abs(bp0));
+  // petal-snow: slow drift down from t ~ 12.2, landing softly
+  let s2 = t - 12.2 - 2.2 * rn2;
+  let dt = 0.5 * (s2 + abs(s2));
+  let yfree = py + 16 * dt * dt + 30 * dt;
+  let yg = 1662 + 22 * rn;
+  let yfall = yfree - 0.5 * ((yfree - yg) + abs(yfree - yg));
+  let sway = 40 * sin(1.8 * dt + i) * tanh(dt);
+  // fallen petals melt away t ~ 18 .. 20.4 (before the leaf carpet arrives)
+  let go0 = tanh((t - 18 - 1.2 * rn) * 1.8);
+  let gone = 0.5 * (go0 + abs(go0));
+  // the second bloom, right at the end: the cycle begins again (t ~ 30.5+)
+  let rb0 = tanh((t - 30.5 - 1.2 * rn) * 2.6);
+  let rb = 0.5 * (rb0 + abs(rb0));
+  let hgt = (1660 - py) / 900;
+  let wind = 20 * sin(0.9 * t + 0.004 * py + 2 * rn) * hgt * hgt;
+  let xfall = px + wind * (1 - tanh(2 * dt)) + sway;
+  let xcan = px + wind + 3 * sin(2.1 * t + i);
+  let x = xfall * (1 - rb) + xcan * rb;
+  let y = yfall * (1 - rb) + py * rb;
+  let tw = 1 + 0.15 * sin(3 * t + i);
+  let r = (2.2 + 1.6 * rn2) * (bp * (1 - gone) + rb) * tw;
+  let hue = 318 + 26 * rn;
+}
+
+// ================= timeline (narration over the self-evolving year) =========
+type(head, 1.1);
+par { show(moon, 0.8); draw(gnd, 0.8); }
+
+// ---- the seed
+say(cap, "it begins with a single seed", 0.5);
+show(seed, 0.3);
+shift(seed, (0, 1355), 1.0, in);
+cue(pop);
+fade(seed, 0.5);
+
+// ---- spring: sprout and first leaves
+par { say(cap, "a sprout reaches for the sky", 0.5); say(season, "spring", 0.3); }
+wait(2.0);
+say(cap, "first leaves unfurl, one by one", 0.5);
+show(nlv, 0.3);
+to(nlv, value, 5500, 2.6, smooth);
+
+// ---- the flowering
+say(cap, "and then - the tree FLOWERS", 0.5);
+cue(chime);
+wait(1.8);
+
+// ---- summer: petal-snow
+par { say(cap, "petals drift away... summer settles in", 0.5); say(season, "summer", 0.3); recolor(season, gold, 0.3); }
+wait(3.0);
+
+// ---- autumn
+par { say(cap, "autumn arrives, one leaf at a time", 0.5); say(season, "autumn", 0.3); recolor(season, orange, 0.3); }
+cue(tick);
+wait(2.6);
+
+// ---- the gust: every leaf lets go
+say(cap, "a cold wind - and every leaf lets go", 0.5);
+cue(whoosh);
+to(nlv, value, 0, 4.6, smooth);
+
+// ---- winter
+par { say(cap, "winter: the tree remembers in silence", 0.5); say(season, "winter", 0.3); recolor(season, cyan, 0.3); }
+wait(2.2);
+
+// ---- spring again
+par { say(cap, "...and then, again", 0.5); say(season, "spring, again", 0.3); recolor(season, lime, 0.3); }
+cue(whoosh);
+to(nlv, value, 5500, 3.0, smooth);
+say(cap, "new leaves - and new flowers", 0.5);
+cue(chime);
+wait(2.6);
+
+// ---- close
+say(cap, "a seed, a tree, a year - 8,420 points, one formula each", 0.6);
+wait(2.5);

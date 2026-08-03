@@ -1,0 +1,147 @@
+title("A Hotdog Is a Taco");
+canvas("16:9");
+template("black");
+
+// ================= HUD =================
+text(head, (cx, 60), "A Hotdog Is a Taco"); display(head); cursor(head);
+caption(sub, "a rigorous proof, with condiments", (cx, 104), 24, dim); hidden(sub);
+text(a1, (cx, 148), "Rule of the game: it's all rubber"); size(a1, 28); color(a1, cyan); hidden(a1);
+text(a2, (cx, 148), "The deformation"); size(a2, 28); color(a2, gold); hidden(a2);
+text(a3, (cx, 148), "The counterexample: the bagel"); size(a3, 28); color(a3, violet); hidden(a3);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+
+// THE claim, stated up front - it earns its QED square at the end
+equation(eqT, (cx, 200), `\textbf{Theorem.}\;\;\text{hotdog} \;\cong\; \text{taco}`, 42); hidden(eqT); z(eqT, 10);
+
+// textbook callouts: the DEFINITION (act 1) and the INVARIANT (coda) that make
+// the proof rigorous, not just tasty
+equation(eqHomeo, (cx, 285), `\text{taco}\;\cong\;\text{hotdog}\ \Longleftrightarrow\ \exists\,f,\ f^{-1}\ \text{continuous}`, 28); hidden(eqHomeo); z(eqHomeo, 10);
+equation(eqGenus, (cx, 285), `g(\text{bagel})=1\;\ne\;0=g(\text{taco}),\quad \chi = 2-2g`, 28); hidden(eqGenus); z(eqGenus, 10);
+
+// confetti ring for the QED moment
+circle(confbox, (cx, 200), 80); hidden(confbox);
+particles(conf, confbox, 22, 4, 9, "ring"); color(conf, gold); hidden(conf);
+
+// act wipe
+line(wipe1, (-40, 140), (-40, h - 90)); stroke(wipe1, 4); color(wipe1, gold); glow(wipe1, 14);
+
+// ================= act 1 cast: rubber-sheet geometry (2D) =================
+circle(blob, (cx, cy + 50), 120); outlined(blob); stroke(blob, 4); color(blob, cyan); untraced(blob); tag(blob, rub);
+polygon(btar, (cx + 150, cy + 60), (cx + 90, cy - 60), (cx - 20, cy - 30), (cx - 150, cy - 10), (cx - 130, cy + 120), (cx - 20, cy + 170), (cx + 100, cy + 150));
+outlined(btar); hidden(btar);
+morph(blob, btar);
+
+text(rule1, (cx - 340, cy + 50), "stretch / bend / squish : ALLOWED"); size(rule1, 26); color(rule1, lime); hidden(rule1); tag(rule1, rub);
+text(rule2, (cx + 340, cy + 50), "cut / glue : FORBIDDEN"); size(rule2, 26); color(rule2, red); hidden(rule2); tag(rule2, rub);
+
+// ================= act 2 cast: the 3D kitchen (right-handed, Z-up) =========
+camera3((7.8, -8.8, 4.4), (0, 0, 0.7), 42);
+grid3(floor, (0, 0, 0), 3, 1); color(floor, dim); opacity(floor, 0.3); hidden(floor);
+
+// the tortilla: a flat disc-like sheet...
+param3(sheet, "u", "v", "0", (-1.4, 1.4), (-1.8, 1.8), 40);
+color(sheet, gold); finish3(sheet, "shading=smooth depth=0.2");
+
+// ...driven by ONE knob. The fold angle grows with p; arc length is preserved
+// (tortillas bend, they do not stretch) - this IS the homeomorphism, live:
+parameter(fold, (w - 180, 610), 0.05, 0.05, 1, "fold", 2); hidden(fold);
+bind(fold, sheet, formula, "sin(2.2*p*u)/(2.2*p)", "v", "(1-cos(2.2*p*u))/(2.2*p)");
+
+// the filling: one sausage, dropped in from above
+param3(saus, "0.34*cos(u)", "v", "2.6+0.34*sin(u)", (0, tau), (-2.2, 2.2), 28);
+color(saus, coral); finish3(saus, "shading=smooth"); hidden(saus);
+
+// the unreachable bagel: genus 1, parked stage right
+param3(torus, "2.9+(0.85+0.32*cos(v))*cos(u)", "(0.85+0.32*cos(v))*sin(u)", "0.62+0.32*sin(v)", (0, tau), (0, tau), 32);
+color(torus, violet); finish3(torus, "shading=smooth"); hidden(torus);
+
+// pinned labels that live in the 3D world
+text(ltaco, (cx, cy), "TACO"); size(ltaco, 32); color(ltaco, lime); hidden(ltaco);
+pin3(ltaco, (0, -2.3, 0.9), (0, -14));
+text(lhot, (cx, cy), "HOTDOG"); size(lhot, 32); color(lhot, coral); hidden(lhot);
+pin3(lhot, (0, -2.3, 0.9), (0, -14));
+text(g0, (cx, cy), "genus 0 - no holes"); size(g0, 24); color(g0, lime); hidden(g0);
+pin3(g0, (-1.7, 0, 1.9), (0, -12));
+text(g1, (cx, cy), "genus 1 - one hole"); size(g1, 24); color(g1, violet); hidden(g1);
+pin3(g1, (2.9, 0, 1.6), (0, -14));
+
+// ================= timeline =================
+
+// ---- cold open: state the theorem with a straight face
+type(head, 1.1);
+wordpop(sub, 0.06);
+show(eqT, 0.7); cue(tick);
+wait(0.9);
+
+// ---- act 1: the rules (rubber-sheet geometry)
+cue(whoosh);
+show(a1, 0.5);
+draw(blob, 1.0);
+show(rule1, 0.5); cue(tick);
+show(rule2, 0.5); shake(rule2, 0.7);
+say(cap, "Topology keeps only what survives stretching - distance is negotiable, holes are not", 0.5);
+show(eqHomeo, 0.6);
+to(blob, morph, 1, 1.5, smooth);
+say(cap, "To a topologist these are the SAME shape - and every move must run backwards too", 0.5);
+to(blob, morph, 0, 1.2, smooth);
+wait(0.4);
+par { shift(wipe1, (w + 80, 0), 0.7, linear); fade(rub, 0.6); fade(a1, 0.5); fade(eqHomeo, 0.5); }
+fade(wipe1, 0.2);   // park the wipe fully off-stage so it can't streak act 2
+
+// ---- act 2: the deformation (the actual proof)
+cue(whoosh);
+show(a2, 0.5);
+par { show(floor, 0.8); show(sheet, 1.0); }
+say(cap, "Exhibit A: the tortilla. A disc - genus 0, no holes", 0.5);
+show(g0, 0.5);
+show(fold, 0.4);
+wait(0.6);
+
+// one knob, turned continuously: disc -> taco
+say(cap, "One knob: FOLD. No cutting, no gluing - just bending", 0.5);
+par { to(fold, value, 0.55, 2.4, smooth); orbit3(-18, 20, 10.5, 2.4, smooth); }
+show(ltaco, 0.5);
+flash(sheet, lime);
+cue(pop);
+show(saus, 0.2);
+shift3(saus, (0, 0, -2.2), 0.9, bounce);
+say(cap, "Add filling: TACO", 0.4);
+wait(0.7);
+
+// keep turning the SAME knob: taco -> hotdog
+say(cap, "Keep folding. Nothing tears, nothing sticks", 0.5);
+par { to(fold, value, 1.0, 2.6, smooth); orbit3(25, 16, 10.0, 2.6, smooth); fade(ltaco, 0.6); }
+show(lhot, 0.5);
+flash(sheet, coral);
+say(cap, "HOTDOG. Same disc - just more fold", 0.4);
+wait(0.6);
+
+// homeomorphism runs both ways: rewind it before their eyes
+say(cap, "And back again... a homeomorphism must run both directions", 0.5);
+to(fold, value, 0.55, 1.6, smooth);
+to(fold, value, 1.0, 1.6, smooth);
+
+// ---- QED
+cue(chime);
+rewrite(eqT, `\textbf{Theorem.}\;\;\text{hotdog} \;\cong\; \text{taco}\quad\blacksquare`, 0.9);
+seq { show(conf, 0.1); burst(conf, 1.4); }
+par { orbit3(115, 18, 10.0, 3.0, smooth); }
+say(cap, "No cuts, no glue - QED, with mustard", 0.6);
+wait(0.8);
+
+// ---- coda: what a hotdog is NOT
+cue(whoosh);
+show(a3, 0.5); fade(a2, 0.4);
+par { show(torus, 0.8); look3((1.3, 0, 0.7), 1.0, smooth); show(g1, 0.6); }
+show(eqGenus, 0.6);
+say(cap, "The bagel stays forever out of reach: making a hole needs a CUT", 0.5);
+say(cap, "Genus is a topological invariant - it can never change under bending", 0.5);
+flash(torus, red);
+pulse(torus, 0.8);
+wait(0.9);
+par { fade(torus, 0.7); fade(g1, 0.5); fade(a3, 0.4); fade(eqGenus, 0.5); look3((0, 0, 0.7), 1.0, smooth); }
+
+// ---- end card: the theorem breathes over a slow orbit of lunch
+par { breathe(eqT, 3, 0.05, 0, 6); orbit3(160, 14, 10.5, 6, smooth); }
+say(cap, "Lunch, rigorously", 0.6);
+wait(12.0);

@@ -1,0 +1,50 @@
+// cloud-shells — a dwitter-style art-tweet reimagined in manic: ONE `cloud` of
+// 10,000 points in three layers (`mod(i,3)`), placed by a polar formula — radius
+// `q`, angle `c` — then coloured per point (a hue gradient per form) and bloomed
+// out of the centre. Rebuilt as a textbook Short: every point a pure function of
+// (i, t), so it scrubs and records.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau) — a prolific poster of
+// these tiny p5.js/dwitter art formulas. This is our own hue'd, annotated take.
+//
+//   manic examples/cloud-shells.manic
+title("One formula, ten thousand points");
+canvas("9:16");
+template("black");
+
+cloud(swirl, 10000, #ffffff, 0.72) {
+  let m = mod(i, 3) * 4;                          // three layers: 0, 4, 8
+  let k = 9 * cos(i / 81);
+  let e = i / 461 - 11;
+  let d = hypot(k, e)^4 / 40000 + 1.5 + sin(t/2 + m)/4;
+  let q = 89 - e*sin(k) + k*(4 + 2*sin(d*9 + e/9 - t));
+  let c = d + sin(t - d*4)/9 - t/9 + m;
+  // raw shell coords (centred at 0), then bloom + scale onto the 1080x1920 frame
+  let qx = q*cos(c);
+  let qy = (q + 30)*sin(c);
+  let grow = tanh(t * 0.5 + 0.12);               // blooms from the centre
+  let x = 540 + qx * 2.9 * grow;
+  let y = 980 + qy * 2.9 * grow;
+  let r = 1.4;
+  // colour: a gradient along each form (index) with the three layers offset, all
+  // slowly cycling — every point its own hue
+  let hue = mod(m * 46 + i * 0.05 + t * 18, 360);
+}
+
+// ---- textbook annotations ----
+caption(head, "One formula, 10,000 points", (540, 132), 40);
+caption(sub, "a 200-char art-tweet, rebuilt in manic", (540, 202), 24);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\cos c,\; q\sin c)`, 44);
+caption(lab, "a polar plot: radius q, angle c, per point", (540, 1784), 22);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(17);

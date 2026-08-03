@@ -266,7 +266,10 @@ as `plot` (sin/cos/sqrt/`hypot`/`sign`/`mod`/`noise`/`fbm`…); `min`/`max` are 
 optional `let alpha` = per-point opacity (fade dots individually). A `from <source>` clause gives each
 point a home as extra vars `hx`/`hy` (x/y default to it; empty block just fills): **`from text("WORD")`**
 fills glyphs (type any word, no art), **`from shape(id)`** area-fills any on-stage shape, **`from path(id)`**
-spaces points by arc length along a path. Fly a swarm in/out by blending toward `hx`/`hy` over `t`.
+spaces points by arc length along a path; **`from flow("dx/dt","dy/dt","dz/dt",(x0,y0,z0),[dt])`** integrates
+a 3D ODE (RK4) and gives each point the i-th state as `hx`/`hy`/`hz` — project any dynamical system (Lorenz,
+Rössler) through your own x/y formulas. **`from map("x'","y'",(x0,y0))`** is the discrete twin — iterates a 2D
+map into a strange attractor (Gumowski-Mira/Clifford/de Jong/Hénon). Fly a swarm in/out by blending toward `hx`/`hy` over `t`.
 **`cloud3(id,count,[fill],[opacity]) { let x…; let y…; let z… }`** is the 3D twin — closed-form x/y/z(i,t)
 projected by the orbit `camera3` (needs one), with per-point r/hue/alpha (from sources are 2D-only) ·
 `livehistogram(id,(cx,cy),min,max,bins,[width],[height],[color])` creates an
@@ -581,6 +584,9 @@ batched one entity per generation; address layers as `{id}.dN` and leaves as
 member proxy) · `vectorfield3(id,center,half,"u(x,y,z,p)","v(x,y,z,p)",
 "w(x,y,z,p)",[density])` (bounded formula field; normalized time `p`) ·
 `curve3(id,"x(t)","y(t)","z(t)",[(t0,t1)])` (parametric 3D curve) ·
+`trajectory3(id,"dx/dt","dy/dt","dz/dt",(x0,y0,z0),[steps],[dt])` (integrate a **3D ODE** with RK4 → a
+strange attractor: Lorenz/Rössler/Aizawa. A single STATEFUL path (each point depends on the last), unlike
+`cloud3`'s memoryless fields; auto-fit + speed-hued; needs `camera3`; `untraced`+`draw` traces it on) ·
 `surface3(id,"z(x,y)",(x0,x1),(y0,y1),[res])` (z=f(x,y) filled, flat-shaded surface; formulas may use `x` and `y`) ·
 `param3(id,"x(u,v)","y(u,v)","z(u,v)",(u0,u1),(v0,v1),[res])` (general parametric surface of `u`,`v` — tori, parametric spheres, Möbius strips; can wrap/close, which `surface3` can't) · `heightmap3(id,grid,"z(x,y,h)",[size])` (**Grid→3D bridge:** lift a grid-kit `grid` into a terrain mesh — `h`=1 for a filled/`wall`/alive cell else 0, latest CA/WFC frame if run; `"h*1.6"` raises walls, add `fbm(x,y)` for organic roll; the grid kit stays 3D-unaware) · **procedural noise in ANY formula string** (plot/surface3/heightmap3/bind): `noise(x,y)` (smooth value noise) and `fbm(x,y)` (fractal Brownian motion) — both ~[-1,1], deterministic; e.g. `surface3(land,"fbm(x*0.9,y*0.9)*2.4",(-4,4),(-4,4),72)` is a fractal landscape. Formula strings also take 2-arg `atan2/hypot/min/max/mod` · **multivariable calculus on a `surface3`:** `gradient3(id,surface,x,y,[color])` steepest-ascent arrow · `tangentplane3(id,surface,x,y,[color])` the tangent plane patch · `volume3(id,surface,[res],[color])` the volume under it as a column grid (double integral) ·
 `prism3(id,(cx,cy,cz),sides,radius,height)` · `pyramid3(id,(cx,cy,cz),sides,radius,height)`
