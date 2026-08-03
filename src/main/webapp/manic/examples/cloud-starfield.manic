@@ -1,0 +1,23 @@
+// cloud-starfield — again the same primitive, now a scatter, not a curve: a
+// drifting starfield built on `noise` and `mod`. Each star sits at a hashed
+// position and rains downward, wrapping at the bottom, with a hashed size — the
+// point being that `cloud` places points by whatever rule you give it. A 9:16
+// Short held 20s so the drift is visible.
+//
+//   manic examples/cloud-starfield.manic
+title("cloud — a drifting starfield");
+canvas("9:16");
+template("black");
+
+cloud(stars, 900, #ffffff, 0.9) {
+  let x = 1080 * noise(i, 1);
+  // fall over time and wrap the height with mod(...) (a 2-arg formula function)
+  let y = mod(1920 * noise(i, 7) + t * 90, 1920);
+  let r = 0.6 + 1.8 * noise(i, 3);
+  // colour reveal: stars start cool blue-white, then drift into gentle
+  // per-star colour as `spread` grows and the whole field slowly cycles
+  let spread = tanh(t * 0.25);
+  let hue = mod(210 + 150 * noise(i, 5) * spread + t * 18, 360);
+}
+
+wait(20);

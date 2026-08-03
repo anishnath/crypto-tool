@@ -1,0 +1,64 @@
+// manic-promo — a generative promo built from the `cloud` primitive alone.
+// Five particle swarms fly in and assemble into words: MANIC at the centre,
+// with 3B1B, Manim, Animation and Generative claiming the four corners. Each
+// word is `cloud(...) from text("…")` — the glyphs are filled with points whose
+// homes arrive as `hx`/`hy`; the block re-centres and scales that home to its
+// slot, then blends the swarm in from a golden-angle scatter over time `t`.
+// One primitive, five words, no art assets. Change the words and it just works.
+//
+//   manic examples/manic-promo.manic
+title("manic — generative animation, from a swarm");
+canvas(1080, 1080);
+template("black");
+
+// --- centre: MANIC, big, a cycling rainbow ---------------------------------
+cloud(manic, 2000, #ffffff, 0.96) from text("MANIC") {
+  let a = 0.5 * (1 + tanh((t - mod(i * 7, 29) * 0.04 - 1.0) * 2.2));
+  let px = (hx - 540) * 0.62 + 540;
+  let py = (hy - 540) * 0.62 + 540;
+  let sx = 540 + cos(i * 2.39996) * (420 + mod(i * 97, 260));
+  let sy = 540 + sin(i * 2.39996) * (420 + mod(i * 97, 260));
+  let x = sx * (1 - a) + px * a;
+  let y = sy * (1 - a) + py * a;
+  let r = 2.4;
+  let hue = mod(hx * 0.4 + t * 22, 360);
+}
+
+// --- four corners: the world manic plays in --------------------------------
+cloud(tl, 780, #3b8ee0, 0.95) from text("3B1B") {
+  let a = 0.5 * (1 + tanh((t - 2.4) * 2.2));
+  let px = (hx - 540) * 0.34 + 250;
+  let py = (hy - 540) * 0.34 + 240;
+  let x = (250 + cos(i * 2.39996) * 460) * (1 - a) + px * a;
+  let y = (240 + sin(i * 2.39996) * 460) * (1 - a) + py * a;
+  let r = 2;
+}
+
+cloud(tr, 820, #46e2c8, 0.95) from text("Manim") {
+  let a = 0.5 * (1 + tanh((t - 2.7) * 2.2));
+  let px = (hx - 540) * 0.34 + 830;
+  let py = (hy - 540) * 0.34 + 240;
+  let x = (830 + cos(i * 2.39996) * 460) * (1 - a) + px * a;
+  let y = (240 + sin(i * 2.39996) * 460) * (1 - a) + py * a;
+  let r = 2;
+}
+
+cloud(bl, 1000, #f0a54e, 0.95) from text("Animation") {
+  let a = 0.5 * (1 + tanh((t - 3.0) * 2.2));
+  let px = (hx - 540) * 0.30 + 250;
+  let py = (hy - 540) * 0.30 + 840;
+  let x = (250 + cos(i * 2.39996) * 460) * (1 - a) + px * a;
+  let y = (840 + sin(i * 2.39996) * 460) * (1 - a) + py * a;
+  let r = 2;
+}
+
+cloud(br, 1050, #b06ef0, 0.95) from text("Generative") {
+  let a = 0.5 * (1 + tanh((t - 3.3) * 2.2));
+  let px = (hx - 540) * 0.30 + 830;
+  let py = (hy - 540) * 0.30 + 840;
+  let x = (830 + cos(i * 2.39996) * 460) * (1 - a) + px * a;
+  let y = (840 + sin(i * 2.39996) * 460) * (1 - a) + py * a;
+  let r = 2;
+}
+
+wait(12);

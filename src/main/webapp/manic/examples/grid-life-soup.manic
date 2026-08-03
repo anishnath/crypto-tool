@@ -16,10 +16,11 @@ let rows = 40;
 let cell = 25;
 grid(life, (540, 540), cols, rows, cell);
 
-// seed ~45% of cells at random (the hash keeps it reproducible)
+// seed ~45% of cells at random — `random` is deterministic, so the soup is
+// reproducible; render with `--seed random` to roll a fresh soup each time.
 for r in 0..rows {
   for c in 0..cols {
-    if sin((r * 12.9898 + c * 78.233) * 43758.5453) > 0.1 {
+    if random(r, c) > 0.55 {
       setcell(life, r, c, wall);
     }
   }

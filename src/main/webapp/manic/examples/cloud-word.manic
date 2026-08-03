@@ -1,0 +1,31 @@
+// cloud-word — type a word, get a particle swarm that flies in from all sides,
+// assembles into the letters, holds, then bursts apart. The `cloud` primitive's
+// `from text("…")` source fills the glyphs and hands each point its home as
+// `hx`/`hy`; the block formulas fly those homes in and out over time `t`. Change
+// the word and it just works — the end-user's creativity, not a hard-coded logo.
+//
+//   manic examples/cloud-word.manic
+title("cloud — a word from a swarm");
+canvas("9:16");
+template("black");
+
+cloud(word, 1800, #ffffff, 0.95) from text("MANIC") {
+  // fly-in start: golden-angle scatter around the canvas centre (540, 960)
+  let din = 500 + mod(i * 97, 520);
+  let sx = 540 + cos(i * 2.39996) * din;
+  let sy = 960 + sin(i * 2.39996) * din;
+  // burst-out end: a different hashed angle
+  let ex = 540 + cos(i * 4.123) * (520 + mod(i * 53, 420));
+  let ey = 960 + sin(i * 4.123) * (520 + mod(i * 53, 420));
+  // timeline: assemble ~t=1.4 (per-dot stagger), hold, burst ~t=7.5
+  let p = t - mod(i * 7, 29) * 0.05;
+  let asm = 0.5 * (1 + tanh((p - 1.4) * 2.0));
+  let bst = 0.5 * (1 + tanh((t - 7.5) * 1.6));
+  let x = sx * (1 - asm) + (hx * (1 - bst) + ex * bst) * asm;
+  let y = sy * (1 - asm) + (hy * (1 - bst) + ey * bst) * asm;
+  let r = 2.4;
+  // a left-to-right rainbow across the word, gently cycling
+  let hue = mod(hx * 0.5 + t * 25, 360);
+}
+
+wait(11);

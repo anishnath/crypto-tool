@@ -1,0 +1,57 @@
+// fibonacci-sphere — an educational cloud3 lesson: how do you scatter N points
+// *evenly* over a sphere? Naive latitude/longitude clumps at the poles; the fix
+// is the golden angle. This builds the answer live — 2000 points placed by the
+// exact closed-form spiral, projected in 3D, with the derivation typeset beside
+// it in LaTeX. The picture and the maths are the same object, which is the point.
+//
+//   manic examples/fibonacci-sphere.manic
+title("The Fibonacci sphere");
+canvas("16:9");
+template("black");
+
+camera3((10, -10, 6), (0, 0, 0), 40, perspective);
+
+// --- headings (caption centres the row; text() would left-anchor and clip) --
+caption(head, "Even points on a sphere", (640, 52), 38);
+caption(ask, "even heights, then a golden-angle turn each step", (640, 108), 22);
+hidden(head);
+hidden(ask);
+
+// --- the sphere: the Fibonacci spiral, breathing-free so it reads as a lesson
+cloud3(orb, 2000, #ffffff, 0.97) {
+  let ct = 1 - 2 * (i + 0.5) / 2000;   // z_i: cos(theta), evenly spaced in [-1,1]
+  let st = sqrt(1 - ct * ct);          // r_i: ring radius at that height
+  let th = i * 2.39996;                // theta_i: i * the golden angle
+  let x = 3 * st * cos(th + t * 0.25); // (slow spin so it reads as a solid)
+  let y = 3 * st * sin(th + t * 0.25);
+  let z = 3 * ct;
+  let r = 0.05;
+  let hue = mod(200 + i * 0.14, 360);  // a cool→warm gradient down the spiral
+}
+untraced(orb);
+
+// --- the derivation, typeset beside it ------------------------------------
+equation(e1, (270, 300), `z_i = 1 - \dfrac{2i+1}{N}`, 34);
+equation(e2, (270, 410), `r_i = \sqrt{1 - z_i^{2}}`, 34);
+equation(e3, (270, 520), `\theta_i = i\,\varphi`, 34);
+equation(e4, (300, 640), `\varphi = \pi(3-\sqrt5) \approx 137.5^\circ`, 30);
+hidden(e1);
+hidden(e2);
+hidden(e3);
+hidden(e4);
+
+// --- lesson beats ---------------------------------------------------------
+show(head);
+wait(0.8);
+show(ask);
+wait(1.2);
+draw(orb, 3);                 // the sphere grows in as the points appear
+wait(0.6);
+show(e1);                     // even heights
+wait(1.6);
+show(e2);                     // the ring radius at each height
+wait(1.6);
+show(e3);                     // turn a little each step...
+wait(1.4);
+show(e4);                     // ...by the golden angle: the never-repeating turn
+wait(3.5);

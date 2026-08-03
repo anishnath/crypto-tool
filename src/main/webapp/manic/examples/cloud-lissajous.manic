@@ -1,0 +1,23 @@
+// cloud-lissajous — the SAME `cloud` primitive as popkorn, a completely
+// different picture: a Lissajous curve traced by 600 points, its horizontal
+// phase drifting with time so the figure slowly folds through itself. Pure math,
+// no donut in sight — proof that `cloud` is a generic point field. On a 9:16
+// Short, held 20s so you can watch it evolve.
+//
+//   manic examples/cloud-lissajous.manic
+title("cloud — a breathing Lissajous figure");
+canvas("9:16");
+template("black");
+
+cloud(liss, 600, #46e2c8, 0.95) {
+  let u = i / 600 * tau;           // parameter around the curve
+  let x = 540 + 460 * sin(3 * u + t);
+  let y = 960 + 760 * sin(2 * u);
+  let r = 3;
+  // colour reveal: starts near cyan (hue 180), fans into a rotating rainbow
+  // around the curve as `spread` grows 0 -> 1 over the first several seconds
+  let spread = tanh(t * 0.3);
+  let hue = mod(180 + u * 57 * spread + t * 35, 360);
+}
+
+wait(20);

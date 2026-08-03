@@ -228,7 +228,13 @@ Use a fresh controller id to coordinate exact named phases in ANY scene—not on
 `sum(i in a..b : expr)` (also `prod`/`min`/`max`).
 Expressions: `+ - * / ^`, unary `-`, `< <= > >= == != && ||`, parens,
 `pi`/`e`/`tau`, funcs `sin cos tan asin acos atan sinh cosh tanh exp ln log
-log10 log2 sqrt abs floor ceil round sign`. Id interpolation: `name{expr}`.
+log10 log2 sqrt abs floor ceil round sign`, plus **`random(x)`** (hash → `[0,1)`)
+and **`noise(x)`** (smooth); both take one or more args (`random(r,c)`,
+`noise(x,y)`). Use anywhere a number goes to jitter loops, seed grids
+(`random(r,c)`), scatter, or vary colour (`hue(d{i},360*random(i))`).
+Deterministic (reproducible; rolled once at build) — `--seed N` re-rolls,
+`--seed random` rolls fresh each render; `noise(t)` for random-looking-over-time.
+Id interpolation: `name{expr}`.
 
 ### Constructors (std)
 `text(id,(x,y),"s")` · `counter(id,(x,y),value,[dec],["pre"],["suf"])` ·
@@ -251,6 +257,18 @@ or `hidden(id)` then `wordpop(id,[delay])` = pop each in) ·
 `dot(id,(x,y),[r])` (filled disc — hides crossings; for textbook contacts use an outlined+dashed circle instead) · `circle(id,(x,y),r)` (**defaults filled+outlined**) · `rect(id,(x,y),w,h)` (**defaults filled+outlined**) ·
 `particles(id,container,count,[radius],[seed],["random|grid|ring"])` creates persistent
 seeded dots inside a circle/rectangle (`grid` is rectangular; `ring` is circular) ·
+`cloud(id,count,[fill],[opacity]) { let … }` is a **formula-driven point field**: `count` points
+placed by closed-form formulas of the point index `i` and live time `t`, re-evaluated each frame
+(it moves, but stays a pure function of `t`). The block is a `let` chain; `x`/`y` required, `r`
+(radius) + `hue` (per-point colour, degrees) optional, other lets are intermediates. Same functions
+as `plot` (sin/cos/sqrt/`hypot`/`sign`/`mod`/`noise`/`fbm`…); `min`/`max` are reductions, so write
+`max(0,s)` as `0.5*(s+abs(s))`. Generic — a parametric curve, starfield, wave lattice, or flow.
+optional `let alpha` = per-point opacity (fade dots individually). A `from <source>` clause gives each
+point a home as extra vars `hx`/`hy` (x/y default to it; empty block just fills): **`from text("WORD")`**
+fills glyphs (type any word, no art), **`from shape(id)`** area-fills any on-stage shape, **`from path(id)`**
+spaces points by arc length along a path. Fly a swarm in/out by blending toward `hx`/`hy` over `t`.
+**`cloud3(id,count,[fill],[opacity]) { let x…; let y…; let z… }`** is the 3D twin — closed-form x/y/z(i,t)
+projected by the orbit `camera3` (needs one), with per-point r/hue/alpha (from sources are 2D-only) ·
 `livehistogram(id,(cx,cy),min,max,bins,[width],[height],[color])` creates an
 initially empty bounded histogram for `observe`; bars are `{id}.bar{k}` and
 tagged `{id}.bars`, while `{id}.count` is its optional count readout ·
@@ -359,7 +377,7 @@ Use `advect(particles,field,duration,[rate])` when persistent dots should follow
 a settled bounded vector field. It is deterministic and seekable, stops at the
 field boundary, and does not imply collisions or fluid physics.
 
-Easings: `smooth linear in out overshoot bounce elastic`.
+Easings: `smooth linear in out overshoot bounce elastic`, plus **`steps<n>`** (quantized — the value holds then jumps in n steps, so motion *ticks* instead of sweeping: a clock second hand `turn(s,(cx,cy),360,60,steps60)`, a clicking counter; works with any verb).
 
 ### Math kit
 `axes(id,(cx,cy),hw,hh,[unit])` · `plane`/`numberplane`/`complexplane`/`polarplane`

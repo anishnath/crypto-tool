@@ -1,0 +1,96 @@
+// astronomical-watch — a textbook orrery: a clockwork solar system built from
+// REAL SVG assets (Twemoji, vendored by scripts/fetch-svg-assets.sh). The Sun
+// and eight planets are imported vector art; each planet is swept around the Sun by
+// `turn` about the shared pivot, inner planets faster (Kepler's third law). The
+// starfield is a `cloud` (per-point `alpha` twinkle), and the eight real
+// moon-phase glyphs run along the bottom. The maths is derived on the left.
+//
+//   # assets first (one-time): scripts/fetch-svg-assets.sh
+//   manic examples/astronomical-watch.manic
+title("An orrery — a clockwork solar system");
+canvas(1280, 720);
+template("black");
+
+// ---- starfield (a dense cloud; drifts, twinkles, and has depth) ----
+cloud(stars, 320, #dfeaff, 1) {
+  let x = 1280 * noise(i, 1);
+  let y = mod(720 * noise(i, 5) + t * 8, 720);    // slow drift down + wrap
+  let sz = noise(i, 9);
+  let r = 1.1 + sz * sz * 2.6;                     // 1.1..3.7 — depth, all visible
+  let alpha = 0.62 + 0.34 * sin(t * (1.0 + noise(i, 3)) + i * 7);  // 0.28..0.96
+}
+
+// ---- orbit rings (faint, dashed), centred on the Sun at (830, 300) ----
+circle(r1, (830, 300), 40);  outlined(r1); dashed(r1); color(r1, #2a2a4e);
+circle(r2, (830, 300), 64);  outlined(r2); dashed(r2); color(r2, #2a2a4e);
+circle(r3, (830, 300), 90);  outlined(r3); dashed(r3); color(r3, #2a2a4e);
+circle(r4, (830, 300), 118); outlined(r4); dashed(r4); color(r4, #2a2a4e);
+circle(r5, (830, 300), 152); outlined(r5); dashed(r5); color(r5, #2a2a4e);
+circle(r6, (830, 300), 192); outlined(r6); dashed(r6); color(r6, #2a2a4e);
+circle(r7, (830, 300), 232); outlined(r7); dashed(r7); color(r7, #2a2a4e);
+circle(r8, (830, 300), 270); outlined(r8); dashed(r8); color(r8, #2a2a4e);
+
+// ---- the Sun + all eight planets (real imported SVGs) ----
+svg(sun,     (830, 300),  "asset:svg/emoji/sun.svg",     60);
+svg(mercury, (870, 300),  "asset:svg/emoji/mercury.svg", 15);
+svg(venus,   (894, 300),  "asset:svg/emoji/venus.svg",   22);
+svg(earth,   (920, 300),  "asset:svg/emoji/earth.svg",   26);
+svg(mars,    (948, 300),  "asset:svg/emoji/mars.svg",    19);
+svg(jupiter, (982, 300),  "asset:svg/emoji/jupiter.svg", 40);
+svg(saturn,  (1022, 300), "asset:svg/emoji/saturn.svg",  46);
+svg(uranus,  (1062, 300), "asset:svg/emoji/uranus.svg",  28);
+svg(neptune, (1100, 300), "asset:svg/emoji/neptune.svg", 28);
+
+// ---- the lesson (left column; text/caption CENTRE on their point) ----
+caption(head, "A clockwork solar system", (240, 54), 30);
+caption(sub, "inner planets orbit faster", (240, 98), 20);
+hidden(head);
+hidden(sub);
+equation(eq1, (240, 240), `\vec p = (R\cos\omega t,\; R\sin\omega t)`, 26);
+text(lab1, (240, 292), "swept around the Sun");
+hidden(eq1);
+hidden(lab1);
+equation(eq2, (240, 410), `T^{2} \propto R^{3}`, 34);
+text(lab2, (240, 466), "far = slow (Kepler)");
+hidden(eq2);
+hidden(lab2);
+
+// ---- the Moon's phases: eight real glyphs along the bottom ----
+caption(moonlab, "the Moon's phases", (640, 620), 22);
+svg(p1, (300, 668), "asset:svg/emoji/newmoon.svg",       42);
+svg(p2, (405, 668), "asset:svg/emoji/waxingcrescent.svg",42);
+svg(p3, (510, 668), "asset:svg/emoji/firstquarter.svg",  42);
+svg(p4, (615, 668), "asset:svg/emoji/waxinggibbous.svg", 42);
+svg(p5, (720, 668), "asset:svg/emoji/fullmoon.svg",      42);
+svg(p6, (825, 668), "asset:svg/emoji/waninggibbous.svg", 42);
+svg(p7, (930, 668), "asset:svg/emoji/lastquarter.svg",   42);
+svg(p8, (1035, 668),"asset:svg/emoji/waningcrescent.svg",42);
+hidden(moonlab);
+hidden(p1); hidden(p2); hidden(p3); hidden(p4);
+hidden(p5); hidden(p6); hidden(p7); hidden(p8);
+
+// ---- run it: planets orbit (in parallel), the lesson reveals alongside ----
+par {
+  turn(mercury, (830, 300), 4320, 24, linear);   // 12 revolutions — fastest
+  turn(venus,   (830, 300), 2520, 24, linear);   // 7
+  turn(earth,   (830, 300), 1620, 24, linear);   // 4.5
+  turn(mars,    (830, 300), 1080, 24, linear);   // 3
+  turn(jupiter, (830, 300), 432, 24, linear);    // 1.2
+  turn(saturn,  (830, 300), 252, 24, linear);    // 0.7
+  turn(uranus,  (830, 300), 162, 24, linear);    // 0.45
+  turn(neptune, (830, 300), 108, 24, linear);    // 0.3 — slowest
+  seq {
+    show(head);
+    wait(0.9);
+    show(sub);
+    wait(1.4);
+    show(eq1); show(lab1);
+    wait(2.4);
+    show(eq2); show(lab2);
+    wait(2.2);
+    show(moonlab);
+    show(p1); show(p2); show(p3); show(p4);
+    show(p5); show(p6); show(p7); show(p8);
+    wait(4);
+  }
+}

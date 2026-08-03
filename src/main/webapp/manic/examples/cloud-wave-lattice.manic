@@ -1,0 +1,23 @@
+// cloud-wave-lattice — a 50x50 grid of points unpacked from the 1-D index with
+// floor/mod, rippling as a travelling wave. Same `cloud` primitive, a physics-
+// flavoured field this time: index arithmetic gives you a lattice, and `t` drives
+// the wave. On a 9:16 Short, held 20s so the ripple travels through fully.
+//
+//   manic examples/cloud-wave-lattice.manic
+title("cloud — a rippling 50x50 lattice");
+canvas("9:16");
+template("black");
+
+cloud(sheet, 2500, #7cf05a, 0.95) {
+  let col = mod(i, 50);
+  let row = floor(i / 50);
+  let x = 60 + col * 19.5;
+  let y = 220 + row * 28 + 70 * sin(col * 0.4 + row * 0.2 + t * 2);
+  let r = 3;
+  // colour reveal: starts near green (hue 140), then fans into rainbow bands
+  // running down/across the sheet as `spread` grows and the wheel cycles
+  let spread = tanh(t * 0.3);
+  let hue = mod(140 + (row * 7 + col * 3) * spread + t * 30, 360);
+}
+
+wait(20);

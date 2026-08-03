@@ -1,5 +1,5 @@
 {
-  "count": 315,
+  "count": 324,
   "categories": [
     {
       "slug": "algorithms",
@@ -1212,6 +1212,48 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "popkorn-field",
+          "file": "popkorn-field.manic",
+          "title": "Popkorn field",
+          "desc": "6000 points, one closed-form formula each, on a 9:16 Short."
+        },
+        {
+          "name": "astronomical-watch",
+          "file": "astronomical-watch.manic",
+          "title": "Astronomical watch",
+          "desc": "A textbook orrery from REAL SVG assets (Twemoji planets, svg() import): the Sun + six planets are imported vector art, each turned around the Sun with inner planets faster (Kepler), over a cloud starfield that twinkles via per-point alpha."
+        },
+        {
+          "name": "manic-promo",
+          "file": "manic-promo.manic",
+          "title": "Manic promo",
+          "desc": "A generative promo from the cloud primitive alone: five particle swarms fly in and assemble into words \u2014 MANIC (a cycling rainbow) at centre, with 3B1B, Manim, Animation and Generative in the four corners."
+        },
+        {
+          "name": "cloud-word",
+          "file": "cloud-word.manic",
+          "title": "Cloud word",
+          "desc": "Type a word, get a particle swarm: cloud(...) from text(\"MANIC\") fills the glyphs and hands each point its home (hx,hy); the formulas fly the swarm in from all sides, hold the word, then burst it apart, in a left-to-right rainbow."
+        },
+        {
+          "name": "cloud-lissajous",
+          "file": "cloud-lissajous.manic",
+          "title": "Cloud lissajous",
+          "desc": "The SAME cloud primitive as popkorn, a completely different picture: a Lissajous curve of 600 points whose phase drifts with t so the figure folds through itself."
+        },
+        {
+          "name": "cloud-starfield",
+          "file": "cloud-starfield.manic",
+          "title": "Cloud starfield",
+          "desc": "cloud again as a scatter, not a curve: a drifting starfield built on noise and mod \u2014 hashed positions raining downward and wrapping, with hashed sizes."
+        },
+        {
+          "name": "cloud-wave-lattice",
+          "file": "cloud-wave-lattice.manic",
+          "title": "Cloud wave lattice",
+          "desc": "cloud as a physics-flavoured field: a 50x50 lattice unpacked from the 1-D index with floor/mod, rippling as a travelling wave driven by t."
+        },
+        {
           "name": "string-art-breath",
           "file": "string-art-breath.manic",
           "title": "String art breath",
@@ -1589,6 +1631,18 @@
       "slug": "threed",
       "title": "3D scenes",
       "examples": [
+        {
+          "name": "cloud3-sphere",
+          "file": "cloud3-sphere.manic",
+          "title": "Cloud3 sphere",
+          "desc": "The 3D twin of cloud: 2500 points placed by closed-form x/y/z formulas of index i and time t, projected by the orbit camera3."
+        },
+        {
+          "name": "fibonacci-sphere",
+          "file": "fibonacci-sphere.manic",
+          "title": "Fibonacci sphere",
+          "desc": "A textbook lesson built on cloud3: how do you scatter N points *evenly* over a sphere? The answer \u2014 even heights plus a golden-angle turn \u2014 is derived in typeset LaTeX beside the live 3D result, so the picture and the maths are the same object."
+        },
         {
           "name": "wireframe-spheres",
           "file": "wireframe-spheres.manic",

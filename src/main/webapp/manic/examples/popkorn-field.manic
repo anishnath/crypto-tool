@@ -1,0 +1,38 @@
+// popkorn-field — a 6000-point parametric field for Shorts (9:16). One closed-
+// form formula per point, animated by live time `t`: it blooms out of the centre
+// over the first few seconds (a `tanh` growth envelope), then keeps evolving,
+// while each point cycles its own hue. This is the `cloud` primitive — N points
+// placed by formulas of the index `i` and the clock `t`, re-evaluated every
+// frame, yet still a pure function of t (it scrubs and records exactly).
+//
+// The maths is domain-neutral; `cloud` knows nothing about what it draws. Note
+// `hypot(a,b)`, `mod(...)` for the hue wrap, and the `0.5*(s + abs(s))` idiom for
+// `max(0, s)` (min/max are reductions in manic, not 2-arg functions).
+//
+//   manic examples/popkorn-field.manic
+title("popkorn field — 6000 points, one formula each");
+canvas("9:16");
+template("black");
+
+cloud(dust, 6000, #ffffff, 0.5) {
+  let a = 4 * cos(i / 21);
+  let b = i / 1880 - 20;
+  let k = hypot(a, b);
+  let S = 3 * sin(2 * a) + 0.3 / a
+        + sin(i / 4465) * a * (9 + 2 * sin(b * 14 - k * 3 + 2 * t));
+  // raw field, centred near (200,120) at ~400px scale in the original
+  let fx = S + 50 * cos(k - t) + 200;
+  let fy = S * sin(k - t) + k * 39 - 475;
+  // bloom from the centre: 0.15 → ~1 over the first several seconds, so the
+  // full structure only resolves "after some point", then keeps drifting
+  let grow = tanh(t * 0.35 + 0.15);
+  let x = 540 + (fx - 205) * 3.3 * grow;
+  let y = 960 + (fy - 250) * 3.3 * grow;
+  // radius 1 where a*a>15 else 0.5, scaled up for the taller canvas
+  let s = sign(a * a - 15);
+  let r = (0.5 * (1 + 0.5 * (s + abs(s)))) * (2.5 + grow);
+  // each point its own hue, the whole wheel cycling over time
+  let hue = mod(i * 0.05 + t * 30, 360);
+}
+
+wait(16);

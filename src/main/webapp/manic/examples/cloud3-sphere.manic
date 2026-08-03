@@ -1,0 +1,26 @@
+// cloud3-sphere — the 3D twin of `cloud`: N points placed by closed-form x/y/z
+// formulas of the index `i` and live time `t`, projected by the orbit `camera3`.
+// A golden-angle spiral spreads 2500 points evenly over a sphere; the radius
+// breathes and the whole shell slowly rotates, each point cycling its own hue.
+// Same primitive philosophy as 2D `cloud`, one dimension up.
+//
+//   manic examples/cloud3-sphere.manic
+title("cloud3 — a breathing rainbow sphere");
+canvas(800, 800);
+template("black");
+
+camera3((9, -9, 6), (0, 0, 0), 42, perspective);
+
+cloud3(orb, 2500, #ffffff, 0.95) {
+  let phi = i * 2.39996;                 // golden angle around the axis
+  let ct = 1 - 2 * (i + 0.5) / 2500;     // cos(theta): points spread evenly in z
+  let st = sqrt(1 - ct * ct);            // sin(theta)
+  let rad = 3 + 0.5 * sin(t * 2 + i * 0.02);   // the shell breathes
+  let x = rad * st * cos(phi + t * 0.4); // ...and slowly rotates
+  let y = rad * st * sin(phi + t * 0.4);
+  let z = rad * ct;
+  let r = 0.05;
+  let hue = mod(i * 0.18 + t * 24, 360);
+}
+
+wait(10);
