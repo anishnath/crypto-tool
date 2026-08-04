@@ -1,0 +1,39 @@
+// raymarch-alpha — Shader backbone step 7: OUTPUT ALPHA. A raymarched object with
+// `let alpha` renders on a TRANSPARENT background, so it composites over the rest of
+// the scene instead of drawing an opaque backdrop. Here a coloured metaball floats
+// over a full-canvas 2-D `shader` gradient — you can see the gradient THROUGH the
+// object's missed rays (and faintly through the object itself at alpha 0.9). Alpha
+// is faithful on both backends: GLSL writes `vec4(rgb, alpha)` and blends; the CPU
+// field stores per-texel alpha and composites the same way.
+//
+//   manic examples/raymarch-alpha.manic
+title("Raymarch with alpha — compositing over the scene");
+canvas("16:9");
+template("black");
+
+// a colourful 2-D shader gradient BEHIND the object (fills the canvas, opaque)
+shader(back) {
+  let hue = mod(u * 160.0 + v * 90.0 + 20.0, 360.0);
+  let sat = 0.7;
+  let val = 0.42 + 0.12 * sin(u * 6.28);
+}
+
+camera3((2.6, -3.2, 2.0), (0, 0, 0), 40, perspective);
+
+raymarch(blob) {
+  // two spheres smooth-unioned into a metaball
+  let a = sdsphere(x - 0.55 * sin(t), y, z + 0.4 * cos(t), 0.52);
+  let b = sdsphere(x + 0.55 * cos(t * 0.8), y - 0.25, z, 0.44);
+  let d = smin(a, b, 0.4);
+  // iridescent hit colour
+  let hue = mod(205.0 + nx * 85.0 + t * 34.0, 360.0);
+  let sat = 0.82;
+  let val = 0.55 + 0.3 * nz;
+  // OUTPUT ALPHA: hit ⇒ 0.9 (slightly translucent), miss ⇒ transparent (composites)
+  let alpha = 0.9;
+}
+
+caption(head, "raymarch ← alpha (composited)", (640, 66), 32);
+hidden(head);
+show(head);
+orbit3(60, 0, 5.0, 18, smooth);

@@ -1,0 +1,46 @@
+// shader-shapes-dsl — Patricio's glsl-shapes Shadertoy, now a FAITHFUL DSL twin using
+// the new shape/SDF builtins (Layer 1). No vec2 algebra, no branches, no glsl — each
+// shape is one scalar builtin (`sdpolygon`/`sdcircle`/`sdtriangle`/`sdhexagon`/
+// `sdstar`/`sdrhombus`/`sdroundbox`), unioned, and banded by Patricio's oscillating
+// iso-line. Transpiles to GLSL (full-res) with the CPU field as the exact fallback —
+// so the SAME scene renders identically on both, unlike the old polar-approximation.
+//
+//   manic examples/shader-shapes-dsl.manic
+title("Patricio's shapes — faithful, in the shader DSL");
+canvas("16:9");
+template("black");
+
+shader(shapes) {
+  let x = u * asp;                         // match Patricio's st = uv*vec2(asp,1)
+  let y = v;
+
+  // eight SDF shapes, each a single builtin (centres = Patricio's layout)
+  let s0 = sdpolygon(x - 0.48, y - 0.48, 0.076, 5);   // pentagon
+  let s1 = sdcircle(x - 0.75, y - 0.80, 0.076);        // circle
+  let s2 = sdtriangle(x - 0.21, y - 0.79, 0.076);      // triangle
+  let s3 = sdpolygon(x - 0.16, y - 0.26, 0.076, 8);    // octagon
+  let s4 = sdhexagon(x - 0.20, y - 0.50, 0.060);       // hexagon
+  let s5 = sdstar(x - 0.79, y - 0.51, 0.11, 5);        // 5-point star
+  let s6 = sdrhombus(x - 0.63, y - 0.17, 0.15, 0.07);  // rhombus (≈ the ellipse)
+  let s7 = sdroundbox(x - 0.48, y - 0.79, 0.13, 0.05, 0.03); // rounded rectangle
+
+  // union — smin with a tiny k ≈ hard min (DSL `min` is a reduction, not callable)
+  let ua = smin(smin(smin(s0, s1, 0.003), s2, 0.003), s3, 0.003);
+  let ub = smin(smin(smin(s4, s5, 0.003), s6, 0.003), s7, 0.003);
+  let d = smin(ua, ub, 0.003);
+
+  // Patricio's oscillating iso-band + inside / thin-line masks
+  let band = floor(mod((d * 57.6 + t * 2.6) / 2.0, 1.0) * 2.0);
+  let outside = step(0.0, d);
+  let linem = step(0.0, d) * step(d, 0.006);
+
+  // two-tone palette: orange outside, blue inside (each banded); white iso-line
+  let br = mix(mix(0.431, 0.270, band), 1.000, outside);
+  let bgc = mix(mix(0.436, 0.190, band), mix(0.684, 0.514, band), outside);
+  let bbc = mix(1.000, mix(0.364, 0.128, band), outside);
+  let r = mix(br, 1.0, linem);
+  let g = mix(bgc, 1.0, linem);
+  let b = mix(bbc, 1.0, linem);
+}
+
+wait(8);

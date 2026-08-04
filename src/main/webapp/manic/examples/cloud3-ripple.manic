@@ -1,0 +1,53 @@
+// cloud3-ripple — the manic answer to a raymarched Shadertoy. The original
+// (https://www.shadertoy.com/view/tssSDN) ray-marches a grid of boxes whose
+// heights ripple in a wave radiating from a bouncing sphere. Ray-marching (a
+// per-pixel loop over an SDF scene) is out of scope for manic's closed-form
+// fields — but the OUTCOME is pure 3D geometry, so we REIMAGINE it with `cloud3`:
+// a 64×64 grid of points whose height is a travelling wave centred on a moving
+// sphere, each point a closed-form function of its index and time. Real 3D,
+// projected by `camera3`, seekable and recordable — no raymarch, no assets.
+//
+//   manic examples/cloud3-ripple.manic
+title("A rippling grid — the cloud3 answer to a raymarch");
+canvas("16:9");
+template("black");
+
+// manic 3D is Z-up: the grid floor lies in the x-y plane and ripples UP in z.
+camera3((11, -11, 8), (0, 0, 0.4), 40, perspective);
+
+// the grid: each point bobs on a wave that radiates from the sphere's position
+cloud3(grid, 4096, #ff3524, 1.0) {
+  let gx = mod(i, 64) / 63 - 0.5;          // cell column 0..63 → -0.5..0.5
+  let gy = floor(i / 64) / 63 - 0.5;       // cell row
+  let x = gx * 9;                          // world -4.5..4.5 (floor)
+  let y = gy * 9;
+  let sx = sin(t * 1.8) * 2.4;             // the sphere's orbit, inlined
+  let sy = cos(t * 2.2) * 2.4;
+  let d = hypot(x - sx, y - sy);           // in-plane distance to the sphere
+  let fall = 1 - smoothstep(0.0, 3.4, d);  // near the sphere ⇒ bob more
+  let z = 1.35 * sin(rand(i) * 3.14 + t * 2.5 + d * 2.2) * fall; // HEIGHT: per-cell phase + wave
+  let r = 0.09;
+  let hue = mix(2.0, 46.0, clamp(z * 0.7 + 0.4, 0.0, 1.0));      // red troughs → gold crests
+}
+
+// the little sphere that drives the wave (a tiny cloud3 shell, orbiting)
+cloud3(ball, 90, #fff3b0, 1.0) {
+  let phi = i * 2.39996;
+  let ct = 1.0 - 2.0 * (i + 0.5) / 90.0;
+  let st = sqrt(1.0 - ct * ct);
+  let bx = sin(t * 1.8) * 2.4;
+  let by = cos(t * 2.2) * 2.4;
+  let x = bx + 0.42 * st * cos(phi);
+  let y = by + 0.42 * st * sin(phi);
+  let z = 1.7 + 0.42 * ct;
+  let r = 0.06;
+}
+
+caption(head, "One wave, a moving source", (640, 68), 34);
+caption(sub, "a cloud3 grid + a bouncing sphere — real 3D, no raymarch", (640, 126), 22);
+hidden(head);
+hidden(sub);
+show(head);
+wait(1.5);
+show(sub);
+wait(26);

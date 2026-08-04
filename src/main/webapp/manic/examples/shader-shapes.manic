@@ -1,0 +1,37 @@
+// shader-shapes — the Book-of-Shaders "Shapes" chapter: draw with DISTANCE and
+// ANGLE. `length(x,y)` is the distance to the centre, `atan2(y,x)` the angle;
+// modulating the radius by the angle turns a circle into a star or flower, and
+// `smoothstep` cuts a crisp (anti-aliased) edge from the distance field. All
+// per-pixel, no paths — just polar algebra of (u, v, t).
+//
+//   manic examples/shader-shapes.manic
+title("Shapes from distance & angle — a shader");
+canvas("9:16");
+template("black");
+
+shader(bg) {
+  let x = (u - 0.5) * asp;          // aspect-correct so it's round, not oval
+  let y = v - 0.5;
+  let r = length(x, y);             // distance to centre
+  let a = atan2(y, x);              // angle (polar)
+  // a 5-point star: the edge radius breathes with the angle (and pulses in t)
+  let edge = 0.30 + 0.08*cos(a*5.0 + t) + 0.02*sin(t*2.0);
+  let body = smoothstep(edge + 0.006, edge - 0.006, r);  // 1 inside the star
+  let hue = mod(a*57.3 + t*30.0, 360.0);   // angle → rainbow rim
+  let sat = 0.9;
+  let val = 0.12 + 0.6*body;         // dark field, lit star
+}
+
+caption(head, "Shapes from distance & angle", (540, 150), 32);
+caption(sub, "length() = radius, atan2() = angle — polar SDF", (540, 214), 20);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1720), `r=\text{length}(x,y),\quad \theta=\operatorname{atan2}(y,x)`, 30);
+hidden(eq);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.4);
+show(eq);
+wait(22);

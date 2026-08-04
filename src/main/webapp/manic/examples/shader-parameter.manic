@@ -1,0 +1,25 @@
+// shader-parameter — a `shader` driven by a scene `parameter`, not just by time.
+// The ring frequency `freq` is a slider/parameter: the shader references it by
+// name, so the SAME field re-renders as `freq` animates. On the GLSL path it's a
+// `u_freq` uniform (resolved from the parameter each frame); on the CPU fallback
+// the live value is substituted into the formula — both stay in lock-step.
+//
+//   manic examples/shader-parameter.manic
+title("A shader driven by a parameter");
+canvas("16:9");
+template("black");
+
+parameter(freq, (640, 660), 3, 1, 14, "freq", 0);
+
+shader(rings) {
+  let d = hypot((u - 0.5) * asp, v - 0.5);   // distance from centre (aspect-correct)
+  let hue = mod(d * freq * 90.0, 360.0);     // ring hue cycles faster as freq rises
+  let sat = 0.8;
+  let val = 0.55 + 0.35 * sin(d * freq * 18.0);
+}
+
+caption(head, "shader ← parameter", (640, 66), 34);
+hidden(head);
+show(head);
+// sweep the parameter: the rings tighten as freq climbs 3 → 14
+to(freq, value, 14, 6, smooth);

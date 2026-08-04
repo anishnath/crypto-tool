@@ -1,0 +1,22 @@
+// shader-warp — Layer 2: vec math in the DSL. The headline that Layer-1 builtins
+// can't express — DOMAIN WARPING. You can't rotate a scalar coordinate; with vec2 +
+// rot2 + swizzle you rotate SPACE itself (more the further from centre), then read a
+// ring pattern in the warped frame. Pure DSL — no glsl(), no vec2 gymnastics beyond
+// the builtins. vecs are erased to scalar math at compile, so it renders on both
+// backends (CPU field + GLSL) from one source.
+//
+//   manic examples/shader-warp.manic
+title("Domain warp — vec2 + rot2 in the shader DSL");
+canvas("16:9");
+template("black");
+
+shader(warp) {
+  let p = vec2(u * asp - 0.9, v - 0.5);   // name the centred coordinate as a vec2
+  let ang = length(p) * 7.0 - t;          // twist grows with radius
+  let q = rot2(p, ang);                    // rotate SPACE once; reuse the vec2
+  let hue = mod(200.0 + q.x * 500.0 + q.y * 300.0, 360.0);
+  let sat = 0.8;
+  let val = 0.5 + 0.4 * sin(q.y * 40.0);
+}
+
+wait(8);

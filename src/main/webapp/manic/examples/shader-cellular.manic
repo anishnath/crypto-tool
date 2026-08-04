@@ -1,0 +1,35 @@
+// shader-cellular — the Book-of-Shaders "Cellular noise" (Worley/Voronoi)
+// chapter. `voronoi(x,y)` scatters one feature point per unit cell and returns
+// the distance to the NEAREST one — so the field organises into cells: bright
+// near a point, dark at the equidistant borders. Drifting the coordinate in `t`
+// makes the cells flow. The 3×3 neighbour search runs inside the engine, so the
+// formula stays a closed-form, seekable function of (u, v, t) — no loop in the DSL.
+//
+//   manic examples/shader-cellular.manic
+title("Cellular noise — a Voronoi shader");
+canvas("9:16");
+template("black");
+
+shader(bg) {
+  let s = 5.5;
+  let d = voronoi(u*s*asp, v*s + t*0.4);    // distance to nearest cell point
+  let edge = smoothstep(0.0, 0.08, d);      // ~0 at borders → dark cracks
+  let tb = smoothstep(0.0, 0.14, v) * smoothstep(1.0, 0.86, v); // darken top/bottom so captions read
+  let hue = mod(d*200.0 + t*24.0, 360.0);   // colour by distance
+  let sat = 0.8;
+  let val = (0.15 + 0.7*edge) * tb;
+}
+
+caption(head, "Cellular noise", (540, 150), 34);
+caption(sub, "distance to the nearest of many scattered points", (540, 214), 20);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1720), `F_1(p)=\min_i\;\lVert p - q_i\rVert`, 34);
+hidden(eq);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.4);
+show(eq);
+wait(22);

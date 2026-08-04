@@ -1,0 +1,45 @@
+// shader-fractal — a LIVING Julia set. Each pixel iterates z = z² + c a fixed
+// number of times and colours by how fast it escapes — the Book-of-Shaders
+// "Fractals" chapter, but with NO per-pixel loop in the DSL: `julia(zx,zy,cx,cy)`
+// runs the iteration in the engine and returns an escape fraction in [0,1]. We
+// sweep the constant `c` in a circle over time, so the fractal morphs through the
+// whole Julia family — every frame still a pure function of `t` (scrub-safe).
+//
+//   manic examples/shader-fractal.manic
+title("A living Julia set — one formula per pixel");
+canvas("9:16");
+template("black");
+
+shader(bg) {
+  // complex plane, aspect-corrected and centred
+  let zx = (u - 0.5) * 3.0 * asp;
+  let zy = (v - 0.5) * 3.0;
+  // the constant c orbits slowly → the set continuously morphs
+  let cx = 0.7 * cos(t * 0.35);
+  let cy = 0.7 * sin(t * 0.35);
+  let e = julia(zx, zy, cx, cy);         // escape fraction: 1 = trapped, 0 = flees
+  let inside = step(0.985, e);           // 1 for the fractal body
+  let band = 0.5 + 0.5 * sin(e * 26.0 - t * 2.0); // rainbow escape contours
+  let glow = 1.0 - inside;               // dark body, lit exterior
+  let r = band * glow;
+  let g = (0.4 + 0.6 * band) * glow;
+  let b = (1.0 - 0.5 * band) * glow + inside * 0.06;
+}
+
+// ---- textbook annotations ----
+caption(head, "A living Julia set", (540, 150), 34);
+caption(sub, "z → z² + c, coloured by escape speed", (540, 214), 20);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1720), `z_{n+1} = z_n^2 + c`, 44);
+caption(lab, "no per-pixel loop in the DSL — the engine iterates", (540, 1800), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.4);
+show(eq);
+show(lab);
+wait(24);

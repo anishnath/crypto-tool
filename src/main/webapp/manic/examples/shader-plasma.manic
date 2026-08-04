@@ -1,0 +1,43 @@
+// shader-plasma — a fragment-shader-style colour field, the per-PIXEL twin of
+// `cloud`. Every pixel's colour is ONE closed-form formula of its normalized
+// coordinates `u`/`v`, live time `t`, and aspect `asp` — re-evaluated each frame
+// yet pure in `t`, so it scrubs and records exactly. This is manic's take on
+// "The Book of Shaders" (thebookofshaders.com): no per-pixel loops, just algebra.
+//
+//   manic examples/shader-plasma.manic
+title("A shader — one formula, every pixel");
+canvas("9:16");
+template("black");
+
+shader(bg) {
+  // centre + aspect-correct so the field is round, not stretched (u/v are 0..1
+  // on BOTH axes, so a raw circle would be an ellipse on a 9:16 canvas).
+  let x = (u - 0.5) * asp;
+  let y = v - 0.5;
+  let d = length(x, y);
+  // layered travelling sines = classic plasma
+  let p = sin(x*7.0 + t) + sin(y*7.0 + t*1.3) + sin((x + y)*5.0 - t*0.9) + sin(d*11.0 - t*1.6);
+  // vignette: bright centre → dark edges (so the title/caption read in white)
+  let vig = smoothstep(0.95, 0.2, d);
+  let r = (0.5 + 0.5*sin(p + t)) * vig;
+  let g = (0.5 + 0.5*sin(p + t + 2.1)) * vig;
+  let b = (0.5 + 0.5*sin(p + t + 4.2)) * vig;
+}
+
+// ---- textbook annotations ----
+caption(head, "A shader — one formula per pixel", (540, 150), 32);
+caption(sub, "no loops, no assets — just algebra of (u, v, t)", (540, 214), 20);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1720), `\text{colour} = f(u,\, v,\, t)`, 40);
+caption(lab, "per-pixel, re-evaluated every frame — yet seekable", (540, 1800), 20);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.4);
+show(eq);
+show(lab);
+wait(24);

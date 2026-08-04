@@ -1,0 +1,47 @@
+// raymarch-boxgrid — Shader V2.3, the finale: the raymarched Shadertoy that
+// started this whole thread (tssSDN — a grid of boxes rippling around a bouncing
+// sphere), rebuilt as a TRUE ray-march this time (V2 tier), not the cloud3
+// reimagining (examples/cloud3-ripple.manic). One signed-distance field does it:
+// `rep(x,r)` tiles a box into an infinite grid (`sdbox3`), each cell's HEIGHT a
+// wave of its `rand2` hash + a falloff from the moving sphere's position; `smin`
+// unions in the sphere. Per-pixel loop in the ENGINE, no vec types — just a
+// scalar distance formula. Coloured red→gold by height, orbited by `camera3`.
+//
+//   manic examples/raymarch-boxgrid.manic
+title("A ray-marched box grid — the Shadertoy, rebuilt");
+canvas("16:9");
+template("black");
+
+camera3((2.6, -3.2, 2.2), (0, 0, 0.25), 40, perspective);
+
+raymarch(grid) {
+  let rp = 0.42;                          // cell size
+  let idx = floor(x / rp);                // which cell (x)
+  let idy = floor(y / rp);                // which cell (y)
+  let lx = rep(x, rp);                    // local coord inside the cell
+  let ly = rep(y, rp);
+  let sx = sin(t * 1.8) * 1.3;            // the bouncing sphere (inlined)
+  let sy = cos(t * 2.2) * 1.3;
+  let cxx = idx * rp + rp * 0.5;          // this cell's centre
+  let cyy = idy * rp + rp * 0.5;
+  let bs = hypot(cxx - sx, cyy - sy);     // cell → sphere distance
+  let fall = 1 - smoothstep(0.0, 2.2, bs);        // near the sphere ⇒ taller
+  let hsh = rand2(idx, idy);              // per-cell phase
+  let bh = 0.34 + 0.30 * sin(hsh * 6.283 + t * 2.6 + bs * 1.7) * fall; // box height (>0)
+  let box = sdbox3(lx, ly, z - bh * 0.5, rp * 0.4, rp * 0.4, bh * 0.5);
+  let ball = sdsphere(x - sx, y - sy, z - 0.6, 0.18);
+  let d = smin(box, ball, 0.04);          // grid ∪ sphere
+  // colour: red troughs → gold crests, top faces brighter
+  let hue = mod(6.0 + bh * 42.0, 360.0);
+  let sat = 0.85;
+  let val = 0.28 + 0.55 * nz;
+}
+
+caption(head, "A ray-marched box grid", (640, 66), 34);
+caption(sub, "sdbox3 + rep() tiling + smin — the Shadertoy, in manic", (640, 122), 22);
+hidden(head);
+hidden(sub);
+show(head);
+wait(1.5);
+show(sub);
+orbit3(50, 0, 4.6, 22, smooth);

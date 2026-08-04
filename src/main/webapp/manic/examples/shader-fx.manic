@@ -1,0 +1,34 @@
+// shader-fx — the Layer-1 shader/formula helpers (fx kit) in action: `fill` and
+// `stroke` turn an SDF distance into a solid + an outline, `gain` shapes a gradient.
+// All scalar builtins, transpiled to GLSL with the CPU field as the exact fallback.
+//
+//   manic examples/shader-fx.manic
+title("fill · stroke · gain — SDF mask helpers");
+canvas("16:9");
+template("black");
+
+shader(fx) {
+  let x = u * asp;
+  let y = v;
+
+  // three shapes, unioned
+  let s0 = sdhexagon(x - 0.60, y - 0.5, 0.15);
+  let s1 = sdstar(x - 1.05, y - 0.5, 0.17, 5);
+  let s2 = sdcircle(x - 1.48, y - 0.5, 0.13);
+  let d = smin(smin(s0, s1, 0.01), s2, 0.01);
+
+  // masks from the distance
+  let fl = fill(d, 0.0, 0.004);          // 1 inside → 0 outside
+  let ol = stroke(d, 0.0, 0.03, 0.004);  // bright band on the iso-line
+
+  // gain-shaped vertical gradient behind the shapes
+  let bgv = gain(v, 2.2);
+  let base = 0.10 + 0.20 * bgv;
+
+  // compose: gradient bg, teal fill, white outline
+  let r = mix(mix(base, 0.16, fl), 1.0, ol);
+  let g = mix(mix(base, 0.52, fl), 1.0, ol);
+  let b = mix(mix(base * 1.7, 0.62, fl), 1.0, ol);
+}
+
+wait(4);

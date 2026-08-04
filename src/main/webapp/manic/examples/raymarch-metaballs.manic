@@ -1,0 +1,37 @@
+// raymarch-metaballs — Shader V2: a 3-D scene RAY-MARCHED per pixel. You write
+// only the signed-distance field `let d` (the distance from any point x,y,z to
+// the scene); the engine marches a ray per pixel until it hits the surface,
+// takes the normal by finite differences, and shades it. No per-pixel loop in
+// the DSL (it runs in the engine, like `voronoi`/`mandelbrot`) and NO vec/mat
+// types — the SDF is a scalar formula, component math the manic way. Here three
+// spheres orbit and MERGE through `smin` (smooth union) into living metaballs.
+//
+//   manic examples/raymarch-metaballs.manic
+title("Metaballs — a ray-marched 3D field");
+canvas("16:9");
+template("black");
+
+raymarch(blobs) {
+  // three moving spheres (signed distance = distance to centre − radius)
+  let a = sdsphere(x - 0.75*sin(t),        y - 0.5*cos(t*1.3),  z + 0.3*sin(t*0.7), 0.52);
+  let b = sdsphere(x + 0.6*cos(t*0.9),     y + 0.45*sin(t*1.1), z - 0.35*cos(t),    0.46);
+  let c = sdsphere(x + 0.2*sin(t*1.7),     y + 0.6*sin(t*0.7),  z + 0.25*sin(t*1.4), 0.4);
+  // smooth-union them (smin) so they gloop together instead of just overlapping
+  let ab = smin(a, b, 0.55);
+  let d  = smin(ab, c, 0.55);
+}
+
+// ---- textbook annotations ----
+caption(head, "Metaballs — one distance field", (640, 66), 34);
+caption(sub, "raymarch: you write the SDF, the engine marches it", (640, 122), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (640, 648), `d = \operatorname{smin}(d_1, d_2, k)`, 34);
+hidden(eq);
+
+show(head);
+wait(1.6);
+show(sub);
+wait(2.6);
+show(eq);
+wait(22);

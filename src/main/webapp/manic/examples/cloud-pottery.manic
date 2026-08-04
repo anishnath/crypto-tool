@@ -1,0 +1,104 @@
+// cloud-pottery — the OpenProcessing weekly "Pottery" creative-coding challenge
+// (https://openprocessing.org/curation/78544) reimagined in ONE manic `cloud`. The p5
+// original stacks random easing curves into pot silhouettes and stipples them with
+// thousands of dots across three graphics layers, plus recursive sticks + flowers.
+// manic can't recurse in a flat `f(i,t)` cloud — so the sticks/flowers/layers are left
+// to the original — but the SIGNATURE look (dotted ellipse-ring vases, each a unique
+// wavy profile, shaded front-bright) is one closed-form formula per point. Pure in
+// (i,t): the pots grow in bottom-up and record exactly, where the p5 sketch draws once.
+//
+//   manic examples/cloud-pottery.manic
+title("Pottery — a p5 sketch, reimagined as one cloud");
+canvas("16:9");
+template("black");
+
+cloud(pots, 40320, #c47a3d, 0.95) {
+  // decode the flat index i into (pot, ring, angle-around-the-ellipse)
+  let per = 5760;                       // 90 rings * 64 dots
+  let pot = floor(i / per);
+  let rem = i - pot * per;
+  let ring = floor(rem / 64);
+  let k = rem - ring * 64;
+  let yl = ring / 89;                   // 0 = base, 1 = rim
+  let a = k / 64 * tau;
+
+  // 7 pots across a 1280-wide frame (margin 86)
+  let span = 1108;
+  let potX = 86 + (pot + 0.5) * (span / 7);
+  let potW = (span / 7) * 0.4;          // half-width
+  let baseY = 545;
+  let potH = potW * (1.0 + 1.8 * rand2(pot, 1.7));
+
+  // a wavy vase silhouette, unique per pot (a couple of seeded sine harmonics)
+  let seed = rand2(pot, 3.7);
+  let prof = 0.55 + 0.28 * sin(yl * pi + seed * tau) + 0.12 * sin(yl * tau + seed * 9.0);
+  let R = potW * prof;
+
+  // ellipse ring, 0.22 vertical squash for perspective, a little per-dot jitter
+  let x = potX + R * sin(a) + 1.4 * rand2(i, 2.1);
+  let y = baseY - yl * potH + R * 0.22 * (-cos(a)) + 1.4 * rand2(i, 5.3);
+
+  // grow bottom-up: only rings below the rising build-line have appeared
+  let build = tanh(t * 0.55) * 1.14;
+  let vis = 1 - smoothstep(build, build + 0.10, yl);
+
+  let r = 0.9 + 1.1 * rand2(i, 7.0);              // fine stipple
+  // terracotta while it grows; AFTER the pots are formed the glaze shifts, cycling
+  // through the "colour sets" the p5 original picks at random — same scene, live.
+  let cyc = (t - 4.0) * step(4.0, t);            // 0 until t=4, then climbs
+  let hue = mod(26 + cyc * 34.0 + 16 * rand2(pot, 4.0), 360);
+  let alpha = (0.38 + 0.55 * (0.5 - 0.5 * cos(a))) * vis;  // near-side brighter; fades in
+}
+
+// flowering sprigs on SOME vessels (the original branches recursively; a flat cloud
+// can't, so this is a hash-selected subset with a curved stem + a dotted flower head)
+cloud(sprigs, 12000, #ffdd88, 0.92) {
+  let per = 2000;
+  let pot = floor(i / per);
+  let rem = i - pot * per;
+  let has = step(0.55, rand2(pot, 9.1));          // ~45% of pots get a sprig
+
+  // recompute the pot geometry so the sprig sits on the rim
+  let span = 1108;
+  let potX = 86 + (pot + 0.5) * (span / 7);
+  let potW = (span / 7) * 0.4;
+  let baseY = 545;
+  let potH = potW * (1.0 + 1.8 * rand2(pot, 1.7));
+  let rimY = baseY - potH;
+  let seedF = rand2(pot, 5.9);
+  let stemLen = potH * (0.8 + 0.7 * seedF);
+  let lean = (rand2(pot, 2.3) - 0.5) * 80;
+
+  let isStem = 1 - step(600, rem);                // first 600 dots = stem, rest = head
+  // stem: a gentle bow from the rim upward
+  let ts = rem / 600;
+  let sx = potX + lean * ts + 10 * sin(ts * pi + seedF * 6.0);
+  let sy = rimY - stemLen * ts;
+  // flower head at the stem top (ts = 1)
+  let hx = potX + lean + 10 * sin(pi + seedF * 6.0);
+  let hy = rimY - stemLen;
+  let tf = (rem - 600) / 1400;
+  let fang = tf * tau * 7.0;                       // spiral fills the head
+  let petal = 0.5 + 0.5 * abs(sin(fang * 2.5));    // 5-lobe petals
+  let frad = (14 + 8 * seedF) * petal * (0.35 + 0.65 * rand2(i, 3.3));
+  let fx = hx + frad * sin(fang) + 3 * (rand2(i, 7.7) - 0.5);
+  let fy = hy + frad * (-cos(fang)) + 3 * (rand2(i, 8.8) - 0.5);
+
+  let x = select(sx, fx, isStem);
+  let y = select(sy, fy, isStem);
+  let r = select(1.0 + 0.5 * rand2(i, 1.1), 1.3 + 1.5 * rand2(i, 2.2), isStem);
+  let hue = select(96, 44, isStem);               // stem green, flower gold
+  let grow = smoothstep(2.6, 4.6, t);             // sprigs sprout after the pots form
+  let alpha = has * grow * (0.4 + 0.55 * rand2(i, 6.6));
+}
+
+// ---- textbook annotations ----
+caption(head, "Pottery — one formula per dot", (640, 60), 30);
+caption(sub, "vases grown bottom-up, sprigged, then re-glazed live — all pure in (i, t)", (640, 112), 20);
+hidden(head);
+hidden(sub);
+
+show(head);
+wait(2.4);
+show(sub);
+wait(11);   // pots grow, sprigs sprout, then the glaze cycles the palette

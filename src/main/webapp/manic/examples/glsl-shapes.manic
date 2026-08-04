@@ -1,0 +1,122 @@
+// glsl-shapes — Patricio Gonzalez Vivo's 2015 "shapes" Shadertoy, running in manic
+// UNCHANGED via the raw glsl() V3 path (2-D SDF gallery: pentagon/sphere/triangle/
+// octagon/hexagon/star/ellipse/rounded-rect, banded by an oscillating iso-line).
+//   Original: http://patriciogonzalezvivo.com  ·  @patriciogv
+canvas("16:9");
+template("black");
+
+glsl(scene, `
+float osc(float d){
+    return floor(mod((d+iTime*2.600)/2.,1.)*2.);
+}
+float sphere(vec2 p, float r){
+    return length(p)-r;
+}
+float tri( in vec2 p, in float r ){
+    const float k = sqrt(3.0);
+    p.x = abs(p.x) - r;
+    p.y = p.y + r/k;
+    if( p.x+k*p.y>0.0 ) p = vec2(p.x-k*p.y,-k*p.x-p.y)/2.0;
+    p.x -= clamp( p.x, -2.0*r, 0.0 );
+    return -length(p)*sign(p.y);
+}
+float pent( in vec2 p, in float r ){
+    const vec3 k = vec3(0.809016994,0.587785252,0.726542528);
+    p.x = abs(p.x);
+    p -= 2.0*min(dot(vec2(-k.x,k.y),p),0.0)*vec2(-k.x,k.y);
+    p -= 2.0*min(dot(vec2( k.x,k.y),p),0.0)*vec2( k.x,k.y);
+    p -= vec2(clamp(p.x,-r*k.z,r*k.z),r);
+    return length(p)*sign(p.y);
+}
+float oct( in vec2 p, in float r ){
+    const vec3 k = vec3(-0.9238795325, 0.3826834323, 0.4142135623 );
+    p = abs(p);
+    p -= 2.0*min(dot(vec2( k.x,k.y),p),0.0)*vec2( k.x,k.y);
+    p -= 2.0*min(dot(vec2(-k.x,k.y),p),0.0)*vec2(-k.x,k.y);
+    p -= vec2(clamp(p.x, -k.z*r, k.z*r), r);
+    return length(p)*sign(p.y);
+}
+float hex( in vec2 p, in float r ){
+    const vec4 k = vec4(-0.5,0.8660254038,0.5773502692,1.7320508076);
+    p = abs(p);
+    p -= 2.0*min(dot(k.xy,p),0.0)*k.xy;
+    p -= 2.0*min(dot(k.yx,p),0.0)*k.yx;
+    p -= vec2(clamp(p.x,r*k.z,r*k.w),r);
+    return length(p)*sign(p.y);
+}
+float str(in vec2 p, in float r, in float rf){
+    const vec2 k1 = vec2(0.809016994375, -0.587785252292);
+    const vec2 k2 = vec2(-k1.x,k1.y);
+    p.x = abs(p.x);
+    p -= 2.0*max(dot(k1,p),0.0)*k1;
+    p -= 2.0*max(dot(k2,p),0.0)*k2;
+    p.x = abs(p.x);
+    p.y -= r;
+    vec2 ba = rf*vec2(-k1.y,k1.x) - vec2(0,1);
+    float h = clamp( dot(p,ba)/dot(ba,ba), 0.0, r );
+    return length(p-ba*h) * sign(p.y*ba.x-p.x*ba.y);
+}
+float elp( in vec2 p, in vec2 ab ){
+    p = abs(p); if( p.x > p.y ) {p=p.yx;ab=ab.yx;}
+    float l = ab.y*ab.y - ab.x*ab.x;
+    float m = ab.x*p.x/l;      float m2 = m*m;
+    float n = ab.y*p.y/l;      float n2 = n*n;
+    float c = (m2+n2-1.0)/3.0; float c3 = c*c*c;
+    float q = c3 + m2*n2*2.0;
+    float d = c3 + m2*n2;
+    float g = m + m*n2;
+    float co;
+    if( d<0.0 ){
+        float h = acos(q/c3)/3.0;
+        float s = cos(h);
+        float t = sin(h)*sqrt(3.0);
+        float rx = sqrt( -c*(s + t + 2.0) + m2 );
+        float ry = sqrt( -c*(s - t + 2.0) + m2 );
+        co = (ry+sign(l)*rx+abs(g)/(rx*ry)- m)/2.0;
+    } else {
+        float h = 2.0*m*n*sqrt( d );
+        float s = sign(q+h)*pow(abs(q+h), 1.0/3.0);
+        float u = sign(q-h)*pow(abs(q-h), 1.0/3.0);
+        float rx = -s - u - c*4.0 + 2.0*m2;
+        float ry = (s - u)*sqrt(3.0);
+        float rm = sqrt( rx*rx + ry*ry );
+        co = (ry/sqrt(rm-rx)+2.0*g/rm-m)/2.0;
+    }
+    vec2 r = ab * vec2(co, sqrt(1.0-co*co));
+    return length(r-p) * sign(p.y-r.y);
+}
+float rnd( in vec2 p, in float w, in float r ){
+    p = abs(p);
+    return length(p-min(p.x+p.y,w)*0.5) - r;
+}
+
+vec2 cent = vec2(0.480,0.480);
+float line = 0.008;
+float spac = 0.0;
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord ){
+    vec2 st = fragCoord/iResolution.xy * vec2( iResolution.x/iResolution.y, 1. );
+    vec3 col = vec3(1.0);
+
+    float d = pent(st-cent,0.076);
+    d = min(d,sphere(st-vec2(0.750,0.800),0.076));
+    d = min(d,tri(st-vec2(0.210,0.790),0.076));
+    d = min(d,oct(st-vec2(0.160,0.260),0.076));
+    d = min(d,hex(st-vec2(0.200,0.500),0.036));
+    d = min(d,str(st-vec2(0.790,0.510),0.108,0.640));
+    d = min(d,elp(st-vec2(0.630,0.170),vec2(0.280,0.100)));
+    d = min(d,rnd(st-vec2(0.480,0.790),0.284,0.032));
+
+    float band = osc(d*200.*0.288);
+    if(d > spac && d < spac+line){
+        col = vec3(1.);
+    } else if(d > 0.0){
+        col*= vec3(1.000,0.684,0.364)*(1.-band)+vec3(1.000,0.514,0.128)*band;
+    } else {
+        col*= vec3(0.431,0.436,1.000)*(1.-band)+vec3(0.270,0.190,1.000)*band;
+    }
+    fragColor = vec4(col,1.0);
+}
+`);
+
+wait(8);

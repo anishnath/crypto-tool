@@ -1,0 +1,119 @@
+// geo-pythagoras-short — a SPLIT STAGE: the top third of the frame is a living
+// generative `shader` artwork (domain-warped aurora plasma — pure art, showing off what
+// per-pixel shaders do), and the bottom two-thirds is the most famous theorem in
+// geometry drawn out on black: a 3-4-5 right triangle whose squares bloom to 9 + 16 = 25
+// → a² + b² = c². Two concepts, one frame — the shader and the maths each at full value.
+//
+//   manic examples/geo-pythagoras-short.manic
+title("Why a² + b² = c²");
+canvas("9:16");
+template("black");
+
+creator(me, "@anish2good name=Manic tagline=Turn_plain_text_into_math_videos yt=zarigatongy x=@anish2good web=8gwifi.org/manic accent=cyan secondary=magenta footer=signature cta=Try_it_free safe=reels");
+
+// ===================== TOP STAGE : the shader as ART =====================
+// A bold domain-warped flow field confined to the top band (v < BAND); pure black
+// below it, with a crisp accent rule marking the seam. This is the shader showcase —
+// motion, depth and colour, all one closed-form expression per pixel.
+shader(art) {
+  let band = 0.34;
+  let inside = 1.0 - smoothstep(band - 0.02, band, v);   // 1 in the top band, 0 below
+
+  // domain warp: fold the plane through itself twice for turbulent, liquid flow
+  let x = (u - 0.5) * asp;
+  let y = v / band;                                       // 0 at top → 1 at the seam
+  let w1 = sin(x * 3.0 + t * 0.5) + cos(y * 4.0 - t * 0.3);
+  let w2 = sin((x + w1) * 2.6 - t * 0.4) * cos((y + w1) * 3.2 + t * 0.25);
+  let flow = 0.5 + 0.5 * sin(x * 4.0 + w2 * 2.2 + t * 0.6);
+  let bands = 0.5 + 0.5 * sin(y * 9.0 - w2 * 3.0 + t * 0.5);  // aurora curtains
+
+  let hue = mod(244 + flow * 118 + w2 * 44, 360);         // magenta → cyan aurora
+  let sat = 0.82;
+  let base = (0.14 + 0.62 * flow * bands) * inside;
+
+  // crisp bright accent rule along the seam (the two stages meet here)
+  let rule = smoothstep(0.006, 0.0, abs(v - band));
+  let val = base + rule * 0.85;
+}
+
+// ===================== BOTTOM STAGE : the proof on black =====================
+// geometry of the 3-4-5 right triangle, sized + placed to live entirely below the seam
+let ux = w * 0.070;          // one unit
+let ox = w * 0.36;           // right-angle vertex x
+let oy = h * 0.75;           // right-angle vertex y (well below the art band)
+
+// vertices: C (right angle), A (end of the 4-leg), B (end of the 3-leg)
+point(pC, (ox, oy));
+point(pA, (ox + 4*ux, oy));
+point(pB, (ox, oy - 3*ux));
+hidden(pC); hidden(pA); hidden(pB);
+polygon(tri, (ox, oy), (ox + 4*ux, oy), (ox, oy - 3*ux), cyan);
+rightangle(ra, pA, pC, pB);
+// `untraced` starts a shape drawn-to-0% (opacity stays 1) so `draw` can pen it on —
+// the outline traces edge by edge while the fill washes in.
+untraced(tri); hidden(ra);
+
+// squares on the two legs (areas 16 and 9) and on the hypotenuse (area 25)
+polygon(sqA, (ox, oy), (ox + 4*ux, oy), (ox + 4*ux, oy + 4*ux), (ox, oy + 4*ux), gold);
+polygon(sqB, (ox, oy), (ox, oy - 3*ux), (ox - 3*ux, oy - 3*ux), (ox - 3*ux, oy), lime);
+polygon(sqC, (ox + 4*ux, oy), (ox + 7*ux, oy - 4*ux), (ox + 3*ux, oy - 7*ux), (ox, oy - 3*ux), magenta);
+untraced(sqA); untraced(sqB); untraced(sqC);
+
+// side length labels — on the triangle's own edges (dark ink on the cyan face)
+caption(lb, "3", (ox + 26, oy - 1.5*ux), 32);    color(lb, #06202a);
+caption(la, "4", (ox + 2*ux, oy - 28), 32);       color(la, #06202a);
+caption(lc, "5", (ox + 2.6*ux, oy - 1.9*ux), 32); color(lc, #06202a);
+hidden(la); hidden(lb); hidden(lc);
+
+// area labels, sitting in each square (dark ink on the bright leg-squares, white on the hyp)
+caption(cA, "16", (ox + 2*ux, oy + 2*ux), 44);      color(cA, #101018);
+caption(cB, "9", (ox - 1.5*ux, oy - 1.5*ux), 44);   color(cB, #101018);
+caption(cC, "25", (ox + 3.5*ux, oy - 3.5*ux), 44);  color(cC, white);
+hidden(cA); hidden(cB); hidden(cC);
+
+// the payoff equations — tucked under the diagram, along the bottom edge
+equation(eqn, (w*0.5, h*0.955), `9 + 16 = 25`, 46);   hidden(eqn);
+equation(eq2, (w*0.5, h*0.955), `a^2 + b^2 = c^2`, 46); hidden(eq2);
+
+// hook + point text — in the seam gap between the art band and the diagram
+caption(hook, "Why is this ALWAYS a right triangle?", (w*0.5, h*0.42), 32);
+caption(point, "Every right triangle. Always.", (w*0.5, h*0.42), 34);
+hidden(hook); hidden(point);
+
+// ================= script =================
+show(hook);
+wait(2.4);
+fade(hook, 0.4);
+
+// BUILD — the triangle is DRAWN OUT edge by edge, then the right angle + side labels
+draw(tri, 1.4);
+wait(0.4);
+show(ra);
+wait(0.4);
+show(la); show(lb); show(lc);
+wait(1.2);
+
+// RULE — squares DRAW out on the legs (pen tracing each side), then the areas appear
+draw(sqA, 1.1); draw(sqB, 1.1);
+wait(0.5);
+show(cA); show(cB);
+wait(1.4);
+// then the hypotenuse square draws out — the payoff shape
+draw(sqC, 1.3);
+wait(0.5);
+show(cC);
+wait(1.6);
+
+// TWIST — the two small squares add up to the big one
+pulse(sqA, 1.4); pulse(sqB, 1.4);
+show(eqn);
+wait(1.6);
+pulse(sqC, 1.6);
+fade(eqn, 0.4);
+show(eq2);
+wait(2.0);
+
+// POINT + hold
+show(point);
+wait(2.6);
+endcard(me, "title=Try_Manic cta=8gwifi.org/manic");

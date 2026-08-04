@@ -1,0 +1,55 @@
+// shader-glitch-grid — a p5 WEBGL multi-pass sketch ("Glitch animation of a randomly
+// generated grid pattern") reimagined in ONE manic `shader`. The original pre-renders
+// FOUR grid/stripe layers into off-screen buffers, composites them with a substitution
+// shader (each coarse cell shows a different sub-pattern), captures the result, then a
+// second shader RGB-shifts it into a glitch. manic `glsl()` can't take render-target
+// textures — but the OUTCOME is closed-form: build the nested grid PROCEDURALLY per
+// pixel, then chromatically tear it by sampling each colour channel at a per-scanline
+// horizontal offset. Pure in (u,v,t): the glitch scrubs and records exactly.
+//
+//   manic examples/shader-glitch-grid.manic
+title("Glitch grid — a multi-pass shader, reimagined per-pixel");
+canvas("1:1");
+template("black");
+
+shader(glitch) {
+  // per-scanline-block horizontal offset, re-randomised a few times a second, and
+  // faded IN after the grid has settled (the original delays the glitch too)
+  let band = floor(v * 40.0);
+  let gt = floor(t * 3.0);
+  let gon = smoothstep(3.5, 4.5, t);
+  let off = (rand2(band, gt) - 0.5) * 0.06 * gon;
+
+  // RED — the nested random grid sampled at u + off
+  let ru = u + off;
+  let rcx = floor(ru * 10.0);  let rcy = floor(v * 10.0);  let rh = rand2(rcx, rcy);
+  let rdot = step(0.2, fract(ru * 100.0)) * step(fract(ru * 100.0), 0.8)
+           * step(0.2, fract(v * 100.0)) * step(fract(v * 100.0), 0.8);
+  let rstr = step(0.5, fract(v * 50.0));
+  let cr = mix(0.08, mix(mix(0.90, 0.12, rdot), mix(0.93, 0.18, rstr), step(0.7, rh)), step(0.4, rh));
+
+  // GREEN — same grid at u + off*0.3 (slight chromatic split)
+  let gu = u + off * 0.3;
+  let gcx = floor(gu * 10.0);  let gh = rand2(gcx, rcy);
+  let gdot = step(0.2, fract(gu * 100.0)) * step(fract(gu * 100.0), 0.8)
+           * step(0.2, fract(v * 100.0)) * step(fract(v * 100.0), 0.8);
+  let cg = mix(0.08, mix(mix(0.90, 0.12, gdot), mix(0.93, 0.18, rstr), step(0.7, gh)), step(0.4, gh));
+
+  // BLUE — same grid at u + off*1.2 (the widest split)
+  let bu = u + off * 1.2;
+  let bcx = floor(bu * 10.0);  let bh = rand2(bcx, rcy);
+  let bdot = step(0.2, fract(bu * 100.0)) * step(fract(bu * 100.0), 0.8)
+           * step(0.2, fract(v * 100.0)) * step(fract(v * 100.0), 0.8);
+  let cb = mix(0.08, mix(mix(0.90, 0.12, bdot), mix(0.93, 0.18, rstr), step(0.7, bh)), step(0.4, bh));
+
+  // white noise on top (as the original adds), stronger while glitching
+  let n = (rand2(u * 700.0 + gt, v * 700.0) - 0.5) * (0.05 + 0.12 * gon);
+  let r = cr + n;
+  let g = cg + n;
+  let b = cb + n;
+}
+
+caption(head, "Glitch grid — one formula per pixel", (400, 44), 22);
+hidden(head);
+show(head);
+wait(9);

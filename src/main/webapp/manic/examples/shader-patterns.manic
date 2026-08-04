@@ -1,0 +1,37 @@
+// shader-patterns — the Book-of-Shaders "Patterns" chapter: `fract` and `floor`
+// turn ONE cell into an infinite grid. `fract(u*n)` is the position INSIDE each
+// tile (0..1), `floor(u*n)` is which tile you're in — so one motif drawn in tile
+// space repeats everywhere, and the tile index can drive per-tile colour. Pure
+// algebra of (u, v, t): no copies, no loop.
+//
+//   manic examples/shader-patterns.manic
+title("Patterns — one tile, endlessly repeated");
+canvas("9:16");
+template("black");
+
+shader(bg) {
+  let n = 6.0;
+  let gx = fract(u*n*asp) - 0.5;      // local coord inside each tile
+  let gy = fract(v*n) - 0.5;
+  let d = length(gx, gy);
+  let dot = smoothstep(0.36, 0.30, d);           // a disc per tile
+  let ring = smoothstep(0.02, 0.0, abs(d - (0.24 + 0.06*sin(t)))); // pulsing ring
+  let id = floor(u*n*asp) + floor(v*n);          // which tile → per-tile hue
+  let hue = mod(id*24.0 + t*36.0, 360.0);
+  let sat = 0.85;
+  let val = 0.12 + 0.6*dot + 0.5*ring;
+}
+
+caption(head, "Patterns from one tile", (540, 150), 34);
+caption(sub, "fract() = position in tile, floor() = which tile", (540, 214), 20);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1720), `\text{tile}(u)=\operatorname{fract}(u\,n),\ \operatorname{floor}(u\,n)`, 28);
+hidden(eq);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.4);
+show(eq);
+wait(22);

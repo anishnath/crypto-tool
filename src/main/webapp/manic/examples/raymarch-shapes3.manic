@@ -1,0 +1,31 @@
+// raymarch-shapes3 — the 3-D shape/SDF builtins (Layer 1, batch 2) in a real
+// ray-march: a torus, an octahedron, and a capsule spindle, smooth-unioned and
+// orbited by camera3. Each is ONE scalar builtin — no vec math, no hand-written
+// distance functions. Full-res GLSL with the CPU marcher as the exact fallback.
+//
+//   manic examples/raymarch-shapes3.manic
+title("Ray-marched SDF primitives — torus · octahedron · capsule");
+canvas("16:9");
+template("black");
+
+camera3((3.2, -3.6, 2.4), (0, 0, 0), 40, perspective);
+
+raymarch(scene) {
+  let tor = sdtorus(x, y, z, 0.95, 0.26);       // ring in the XY plane
+  let oct = sdoctahedron(x, y, z - 1.05, 0.5);   // floating above
+  let spn = sdcapsule(x, y, z, 1.5, 0.10);       // vertical spindle through it
+  let d = smin(smin(tor, oct, 0.18), spn, 0.12);
+  // iridescent hit colour from the normal + a slow time sweep
+  let hue = mod(190.0 + nz * 70.0 + nx * 40.0 + t * 30.0, 360.0);
+  let sat = 0.82;
+  let val = 0.52 + 0.32 * nz;
+}
+
+caption(head, "sdtorus · sdoctahedron · sdcapsule", (640, 66), 30);
+caption(sub, "each shape one scalar builtin — no vec math", (640, 118), 20);
+hidden(head);
+hidden(sub);
+show(head);
+wait(1.4);
+show(sub);
+orbit3(70, 0, 5.4, 20, smooth);

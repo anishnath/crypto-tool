@@ -1,5 +1,5 @@
 {
-  "count": 338,
+  "count": 360,
   "categories": [
     {
       "slug": "algorithms",
@@ -1008,6 +1008,12 @@
       "title": "Geometry (olympiad)",
       "examples": [
         {
+          "name": "geo-pythagoras-short",
+          "file": "geo-pythagoras-short.manic",
+          "title": "Geo pythagoras short",
+          "desc": "A vertical Short proving a\u00b2 + b\u00b2 = c\u00b2 by area \u2014 and a demo that a shader art panel and generic geometry share ONE frame at full value."
+        },
+        {
           "name": "equilateral",
           "file": "equilateral.manic",
           "title": "Equilateral",
@@ -1212,6 +1218,120 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "shader-glitch-grid",
+          "file": "shader-glitch-grid.manic",
+          "title": "Shader glitch grid",
+          "desc": "A p5 WEBGL multi-pass sketch \u2014 a randomly generated grid pattern, RGB-shifted into a glitch \u2014 reimagined as ONE per-pixel shader."
+        },
+        {
+          "name": "shader-plasma",
+          "file": "shader-plasma.manic",
+          "title": "Shader plasma",
+          "desc": "A fragment-shader-style colour field \u2014 the per-PIXEL twin of cloud."
+        },
+        {
+          "name": "shader-fractal",
+          "file": "shader-fractal.manic",
+          "title": "Shader fractal",
+          "desc": "A LIVING Julia set in a shader field."
+        },
+        {
+          "name": "shader-shapes",
+          "file": "shader-shapes.manic",
+          "title": "Shader shapes",
+          "desc": "The Book of Shaders 'Shapes' chapter in a shader field: draw with DISTANCE and ANGLE."
+        },
+        {
+          "name": "shader-cellular",
+          "file": "shader-cellular.manic",
+          "title": "Shader cellular",
+          "desc": "The 'Cellular noise' (Worley/Voronoi) chapter: voronoi(x,y) scatters one feature point per unit cell and returns the distance to the nearest, so the field organises into flowing cells."
+        },
+        {
+          "name": "shader-patterns",
+          "file": "shader-patterns.manic",
+          "title": "Shader patterns",
+          "desc": "The 'Patterns' chapter: fract+floor turn ONE tile into an infinite grid."
+        },
+        {
+          "name": "shader-shapes-dsl",
+          "file": "shader-shapes-dsl.manic",
+          "title": "Shader shapes dsl",
+          "desc": "Patricio's glsl-shapes Shadertoy rebuilt as a FAITHFUL DSL twin using the shape/SDF builtin library: each shape is ONE scalar call \u2014 sdpolygon/sdhexagon/sdstar/sdrhombus/sdroundbox \u2014 smin- unioned and banded by an oscillating iso-line."
+        },
+        {
+          "name": "shader-fx",
+          "file": "shader-fx.manic",
+          "title": "Shader fx",
+          "desc": "The shader/formula HELPER kit in action: fill(d,size,edge) and stroke(d,size,w,edge) turn an SDF distance into a solid + a crisp outline, and gain shapes the gradient behind them."
+        },
+        {
+          "name": "shader-parameter",
+          "file": "shader-parameter.manic",
+          "title": "Shader parameter",
+          "desc": "A shader driven by a scene parameter, not just by time: the ring frequency is a SLIDER the field references by name, so the SAME shader re-renders as you sweep it."
+        },
+        {
+          "name": "shader-warp",
+          "file": "shader-warp.manic",
+          "title": "Shader warp",
+          "desc": "DOMAIN WARPING \u2014 the class of shader Layer-1 builtins can't express, because you can't rotate a scalar coordinate."
+        },
+        {
+          "name": "raymarch-metaballs",
+          "file": "raymarch-metaballs.manic",
+          "title": "Raymarch metaballs",
+          "desc": "Shader **V2**: a 3-D scene RAY-MARCHED per pixel."
+        },
+        {
+          "name": "raymarch-sculpture",
+          "file": "raymarch-sculpture.manic",
+          "title": "Raymarch sculpture",
+          "desc": "Shader **V2.2**: a coloured, carved SDF sculpture that a real camera3 orbits."
+        },
+        {
+          "name": "raymarch-boxgrid",
+          "file": "raymarch-boxgrid.manic",
+          "title": "Raymarch boxgrid",
+          "desc": "Shader **V2.3**, the finale: the raymarched Shadertoy that started the thread (tssSDN \u2014 a grid of boxes rippling around a bouncing sphere), rebuilt as a TRUE ray-march (not the cloud3 reimagining)."
+        },
+        {
+          "name": "raymarch-shapes3",
+          "file": "raymarch-shapes3.manic",
+          "title": "Raymarch shapes3",
+          "desc": "The 3-D SDF PRIMITIVES in a real ray-march: a torus, an octahedron and a capsule spindle \u2014 sdtorus/sdoctahedron/sdcapsule \u2014 smooth-unioned and orbited by camera3."
+        },
+        {
+          "name": "raymarch-alpha",
+          "file": "raymarch-alpha.manic",
+          "title": "Raymarch alpha",
+          "desc": "OUTPUT ALPHA / compositing: a raymarched metaball with let alpha renders on a TRANSPARENT background, so the object floats over the rest of the scene (here a full-canvas shader gradient) instead of an opaque backdrop."
+        },
+        {
+          "name": "glsl-raymarch",
+          "file": "glsl-raymarch.manic",
+          "title": "Glsl raymarch",
+          "desc": "Shader **V3**: glsl(id, <shader>) runs a REAL GLSL fragment shader (Shadertoy-style mainImage, iTime/iResolution/iMouse) straight through the graphics pipeline \u2014 so the whole scene is marched PER PIXEL by the GPU/GL: crisp, anti-aliased, full resolution, and fast."
+        },
+        {
+          "name": "glsl-boxgrid",
+          "file": "glsl-boxgrid.manic",
+          "title": "Glsl boxgrid",
+          "desc": "The ACTUAL Shadertoy (tssSDN \u2014 a grid of boxes rippling around a bouncing sphere) that started this whole thread, running in manic UNCHANGED via glsl."
+        },
+        {
+          "name": "glsl-shapes",
+          "file": "glsl-shapes.manic",
+          "title": "Glsl shapes",
+          "desc": "Patricio Gonzalez Vivo's 2015 'shapes' Shadertoy running in manic UNCHANGED via glsl \u2014 a 2-D SDF gallery (pentagon/circle/triangle/octagon/hexagon/star/ellipse/rounded-rect) banded by an oscillating iso-line."
+        },
+        {
+          "name": "glsl-parameter",
+          "file": "glsl-parameter.manic",
+          "title": "Glsl parameter",
+          "desc": "A RAW GLSL shader driven by a scene parameter: declare uniform float u_freq; in the paste and it AUTO-BINDS to the slider freq, so a raw Shadertoy gets a manic control with no wrapper changes."
+        },
+        {
           "name": "tree-of-leaves",
           "file": "tree-of-leaves.manic",
           "title": "Tree of leaves",
@@ -1240,6 +1360,12 @@
           "file": "cloud-phoenix.manic",
           "title": "Cloud phoenix",
           "desc": "Another @yuruyurau art-tweet in ONE cloud: 10,000 points flow into a living, wing-like form and morph over time."
+        },
+        {
+          "name": "cloud-pottery",
+          "file": "cloud-pottery.manic",
+          "title": "Cloud pottery",
+          "desc": "The OpenProcessing weekly 'Pottery' challenge in ONE cloud: seven stippled vases, each a UNIQUE wavy silhouette from a couple of seeded sine harmonics, drawn as dotted ellipse-rings shaded front-bright by per-dot alpha, with flowering sprigs on a hash-picked subset (a curved stem + a dotted 5-lobe head)."
         },
         {
           "name": "cloud-kaleidoscope",
@@ -1714,6 +1840,12 @@
           "file": "cloud3-sphere.manic",
           "title": "Cloud3 sphere",
           "desc": "The 3D twin of cloud: 2500 points placed by closed-form x/y/z formulas of index i and time t, projected by the orbit camera3."
+        },
+        {
+          "name": "cloud3-ripple",
+          "file": "cloud3-ripple.manic",
+          "title": "Cloud3 ripple",
+          "desc": "The manic answer to a raymarched Shadertoy (tssSDN): a 64x64 cloud3 grid whose HEIGHT is a travelling wave radiating from a bouncing sphere \u2014 cells near the sphere bob most, red troughs rise to gold crests."
         },
         {
           "name": "fibonacci-sphere",

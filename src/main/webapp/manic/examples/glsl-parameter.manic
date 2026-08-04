@@ -1,0 +1,30 @@
+// glsl-parameter — a RAW GLSL shader driven by a scene `parameter`. Step 5 of the
+// shader backbone: `glsl()` is now a full citizen of the uniform table, so a paste
+// that DECLARES `uniform float u_<name>;` auto-binds to the matching `parameter`
+// (and `uniform vec3 iCamEye;` etc. would bind to `camera3`). Here `u_freq` is a
+// slider: the same shader re-renders as you sweep it — no re-paste, no edits.
+//
+//   manic examples/glsl-parameter.manic
+title("A raw GLSL shader, driven by a slider");
+canvas("16:9");
+template("black");
+
+parameter(freq, (640, 660), 3, 1, 16, "freq", 0);
+
+glsl(scene, `
+uniform float u_freq;
+void mainImage(out vec4 o, in vec2 fc){
+  vec2 uv = fc / iResolution;
+  vec2 c = uv - 0.5;
+  c.x *= iResolution.x / iResolution.y;            // aspect-correct
+  float d = length(c);
+  float rings = 0.5 + 0.5 * sin(d * u_freq * 32.0 - iTime);
+  vec3 col = vec3(rings, 1.0 - rings, 0.5 + 0.5 * sin(d * u_freq * 8.0));
+  o = vec4(col, 1.0);
+}
+`);
+
+caption(head, "glsl ← parameter", (640, 66), 34);
+hidden(head);
+show(head);
+to(freq, value, 16, 6, smooth);
