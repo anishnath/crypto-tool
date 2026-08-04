@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e83c9c7d.js";
+            window.path_to_searchindex_js = "searchindex-a906f1aa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3a725e0e.js"></script>
@@ -8228,10 +8228,10 @@ least-significant bits across drivers). Handy for byte-exact export jobs. Raw
 <li><a href="#physics--simulations">Physics — simulations</a> — 58 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 5 examples</li>
-<li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 9 examples</li>
+<li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 11 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 60 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 64 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
@@ -19371,6 +19371,339 @@ endcard(me, "title=Try_Manic cta=8gwifi.org/manic");
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/rtpp2FJWxO4" title="Proving the Pythagorean Theorem by Area — a Shader-Art + Geometry Split-Stage Short in manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="circle-in-three"><a class="header" href="#circle-in-three">circle-in-three</a></h2>
+<p>A <strong>Problem Book</strong> plate (paper + masthead): split one round cake among three friends with exactly
+TWO straight cuts. Wrong guesses first, then the lemma (crossing cuts always give four pieces), then
+the transcendental equation <code>cos⁻¹(u) − u√(1−u²) = π/3</code> solved on a live graph, then the fair cut —
+with the three piece percentages recomputing throughout. The solved height u = a/R = 0.2649.</p>
+<pre><code class="language-manic">// circle-in-three — a story-driven textbook plate: divide one round cake among
+// three friends using exactly two straight cuts. Wrong ideas first, then the
+// lemma (crossing cuts always give four pieces), then the transcendental
+// equation, solved on a graph, then the fair cut - live percentages throughout.
+// The solved height: cos^-1(u) - u sqrt(1-u^2) = pi/3  =&gt;  u = a/R = 0.2649.
+title("Split a Circle in Three - with Two Lines");
+canvas("16:9");
+template("paper");
+masthead("The Problem Book", "Plate VII");
+
+// ---------- layout ----------
+let R = 205;
+let ox = 400;
+let oy = 400;
+let dyE = R/3;          // "evenly spaced" cut height (the wrong guess)
+let dyS = 0.2649*R;     // the solved cut height
+let sf = 1.0228;        // chord length ratio: sqrt(1-0.2649^2)/sqrt(8/9)
+
+// ---------- HUD ----------
+text(head, (cx, 100), "Split a Circle in Three - with Two Lines"); display(head); cursor(head); sticky(head);
+text(cap, (cx, h - 40), ""); size(cap, 26); sticky(cap);
+text(fig, (ox, 648), ""); size(fig, 24); color(fig, dim); sticky(fig);
+
+// ---------- the cake ----------
+circle(cake, (ox, oy), R); outlined(cake); stroke(cake, 3); untraced(cake);
+
+// attempt 1: two diameters
+line(d1, (ox, oy - R), (ox, oy + R)); untraced(d1); stroke(d1, 3);
+line(d2, (ox - R, oy), (ox + R, oy)); untraced(d2); stroke(d2, 3);
+text(q1, (ox + 70, oy - 70), "1"); size(q1, 30); hidden(q1); tag(q1, qlab);
+text(q2, (ox - 70, oy - 70), "2"); size(q2, 30); hidden(q2); tag(q2, qlab);
+text(q3, (ox - 70, oy + 70), "3"); size(q3, 30); hidden(q3); tag(q3, qlab);
+text(q4, (ox + 70, oy + 70), "4"); size(q4, 30); hidden(q4); tag(q4, qlab);
+
+// attempt 2: parallel cuts at thirds (they will SLIDE to the true height later)
+line(cA1, (ox - R*0.94281, oy - dyE), (ox + R*0.94281, oy - dyE)); untraced(cA1); stroke(cA1, 4); color(cA1, red);
+line(cB1, (ox - R*0.94281, oy + dyE), (ox + R*0.94281, oy + dyE)); untraced(cB1); stroke(cB1, 4); color(cB1, red);
+
+// boolean sources (hidden): the disc and the horizontal bands
+circle(disc, (ox, oy), R); hidden(disc);
+rect(rT2, (ox, oy - dyE - 75), 430, 150); hidden(rT2);
+rect(rM2, (ox, oy), 430, 2*dyE); hidden(rM2);
+rect(rB2, (ox, oy + dyE + 75), 430, 150); hidden(rB2);
+rect(rT3, (ox, oy - dyS - 75), 430, 150); hidden(rT3);
+rect(rM3, (ox, oy), 430, 2*dyS); hidden(rM3);
+rect(rB3, (ox, oy + dyS + 75), 430, 150); hidden(rB3);
+
+// the three shares, evenly-spaced version (29.2 / 41.7 / 29.2)
+intersect(capT2, disc, rT2); color(capT2, cyan); opacity(capT2, 0.45); hidden(capT2); tag(capT2, att2);
+intersect(mid2, disc, rM2); color(mid2, gold); opacity(mid2, 0.45); hidden(mid2); tag(mid2, att2);
+intersect(capB2, disc, rB2); color(capB2, magenta); opacity(capB2, 0.45); hidden(capB2); tag(capB2, att2);
+
+// the three shares, solved version (33.3 each)
+intersect(capT3, disc, rT3); color(capT3, cyan); opacity(capT3, 0.45); hidden(capT3); tag(capT3, att3);
+intersect(mid3, disc, rM3); color(mid3, gold); opacity(mid3, 0.45); hidden(mid3); tag(mid3, att3);
+intersect(capB3, disc, rB3); color(capB3, magenta); opacity(capB3, 0.45); hidden(capB3); tag(capB3, att3);
+
+// live percentages, one per share
+counter(pcT, (ox, oy - 128), 0, 1, "", "%"); hidden(pcT);
+counter(pcM, (ox, oy), 0, 1, "", "%"); hidden(pcM);
+counter(pcB, (ox, oy + 128), 0, 1, "", "%"); hidden(pcB);
+
+// ---------- the mathematics panel (right side) ----------
+equation(eqA, (960, 205), `A_{\text{cap}}(a) \;=\; R^2\cos^{-1}\!\frac{a}{R} \;-\; a\sqrt{R^2-a^2}`, 32); hidden(eqA); sticky(eqA);
+equation(eqG, (960, 430), `f(u)=\cos^{-1}u \;-\; u\sqrt{1-u^2} \;-\; \tfrac{\pi}{3}`, 26); hidden(eqG); sticky(eqG);
+arrow(gxa, (850, 560), (1195, 560)); untraced(gxa); stroke(gxa, 2);
+arrow(gya, (880, 655), (880, 495)); untraced(gya); stroke(gya, 2);
+plot(pf, (880, 560), 300, 90, "acos(x)-x*sqrt(1-x^2)-1.047198", (0.01, 0.99));
+untraced(pf); stroke(pf, 3); color(pf, blue);
+roots(rt, pf, magenta); hidden(rt);
+text(rlab, (1040, 596), "u ≈ 0.2649"); size(rlab, 24); color(rlab, magenta); hidden(rlab);
+
+// ================= timeline =================
+
+// ---- the problem
+type(head, 1.1);
+say(cap, "Three friends. One round cake. Two straight cuts. Make it fair.", 0.6);
+draw(cake, 1.2);
+say(fig, "Fig. 1 - the cake", 0.3);
+wait(0.5);
+
+// ---- attempt 1: through the middle, twice
+cue(whoosh);
+say(cap, "First idea: cut through the middle - twice.", 0.5);
+par { draw(d1, 0.7); draw(d2, 0.7); }
+stagger(0.12) { show(q1, 0.3); show(q2, 0.3); show(q3, 0.3); show(q4, 0.3); }
+say(cap, "Four pieces. Perfectly equal - and perfectly useless. We are THREE.", 0.5);
+wait(0.6);
+
+// ---- the lemma: crossing cuts always make four
+say(cap, "Tilt a cut, slide it anywhere: two CROSSING cuts always make four pieces.", 0.5);
+rotate(d2, 38, 1.0, smooth);
+shift(d2, (55, 35), 1.0, smooth);
+pulse(qlab, 0.8);
+say(cap, "Lemma: the two cuts must never cross inside the cake. They must be PARALLEL.", 0.5);
+cue(tick);
+par { fade(d1, 0.5); fade(d2, 0.5); fade(qlab, 0.4); }
+
+// ---- attempt 2: parallel, evenly spaced
+say(fig, "Fig. 2 - parallel cuts at thirds", 0.3);
+say(cap, "Second idea: space the parallel cuts evenly - at thirds of the diameter.", 0.5);
+par { draw(cA1, 0.7); draw(cB1, 0.7); }
+stagger(0.15) { show(capT2, 0.5); show(mid2, 0.5); show(capB2, 0.5); }
+par { show(pcT, 0.3); show(pcM, 0.3); show(pcB, 0.3); }
+par { to(pcT, value, 29.2, 1.3, smooth); to(pcM, value, 41.7, 1.3, smooth); to(pcB, value, 29.2, 1.3, smooth); }
+cue(pop);
+flash(mid2, gold);
+say(cap, "The middle friend grins: 41.7 percent. Evenly SPACED is not evenly SHARED.", 0.5);
+wait(0.8);
+
+// ---- the mathematics: ask the cake
+say(cap, "So ask the cake: how much lies beyond a cut at height a?", 0.5);
+show(eqA, 0.6);
+wait(0.8);
+cue(tick);
+rewrite(eqA, `R^2\cos^{-1}\!\frac{a}{R} - a\sqrt{R^2-a^2} \;=\; \frac{\pi R^2}{3}`, 0.9);
+say(cap, "Each outer piece must hold a third of the cake. Divide out the radius...", 0.5);
+cue(tick);
+rewrite(eqA, `\cos^{-1}u \;-\; u\sqrt{1-u^2} \;=\; \frac{\pi}{3}, \qquad u=\frac{a}{R}`, 0.9);
+say(cap, "No algebra unties this knot - it is transcendental. Let the graph solve it.", 0.5);
+say(fig, "Fig. 3 - solving f(u) = 0", 0.3);
+par { draw(gxa, 0.5); draw(gya, 0.5); }
+par { draw(pf, 1.3); show(eqG, 0.7); }
+show(rt, 0.4); show(rlab, 0.4);
+par { cam((959, 545), 1.0, smooth); zoom(1.6, 1.0, smooth); }
+flash(rt, magenta);
+say(cap, "One root. The cuts belong at u = 0.2649 - about a quarter of the radius.", 0.5);
+wait(0.7);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+cue(tick);
+rewrite(eqA, `u \;=\; \frac{a}{R} \;\approx\; 0.2649`, 0.9);
+
+// ---- the fair cut: slide the knives home
+say(cap, "Nudge each cut toward the centre: from 0.333 R in to 0.2649 R.", 0.5);
+cue(whoosh);
+par {
+  shift(cA1, (0, dyE - dyS), 1.4, smooth); scale(cA1, sf, 1.4, smooth);
+  shift(cB1, (0, dyS - dyE), 1.4, smooth); scale(cB1, sf, 1.4, smooth);
+  fade(att2, 1.2); show(capT3, 1.2); show(mid3, 1.2); show(capB3, 1.2);
+}
+par { to(pcT, value, 33.3, 1.3, smooth); to(pcM, value, 33.3, 1.3, smooth); to(pcB, value, 33.3, 1.3, smooth); }
+cue(chime);
+par { flash(capT3, cyan); flash(mid3, gold); flash(capB3, magenta); }
+say(cap, "33.3 - 33.3 - 33.3. Fair, to the crumb.", 0.5);
+say(fig, "Fig. 4 - the fair cut: a = 0.2649 R", 0.3);
+wait(0.8);
+
+// ---- closing plate
+cue(tick);
+rewrite(eqA, `\boxed{\;a \;=\; 0.2649\,R\;}`, 1.0);
+par {
+  breathe(eqA, 3, 0.05, 0, 5);
+  seq { pulse(capT3, 0.7); pulse(mid3, 0.7); pulse(capB3, 0.7); }
+}
+say(cap, "Two cuts. Three equal shares. One transcendental number.", 0.6);
+wait(2.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/2nqoOs7Dhpo" title="Split a Circle in Three With Two Straight Cuts — Solving the Transcendental Equation in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="circle-thirds-no-triangle"><a class="header" href="#circle-thirds-no-triangle">circle-thirds-no-triangle</a></h2>
+<p><strong>Problem Book</strong> Plate VIII: cut a circle into three EQUAL areas — but the classic three-sector answer
+(and the equilateral triangle hiding inside it) is banned. Two triangle-free solutions: the bullseye
+(concentric circles at r₁ = R/√3, r₂ = R√(2/3)) and the waves (S-curves of semicircular arcs on a
+thirds-divided diameter), each piece proven to equal πR²/3 exactly. A 1,000-entity constructed proof.</p>
+<pre><code class="language-manic">// circle-thirds-no-triangle — Plate VIII of the Problem Book: cut a circle
+// into three EQUAL areas, but the classic three-sector answer (and the
+// equilateral triangle hiding inside it) is banned. Two triangle-free answers:
+//   1. the bullseye: concentric circles at r1 = R/sqrt(3), r2 = R sqrt(2/3)
+//   2. the waves: S-curves of semicircular arcs on a thirds-divided diameter;
+//      piece_k = (pi/2)(r_k^2 - r_{k-1}^2) + (pi/2)(s_{k-1}^2 - s_k^2)
+//              = (pi R^2/18)[(2k-1) + (7-2k)] = pi R^2 / 3  for EVERY k.
+title("Three Equal Parts - No Triangles Allowed");
+canvas("16:9");
+template("paper");
+masthead("The Problem Book", "Plate VIII");
+
+// ---------- layout ----------
+let R = 205;
+let ox = 400;
+let oy = 400;
+let r1 = R*0.57735;   // R / sqrt 3
+let r2 = R*0.8165;    // R sqrt(2/3)
+
+// ---------- HUD ----------
+text(head, (cx, 100), "Three Equal Parts - No Triangles Allowed"); display(head); cursor(head); sticky(head);
+text(cap, (cx, h - 40), ""); size(cap, 26); sticky(cap);
+text(fig, (ox, 648), ""); size(fig, 24); color(fig, dim); sticky(fig);
+
+// ---------- the cake ----------
+circle(cake, (ox, oy), R); outlined(cake); stroke(cake, 3); untraced(cake);
+circle(disc, (ox, oy), R); hidden(disc);   // hidden filled source for booleans
+
+// ---------- act 1: the banned answer ----------
+line(m1, (ox, oy), (ox, oy - R)); untraced(m1); stroke(m1, 3); tag(m1, merc);
+line(m2, (ox, oy), (ox - R*0.866, oy + R*0.5)); untraced(m2); stroke(m2, 3); tag(m2, merc);
+line(m3, (ox, oy), (ox + R*0.866, oy + R*0.5)); untraced(m3); stroke(m3, 3); tag(m3, merc);
+line(e1, (ox, oy - R), (ox - R*0.866, oy + R*0.5)); dashed(e1); stroke(e1, 3); color(e1, red); untraced(e1); tag(e1, tri);
+line(e2, (ox - R*0.866, oy + R*0.5), (ox + R*0.866, oy + R*0.5)); dashed(e2); stroke(e2, 3); color(e2, red); untraced(e2); tag(e2, tri);
+line(e3, (ox + R*0.866, oy + R*0.5), (ox, oy - R)); dashed(e3); stroke(e3, 3); color(e3, red); untraced(e3); tag(e3, tri);
+
+// ---------- act 2: the bullseye ----------
+circle(c1, (ox, oy), r1); outlined(c1); stroke(c1, 3); untraced(c1); tag(c1, bull);
+circle(c2, (ox, oy), r2); outlined(c2); stroke(c2, 3); untraced(c2); tag(c2, bull);
+circle(c1d, (ox, oy), r1); hidden(c1d);
+circle(c2d, (ox, oy), r2); hidden(c2d);
+circle(fin, (ox, oy), r1); color(fin, cyan); opacity(fin, 0.45); hidden(fin); tag(fin, bull);
+difference(ringM, c2d, c1d); color(ringM, gold); opacity(ringM, 0.45); hidden(ringM); tag(ringM, bull);
+difference(ringO, disc, c2d); color(ringO, magenta); opacity(ringO, 0.45); hidden(ringO); tag(ringO, bull);
+counter(pb1, (ox, oy), 0, 1, "", "%"); hidden(pb1); tag(pb1, bull);
+counter(pb2, (ox, oy - 143), 0, 1, "", "%"); hidden(pb2); tag(pb2, bull);
+counter(pb3, (ox, oy + 186), 0, 1, "", "%"); hidden(pb3); tag(pb3, bull);
+equation(eqB, (960, 210), `\pi r_1^2 \;=\; \pi\big(r_2^2-r_1^2\big) \;=\; \pi\big(R^2-r_2^2\big) \;=\; \frac{\pi R^2}{3}`, 26); hidden(eqB); sticky(eqB);
+
+// ---------- act 3: the waves ----------
+// construction guides: the diameter, divided into thirds
+line(diam, (ox - R, oy), (ox + R, oy)); dashed(diam); stroke(diam, 2); color(diam, dim); untraced(diam); tag(diam, guide);
+dot(dv1, (ox - R/3, oy), 6); color(dv1, gold); hidden(dv1); tag(dv1, guide);
+dot(dv2, (ox + R/3, oy), 6); color(dv2, gold); hidden(dv2); tag(dv2, guide);
+// cut 1: semicircle r = R/3 above on the first third + r = 2R/3 below on the rest
+plot(pU1, (ox, oy), R, R, "sqrt(abs(0.111111-(x+0.666667)^2))", (-1, -0.3333));
+untraced(pU1); stroke(pU1, 4); color(pU1, red); tag(pU1, waves);
+plot(pL1, (ox, oy), R, R, "0-sqrt(abs(0.444444-(x-0.333333)^2))", (-0.3333, 1));
+untraced(pL1); stroke(pL1, 4); color(pL1, red); tag(pL1, waves);
+// cut 2: semicircle r = 2R/3 above on the first two thirds + r = R/3 below
+plot(pU2, (ox, oy), R, R, "sqrt(abs(0.444444-(x+0.333333)^2))", (-1, 0.3333));
+untraced(pU2); stroke(pU2, 4); color(pU2, red); tag(pU2, waves);
+plot(pL2, (ox, oy), R, R, "0-sqrt(abs(0.111111-(x-0.666667)^2))", (0.3333, 1));
+untraced(pL2); stroke(pL2, 4); color(pL2, red); tag(pL2, waves);
+// boolean sources: half-disc sectors + the four construction circles.
+// key fact: consecutive half-discs are INTERNALLY TANGENT, so every wave piece is
+// either a plain sector or ONE difference(sector, circle) - no nesting needed.
+sector(sLoB, (ox, oy), R, 180, 360); hidden(sLoB);
+sector(sHiB, (ox, oy), R, 0, 180); hidden(sHiB);
+sector(sU2s, (ox - R/3, oy), 2*R/3, 0, 180); hidden(sU2s);
+sector(sL1s, (ox + R/3, oy), 2*R/3, 180, 360); hidden(sL1s);
+circle(dU1c, (ox - 2*R/3, oy), R/3); hidden(dU1c);
+circle(dU2c, (ox - R/3, oy), 2*R/3); hidden(dU2c);
+circle(dL1c, (ox + R/3, oy), 2*R/3); hidden(dL1c);
+circle(dL2c, (ox + 2*R/3, oy), R/3); hidden(dL2c);
+// region 1 (cyan): lower-left crescent + its little bump above the diameter
+difference(w1a, sLoB, dL1c); color(w1a, cyan); opacity(w1a, 0.45); filled(w1a); tag(w1a, wave1); tag(w1a, waves);
+sector(sU1f, (ox - 2*R/3, oy), R/3, 0, 180); color(sU1f, cyan); opacity(sU1f, 0.45); filled(sU1f); tag(sU1f, wave1); tag(sU1f, waves);
+// region 2 (gold): the S in the middle - one piece above the axis, one below
+difference(w2a, sU2s, dU1c); color(w2a, gold); opacity(w2a, 0.45); filled(w2a); tag(w2a, wave2); tag(w2a, waves);
+difference(w2b, sL1s, dL2c); color(w2b, gold); opacity(w2b, 0.45); filled(w2b); tag(w2b, wave2); tag(w2b, waves);
+// region 3 (magenta): upper-right crescent + its little bump below
+difference(w3a, sHiB, dU2c); color(w3a, magenta); opacity(w3a, 0.45); filled(w3a); tag(w3a, wave3); tag(w3a, waves);
+sector(sL2f, (ox + 2*R/3, oy), R/3, 180, 360); color(sL2f, magenta); opacity(sL2f, 0.45); filled(sL2f); tag(sL2f, wave3); tag(sL2f, waves);
+hidden(wave1); hidden(wave2); hidden(wave3);
+counter(pc1, (300, 492), 0, 1, "", "%"); hidden(pc1);
+counter(pc2, (370, 360), 0, 1, "", "%"); hidden(pc2);
+counter(pc3, (508, 308), 0, 1, "", "%"); hidden(pc3);
+equation(eqW, (960, 210), `\text{piece}_k=\frac{\pi}{2}\big(r_k^2-r_{k-1}^2\big)+\frac{\pi}{2}\big(s_{k-1}^2-s_k^2\big)`, 26); hidden(eqW); sticky(eqW); z(eqW, 10);
+
+// ================= timeline =================
+
+// ---- the challenge
+type(head, 1.1);
+say(cap, "Cut a circle into three equal parts. Everyone knows the answer...", 0.6);
+draw(cake, 1.2);
+say(fig, "Fig. 1 - the answer everyone knows", 0.3);
+par { draw(m1, 0.5); draw(m2, 0.5); draw(m3, 0.5); }
+say(cap, "Three cuts from the centre, 120 degrees apart. Equal - by symmetry.", 0.5);
+wait(0.5);
+say(cap, "But look what hides inside it...", 0.5);
+par { draw(e1, 0.5); draw(e2, 0.5); draw(e3, 0.5); }
+flash(tri, red);
+cue(pop);
+say(cap, "An equilateral triangle. And today, triangles are BANNED.", 0.5);
+wait(0.5);
+par { disintegrate(e1, 0.7); disintegrate(e2, 0.7); disintegrate(e3, 0.7); disintegrate(m1, 0.7); disintegrate(m2, 0.7); disintegrate(m3, 0.7); }
+
+// ---- answer one: the bullseye
+cue(whoosh);
+say(fig, "Fig. 2 - the bullseye", 0.3);
+say(cap, "Answer one: forget cuts across - aim for the BULLSEYE.", 0.5);
+par { draw(c1, 0.8); draw(c2, 0.8); }
+stagger(0.15) { show(fin, 0.5); show(ringM, 0.5); show(ringO, 0.5); }
+par { show(pb1, 0.3); show(pb2, 0.3); show(pb3, 0.3); }
+par { to(pb1, value, 33.3, 1.2, smooth); to(pb2, value, 33.3, 1.2, smooth); to(pb3, value, 33.3, 1.2, smooth); }
+show(eqB, 0.6);
+cue(tick);
+rewrite(eqB, `r_1=\frac{R}{\sqrt{3}}\approx 0.577\,R \qquad r_2=R\sqrt{\tfrac{2}{3}}\approx 0.816\,R`, 0.9);
+say(cap, "A disc and two rings, each exactly a third. No corners anywhere.", 0.5);
+wait(1.2);
+par { fade(bull, 0.6); disintegrate(eqB, 0.8); }
+
+// ---- answer two: the waves
+cue(whoosh);
+say(fig, "Fig. 3 - the waves", 0.3);
+say(cap, "Answer two: let the cuts WAVE. Divide the diameter into thirds...", 0.5);
+draw(diam, 0.7);
+par { show(dv1, 0.4); show(dv2, 0.4); }
+say(cap, "...then each cut is two half-circles: one arching over, one diving under.", 0.5);
+par { cam((ox, oy), 1.0, smooth); zoom(1.25, 1.0, smooth); }
+seq { draw(pU1, 0.9); draw(pL1, 0.9); }
+cue(tick);
+seq { draw(pU2, 0.9); draw(pL2, 0.9); }
+stagger(0.15) { show(wave1, 0.6); show(wave2, 0.6); show(wave3, 0.6); }
+par { show(pc1, 0.3); show(pc2, 0.3); show(pc3, 0.3); }
+par { to(pc1, value, 33.3, 1.2, smooth); to(pc2, value, 33.3, 1.2, smooth); to(pc3, value, 33.3, 1.2, smooth); }
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// the telescoping proof
+show(eqW, 0.6);
+say(cap, "Why equal? Each piece is half-circles added and subtracted...", 0.5);
+cue(tick);
+rewrite(eqW, `\text{piece}_k=\frac{\pi R^2}{18}\Big[(2k-1)+(7-2k)\Big]`, 0.9);
+say(cap, "...and the k cancels itself. Every wave weighs the same.", 0.5);
+cue(tick);
+rewrite(eqW, `\boxed{\;\text{piece}_k=\frac{\pi R^2}{3}\quad\text{for every }k\;}`, 1.0);
+cue(chime);
+par { flash(wave1, cyan); flash(wave2, gold); flash(wave3, magenta); }
+wait(0.8);
+
+// ---- finale: still fair, whichever way it turns
+say(fig, "Fig. 4 - still fair, spinning", 0.3);
+par { fade(pc1, 0.4); fade(pc2, 0.4); fade(pc3, 0.4); fade(guide, 0.4); }
+say(cap, "And a third stays a third, whichever way you turn the plate.", 0.5);
+par {
+  turn(waves, (ox, oy), 120, 5.0, smooth);
+  breathe(eqW, 3, 0.05, 0, 5);
+}
+say(cap, "Three equal parts - and not a triangle in sight.", 0.6);
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/NRpeEodoUtg" title="Three Equal Parts, No Triangles — Bullseye & Wave Dissections of a Circle in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="equilateral"><a class="header" href="#equilateral">equilateral</a></h2>
 <p>Euclid I.1 — an equilateral triangle from two circles.</p>
 <pre><code class="language-manic">// Equilateral Triangle — Euclid, Elements Book I, Proposition 1. Given a segment
@@ -22496,6 +22829,240 @@ orbit3(50, 0, 4.6, 22, smooth);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/XvgJBWu55O4" title="Raymarched Box Grid Rippling Around a Sphere — a Shadertoy Rebuilt in manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="raymarch-docker-latency"><a class="header" href="#raymarch-docker-latency">raymarch-docker-latency</a></h2>
+<p>Data as geometry: <strong>Docker daemon socket latency</strong> as a raymarched LIQUID MESH. The daemon sits at
+the origin emitting high-frequency concentric pings (amplitude ∝ a jittery round-trip-time signal);
+three containers fire expanding ring events at baked timestamps, each ring’s reach ∝ its measured
+RTT. Every cell of a <code>sdbox3</code>+<code>rep()</code> grid samples that field at its centre, so the mesh shimmers
+with socket traffic — one scalar SDF, marched by the engine, coloured by hit height. Honest by
+design: manic is pure in <code>t</code>, so the trace is BAKED (not a live socket) — swap the constants for a
+captured <code>docker events</code> log and it replays deterministically. Data → SDF displacement → raymarch.</p>
+<pre><code class="language-manic">// raymarch-docker-latency — "Visualizing Docker daemon socket latency as a raymarched
+// fluid surface." A per-pixel ray-marched LIQUID MESH: a grid of columns whose heights
+// ARE a latency trace. The daemon socket sits at the origin and emits high-frequency
+// concentric pings (amplitude modulated by a jittery round-trip-time signal); three
+// containers fire expanding ring events at baked timestamps, each ring's reach ∝ its
+// measured RTT. Every cell samples that field at its centre → the mesh shimmers with
+// socket traffic. One scalar SDF (`sdbox3` + `rep()` tiling), marched by the engine.
+//
+// Honest note: manic is PURE IN t (that's what lets it scrub + record), so it does NOT
+// tail a live /var/run/docker.sock in real time. The trace is BAKED IN — timestamps and
+// RTTs as constants — so the same second always renders the same wavefront. Swap the
+// constants for a captured `docker events` / socket-latency log and the mesh replays it
+// deterministically: data → SDF displacement → raymarch, exactly as described. The data
+// source is a recording, not a socket; the mechanism is real.
+//
+//   manic examples/raymarch-docker-latency.manic
+title("Docker daemon socket latency — a raymarched liquid mesh");
+canvas("16:9");
+template("black");
+
+camera3((2.4, -3.3, 2.0), (0, 0, 0.2), 40, perspective);
+
+raymarch(fluid) {
+  let rp = 0.34;                               // mesh cell size
+  let idx = floor(x / rp);   let idy = floor(y / rp);
+  let lx = rep(x, rp);       let ly = rep(y, rp);
+  let cx = idx*rp + rp*0.5;  let cy = idy*rp + rp*0.5;   // this cell's centre
+  let r0 = hypot(cx, cy);                       // distance from the daemon socket (origin)
+
+  // baked latency signal: socket round-trip time, jittery + bursty
+  let lat = 0.5 + 0.28*sin(t*5.3) + 0.16*sin(t*11.7 + 1.3) + 0.10*sin(t*23.1 + 0.7);
+
+  // the daemon socket: high-frequency concentric pings, amplitude ∝ latency
+  let pings = lat * sin(6.0*r0 - t*7.0) / (1.0 + 1.3*r0);
+
+  // three containers talking to the daemon: baked (epicenter, fire time, RTT) rings
+  let d1 = hypot(cx + 1.3, cy - 0.8);   let a1 = t - 1.4;   let f1 = a1*1.9;
+  let e1 = step(0.0, a1) * exp(-0.7*a1)  * sin(7.0*(d1 - f1)) * exp(-3.0*(d1-f1)*(d1-f1));
+  let d2 = hypot(cx - 1.6, cy - 1.1);   let a2 = t - 3.2;   let f2 = a2*2.1;
+  let e2 = step(0.0, a2) * exp(-0.6*a2)  * sin(7.0*(d2 - f2)) * exp(-3.0*(d2-f2)*(d2-f2));
+  let d3 = hypot(cx + 0.4, cy + 1.7);   let a3 = t - 5.0;   let f3 = a3*2.0;
+  let e3 = step(0.0, a3) * exp(-0.55*a3) * sin(7.0*(d3 - f3)) * exp(-3.0*(d3-f3)*(d3-f3));
+
+  // column height = calm water level + the summed latency displacement (always &gt; 0)
+  let bh = clamp(0.22 + 0.13*pings + 0.17*(e1 + e2 + e3), 0.03, 0.78);
+  let box = sdbox3(lx, ly, z - bh*0.5, rp*0.42, rp*0.42, bh*0.5);
+  let d = box;
+
+  // hit colour: deep-blue troughs → bright cyan crests (from the actual hit height),
+  // top faces brightest — no cross-stage lets, so the field colours cleanly
+  let crest = clamp(hz * 1.7, 0.0, 1.0);
+  let hue = mod(210.0 - crest*56.0, 360.0);
+  let sat = 0.82;
+  let val = 0.16 + 0.55*crest + 0.30*nz;
+}
+
+// ---- annotations ----
+caption(head, "Docker daemon socket latency", (640, 60), 33);
+caption(sub, "each socket ping ripples a raymarched liquid mesh", (640, 112), 21);
+hidden(head);
+hidden(sub);
+equation(eq, (640, 636), `z_{\text{cell}} = \mathrm{water} + \sum_i \mathrm{RTT}_i\,\mathrm{ring}(r_i - c\,\Delta t_i)`, 26);
+caption(note, "baked latency trace → SDF displacement → raymarch · pure in t, so it scrubs", (640, 690), 18);
+hidden(eq);
+hidden(note);
+
+show(head);
+wait(1.6);
+show(sub);
+wait(2.2);
+show(eq);
+show(note);
+// slow orbit so the mesh reads as genuine 3-D geometry
+orbit3(52, 8, 4.8, 22, smooth);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/b1rdMFwXwxw" title="Docker Socket Latency as a Raymarched Liquid Mesh — Data-Driven SDF Displacement in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="type-to-sdf"><a class="header" href="#type-to-sdf">type-to-sdf</a></h2>
+<p>Typography, dismantled across all three shader tiers in one scene. <strong>Act 1</strong> — 2,600 points born
+INSIDE the glyphs of “SDF” via <code>cloud(…) from text("SDF")</code>, swarming out and flying home. <strong>Act 2</strong> —
+the letters re-authored as ray-marched signed-distance VOLUMES (<code>raymarch</code>, kept ALL-SCALAR so it
+transpiles to the GPU — tori carved by box intersections, no <code>vec2</code>/<code>rot2</code>). <strong>Act 3</strong> — the SAME
+three sliders (weight/wave/melt) drive a raw <code>glsl</code> pass. One interface, three ways manic renders a
+field: per-point <code>cloud</code>, per-pixel scalar <code>raymarch</code>, and hand-written GLSL.</p>
+<pre><code class="language-manic">// type-to-sdf — flat 2D typography dismantled into a point field, rebuilt as
+// reactive 3D signed-distance volumes, then handed to raw GLSL.
+//   act 1  cloud ... from text("SDF")  - the glyphs dissolve into positions
+//   act 2  raymarch, ALL-SCALAR        - S, D, F re-authored as SDF volumes
+//          (scalar-only =&gt; GPU transpile; parameters bind as uniforms;
+//           tori are carved with box INTERSECTIONS, no rot2/vec2 anywhere)
+//   act 3  glsl                        - the SAME sliders drive raw GLSL
+// Three UI parameters are the whole interface: weight / wave / melt.
+title("Type, Dismantled");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "Type, Dismantled: Flat Glyphs to SDF Volumes"); display(head); cursor(head);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+
+// the UI: three sliders, visibly driving everything
+parameter(wgt, (w - 180, 150), 0.15, 0, 1, "weight", 2);
+parameter(wav, (w - 180, 220), 0, 0, 1, "wave", 2);
+parameter(mlt, (w - 180, 290), 0, 0, 1, "melt", 2);
+
+// ---------- act 1: the glyph field ----------
+// 2600 points born INSIDE the glyphs of "SDF"; each remembers home (hx, hy).
+// They swarm out at t~3.2 and fly home at t~6 - the word dismantled and recalled.
+cloud(dust, 2600, #ffffff, 0.9) from text("SDF") {
+  let rn = mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let sc = smoothstep(3.2, 4.6, t) - smoothstep(6.0, 7.6, t);
+  let ang = i * 2.399;
+  let rad = 40 + 230 * rn;
+  let x = hx + sc * rad * cos(ang + 0.5 * t);
+  let y = hy + sc * rad * sin(ang + 0.5 * t) * 0.8;
+  let r = 1.6 + 1.4 * rn;
+  let hue = 190 + 50 * sin(0.7 * i + t);
+}
+
+// ---------- act 2: the volumes ----------
+camera3((0, -4.6, 1.6), (0, 0, 0.95), 40);
+
+raymarch(vol) {
+  // domain warp: the WAVE slider bends the coordinate field itself
+  let xw = x + wav * 0.16 * sin(2.6 * z + 2 * t);
+  let zw = z + wav * 0.10 * sin(2.2 * x - 1.6 * t);
+  // ---- S (at x = -1.5): two torus arcs, quadrants removed by intersection
+  let sx = xw + 1.5;
+  let torU = sdtorus(sx, zw - 1.15, y, 0.26, 0.09);
+  let torL = sdtorus(sx, zw - 0.63, y, 0.26, 0.09);
+  let upC = smin(sdint(torU, sdbox3(sx + 0.30, y, zw - 1.15, 0.32, 0.6, 0.45)), sdint(torU, sdbox3(sx, y, zw - 1.32, 0.6, 0.6, 0.20)), 0.02);
+  let loC = smin(sdint(torL, sdbox3(sx - 0.30, y, zw - 0.63, 0.32, 0.6, 0.45)), sdint(torL, sdbox3(sx, y, zw - 0.44, 0.6, 0.6, 0.20)), 0.02);
+  let dS = smin(upC, loC, 0.05);
+  // ---- D (at x = 0): stem + right half of a ring
+  let stemD = sdbox3(xw + 0.26, y, zw - 0.9, 0.09, 0.10, 0.55);
+  let bowl = sdint(sdtorus(xw + 0.10, zw - 0.9, y, 0.36, 0.09), sdbox3(xw - 0.22, y, zw - 0.9, 0.34, 0.6, 0.6));
+  let dD = smin(stemD, bowl, 0.05);
+  // ---- F (at x = +1.5): stem + two arms
+  let fx = xw - 1.5;
+  let stemF = sdbox3(fx + 0.22, y, zw - 0.9, 0.09, 0.10, 0.55);
+  let armT = sdbox3(fx, y, zw - 1.36, 0.30, 0.10, 0.09);
+  let armM = sdbox3(fx - 0.03, y, zw - 0.98, 0.24, 0.10, 0.08);
+  let dF = smin(stemF, smin(armT, armM, 0.03), 0.05);
+  // ---- the word: MELT widens the union until letterforms dissolve;
+  //      WEIGHT is one sdround inflation - bold is literally deeper
+  let k = 0.05 + 0.5 * mlt;
+  let word = smin(smin(dS, dD, k), dF, k);
+  let fluid = mlt * 0.03 * sin(5 * xw + 2.4 * t) * sin(4 * zw - 1.8 * t);
+  let d = sdround(word, 0.02 + 0.09 * wgt) + fluid;
+  let hue = 190 + 40 * nx + 50 * mlt + 20 * sin(3 * hz + t);
+  let sat = 0.75;
+  let val = 0.9 + 0.1 * nz;
+  let alpha = 1;
+}
+hidden(vol);
+
+// ---------- act 3: the same sliders, raw GLSL ----------
+glsl(neon, `
+uniform float u_wgt;
+uniform float u_mlt;
+float smin2(float a, float b, float k){ float h = clamp(0.5 + 0.5*(b - a)/k, 0.0, 1.0); return mix(b, a, h) - k*h*(1.0 - h); }
+void mainImage(out vec4 O, in vec2 I){
+  vec2 p = (2.0*I - iResolution.xy)/iResolution.y;
+  float k = 0.15 + 0.6*u_mlt;
+  float d = 1e5;
+  for (int i = 0; i &lt; 3; i++) {
+    float fi = float(i);
+    vec2 c = vec2(-0.9 + 0.9*fi, 0.12*sin(iTime*1.3 + fi*2.1));
+    float r = 0.26 + 0.12*u_wgt + 0.05*sin(iTime*2.0 + fi);
+    d = smin2(d, length(p - c) - r, k);
+  }
+  float glow = pow(0.02/max(abs(d), 0.004), 0.9);
+  vec3 col = glow * mix(vec3(0.1, 0.8, 1.0), vec3(1.0, 0.4, 0.9), 0.5 + 0.5*sin(3.0*u_mlt + p.x));
+  O = vec4(col, clamp(glow, 0.0, 1.0));
+}
+`);
+hidden(neon);
+
+// ================= timeline =================
+
+// ---- act 1: flat, then dismantled
+type(head, 1.1);
+say(cap, "this is type as your screen stores it: flat outlines, frozen in place", 0.6);
+wait(1.4);
+cue(whoosh);
+say(cap, "step one: DISMANTLE - a glyph is nothing but a field of positions", 0.5);
+wait(2.6);
+say(cap, "...and every position remembers home", 0.5);
+wait(2.6);
+
+// ---- act 2: rebuilt as signed-distance volumes
+cue(whoosh);
+par { fade(dust, 0.9); show(vol, 1.2); }
+say(cap, "step two: REBUILD - each letter re-authored as a signed distance volume", 0.5);
+orbit3(-24, 16, 5.0, 2.0, smooth);
+
+// weight: variable font, one number
+cue(tick);
+say(cap, "one slider inflates every stroke: WEIGHT - bold is literally deeper", 0.5);
+to(wgt, value, 1, 1.6, smooth);
+to(wgt, value, 0.35, 1.2, smooth);
+
+// wave: the coordinate field bends
+cue(tick);
+say(cap, "WAVE bends the coordinate field itself - the letters ride it", 0.5);
+par { to(wav, value, 1, 1.8, smooth); orbit3(18, 22, 4.8, 1.8, smooth); }
+to(wav, value, 0.35, 1.2, smooth);
+
+// melt: typography as fluid
+cue(pop);
+say(cap, "MELT widens the union - and the word forgets its letterforms", 0.5);
+par { to(mlt, value, 1, 2.6, smooth); orbit3(40, 14, 5.2, 2.6, smooth); }
+wait(1.0);
+
+// ---- act 3: the bridge to raw GLSL
+cue(chime);
+say(cap, "step three: the SAME sliders, handed to raw GLSL at full resolution", 0.5);
+par { fade(vol, 1.0); show(neon, 1.0); }
+to(mlt, value, 0.25, 1.6, smooth);
+par { to(mlt, value, 0.9, 1.8, smooth); to(wgt, value, 0.8, 1.8, smooth); }
+to(wgt, value, 0.3, 1.4, smooth);
+say(cap, "flat vectors in - living volumes out", 0.6);
+wait(2.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/iYNfuhhs01o" title="Type Dismantled — Glyphs to SDF Volumes Across cloud, raymarch & GLSL in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="raymarch-shapes3"><a class="header" href="#raymarch-shapes3">raymarch-shapes3</a></h2>
 <p>The 3-D SDF PRIMITIVES in a real ray-march: a torus, an octahedron and a capsule spindle —
 <code>sdtorus</code>/<code>sdoctahedron</code>/<code>sdcapsule</code> — smooth-unioned and orbited by <code>camera3</code>. Each is ONE scalar
@@ -22931,6 +23498,189 @@ show(head);
 to(freq, value, 16, 6, smooth);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/4msHrRopMhs" title="Drive a Raw GLSL Shader with a Slider — Auto-Bound Uniforms in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="bloom-scope"><a class="header" href="#bloom-scope">bloom-scope</a></h2>
+<p>Multi-pass BLOOM, dissected live. A ‘light scope’ (reticle ring + ticks + core + orbiting emitters +
+a pulsing probe) in raw <code>glsl</code>, with the bloom pipeline broken into inspectable passes a <code>view</code> slider
+steps through: the crisp scene, the bright-pass (luminance over threshold τ — the ticks vanish), the
+gaussian stack (N passes, radius DOUBLING each), and the additive composite. No ping-pong buffers
+needed: every emitter is an SDF, so each blurred pass is closed-form <code>exp(-d²/σ²)</code> and the mip ladder
+is one constant-bound loop. Five sliders bind straight in as <code>u_&lt;name&gt;</code> uniforms; the flicker beat
+shows a hard threshold POP the soft knee fixes.</p>
+<pre><code class="language-manic">// bloom-scope — multi-pass bloom, dissected live. A "light scope" (reticle
+// ring + ticks + core + three orbiting emitters + one pulsing probe) rendered
+// in raw GLSL, with the bloom pipeline broken into inspectable passes:
+//   view 0  the crisp scene (no bloom)
+//   view 1  bright-pass: luminance over the threshold tau (ticks vanish!)
+//   view 2  the gaussian stack: N passes, radius DOUBLING each pass
+//   view 3  composite: scene + sum of passes (additive - base stays crisp)
+// manic has no ping-pong buffers - and doesn't need them here: every emitter
+// is an SDF, so each blurred pass exists in closed form exp(-d^2/sigma^2);
+// the mip ladder becomes one constant-bound loop. Five UI sliders bind
+// straight into the shader as u_&lt;name&gt; uniforms. The flicker beat: the probe
+// pulses across tau - hard threshold makes its halo POP; the soft knee fixes it.
+title("Bloom, One Pass at a Time");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "Bloom, One Pass at a Time"); display(head); cursor(head);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+text(viewlab, (300, h - 100), ""); size(viewlab, 24); color(viewlab, lime);
+equation(eqb, (cx, 150), `\text{bloom} \;=\; \sum_{p=0}^{N} w_p\; G_{2^{p}\sigma}\!\big(\max(L-\tau,\,0)\big)`, 32); hidden(eqb);
+
+// the UI: five sliders, bound into the shader as u_glo/u_rad/u_pas/u_kne/u_vew
+parameter(glo, (w - 180, 140), 0, 0, 2, "intensity", 2);
+parameter(rad, (w - 180, 205), 0.5, 0, 2, "radius", 2);
+parameter(pas, (w - 180, 270), 0, 0, 5, "passes", 1);
+parameter(kne, (w - 180, 335), 0, 0, 1, "knee", 2);
+parameter(vew, (w - 180, 400), 0, 0, 3, "view", 1);
+counter(cnt, (w - 185, 462), 0, 0, "active passes ", ""); color(cnt, gold); hidden(cnt);
+
+// ---------- the shader ----------
+glsl(scope, `
+uniform float u_glo;
+uniform float u_rad;
+uniform float u_pas;
+uniform float u_kne;
+uniform float u_vew;
+
+float sdRing(vec2 p, float R){ return abs(length(p) - R); }
+float sdBox(vec2 p, vec2 b){ vec2 d = abs(p) - b; return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0); }
+
+// bright-pass weight: hard threshold (tau = 0.55) blended toward a soft knee
+float knee(float b){ return mix(step(0.55, b), smoothstep(0.25, 0.70, b), u_kne); }
+
+// the gaussian stack: N passes, sigma doubling each pass, weights decaying -
+// the closed-form mip ladder (no texture taps: d comes from the SDF)
+vec3 halo(float d, vec3 cb, float w){
+  vec3 a = vec3(0.0);
+  for (int pp = 0; pp &lt; 5; pp++) {
+    float on = clamp(u_pas - float(pp), 0.0, 1.0);
+    float s = max(0.02, u_rad * 0.05 * pow(2.0, float(pp)));
+    a += on * w * cb * exp(-(d*d)/(s*s)) * 0.6 / pow(1.6, float(pp));
+  }
+  return a * u_glo;
+}
+
+void mainImage(out vec4 O, in vec2 I){
+  vec2 p = (2.0*I - iResolution.xy)/iResolution.y;
+  // ---- the light scope: reticle ring + folded tick marks + core
+  float dRing = sdRing(p, 0.62);
+  vec2 q = vec2(abs(p.x), abs(p.y));
+  float ticks = min(sdBox(vec2(q.x - 0.62, p.y), vec2(0.055, 0.012)),
+                    sdBox(vec2(p.x, q.y - 0.62), vec2(0.012, 0.055)));
+  float dCore = length(p) - 0.035;
+  // ---- three orbiting emitters + the pulsing probe (the flicker demo)
+  float a1 = 0.7*iTime;
+  vec2 c1 = 0.45*vec2(cos(a1), sin(a1));
+  vec2 c2 = 0.45*vec2(cos(a1 + 2.09), sin(a1 + 2.09));
+  vec2 c3 = 0.45*vec2(cos(a1 + 4.19), sin(a1 + 4.19));
+  float o1 = length(p - c1) - 0.050;
+  float o2 = length(p - c2) - 0.040;
+  float o3 = length(p - c3) - 0.045;
+  float dPr = length(p - vec2(0.0, -0.86)) - 0.055;
+  float bPr = 0.35 + 0.45*(0.5 + 0.5*sin(2.6*iTime));
+  vec3 cRing = vec3(0.30, 0.85, 1.00);
+  vec3 cCore = vec3(1.00, 0.95, 0.80);
+  vec3 cO1 = vec3(1.00, 0.72, 0.25);
+  vec3 cO2 = vec3(1.00, 0.35, 0.80);
+  vec3 cO3 = vec3(0.30, 1.00, 0.75);
+  vec3 cPr = vec3(0.75, 0.85, 1.00);
+  // ---- view 0: the crisp scene
+  float e = 0.006;
+  vec3 scene = vec3(0.0);
+  scene += smoothstep(e, 0.0, dRing) * cRing * 0.77;
+  scene += smoothstep(e, 0.0, ticks) * cRing * 0.50;
+  scene += smoothstep(e, 0.0, dCore) * cCore * 1.00;
+  scene += smoothstep(e, 0.0, o1) * cO1 * 0.95;
+  scene += smoothstep(e, 0.0, o2) * cO2 * 0.90;
+  scene += smoothstep(e, 0.0, o3) * cO3 * 0.90;
+  scene += smoothstep(e, 0.0, dPr) * cPr * bPr;
+  // ---- view 1: bright extraction (the 0.50 reticle ticks fall BELOW tau)
+  vec3 bright = vec3(0.0);
+  bright += smoothstep(e, 0.0, dRing) * cRing * knee(0.77);
+  bright += smoothstep(e, 0.0, dCore) * cCore * knee(1.00);
+  bright += smoothstep(e, 0.0, o1) * cO1 * knee(0.95);
+  bright += smoothstep(e, 0.0, o2) * cO2 * knee(0.90);
+  bright += smoothstep(e, 0.0, o3) * cO3 * knee(0.90);
+  bright += smoothstep(e, 0.0, dPr) * cPr * knee(bPr);
+  // ---- views 2/3: the stacked gaussian passes
+  vec3 bloom = vec3(0.0);
+  bloom += halo(dRing, cRing * 0.77, knee(0.77) * 0.55);
+  bloom += halo(dCore, cCore, knee(1.00));
+  bloom += halo(o1, cO1 * 0.95, knee(0.95));
+  bloom += halo(o2, cO2 * 0.90, knee(0.90));
+  bloom += halo(o3, cO3 * 0.90, knee(0.90));
+  bloom += halo(dPr, cPr * bPr, knee(bPr));
+  // ---- the view dial
+  float vA = 1.0 - clamp(abs(u_vew - 0.0), 0.0, 1.0);
+  float vB = 1.0 - clamp(abs(u_vew - 1.0), 0.0, 1.0);
+  float vC = 1.0 - clamp(abs(u_vew - 2.0), 0.0, 1.0);
+  float vD = 1.0 - clamp(abs(u_vew - 3.0), 0.0, 1.0);
+  vec3 col = vA*scene + vB*bright + vC*bloom + vD*(scene + bloom);
+  float aOut = clamp(1.6*max(col.r, max(col.g, col.b)), 0.0, 1.0);
+  O = vec4(col, aOut);
+}
+`);
+
+// ================= timeline =================
+
+// ---- view 0: honest and dead
+type(head, 1.1);
+say(viewlab, "VIEW 0 - scene, no bloom", 0.3);
+say(cap, "a light scope, rendered honest: crisp, correct - and completely dead", 0.6);
+wait(2.2);
+
+// ---- view 1: the bright-pass
+cue(tick);
+say(viewlab, "VIEW 1 - bright-pass: L &gt; tau", 0.3);
+to(vew, value, 1, 0.8, smooth);
+say(cap, "pass one: keep only what outshines the threshold - the fine ticks vanish", 0.5);
+wait(2.6);
+
+// ---- view 2: stack the gaussian passes, one by one
+cue(whoosh);
+say(viewlab, "VIEW 2 - gaussian stack, radius x2 per pass", 0.3);
+to(vew, value, 2, 0.8, smooth);
+show(eqb, 0.6);
+show(cnt, 0.3);
+to(glo, value, 1, 0.8, smooth);
+say(cap, "now blur it - again and again, radius doubling: the mip ladder", 0.5);
+par { to(pas, value, 1, 0.7, smooth); to(cnt, value, 1, 0.7); }
+wait(0.4);
+par { to(pas, value, 2, 0.7, smooth); to(cnt, value, 2, 0.7); }
+wait(0.4);
+par { to(pas, value, 3, 0.7, smooth); to(cnt, value, 3, 0.7); }
+wait(0.4);
+par { to(pas, value, 5, 1.0, smooth); to(cnt, value, 5, 1.0); }
+say(cap, "no ping-pong buffers: the emitters are SDFs, so every pass exists in closed form", 0.5);
+wait(1.2);
+
+// ---- view 3: the composite
+cue(chime);
+say(viewlab, "VIEW 3 - composite: scene + all passes", 0.3);
+to(vew, value, 3, 0.9, smooth);
+say(cap, "add it back on top: the scope begins to BLEED - but the base layer stays crisp", 0.5);
+wait(2.0);
+
+// ---- the flicker, and the fix
+cue(tick);
+say(cap, "watch the probe at the bottom: a HARD threshold makes its halo pop on and off", 0.5);
+wait(3.4);
+say(cap, "the fix: a soft KNEE - brightness eases across tau, and the halo breathes", 0.5);
+to(kne, value, 1, 1.6, smooth);
+wait(3.0);
+
+// ---- finale: crank it
+cue(whoosh);
+say(cap, "clarity amidst chaos: bloom is additive light, never a blur of the scene", 0.5);
+par { to(glo, value, 1.7, 2.0, smooth); to(rad, value, 1.5, 2.0, smooth); breathe(eqb, 3, 0.05, 0, 6); }
+to(rad, value, 0.9, 1.6, smooth);
+say(cap, "five sliders, one shader, every pass inspectable", 0.6);
+wait(2.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xD4KzXaLYcA" title="Multi-Pass Bloom Dissected — Bright-Pass, Gaussian Stack & Composite in Raw GLSL (manic)" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="tree-of-leaves"><a class="header" href="#tree-of-leaves">tree-of-leaves</a></h2>
 <p>A seed becomes a tree over one year — entirely from <code>cloud</code> particles. A wood front grows the trunk
@@ -23763,6 +24513,102 @@ show(lab);
 wait(25);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/aQ1LNBBOzPg" title="Generative Particle Art — Two Jellyfish from One Formula — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="cloud-jellyfish-v2"><a class="header" href="#cloud-jellyfish-v2">cloud-jellyfish-v2</a></h2>
+<p>The jellyfish cloud, now SWIMMING IN A SHADER AQUARIUM — a demo that a particle system and a
+per-pixel field share one frame. The bells are the v1 cloud, re-lit into a cyan↔magenta
+bioluminescent band; everything around them is one <code>shader</code>: a depth gradient (teal surface →
+deep navy), animated caustics, and soft god-rays from the surface. Rising bubbles are a second
+tiny <code>cloud</code>. Two clouds + one ocean shader + captions, all pure in (i, t) — the whole tank scrubs.</p>
+<pre><code class="language-manic">// cloud-jellyfish-v2 — the @yuruyurau jellyfish `cloud` (20,000 points, two layers,
+// pulsing bells + tendrils), now SWIMMING IN A SHADER AQUARIUM. The bells are the same
+// particle system as v1; everything around them is one per-pixel `shader`: a depth
+// gradient (teal surface → deep navy), animated caustics rippling near the top, and soft
+// god-rays falling from the surface. A third element — rising bubbles — is a second tiny
+// `cloud`. Particle art + a per-pixel ocean + generic captions, all in one 9:16 frame,
+// all pure in (i, t) so the whole aquarium scrubs and records exactly.
+//
+//   manic examples/cloud-jellyfish-v2.manic
+title("Jellyfish in a shader aquarium");
+canvas("9:16");
+template("black");
+
+// ===================== the aquarium — one shader, per pixel =====================
+shader(water) {
+  let x = (u - 0.5) * asp;
+  let y = v;                                   // 0 = surface (top), 1 = deep (bottom)
+  let depth = smoothstep(0.0, 1.0, y);
+
+  // deep-water colour ramp: bright teal near the surface, deep blue below
+  let hue = mix(186, 216, depth);
+  let base = mix(0.26, 0.045, depth);
+
+  // caustics — warped interference, bright veins that fade with depth
+  let wx = x * 4.0 + 0.5 * sin(y * 6.0 + t * 0.4);
+  let wy = y * 7.0 + 0.5 * sin(x * 5.0 - t * 0.5);
+  let cc = sin(wx + t * 0.7) + sin(wy - t * 0.6) + sin((wx + wy) * 0.7 + t * 0.5);
+  let b = 0.5 + 0.5 * sin(cc * 1.5);
+  let caust = b * b * b * (1.0 - depth * 0.75);
+
+  // god-rays — soft vertical light shafts from the surface, strongest up top
+  let ray = 0.5 + 0.5 * sin(x * 3.0 + 0.6 * sin(t * 0.2));
+  let r2 = ray * ray;
+  let rays = r2 * r2 * (1.0 - smoothstep(0.0, 0.65, y)) * 0.45;
+
+  let val = clamp(base + caust * 0.5 + rays, 0.0, 0.95);
+  let sat = mix(0.85, 0.62, caust);            // bright veins read a touch whiter
+}
+
+// ===================== the jellyfish — the v1 cloud, re-lit ====================
+// same polar formula as v1; the hue is pulled into a cyan↔magenta bioluminescent band
+// so the bells glow like sea creatures against the water instead of full-spectrum.
+cloud(jelly, 20000, #ffffff, 0.6) {
+  let s = i/99;                 // reference's "y" parameter
+  let m = mod(i, 2) * 3;        // two layers
+  let k = 9*cos(s*2);
+  let e = s/8 - 12;
+  let d = (k*k + e*e)/79 + 1;
+  let q = 79 - e*sin(k) + k/d*(8 + 4*sin(sin(d*d + e/9 - t)));
+  let c = d/2 - cos(d*2)/5 - t/16 + m;
+  let px = q*sin(c);
+  let py = (q + 40)*cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.2 * grow;
+  let y = 960 + py * 2.2 * grow;
+  let hue = mod(198 + m*30 + 46*sin(s*0.18 + t*0.35), 360);   // cyan ↔ magenta glow
+}
+
+// ---- rising bubbles — a second tiny cloud drifting up the tank ----
+cloud(bubbles, 130, #dff4ff, 0.5) {
+  let sp = 0.05 + 0.06 * rand2(i, 1.3);        // per-bubble rise speed
+  let ph = rand2(i, 2.7);
+  let prog = fract(ph + t * sp);               // 0 → 1 rise progress
+  let x = 1080 * rand2(i, 4.1) + 24 * sin(prog * tau * 2.0 + i);
+  let y = 1920 * (1.0 - prog);                 // bottom → top
+  let r = 2.0 + 5.0 * rand2(i, 5.5);
+  let hue = 196;
+  let alpha = 0.5 * sin(prog * pi);            // fade in low, fade out near the surface
+}
+
+// ---- textbook annotations ----
+caption(head, "Jellyfish in a shader aquarium", (540, 138), 33);
+caption(sub, "a 20,000-point cloud + a per-pixel ocean", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q{+}40)\cos c)`, 30);
+caption(lab, "bells: a polar cloud · water: one shader · bubbles: a second cloud", (540, 1786), 19);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GwXK2aw_Q9k" title="Jellyfish in a Shader Aquarium — a Particle Cloud Meets a Per-Pixel Ocean — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="cloud-plumes"><a class="header" href="#cloud-plumes">cloud-plumes</a></h2>
 <p>Another @yuruyurau art-tweet in ONE <code>cloud</code>: 30,000 points in two mirrored layers (<code>mod(i,2)</code>) drift

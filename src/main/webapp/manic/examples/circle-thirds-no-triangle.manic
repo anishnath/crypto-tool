@@ -1,0 +1,161 @@
+// circle-thirds-no-triangle — Plate VIII of the Problem Book: cut a circle
+// into three EQUAL areas, but the classic three-sector answer (and the
+// equilateral triangle hiding inside it) is banned. Two triangle-free answers:
+//   1. the bullseye: concentric circles at r1 = R/sqrt(3), r2 = R sqrt(2/3)
+//   2. the waves: S-curves of semicircular arcs on a thirds-divided diameter;
+//      piece_k = (pi/2)(r_k^2 - r_{k-1}^2) + (pi/2)(s_{k-1}^2 - s_k^2)
+//              = (pi R^2/18)[(2k-1) + (7-2k)] = pi R^2 / 3  for EVERY k.
+title("Three Equal Parts - No Triangles Allowed");
+canvas("16:9");
+template("paper");
+masthead("The Problem Book", "Plate VIII");
+
+// ---------- layout ----------
+let R = 205;
+let ox = 400;
+let oy = 400;
+let r1 = R*0.57735;   // R / sqrt 3
+let r2 = R*0.8165;    // R sqrt(2/3)
+
+// ---------- HUD ----------
+text(head, (cx, 100), "Three Equal Parts - No Triangles Allowed"); display(head); cursor(head); sticky(head);
+text(cap, (cx, h - 40), ""); size(cap, 26); sticky(cap);
+text(fig, (ox, 648), ""); size(fig, 24); color(fig, dim); sticky(fig);
+
+// ---------- the cake ----------
+circle(cake, (ox, oy), R); outlined(cake); stroke(cake, 3); untraced(cake);
+circle(disc, (ox, oy), R); hidden(disc);   // hidden filled source for booleans
+
+// ---------- act 1: the banned answer ----------
+line(m1, (ox, oy), (ox, oy - R)); untraced(m1); stroke(m1, 3); tag(m1, merc);
+line(m2, (ox, oy), (ox - R*0.866, oy + R*0.5)); untraced(m2); stroke(m2, 3); tag(m2, merc);
+line(m3, (ox, oy), (ox + R*0.866, oy + R*0.5)); untraced(m3); stroke(m3, 3); tag(m3, merc);
+line(e1, (ox, oy - R), (ox - R*0.866, oy + R*0.5)); dashed(e1); stroke(e1, 3); color(e1, red); untraced(e1); tag(e1, tri);
+line(e2, (ox - R*0.866, oy + R*0.5), (ox + R*0.866, oy + R*0.5)); dashed(e2); stroke(e2, 3); color(e2, red); untraced(e2); tag(e2, tri);
+line(e3, (ox + R*0.866, oy + R*0.5), (ox, oy - R)); dashed(e3); stroke(e3, 3); color(e3, red); untraced(e3); tag(e3, tri);
+
+// ---------- act 2: the bullseye ----------
+circle(c1, (ox, oy), r1); outlined(c1); stroke(c1, 3); untraced(c1); tag(c1, bull);
+circle(c2, (ox, oy), r2); outlined(c2); stroke(c2, 3); untraced(c2); tag(c2, bull);
+circle(c1d, (ox, oy), r1); hidden(c1d);
+circle(c2d, (ox, oy), r2); hidden(c2d);
+circle(fin, (ox, oy), r1); color(fin, cyan); opacity(fin, 0.45); hidden(fin); tag(fin, bull);
+difference(ringM, c2d, c1d); color(ringM, gold); opacity(ringM, 0.45); hidden(ringM); tag(ringM, bull);
+difference(ringO, disc, c2d); color(ringO, magenta); opacity(ringO, 0.45); hidden(ringO); tag(ringO, bull);
+counter(pb1, (ox, oy), 0, 1, "", "%"); hidden(pb1); tag(pb1, bull);
+counter(pb2, (ox, oy - 143), 0, 1, "", "%"); hidden(pb2); tag(pb2, bull);
+counter(pb3, (ox, oy + 186), 0, 1, "", "%"); hidden(pb3); tag(pb3, bull);
+equation(eqB, (960, 210), `\pi r_1^2 \;=\; \pi\big(r_2^2-r_1^2\big) \;=\; \pi\big(R^2-r_2^2\big) \;=\; \frac{\pi R^2}{3}`, 26); hidden(eqB); sticky(eqB);
+
+// ---------- act 3: the waves ----------
+// construction guides: the diameter, divided into thirds
+line(diam, (ox - R, oy), (ox + R, oy)); dashed(diam); stroke(diam, 2); color(diam, dim); untraced(diam); tag(diam, guide);
+dot(dv1, (ox - R/3, oy), 6); color(dv1, gold); hidden(dv1); tag(dv1, guide);
+dot(dv2, (ox + R/3, oy), 6); color(dv2, gold); hidden(dv2); tag(dv2, guide);
+// cut 1: semicircle r = R/3 above on the first third + r = 2R/3 below on the rest
+plot(pU1, (ox, oy), R, R, "sqrt(abs(0.111111-(x+0.666667)^2))", (-1, -0.3333));
+untraced(pU1); stroke(pU1, 4); color(pU1, red); tag(pU1, waves);
+plot(pL1, (ox, oy), R, R, "0-sqrt(abs(0.444444-(x-0.333333)^2))", (-0.3333, 1));
+untraced(pL1); stroke(pL1, 4); color(pL1, red); tag(pL1, waves);
+// cut 2: semicircle r = 2R/3 above on the first two thirds + r = R/3 below
+plot(pU2, (ox, oy), R, R, "sqrt(abs(0.444444-(x+0.333333)^2))", (-1, 0.3333));
+untraced(pU2); stroke(pU2, 4); color(pU2, red); tag(pU2, waves);
+plot(pL2, (ox, oy), R, R, "0-sqrt(abs(0.111111-(x-0.666667)^2))", (0.3333, 1));
+untraced(pL2); stroke(pL2, 4); color(pL2, red); tag(pL2, waves);
+// boolean sources: half-disc sectors + the four construction circles.
+// key fact: consecutive half-discs are INTERNALLY TANGENT, so every wave piece is
+// either a plain sector or ONE difference(sector, circle) - no nesting needed.
+sector(sLoB, (ox, oy), R, 180, 360); hidden(sLoB);
+sector(sHiB, (ox, oy), R, 0, 180); hidden(sHiB);
+sector(sU2s, (ox - R/3, oy), 2*R/3, 0, 180); hidden(sU2s);
+sector(sL1s, (ox + R/3, oy), 2*R/3, 180, 360); hidden(sL1s);
+circle(dU1c, (ox - 2*R/3, oy), R/3); hidden(dU1c);
+circle(dU2c, (ox - R/3, oy), 2*R/3); hidden(dU2c);
+circle(dL1c, (ox + R/3, oy), 2*R/3); hidden(dL1c);
+circle(dL2c, (ox + 2*R/3, oy), R/3); hidden(dL2c);
+// region 1 (cyan): lower-left crescent + its little bump above the diameter
+difference(w1a, sLoB, dL1c); color(w1a, cyan); opacity(w1a, 0.45); filled(w1a); tag(w1a, wave1); tag(w1a, waves);
+sector(sU1f, (ox - 2*R/3, oy), R/3, 0, 180); color(sU1f, cyan); opacity(sU1f, 0.45); filled(sU1f); tag(sU1f, wave1); tag(sU1f, waves);
+// region 2 (gold): the S in the middle - one piece above the axis, one below
+difference(w2a, sU2s, dU1c); color(w2a, gold); opacity(w2a, 0.45); filled(w2a); tag(w2a, wave2); tag(w2a, waves);
+difference(w2b, sL1s, dL2c); color(w2b, gold); opacity(w2b, 0.45); filled(w2b); tag(w2b, wave2); tag(w2b, waves);
+// region 3 (magenta): upper-right crescent + its little bump below
+difference(w3a, sHiB, dU2c); color(w3a, magenta); opacity(w3a, 0.45); filled(w3a); tag(w3a, wave3); tag(w3a, waves);
+sector(sL2f, (ox + 2*R/3, oy), R/3, 180, 360); color(sL2f, magenta); opacity(sL2f, 0.45); filled(sL2f); tag(sL2f, wave3); tag(sL2f, waves);
+hidden(wave1); hidden(wave2); hidden(wave3);
+counter(pc1, (300, 492), 0, 1, "", "%"); hidden(pc1);
+counter(pc2, (370, 360), 0, 1, "", "%"); hidden(pc2);
+counter(pc3, (508, 308), 0, 1, "", "%"); hidden(pc3);
+equation(eqW, (960, 210), `\text{piece}_k=\frac{\pi}{2}\big(r_k^2-r_{k-1}^2\big)+\frac{\pi}{2}\big(s_{k-1}^2-s_k^2\big)`, 26); hidden(eqW); sticky(eqW); z(eqW, 10);
+
+// ================= timeline =================
+
+// ---- the challenge
+type(head, 1.1);
+say(cap, "Cut a circle into three equal parts. Everyone knows the answer...", 0.6);
+draw(cake, 1.2);
+say(fig, "Fig. 1 - the answer everyone knows", 0.3);
+par { draw(m1, 0.5); draw(m2, 0.5); draw(m3, 0.5); }
+say(cap, "Three cuts from the centre, 120 degrees apart. Equal - by symmetry.", 0.5);
+wait(0.5);
+say(cap, "But look what hides inside it...", 0.5);
+par { draw(e1, 0.5); draw(e2, 0.5); draw(e3, 0.5); }
+flash(tri, red);
+cue(pop);
+say(cap, "An equilateral triangle. And today, triangles are BANNED.", 0.5);
+wait(0.5);
+par { disintegrate(e1, 0.7); disintegrate(e2, 0.7); disintegrate(e3, 0.7); disintegrate(m1, 0.7); disintegrate(m2, 0.7); disintegrate(m3, 0.7); }
+
+// ---- answer one: the bullseye
+cue(whoosh);
+say(fig, "Fig. 2 - the bullseye", 0.3);
+say(cap, "Answer one: forget cuts across - aim for the BULLSEYE.", 0.5);
+par { draw(c1, 0.8); draw(c2, 0.8); }
+stagger(0.15) { show(fin, 0.5); show(ringM, 0.5); show(ringO, 0.5); }
+par { show(pb1, 0.3); show(pb2, 0.3); show(pb3, 0.3); }
+par { to(pb1, value, 33.3, 1.2, smooth); to(pb2, value, 33.3, 1.2, smooth); to(pb3, value, 33.3, 1.2, smooth); }
+show(eqB, 0.6);
+cue(tick);
+rewrite(eqB, `r_1=\frac{R}{\sqrt{3}}\approx 0.577\,R \qquad r_2=R\sqrt{\tfrac{2}{3}}\approx 0.816\,R`, 0.9);
+say(cap, "A disc and two rings, each exactly a third. No corners anywhere.", 0.5);
+wait(1.2);
+par { fade(bull, 0.6); disintegrate(eqB, 0.8); }
+
+// ---- answer two: the waves
+cue(whoosh);
+say(fig, "Fig. 3 - the waves", 0.3);
+say(cap, "Answer two: let the cuts WAVE. Divide the diameter into thirds...", 0.5);
+draw(diam, 0.7);
+par { show(dv1, 0.4); show(dv2, 0.4); }
+say(cap, "...then each cut is two half-circles: one arching over, one diving under.", 0.5);
+par { cam((ox, oy), 1.0, smooth); zoom(1.25, 1.0, smooth); }
+seq { draw(pU1, 0.9); draw(pL1, 0.9); }
+cue(tick);
+seq { draw(pU2, 0.9); draw(pL2, 0.9); }
+stagger(0.15) { show(wave1, 0.6); show(wave2, 0.6); show(wave3, 0.6); }
+par { show(pc1, 0.3); show(pc2, 0.3); show(pc3, 0.3); }
+par { to(pc1, value, 33.3, 1.2, smooth); to(pc2, value, 33.3, 1.2, smooth); to(pc3, value, 33.3, 1.2, smooth); }
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+
+// the telescoping proof
+show(eqW, 0.6);
+say(cap, "Why equal? Each piece is half-circles added and subtracted...", 0.5);
+cue(tick);
+rewrite(eqW, `\text{piece}_k=\frac{\pi R^2}{18}\Big[(2k-1)+(7-2k)\Big]`, 0.9);
+say(cap, "...and the k cancels itself. Every wave weighs the same.", 0.5);
+cue(tick);
+rewrite(eqW, `\boxed{\;\text{piece}_k=\frac{\pi R^2}{3}\quad\text{for every }k\;}`, 1.0);
+cue(chime);
+par { flash(wave1, cyan); flash(wave2, gold); flash(wave3, magenta); }
+wait(0.8);
+
+// ---- finale: still fair, whichever way it turns
+say(fig, "Fig. 4 - still fair, spinning", 0.3);
+par { fade(pc1, 0.4); fade(pc2, 0.4); fade(pc3, 0.4); fade(guide, 0.4); }
+say(cap, "And a third stays a third, whichever way you turn the plate.", 0.5);
+par {
+  turn(waves, (ox, oy), 120, 5.0, smooth);
+  breathe(eqW, 3, 0.05, 0, 5);
+}
+say(cap, "Three equal parts - and not a triangle in sight.", 0.6);
+wait(2.0);

@@ -1,0 +1,172 @@
+// bloom-scope — multi-pass bloom, dissected live. A "light scope" (reticle
+// ring + ticks + core + three orbiting emitters + one pulsing probe) rendered
+// in raw GLSL, with the bloom pipeline broken into inspectable passes:
+//   view 0  the crisp scene (no bloom)
+//   view 1  bright-pass: luminance over the threshold tau (ticks vanish!)
+//   view 2  the gaussian stack: N passes, radius DOUBLING each pass
+//   view 3  composite: scene + sum of passes (additive - base stays crisp)
+// manic has no ping-pong buffers - and doesn't need them here: every emitter
+// is an SDF, so each blurred pass exists in closed form exp(-d^2/sigma^2);
+// the mip ladder becomes one constant-bound loop. Five UI sliders bind
+// straight into the shader as u_<name> uniforms. The flicker beat: the probe
+// pulses across tau - hard threshold makes its halo POP; the soft knee fixes it.
+title("Bloom, One Pass at a Time");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "Bloom, One Pass at a Time"); display(head); cursor(head);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+text(viewlab, (300, h - 100), ""); size(viewlab, 24); color(viewlab, lime);
+equation(eqb, (cx, 150), `\text{bloom} \;=\; \sum_{p=0}^{N} w_p\; G_{2^{p}\sigma}\!\big(\max(L-\tau,\,0)\big)`, 32); hidden(eqb);
+
+// the UI: five sliders, bound into the shader as u_glo/u_rad/u_pas/u_kne/u_vew
+parameter(glo, (w - 180, 140), 0, 0, 2, "intensity", 2);
+parameter(rad, (w - 180, 205), 0.5, 0, 2, "radius", 2);
+parameter(pas, (w - 180, 270), 0, 0, 5, "passes", 1);
+parameter(kne, (w - 180, 335), 0, 0, 1, "knee", 2);
+parameter(vew, (w - 180, 400), 0, 0, 3, "view", 1);
+counter(cnt, (w - 185, 462), 0, 0, "active passes ", ""); color(cnt, gold); hidden(cnt);
+
+// ---------- the shader ----------
+glsl(scope, `
+uniform float u_glo;
+uniform float u_rad;
+uniform float u_pas;
+uniform float u_kne;
+uniform float u_vew;
+
+float sdRing(vec2 p, float R){ return abs(length(p) - R); }
+float sdBox(vec2 p, vec2 b){ vec2 d = abs(p) - b; return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0); }
+
+// bright-pass weight: hard threshold (tau = 0.55) blended toward a soft knee
+float knee(float b){ return mix(step(0.55, b), smoothstep(0.25, 0.70, b), u_kne); }
+
+// the gaussian stack: N passes, sigma doubling each pass, weights decaying -
+// the closed-form mip ladder (no texture taps: d comes from the SDF)
+vec3 halo(float d, vec3 cb, float w){
+  vec3 a = vec3(0.0);
+  for (int pp = 0; pp < 5; pp++) {
+    float on = clamp(u_pas - float(pp), 0.0, 1.0);
+    float s = max(0.02, u_rad * 0.05 * pow(2.0, float(pp)));
+    a += on * w * cb * exp(-(d*d)/(s*s)) * 0.6 / pow(1.6, float(pp));
+  }
+  return a * u_glo;
+}
+
+void mainImage(out vec4 O, in vec2 I){
+  vec2 p = (2.0*I - iResolution.xy)/iResolution.y;
+  // ---- the light scope: reticle ring + folded tick marks + core
+  float dRing = sdRing(p, 0.62);
+  vec2 q = vec2(abs(p.x), abs(p.y));
+  float ticks = min(sdBox(vec2(q.x - 0.62, p.y), vec2(0.055, 0.012)),
+                    sdBox(vec2(p.x, q.y - 0.62), vec2(0.012, 0.055)));
+  float dCore = length(p) - 0.035;
+  // ---- three orbiting emitters + the pulsing probe (the flicker demo)
+  float a1 = 0.7*iTime;
+  vec2 c1 = 0.45*vec2(cos(a1), sin(a1));
+  vec2 c2 = 0.45*vec2(cos(a1 + 2.09), sin(a1 + 2.09));
+  vec2 c3 = 0.45*vec2(cos(a1 + 4.19), sin(a1 + 4.19));
+  float o1 = length(p - c1) - 0.050;
+  float o2 = length(p - c2) - 0.040;
+  float o3 = length(p - c3) - 0.045;
+  float dPr = length(p - vec2(0.0, -0.86)) - 0.055;
+  float bPr = 0.35 + 0.45*(0.5 + 0.5*sin(2.6*iTime));
+  vec3 cRing = vec3(0.30, 0.85, 1.00);
+  vec3 cCore = vec3(1.00, 0.95, 0.80);
+  vec3 cO1 = vec3(1.00, 0.72, 0.25);
+  vec3 cO2 = vec3(1.00, 0.35, 0.80);
+  vec3 cO3 = vec3(0.30, 1.00, 0.75);
+  vec3 cPr = vec3(0.75, 0.85, 1.00);
+  // ---- view 0: the crisp scene
+  float e = 0.006;
+  vec3 scene = vec3(0.0);
+  scene += smoothstep(e, 0.0, dRing) * cRing * 0.77;
+  scene += smoothstep(e, 0.0, ticks) * cRing * 0.50;
+  scene += smoothstep(e, 0.0, dCore) * cCore * 1.00;
+  scene += smoothstep(e, 0.0, o1) * cO1 * 0.95;
+  scene += smoothstep(e, 0.0, o2) * cO2 * 0.90;
+  scene += smoothstep(e, 0.0, o3) * cO3 * 0.90;
+  scene += smoothstep(e, 0.0, dPr) * cPr * bPr;
+  // ---- view 1: bright extraction (the 0.50 reticle ticks fall BELOW tau)
+  vec3 bright = vec3(0.0);
+  bright += smoothstep(e, 0.0, dRing) * cRing * knee(0.77);
+  bright += smoothstep(e, 0.0, dCore) * cCore * knee(1.00);
+  bright += smoothstep(e, 0.0, o1) * cO1 * knee(0.95);
+  bright += smoothstep(e, 0.0, o2) * cO2 * knee(0.90);
+  bright += smoothstep(e, 0.0, o3) * cO3 * knee(0.90);
+  bright += smoothstep(e, 0.0, dPr) * cPr * knee(bPr);
+  // ---- views 2/3: the stacked gaussian passes
+  vec3 bloom = vec3(0.0);
+  bloom += halo(dRing, cRing * 0.77, knee(0.77) * 0.55);
+  bloom += halo(dCore, cCore, knee(1.00));
+  bloom += halo(o1, cO1 * 0.95, knee(0.95));
+  bloom += halo(o2, cO2 * 0.90, knee(0.90));
+  bloom += halo(o3, cO3 * 0.90, knee(0.90));
+  bloom += halo(dPr, cPr * bPr, knee(bPr));
+  // ---- the view dial
+  float vA = 1.0 - clamp(abs(u_vew - 0.0), 0.0, 1.0);
+  float vB = 1.0 - clamp(abs(u_vew - 1.0), 0.0, 1.0);
+  float vC = 1.0 - clamp(abs(u_vew - 2.0), 0.0, 1.0);
+  float vD = 1.0 - clamp(abs(u_vew - 3.0), 0.0, 1.0);
+  vec3 col = vA*scene + vB*bright + vC*bloom + vD*(scene + bloom);
+  float aOut = clamp(1.6*max(col.r, max(col.g, col.b)), 0.0, 1.0);
+  O = vec4(col, aOut);
+}
+`);
+
+// ================= timeline =================
+
+// ---- view 0: honest and dead
+type(head, 1.1);
+say(viewlab, "VIEW 0 - scene, no bloom", 0.3);
+say(cap, "a light scope, rendered honest: crisp, correct - and completely dead", 0.6);
+wait(2.2);
+
+// ---- view 1: the bright-pass
+cue(tick);
+say(viewlab, "VIEW 1 - bright-pass: L > tau", 0.3);
+to(vew, value, 1, 0.8, smooth);
+say(cap, "pass one: keep only what outshines the threshold - the fine ticks vanish", 0.5);
+wait(2.6);
+
+// ---- view 2: stack the gaussian passes, one by one
+cue(whoosh);
+say(viewlab, "VIEW 2 - gaussian stack, radius x2 per pass", 0.3);
+to(vew, value, 2, 0.8, smooth);
+show(eqb, 0.6);
+show(cnt, 0.3);
+to(glo, value, 1, 0.8, smooth);
+say(cap, "now blur it - again and again, radius doubling: the mip ladder", 0.5);
+par { to(pas, value, 1, 0.7, smooth); to(cnt, value, 1, 0.7); }
+wait(0.4);
+par { to(pas, value, 2, 0.7, smooth); to(cnt, value, 2, 0.7); }
+wait(0.4);
+par { to(pas, value, 3, 0.7, smooth); to(cnt, value, 3, 0.7); }
+wait(0.4);
+par { to(pas, value, 5, 1.0, smooth); to(cnt, value, 5, 1.0); }
+say(cap, "no ping-pong buffers: the emitters are SDFs, so every pass exists in closed form", 0.5);
+wait(1.2);
+
+// ---- view 3: the composite
+cue(chime);
+say(viewlab, "VIEW 3 - composite: scene + all passes", 0.3);
+to(vew, value, 3, 0.9, smooth);
+say(cap, "add it back on top: the scope begins to BLEED - but the base layer stays crisp", 0.5);
+wait(2.0);
+
+// ---- the flicker, and the fix
+cue(tick);
+say(cap, "watch the probe at the bottom: a HARD threshold makes its halo pop on and off", 0.5);
+wait(3.4);
+say(cap, "the fix: a soft KNEE - brightness eases across tau, and the halo breathes", 0.5);
+to(kne, value, 1, 1.6, smooth);
+wait(3.0);
+
+// ---- finale: crank it
+cue(whoosh);
+say(cap, "clarity amidst chaos: bloom is additive light, never a blur of the scene", 0.5);
+par { to(glo, value, 1.7, 2.0, smooth); to(rad, value, 1.5, 2.0, smooth); breathe(eqb, 3, 0.05, 0, 6); }
+to(rad, value, 0.9, 1.6, smooth);
+say(cap, "five sliders, one shader, every pass inspectable", 0.6);
+wait(2.5);

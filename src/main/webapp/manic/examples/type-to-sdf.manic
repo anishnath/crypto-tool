@@ -1,0 +1,139 @@
+// type-to-sdf — flat 2D typography dismantled into a point field, rebuilt as
+// reactive 3D signed-distance volumes, then handed to raw GLSL.
+//   act 1  cloud ... from text("SDF")  - the glyphs dissolve into positions
+//   act 2  raymarch, ALL-SCALAR        - S, D, F re-authored as SDF volumes
+//          (scalar-only => GPU transpile; parameters bind as uniforms;
+//           tori are carved with box INTERSECTIONS, no rot2/vec2 anywhere)
+//   act 3  glsl                        - the SAME sliders drive raw GLSL
+// Three UI parameters are the whole interface: weight / wave / melt.
+title("Type, Dismantled");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "Type, Dismantled: Flat Glyphs to SDF Volumes"); display(head); cursor(head);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+
+// the UI: three sliders, visibly driving everything
+parameter(wgt, (w - 180, 150), 0.15, 0, 1, "weight", 2);
+parameter(wav, (w - 180, 220), 0, 0, 1, "wave", 2);
+parameter(mlt, (w - 180, 290), 0, 0, 1, "melt", 2);
+
+// ---------- act 1: the glyph field ----------
+// 2600 points born INSIDE the glyphs of "SDF"; each remembers home (hx, hy).
+// They swarm out at t~3.2 and fly home at t~6 - the word dismantled and recalled.
+cloud(dust, 2600, #ffffff, 0.9) from text("SDF") {
+  let rn = mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let sc = smoothstep(3.2, 4.6, t) - smoothstep(6.0, 7.6, t);
+  let ang = i * 2.399;
+  let rad = 40 + 230 * rn;
+  let x = hx + sc * rad * cos(ang + 0.5 * t);
+  let y = hy + sc * rad * sin(ang + 0.5 * t) * 0.8;
+  let r = 1.6 + 1.4 * rn;
+  let hue = 190 + 50 * sin(0.7 * i + t);
+}
+
+// ---------- act 2: the volumes ----------
+camera3((0, -4.6, 1.6), (0, 0, 0.95), 40);
+
+raymarch(vol) {
+  // domain warp: the WAVE slider bends the coordinate field itself
+  let xw = x + wav * 0.16 * sin(2.6 * z + 2 * t);
+  let zw = z + wav * 0.10 * sin(2.2 * x - 1.6 * t);
+  // ---- S (at x = -1.5): two torus arcs, quadrants removed by intersection
+  let sx = xw + 1.5;
+  let torU = sdtorus(sx, zw - 1.15, y, 0.26, 0.09);
+  let torL = sdtorus(sx, zw - 0.63, y, 0.26, 0.09);
+  let upC = smin(sdint(torU, sdbox3(sx + 0.30, y, zw - 1.15, 0.32, 0.6, 0.45)), sdint(torU, sdbox3(sx, y, zw - 1.32, 0.6, 0.6, 0.20)), 0.02);
+  let loC = smin(sdint(torL, sdbox3(sx - 0.30, y, zw - 0.63, 0.32, 0.6, 0.45)), sdint(torL, sdbox3(sx, y, zw - 0.44, 0.6, 0.6, 0.20)), 0.02);
+  let dS = smin(upC, loC, 0.05);
+  // ---- D (at x = 0): stem + right half of a ring
+  let stemD = sdbox3(xw + 0.26, y, zw - 0.9, 0.09, 0.10, 0.55);
+  let bowl = sdint(sdtorus(xw + 0.10, zw - 0.9, y, 0.36, 0.09), sdbox3(xw - 0.22, y, zw - 0.9, 0.34, 0.6, 0.6));
+  let dD = smin(stemD, bowl, 0.05);
+  // ---- F (at x = +1.5): stem + two arms
+  let fx = xw - 1.5;
+  let stemF = sdbox3(fx + 0.22, y, zw - 0.9, 0.09, 0.10, 0.55);
+  let armT = sdbox3(fx, y, zw - 1.36, 0.30, 0.10, 0.09);
+  let armM = sdbox3(fx - 0.03, y, zw - 0.98, 0.24, 0.10, 0.08);
+  let dF = smin(stemF, smin(armT, armM, 0.03), 0.05);
+  // ---- the word: MELT widens the union until letterforms dissolve;
+  //      WEIGHT is one sdround inflation - bold is literally deeper
+  let k = 0.05 + 0.5 * mlt;
+  let word = smin(smin(dS, dD, k), dF, k);
+  let fluid = mlt * 0.03 * sin(5 * xw + 2.4 * t) * sin(4 * zw - 1.8 * t);
+  let d = sdround(word, 0.02 + 0.09 * wgt) + fluid;
+  let hue = 190 + 40 * nx + 50 * mlt + 20 * sin(3 * hz + t);
+  let sat = 0.75;
+  let val = 0.9 + 0.1 * nz;
+  let alpha = 1;
+}
+hidden(vol);
+
+// ---------- act 3: the same sliders, raw GLSL ----------
+glsl(neon, `
+uniform float u_wgt;
+uniform float u_mlt;
+float smin2(float a, float b, float k){ float h = clamp(0.5 + 0.5*(b - a)/k, 0.0, 1.0); return mix(b, a, h) - k*h*(1.0 - h); }
+void mainImage(out vec4 O, in vec2 I){
+  vec2 p = (2.0*I - iResolution.xy)/iResolution.y;
+  float k = 0.15 + 0.6*u_mlt;
+  float d = 1e5;
+  for (int i = 0; i < 3; i++) {
+    float fi = float(i);
+    vec2 c = vec2(-0.9 + 0.9*fi, 0.12*sin(iTime*1.3 + fi*2.1));
+    float r = 0.26 + 0.12*u_wgt + 0.05*sin(iTime*2.0 + fi);
+    d = smin2(d, length(p - c) - r, k);
+  }
+  float glow = pow(0.02/max(abs(d), 0.004), 0.9);
+  vec3 col = glow * mix(vec3(0.1, 0.8, 1.0), vec3(1.0, 0.4, 0.9), 0.5 + 0.5*sin(3.0*u_mlt + p.x));
+  O = vec4(col, clamp(glow, 0.0, 1.0));
+}
+`);
+hidden(neon);
+
+// ================= timeline =================
+
+// ---- act 1: flat, then dismantled
+type(head, 1.1);
+say(cap, "this is type as your screen stores it: flat outlines, frozen in place", 0.6);
+wait(1.4);
+cue(whoosh);
+say(cap, "step one: DISMANTLE - a glyph is nothing but a field of positions", 0.5);
+wait(2.6);
+say(cap, "...and every position remembers home", 0.5);
+wait(2.6);
+
+// ---- act 2: rebuilt as signed-distance volumes
+cue(whoosh);
+par { fade(dust, 0.9); show(vol, 1.2); }
+say(cap, "step two: REBUILD - each letter re-authored as a signed distance volume", 0.5);
+orbit3(-24, 16, 5.0, 2.0, smooth);
+
+// weight: variable font, one number
+cue(tick);
+say(cap, "one slider inflates every stroke: WEIGHT - bold is literally deeper", 0.5);
+to(wgt, value, 1, 1.6, smooth);
+to(wgt, value, 0.35, 1.2, smooth);
+
+// wave: the coordinate field bends
+cue(tick);
+say(cap, "WAVE bends the coordinate field itself - the letters ride it", 0.5);
+par { to(wav, value, 1, 1.8, smooth); orbit3(18, 22, 4.8, 1.8, smooth); }
+to(wav, value, 0.35, 1.2, smooth);
+
+// melt: typography as fluid
+cue(pop);
+say(cap, "MELT widens the union - and the word forgets its letterforms", 0.5);
+par { to(mlt, value, 1, 2.6, smooth); orbit3(40, 14, 5.2, 2.6, smooth); }
+wait(1.0);
+
+// ---- act 3: the bridge to raw GLSL
+cue(chime);
+say(cap, "step three: the SAME sliders, handed to raw GLSL at full resolution", 0.5);
+par { fade(vol, 1.0); show(neon, 1.0); }
+to(mlt, value, 0.25, 1.6, smooth);
+par { to(mlt, value, 0.9, 1.8, smooth); to(wgt, value, 0.8, 1.8, smooth); }
+to(wgt, value, 0.3, 1.4, smooth);
+say(cap, "flat vectors in - living volumes out", 0.6);
+wait(2.5);

@@ -1,5 +1,5 @@
 {
-  "count": 360,
+  "count": 366,
   "categories": [
     {
       "slug": "algorithms",
@@ -1014,6 +1014,18 @@
           "desc": "A vertical Short proving a\u00b2 + b\u00b2 = c\u00b2 by area \u2014 and a demo that a shader art panel and generic geometry share ONE frame at full value."
         },
         {
+          "name": "circle-in-three",
+          "file": "circle-in-three.manic",
+          "title": "Circle in three",
+          "desc": "A **Problem Book** plate (paper + masthead): split one round cake among three friends with exactly TWO straight cuts."
+        },
+        {
+          "name": "circle-thirds-no-triangle",
+          "file": "circle-thirds-no-triangle.manic",
+          "title": "Circle thirds no triangle",
+          "desc": "**Problem Book** Plate VIII: cut a circle into three EQUAL areas \u2014 but the classic three-sector answer (and the equilateral triangle hiding inside it) is banned."
+        },
+        {
           "name": "equilateral",
           "file": "equilateral.manic",
           "title": "Equilateral",
@@ -1296,6 +1308,18 @@
           "desc": "Shader **V2.3**, the finale: the raymarched Shadertoy that started the thread (tssSDN \u2014 a grid of boxes rippling around a bouncing sphere), rebuilt as a TRUE ray-march (not the cloud3 reimagining)."
         },
         {
+          "name": "raymarch-docker-latency",
+          "file": "raymarch-docker-latency.manic",
+          "title": "Raymarch docker latency",
+          "desc": "Data as geometry: **Docker daemon socket latency** as a raymarched LIQUID MESH."
+        },
+        {
+          "name": "type-to-sdf",
+          "file": "type-to-sdf.manic",
+          "title": "Type to sdf",
+          "desc": "Typography, dismantled across all three shader tiers in one scene."
+        },
+        {
           "name": "raymarch-shapes3",
           "file": "raymarch-shapes3.manic",
           "title": "Raymarch shapes3",
@@ -1330,6 +1354,12 @@
           "file": "glsl-parameter.manic",
           "title": "Glsl parameter",
           "desc": "A RAW GLSL shader driven by a scene parameter: declare uniform float u_freq; in the paste and it AUTO-BINDS to the slider freq, so a raw Shadertoy gets a manic control with no wrapper changes."
+        },
+        {
+          "name": "bloom-scope",
+          "file": "bloom-scope.manic",
+          "title": "Bloom scope",
+          "desc": "Multi-pass BLOOM, dissected live."
         },
         {
           "name": "tree-of-leaves",
@@ -1396,6 +1426,12 @@
           "file": "cloud-jellyfish.manic",
           "title": "Cloud jellyfish",
           "desc": "Another @yuruyurau art-tweet in ONE cloud: 20,000 points in two layers (mod(i,2)) drift into jellyfish-like bells with trailing tendrils and pulse over time \u2014 a polar plot with a nested sin(sin(...)) ripple, hue-coloured and bloomed on a 9:16 Short."
+        },
+        {
+          "name": "cloud-jellyfish-v2",
+          "file": "cloud-jellyfish-v2.manic",
+          "title": "Cloud jellyfish v2",
+          "desc": "The jellyfish cloud, now SWIMMING IN A SHADER AQUARIUM \u2014 a demo that a particle system and a per-pixel field share one frame."
         },
         {
           "name": "cloud-plumes",

@@ -1,0 +1,156 @@
+// circle-in-three — a story-driven textbook plate: divide one round cake among
+// three friends using exactly two straight cuts. Wrong ideas first, then the
+// lemma (crossing cuts always give four pieces), then the transcendental
+// equation, solved on a graph, then the fair cut - live percentages throughout.
+// The solved height: cos^-1(u) - u sqrt(1-u^2) = pi/3  =>  u = a/R = 0.2649.
+title("Split a Circle in Three - with Two Lines");
+canvas("16:9");
+template("paper");
+masthead("The Problem Book", "Plate VII");
+
+// ---------- layout ----------
+let R = 205;
+let ox = 400;
+let oy = 400;
+let dyE = R/3;          // "evenly spaced" cut height (the wrong guess)
+let dyS = 0.2649*R;     // the solved cut height
+let sf = 1.0228;        // chord length ratio: sqrt(1-0.2649^2)/sqrt(8/9)
+
+// ---------- HUD ----------
+text(head, (cx, 100), "Split a Circle in Three - with Two Lines"); display(head); cursor(head); sticky(head);
+text(cap, (cx, h - 40), ""); size(cap, 26); sticky(cap);
+text(fig, (ox, 648), ""); size(fig, 24); color(fig, dim); sticky(fig);
+
+// ---------- the cake ----------
+circle(cake, (ox, oy), R); outlined(cake); stroke(cake, 3); untraced(cake);
+
+// attempt 1: two diameters
+line(d1, (ox, oy - R), (ox, oy + R)); untraced(d1); stroke(d1, 3);
+line(d2, (ox - R, oy), (ox + R, oy)); untraced(d2); stroke(d2, 3);
+text(q1, (ox + 70, oy - 70), "1"); size(q1, 30); hidden(q1); tag(q1, qlab);
+text(q2, (ox - 70, oy - 70), "2"); size(q2, 30); hidden(q2); tag(q2, qlab);
+text(q3, (ox - 70, oy + 70), "3"); size(q3, 30); hidden(q3); tag(q3, qlab);
+text(q4, (ox + 70, oy + 70), "4"); size(q4, 30); hidden(q4); tag(q4, qlab);
+
+// attempt 2: parallel cuts at thirds (they will SLIDE to the true height later)
+line(cA1, (ox - R*0.94281, oy - dyE), (ox + R*0.94281, oy - dyE)); untraced(cA1); stroke(cA1, 4); color(cA1, red);
+line(cB1, (ox - R*0.94281, oy + dyE), (ox + R*0.94281, oy + dyE)); untraced(cB1); stroke(cB1, 4); color(cB1, red);
+
+// boolean sources (hidden): the disc and the horizontal bands
+circle(disc, (ox, oy), R); hidden(disc);
+rect(rT2, (ox, oy - dyE - 75), 430, 150); hidden(rT2);
+rect(rM2, (ox, oy), 430, 2*dyE); hidden(rM2);
+rect(rB2, (ox, oy + dyE + 75), 430, 150); hidden(rB2);
+rect(rT3, (ox, oy - dyS - 75), 430, 150); hidden(rT3);
+rect(rM3, (ox, oy), 430, 2*dyS); hidden(rM3);
+rect(rB3, (ox, oy + dyS + 75), 430, 150); hidden(rB3);
+
+// the three shares, evenly-spaced version (29.2 / 41.7 / 29.2)
+intersect(capT2, disc, rT2); color(capT2, cyan); opacity(capT2, 0.45); hidden(capT2); tag(capT2, att2);
+intersect(mid2, disc, rM2); color(mid2, gold); opacity(mid2, 0.45); hidden(mid2); tag(mid2, att2);
+intersect(capB2, disc, rB2); color(capB2, magenta); opacity(capB2, 0.45); hidden(capB2); tag(capB2, att2);
+
+// the three shares, solved version (33.3 each)
+intersect(capT3, disc, rT3); color(capT3, cyan); opacity(capT3, 0.45); hidden(capT3); tag(capT3, att3);
+intersect(mid3, disc, rM3); color(mid3, gold); opacity(mid3, 0.45); hidden(mid3); tag(mid3, att3);
+intersect(capB3, disc, rB3); color(capB3, magenta); opacity(capB3, 0.45); hidden(capB3); tag(capB3, att3);
+
+// live percentages, one per share
+counter(pcT, (ox, oy - 128), 0, 1, "", "%"); hidden(pcT);
+counter(pcM, (ox, oy), 0, 1, "", "%"); hidden(pcM);
+counter(pcB, (ox, oy + 128), 0, 1, "", "%"); hidden(pcB);
+
+// ---------- the mathematics panel (right side) ----------
+equation(eqA, (960, 205), `A_{\text{cap}}(a) \;=\; R^2\cos^{-1}\!\frac{a}{R} \;-\; a\sqrt{R^2-a^2}`, 32); hidden(eqA); sticky(eqA);
+equation(eqG, (960, 430), `f(u)=\cos^{-1}u \;-\; u\sqrt{1-u^2} \;-\; \tfrac{\pi}{3}`, 26); hidden(eqG); sticky(eqG);
+arrow(gxa, (850, 560), (1195, 560)); untraced(gxa); stroke(gxa, 2);
+arrow(gya, (880, 655), (880, 495)); untraced(gya); stroke(gya, 2);
+plot(pf, (880, 560), 300, 90, "acos(x)-x*sqrt(1-x^2)-1.047198", (0.01, 0.99));
+untraced(pf); stroke(pf, 3); color(pf, blue);
+roots(rt, pf, magenta); hidden(rt);
+text(rlab, (1040, 596), "u ≈ 0.2649"); size(rlab, 24); color(rlab, magenta); hidden(rlab);
+
+// ================= timeline =================
+
+// ---- the problem
+type(head, 1.1);
+say(cap, "Three friends. One round cake. Two straight cuts. Make it fair.", 0.6);
+draw(cake, 1.2);
+say(fig, "Fig. 1 - the cake", 0.3);
+wait(0.5);
+
+// ---- attempt 1: through the middle, twice
+cue(whoosh);
+say(cap, "First idea: cut through the middle - twice.", 0.5);
+par { draw(d1, 0.7); draw(d2, 0.7); }
+stagger(0.12) { show(q1, 0.3); show(q2, 0.3); show(q3, 0.3); show(q4, 0.3); }
+say(cap, "Four pieces. Perfectly equal - and perfectly useless. We are THREE.", 0.5);
+wait(0.6);
+
+// ---- the lemma: crossing cuts always make four
+say(cap, "Tilt a cut, slide it anywhere: two CROSSING cuts always make four pieces.", 0.5);
+rotate(d2, 38, 1.0, smooth);
+shift(d2, (55, 35), 1.0, smooth);
+pulse(qlab, 0.8);
+say(cap, "Lemma: the two cuts must never cross inside the cake. They must be PARALLEL.", 0.5);
+cue(tick);
+par { fade(d1, 0.5); fade(d2, 0.5); fade(qlab, 0.4); }
+
+// ---- attempt 2: parallel, evenly spaced
+say(fig, "Fig. 2 - parallel cuts at thirds", 0.3);
+say(cap, "Second idea: space the parallel cuts evenly - at thirds of the diameter.", 0.5);
+par { draw(cA1, 0.7); draw(cB1, 0.7); }
+stagger(0.15) { show(capT2, 0.5); show(mid2, 0.5); show(capB2, 0.5); }
+par { show(pcT, 0.3); show(pcM, 0.3); show(pcB, 0.3); }
+par { to(pcT, value, 29.2, 1.3, smooth); to(pcM, value, 41.7, 1.3, smooth); to(pcB, value, 29.2, 1.3, smooth); }
+cue(pop);
+flash(mid2, gold);
+say(cap, "The middle friend grins: 41.7 percent. Evenly SPACED is not evenly SHARED.", 0.5);
+wait(0.8);
+
+// ---- the mathematics: ask the cake
+say(cap, "So ask the cake: how much lies beyond a cut at height a?", 0.5);
+show(eqA, 0.6);
+wait(0.8);
+cue(tick);
+rewrite(eqA, `R^2\cos^{-1}\!\frac{a}{R} - a\sqrt{R^2-a^2} \;=\; \frac{\pi R^2}{3}`, 0.9);
+say(cap, "Each outer piece must hold a third of the cake. Divide out the radius...", 0.5);
+cue(tick);
+rewrite(eqA, `\cos^{-1}u \;-\; u\sqrt{1-u^2} \;=\; \frac{\pi}{3}, \qquad u=\frac{a}{R}`, 0.9);
+say(cap, "No algebra unties this knot - it is transcendental. Let the graph solve it.", 0.5);
+say(fig, "Fig. 3 - solving f(u) = 0", 0.3);
+par { draw(gxa, 0.5); draw(gya, 0.5); }
+par { draw(pf, 1.3); show(eqG, 0.7); }
+show(rt, 0.4); show(rlab, 0.4);
+par { cam((959, 545), 1.0, smooth); zoom(1.6, 1.0, smooth); }
+flash(rt, magenta);
+say(cap, "One root. The cuts belong at u = 0.2649 - about a quarter of the radius.", 0.5);
+wait(0.7);
+par { cam((cx, cy), 1.0, smooth); zoom(1, 1.0, smooth); }
+cue(tick);
+rewrite(eqA, `u \;=\; \frac{a}{R} \;\approx\; 0.2649`, 0.9);
+
+// ---- the fair cut: slide the knives home
+say(cap, "Nudge each cut toward the centre: from 0.333 R in to 0.2649 R.", 0.5);
+cue(whoosh);
+par {
+  shift(cA1, (0, dyE - dyS), 1.4, smooth); scale(cA1, sf, 1.4, smooth);
+  shift(cB1, (0, dyS - dyE), 1.4, smooth); scale(cB1, sf, 1.4, smooth);
+  fade(att2, 1.2); show(capT3, 1.2); show(mid3, 1.2); show(capB3, 1.2);
+}
+par { to(pcT, value, 33.3, 1.3, smooth); to(pcM, value, 33.3, 1.3, smooth); to(pcB, value, 33.3, 1.3, smooth); }
+cue(chime);
+par { flash(capT3, cyan); flash(mid3, gold); flash(capB3, magenta); }
+say(cap, "33.3 - 33.3 - 33.3. Fair, to the crumb.", 0.5);
+say(fig, "Fig. 4 - the fair cut: a = 0.2649 R", 0.3);
+wait(0.8);
+
+// ---- closing plate
+cue(tick);
+rewrite(eqA, `\boxed{\;a \;=\; 0.2649\,R\;}`, 1.0);
+par {
+  breathe(eqA, 3, 0.05, 0, 5);
+  seq { pulse(capT3, 0.7); pulse(mid3, 0.7); pulse(capB3, 0.7); }
+}
+say(cap, "Two cuts. Three equal shares. One transcendental number.", 0.6);
+wait(2.5);

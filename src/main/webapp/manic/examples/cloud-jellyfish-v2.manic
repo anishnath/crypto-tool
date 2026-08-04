@@ -1,0 +1,87 @@
+// cloud-jellyfish-v2 — the @yuruyurau jellyfish `cloud` (20,000 points, two layers,
+// pulsing bells + tendrils), now SWIMMING IN A SHADER AQUARIUM. The bells are the same
+// particle system as v1; everything around them is one per-pixel `shader`: a depth
+// gradient (teal surface → deep navy), animated caustics rippling near the top, and soft
+// god-rays falling from the surface. A third element — rising bubbles — is a second tiny
+// `cloud`. Particle art + a per-pixel ocean + generic captions, all in one 9:16 frame,
+// all pure in (i, t) so the whole aquarium scrubs and records exactly.
+//
+//   manic examples/cloud-jellyfish-v2.manic
+title("Jellyfish in a shader aquarium");
+canvas("9:16");
+template("black");
+
+// ===================== the aquarium — one shader, per pixel =====================
+shader(water) {
+  let x = (u - 0.5) * asp;
+  let y = v;                                   // 0 = surface (top), 1 = deep (bottom)
+  let depth = smoothstep(0.0, 1.0, y);
+
+  // deep-water colour ramp: bright teal near the surface, deep blue below
+  let hue = mix(186, 216, depth);
+  let base = mix(0.26, 0.045, depth);
+
+  // caustics — warped interference, bright veins that fade with depth
+  let wx = x * 4.0 + 0.5 * sin(y * 6.0 + t * 0.4);
+  let wy = y * 7.0 + 0.5 * sin(x * 5.0 - t * 0.5);
+  let cc = sin(wx + t * 0.7) + sin(wy - t * 0.6) + sin((wx + wy) * 0.7 + t * 0.5);
+  let b = 0.5 + 0.5 * sin(cc * 1.5);
+  let caust = b * b * b * (1.0 - depth * 0.75);
+
+  // god-rays — soft vertical light shafts from the surface, strongest up top
+  let ray = 0.5 + 0.5 * sin(x * 3.0 + 0.6 * sin(t * 0.2));
+  let r2 = ray * ray;
+  let rays = r2 * r2 * (1.0 - smoothstep(0.0, 0.65, y)) * 0.45;
+
+  let val = clamp(base + caust * 0.5 + rays, 0.0, 0.95);
+  let sat = mix(0.85, 0.62, caust);            // bright veins read a touch whiter
+}
+
+// ===================== the jellyfish — the v1 cloud, re-lit ====================
+// same polar formula as v1; the hue is pulled into a cyan↔magenta bioluminescent band
+// so the bells glow like sea creatures against the water instead of full-spectrum.
+cloud(jelly, 20000, #ffffff, 0.6) {
+  let s = i/99;                 // reference's "y" parameter
+  let m = mod(i, 2) * 3;        // two layers
+  let k = 9*cos(s*2);
+  let e = s/8 - 12;
+  let d = (k*k + e*e)/79 + 1;
+  let q = 79 - e*sin(k) + k/d*(8 + 4*sin(sin(d*d + e/9 - t)));
+  let c = d/2 - cos(d*2)/5 - t/16 + m;
+  let px = q*sin(c);
+  let py = (q + 40)*cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 2.2 * grow;
+  let y = 960 + py * 2.2 * grow;
+  let hue = mod(198 + m*30 + 46*sin(s*0.18 + t*0.35), 360);   // cyan ↔ magenta glow
+}
+
+// ---- rising bubbles — a second tiny cloud drifting up the tank ----
+cloud(bubbles, 130, #dff4ff, 0.5) {
+  let sp = 0.05 + 0.06 * rand2(i, 1.3);        // per-bubble rise speed
+  let ph = rand2(i, 2.7);
+  let prog = fract(ph + t * sp);               // 0 → 1 rise progress
+  let x = 1080 * rand2(i, 4.1) + 24 * sin(prog * tau * 2.0 + i);
+  let y = 1920 * (1.0 - prog);                 // bottom → top
+  let r = 2.0 + 5.0 * rand2(i, 5.5);
+  let hue = 196;
+  let alpha = 0.5 * sin(prog * pi);            // fade in low, fade out near the surface
+}
+
+// ---- textbook annotations ----
+caption(head, "Jellyfish in a shader aquarium", (540, 138), 33);
+caption(sub, "a 20,000-point cloud + a per-pixel ocean", (540, 206), 22);
+hidden(head);
+hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q{+}40)\cos c)`, 30);
+caption(lab, "bells: a polar cloud · water: one shader · bubbles: a second cloud", (540, 1786), 19);
+hidden(eq);
+hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(25);
