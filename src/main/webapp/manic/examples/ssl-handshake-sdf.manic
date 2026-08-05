@@ -1,0 +1,116 @@
+// ssl-handshake-sdf — a TLS 1.3 handshake rendered as a raymarched SDF scene.
+// Four scene parameters are the "reactive shader variables"; the timeline
+// replays the handshake by driving them, and the SDF reads them by name:
+//   ent - cryptographic entropy      -> surface displacement (the boil)
+//   mrg - x25519 key agreement       -> the two endpoint solids smin-FUSE
+//   grw - HKDF key-schedule          -> a key TREE grows from the shared secret
+//   tun - the encrypted channel      -> rep()-tiled cipher rings, an endless tunnel
+// Honesty note: manic is a pure function of t - no live sockets. This is a
+// deterministic replay of one captured handshake; the hex in the transcript is
+// that capture, not live traffic. The marcher is fully GPU-transpilable (scalar
+// SDF, no vec lets), so it previews and records smoothly.
+title("The Handshake, Made Visible");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "The Handshake, Made Visible"); display(head); cursor(head);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+equation(eqk, (cx, 170), `(g^{a})^{b} \;=\; (g^{b})^{a}`, 36); hidden(eqk);
+
+// the transcript, typed line by line (terminal-green, top left)
+text(tl1, (330, 150), "ClientHello    random: 9f3a c241 77d0 8e5b"); size(tl1, 24); color(tl1, lime); cursor(tl1); hidden(tl1);
+text(tl2, (330, 190), "ServerHello    random: 4be7 01cc a913 f2d6"); size(tl2, 24); color(tl2, lime); cursor(tl2); hidden(tl2);
+text(tl3, (330, 230), "KeyShare       x25519: e5a2 39f8 1b44 c07e"); size(tl3, 24); color(tl3, lime); cursor(tl3); hidden(tl3);
+text(tl4, (330, 270), "HKDF-Expand    client + server traffic keys"); size(tl4, 24); color(tl4, lime); cursor(tl4); hidden(tl4);
+text(tl5, (330, 310), "Finished       cipher: CHACHA20-POLY1305"); size(tl5, 24); color(tl5, lime); cursor(tl5); hidden(tl5);
+
+// entropy readouts (the visible reactive variable + a bit counter)
+counter(bits, (w - 185, 118), 0, 0, "entropy bits ", ""); color(bits, gold); hidden(bits);
+parameter(ent, (w - 180, 168), 0.02, 0, 1, "entropy", 2);
+parameter(mrg, (w - 180, 238), 0, 0, 1, "key-mix", 2); hidden(mrg);
+parameter(grw, (w - 180, 308), 0, 0, 1, "hkdf", 2); hidden(grw);
+parameter(tun, (w - 180, 378), 0, 0, 1, "tunnel", 2); hidden(tun);
+
+// ---------- the scene ----------
+camera3((4.5, -5.5, 3.4), (0, 0, 1.1), 44);
+
+raymarch(hs) {
+  // entropy boils every surface: high-frequency displacement scaled by `ent`
+  let wob = ent * 0.13 * sin(6*x + 2*t) * sin(6*y + 1.7*t) * sin(6*z + 1.3*t);
+  // the two endpoints: browser (sphere) and server (octahedron), pulled
+  // together as the key-mix parameter rises
+  let ox = 1.25 - 0.95*mrg;
+  let c = sdsphere(x + ox, y, z - 0.85, 0.55) + wob;
+  let s = sdoctahedron(x - ox, y, z - 0.85, 0.62) + wob;
+  let duo = smin(c, s, 0.12 + 0.55*mrg);
+  // the HKDF key tree: trunk + branches, growing out of the fused secret as `grw`
+  // rises. Branch tilts are SCALAR component rotations (not vec2/rot2) so the whole
+  // marcher transpiles to GLSL and runs on the GPU instead of the heavy CPU fallback.
+  //   rot(a,b,θ) = (a·cosθ − b·sinθ,  a·sinθ + b·cosθ)
+  let zt = z - 0.85;
+  let tr = sdcapsule(x, y, zt, 1.05*grw, 0.12);
+  let za = zt - 1.0*grw;    let ca = cos(0.65);  let sa = sin(0.65);
+  let zb = zt - 1.55*grw;   let cb = cos(0.8);   let sb = sin(0.8);
+  let b1 = sdcapsule(x*ca - za*sa, y,  x*sa + za*ca, 0.7*grw, 0.085);
+  let b2 = sdcapsule(x*ca + za*sa, y, 0 - x*sa + za*ca, 0.7*grw, 0.085);
+  let b3 = sdcapsule(x, y*cb - zb*sb,  y*sb + zb*cb, 0.5*grw, 0.06);
+  let b4 = sdcapsule(x, y*cb + zb*sb, 0 - y*sb + zb*cb, 0.5*grw, 0.06);
+  let tree0 = smin(smin(tr, smin(b1, b2, 0.1), 0.12), smin(b3, b4, 0.1), 0.12);
+  let tree = tree0 + 0.6*wob + (1 - smoothstep(0.02, 0.12, grw))*9;
+  // the encrypted tunnel: an endless procession of cipher rings along y
+  let ry = rep(y, 1.05);
+  let ring = sdtorus(x, z - 0.85, ry, 0.8, 0.05 + 0.03*sin(3*t + y)) + (1 - smoothstep(0.02, 0.2, tun))*9;
+  let d = smin(smin(duo, tree, 0.14), ring, 0.1);
+  // colour: cool protocol teal, warmed and destabilized by entropy
+  let hue = 165 + 55*nz + 30*sin(2*hz + 0.5*t) + 50*ent;
+  let sat = 0.7;
+  let val = 0.85 + 0.15*nz;
+  let alpha = 1;
+}
+
+// ================= timeline: the handshake, message by message ==============
+type(head, 1.1);
+say(cap, "a TLS 1.3 handshake - captured once, replayed as geometry", 0.6);
+wait(0.8);
+say(cap, "two strangers: your browser, and a server it has never met", 0.5);
+wait(1.4);
+
+// ---- ClientHello: 32 bytes of randomness leave home
+cue(tick);
+show(tl1, 0.1); type(tl1, 1.0);
+show(bits, 0.3);
+say(cap, "ClientHello: 32 bytes of pure randomness leave home - the surface begins to boil", 0.5);
+par { to(ent, value, 0.55, 1.6, smooth); to(bits, value, 256, 1.6); orbit3(-35, 20, 7.4, 1.6, smooth); }
+wait(0.8);
+
+// ---- ServerHello: chaos answers chaos
+cue(tick);
+show(tl2, 0.1); type(tl2, 1.0);
+say(cap, "ServerHello: the server answers with chaos of its own", 0.5);
+par { to(ent, value, 0.85, 1.4, smooth); to(bits, value, 512, 1.4); }
+wait(0.8);
+
+// ---- x25519: the fusion - a secret neither of them ever sent
+cue(whoosh);
+show(tl3, 0.1); type(tl3, 1.0);
+show(eqk, 0.6);
+say(cap, "x25519: the shapes fuse into a secret that NEITHER side ever transmitted", 0.5);
+par { to(mrg, value, 1, 2.4, smooth); orbit3(15, 24, 6.8, 2.4, smooth); }
+wait(0.9);
+
+// ---- HKDF: the key tree
+cue(pop);
+show(tl4, 0.1); type(tl4, 1.0);
+say(cap, "HKDF: one shared secret sprouts a whole tree of session keys", 0.5);
+par { to(grw, value, 1, 2.6, smooth); orbit3(60, 26, 6.6, 2.6, smooth); }
+wait(0.9);
+
+// ---- Finished: the tunnel opens
+cue(chime);
+show(tl5, 0.1); type(tl5, 1.0);
+say(cap, "Finished: from here on, every byte travels dressed in noise", 0.5);
+par { to(tun, value, 1, 2.2, smooth); to(ent, value, 1, 2.2, smooth); orbit3(110, 18, 7.2, 4.5, smooth); }
+disintegrate(eqk, 0.8);
+say(cap, "the invisible negotiation, rendered visible", 0.6);
+wait(2.5);

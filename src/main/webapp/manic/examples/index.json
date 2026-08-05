@@ -1,5 +1,5 @@
 {
-  "count": 366,
+  "count": 369,
   "categories": [
     {
       "slug": "algorithms",
@@ -1230,6 +1230,12 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "exponential-shells",
+          "file": "exponential-shells.manic",
+          "title": "Exponential shells",
+          "desc": "A living **de Sitter volume** \u2014 \u222d a(t) \u221d e^{Ht} rendered as ~320,000 points of light."
+        },
+        {
           "name": "shader-glitch-grid",
           "file": "shader-glitch-grid.manic",
           "title": "Shader glitch grid",
@@ -1246,6 +1252,12 @@
           "file": "shader-fractal.manic",
           "title": "Shader fractal",
           "desc": "A LIVING Julia set in a shader field."
+        },
+        {
+          "name": "lost-in-patterns",
+          "file": "lost-in-patterns.manic",
+          "title": "Lost in patterns",
+          "desc": "A **learning-forward fractal odyssey** in four movements, each a different KIND of infinity with its generating RULE shown on screen: **\u221e by ZOOM** \u2014 a \u00d7500 Mandelbrot dive (z\u2192z\u00b2+c); **\u221e by PARAMETER** \u2014 the SAME rule with c the knob, wiring the Mandelbrot\u2192Julia bridge (each c in the set grows one Julia); **\u221e by ITERATION** \u2014 a Clifford strange attractor from one cloud \u2026 from map rule fed its own output 6,000\u00d7; **\u221e by RECURSION** \u2014 a Koch snowflake (lsystem) closing on the paradox: perimeter 3(4/3)\u207f\u2192\u221e yet area\u21928/5\u00b7A\u2080."
         },
         {
           "name": "shader-shapes",
@@ -1312,6 +1324,12 @@
           "file": "raymarch-docker-latency.manic",
           "title": "Raymarch docker latency",
           "desc": "Data as geometry: **Docker daemon socket latency** as a raymarched LIQUID MESH."
+        },
+        {
+          "name": "ssl-handshake-sdf",
+          "file": "ssl-handshake-sdf.manic",
+          "title": "Ssl handshake sdf",
+          "desc": "A **TLS 1.3 handshake** rendered as a raymarched SDF scene, message by message."
         },
         {
           "name": "type-to-sdf",

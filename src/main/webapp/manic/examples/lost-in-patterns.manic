@@ -1,0 +1,149 @@
+// lost-in-patterns — a fractal odyssey in four movements, each a different KIND
+// of infinity, each with the RULE that generates it shown on screen (manic's
+// thesis: the diagram is true, so the maths is visible):
+//   I   ∞ by ZOOM       the Mandelbrot set — z→z²+c, a x500 dive into seahorse valley
+//   II  ∞ by PARAMETER  the Julia family — SAME rule, but now c is the knob
+//        (the Mandelbrot set is the MAP of which c give a connected Julia — the
+//         bridge between movements I and II)
+//   III ∞ by ITERATION  a Clifford strange attractor — no shape-formula, one rule fed
+//        its own output 6,000× (cloud … from map)
+//   IV  ∞ by RECURSION  the Koch snowflake — F→F+F--F+F, closing on the paradox:
+//        infinite perimeter, finite area.
+title("Lost in Infinite Patterns");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "Lost in Infinite Patterns"); display(head); cursor(head); sticky(head);
+text(cap, (cx, h - 42), ""); size(cap, 26); sticky(cap);
+counter(mag, (w - 170, 120), 1, 0, "zoom x", ""); color(mag, gold); hidden(mag);
+
+// a dark card so the teaching panel stays legible over the bright fractals
+polygon(panel, (230, 92), (768, 92), (768, 250), (230, 250), #05070d);
+opacity(panel, 0.5); sticky(panel); hidden(panel);
+
+// the "kind of infinity" chip — one per movement (show/hide, no narration)
+text(kind1, (499, 122), "∞  by ZOOM"); size(kind1, 30); color(kind1, cyan); sticky(kind1); hidden(kind1);
+text(kind2, (499, 122), "∞  by PARAMETER"); size(kind2, 30); color(kind2, magenta); sticky(kind2); hidden(kind2);
+text(kind3, (499, 122), "∞  by ITERATION"); size(kind3, 30); color(kind3, gold); sticky(kind3); hidden(kind3);
+text(kind4, (499, 122), "∞  by RECURSION"); size(kind4, 30); color(kind4, lime); sticky(kind4); hidden(kind4);
+
+// the generating rule of each movement — the maths made visible
+equation(eqIter, (499, 190), `z_{n+1} = z_n^{2} + c`, 34); sticky(eqIter); hidden(eqIter);
+equation(eqC,    (499, 236), `c = 0.7885\,e^{i\theta}`, 26); sticky(eqC); hidden(eqC);
+equation(eqCliff,(499, 196), `\begin{cases} x' = \sin(ay)+c\cos(ax) \\ y' = \sin(bx)+d\cos(by) \end{cases}`, 24); sticky(eqCliff); hidden(eqCliff);
+equation(eqKoch, (499, 188), `F \to F\,{+}\,F\,{-}{-}\,F\,{+}\,F`, 30); sticky(eqKoch); hidden(eqKoch);
+// the closing paradox — the one genuine gasp
+equation(eqPar, (cx, h - 120), `\text{perimeter } 3\left(\tfrac{4}{3}\right)^{n}\!\to\infty \qquad \text{area}\to \tfrac{8}{5}A_0`, 34); sticky(eqPar); hidden(eqPar);
+
+// hidden journey axes (the sliders stay backstage — the dive/angle drive the shaders)
+parameter(dive, (w - 180, 660), 0, 0, 1, "dive", 2); hidden(dive);
+parameter(ang, (w - 180, 690), 0, 0, 6.283, "angle", 2); hidden(ang);
+
+// ---------- I. the Mandelbrot coastline ----------
+shader(mset) {
+  let sc = 3.2 * exp(-6.2 * dive);
+  let x = -0.743644 + (u - 0.5) * asp * sc;
+  let y = 0.131826 + (v - 0.5) * sc;
+  let m = mandelbrot(x, y);
+  let band = m^0.35;
+  let hue = 205 + 140 * band + 25 * sin(0.3 * t);
+  let sat = 0.75;
+  let val = (1 - step(0.999, m)) * (0.12 + 0.88 * band);
+}
+
+// ---------- II. the Julia bloom ----------
+shader(jul) {
+  let x = (u - 0.5) * asp * 2.9;
+  let y = (v - 0.5) * 2.9;
+  let cr = 0.7885 * cos(ang);
+  let ci = 0.7885 * sin(ang);
+  let j = julia(x, y, cr, ci);
+  let band = j^0.4;
+  let hue = 290 + 120 * band + 15 * sin(0.4 * t);
+  let sat = 0.8;
+  let val = (1 - step(0.999, j)) * (0.1 + 0.9 * band);
+}
+hidden(jul);
+
+// ---------- III. the strange attractor (Clifford, a=-1.4 b=1.6 c=1 d=0.7) ----
+cloud(att, 6000, #ffffff, 0.85) from map("sin(-1.4*y)+cos(-1.4*x)", "sin(1.6*x)+0.7*cos(1.6*y)", (0.1, 0.1)) {
+  let wsp = 0.12 * t;
+  let px = hx * cos(wsp) - hy * sin(wsp);
+  let py = hx * sin(wsp) + hy * cos(wsp);
+  let x = 640 + 225 * px;        // cloud formulas can't see cx/cy — hardcode the 16:9 centre
+  let y = 360 + 15 + 165 * py;
+  let r = 1.1 + 0.8 * mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let hue = 150 + 60 * hypot(hx, hy) + 25 * sin(0.4 * t + 0.002 * i);
+}
+hidden(att);
+
+// ---------- IV. the snowflake (Koch, one closed stroke) ----------
+lsystem(koch, (cx, cy + 20), 560, "F--F--F", "F=F+F--F+F", "angle=60 iterations=4 closed=true");
+untraced(koch); stroke(koch, 3); gradient(koch, cyan, magenta, gold);
+
+// the four fullscreen visuals sit BEHIND the HUD (all default to z=0, so without
+// this the later-declared shader would paint over the teaching panel + captions)
+z(mset, -3); z(jul, -3); z(att, -3); z(koch, -2);
+
+// ================= timeline =================
+
+// ---- I: ∞ by ZOOM — the Mandelbrot dive
+type(head, 1.2);
+par { show(panel, 0.4); show(kind1, 0.4); show(mag, 0.3); }
+show(eqIter, 0.6);
+par {
+  to(dive, value, 1, 12, smooth);
+  to(mag, value, 500, 12, smooth);
+  seq {
+    say(cap, "the Mandelbrot set: keep the points where z → z² + c never flies to infinity", 0.6);
+    wait(4.6);
+    say(cap, "zoom 500x and the coastline keeps unfolding — new seahorses, never one exact repeat", 0.5);
+    wait(4.2);
+  }
+}
+cue(whoosh);
+
+// ---- bridge: the Mandelbrot set IS the map of Julia sets
+say(cap, "here is the secret: every point c in that black island grows its OWN fractal...", 0.5);
+wait(3.2);
+
+// ---- II: ∞ by PARAMETER — same rule, c is the knob
+par { fade(mset, 1.2); fade(mag, 0.6); fade(kind1, 0.3); show(jul, 1.2); show(kind2, 0.4); }
+show(eqC, 0.5);           // eqIter STAYS on screen — same rule, bridging I and II
+par {
+  to(ang, value, 6.283, 12, linear);
+  seq {
+    say(cap, "...a Julia set. Freeze z's rule, make c the knob: c inside the set → connected, outside → dust", 0.5);
+    wait(5.0);
+    say(cap, "slide c around a circle and every value is a different universe — same equation, new world", 0.5);
+    wait(4.6);
+  }
+}
+cue(whoosh);
+
+// ---- III: ∞ by ITERATION — a rule fed its own output
+par { fade(jul, 1.4); fade(kind2, 0.3); fade(eqIter, 0.3); fade(eqC, 0.3); show(att, 1.6); show(kind3, 0.4); }
+show(eqCliff, 0.5);
+say(cap, "no formula draws this shape — just this rule, fed its own output six thousand times", 0.5);
+wait(4.0);
+say(cap, "nudge one constant and it's a whole new creature: that sensitivity IS chaos", 0.5);
+wait(3.4);
+cue(whoosh);
+
+// ---- IV: ∞ by RECURSION — the snowflake, and the paradox
+par { fade(att, 1.2); fade(kind3, 0.3); fade(eqCliff, 0.3); show(kind4, 0.4); }
+show(eqKoch, 0.5);
+say(cap, "some infinities you draw with one stroke: replace every edge with four, forever", 0.5);
+draw(koch, 6.0);
+par { cam((cx + 215, cy - 100), 1.6, smooth); zoom(2.8, 1.6, smooth); }
+say(cap, "look closer — the edge is made of smaller edges, at every scale", 0.5);
+wait(2.6);
+par { cam((cx, cy), 1.5, smooth); zoom(1, 1.5, smooth); }
+// the payoff: infinite perimeter, finite area
+show(eqPar, 0.8);
+say(cap, "the perimeter grows x4/3 every step — to INFINITY — yet the whole shape fits in a circle", 0.6);
+wait(3.4);
+cue(chime);
+say(cap, "four rules, four infinities — and you are never done looking", 0.7);
+wait(3.2);

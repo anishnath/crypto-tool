@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-a906f1aa.js";
+            window.path_to_searchindex_js = "searchindex-5f5d3f4a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3a725e0e.js"></script>
@@ -4260,7 +4260,7 @@ figures → <a href="#kits--domain-knowledge-ordinary-manic-composition">Kits</a
 </div>
 <h2 id="fixed-language-vocabularies"><a class="header" href="#fixed-language-vocabularies">Fixed language vocabularies</a></h2>
 <h3 id="colours"><a class="header" href="#colours">Colours</a></h3>
-<p><code>fg</code>, <code>void</code>, <code>black</code>, <code>ink</code>, <code>cyan</code>, <code>magenta</code>, <code>lime</code>, <code>gold</code>, <code>red</code>, <code>orange</code>, <code>blue</code>, <code>teal</code>, <code>violet</code>, <code>coral</code>, <code>indigo</code>, <code>mint</code>, <code>dim</code>, <code>panel</code>, <code>rainbow</code></p>
+<p><code>fg</code>, <code>white</code>, <code>void</code>, <code>bg</code>, <code>black</code>, <code>ink</code>, <code>charcoal</code>, <code>slate</code>, <code>silver</code>, <code>cyan</code>, <code>magenta</code>, <code>pink</code>, <code>accent</code>, <code>lime</code>, <code>green</code>, <code>gold</code>, <code>amber</code>, <code>yellow</code>, <code>red</code>, <code>crimson</code>, <code>orange</code>, <code>blue</code>, <code>azure</code>, <code>teal</code>, <code>turquoise</code>, <code>violet</code>, <code>purple</code>, <code>coral</code>, <code>salmon</code>, <code>indigo</code>, <code>mint</code>, <code>seafoam</code>, <code>dim</code>, <code>gray</code>, <code>grey</code>, <code>panel</code>, <code>rainbow</code></p>
 <h3 id="easings-1"><a class="header" href="#easings-1">Easings</a></h3>
 <p><code>linear</code>, <code>smooth</code>, <code>inout</code>, <code>in</code>, <code>out</code>, <code>overshoot</code>, <code>back</code>, <code>bounce</code>, <code>elastic</code>, <code>spring</code></p>
 <h3 id="named-plot-functions"><a class="header" href="#named-plot-functions">Named plot functions</a></h3>
@@ -8231,7 +8231,7 @@ least-significant bits across drivers). Handy for byte-exact export jobs. Raw
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 11 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 64 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 67 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
@@ -22219,6 +22219,205 @@ wait(1.0);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="exponential-shells"><a class="header" href="#exponential-shells">exponential-shells</a></h2>
+<p>A living <strong>de Sitter volume</strong> — ∭ a(t) ∝ e^{Ht} rendered as ~320,000 points of light. A grainy
+multicolour spherical CAP meets a family of exponentially-growing spherical SHELLS tangent at a
+shared hot origin — one <code>cloud3</code> batch per colour family, every point a pure closed-form <code>f(i)</code>. A
+dense gold <code>junction</code> glows additively (<code>glow</code>) into the white-hot core; <code>bloom()</code> gives the milky
+cosmic light. A full 25s <code>camera3</code> orbit turns the face-on concentric rings into the offset 3-D
+shells and loops cleanly back. Showcases cloud3 at scale + per-point <code>sat</code>/<code>val</code>, additive <code>glow</code>,
+and the <code>bloom</code> post-process together.</p>
+<pre><code class="language-manic">// engine-test-13 — native 3D reconstruction of the reference.
+//
+// The picture is not a flat disc. It is a large, grainy spherical particle cap
+// meeting a family of exponentially growing particle shells at a shared hot
+// origin. Looking down their common axis makes concentric rings; a full camera
+// orbit reveals the offset spherical shells and returns to the opening frame.
+title("∭ 𝘢(𝘵) ∝ eᴴᵗ");
+canvas(1638, 1482);
+template("black");
+bloom(0.90, 0.22, 52);
+
+// Keep the mathematical title fixed in screen space while the 3-D field turns.
+text(formulaTitle, (819, 70), "∭ 𝘢(𝘵) ∝ eᴴᵗ");
+size(formulaTitle, 44);
+color(formulaTitle, gold);
+bold(formulaTitle);
+display(formulaTitle);
+sticky(formulaTitle);
+z(formulaTitle, 20);
+
+// The camera begins on the cap side of the common tangent. It keeps turning in
+// one direction throughout the 20-second hold, completing 1.5 revolutions.
+// That puts opposite face-on views about 6.67 s apart, matching the reference
+// cadence; four fast turns made the alternating side views read as oscillation.
+// The wider field of view keeps the luminous rim inside the complete orbit.
+camera3((-32, 0, 0), (0, 0, 0), 21.0, perspective);
+
+// --- large spherical cap --------------------------------------------------
+// Several low-opacity random skins give the reference its fine, multicolour
+// grain. Surface-point foreshortening naturally creates the bright rim.
+cloud3(outerRose, 52000, #d78676, 0.095) {
+  let ct = -1 + 1.18 * rand2(i, 10.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 11.9);
+  let rr = 4.66 + 0.075 * (rand2(i, 11.3) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.42 + 0.58 * (-ct);
+  let r = 0.042;
+}
+glow(outerRose, 1);
+
+cloud3(outerViolet, 48000, #72589f, 0.072) {
+  let ct = -1 + 1.18 * rand2(i, 22.7);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 24.3);
+  let rr = 4.69 + 0.09 * (rand2(i, 23.9) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.30 + 0.70 * (1 + ct);
+  let r = 0.038;
+}
+glow(outerViolet, 1);
+
+cloud3(outerSilver, 36000, #b8d8ef, 0.072) {
+  let ct = -1 + 1.18 * rand2(i, 36.3);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 38.7);
+  let rr = 4.72 + 0.055 * (rand2(i, 37.1) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.22 + 0.78 * (1 + ct);
+  let r = 0.034;
+}
+glow(outerSilver, 1);
+
+// A sparse warm skin just outside the main boundary produces the thin amber
+// fringe visible around the lavender rim in the reference.
+cloud3(outerAmber, 18000, #d67425, 0.026) {
+  let ct = -1 + 1.18 * rand2(i, 50.3);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 52.9);
+  let rr = 4.79 + 0.08 * (rand2(i, 51.7) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.35 + 0.65 * (-ct);
+  let r = 0.036;
+}
+glow(outerAmber, 1);
+
+// A broad, extremely faint splat layer closes the gaps between the fine
+// grains. Additive accumulation turns it into the milky cosmic illumination
+// visible in the recording without replacing the surface texture.
+cloud3(outerCosmos, 90000, #b99bbd, 0.012) {
+  let ct = -1 + 1.18 * rand2(i, 118.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 121.7);
+  let rr = 4.69 + 0.10 * (rand2(i, 119.9) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.32 + 0.68 * (-ct);
+  let r = 0.085;
+}
+glow(outerCosmos, 1);
+
+// --- exponential shell family -------------------------------------------
+// Every sphere is tangent at the origin. The gold family grows inward with
+// centre=(-radius,0,0); pink/violet/cyan grow outward from (+radius,0,0).
+// Exponential radius growth turns the face-on rings into the nested horn seen
+// edge-on. `s` selects one sphere and `j` selects a deterministic surface point;
+// each colour family remains one efficient renderer batch.
+cloud3(shellGold, 33600, #ffad24, 0.080) {
+  let per = 4200;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let sr = 0.080 * exp(0.310 * s);
+  let ct = 1 - 2 * rand2(j, s + 63.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, s + 65.7);
+  let rr = sr + 0.012 * (rand2(i, s + 4.2) - 0.5);
+  let x = -sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.018 + 0.0012 * s;
+}
+glow(shellGold, 1);
+
+cloud3(shellPink, 9200, #ff79c6, 0.075) {
+  let per = 4600;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let k = s + 8;
+  let sr = 0.105 * exp(0.218 * k);
+  let ct = 1 - 2 * rand2(j, k + 73.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, k + 75.7);
+  let rr = sr + 0.012 * (rand2(i, k + 4.2) - 0.5);
+  let x = sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.028;
+}
+glow(shellPink, 1);
+
+cloud3(shellViolet, 10000, #c398ff, 0.065) {
+  let per = 5000;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let k = s + 10;
+  let sr = 0.105 * exp(0.218 * k);
+  let ct = 1 - 2 * rand2(j, k + 83.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, k + 85.7);
+  let rr = sr + 0.012 * (rand2(i, k + 4.2) - 0.5);
+  let x = sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.030;
+}
+glow(shellViolet, 1);
+
+cloud3(shellCyan, 16800, #b9ffff, 0.070) {
+  let per = 5600;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let k = s + 12;
+  let sr = 0.105 * exp(0.218 * k);
+  let ct = 1 - 2 * rand2(j, k + 93.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, k + 95.7);
+  let rr = sr + 0.012 * (rand2(i, k + 4.2) - 0.5);
+  let x = sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.032;
+}
+glow(shellCyan, 1);
+
+// Dense gold dust at the shared tangent becomes the white-hot crescent when
+// viewed from the side and the tiny luminous bullseye when viewed end-on.
+cloud3(junction, 7600, #ffd45a, 0.14) {
+  let ct = 1 - 2 * rand2(i, 103.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 105.7);
+  let rr = 0.095 * (0.45 + 0.55 * rand2(i, 71.2));
+  let x = 0.02 + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.026;
+}
+glow(junction, 1);
+
+orbit3(720, 0, 32, 20, linear);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Ziiy8ET8NCI" title="320,000 Particles From One Formula Each — a Living 3D Cosmic Volume in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="shader-glitch-grid"><a class="header" href="#shader-glitch-grid">shader-glitch-grid</a></h2>
 <p>A p5 WEBGL multi-pass sketch — a randomly generated grid pattern, RGB-shifted into a glitch —
 reimagined as ONE per-pixel <code>shader</code>. The original pre-renders four grid/stripe layers into
@@ -22390,6 +22589,165 @@ show(lab);
 wait(24);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/I-bdF9s1AJA" title="Animated Julia Set Fractal from One Formula — Creative Coding in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lost-in-patterns"><a class="header" href="#lost-in-patterns">lost-in-patterns</a></h2>
+<p>A <strong>learning-forward fractal odyssey</strong> in four movements, each a different KIND of infinity with its
+generating RULE shown on screen: <strong>∞ by ZOOM</strong> — a ×500 Mandelbrot dive (<code>z→z²+c</code>); <strong>∞ by PARAMETER</strong>
+— the SAME rule with <code>c</code> the knob, wiring the Mandelbrot→Julia bridge (each c in the set grows one
+Julia); <strong>∞ by ITERATION</strong> — a Clifford strange attractor from one <code>cloud … from map</code> rule fed its own
+output 6,000×; <strong>∞ by RECURSION</strong> — a Koch snowflake (<code>lsystem</code>) closing on the paradox: perimeter
+3(4/3)ⁿ→∞ yet area→8/5·A₀. Four generators (shader · shader · cloud · lsystem) as one lesson, pure in t.</p>
+<pre><code class="language-manic">// lost-in-patterns — a fractal odyssey in four movements, each a different KIND
+// of infinity, each with the RULE that generates it shown on screen (manic's
+// thesis: the diagram is true, so the maths is visible):
+//   I   ∞ by ZOOM       the Mandelbrot set — z→z²+c, a x500 dive into seahorse valley
+//   II  ∞ by PARAMETER  the Julia family — SAME rule, but now c is the knob
+//        (the Mandelbrot set is the MAP of which c give a connected Julia — the
+//         bridge between movements I and II)
+//   III ∞ by ITERATION  a Clifford strange attractor — no shape-formula, one rule fed
+//        its own output 6,000× (cloud … from map)
+//   IV  ∞ by RECURSION  the Koch snowflake — F→F+F--F+F, closing on the paradox:
+//        infinite perimeter, finite area.
+title("Lost in Infinite Patterns");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "Lost in Infinite Patterns"); display(head); cursor(head); sticky(head);
+text(cap, (cx, h - 42), ""); size(cap, 26); sticky(cap);
+counter(mag, (w - 170, 120), 1, 0, "zoom x", ""); color(mag, gold); hidden(mag);
+
+// a dark card so the teaching panel stays legible over the bright fractals
+polygon(panel, (230, 92), (768, 92), (768, 250), (230, 250), #05070d);
+opacity(panel, 0.5); sticky(panel); hidden(panel);
+
+// the "kind of infinity" chip — one per movement (show/hide, no narration)
+text(kind1, (499, 122), "∞  by ZOOM"); size(kind1, 30); color(kind1, cyan); sticky(kind1); hidden(kind1);
+text(kind2, (499, 122), "∞  by PARAMETER"); size(kind2, 30); color(kind2, magenta); sticky(kind2); hidden(kind2);
+text(kind3, (499, 122), "∞  by ITERATION"); size(kind3, 30); color(kind3, gold); sticky(kind3); hidden(kind3);
+text(kind4, (499, 122), "∞  by RECURSION"); size(kind4, 30); color(kind4, lime); sticky(kind4); hidden(kind4);
+
+// the generating rule of each movement — the maths made visible
+equation(eqIter, (499, 190), `z_{n+1} = z_n^{2} + c`, 34); sticky(eqIter); hidden(eqIter);
+equation(eqC,    (499, 236), `c = 0.7885\,e^{i\theta}`, 26); sticky(eqC); hidden(eqC);
+equation(eqCliff,(499, 196), `\begin{cases} x' = \sin(ay)+c\cos(ax) \\ y' = \sin(bx)+d\cos(by) \end{cases}`, 24); sticky(eqCliff); hidden(eqCliff);
+equation(eqKoch, (499, 188), `F \to F\,{+}\,F\,{-}{-}\,F\,{+}\,F`, 30); sticky(eqKoch); hidden(eqKoch);
+// the closing paradox — the one genuine gasp
+equation(eqPar, (cx, h - 120), `\text{perimeter } 3\left(\tfrac{4}{3}\right)^{n}\!\to\infty \qquad \text{area}\to \tfrac{8}{5}A_0`, 34); sticky(eqPar); hidden(eqPar);
+
+// hidden journey axes (the sliders stay backstage — the dive/angle drive the shaders)
+parameter(dive, (w - 180, 660), 0, 0, 1, "dive", 2); hidden(dive);
+parameter(ang, (w - 180, 690), 0, 0, 6.283, "angle", 2); hidden(ang);
+
+// ---------- I. the Mandelbrot coastline ----------
+shader(mset) {
+  let sc = 3.2 * exp(-6.2 * dive);
+  let x = -0.743644 + (u - 0.5) * asp * sc;
+  let y = 0.131826 + (v - 0.5) * sc;
+  let m = mandelbrot(x, y);
+  let band = m^0.35;
+  let hue = 205 + 140 * band + 25 * sin(0.3 * t);
+  let sat = 0.75;
+  let val = (1 - step(0.999, m)) * (0.12 + 0.88 * band);
+}
+
+// ---------- II. the Julia bloom ----------
+shader(jul) {
+  let x = (u - 0.5) * asp * 2.9;
+  let y = (v - 0.5) * 2.9;
+  let cr = 0.7885 * cos(ang);
+  let ci = 0.7885 * sin(ang);
+  let j = julia(x, y, cr, ci);
+  let band = j^0.4;
+  let hue = 290 + 120 * band + 15 * sin(0.4 * t);
+  let sat = 0.8;
+  let val = (1 - step(0.999, j)) * (0.1 + 0.9 * band);
+}
+hidden(jul);
+
+// ---------- III. the strange attractor (Clifford, a=-1.4 b=1.6 c=1 d=0.7) ----
+cloud(att, 6000, #ffffff, 0.85) from map("sin(-1.4*y)+cos(-1.4*x)", "sin(1.6*x)+0.7*cos(1.6*y)", (0.1, 0.1)) {
+  let wsp = 0.12 * t;
+  let px = hx * cos(wsp) - hy * sin(wsp);
+  let py = hx * sin(wsp) + hy * cos(wsp);
+  let x = 640 + 225 * px;        // cloud formulas can't see cx/cy — hardcode the 16:9 centre
+  let y = 360 + 15 + 165 * py;
+  let r = 1.1 + 0.8 * mod(abs(sin(i * 12.9898) * 43758.55), 1);
+  let hue = 150 + 60 * hypot(hx, hy) + 25 * sin(0.4 * t + 0.002 * i);
+}
+hidden(att);
+
+// ---------- IV. the snowflake (Koch, one closed stroke) ----------
+lsystem(koch, (cx, cy + 20), 560, "F--F--F", "F=F+F--F+F", "angle=60 iterations=4 closed=true");
+untraced(koch); stroke(koch, 3); gradient(koch, cyan, magenta, gold);
+
+// the four fullscreen visuals sit BEHIND the HUD (all default to z=0, so without
+// this the later-declared shader would paint over the teaching panel + captions)
+z(mset, -3); z(jul, -3); z(att, -3); z(koch, -2);
+
+// ================= timeline =================
+
+// ---- I: ∞ by ZOOM — the Mandelbrot dive
+type(head, 1.2);
+par { show(panel, 0.4); show(kind1, 0.4); show(mag, 0.3); }
+show(eqIter, 0.6);
+par {
+  to(dive, value, 1, 12, smooth);
+  to(mag, value, 500, 12, smooth);
+  seq {
+    say(cap, "the Mandelbrot set: keep the points where z → z² + c never flies to infinity", 0.6);
+    wait(4.6);
+    say(cap, "zoom 500x and the coastline keeps unfolding — new seahorses, never one exact repeat", 0.5);
+    wait(4.2);
+  }
+}
+cue(whoosh);
+
+// ---- bridge: the Mandelbrot set IS the map of Julia sets
+say(cap, "here is the secret: every point c in that black island grows its OWN fractal...", 0.5);
+wait(3.2);
+
+// ---- II: ∞ by PARAMETER — same rule, c is the knob
+par { fade(mset, 1.2); fade(mag, 0.6); fade(kind1, 0.3); show(jul, 1.2); show(kind2, 0.4); }
+show(eqC, 0.5);           // eqIter STAYS on screen — same rule, bridging I and II
+par {
+  to(ang, value, 6.283, 12, linear);
+  seq {
+    say(cap, "...a Julia set. Freeze z's rule, make c the knob: c inside the set → connected, outside → dust", 0.5);
+    wait(5.0);
+    say(cap, "slide c around a circle and every value is a different universe — same equation, new world", 0.5);
+    wait(4.6);
+  }
+}
+cue(whoosh);
+
+// ---- III: ∞ by ITERATION — a rule fed its own output
+par { fade(jul, 1.4); fade(kind2, 0.3); fade(eqIter, 0.3); fade(eqC, 0.3); show(att, 1.6); show(kind3, 0.4); }
+show(eqCliff, 0.5);
+say(cap, "no formula draws this shape — just this rule, fed its own output six thousand times", 0.5);
+wait(4.0);
+say(cap, "nudge one constant and it's a whole new creature: that sensitivity IS chaos", 0.5);
+wait(3.4);
+cue(whoosh);
+
+// ---- IV: ∞ by RECURSION — the snowflake, and the paradox
+par { fade(att, 1.2); fade(kind3, 0.3); fade(eqCliff, 0.3); show(kind4, 0.4); }
+show(eqKoch, 0.5);
+say(cap, "some infinities you draw with one stroke: replace every edge with four, forever", 0.5);
+draw(koch, 6.0);
+par { cam((cx + 215, cy - 100), 1.6, smooth); zoom(2.8, 1.6, smooth); }
+say(cap, "look closer — the edge is made of smaller edges, at every scale", 0.5);
+wait(2.6);
+par { cam((cx, cy), 1.5, smooth); zoom(1, 1.5, smooth); }
+// the payoff: infinite perimeter, finite area
+show(eqPar, 0.8);
+say(cap, "the perimeter grows x4/3 every step — to INFINITY — yet the whole shape fits in a circle", 0.6);
+wait(3.4);
+cue(chime);
+say(cap, "four rules, four infinities — and you are never done looking", 0.7);
+wait(3.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/iBc2ztGp_Ws" title="Four Kinds of Infinity — Mandelbrot, Julia, Strange Attractor & Koch Snowflake, Explained in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="shader-shapes"><a class="header" href="#shader-shapes">shader-shapes</a></h2>
 <p>The Book of Shaders ‘Shapes’ chapter in a <code>shader</code> field: draw with DISTANCE and ANGLE. <code>length(x,y)</code>
@@ -22913,6 +23271,132 @@ show(note);
 orbit3(52, 8, 4.8, 22, smooth);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/b1rdMFwXwxw" title="Docker Socket Latency as a Raymarched Liquid Mesh — Data-Driven SDF Displacement in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ssl-handshake-sdf"><a class="header" href="#ssl-handshake-sdf">ssl-handshake-sdf</a></h2>
+<p>A <strong>TLS 1.3 handshake</strong> rendered as a raymarched SDF scene, message by message. Four scene
+<code>parameter</code>s are the reactive shader variables the timeline drives: entropy boils every surface,
+x25519 key agreement <code>smin</code>-FUSES the two endpoint solids into a secret neither side ever sent, HKDF
+sprouts a key TREE, and the encrypted channel becomes a <code>rep()</code>-tiled tunnel of cipher rings. All
+ALL-SCALAR (branch tilts as component rotations, no <code>vec2</code>/<code>rot2</code>) so the marcher runs on the GPU.
+Honest by design: pure in <code>t</code>, a deterministic replay of one captured handshake — not a live socket.</p>
+<pre><code class="language-manic">// ssl-handshake-sdf — a TLS 1.3 handshake rendered as a raymarched SDF scene.
+// Four scene parameters are the "reactive shader variables"; the timeline
+// replays the handshake by driving them, and the SDF reads them by name:
+//   ent - cryptographic entropy      -&gt; surface displacement (the boil)
+//   mrg - x25519 key agreement       -&gt; the two endpoint solids smin-FUSE
+//   grw - HKDF key-schedule          -&gt; a key TREE grows from the shared secret
+//   tun - the encrypted channel      -&gt; rep()-tiled cipher rings, an endless tunnel
+// Honesty note: manic is a pure function of t - no live sockets. This is a
+// deterministic replay of one captured handshake; the hex in the transcript is
+// that capture, not live traffic. The marcher is fully GPU-transpilable (scalar
+// SDF, no vec lets), so it previews and records smoothly.
+title("The Handshake, Made Visible");
+canvas("16:9");
+template("black");
+
+// ---------- HUD ----------
+text(head, (cx, 60), "The Handshake, Made Visible"); display(head); cursor(head);
+text(cap, (cx, h - 42), ""); size(cap, 26);
+equation(eqk, (cx, 170), `(g^{a})^{b} \;=\; (g^{b})^{a}`, 36); hidden(eqk);
+
+// the transcript, typed line by line (terminal-green, top left)
+text(tl1, (330, 150), "ClientHello    random: 9f3a c241 77d0 8e5b"); size(tl1, 24); color(tl1, lime); cursor(tl1); hidden(tl1);
+text(tl2, (330, 190), "ServerHello    random: 4be7 01cc a913 f2d6"); size(tl2, 24); color(tl2, lime); cursor(tl2); hidden(tl2);
+text(tl3, (330, 230), "KeyShare       x25519: e5a2 39f8 1b44 c07e"); size(tl3, 24); color(tl3, lime); cursor(tl3); hidden(tl3);
+text(tl4, (330, 270), "HKDF-Expand    client + server traffic keys"); size(tl4, 24); color(tl4, lime); cursor(tl4); hidden(tl4);
+text(tl5, (330, 310), "Finished       cipher: CHACHA20-POLY1305"); size(tl5, 24); color(tl5, lime); cursor(tl5); hidden(tl5);
+
+// entropy readouts (the visible reactive variable + a bit counter)
+counter(bits, (w - 185, 118), 0, 0, "entropy bits ", ""); color(bits, gold); hidden(bits);
+parameter(ent, (w - 180, 168), 0.02, 0, 1, "entropy", 2);
+parameter(mrg, (w - 180, 238), 0, 0, 1, "key-mix", 2); hidden(mrg);
+parameter(grw, (w - 180, 308), 0, 0, 1, "hkdf", 2); hidden(grw);
+parameter(tun, (w - 180, 378), 0, 0, 1, "tunnel", 2); hidden(tun);
+
+// ---------- the scene ----------
+camera3((4.5, -5.5, 3.4), (0, 0, 1.1), 44);
+
+raymarch(hs) {
+  // entropy boils every surface: high-frequency displacement scaled by `ent`
+  let wob = ent * 0.13 * sin(6*x + 2*t) * sin(6*y + 1.7*t) * sin(6*z + 1.3*t);
+  // the two endpoints: browser (sphere) and server (octahedron), pulled
+  // together as the key-mix parameter rises
+  let ox = 1.25 - 0.95*mrg;
+  let c = sdsphere(x + ox, y, z - 0.85, 0.55) + wob;
+  let s = sdoctahedron(x - ox, y, z - 0.85, 0.62) + wob;
+  let duo = smin(c, s, 0.12 + 0.55*mrg);
+  // the HKDF key tree: trunk + branches, growing out of the fused secret as `grw`
+  // rises. Branch tilts are SCALAR component rotations (not vec2/rot2) so the whole
+  // marcher transpiles to GLSL and runs on the GPU instead of the heavy CPU fallback.
+  //   rot(a,b,θ) = (a·cosθ − b·sinθ,  a·sinθ + b·cosθ)
+  let zt = z - 0.85;
+  let tr = sdcapsule(x, y, zt, 1.05*grw, 0.12);
+  let za = zt - 1.0*grw;    let ca = cos(0.65);  let sa = sin(0.65);
+  let zb = zt - 1.55*grw;   let cb = cos(0.8);   let sb = sin(0.8);
+  let b1 = sdcapsule(x*ca - za*sa, y,  x*sa + za*ca, 0.7*grw, 0.085);
+  let b2 = sdcapsule(x*ca + za*sa, y, 0 - x*sa + za*ca, 0.7*grw, 0.085);
+  let b3 = sdcapsule(x, y*cb - zb*sb,  y*sb + zb*cb, 0.5*grw, 0.06);
+  let b4 = sdcapsule(x, y*cb + zb*sb, 0 - y*sb + zb*cb, 0.5*grw, 0.06);
+  let tree0 = smin(smin(tr, smin(b1, b2, 0.1), 0.12), smin(b3, b4, 0.1), 0.12);
+  let tree = tree0 + 0.6*wob + (1 - smoothstep(0.02, 0.12, grw))*9;
+  // the encrypted tunnel: an endless procession of cipher rings along y
+  let ry = rep(y, 1.05);
+  let ring = sdtorus(x, z - 0.85, ry, 0.8, 0.05 + 0.03*sin(3*t + y)) + (1 - smoothstep(0.02, 0.2, tun))*9;
+  let d = smin(smin(duo, tree, 0.14), ring, 0.1);
+  // colour: cool protocol teal, warmed and destabilized by entropy
+  let hue = 165 + 55*nz + 30*sin(2*hz + 0.5*t) + 50*ent;
+  let sat = 0.7;
+  let val = 0.85 + 0.15*nz;
+  let alpha = 1;
+}
+
+// ================= timeline: the handshake, message by message ==============
+type(head, 1.1);
+say(cap, "a TLS 1.3 handshake - captured once, replayed as geometry", 0.6);
+wait(0.8);
+say(cap, "two strangers: your browser, and a server it has never met", 0.5);
+wait(1.4);
+
+// ---- ClientHello: 32 bytes of randomness leave home
+cue(tick);
+show(tl1, 0.1); type(tl1, 1.0);
+show(bits, 0.3);
+say(cap, "ClientHello: 32 bytes of pure randomness leave home - the surface begins to boil", 0.5);
+par { to(ent, value, 0.55, 1.6, smooth); to(bits, value, 256, 1.6); orbit3(-35, 20, 7.4, 1.6, smooth); }
+wait(0.8);
+
+// ---- ServerHello: chaos answers chaos
+cue(tick);
+show(tl2, 0.1); type(tl2, 1.0);
+say(cap, "ServerHello: the server answers with chaos of its own", 0.5);
+par { to(ent, value, 0.85, 1.4, smooth); to(bits, value, 512, 1.4); }
+wait(0.8);
+
+// ---- x25519: the fusion - a secret neither of them ever sent
+cue(whoosh);
+show(tl3, 0.1); type(tl3, 1.0);
+show(eqk, 0.6);
+say(cap, "x25519: the shapes fuse into a secret that NEITHER side ever transmitted", 0.5);
+par { to(mrg, value, 1, 2.4, smooth); orbit3(15, 24, 6.8, 2.4, smooth); }
+wait(0.9);
+
+// ---- HKDF: the key tree
+cue(pop);
+show(tl4, 0.1); type(tl4, 1.0);
+say(cap, "HKDF: one shared secret sprouts a whole tree of session keys", 0.5);
+par { to(grw, value, 1, 2.6, smooth); orbit3(60, 26, 6.6, 2.6, smooth); }
+wait(0.9);
+
+// ---- Finished: the tunnel opens
+cue(chime);
+show(tl5, 0.1); type(tl5, 1.0);
+say(cap, "Finished: from here on, every byte travels dressed in noise", 0.5);
+par { to(tun, value, 1, 2.2, smooth); to(ent, value, 1, 2.2, smooth); orbit3(110, 18, 7.2, 4.5, smooth); }
+disintegrate(eqk, 0.8);
+say(cap, "the invisible negotiation, rendered visible", 0.6);
+wait(2.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TsoCJysgfJc" title="The TLS Handshake as a Raymarched SDF Scene — x25519, HKDF & the Encrypted Tunnel in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="type-to-sdf"><a class="header" href="#type-to-sdf">type-to-sdf</a></h2>
 <p>Typography, dismantled across all three shader tiers in one scene. <strong>Act 1</strong> — 2,600 points born

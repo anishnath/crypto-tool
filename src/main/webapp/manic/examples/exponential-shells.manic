@@ -1,0 +1,188 @@
+// engine-test-13 — native 3D reconstruction of the reference.
+//
+// The picture is not a flat disc. It is a large, grainy spherical particle cap
+// meeting a family of exponentially growing particle shells at a shared hot
+// origin. Looking down their common axis makes concentric rings; a full camera
+// orbit reveals the offset spherical shells and returns to the opening frame.
+title("∭ 𝘢(𝘵) ∝ eᴴᵗ");
+canvas(1638, 1482);
+template("black");
+bloom(0.90, 0.22, 52);
+
+// Keep the mathematical title fixed in screen space while the 3-D field turns.
+text(formulaTitle, (819, 70), "∭ 𝘢(𝘵) ∝ eᴴᵗ");
+size(formulaTitle, 44);
+color(formulaTitle, gold);
+bold(formulaTitle);
+display(formulaTitle);
+sticky(formulaTitle);
+z(formulaTitle, 20);
+
+// The camera begins on the cap side of the common tangent. It keeps turning in
+// one direction throughout the 20-second hold, completing 1.5 revolutions.
+// That puts opposite face-on views about 6.67 s apart, matching the reference
+// cadence; four fast turns made the alternating side views read as oscillation.
+// The wider field of view keeps the luminous rim inside the complete orbit.
+camera3((-32, 0, 0), (0, 0, 0), 21.0, perspective);
+
+// --- large spherical cap --------------------------------------------------
+// Several low-opacity random skins give the reference its fine, multicolour
+// grain. Surface-point foreshortening naturally creates the bright rim.
+cloud3(outerRose, 52000, #d78676, 0.095) {
+  let ct = -1 + 1.18 * rand2(i, 10.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 11.9);
+  let rr = 4.66 + 0.075 * (rand2(i, 11.3) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.42 + 0.58 * (-ct);
+  let r = 0.042;
+}
+glow(outerRose, 1);
+
+cloud3(outerViolet, 48000, #72589f, 0.072) {
+  let ct = -1 + 1.18 * rand2(i, 22.7);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 24.3);
+  let rr = 4.69 + 0.09 * (rand2(i, 23.9) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.30 + 0.70 * (1 + ct);
+  let r = 0.038;
+}
+glow(outerViolet, 1);
+
+cloud3(outerSilver, 36000, #b8d8ef, 0.072) {
+  let ct = -1 + 1.18 * rand2(i, 36.3);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 38.7);
+  let rr = 4.72 + 0.055 * (rand2(i, 37.1) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.22 + 0.78 * (1 + ct);
+  let r = 0.034;
+}
+glow(outerSilver, 1);
+
+// A sparse warm skin just outside the main boundary produces the thin amber
+// fringe visible around the lavender rim in the reference.
+cloud3(outerAmber, 18000, #d67425, 0.026) {
+  let ct = -1 + 1.18 * rand2(i, 50.3);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 52.9);
+  let rr = 4.79 + 0.08 * (rand2(i, 51.7) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.35 + 0.65 * (-ct);
+  let r = 0.036;
+}
+glow(outerAmber, 1);
+
+// A broad, extremely faint splat layer closes the gaps between the fine
+// grains. Additive accumulation turns it into the milky cosmic illumination
+// visible in the recording without replacing the surface texture.
+cloud3(outerCosmos, 90000, #b99bbd, 0.012) {
+  let ct = -1 + 1.18 * rand2(i, 118.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 121.7);
+  let rr = 4.69 + 0.10 * (rand2(i, 119.9) - 0.5);
+  let x = rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let alpha = 0.32 + 0.68 * (-ct);
+  let r = 0.085;
+}
+glow(outerCosmos, 1);
+
+// --- exponential shell family -------------------------------------------
+// Every sphere is tangent at the origin. The gold family grows inward with
+// centre=(-radius,0,0); pink/violet/cyan grow outward from (+radius,0,0).
+// Exponential radius growth turns the face-on rings into the nested horn seen
+// edge-on. `s` selects one sphere and `j` selects a deterministic surface point;
+// each colour family remains one efficient renderer batch.
+cloud3(shellGold, 33600, #ffad24, 0.080) {
+  let per = 4200;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let sr = 0.080 * exp(0.310 * s);
+  let ct = 1 - 2 * rand2(j, s + 63.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, s + 65.7);
+  let rr = sr + 0.012 * (rand2(i, s + 4.2) - 0.5);
+  let x = -sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.018 + 0.0012 * s;
+}
+glow(shellGold, 1);
+
+cloud3(shellPink, 9200, #ff79c6, 0.075) {
+  let per = 4600;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let k = s + 8;
+  let sr = 0.105 * exp(0.218 * k);
+  let ct = 1 - 2 * rand2(j, k + 73.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, k + 75.7);
+  let rr = sr + 0.012 * (rand2(i, k + 4.2) - 0.5);
+  let x = sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.028;
+}
+glow(shellPink, 1);
+
+cloud3(shellViolet, 10000, #c398ff, 0.065) {
+  let per = 5000;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let k = s + 10;
+  let sr = 0.105 * exp(0.218 * k);
+  let ct = 1 - 2 * rand2(j, k + 83.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, k + 85.7);
+  let rr = sr + 0.012 * (rand2(i, k + 4.2) - 0.5);
+  let x = sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.030;
+}
+glow(shellViolet, 1);
+
+cloud3(shellCyan, 16800, #b9ffff, 0.070) {
+  let per = 5600;
+  let s = floor(i / per);
+  let j = i - s * per;
+  let k = s + 12;
+  let sr = 0.105 * exp(0.218 * k);
+  let ct = 1 - 2 * rand2(j, k + 93.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(j, k + 95.7);
+  let rr = sr + 0.012 * (rand2(i, k + 4.2) - 0.5);
+  let x = sr + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.032;
+}
+glow(shellCyan, 1);
+
+// Dense gold dust at the shared tangent becomes the white-hot crescent when
+// viewed from the side and the tiny luminous bullseye when viewed end-on.
+cloud3(junction, 7600, #ffd45a, 0.14) {
+  let ct = 1 - 2 * rand2(i, 103.1);
+  let st = sqrt(1 - ct * ct);
+  let th = tau * rand2(i, 105.7);
+  let rr = 0.095 * (0.45 + 0.55 * rand2(i, 71.2));
+  let x = 0.02 + rr * ct;
+  let y = rr * st * cos(th);
+  let z = rr * st * sin(th);
+  let r = 0.026;
+}
+glow(junction, 1);
+
+orbit3(720, 0, 32, 20, linear);
