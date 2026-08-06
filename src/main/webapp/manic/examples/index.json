@@ -1353,7 +1353,7 @@
           "name": "glsl-raymarch",
           "file": "glsl-raymarch.manic",
           "title": "Glsl raymarch",
-          "desc": "Shader **V3**: glsl(id, <shader>) runs a REAL GLSL fragment shader (Shadertoy-style mainImage, iTime/iResolution/iMouse) straight through the graphics pipeline \u2014 so the whole scene is marched PER PIXEL by the GPU/GL: crisp, anti-aliased, full resolution, and fast."
+          "desc": "Shader **V3**: glsl(id, \"shader source\") runs a REAL GLSL fragment shader (Shadertoy-style mainImage, iTime/iResolution/iMouse) straight through the graphics pipeline \u2014 so the whole scene is marched PER PIXEL by the GPU/GL: crisp, anti-aliased, full resolution, and fast."
         },
         {
           "name": "glsl-boxgrid",
