@@ -228,8 +228,8 @@ Use a fresh controller id to coordinate exact named phases in ANY scene—not on
 `if cond { } else { }` · `def name(p1,p2) { }` (reusable macro, may recurse) ·
 `sum(i in a..b : expr)` (also `prod`/`min`/`max`).
 Expressions: `+ - * / ^`, unary `-`, `< <= > >= == != && ||`, parens,
-`pi`/`e`/`tau`, funcs `sin cos tan asin acos atan sinh cosh tanh exp ln log
-log10 log2 sqrt abs floor ceil round sign`, plus **`random(x)`** (hash → `[0,1)`)
+`pi`/`e`/`tau`, funcs `sin cos tan asin acos atan sinh cosh tanh sinc exp ln log
+log10 log2 sqrt abs floor ceil round sign` (`sinc(x)=sin(x)/x`, `sinc(0)=1` — the diffraction/signal envelope), plus **`random(x)`** (hash → `[0,1)`)
 and **`noise(x)`** (smooth); both take one or more args (`random(r,c)`,
 `noise(x,y)`). Use anywhere a number goes to jitter loops, seed grids
 (`random(r,c)`), scatter, or vary colour (`hue(d{i},360*random(i))`).
@@ -296,7 +296,7 @@ sim's `.path`, a `freekick` arc) by its TRUE local speed, slowest stop first —
 a build error on purely geometric paths; `"curvature"` colours any path by how
 hard it bends, straightest stop first. Palette names only, template-aware;
 composes with trace/dashed/glow/arrowheads; 2D shapes and strokes, not
-text/images; quantity modes stroke-only) · `glow(id,n)` (neon halo; on a `cloud`/`cloud3` → ADDITIVE point blending = accumulating bloom for glowing cores/grain, keep per-point `alpha` low; glowing `cloud3` uses batched camera-facing soft splats instead of hard octahedra, while non-glowing 3-D collections stay crisp) · `z(id,n)` · `clip(id,region)` (clip id/tag to another entity's rectangular bounds — reveal-through-a-window / crop-to-panel; `region` declared first; scissor follows it each frame) · `mask(id,region)` (clip id/tag to another entity's ARBITRARY shape — circle/polygon/star/svg-outline; lens / porthole / reveal-through-any-shape; general cousin of `clip`, follows region each frame) · `rot(id,deg)`
+text/images; quantity modes stroke-only) · `glow(id,n)` (neon halo; on a `cloud`/`cloud3` → ADDITIVE point blending = accumulating bloom for glowing cores/grain, keep per-point `alpha` low; glowing `cloud3` uses batched camera-facing soft splats instead of hard octahedra, while non-glowing 3-D collections stay crisp) · `plate(id,[opacity])` (legibility backing for TEXT — a theme-aware chip sized to the glyphs so a caption/title reads over a busy shader/field; default 0.55; use it instead of hand-rolling a scrim rect; ensure the text's `z` is ABOVE the shader) · `z(id,n)` · `clip(id,region)` (clip id/tag to another entity's rectangular bounds — reveal-through-a-window / crop-to-panel; `region` declared first; scissor follows it each frame) · `mask(id,region)` (clip id/tag to another entity's ARBITRARY shape — circle/polygon/star/svg-outline; lens / porthole / reveal-through-any-shape; general cousin of `clip`, follows region each frame) · `rot(id,deg)`
 · `bold` · `display` · `tag(id,name)` · `label(id,"s",[(dx,dy)])`.
 
 ### Verbs (timeline)
@@ -384,6 +384,7 @@ field boundary, and does not imply collisions or fluid physics.
 Easings: `smooth linear in out overshoot bounce elastic`, plus **`steps<n>`** (quantized — the value holds then jumps in n steps, so motion *ticks* instead of sweeping: a clock second hand `turn(s,(cx,cy),360,60,steps60)`, a clicking counter; works with any verb).
 
 ### Math kit
+`field(name,"expr")` — a REUSABLE scalar field, a pure function of `x`,`y`: call `name(a,b)` in ANY formula (`plot`/`surface3`/`shader`/`cloud`/`raymarch`) and it INLINES, so every view samples the IDENTICAL expression (author once, view many ways — provably the same field). `plot name(x,0)` (1-D slice: pass `name(x,0)`), `surface3 name(x,y)`, heatmap `shader name((u-0.5)*8,(v-0.5)*8)`. Body uses ONLY `x`,`y`,pi/tau/e,functions — NO ambient `t`/`u`/`i`; pass time/inputs at the CALL site. Not an entity; references only earlier-defined fields (no cycles); can't shadow a builtin; works on GPU + CPU alike. ·
 `axes(id,(cx,cy),hw,hh,[unit])` · `plane`/`numberplane`/`complexplane`/`polarplane`
 · `plot(id,(cx,cy),sx,sy,fn,[domain|(x0,x1)])` where `fn` is a named function
 (`sin cos tan asin acos atan parabola cubic line abs exp sqrt log recip gauss sinc sigmoid relu step`) or a

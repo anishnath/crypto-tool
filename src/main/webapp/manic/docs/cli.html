@@ -34,7 +34,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4c6ca13f.js";
+            window.path_to_searchindex_js = "searchindex-9fb17171.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-06bf48f0.js"></script>
@@ -215,11 +215,40 @@ manic story.manic --record out
 <tr><td><code>manic stages story.manic</code></td><td>List named stages and their durations</td></tr>
 <tr><td><code>manic voice story.manic</code></td><td>Report narration/TTS usage without synthesis</td></tr>
 <tr><td><code>manic svgcheck assets/</code></td><td>Screen SVG files for importer compatibility</td></tr>
+<tr><td><code>manic ui</code></td><td>Open the <strong>Workbench</strong> — a local browser studio for your project</td></tr>
 <tr><td><code>manic version</code></td><td>Show the installed version</td></tr>
 <tr><td><code>manic --help</code></td><td>Show every command and option</td></tr>
 </tbody>
 </table>
 </div>
+<h2 id="the-workbench-ui"><a class="header" href="#the-workbench-ui">The Workbench UI</a></h2>
+<p><code>manic ui</code> opens the <strong>Manic Workbench</strong> — a local, browser-based studio for your
+<code>.manic</code> projects. It’s a friendlier front-end to the same engine you drive from the
+command line:</p>
+<ul>
+<li><strong>Files</strong> — browse, create, rename, duplicate, and delete stories, edited in a
+Monaco editor with syntax help, live diagnostics, and autosave.</li>
+<li><strong>Preview &amp; render</strong> — one-click preview, and MP4 / animated GIF / PNG-frame exports
+with live progress and a render history under the project’s <code>.manic-output</code> folder.</li>
+<li><strong>AI drafting (optional)</strong> — describe a story and get a draft, with diff-before-apply
+and a built-in <code>manic check</code>. Nothing leaves your machine unless you enable a provider
+and add your own key.</li>
+</ul>
+<pre><code class="language-sh">manic ui                     # open the current folder
+manic ui path/to/project     # open a specific project folder
+</code></pre>
+<p>It runs entirely on your machine, on a loopback-only address with a session token, and
+points the Workbench at <em>this</em> <code>manic</code> binary and its bundled assets automatically — no
+flags needed. Use <strong>Open folder…</strong> in the UI to switch projects without restarting.</p>
+<p><strong>Requirements.</strong> The Workbench is fetched and run with <code>npx</code>, so it needs <strong>Node.js 22
+or newer</strong> (npm and npx come with it); FFmpeg on your <code>PATH</code> is needed for MP4/GIF export.
+Verify with:</p>
+<pre><code class="language-sh">node -v    # v22.x or newer
+npm -v
+npx -v
+</code></pre>
+<p>If Node is missing or too old, <code>manic ui</code> prints a short install guide for your operating
+system instead of launching — install Node.js 22+, reopen your terminal, and run it again.</p>
 <h2 id="render-one-part-of-a-story"><a class="header" href="#render-one-part-of-a-story">Render one part of a story</a></h2>
 <p>Named stages make long explainers fast to review:</p>
 <pre><code class="language-sh">manic stages lesson.manic
