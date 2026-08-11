@@ -1,0 +1,176 @@
+// v2 of the Fourier gallery — on the BLACK template (the full-colour screen where
+// semantic colours pop), short 9:16 canvas. Same twenty-ring engine and five
+// relations, but the run is extended and the final "all five signals" overview
+// HOLDS longer so the viewer gets a full, unhurried view of the complete colour
+// composition — every strand vivid against black.
+
+title("Fourier Series — Rotations Become Waves");
+canvas("9:16");
+template("black");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(chapter,(cx,h*0.075),"FOURIER SERIES · FIVE RELATIONS");
+text(caption,(cx,h*0.85),"Twenty rotating circles. One continuously derived signal.");
+text(cta,(cx,h*0.925),"BUILD VISUAL EXPLANATIONS → 8gwifi.org/manic");
+size(chapter,18); color(chapter,dim); bold(chapter); hidden(chapter);
+size(caption,20); color(caption,dim); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-31,-25,44),(1,-2,0),42,orthographic);
+
+def relation(k,zv) {
+  // The chain, its two local axes, and the waveform axes all share one layer.
+  collection3(series{k},(-3,5,zv),20,(0,0,0),11,0.055);
+  line3(sweep{k},(-3,5,zv),(10,5,zv));
+  hidden(sweep{k});
+  links3(arms{k},series{k},chain);
+  child3(tip{k},series{k},19,0.12);
+  arrow3(chainX{k},(-11,5,zv),(7,5,zv));
+  arrow3(chainY{k},(-3,-3,zv),(-3,13,zv));
+  arrow3(plotX{k},(-7,-12,zv),(12,-12,zv));
+  arrow3(plotY{k},(-7,-12,zv),(-7,-3,zv));
+  // A cinematic crop: the axes may continue beyond the frame, as in the
+  // reference, while the active rings and the growing history stay dominant.
+  point3(shot{k}A,(-7.5,-10,zv),0.01);
+  point3(shot{k}B,(8.5,10,zv),0.01);
+  tag(shot{k}A,shot{k}); tag(shot{k}B,shot{k});
+  hidden(shot{k}A); hidden(shot{k}B);
+
+  tag(series{k},layer{k}); tag(arms{k},layer{k}); tag(tip{k},layer{k});
+  tag(chainX{k},layer{k}); tag(chainY{k},layer{k});
+  tag(plotX{k},layer{k}); tag(plotY{k},layer{k});
+  tag(layer{k},stack);
+
+  for i in 0..20 {
+    ring3(orbit{k}_{i},series{k},i,72);
+    historyplot3(wave{k}_{i},series{k},i,y,(-7,-12,zv),(19,8.5));
+    thick(orbit{k}_{i},0.022);
+    thick(wave{k}_{i},0.014);
+    tag(orbit{k}_{i},layer{k}); tag(wave{k}_{i},layer{k});
+  }
+
+  color(series{k},fg); color(arms{k},fg); color(tip{k},fg);
+  color(chainX{k},fg); color(chainY{k},fg);
+  color(plotX{k},fg); color(plotY{k},fg);
+  thick(chainX{k},0.016); thick(chainY{k},0.016);
+  thick(plotX{k},0.016); thick(plotY{k},0.016);
+
+  color(orbit{k}_0,lime);       color(wave{k}_0,lime);
+  color(orbit{k}_1,gold);       color(wave{k}_1,gold);
+  color(orbit{k}_2,gold);       color(wave{k}_2,gold);
+  color(orbit{k}_3,magenta);    color(wave{k}_3,magenta);
+  color(orbit{k}_4,coral);      color(wave{k}_4,coral);
+  color(orbit{k}_5,red);        color(wave{k}_5,red);
+  color(orbit{k}_6,orange);     color(wave{k}_6,orange);
+  color(orbit{k}_7,magenta);    color(wave{k}_7,magenta);
+  color(orbit{k}_8,violet);     color(wave{k}_8,violet);
+  color(orbit{k}_9,indigo);     color(wave{k}_9,indigo);
+  color(orbit{k}_10,cyan);      color(wave{k}_10,cyan);
+  color(orbit{k}_11,blue);      color(wave{k}_11,blue);
+  color(orbit{k}_12,mint);      color(wave{k}_12,mint);
+  color(orbit{k}_13,lime);      color(wave{k}_13,lime);
+  color(orbit{k}_14,gold);      color(wave{k}_14,gold);
+  color(orbit{k}_15,cyan);      color(wave{k}_15,cyan);
+  color(orbit{k}_16,lime);      color(wave{k}_16,lime);
+  color(orbit{k}_17,magenta);   color(wave{k}_17,magenta);
+  color(orbit{k}_18,coral);     color(wave{k}_18,coral);
+  color(orbit{k}_19,cyan);      color(wave{k}_19,cyan);
+}
+
+relation(0,-20);
+relation(1,-10);
+relation(2,0);
+relation(3,10);
+relation(4,20);
+point3(overviewA,(-11,-12,-20),0.01);
+point3(overviewB,(12,13,20),0.01);
+tag(overviewA,overviewShot); tag(overviewB,overviewShot);
+hidden(overviewA); hidden(overviewB);
+
+equation(formula0,(0,0),`\sum_{n=1}^{N}\frac{4}{\pi(2n-1)}\sin((2n-1)t)`,26);
+equation(formula1,(0,0),`\sum_{n=1}^{N}\frac{2(-1)^{n+1}}{\pi n}\sin(nt)`,26);
+equation(formula2,(0,0),`\sum_{n=1}^{N}\frac{2w_n}{\pi n}\sin(nt)`,26);
+equation(formula3,(0,0),`\sum_{n=1}^{N}\frac{2}{\pi n}\sin(n^2t)`,26);
+equation(formula4,(0,0),`\sum_{n=1}^{N}\frac{2r_n}{\pi n}\sin(nt)`,26);
+label3(formula0,(-8,-2,-20),0.82);
+label3(formula1,(-8,-2,-10),0.82);
+label3(formula2,(-8,-2,0),0.82);
+label3(formula3,(-8,-2,10),0.82);
+label3(formula4,(-8,-2,20),0.82);
+for i in 0..5 {
+  tag(formula{i},layer{i}); tag(formula{i},stack); color(formula{i},fg);
+}
+
+hidden(stack);
+
+step("enter the Fourier world") {
+  show(chapter,0.30);
+  show(caption,0.35);
+  show(stack,0.85);
+}
+wait(0.35);
+
+step("twenty circles write five signals") {
+  par {
+    chain3(series0,"4.0744 1.3581 0.8149 0.5821 0.4527 0.3704 0.3134 0.2716 0.2397 0.2144 0.1940 0.1771 0.1630 0.1509 0.1405 0.1314 0.1235 0.1164 0.1101 0.1045","1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39",22.0);
+    chain3(series1,"2.0372 -1.0186 0.6791 -0.5093 0.4074 -0.3395 0.2910 -0.2546 0.2264 -0.2037 0.1852 -0.1698 0.1567 -0.1455 0.1358 -0.1273 0.1198 -0.1132 0.1072 -0.1019","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",22.0);
+    chain3(series2,"0 0.0276 0.0716 0.1154 0.1537 0.1838 0.2040 0.2136 0.2127 0.2023 0.1839 0.1595 0.1314 0.1020 0.0735 0.0480 0.0271 0.0119 0.0029 0","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",22.0);
+    chain3(series3,"2.0372 1.0186 0.6791 0.5093 0.4074 0.3395 0.2910 0.2546 0.2264 0.2037 0.1852 0.1698 0.1567 0.1455 0.1358 0.1273 0.1198 0.1132 0.1072 0.1019","1 4 9 16 25 36 49 64 81 100 121 144 169 196 225 256 289 324 361 400",22.0);
+    chain3(series4,"1.3334 0.0973 0.0648 0.3333 0.4074 0.2222 0.0278 0.0243 0.1482 0.2037 0.1212 0.0162 0.0150 0.0952 0.1358 0.0833 0.0114 0.0108 0.0702 0.1019","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",22.0);
+    travel3(series0,sweep0,22.0,linear);
+    travel3(series1,sweep1,22.0,linear);
+    travel3(series2,sweep2,22.0,linear);
+    travel3(series3,sweep3,22.0,linear);
+    travel3(series4,sweep4,22.0,linear);
+
+    seq {
+      wait(0.45);
+      par {
+        fade(layer1,0.80); fade(layer2,0.80); fade(layer3,0.80); fade(layer4,0.80);
+        view3(shot0,"isometric",1.45,smooth,1.08);
+        say(caption,"Square wave — odd harmonics sharpen every corner.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer0,0.65); show(layer1,0.65);
+        view3(shot1,"isometric",1.35,smooth,1.08);
+        say(caption,"Sawtooth — every harmonic joins with alternating direction.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer1,0.65); show(layer2,0.65);
+        view3(shot2,"isometric",1.35,smooth,1.08);
+        say(caption,"Hann window — the outer harmonics taper away.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer2,0.65); show(layer3,0.65);
+        view3(shot3,"isometric",1.35,smooth,1.08);
+        say(caption,"Quadratic chirp — frequency accelerates as n squared.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer3,0.65); show(layer4,0.65);
+        view3(shot4,"isometric",1.35,smooth,1.08);
+        say(caption,"Envelope ripple — selected harmonics breathe in and out.",0.35);
+      }
+      wait(1.55);
+      par {
+        show(layer0,0.55); show(layer1,0.55); show(layer2,0.55); show(layer3,0.55);
+        view3(overviewShot,"isometric",1.5,smooth,1.30);
+        say(caption,"One relationship engine. Five very different signals.",0.35);
+      }
+      // Hold on the full colour composition — all five signals rotating and drawing
+      // together — so the viewer gets an unhurried, complete view.
+      wait(6.5);
+    }
+  }
+}
+wait(0.6);
+
+step("create with Manic") {
+  show(cta,0.45);
+  pulse(stack,0.75);
+  say(caption,"Describe the relationship; Manic keeps every ring, endpoint, history, and camera together.",0.40);
+}
+wait(3.0);

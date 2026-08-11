@@ -22,12 +22,36 @@ support(rule, (cx, 102), 380, "down");   // a hatched section rule — a std pri
 list(dll, "3 8 5 2", (cx, 340), doubly, 80, 58);
 
 text(cap, (cx, 628), ""); color(cap, fg); size(cap, 22); display(cap);
+wrap(cap, 1140);                         // keep long captions inside the page
 
-say(cap, "each node = [ ·prev | data | next· ] — data plus two pointers");
-wait(1.1);
-say(cap, "insert 7 after node 1: the prev/next pointers re-thread — nothing shifts");
-insert(dll, 1, "7");
-wait(0.9);
-say(cap, "remove the head: the list simply re-points past it");
+// ---- anatomy: what a node is, and why "doubly" ----
+say(cap, "each node = [ ·prev | data | next· ] — one value, two pointers");
+wait(1.4);
+say(cap, "\"doubly\" = every node links BOTH ways — a next pointer and a prev pointer; both ends meet NULL, and head marks the front");
+wait(1.9);
+
+// ---- grow it: three inserts, each an O(1) pointer splice ----
+say(cap, "append 9 at the tail — set last.next → 9 and 9.prev → last. Two pointer writes.");
+insert(dll, 3, "9");
+wait(1.6);
+say(cap, "splice 6 after 8 — four pointers re-thread (8.next→6, 6.prev→8, 6.next→5, 5.prev→6) and nothing else shifts");
+insert(dll, 1, "6");
+wait(1.9);
+say(cap, "insert 1 right after the head — the very same four-pointer splice, done in O(1)");
+insert(dll, 0, "1");
+wait(1.8);
+
+// ---- shrink it: three deletes, each a re-thread ----
+say(cap, "delete the head — head advances to the next node, whose prev becomes NULL");
 remove(dll, 0);
-wait(1.2);
+wait(1.6);
+say(cap, "delete a middle node — its neighbours bypass it: prev.next and next.prev re-point past it, both ways");
+remove(dll, 2);
+wait(1.9);
+say(cap, "delete the tail — the new last node's next becomes NULL");
+remove(dll, 4);
+wait(1.7);
+
+// ---- the payoff ----
+say(cap, "Doubly linked list: O(1) insert/delete at a known node, and you can walk it both ways — the cost is one extra pointer per node");
+wait(2.4);

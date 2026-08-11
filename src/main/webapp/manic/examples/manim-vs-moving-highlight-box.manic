@@ -1,0 +1,26 @@
+// ============================================================================
+//  The product rule, with a highlight box that moves between the two terms.
+//
+//  The equation is one `mathparts` — split into parts that lay themselves out and
+//  stay individually addressable (pr.0, pr.1, …). It's written on left-to-right,
+//  a box is drawn around the first product term, then the box glides + resizes to
+//  surround the second.
+// ============================================================================
+title("Product rule — moving highlight box");
+canvas(1280, 720);
+template("black");
+
+mathparts(pr, (640, 340),
+  `\frac{d}{dx}f(x)g(x)=`, `f(x)\frac{d}{dx}g(x)`, `+`, `g(x)\frac{d}{dx}f(x)`, 34);
+framebox(fb, pr.1, 10); color(fb, gold);        // box the first product term (pr.1)
+
+untraced(pr); untraced(fb);
+
+wait(0.5);
+// write the equation on, part by part, left to right
+draw(pr.0, 0.9); draw(pr.1, 0.7); draw(pr.2, 0.3); draw(pr.3, 0.8);
+wait(0.4);
+draw(fb, 0.8);                                  // draw the box around the first term
+wait(0.9);
+surround(fb, pr.3, 1.0, smooth);                // move it to the second term (pr.3)
+wait(0.8);

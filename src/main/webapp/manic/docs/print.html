@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9fb17171.js";
+            window.path_to_searchindex_js = "searchindex-979a81e0.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-06bf48f0.js"></script>
+        <script src="toc-b0bf7e39.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -7820,13 +7820,120 @@ living sea.</p>
 <p>That’s the point of the shared pipeline: the shader isn’t a wallpaper you switch to — it’s
 one more entity in the same scene as your maths, your 3-D, and your timeline.</p>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="coming-from-manim-to-manic"><a class="header" href="#coming-from-manim-to-manic">Coming from Manim to Manic</a></h1>
+<p>If you’ve written Manim scenes, you already think the right way: a scene is a
+sequence of things that appear, move, and change over time. Manic keeps that
+mental model and drops most of the plumbing. This page is a translation guide —
+what your favourite Manim moves look like in Manic, and where the two languages
+genuinely differ.</p>
+<p>Every scene mentioned here is a runnable file in the gallery under
+<a href="#coming-from-manim"><strong>Coming from Manim</strong></a>. Read this page for the <em>why</em>; open those
+for the <em>how</em>.</p>
+<blockquote>
+<p>Manic is not “Manim with different syntax.” It’s a small declarative language
+built for people who aren’t programmers. Where Manim hands you Python objects
+and asks you to wire them together, Manic gives you a builtin that already
+knows the intent. Most reactive rigs — a <code>ValueTracker</code> feeding an updater
+feeding an <code>always_redraw</code> — collapse to a single verb. The examples below are
+the same tutorial scenes you already know, written the Manic way.</p>
+</blockquote>
+<h2 id="the-three-big-differences"><a class="header" href="#the-three-big-differences">The three big differences</a></h2>
+<p><strong>1. No <code>ValueTracker</code>, no <code>add_updater</code>, no <code>always_redraw</code>.</strong>
+This is the headline. In Manim, “keep this line connected to those two dots as
+they move” is a hand-written updater. In Manic, a <code>segment</code> between two points is
+reactive <em>by construction</em> — it reflows to its endpoints every frame because the
+constraint pass runs for you. You rarely write the reactive glue; you state the
+relationship once and animate the inputs.</p>
+<pre><code class="language-manic">point(a, (200, 400)); point(b, (600, 300));
+segment(l, a, b);            // stays connected — no updater
+slidex(a, 840, 2);           // move one dot; the line follows
+</code></pre>
+<p><strong>2. The timeline is deterministic and scrubbable.</strong>
+Animations in Manic resolve to a pure function of time <code>t</code>. A motion trail
+(<code>trail</code>) isn’t accumulated frame-by-frame like a Manim updater that appends
+points — it’s <em>sampled from the resolved timeline</em>, so scrubbing backwards shows
+exactly the trail up to that moment. You get correct reverse playback for free.</p>
+<p><strong>3. You say what happens, not how to redraw it.</strong>
+Manim’s <code>self.play(Create(x))</code>, <code>Transform</code>, <code>Restore</code>, <code>MoveAlongPath</code> are
+render instructions. Manic’s verbs — <code>show</code>, <code>draw</code>, <code>move</code>, <code>to</code>, <code>turn</code>,
+<code>grow</code>, <code>fade</code> — are intentions, sequenced with <code>wait</code> and grouped with <code>par { }</code>.</p>
+<h2 id="the-translation-table"><a class="header" href="#the-translation-table">The translation table</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Manim</th><th>Manic</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td><code>Axes(x_range, y_range, tips=False)</code></td><td><code>coords(id, origin, xrange, yrange, sx, sy, 0)</code></td><td>Arbitrary ranges, per-axis scale, tips/ticks/auto-numbers, and axis names — one call. Align a <code>plot</code> to the same <code>origin</code>+<code>sx</code>+<code>sy</code>.</td></tr>
+<tr><td><code>ax.plot(lambda x: 4*x - x**2)</code></td><td><code>plot(id, origin, sx, sy, "4*x - x*x", (0,4))</code></td><td>Formula strings; <code>x*x</code> or <code>x^2</code>.</td></tr>
+<tr><td>custom / non-numeric tick labels</td><td><code>xtick(id, coords, value, [text])</code> / <code>ytick(…)</code></td><td>Label a tick <strong>at an axis value</strong> — a number, a word (<code>"Mon"</code>), or a symbol (<code>"π/2"</code>).</td></tr>
+<tr><td><code>ax.get_vertical_line(ax.i2gp(2, curve))</code></td><td><code>vline(id, curve, x, [color])</code></td><td>Lands exactly on the graph; dotted/dashed/solid.</td></tr>
+<tr><td><code>ax.get_riemann_rectangles(curve, …, dx)</code></td><td><code>riemann(id, curve, a, b, [dx], [color])</code></td><td>The discrete analogue of <code>area</code>.</td></tr>
+<tr><td><code>ax.get_area(g, [a,b], bounded_graph=…)</code></td><td><code>band(top, bottom, [color], (a,b))</code></td><td>Fills only the x-slice between two curves.</td></tr>
+<tr><td><code>ax.get_graph_label(graph, "\sin x", …)</code></td><td><code>graphlabel(id, curve, </code> <code>`\sin x`</code> <code>, x, up)</code></td><td>LaTeX label pinned to the curve, coloured to match.</td></tr>
+<tr><td><code>Dot</code> + <code>add_updater(move_to(c2p(t, f(t))))</code></td><td><code>mark(id, curve, x)</code> then <code>to(id, x, …)</code></td><td>A dot that rides a curve — no updater.</td></tr>
+<tr><td><code>always_redraw(Rectangle origin→(t, k/t))</code></td><td><code>boxto(id, curve, x)</code></td><td>Reactive inscribed rectangle; the constant-area demo in one line.</td></tr>
+<tr><td><code>MathTex("a","+","b")</code> (indexable)</td><td><code>mathparts(id, (x,y), </code> <code>`a`</code> <code>, </code> <code>`+`</code> <code>, </code> <code>`b`</code> <code>)</code></td><td>Auto-laid-out, baseline-aligned, addressable parts <code>{id}.0</code>, <code>{id}.1</code>, …</td></tr>
+<tr><td><code>Write(text)</code></td><td><code>untraced(e); draw(e)</code></td><td>A left-to-right write-on wipe.</td></tr>
+<tr><td><code>SurroundingRectangle(term, buff=.1)</code></td><td><code>framebox(id, target, [buff])</code></td><td>Outlined box fitted to a target’s bbox + pad.</td></tr>
+<tr><td><code>ReplacementTransform(box1, box2)</code></td><td><code>surround(box, newTarget)</code></td><td>Glides + resizes the box to a new target — one verb, no second box.</td></tr>
+<tr><td><code>Line(...).rotate(theta)</code> about a vertex</td><td><code>turn(point, vertex, degrees, dur)</code></td><td>Rotate a point about a pivot; attached arms/arcs follow.</td></tr>
+<tr><td><code>Angle(l1, l2)</code> + <code>add_updater</code></td><td><code>anglemark(id, a, b, c, ["θ"])</code></td><td>Reactive arc; optional label rides the bisector as the angle opens.</td></tr>
+<tr><td><code>x = ValueTracker(0)</code> + <code>set_x</code> updater</td><td><code>slidex(id, x, dur)</code> / <code>slidey(id, y, dur)</code></td><td>Move one coordinate to an absolute value, keeping the other.</td></tr>
+<tr><td><code>VGroup(...).scale(1.4)</code></td><td><code>groupscale(tag, 1.4)</code></td><td>Scales about the group’s <strong>collective</strong> centroid.</td></tr>
+<tr><td><code>group.animate.shift(dest − group[i])</code></td><td><code>dock(tag, member, target)</code></td><td>Slides the group so one member lands on the target — no delta maths.</td></tr>
+<tr><td><code>VMobject</code> + append-point updater (trace)</td><td><code>trail(id, target, color, width)</code></td><td>Exact, seekable motion trail sampled from the timeline.</td></tr>
+<tr><td><code>self.camera.frame.animate.move_to(dot)</code></td><td><code>followshot(id)</code></td><td>The 2D camera tracks an entity; <code>followshot(none)</code> releases.</td></tr>
+<tr><td><code>frame.animate.scale(0.5)</code></td><td><code>zoom(2, …)</code></td><td>⚠️ Inverted: Manim’s smaller frame = Manic’s <code>zoom &gt; 1</code>.</td></tr>
+<tr><td><code>ZoomedScene</code> + <code>activate_zooming()</code></td><td><code>loupe(id, (sx,sy), w, h, (dx,dy), mag)</code></td><td>A live magnifier: a frame over the scene + a panel showing that region enlarged.</td></tr>
+<tr><td><code>self.play(a, b)</code> (parallel)</td><td><code>par { a; b; }</code></td><td>Run verbs together.</td></tr>
+<tr><td><code>self.wait(t)</code></td><td><code>wait(t)</code></td><td>Same.</td></tr>
+<tr><td><code>self.play(FadeIn/FadeOut)</code></td><td><code>show(id)</code> / <code>fade(id)</code></td><td>See the note on <code>hidden</code> below.</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="two-things-that-trip-people-up"><a class="header" href="#two-things-that-trip-people-up">Two things that trip people up</a></h2>
+<p><strong><code>hidden</code> is a base state, not an animation.</strong> <code>hidden(x)</code> means “x starts
+invisible from t=0” — it’s declared once, up top, alongside the constructors.
+To <em>hide something mid-scene</em>, use the timeline verb <code>fade(x)</code>. (Symmetrically,
+<code>show(x)</code> reveals it.) Constructors run at build time, so anything you don’t want
+on screen at the start should be declared and <code>hidden</code> before the timeline begins.</p>
+<p><strong><code>zoom</code> is inverted from Manim’s camera scale.</strong> Manim shrinks the camera frame
+to magnify (<code>frame.scale(0.5)</code>); Manic zooms the view directly, so <code>zoom(2)</code>
+magnifies and <code>zoom(1)</code> is the wide shot.</p>
+<h2 id="porting-a-scene-step-by-step"><a class="header" href="#porting-a-scene-step-by-step">Porting a scene, step by step</a></h2>
+<p>A comfortable way to move a Manim scene across:</p>
+<ol>
+<li><strong>Set the frame.</strong> Replace the whole <code>Axes(...)</code> block with one <code>coords(...)</code> —
+ranges, per-axis scale, tips, ticks, numbers, and axis names all live there.
+Point your <code>plot</code>s at the same <code>origin</code>, <code>sx</code>, <code>sy</code> and they line up.</li>
+<li><strong>Delete the reactive rig.</strong> Every <code>ValueTracker</code>, <code>add_updater</code>, and
+<code>always_redraw</code> has a direct verb (<code>slidex</code>, <code>mark</code>, <code>boxto</code>, <code>anglemark</code>,
+<code>segment</code>, <code>trail</code>, …). Find the builtin that already encodes the relationship
+instead of re-wiring it — the table above is your lookup.</li>
+<li><strong>Sequence with <code>wait</code> and <code>par</code>.</strong> <code>self.play(a, b)</code> becomes <code>par { a; b; }</code>;
+<code>self.wait(t)</code> becomes <code>wait(t)</code>. Reveals are <code>show</code>/<code>draw</code>; hides are <code>fade</code>.</li>
+<li><strong>Declare-and-<code>hidden</code> up top.</strong> Anything that shouldn’t be on screen at the
+start is constructed and <code>hidden</code> before the timeline, then <code>show</code>n when its
+moment comes.</li>
+</ol>
+<p>If a Manim move isn’t in the table, check the <a href="#manic-api-reference">API reference</a> — Manic’s
+vocabulary is broad, and there’s usually a builtin that says it in one line.</p>
+<h2 id="where-to-go-next"><a class="header" href="#where-to-go-next">Where to go next</a></h2>
+<ul>
+<li><a href="#coming-from-manim"><strong>Coming from Manim</strong> gallery</a> — every scene above, runnable.</li>
+<li><a href="#3blue1brown-reproduced"><strong>3Blue1Brown, reproduced</strong></a> — longer-form math lessons built the same way.</li>
+<li><a href="#kits--domain-knowledge-ordinary-manic-composition">The graphing &amp; calculus kit</a> — <code>coords</code>, <code>plot</code>, <code>area</code>, <code>riemann</code>, and friends in depth.</li>
+<li><a href="#motion-graphics--move-ideas-not-layers">Motion graphics</a> — the relationship verbs (<code>attach</code>, <code>become</code>, <code>travel</code>) that replace updaters.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="examples-gallery"><a class="header" href="#examples-gallery">Examples gallery</a></h1>
 <p>Every animation in <code>examples/</code>, by topic — <strong>the code and the clip for each</strong>. Run any of them with <code>manic examples/&lt;name&gt;.manic</code>. Project: <a href="https://maniclang.com">https://maniclang.com</a>.</p>
 <ul>
 <li><a href="#algorithms--data-structures">Algorithms &amp; data structures</a> — 6 examples</li>
 <li><a href="#graphs">Graphs</a> — 5 examples</li>
 <li><a href="#grids--pathfinding--automata">Grids — pathfinding &amp; automata</a> — 5 examples</li>
-<li><a href="#calculus--functions">Calculus &amp; functions</a> — 28 examples</li>
+<li><a href="#calculus--functions">Calculus &amp; functions</a> — 30 examples</li>
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 13 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 14 examples</li>
 <li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
@@ -7836,12 +7943,14 @@ one more entity in the same scene as your maths, your 3-D, and your timeline.</p
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 11 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 67 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 68 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
-<li><a href="#3d-scenes">3D scenes</a> — 49 examples</li>
+<li><a href="#3d-scenes">3D scenes</a> — 51 examples</li>
 <li><a href="#diagrams">Diagrams</a> — 24 examples</li>
+<li><a href="#coming-from-manim">Coming from Manim</a> — 12 examples</li>
+<li><a href="#3blue1brown-reproduced">3Blue1Brown, reproduced</a> — 11 examples</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="algorithms--data-structures"><a class="header" href="#algorithms--data-structures">Algorithms &amp; data structures</a></h1>
@@ -8059,17 +8168,41 @@ support(rule, (cx, 102), 380, "down");   // a hatched section rule — a std pri
 list(dll, "3 8 5 2", (cx, 340), doubly, 80, 58);
 
 text(cap, (cx, 628), ""); color(cap, fg); size(cap, 22); display(cap);
+wrap(cap, 1140);                         // keep long captions inside the page
 
-say(cap, "each node = [ ·prev | data | next· ] — data plus two pointers");
-wait(1.1);
-say(cap, "insert 7 after node 1: the prev/next pointers re-thread — nothing shifts");
-insert(dll, 1, "7");
-wait(0.9);
-say(cap, "remove the head: the list simply re-points past it");
+// ---- anatomy: what a node is, and why "doubly" ----
+say(cap, "each node = [ ·prev | data | next· ] — one value, two pointers");
+wait(1.4);
+say(cap, "\"doubly\" = every node links BOTH ways — a next pointer and a prev pointer; both ends meet NULL, and head marks the front");
+wait(1.9);
+
+// ---- grow it: three inserts, each an O(1) pointer splice ----
+say(cap, "append 9 at the tail — set last.next → 9 and 9.prev → last. Two pointer writes.");
+insert(dll, 3, "9");
+wait(1.6);
+say(cap, "splice 6 after 8 — four pointers re-thread (8.next→6, 6.prev→8, 6.next→5, 5.prev→6) and nothing else shifts");
+insert(dll, 1, "6");
+wait(1.9);
+say(cap, "insert 1 right after the head — the very same four-pointer splice, done in O(1)");
+insert(dll, 0, "1");
+wait(1.8);
+
+// ---- shrink it: three deletes, each a re-thread ----
+say(cap, "delete the head — head advances to the next node, whose prev becomes NULL");
 remove(dll, 0);
-wait(1.2);
+wait(1.6);
+say(cap, "delete a middle node — its neighbours bypass it: prev.next and next.prev re-point past it, both ways");
+remove(dll, 2);
+wait(1.9);
+say(cap, "delete the tail — the new last node's next becomes NULL");
+remove(dll, 4);
+wait(1.7);
+
+// ---- the payoff ----
+say(cap, "Doubly linked list: O(1) insert/delete at a known node, and you can walk it both ways — the cost is one extra pointer per node");
+wait(2.4);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/YucCrtOvZjg" title="Doubly Linked List — Textbook Style (Agnostic Treatment) — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/lAKD6qL56-o" title="Doubly Linked List — Textbook Style (Agnostic Treatment) — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="hashmap"><a class="header" href="#hashmap">hashmap</a></h2>
 <p>Hash a key to a bucket; collisions chain on (separate chaining).</p>
@@ -12214,6 +12347,308 @@ draw(p5, 1.0);  show(l5, 0.3);  wait(0.3);
 draw(p7, 1.1);  show(l7, 0.3);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/5_W8DHKCI88" title="Taylor Series: Watch Polynomials Become sin(x) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="iit-exp-equation"><a class="header" href="#iit-exp-equation">iit-exp-equation</a></h2>
+<p>A JEE Advanced exponential equation solved by REWRITE, then LOOK: 4^x+6^{x^2}=5^x+5^{x^2}
+regroups to 6^{x^2}-5^{x^2}=5^x-4^x; the two sides trace in, meet only at x=0 and x=1, and
+the Mean Value Theorem reveals the hidden parabola x^2-x whose sign IS the equation’s sign
+— so it is secretly x^2=x. Typeset captions; the problem lands centre-stage, then docks.</p>
+<pre><code class="language-manic">// ============================================================================
+//  iit-exp-equation.manic — a JEE Advanced exponential equation, solved with
+//  DEPTH and MOTION (curves trace in; the hidden skeleton is revealed).
+//     4^x + 6^{x^2} = 5^x + 5^{x^2}   -&gt;   6^{x^2}-5^{x^2} = 5^x-4^x
+//  RIGOUR (MVT, math.stackexchange/2079546):
+//    6^{x^2}-5^{x^2} = x^2 * xi^{x^2-1}  (xi in (5,6)),
+//    5^x-4^x         = x   * eta^{x-1}   (eta in (4,5)),
+//    so  LHS-RHS = x^2*xi^{x^2-1} - x*eta^{x-1},  and bounding by the middle
+//    base 5 gives  sign(LHS-RHS) = sign(x^2 - x).  Hence LHS=RHS &lt;=&gt; x^2=x.
+//  Captions are LaTeX equations (typeset math, not ASCII), shown one at a time.
+// ============================================================================
+
+title("JEE — 4^x + 6^{x^2} = 5^x + 5^{x^2}");
+canvas(1280, 720);
+template("black");
+
+text(brow, (640, 40), "JEE ADVANCED  ·  HOW MANY REAL SOLUTIONS?");
+color(brow, dim); size(brow, 18); bold(brow); hidden(brow);
+
+equation(eq0, (640, 360), `4^{x}+6^{x^{2}}=5^{x}+5^{x^{2}}`, 40);   // lands CENTRE, big
+equation(eq1, (640, 150), `6^{x^{2}}-5^{x^{2}}\;=\;5^{x}-4^{x}`, 26);
+color(eq0, fg); color(eq1, gold); hidden(eq0); hidden(eq1);
+
+// ---- captions: typeset LaTeX (one shown at a time), bottom of frame ----
+equation(c1, (640, 690), `\text{Bases }4,5,6\ \text{·  exponents }x,\ x^{2}\ \text{·  how many real roots?}`, 22);
+equation(c2, (640, 690), `\text{Regroup: put the }x^{2}\text{-powers together, the }x\text{-powers together}`, 22);
+equation(c3, (640, 690), `L(x)=6^{x^{2}}-5^{x^{2}}\ \ge\ 0\quad(\text{even U, zero only at }x=0)`, 22);
+equation(c4, (640, 690), `R(x)=5^{x}-4^{x}\quad\text{takes the sign of }x`, 22);
+equation(c5, (640, 690), `\text{They meet at }x=0\text{ and }x=1:\quad 4+6=10=5+5`, 22);
+equation(c6, (640, 690), `\text{MVT: } L-R=x^{2}\xi^{\,x^{2}-1}-x\,\eta^{\,x-1},\quad \operatorname{sign}=\operatorname{sign}(x^{2}-x)`, 21);
+equation(c7, (640, 690), `\text{A parabola hides inside:}\quad x^{2}-x=x(x-1)`, 22);
+equation(c8, (640, 690), `x^{2}-x&lt;0\text{ on }(0,1)\Rightarrow L&lt;R;\quad\text{outside, } L&gt;R`, 22);
+equation(c9, (640, 690), `\text{Secretly } x^{2}=x\ \Rightarrow\ \text{two roots, no more}`, 22);
+color(c1,dim); color(c2,dim); color(c3,dim); color(c4,dim); color(c5,dim);
+color(c6,dim); color(c7,dim); color(c8,dim); color(c9,dim);
+hidden(c1); hidden(c2); hidden(c3); hidden(c4); hidden(c5);
+hidden(c6); hidden(c7); hidden(c8); hidden(c9);
+
+// ---- axes: math origin at pixel (455,452); 270 px/x-unit, 100 px/y-unit ----
+plane(pl, (455, 452), 380, 228, 100);
+hidden(pl.grid);
+untraced(pl.x); untraced(pl.y);
+
+// the two sides of the rewritten equation, and the HIDDEN skeleton x^2 - x
+plot(Lc, (455, 452), 270, 100, "6^(x*x) - 5^(x*x)", 1.35);
+plot(Rc, (455, 452), 270, 100, "5^x - 4^x",        1.35);
+plot(Pc, (455, 452), 270, 100, "x*x - x",          1.35);
+color(Lc, gold); color(Rc, cyan); color(Pc, magenta);
+stroke(Lc, 2.6); stroke(Rc, 2.6); stroke(Pc, 2.6);
+untraced(Lc); untraced(Rc); untraced(Pc);      // start un-drawn; draw() traces them
+
+// the negative dip of the skeleton on (0,1) — swept open for effect
+area(dip, Pc, 0, 0); color(dip, magenta); hidden(dip);
+
+// a guide at x=1 tying the (1,1) crossing down to the parabola's root at (1,0)
+line(g1, (725, 250), (725, 512)); color(g1, dim); stroke(g1, 1.4); untraced(g1);
+
+// labels + ticks
+equation(Llab, (210, 246), `6^{x^{2}}-5^{x^{2}}`, 19); color(Llab, gold);    hidden(Llab);
+equation(Rlab, (760, 300), `5^{x}-4^{x}`,        19); color(Rlab, cyan);    hidden(Rlab);
+equation(Plab, (748, 505), `x^{2}-x`,            19); color(Plab, magenta); hidden(Plab);
+text(tx1, (725, 474), "1"); color(tx1, dim); size(tx1, 18); hidden(tx1);
+text(ty1, (435, 350), "1"); color(ty1, dim); size(ty1, 18); hidden(ty1);
+
+// intersections: math (0,0)-&gt;px(455,452); (1,1)-&gt;px(725,352)
+point(P0, (455, 452), "x = 0"); color(P0, lime);   hidden(P0);
+point(P1, (725, 352), "x = 1"); color(P1, orange); hidden(P1);
+
+equation(ans, (1048, 300), `\boxed{\,x=0\ \ \text{or}\ \ x=1\,}`, 28);
+color(ans, lime); hidden(ans);
+
+// ============================ the lesson ====================================
+
+step("the problem — front and centre") {
+  show(eq0, 0.6);
+  show(c1, 0.4);
+}
+wait(1.6);
+
+step("dock it to the top") {
+  show(brow, 0.4);
+  par { move(eq0, (640, 96), 0.9, smooth); scale(eq0, 0.78, 0.9); }
+}
+wait(0.3);
+
+step("one rewrite") {
+  par { fade(c1, 0.25); show(c2, 0.3); }
+  show(eq1, 0.6);
+}
+wait(1.5);
+
+step("axes") {
+  par { draw(pl.x, 0.5); draw(pl.y, 0.5); }
+  show(tx1, 0.3); show(ty1, 0.3);
+}
+wait(0.3);
+
+step("trace the left side") {
+  par { fade(c2, 0.25); show(c3, 0.3); }
+  draw(Lc, 1.2);
+  show(Llab, 0.4);
+}
+wait(1.5);
+
+step("trace the right side") {
+  par { fade(c3, 0.25); show(c4, 0.3); }
+  draw(Rc, 1.2);
+  show(Rlab, 0.4);
+}
+wait(1.5);
+
+step("two crossings") {
+  par { fade(c4, 0.25); show(c5, 0.3); }
+  show(P0, 0.4); show(P1, 0.4);
+  pulse(P0, 0.5); pulse(P1, 0.5);
+}
+wait(1.6);
+
+step("the rigorous why (MVT)") {
+  par { fade(c5, 0.25); show(c6, 0.3); }
+}
+wait(2.0);
+
+step("the hidden skeleton") {
+  par { fade(c6, 0.25); show(c7, 0.3); }
+  draw(Pc, 1.2);
+  show(Plab, 0.4);
+  draw(g1, 0.6);
+}
+wait(1.6);
+
+step("sign follows the parabola") {
+  par { fade(c7, 0.25); show(c8, 0.3); }
+  show(dip, 0.2);
+  to(dip, x, 1, 1.5);
+}
+wait(1.7);
+
+step("the answer") {
+  par { fade(c8, 0.25); show(c9, 0.3); }
+  show(ans, 0.6);
+  pulse(ans, 0.6);
+}
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xubzv-ij1kY" title="This Exponential Equation Is Secretly x²=x — JEE Advanced — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="iit-exp-equation-short"><a class="header" href="#iit-exp-equation-short">iit-exp-equation-short</a></h2>
+<p>The 9:16 Short cut of the JEE exponential-equation proof: same rewrite -&gt; trace -&gt; MVT -&gt;
+hidden x^2-x skeleton -&gt; answer, laid out vertically with a CTA endcard.</p>
+<pre><code class="language-manic">// ============================================================================
+//  iit-exp-equation-short.manic — the 9:16 Short cut, with DEPTH + MOTION.
+//  Same proof as the landscape iit-exp-equation.manic (MVT + the hidden x^2-x
+//  skeleton, math.stackexchange/2079546), re-laid out for vertical:
+//     4^x + 6^{x^2} = 5^x + 5^{x^2}  -&gt;  6^{x^2}-5^{x^2} = 5^x-4^x
+//  Curves TRACE in; MVT =&gt; sign(L-R) = sign(x^2-x); the parabola x(x-1) hides
+//  inside, roots 0 and 1 only. Captions are typeset LaTeX equations.
+// ============================================================================
+
+title("JEE exponential equation — how many real solutions?");
+canvas(1080, 1920);
+template("black");
+
+watermark(mark, (w*0.16, h*0.03), "Made With Manic");
+
+text(brow, (540, 96), "JEE ADVANCED  ·  HOW MANY REAL SOLUTIONS?");
+color(brow, dim); size(brow, 26); bold(brow); hidden(brow);
+
+equation(eq0, (540, 900), `4^{x}+6^{x^{2}}=5^{x}+5^{x^{2}}`, 52);   // lands CENTRE, big
+equation(eq1, (540, 320), `6^{x^{2}}-5^{x^{2}}\;=\;5^{x}-4^{x}`, 34);
+color(eq0, fg); color(eq1, gold); hidden(eq0); hidden(eq1);
+
+// ---- captions: typeset LaTeX (one shown at a time), bottom of frame ----
+equation(c1, (540, 1690), `\text{Bases }4,5,6\ \text{·  exponents }x,\ x^{2}`, 24);
+equation(c2, (540, 1690), `\text{Regroup: }x^{2}\text{-powers vs }x\text{-powers}`, 24);
+equation(c3, (540, 1690), `L(x)=6^{x^{2}}-5^{x^{2}}\ \ge\ 0\ \ (\text{zero at }x=0)`, 24);
+equation(c4, (540, 1690), `R(x)=5^{x}-4^{x}\ \ \text{has the sign of }x`, 24);
+equation(c5, (540, 1690), `\text{Meet at }x=0,\,x=1:\ \ 4+6=10=5+5`, 24);
+equation(c6, (540, 1690), `\text{MVT}\Rightarrow\operatorname{sign}(L-R)=\operatorname{sign}(x^{2}-x)`, 24);
+equation(c7, (540, 1690), `\text{Hidden skeleton:}\ \ x^{2}-x=x(x-1)`, 24);
+equation(c8, (540, 1690), `x^{2}-x&lt;0\text{ on }(0,1)\ \Rightarrow\ L&lt;R`, 24);
+equation(c9, (540, 1690), `\text{Secretly } x^{2}=x\ \Rightarrow\ \text{two roots}`, 24);
+color(c1,dim); color(c2,dim); color(c3,dim); color(c4,dim); color(c5,dim);
+color(c6,dim); color(c7,dim); color(c8,dim); color(c9,dim);
+hidden(c1); hidden(c2); hidden(c3); hidden(c4); hidden(c5);
+hidden(c6); hidden(c7); hidden(c8); hidden(c9);
+
+text(cta, (540, 1806), "Try it → 8gwifi.org/manic"); color(cta, cyan); size(cta, 30); bold(cta); hidden(cta);
+
+// ---- tall plot: math origin px(500,1120); 300 px/x-unit, 180 px/y-unit ----
+plane(pl, (500, 1120), 410, 350, 180);
+hidden(pl.grid);
+untraced(pl.x); untraced(pl.y);
+
+plot(Lc, (500, 1120), 300, 180, "6^(x*x) - 5^(x*x)", 1.18);
+plot(Rc, (500, 1120), 300, 180, "5^x - 4^x",        1.18);
+plot(Pc, (500, 1120), 300, 180, "x*x - x",          1.18);
+color(Lc, gold); color(Rc, cyan); color(Pc, magenta);
+stroke(Lc, 3.2); stroke(Rc, 3.2); stroke(Pc, 3.0);
+untraced(Lc); untraced(Rc); untraced(Pc);      // trace in with draw()
+
+// the parabola's negative dip on (0,1) — swept open for effect
+area(dip, Pc, 0, 0); color(dip, magenta); hidden(dip);
+
+// guide at x=1 tying the (1,1) crossing down to the parabola's root at (1,0)
+line(g1, (800, 900), (800, 1170)); color(g1, dim); stroke(g1, 1.6); untraced(g1);
+
+equation(Llab, (232, 760),  `6^{x^{2}}-5^{x^{2}}`, 26); color(Llab, gold);    hidden(Llab);
+equation(Rlab, (836, 1000), `5^{x}-4^{x}`,        26); color(Rlab, cyan);    hidden(Rlab);
+equation(Plab, (700, 1214), `x^{2}-x`,            26); color(Plab, magenta); hidden(Plab);
+text(tx1, (800, 1092), "1"); color(tx1, dim); size(tx1, 22); hidden(tx1);
+text(ty1, (462, 936),  "1"); color(ty1, dim); size(ty1, 22); hidden(ty1);
+
+// intersections: math (0,0)-&gt;px(500,1120); (1,1)-&gt;px(800,940)
+point(P0, (500, 1120), "x = 0"); color(P0, lime);   hidden(P0);
+point(P1, (800, 940),  "x = 1"); color(P1, orange); hidden(P1);
+
+equation(ans, (540, 1560), `\boxed{\,x=0\ \ \text{or}\ \ x=1\,}`, 40);
+color(ans, lime); hidden(ans);
+
+// ============================ the Short ====================================
+
+step("the problem — front and centre") {
+  show(eq0, 0.6);
+  show(c1, 0.4);
+}
+wait(1.6);
+
+step("dock it to the top") {
+  show(brow, 0.4);
+  par { move(eq0, (540, 214), 0.9, smooth); scale(eq0, 0.80, 0.9); }
+}
+wait(0.3);
+
+step("one rewrite") {
+  par { fade(c1, 0.25); show(c2, 0.3); }
+  show(eq1, 0.6);
+}
+wait(1.5);
+
+step("axes") {
+  par { draw(pl.x, 0.5); draw(pl.y, 0.5); }
+  show(tx1, 0.3); show(ty1, 0.3);
+}
+wait(0.3);
+
+step("trace the left side") {
+  par { fade(c2, 0.25); show(c3, 0.3); }
+  draw(Lc, 1.1);
+  show(Llab, 0.4);
+}
+wait(1.5);
+
+step("trace the right side") {
+  par { fade(c3, 0.25); show(c4, 0.3); }
+  draw(Rc, 1.1);
+  show(Rlab, 0.4);
+}
+wait(1.5);
+
+step("two crossings") {
+  par { fade(c4, 0.25); show(c5, 0.3); }
+  show(P0, 0.4); show(P1, 0.4);
+  pulse(P0, 0.5); pulse(P1, 0.5);
+}
+wait(1.6);
+
+step("the rigorous why") {
+  par { fade(c5, 0.25); show(c6, 0.3); }
+}
+wait(2.0);
+
+step("the hidden skeleton") {
+  par { fade(c6, 0.25); show(c7, 0.3); }
+  draw(Pc, 1.1);
+  show(Plab, 0.4);
+  draw(g1, 0.6);
+}
+wait(1.6);
+
+step("sign follows the parabola") {
+  par { fade(c7, 0.25); show(c8, 0.3); }
+  show(dip, 0.2);
+  to(dip, x, 1, 1.4);
+}
+wait(1.6);
+
+step("answer") {
+  par { fade(c8, 0.25); show(c9, 0.3); }
+  show(ans, 0.6);
+  show(cta, 0.6);
+  pulse(ans, 0.6);
+}
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/yCA35TVCazg" title="A Hard Exponential Equation, Secretly x²=x — JEE — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="linear-algebra--tables"><a class="header" href="#linear-algebra--tables">Linear algebra &amp; tables</a></h1>
@@ -24699,6 +25134,87 @@ wait(25);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/GwXK2aw_Q9k" title="Jellyfish in a Shader Aquarium — a Particle Cloud Meets a Per-Pixel Ocean — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="cloud-siphonophore"><a class="header" href="#cloud-siphonophore">cloud-siphonophore</a></h2>
+<p>Another @yuruyurau art-tweet in ONE <code>cloud</code>, reimagined as a bioluminescent deep-sea drifter:
+12,000 points trace a morphing bell + long feathered tail (polar radius q, angle c, with a
+<code>d^sin(2d-t/3)</code> body-warp) that swims and reconfigures over time. Re-lit in the abyss — additive
+<code>glow</code> + <code>bloom</code> make it luminous, the hue drifts cyan bell → violet tail, and faint marine snow
+sifts down past it. Pure in (i, t), so it scrubs; the p5 original can’t.</p>
+<pre><code class="language-manic">// cloud-siphonophore — another @yuruyurau creature in ONE `cloud`, reimagined as a
+// bioluminescent deep-sea drifter. The reference is a tweet-sized golf:
+//   k = 5cos(i/14)cos(y/30),  e = y/8-13,  d = (k²+e²)/59 + 6,
+//   q = 90 - 5sin(atan2(k,e)·e) + k(3+sin(d²-2t)),  c = d/2 - t/18,
+//   point( q·sin c , (q + d·d^sin(2d-t/3))·cos c )
+// A morphing bell trailing a long feathered tail (10,000 points, pure in i,t). Here it
+// glows in the abyss: additive `glow` + `bloom` make it luminous, the hue drifts along
+// the body (cyan bell → violet tail), and faint marine snow sifts down past it.
+//
+//   manic examples/cloud-siphonophore.manic
+title("Siphonophore — a yuruyurau creature in the abyss");
+canvas("9:16");
+template("black");
+bloom(0.42, 0.5, 34);
+
+// ---- the abyss: a near-black depth gradient, faint cold light from above ----
+shader(abyss) {
+  let y = v;
+  let depth = smoothstep(0.0, 1.0, y);
+  let hue = mix(206, 244, depth);
+  let val = mix(0.05, 0.006, depth) + 0.02 * (1.0 - smoothstep(0.0, 0.5, y));
+  let sat = 0.8;
+}
+z(abyss, -10);
+
+// ---- the creature — the yuruyurau golf, re-lit ----
+cloud(crea, 12000, #ffffff, 0.30) {
+  let yy = i / 43.0;
+  let k = 5.0 * cos(i / 14.0) * cos(yy / 30.0);
+  let e = yy / 8.0 - 13.0;
+  let d = (k*k + e*e) / 59.0 + 6.0;
+  let T = t * 3.0;
+  let q = 90.0 - 5.0*sin(atan2(k, e) * e) + k*(3.0 + sin(d*d - T*2.0));
+  let c = d/2.0 - T/18.0;
+  let px = q * sin(c);
+  let py = (q + d * d^sin(d*2.0 - T/3.0)) * cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 3.5 * grow;
+  let y = 960 + py * 3.5 * grow;
+  // bioluminescence: cyan bell (small d) → violet tail (large d), shimmering
+  let hue = mod(184.0 + d * 15.0 + 26.0*sin(yy*0.08 + t*0.4), 360);
+  let sat = 0.85;
+  let val = clamp(0.55 + 0.45*sin(d*d - T*2.0), 0.22, 1.0);
+  let r = 1.35;
+}
+glow(crea, 1);
+
+// ---- marine snow — a second tiny cloud sifting down past the creature ----
+cloud(snow, 150, #dfeeff, 0.4) {
+  let sp = 0.02 + 0.03 * rand2(i, 1.3);
+  let ph = rand2(i, 2.7);
+  let prog = fract(ph + t * sp);
+  let x = 1080 * rand2(i, 4.1) + 16 * sin(prog * tau + i);
+  let y = 1920 * prog;
+  let r = 1.4 + 3.0 * rand2(i, 5.5);
+  let hue = 200;
+  let alpha = 0.4 * sin(prog * pi);
+}
+
+// ---- annotations ----
+caption(head, "Siphonophore in the abyss", (540, 140), 32); hidden(head);
+caption(sub, "a 12,000-point cloud, glowing", (540, 206), 22); hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q + d\,d^{\sin(2d-t/3)})\cos c)`, 26); hidden(eq);
+caption(lab, "one @yuruyurau golf · additive glow · bloom", (540, 1786), 19); hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(24);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/jQKdResxvh8" title="A Glowing Deep-Sea Siphonophore from One Formula — a @yuruyurau Golf in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="cloud-plumes"><a class="header" href="#cloud-plumes">cloud-plumes</a></h2>
 <p>Another @yuruyurau art-tweet in ONE <code>cloud</code>: 30,000 points in two mirrored layers (<code>mod(i,2)</code>) drift
 into flowing frond/plume forms and morph over time — a polar plot (radius q, angle c), hue-gradient
@@ -31039,6 +31555,269 @@ wait(1.5);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="3d-scenes"><a class="header" href="#3d-scenes">3D scenes</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video). See the <a href="#going-3d">Going 3D</a> chapter for the words used here. <code>three-d-v2-lab</code> uses the bundled geometry-only asset <code>asset:models/manic-pyramid.obj</code>; production packages install it automatically, or you can replace its <code>model3</code> call with a built-in solid.</p>
+<h2 id="engine-test-14-laplace"><a class="header" href="#engine-test-14-laplace">engine-test-14-laplace</a></h2>
+<p>A 3Blue1Brown-style <strong>Laplace Transform</strong> board, showcasing the domain-colouring toolkit:
+the <code>|F(s)|</code> pole surface is a <code>domainsurface</code> (height = magnitude, colour = phase) rendered
+INSIDE the middle panel via the new <code>camera3</code> viewport, flanked by the <code>Re[e^{st}]</code> waveform,
+the s-plane vector, and the <code>e^{st}</code> spiral — three graphs kept in sync by one complex-frequency
+parameter (<code>bind</code> on a reactive <code>param</code> curve). Colour-coded formulas, a directional <code>brace</code>,
+a <code>colorwheel</code> legend, an <code>svg()</code> pi-creature, and a <code>domaincolor</code>-family palette throughout.</p>
+<pre><code class="language-manic">// ============================================================================
+//  engine-test-14-laplace.manic — reproducing the 3Blue1Brown "Laplace
+//  Transform" clip (engine-test-14-1.mp4) as a two-scene story:
+//   SCENE 1  the Laplace board — a brace over the left rectangle, whose THREE
+//            graphs (Re[e^{st}] waveform · s-plane vector to s · e^{st} spiral)
+//            stay synced to one complex-frequency parameter s; the |F(s)| pole
+//            surface (domainsurface) in the middle camera3 VIEWPORT with its
+//            cos(t)e^{-st} insets; the s-plane contour + colorwheel on the right.
+//   TRANSITION  the board fades and Scene 2 EMERGES in the left rectangle with
+//            MOTION (continuity, not a hard cut — motion-graphics.md): e^{pi i}=-1
+//            surfaces and the red pi RISES up into the unit circle as the cue.
+//   SCENE 2  Euler's identity — e^t + axes, the unit circle with pi, e^{pi i}=-1,
+//            and i^2 = -1.
+//  (Graphs sized to fit their panels — clip doesn't compose with a camera3
+//  viewport panel; see CAPABILITIES.)
+// ============================================================================
+
+title("Laplace Transform — engine test 14");
+canvas(1280, 720);
+template("black");
+
+// ---- masthead ----
+svg(creature, (108, 108), "asset:svg/pi-creature.svg", 120);
+equation(ttl, (820, 74), `\text{Laplace Transform}`, 44); color(ttl, fg);
+equation(fwd, (430, 178),
+  `F(\textcolor{gold}{s})=\int_{0}^{\infty} f(\textcolor{cyan}{t})\,e^{-\textcolor{gold}{s}\textcolor{cyan}{t}}\,dt`, 26);
+equation(inv, (930, 178),
+  `f(\textcolor{cyan}{t})=\tfrac{1}{2\pi i}\int_{a-i\infty}^{a+i\infty} F(\textcolor{gold}{s})\,e^{\textcolor{gold}{s}\textcolor{cyan}{t}}\,d\textcolor{gold}{s}`, 21);
+
+// ---- three bordered panels ----
+rect(pL, (222, 500), 372, 320); outlined(pL); outline(pL, dim);
+rect(pM, (640, 500), 372, 320); outlined(pM); outline(pM, dim);
+rect(pR, (1058, 500), 372, 320); outlined(pR); outline(pR, dim);
+
+// a brace grouping the LEFT rectangle (the signal analysis of f(t))
+brace(br, (44, 324), (400, 324), "down"); color(br, dim);
+
+// ---- LEFT panel: three graphs, all driven by the complex frequency s = -0.1 + i·(p) ----
+parameter(sfreq, (222, 648), -1.8, -1.8, -0.3, "Im s", 1);
+// 1) the damped Re[e^{st}] waveform
+plot(wave, (50, 412), 11, 26, "exp(-0.1*x)*cos(p*x)", (0, 30));
+color(wave, mint); stroke(wave, 2.4);
+bind(sfreq, wave, formula, "exp(-0.1*x)*cos(p*x)");
+equation(rel, (95, 372), `\mathrm{Re}\,[e^{st}]`, 15); color(rel, mint);
+// 2) the s-plane, with a vector to the point s = -0.1 - 0.8i (its tip tracks s)
+complexplane(spA, (132, 578), 62, 62, 30);
+arrow(svec, (132, 578), (129, 632)); color(svec, gold);
+// 3) the e^{st} spiral (a reactive param curve)
+param(spir, (318, 578), 22, 22, "exp(-0.1*t)*cos(p*t)", "exp(-0.1*t)*sin(p*t)", (0, 26));
+color(spir, cyan); stroke(spir, 2.0);
+bind(sfreq, spir, formula, "exp(-0.1*t)*cos(p*t)", "exp(-0.1*t)*sin(p*t)");
+equation(est, (360, 520), `e^{st}`, 16); color(est, gold);
+
+// ---- MIDDLE panel: the |F(s)| modulus surface, domain-coloured, in a viewport ----
+camera3((7.2, -6.4, 5.0), (0.15, 0.0, 0.9), 40, perspective, (640, 500), 372, 320);
+domainsurface(surf, "1/(z*z+1)", (-2.5, 2.5), (-2.5, 2.5), 64, 0.26);
+equation(fs, (592, 640), `|F(\textcolor{gold}{s})|`, 16); color(fs, dim);
+// insets over the panel: the integrand cos(t)·e^{-st} (a rose) and its transform
+equation(rlab, (540, 392), `\cos(t)\,e^{-st}`, 14); color(rlab, magenta);
+param(rose, (540, 430), 20, 20, "cos(t)*exp(-0.1*t)*cos(p*t)", "-cos(t)*exp(-0.1*t)*sin(p*t)", (0, 18));
+color(rose, magenta); stroke(rose, 1.6);
+bind(sfreq, rose, formula, "cos(t)*exp(-0.1*t)*cos(p*t)", "-cos(t)*exp(-0.1*t)*sin(p*t)");
+equation(ilab, (738, 392), `\int_{0}^{\infty}\!\cos(t)\,e^{-st}dt`, 12); color(ilab, gold);
+param(iarc, (738, 430), 26, 26, "t/(t*t+1)", "0-1/(t*t+1)", (0.2, 3.2));
+color(iarc, gold); stroke(iarc, 1.6);
+
+// ---- RIGHT panel: the s-plane contour + the colour-wheel legend ----
+complexplane(cpl, (1058, 500), 120, 120, 40);
+plot(contour, (1058, 500), 40, 22, "2*sin(x*2.2)/(1+x*x)", (-2.5, 2.5));
+color(contour, coral); stroke(contour, 2.2);
+colorwheel(key, (1205, 648), 30);
+equation(keyl, (1152, 610), `\arg`, 15); color(keyl, dim);
+
+// ---- Scene 2 (Euler's identity) — hidden; revealed as the board fades ----
+// a bordered LEFT rectangle framing the identity, mirroring the grid's frame so
+// the two panels read as a balanced pair (reference img_22/img_23).
+rect(eboard, (224, 400), 420, 400); outlined(eboard); outline(eboard, dim); tag(eboard, euler);
+axes(eax, (95, 487), 66, 62); tag(eax, euler);
+plot(ecurve, (95, 487), 18, 16, "exp(x)", (-4, 2.2)); color(ecurve, cyan); stroke(ecurve, 2.2); tag(ecurve, euler);
+// the derivative demo: a white tangent that SLIDES along e^t (its slope = its height),
+// with the d/dt e^t=e^t caption riding along — matching the reference's white styling.
+tangent(etan, ecurve, 0.4, 96); color(etan, fg); stroke(etan, 2.5); tag(etan, euler);
+equation(edl, (150, 455), `\tfrac{d}{dt}e^{t}=e^{t}`, 14); color(edl, fg); tag(edl, euler);
+// the slope triangle under the tangent: run "1" + red rise = e^t, so slope = height.
+// Parts share tag `etri`, so to(etri, x, ...) slides them WITH the tangent.
+slopetri(etri, ecurve, 0.4, 1); hidden(etri);
+equation(erise, (176, 420), `e^{t}`, 13); color(erise, red); tag(erise, euler);
+param(ecirc, (250, 400), 34, 34, "cos(t)", "sin(t)", (0, 6.2832)); color(ecirc, dim); stroke(ecirc, 2.0); tag(ecirc, euler);
+param(earc, (250, 400), 34, 34, "cos(t)", "sin(t)", (0, 3.14159)); color(earc, red); stroke(earc, 2.4); tag(earc, euler);
+equation(epi, (250, 424), `\pi`, 16); color(epi, red); tag(epi, euler); // starts low; rises in the transition
+line(erad, (250, 400), (284, 400)); color(erad, dim); tag(erad, euler);
+// 3b1b colour convention: i is always cyan, π is always red (same reds/cyans as the
+// circle's π-arc and this i), so the eye tracks each symbol across the identities.
+equation(eisq, (352, 396), `\textcolor{cyan}{i}^{2}=-1`, 20); tag(eisq, euler);
+equation(eeuler, (214, 540), `e^{\textcolor{red}{\pi}\textcolor{cyan}{i}}=-1`, 24); tag(eeuler, euler);
+hidden(euler);
+
+// ---- Scene 3 (00:05–00:17): the SHM phase grid — a 5×5 sweep of the mass-spring
+//      oscillator over initial position × initial velocity. One generic `sweep`
+//      builtin (physics kit) lays out the bare cells + headers; `run` animates all
+//      25 in sync. Hidden until Euler settles, then swept in with the teal arrow. ----
+sweep(phz, spring, (895, 400), 150, 80, (-2, 2), (2, -2), 5, 5);
+hidden(phz);
+// a bold teal CURVED arrow arcing from the board up-and-over into the grid; drawn
+// on (untraced → draw) so the arc sweeps in and the eye rides it into Scene 3.
+arrow(swp, (352, 228), (600, 206), -88); color(swp, mint); stroke(swp, 6); untraced(swp);
+
+// ---- Scene 4 (00:17–00:23): the exponential e^{st} with the REAL rate s swept —
+//      decay (s&lt;0) → flat (s=0) → growth (s&gt;0). One `plot` bound to a `parameter`;
+//      the title's live gold number is a `counter` bound to the same s. Hidden. ----
+axes(gax, (780, 400), 270, 200); color(gax, dim); tag(gax, graph);
+plot(gcurve, (780, 400), 60, 38, "exp(p*x)", (-3.6, 3.8)); color(gcurve, mint); stroke(gcurve, 3); tag(gcurve, graph);
+equation(gyl, (816, 206), `e^{st}`, 15); color(gyl, dim); tag(gyl, graph);
+equation(gxl, (1058, 412), `t`, 18); color(gxl, dim); tag(gxl, graph);
+parameter(gs, (600, 690), -0.16, -0.95, 0.5, "", 2);   // slider hidden — it only drives
+bind(gs, gcurve, formula, "exp(p*x)");
+// live colour-coded title  e^{ [s] t }  — e white · s gold (a counter) · t cyan
+equation(gte, (248, 112), `e`, 56); color(gte, fg); tag(gte, graph);
+counter(gsc, (300, 74), -0.16, 2, "", ""); color(gsc, gold); size(gsc, 36); tag(gsc, graph);
+equation(gtt, (400, 76), `t`, 34); color(gtt, cyan); tag(gtt, graph);
+bind(gs, gsc, value, "p");
+// clean single-equation symbolic title — crisp LaTeX superscript (used once s is symbolic)
+equation(esym, (250, 98), `e^{\textcolor{gold}{s}\textcolor{cyan}{t}}`, 40); hidden(esym);
+hidden(graph); hidden(gs.widget);
+
+// ---- Scene 5 (00:24–00:37): s lives on a NUMBER LINE — slide it, the graph reshapes.
+//      The graph sits on the right; a labelled real axis for s appears on the left with a
+//      gold marker + "s = value" readout (a counter bound to the same s). ----
+numberline(sl, (240, 400), 155, -2, 2, 1);                       // labelled real axis −2..2
+rect(slbox, (240, 380), 380, 140); outlined(slbox); outline(slbox, gold);
+counter(sread, (240, 332), 0.5, 1, "s = ", ""); color(sread, gold); size(sread, 26);
+bind(gs, sread, value, "p");
+dot(smk, (279, 400), 8); color(smk, gold);                       // marker rides s: x = 240 + 77.5·s
+hidden(sl); hidden(slbox); hidden(sread); hidden(smk);
+
+// ---- Scene 6 (00:37–00:53): s is a POINT IN THE COMPLEX PLANE, and e^{st} SPIRALS.
+//      CONTINUITY: the LEFT plane sits exactly on the number line (same centre + unit 77.5),
+//      so the real axis persists and the s-marker LIFTS off ℝ into ℂ. RIGHT traces e^{st} as
+//      t grows — a spiral (rotation from Im s, decay from Re s). The payoff of the story. ----
+complexplane(lp, (240, 400), 176, 158, 77.5);                    // real axis = the number line
+equation(lph, (240, 214), `\text{Complex Plane}`, 22); color(lph, fg);
+equation(sval, (352, 316), `s = -0.2 + 1.0i`, 17); color(sval, gold);   // smk lifts here → its label
+complexplane(rp, (930, 400), 176, 158, 77.5);
+param(spir6, (930, 400), 77.5, 77.5, "exp(-0.2*t)*cos(t)", "exp(-0.2*t)*sin(t)", (0, 15)); color(spir6, lime); stroke(spir6, 2.5); untraced(spir6);
+equation(whyt, (640, 72), `\text{Why}`, 48); color(whyt, fg); hidden(whyt);
+equation(ctitle, (640, 72), `\text{Wait, what does this even mean?}`, 30); color(ctitle, fg);
+svg(pc1, (300, 650), "asset:svg/pi-creature.svg", 84);
+svg(pc2, (470, 650), "asset:svg/pi-creature.svg", 84);
+svg(pc3, (820, 650), "asset:svg/pi-creature.svg", 84);
+svg(pc4, (990, 650), "asset:svg/pi-creature.svg", 84);
+hidden(lp); hidden(rp); hidden(lph); hidden(sval); hidden(ctitle);
+hidden(pc1); hidden(pc2); hidden(pc3); hidden(pc4);
+
+// ---- SCENE 1 motion: sweep s; the three left-panel graphs reshape together ----
+wait(0.6);
+par {
+  to(sfreq, value, -0.3, 4.5, smooth);
+  grow(svec, (129, 587), 4.5, smooth);
+}
+wait(0.5);
+
+// ---- TRANSITION: the Laplace board fades, the panel becomes Euler's identity ----
+par {
+  fade(ttl, 0.7); fade(fwd, 0.7); fade(inv, 0.7); fade(br, 0.7); fade(creature, 0.7);
+  fade(pL, 0.7);  // the Scene 1 left panel — replaced by the framed Euler board
+  fade(pM, 0.7); fade(surf, 0.7); fade(fs, 0.7); fade(rlab, 0.7); fade(rose, 0.7); fade(ilab, 0.7); fade(iarc, 0.7);
+  fade(pR, 0.7); fade(cpl, 0.7); fade(contour, 0.7); fade(key, 0.7); fade(keyl, 0.7);
+  fade(wave, 0.7); fade(spA, 0.7); fade(svec, 0.7); fade(spir, 0.7); fade(rel, 0.7); fade(est, 0.7);
+}
+hidden(sfreq.widget);
+// EMERGENCE (continuity — motion, not a hard cut): e^{πi}=-1 surfaces and the
+// red π RISES up into the unit circle, leading the eye into the next scene.
+show(eeuler, 0.7);
+show(epi, 0.5);
+par {
+  move(epi, (250, 354), 1.1, smooth);   // π moves up to the circle top — the emergence cue
+  show(ecirc, 0.9);
+  show(earc, 1.0);
+}
+wait(0.3);
+show(eboard, 0.6);                    // reveal the left panel's frame (aligned with the grid)
+par { show(eax, 0.5); show(ecurve, 0.9); show(erad, 0.5); show(etan, 0.9); show(edl, 0.6); show(etri, 0.9); show(erise, 0.6); }
+attach(edl, etan, (58, -14));         // the d/dt e^t=e^t label RIDES the tangent as it slides
+attach(erise, etri.rise, (14, -20));  // the red e^t rise label rides the rise leg
+wait(0.4);
+show(eisq, 0.6);
+wait(1.0);
+
+// ---- SWEEP (00:05→00:17): the eye is carried from the identity into the grid ----
+// Continuity again (motion-graphics.md): a teal arrow SWEEPS from the board over to
+// the right, and the 5×5 of oscillators emerges under its tip — not a hard cut.
+draw(swp, 1.0, smooth);               // the teal arc sweeps board → grid, leading the eye
+wait(0.2);
+par {
+  show(phz.chrome, 0.5);
+  show(phz.headers, 0.6);
+}
+show(phz.cells, 0.9);                 // the phase grid surfaces under the arrow tip
+// the grid runs AND the left board keeps moving — the tangent slides along e^t
+par {
+  run(phz, 9);                        // all 25 oscillators run in sync
+  to(etan, x, 2.0, 8.5, smooth);      // the e^t tangent slides (the left "slider" moves too)
+  to(etri, x, 2.0, 8.5, smooth);      // ...and the slope triangle (run 1 + red rise e^t) slides with it
+}
+wait(0.4);
+
+// ---- SCENE 4 (00:17→00:23): cut to the exponential e^{st}, then sweep the rate s ----
+par { fade(euler, 0.6); fade(etri, 0.6); fade(phz, 0.6); fade(swp, 0.6); }
+par { show(gax, 0.6); show(gcurve, 0.9); show(gyl, 0.5); show(gxl, 0.5); show(gte, 0.6); show(gsc, 0.6); show(gtt, 0.6); }
+to(gs, value, -0.95, 2.4, smooth);    // deepen the decay (curve steepens down-right)
+to(gs, value, 0.5, 3.6, smooth);      // through s=0 (flat) into growth (curve turns up)
+wait(0.5);
+
+// ---- SCENE 5 (00:24→00:37): make s symbolic + give it a number line, then slide s ----
+// numeric title  e^{0.50 t}  →  a single crisp symbolic equation  e^{s t}
+par { fade(gte, 0.5); fade(gsc, 0.5); fade(gtt, 0.5); show(esym, 0.6); }
+// the s number line appears on the left (the graph already sits on the right)
+par { show(sl, 0.6); show(slbox, 0.6); show(sread, 0.6); show(smk, 0.6); }
+wait(0.6);
+// slide s along the line — the gold marker, the "s =" readout, and the graph all track it
+par { to(gs, value, -0.4, 2.2, smooth); move(smk, (209, 400), 2.2, smooth); }
+par { to(gs, value, -1.0, 2.0, smooth); move(smk, (163, 400), 2.0, smooth); }
+par { to(gs, value, -0.5, 2.0, smooth); move(smk, (201, 400), 2.0, smooth); }
+wait(0.4);
+// oscillate s between −0.5 and +0.5 a few times so the decay↔growth reshape reads clearly
+par { to(gs, value,  0.5, 1.3, smooth); move(smk, (279, 400), 1.3, smooth); }
+par { to(gs, value, -0.5, 1.3, smooth); move(smk, (201, 400), 1.3, smooth); }
+par { to(gs, value,  0.5, 1.3, smooth); move(smk, (279, 400), 1.3, smooth); }
+par { to(gs, value, -0.5, 1.3, smooth); move(smk, (201, 400), 1.3, smooth); }
+par { to(gs, value,  0.5, 1.3, smooth); move(smk, (279, 400), 1.3, smooth); }
+par { to(gs, value, -0.5, 1.3, smooth); move(smk, (201, 400), 1.3, smooth); }
+wait(0.6);
+
+// ---- SCENE 6 (00:37→00:53): the complex-plane payoff — with CONTINUITY, not a cut ----
+// "Why" — the dramatic pivot (00:43): the scene is about to change under this one word.
+show(whyt, 0.6);
+wait(0.5);
+// CONTINUITY (motion-graphics.md): the number line BECOMES the real axis of the complex plane
+// (same centre + unit), so the real axis persists while the imaginary dimension grows around it.
+par { fade(slbox, 0.6); fade(sread, 0.6); fade(graph, 0.6); }
+show(lp, 0.9);                        // the complex plane grows in — its real axis = the number line
+fade(sl, 0.7);                        // the bare number line hands its axis over to the plane
+show(lph, 0.5);
+move(smk, (224, 322), 1.4, smooth);   // the s-dot LIFTS off ℝ up into ℂ — one object, transformed
+show(sval, 0.6);
+// the e^{st} title TRAVELS from top-left to head the right plane, which grows + traces the spiral
+par { move(esym, (930, 210), 1.1, smooth); show(rp, 0.9); }
+draw(spir6, 4.5, smooth);             // e^{st} spirals: rotation from Im s × decay from Re s
+wait(0.3);
+par { fade(whyt, 0.5); show(ctitle, 0.7); }   // "Why" → "Wait, what does this even mean?"
+// the π-creatures pop up to watch (the 3b1b button)
+par { show(pc1, 0.5); show(pc2, 0.6); show(pc3, 0.6); show(pc4, 0.5); }
+wait(1.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/8a_BhF_-Svw" title="The Laplace Transform, Fully Animated — Pole Surface + Domain Colouring in manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="lorenz-attractor"><a class="header" href="#lorenz-attractor">lorenz-attractor</a></h2>
 <p>The classic strange attractor, drawn by <code>trajectory3</code> — a 3D ODE integrated with RK4 into a single
 stateful path (each point depends on every step before it, so it’s NOT a memoryless <code>cloud</code>),
@@ -32743,6 +33522,189 @@ step("create with Manic") {
 wait(1.4);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/whoTuQ4oJOk" title="Five Fourier Worlds, One Continuous Camera — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="definedmotion-fourier-gallery-v2"><a class="header" href="#definedmotion-fourier-gallery-v2">definedmotion-fourier-gallery-v2</a></h2>
+<p>The five-family gallery re-lit on the black full-colour screen: twenty coloured <code>ring3</code>
+orbits per family rotate and draw twenty world-space histories, then a long final overview
+holds on all five vivid signals at once—every strand readable against black.</p>
+<pre><code class="language-manic">// v2 of the Fourier gallery — on the BLACK template (the full-colour screen where
+// semantic colours pop), short 9:16 canvas. Same twenty-ring engine and five
+// relations, but the run is extended and the final "all five signals" overview
+// HOLDS longer so the viewer gets a full, unhurried view of the complete colour
+// composition — every strand vivid against black.
+
+title("Fourier Series — Rotations Become Waves");
+canvas("9:16");
+template("black");
+
+watermark(mark,(w*0.15,h*0.045),"Made With Manic");
+text(chapter,(cx,h*0.075),"FOURIER SERIES · FIVE RELATIONS");
+text(caption,(cx,h*0.85),"Twenty rotating circles. One continuously derived signal.");
+text(cta,(cx,h*0.925),"BUILD VISUAL EXPLANATIONS → 8gwifi.org/manic");
+size(chapter,18); color(chapter,dim); bold(chapter); hidden(chapter);
+size(caption,20); color(caption,dim); hidden(caption);
+size(cta,21); color(cta,cyan); bold(cta); hidden(cta);
+
+camera3((-31,-25,44),(1,-2,0),42,orthographic);
+
+def relation(k,zv) {
+  // The chain, its two local axes, and the waveform axes all share one layer.
+  collection3(series{k},(-3,5,zv),20,(0,0,0),11,0.055);
+  line3(sweep{k},(-3,5,zv),(10,5,zv));
+  hidden(sweep{k});
+  links3(arms{k},series{k},chain);
+  child3(tip{k},series{k},19,0.12);
+  arrow3(chainX{k},(-11,5,zv),(7,5,zv));
+  arrow3(chainY{k},(-3,-3,zv),(-3,13,zv));
+  arrow3(plotX{k},(-7,-12,zv),(12,-12,zv));
+  arrow3(plotY{k},(-7,-12,zv),(-7,-3,zv));
+  // A cinematic crop: the axes may continue beyond the frame, as in the
+  // reference, while the active rings and the growing history stay dominant.
+  point3(shot{k}A,(-7.5,-10,zv),0.01);
+  point3(shot{k}B,(8.5,10,zv),0.01);
+  tag(shot{k}A,shot{k}); tag(shot{k}B,shot{k});
+  hidden(shot{k}A); hidden(shot{k}B);
+
+  tag(series{k},layer{k}); tag(arms{k},layer{k}); tag(tip{k},layer{k});
+  tag(chainX{k},layer{k}); tag(chainY{k},layer{k});
+  tag(plotX{k},layer{k}); tag(plotY{k},layer{k});
+  tag(layer{k},stack);
+
+  for i in 0..20 {
+    ring3(orbit{k}_{i},series{k},i,72);
+    historyplot3(wave{k}_{i},series{k},i,y,(-7,-12,zv),(19,8.5));
+    thick(orbit{k}_{i},0.022);
+    thick(wave{k}_{i},0.014);
+    tag(orbit{k}_{i},layer{k}); tag(wave{k}_{i},layer{k});
+  }
+
+  color(series{k},fg); color(arms{k},fg); color(tip{k},fg);
+  color(chainX{k},fg); color(chainY{k},fg);
+  color(plotX{k},fg); color(plotY{k},fg);
+  thick(chainX{k},0.016); thick(chainY{k},0.016);
+  thick(plotX{k},0.016); thick(plotY{k},0.016);
+
+  color(orbit{k}_0,lime);       color(wave{k}_0,lime);
+  color(orbit{k}_1,gold);       color(wave{k}_1,gold);
+  color(orbit{k}_2,gold);       color(wave{k}_2,gold);
+  color(orbit{k}_3,magenta);    color(wave{k}_3,magenta);
+  color(orbit{k}_4,coral);      color(wave{k}_4,coral);
+  color(orbit{k}_5,red);        color(wave{k}_5,red);
+  color(orbit{k}_6,orange);     color(wave{k}_6,orange);
+  color(orbit{k}_7,magenta);    color(wave{k}_7,magenta);
+  color(orbit{k}_8,violet);     color(wave{k}_8,violet);
+  color(orbit{k}_9,indigo);     color(wave{k}_9,indigo);
+  color(orbit{k}_10,cyan);      color(wave{k}_10,cyan);
+  color(orbit{k}_11,blue);      color(wave{k}_11,blue);
+  color(orbit{k}_12,mint);      color(wave{k}_12,mint);
+  color(orbit{k}_13,lime);      color(wave{k}_13,lime);
+  color(orbit{k}_14,gold);      color(wave{k}_14,gold);
+  color(orbit{k}_15,cyan);      color(wave{k}_15,cyan);
+  color(orbit{k}_16,lime);      color(wave{k}_16,lime);
+  color(orbit{k}_17,magenta);   color(wave{k}_17,magenta);
+  color(orbit{k}_18,coral);     color(wave{k}_18,coral);
+  color(orbit{k}_19,cyan);      color(wave{k}_19,cyan);
+}
+
+relation(0,-20);
+relation(1,-10);
+relation(2,0);
+relation(3,10);
+relation(4,20);
+point3(overviewA,(-11,-12,-20),0.01);
+point3(overviewB,(12,13,20),0.01);
+tag(overviewA,overviewShot); tag(overviewB,overviewShot);
+hidden(overviewA); hidden(overviewB);
+
+equation(formula0,(0,0),`\sum_{n=1}^{N}\frac{4}{\pi(2n-1)}\sin((2n-1)t)`,26);
+equation(formula1,(0,0),`\sum_{n=1}^{N}\frac{2(-1)^{n+1}}{\pi n}\sin(nt)`,26);
+equation(formula2,(0,0),`\sum_{n=1}^{N}\frac{2w_n}{\pi n}\sin(nt)`,26);
+equation(formula3,(0,0),`\sum_{n=1}^{N}\frac{2}{\pi n}\sin(n^2t)`,26);
+equation(formula4,(0,0),`\sum_{n=1}^{N}\frac{2r_n}{\pi n}\sin(nt)`,26);
+label3(formula0,(-8,-2,-20),0.82);
+label3(formula1,(-8,-2,-10),0.82);
+label3(formula2,(-8,-2,0),0.82);
+label3(formula3,(-8,-2,10),0.82);
+label3(formula4,(-8,-2,20),0.82);
+for i in 0..5 {
+  tag(formula{i},layer{i}); tag(formula{i},stack); color(formula{i},fg);
+}
+
+hidden(stack);
+
+step("enter the Fourier world") {
+  show(chapter,0.30);
+  show(caption,0.35);
+  show(stack,0.85);
+}
+wait(0.35);
+
+step("twenty circles write five signals") {
+  par {
+    chain3(series0,"4.0744 1.3581 0.8149 0.5821 0.4527 0.3704 0.3134 0.2716 0.2397 0.2144 0.1940 0.1771 0.1630 0.1509 0.1405 0.1314 0.1235 0.1164 0.1101 0.1045","1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39",22.0);
+    chain3(series1,"2.0372 -1.0186 0.6791 -0.5093 0.4074 -0.3395 0.2910 -0.2546 0.2264 -0.2037 0.1852 -0.1698 0.1567 -0.1455 0.1358 -0.1273 0.1198 -0.1132 0.1072 -0.1019","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",22.0);
+    chain3(series2,"0 0.0276 0.0716 0.1154 0.1537 0.1838 0.2040 0.2136 0.2127 0.2023 0.1839 0.1595 0.1314 0.1020 0.0735 0.0480 0.0271 0.0119 0.0029 0","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",22.0);
+    chain3(series3,"2.0372 1.0186 0.6791 0.5093 0.4074 0.3395 0.2910 0.2546 0.2264 0.2037 0.1852 0.1698 0.1567 0.1455 0.1358 0.1273 0.1198 0.1132 0.1072 0.1019","1 4 9 16 25 36 49 64 81 100 121 144 169 196 225 256 289 324 361 400",22.0);
+    chain3(series4,"1.3334 0.0973 0.0648 0.3333 0.4074 0.2222 0.0278 0.0243 0.1482 0.2037 0.1212 0.0162 0.0150 0.0952 0.1358 0.0833 0.0114 0.0108 0.0702 0.1019","1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",22.0);
+    travel3(series0,sweep0,22.0,linear);
+    travel3(series1,sweep1,22.0,linear);
+    travel3(series2,sweep2,22.0,linear);
+    travel3(series3,sweep3,22.0,linear);
+    travel3(series4,sweep4,22.0,linear);
+
+    seq {
+      wait(0.45);
+      par {
+        fade(layer1,0.80); fade(layer2,0.80); fade(layer3,0.80); fade(layer4,0.80);
+        view3(shot0,"isometric",1.45,smooth,1.08);
+        say(caption,"Square wave — odd harmonics sharpen every corner.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer0,0.65); show(layer1,0.65);
+        view3(shot1,"isometric",1.35,smooth,1.08);
+        say(caption,"Sawtooth — every harmonic joins with alternating direction.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer1,0.65); show(layer2,0.65);
+        view3(shot2,"isometric",1.35,smooth,1.08);
+        say(caption,"Hann window — the outer harmonics taper away.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer2,0.65); show(layer3,0.65);
+        view3(shot3,"isometric",1.35,smooth,1.08);
+        say(caption,"Quadratic chirp — frequency accelerates as n squared.",0.35);
+      }
+      wait(1.65);
+      par {
+        fade(layer3,0.65); show(layer4,0.65);
+        view3(shot4,"isometric",1.35,smooth,1.08);
+        say(caption,"Envelope ripple — selected harmonics breathe in and out.",0.35);
+      }
+      wait(1.55);
+      par {
+        show(layer0,0.55); show(layer1,0.55); show(layer2,0.55); show(layer3,0.55);
+        view3(overviewShot,"isometric",1.5,smooth,1.30);
+        say(caption,"One relationship engine. Five very different signals.",0.35);
+      }
+      // Hold on the full colour composition — all five signals rotating and drawing
+      // together — so the viewer gets an unhurried, complete view.
+      wait(6.5);
+    }
+  }
+}
+wait(0.6);
+
+step("create with Manic") {
+  show(cta,0.45);
+  pulse(stack,0.75);
+  say(caption,"Describe the relationship; Manic keeps every ring, endpoint, history, and camera together.",0.40);
+}
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/PIH7AXJm79U" title="Rotating Circles Become Waves — 5 Fourier Series in Colour — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="fourier-square-wave-live"><a class="header" href="#fourier-square-wave-live">fourier-square-wave-live</a></h2>
 <p>Thirteen orbit rings add odd harmonics 1 through 25. Their live partial histories show
@@ -38523,16 +39485,1159 @@ wait(1.30);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/Dhl6cFAOBHw" title="Advanced On-Prem Web Service, Paths Coloured by Relationship — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="coming-from-manim"><a class="header" href="#coming-from-manim">Coming from Manim</a></h1>
+<p>For folks arriving from Manim: each of these is a well-known Manim tutorial scene written the Manic way — same idea, Manic’s vocabulary, usually far less code. The side-by-side translation guide is in <a href="#coming-from-manim-to-manic">Coming from Manim to Manic</a>; these are the runnable files.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="graph-area-plot"><a class="header" href="#graph-area-plot">graph-area-plot</a></h2>
+<p>A <code>coords</code> frame + two <code>plot</code>s, a <code>vline</code>, <code>riemann</code> bars, and a <code>band</code> between curves — Manim’s <code>GraphAreaPlot</code>, static.</p>
+<pre><code class="language-manic">// ============================================================================
+//  GraphAreaPlot — the Manim tutorial scene, in Manic.
+//
+//  A coordinate frame with two parabolas, vertical lines up to the first curve,
+//  Riemann rectangles under it, and a shaded region between the two curves.
+//
+//  Coordinate frame: math origin (0,0) → screen (250,620); 130 px per x-unit,
+//  92 px per y-unit. Every plot below shares that same origin + scale.
+// ============================================================================
+title("Manim vs Manic — GraphAreaPlot");
+canvas(1280, 720);
+template("black");
+
+// axes over x∈[0,5], y∈[0,6] — no arrow tips, ticks numbered, axes named "x" / "y"
+coords(ax, (250, 620), (0, 5), (0, 6), 130, 92, 0, 1, 1, "x", "y");
+
+// the two curves
+plot(c1, (250, 620), 130, 92, "4*x - x*x", (0, 4));          color(c1, blue);  stroke(c1, 3);   // 4x − x²
+plot(c2, (250, 620), 130, 92, "0.8*x*x - 3*x + 4", (0, 4));  color(c2, green); stroke(c2, 3);   // 0.8x² − 3x + 4
+
+// dotted guide lines from the x-axis up to curve_1 at x = 2 and x = 3
+vline(l1, c1, 2, yellow);
+vline(l2, c1, 3, yellow);
+
+// Riemann rectangles under curve_1 on [0.3, 0.6], bars of width 0.03
+riemann(rm, c1, 0.3, 0.6, 0.03, green);
+
+// the region between the two curves on the slice [2, 3] (curve_1 on top)
+band(ar, c1, c2, grey, (2, 3)); opacity(ar, 0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VC8yGqL3Ypw" title="Riemann Sums & Area Under a Curve — the Manim GraphArea Scene, in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="graph-area-plot-animated"><a class="header" href="#graph-area-plot-animated">graph-area-plot-animated</a></h2>
+<p>The same curve toured live: a sliding <code>tangent</code>+<code>slope</code>, an <code>area</code> sweep + <code>integral</code> readout, re-selected domains, then <code>riemann</code> bars.</p>
+<pre><code class="language-manic">// ============================================================================
+//  GraphAreaPlot — the full tour. One curve, y = 4x − x², and the whole calculus
+//  toolkit moving over it, selecting different domains as it goes:
+//
+//    1. reveal the frame + curve
+//    2. DERIVATIVE — a tangent slides along the curve, slope read live
+//    3. INTEGRAL   — the area sweeps open 0→4, the value climbs to 32/3
+//    4. DOMAINS    — the interval is re-selected: [0,1], then [1,3], then [3,4]
+//    5. RIEMANN    — approximate the selected [1,3] with rectangles
+//
+//  Same declarative primitives as the static diagram — the animator only says
+//  what happens when.
+// ============================================================================
+title("GraphAreaPlot — the full tour");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (250, 620), (0, 5), (0, 6), 130, 92, 0, 1, 1, "x", "y");
+plot(c1, (250, 620), 130, 92, "4*x - x*x", (0, 4)); color(c1, blue); stroke(c1, 3);
+
+// tour props
+tangent(tg, c1, 0.4, 150); color(tg, gold); stroke(tg, 2);
+slope(sv, c1, 0.4, (22, -28)); color(sv, gold); size(sv, 24);
+area(acc, c1, 0, 0); color(acc, cyan);                       // whole-domain area, sweeps
+integral(iv, c1, 0, 0, (940, 150)); color(iv, cyan); size(iv, 30);
+area(a01, c1, 0, 1); color(a01, cyan);                       // the three selected sub-domains
+area(a13, c1, 1, 3); color(a13, gold);
+area(a34, c1, 3, 4); color(a34, magenta);
+riemann(rm, c1, 1, 3, 0.25, green);                          // Riemann on the chosen [1,3]
+
+// initial states
+hidden(ax); untraced(c1);
+hidden(tg); hidden(sv); hidden(iv);
+opacity(acc, 0.30);
+opacity(a01, 0); opacity(a13, 0); opacity(a34, 0); opacity(rm, 0);
+
+// ===== 1. reveal the frame + curve =====
+show(ax, 0.7); wait(0.2);
+draw(c1, 1.2); wait(0.4);
+
+// ===== 2. DERIVATIVE — the tangent slides, its slope read live (4 → 0 → −4) =====
+par { show(tg, 0.4); show(sv, 0.4); }
+par { to(tg, x, 3.6, 3.2, smooth); to(sv, x, 3.6, 3.2, smooth); }
+wait(0.3);
+par { fade(tg, 0.4); fade(sv, 0.4); }
+
+// ===== 3. INTEGRAL — the area sweeps open, the value climbs to 32/3 ≈ 10.67 =====
+show(iv, 0.4);
+par { to(acc, x, 4, 3.2, smooth); to(iv, x, 4, 3.2, smooth); }
+wait(0.7);
+par { fade(acc, 0.5); fade(iv, 0.4); }
+
+// ===== 4. DIFFERENT DOMAINS — re-select the interval, one slice at a time =====
+to(a01, opacity, 0.5, 0.5); wait(0.5);       // [0, 1]
+to(a13, opacity, 0.5, 0.5); wait(0.5);       // [1, 3]
+to(a34, opacity, 0.5, 0.5); wait(0.7);       // [3, 4]
+par { fade(a01, 0.5); fade(a34, 0.5); }      // keep just [1, 3]
+
+// ===== 5. RIEMANN — approximate the selected [1,3] with rectangles =====
+par { fade(a13, 0.5); to(rm, opacity, 0.75, 0.7); }
+wait(0.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/r6B2vER0Cws" title="Animate Calculus on One Curve — Tangent, Area, Integral & Riemann Bars in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="custom-axis-labels"><a class="header" href="#custom-axis-labels">custom-axis-labels</a></h2>
+<p>A radian sine on <code>coords</code> with <code>xtick</code>/<code>ytick</code> labelling ticks at an axis VALUE (<code>π/2</code>) and named axes — no pixel maths.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Custom (non-numeric) axis + tick labels — no pixel maths anywhere.
+//
+//  `coords` names the axes for you (xname / yname), and `xtick` / `ytick` place
+//  a label at an axis VALUE — the label is any text: a number, a word, or a
+//  symbol like "π/2". Here: a sine wave on a radian axis.
+// ============================================================================
+title("Custom axis labels");
+canvas(1280, 720);
+template("black");
+
+// frame: x from 0 to ~2π, y from -1.4 to 1.4; ticks every π/2; named axes
+coords(ax, (200, 380), (0, 6.6), (-1.4, 1.4), 150, 130, 0, 1.5708, 0, "θ", "sin θ");
+plot(sine, (200, 380), 150, 130, "sin(x)", (0, 6.2832)); color(sine, cyan); stroke(sine, 3);
+
+// x-axis ticks labelled in radians — text placed at each VALUE, not a pixel
+xtick(qa, ax, 1.5708, "π/2");
+xtick(qb, ax, 3.1416, "π");
+xtick(qc, ax, 4.7124, "3π/2");
+xtick(qd, ax, 6.2832, "2π");
+
+// y-axis: just the extremes
+ytick(yp, ax, 1, "1");
+ytick(ym, ax, -1, "-1");
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VuIAoUpcG6M" title="Custom Axis Labels & Radian Ticks (π/2) — Manim Axes Done in One Line — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="constant-area-rectangle"><a class="header" href="#constant-area-rectangle">constant-area-rectangle</a></h2>
+<p>A rectangle rides <code>y=25/x</code> via <code>boxto</code>+<code>mark</code>; the corner slides but the area stays 25 — Manim’s <code>always_redraw</code>, without the updater.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Constant-area rectangle under a hyperbola.
+//
+//  A rectangle runs from the origin to a point (x, 25/x) on the curve y = 25/x.
+//  As the corner slides along the curve, the rectangle morphs from wide-and-short
+//  to tall-and-narrow — but its area (width × height = x · 25/x) stays fixed at 25.
+//  A dot rides the corner along the curve.
+// ============================================================================
+title("Constant-area rectangle");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (200, 640), (0, 10), (0, 10), 90, 55, 0, 2, 1, "x", "y");
+plot(g, (200, 640), 90, 55, "25/x", (2.5, 10)); color(g, gold); stroke(g, 3);
+
+boxto(box, g, 5); color(box, blue);       // rectangle origin → (x, 25/x); area = x·(25/x)
+mark(dot, g, 5); color(dot, fg);          // a dot riding the corner along the curve
+equation(inv, (760, 150), `x \cdot y = 25`, 30); color(inv, blue);
+
+// the axes, curve and dot are up from the start; the box is CREATED (drawn into being)
+untraced(box); hidden(inv);
+
+wait(0.4);
+draw(box, 1.3);                                        // outline traces on as the fill rises bottom-up
+wait(0.3);
+show(inv, 0.5);                                        // then reveal the invariant
+wait(0.4);
+// slide the corner along the curve — width and height trade off, area holds at 25
+par { to(box, x, 10, 1.8, smooth);  to(dot, x, 10, 1.8, smooth);  }   // wide &amp; short
+par { to(box, x, 2.5, 2.0, smooth); to(dot, x, 2.5, 2.0, smooth); }   // tall &amp; narrow
+par { to(box, x, 5, 1.8, smooth);   to(dot, x, 5, 1.8, smooth);   }   // back to the 5×5 square
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/vu9EZ56CNn8" title="Constant-Area Rectangle Under a Hyperbola — Manim always_redraw Without the Updater — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="moving-camera-follow"><a class="header" href="#moving-camera-follow">moving-camera-follow</a></h2>
+<p>A dot walks a sine; <code>followshot</code> makes the 2D camera track it, then releases and restores the wide shot — Manim’s <code>MovingCameraScene</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A moving camera that follows a dot along a curve.
+//
+//  The wide shot shows a sine wave with dots at both ends. The camera zooms in
+//  on a dot at the start, then TRACKS it as it travels the whole curve — a follow
+//  shot — before pulling back out to the wide shot.
+// ============================================================================
+title("Moving camera — follow shot");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (200, 480), (-1, 10), (-1, 10), 95, 45, 1, 2, 1, "x", "y");
+plot(g, (200, 480), 95, 45, "sin(x)", (0, 9.4248)); color(g, blue); stroke(g, 3);
+
+mark(d1, g, 0);        color(d1, fg);        // fixed dot at the start
+mark(d2, g, 9.4248);   color(d2, fg);        // fixed dot at the end
+mark(md, g, 0);        color(md, orange);    // the dot the camera will follow
+
+wait(0.6);
+// zoom in and glide to the dot at the start of the curve
+par { zoom(2, 1.3, smooth); cam((200, 480), 1.3, smooth); }
+followshot(md);                              // lock the camera onto the moving dot
+to(md, x, 9.4248, 4.5, linear);              // it walks the whole sine curve; the camera trails it
+followshot(none);                            // release the lock
+// pull back out to the wide shot
+par { zoom(1, 1.3, smooth); cam((640, 360), 1.3, smooth); }
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/V_TiguzEfBY" title="Moving Camera That Follows a Point — Manim MovingCameraScene in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="moving-highlight-box"><a class="header" href="#moving-highlight-box">moving-highlight-box</a></h2>
+<p>The product rule written with <code>mathparts</code> (addressable terms), a <code>framebox</code> boxes one term, then <code>surround</code> glides it to the next.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The product rule, with a highlight box that moves between the two terms.
+//
+//  The equation is one `mathparts` — split into parts that lay themselves out and
+//  stay individually addressable (pr.0, pr.1, …). It's written on left-to-right,
+//  a box is drawn around the first product term, then the box glides + resizes to
+//  surround the second.
+// ============================================================================
+title("Product rule — moving highlight box");
+canvas(1280, 720);
+template("black");
+
+mathparts(pr, (640, 340),
+  `\frac{d}{dx}f(x)g(x)=`, `f(x)\frac{d}{dx}g(x)`, `+`, `g(x)\frac{d}{dx}f(x)`, 34);
+framebox(fb, pr.1, 10); color(fb, gold);        // box the first product term (pr.1)
+
+untraced(pr); untraced(fb);
+
+wait(0.5);
+// write the equation on, part by part, left to right
+draw(pr.0, 0.9); draw(pr.1, 0.7); draw(pr.2, 0.3); draw(pr.3, 0.8);
+wait(0.4);
+draw(fb, 0.8);                                  // draw the box around the first term
+wait(0.9);
+surround(fb, pr.3, 1.0, smooth);                // move it to the second term (pr.3)
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Y9XYZKaPoUY" title="A Highlight Box That Glides Between Equation Terms — Manim SurroundingRectangle in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="moving-angle"><a class="header" href="#moving-angle">moving-angle</a></h2>
+<p>Two arms share a vertex; one swings and <code>anglemark</code>’s arc + its θ label track the opening live, then the label recolours — Manim’s <code>MovingAngle</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A moving angle: two arms share a vertex, one arm swings, and the angle arc
+//  plus its θ label track the opening live — no updaters, just `turn`.
+//
+//  The whole rig is reactive: `segment` arms reflow to their endpoints, and
+//  `anglemark` recomputes its arc AND rides its θ label along the bisector
+//  every frame. Rotate the moving point and everything follows.
+// ============================================================================
+title("Moving angle");
+canvas(1280, 720);
+template("black");
+
+point(o,  (470, 470));           // vertex — the pivot everything turns about
+point(pr, (800, 470));           // fixed arm, along the horizontal
+point(pm, (357, 188));           // moving arm, starts at ~110°
+
+segment(l1, o, pr);
+segment(lm, o, pm);
+anglemark(ang, pr, o, pm, "θ");  // arc + θ label, both track the opening
+
+wait(0.6);
+turn(pm, o, -70, 1.6);           // close the angle down to ~40°
+wait(0.5);
+turn(pm, o, 140, 2.2);           // swing wide, past straight
+wait(0.4);
+recolor(ang.label, red, 0.5);    // paint the θ red
+wait(0.4);
+turn(pm, o, 170, 2.6);           // carry on around
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KVzWCMbzerg" title="Live Angle Arc + θ Label as an Arm Rotates — Manim MovingAngle in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="moving-dots"><a class="header" href="#moving-dots">moving-dots</a></h2>
+<p>Two dots move on independent axes (<code>slidex</code>/<code>slidey</code>) joined by a <code>segment</code> that always connects them — Manim’s <code>MovingDots</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Two dots move on independent axes, joined by a line that always connects
+//  them. The blue dot slides right; the green dot rises; the red segment
+//  stretches to follow — reactively, with no updaters.
+//
+//  `slidex`/`slidey` push one dot along a single axis (the other coordinate
+//  stays put), and `segment` reflows to its endpoints every frame.
+// ============================================================================
+title("Moving dots");
+canvas(1280, 720);
+template("black");
+
+point(a, (440, 420));            // blue dot — will slide right
+point(b, (640, 420));            // green dot — will rise
+color(a, blue);
+color(b, green);
+
+segment(l, a, b);                // the joining line, tracks both endpoints
+color(l, red);
+
+wait(0.5);
+slidex(a, 840, 1.5);             // blue dot travels right along its row
+wait(0.3);
+slidey(b, 180, 1.5);             // green dot climbs its column
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/CjE-9oUZL14" title="Two Dots on Independent Axes, Joined by a Line — Manim MovingDots, No Updaters — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="moving-group-to-destination"><a class="header" href="#moving-group-to-destination">moving-group-to-destination</a></h2>
+<p><code>groupscale</code> grows a tagged row about its centre, then <code>dock</code> slides it so one member lands on a target — Manim’s <code>MovingGroupToDestination</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A whole group of dots slides to a destination — rigidly, so that one chosen
+//  member (the red dot) lands exactly on a yellow target, carrying the rest of
+//  the row along with it.
+//
+//  The four dots share a tag, so the whole row moves and scales as one:
+//  `groupscale` grows it about its collective centre, then `dock` slides it so
+//  the chosen member (the red dot) lands on the target. You name the member and
+//  the target; the shift is worked out for you — no delta arithmetic.
+// ============================================================================
+title("Moving group to destination");
+canvas(1280, 720);
+template("black");
+
+point(d0, (360, 470));  tag(d0, row);
+point(d1, (470, 470));  tag(d1, row);
+point(d2, (580, 470));  tag(d2, row);   // the chosen member
+point(d3, (690, 470));  tag(d3, row);
+color(d2, red);
+
+point(dest, (940, 190));
+color(dest, yellow);
+
+wait(0.6);
+groupscale(row, 1.4, 1.0);   // grow the row about its own centre
+wait(0.3);
+dock(row, d2, dest, 1.6);    // slide the row so d2 lands on dest
+wait(0.5);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oHqtTG-ynjo" title="Move a Whole Group So One Dot Hits a Target — Manim VGroup Shift in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="point-with-trace"><a class="header" href="#point-with-trace">point-with-trace</a></h2>
+<p>A dot swings a half-circle then steps up/left; <code>trail</code> records the whole path behind it — sampled from the timeline, so it’s exact and seekable.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A dot leaves a trail as it moves — first swinging a half-circle around a
+//  pivot, then stepping up and to the left. The gold path records everywhere
+//  the dot has been, growing behind it as it goes.
+//
+//  `trail` samples the dot's trajectory once and replays it by time, so the
+//  path is exact and seekable — no per-frame bookkeeping.
+// ============================================================================
+title("Point with trace");
+canvas(1280, 720);
+template("black");
+
+point(dot, (540, 380));
+trail(tr, dot, gold, 3);
+
+wait(0.4);
+turn(dot, (740, 380), 180, 2.0, linear);   // swing a half-circle about the pivot
+wait(0.4);
+shift(dot, (0, -160), 1.0);                 // step up
+shift(dot, (-200, 0), 1.0);                 // step left
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/zUfl5zXUhVo" title="A Dot That Leaves a Motion Trail — Manim PointWithTrace, Exact & Seekable — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="sin-and-cos-plot"><a class="header" href="#sin-and-cos-plot">sin-and-cos-plot</a></h2>
+<p>sin &amp; cos on one frame with <code>graphlabel</code> LaTeX labels pinned to each curve, plus a <code>vline</code> guide at <code>x=2π</code> — Manim’s <code>SinAndCosFunctionPlot</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  sin and cos on one coordinate frame, each curve labelled where it lives, plus
+//  a vertical guide at x = 2π with its own label.
+//
+//  `coords` gives the whole frame (ranges, ticks, numbers, axis names); the new
+//  piece is `graphlabel` — a LaTeX label that pins itself to a curve at an x and
+//  nudges clear of the line, taking the curve's colour by default.
+// ============================================================================
+title("sin and cos");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (640, 360), (-10, 10), (-1.5, 1.5), 52, 105, 0, 2, 1, "x", "y");
+
+plot(sinq, (640, 360), 52, 105, "sin(x)", (-10, 10));  color(sinq, blue);
+plot(cosq, (640, 360), 52, 105, "cos(x)", (-10, 10));  color(cosq, red);
+
+graphlabel(sl, sinq, `\sin(x)`, -9, up);      // rides sin near its left end
+graphlabel(cl, cosq, `\cos(x)`);              // default: cos's right end, up
+
+vline(vl, cosq, 6.2832, yellow);              // guide up to cos at x = 2π
+graphlabel(ll, cosq, `x=2\pi`, 6.2832, upright, white);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/FRRQ2nRFIUI" title="sin & cos on One Frame with LaTeX Labels — Manim SinAndCosFunctionPlot in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="moving-zoomed-scene"><a class="header" href="#moving-zoomed-scene">moving-zoomed-scene</a></h2>
+<p>A <code>loupe</code>: a frame over the scene + a panel showing that region magnified LIVE; pan the frame and the panel tracks it — Manim’s <code>ZoomedScene</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A magnifier (loupe): a small frame sits over a detailed corner of the scene,
+//  and a panel shows that region blown up live. Move the frame and the panel
+//  tracks it — the magnified view is the real scene, redrawn zoomed.
+// ============================================================================
+title("Moving zoomed scene");
+canvas(1280, 720);
+template("black");
+
+// --- a patch of fine detail to inspect ---
+circle(a, (360, 300), 10);  color(a, red);
+circle(b, (400, 290), 7);   color(b, cyan);
+circle(c, (438, 306), 9);   color(c, green);
+circle(d, (410, 330), 5);   color(d, gold);
+text(cap, (400, 360), "detail", 16);
+dot(spot, (400, 300), 4);
+
+// --- the magnifier: frame over the patch, panel showing it 3.2x ---
+loupe(lp, (400, 310), 150, 96, (900, 360), 3.2);
+
+wait(0.4);
+show(lp.panel);
+wait(0.4);
+shift(lp.frame, (-40, -30), 1.4);   // pan the loupe — the panel follows live
+wait(0.4);
+shift(lp.frame, (60, 40), 1.4);
+wait(0.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/VXt0mCl2PZE" title="A Live Magnifier / Loupe That Tracks the Scene — Manim ZoomedScene in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="3blue1brown-reproduced"><a class="header" href="#3blue1brown-reproduced">3Blue1Brown, reproduced</a></h1>
+<p>Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta function, each is a single readable <code>.manic</code> file you can open, run, and adapt.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="vectors-basis-transformations"><a class="header" href="#vectors-basis-transformations">vectors-basis-transformations</a></h2>
+<p>Essence of Linear Algebra, chapters 1–11 in one file: vectors → basis → the grid transforming (<code>gridmap</code>) → composition → determinant → inverse → the dot product (projection AND duality) → change of basis → eigenvectors → eigenbasis → functions as vectors.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Essence of Linear Algebra, chapters 1→2→3 in one arc.
+//
+//  Ch1  A vector is an arrow from the origin; its coordinates are [x, y].
+//  Ch2  Those coordinates are SCALARS: v = x·î + y·ĵ — a linear combination of
+//       the basis vectors î=(1,0), ĵ=(0,1).
+//  Ch3  A matrix is a transformation: it says where î and ĵ LAND, and the whole
+//       grid morphs to follow (`gridmap` animates it). Because v = x·î + y·ĵ,
+//       it rides along, landing at x·(new î) + y·(new ĵ).
+//
+//  Example: v = [1, 2] under [[2,1],[1,2]] (î→(2,1), ĵ→(1,2)), so v lands at
+//  1·(2,1) + 2·(1,2) = (4,5). Origin (400,470), 55 px/unit.
+// ============================================================================
+title("Vectors, basis, and transformations");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 696), "A vector is an arrow from the origin.", 24);
+
+// the plane + basis, ready to be transformed in Ch3 (starts at the identity)
+gridmap(gm, (400, 470), 55, 2, 1, 1, 2, 5);
+
+// the vector v = [1,2] and its linear-combination scaffold
+vector(v, (400, 470), (55, 110), yellow);
+vector(jj, (455, 470), (0, 110), red);           // 2·j-hat, stacked on i-hat → reaches v
+equation(vlab, (486, 352), `\vec{v}=[1,2]`, 30); color(vlab, yellow);
+equation(ilab, (472, 500), `\hat{\imath}`, 26); color(ilab, lime);
+equation(jlab, (366, 414), `\hat{\jmath}`, 26); color(jlab, red);
+equation(mtx, (980, 165), `\begin{bmatrix}2&amp;1\\1&amp;2\end{bmatrix}`, 44);
+
+// Ch4 — a second transform (90° rotation) composed on top: morph M1 → M2·M1
+gridmap(gm2, (400, 470), 55, -1, -2, 2, 1, 5, 2, 1, 1, 2);
+equation(comp4, (640, 96), `\begin{bmatrix}0&amp;-1\\1&amp;0\end{bmatrix}\begin{bmatrix}2&amp;1\\1&amp;2\end{bmatrix}=\begin{bmatrix}-1&amp;-2\\2&amp;1\end{bmatrix}`, 34);
+
+// the determinant cell (Ch5), the projection (Ch7), and the alt-basis grid (Ch8)
+determinant(dt, (400, 470), 55, 2, 1, 1, 2, gold);
+project(pr, (400, 470), 55, (1, 2), (3, 1));       // project v=(1,2) onto span(w=(3,1))
+squish(sq, (400, 470), 55, 1, 2, 5);               // Ch7 duality: dot with v = squish onto a line
+eigen(ev, (400, 470), 55, 2, 1, 1, 2, gold);       // Ch9 eigenvectors of [[2,1],[1,2]] (λ = 3, 1)
+diagonalise(dg, (400, 470), 55, 2, 1, 1, 2, gold); // Ch10 eigenbasis = a pure stretch
+coords(cf, (700, 450), (-4, 4), (-3, 3), 46, 46, 0); // Ch11 a function graph…
+plot(fn, (700, 450), 46, 46, "0.25*x*x*x - x", (-3.6, 3.6)); color(fn, mint);
+equation(deq, (700, 130), `\tfrac{d}{dx}\;\leftrightarrow\;\begin{bmatrix}0&amp;1&amp;0\\0&amp;0&amp;2\\0&amp;0&amp;0\end{bmatrix}`, 32);
+gridmap(cb, (400, 470), 55, 1, 0.7, 0.4, 1, 5);
+vector(vb, (400, 470), (55, 110), yellow);
+
+// --- initial visibility ---
+hidden(gm.i); hidden(gm.j);                       // basis revealed in Ch2
+hidden(v); hidden(vlab); hidden(jj); hidden(ilab); hidden(jlab); hidden(mtx);
+hidden(dt); hidden(dt.unit); hidden(dt.val); hidden(pr);
+hidden(sq); hidden(sq.line); hidden(sq.dual);
+hidden(ev); hidden(dg); hidden(cf); hidden(fn); hidden(deq);
+hidden(gm2); hidden(gm2.bg); hidden(gm2.i); hidden(gm2.j); hidden(comp4);
+hidden(cb); hidden(cb.bg); hidden(cb.i); hidden(cb.j); hidden(vb);
+
+// --- Ch1: a vector ---
+wait(0.5);
+par { show(v); show(vlab); }
+wait(1.3);
+
+// --- Ch2: coordinates are a linear combination of the basis ---
+say(narr, "Its coordinates are scalars: v = 1·i-hat + 2·j-hat.");
+par { show(gm.i); show(gm.j); show(ilab); show(jlab); }
+wait(0.7);
+show(jj);                                         // i-hat then two j-hats reach v
+wait(1.6);
+
+// --- Ch3: the matrix transforms space; v rides along ---
+say(narr, "A matrix moves i-hat and j-hat — and the whole grid follows.");
+show(mtx);
+par { fade(jj); fade(ilab); fade(jlab); fade(vlab); }
+par { to(gm, morph, 1, 2.2); grow(v, (620, 195), 2.2); }   // space deforms, v follows
+wait(0.6);
+say(narr, "v lands at 1·(new i-hat) + 2·(new j-hat) = (4,5).");
+wait(1.6);
+
+// --- Ch4: matrix multiplication is composition ---
+say(narr, "Ch 4 — apply one transform, then another: that is matrix multiplication.");
+show(comp4);                                       // the product, clearly placed up top
+par { fade(gm); fade(v); }
+show(gm2);                                          // starts at M1 (seamless with Ch3)
+to(gm2, morph, 1, 1.8);                             // now rotate 90°: the grid is at M2·M1
+wait(1.3);
+to(gm2, morph, 0, 1.5);                             // undo the second transform, back to M1
+par { fade(gm2); fade(comp4); }
+par { show(gm); show(v); }
+wait(0.6);
+
+// --- Ch5: the determinant is the area scale factor ---
+say(narr, "Ch 5 — the determinant is how much areas scale: 2·2 − 1·1 = 3.");
+par { show(dt); show(dt.unit); show(dt.val); }
+wait(1.9);
+par { fade(dt); fade(dt.unit); fade(dt.val); }    // fade = timeline hide (hidden is base-state only)
+
+// --- Ch6: column space + the inverse undoes the transform ---
+say(narr, "Ch 6 — the columns span the whole plane, so the inverse sends space back.");
+par { to(gm, morph, 0, 1.8); grow(v, (455, 360), 1.8); }   // reverse the morph = the inverse
+wait(1.4);
+
+// --- Ch7: the dot product — projection, and its dual (a squish onto a line) ---
+say(narr, "Ch 7 — the dot product of v and w is a projection — w's shadow on v.");
+par { fade(gm); fade(gm.bg); fade(v); fade(mtx); }
+show(pr);
+wait(1.6);
+say(narr, "It's also a squish of the whole plane onto a line — the dual vector IS v.");
+fade(pr);
+par { show(sq); show(sq.line); show(sq.dual); }
+to(sq, morph, 1, 1.9);                              // collapse space onto the number line
+wait(1.0);
+to(sq, morph, 0, 1.2);                              // and back — the dual vector remains
+wait(0.8);
+
+// --- Ch8: change of basis ---
+say(narr, "Ch 8 — change of basis: the same arrow, read on a different grid.");
+par { fade(sq); fade(sq.line); fade(sq.dual); }
+par { show(cb); show(vb); }
+to(cb, morph, 1, 1.8);                                       // the coordinate grid changes; v stays put
+wait(1.8);
+
+// --- Ch9: eigenvectors and eigenvalues ---
+say(narr, "Ch 9 — some vectors keep to their own line: eigenvectors (λ = 3 and λ = 1).");
+par { fade(cb); fade(vb); }
+show(ev);
+wait(2.0);
+
+// --- Ch10: the eigenbasis is a pure stretch ---
+say(narr, "Ch 10 — in the eigenbasis, the transformation is just a diagonal stretch.");
+fade(ev);
+show(dg);
+wait(2.0);
+
+// --- Ch11: abstract vector spaces ---
+say(narr, "Ch 11 — even functions are vectors; the derivative is a linear map with a matrix.");
+fade(dg);
+par { show(cf); show(fn); show(deq); }
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/d6-o7lGw5Ks" title="Essence of Linear Algebra in One Animation — Vectors, Basis, Determinant, Eigenvectors — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="duality-dot-product"><a class="header" href="#duality-dot-product">duality-dot-product</a></h2>
+<p>The dot product as DUALITY: the plane collapses onto a number line under a 1×2 map (<code>squish</code>), and the gold dual vector is what you dot with.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The dot product and duality (eola chapter 7 — the "why" behind chapter8p2).
+//
+//  A 1x2 matrix [a b] is a linear map from the plane to a NUMBER LINE: it sends
+//  (x,y) to a·x + b·y and squishes all of space onto the line. Every such map
+//  corresponds to a single 2D vector — the DUAL vector (a,b) — and applying the
+//  map is exactly the dot product with (a,b). That correspondence is duality.
+//
+//  Built on the new `squish` builtin. Here [a b] = [2 1].
+// ============================================================================
+title("The dot product and duality");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "A 1×2 matrix is a map from the plane to a number line.", 24);
+equation(mtx, (980, 130), `\begin{bmatrix}2&amp;1\end{bmatrix}`, 44);
+
+squish(sq, (640, 360), 70, 2, 1, 4);
+
+// --- reveal ---
+hidden(sq.dual); hidden(mtx);
+
+wait(0.6);
+show(mtx);
+wait(1.2);
+
+say(narr, "It squishes all of space onto the line — i-hat to 2, j-hat to 1.");
+to(sq, morph, 1, 2.4);
+wait(1.2);
+
+say(narr, "Every such map corresponds to a single 2D vector — the dual vector (2,1).");
+to(sq, morph, 0, 1.6);                             // un-squish, back to the plane
+show(sq.dual);
+wait(1.4);
+
+say(narr, "Applying the map is the same as dotting with (2,1). That is duality.");
+pulse(sq.dual);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kRASlv3iKDc" title="The Dot Product as Duality — Why It's a Squish onto a Number Line — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="warp-grid"><a class="header" href="#warp-grid">warp-grid</a></h2>
+<p>A complex-plane grid DEFORMS under <code>z → z²</code> (<code>warp</code>) — lines bend into the classic parabolic conformal web.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A coordinate grid over the complex plane, deforming under z -&gt; f(z).
+//
+//  `warp` samples each grid line through the complex function, so straight lines
+//  bend into curves. It starts as the identity grid and morphs to the warped
+//  image when animated — `to(id, morph, 1, dur)`. Here z -&gt; z^2, the classic
+//  conformal map (the non-linear twin of `linmap`, and the deforming-grid
+//  companion to `domaincolor`).
+// ============================================================================
+title("Complex grid warp");
+canvas(1280, 720);
+template("black");
+
+warp(g, (640, 360), 82, `z*z`, 3, 40);
+equation(fn, (640, 80), `z \mapsto z^{2}`, 46);
+text(narr, (640, 672), "A grid over the complex plane.", 26);
+
+wait(0.6);
+say(narr, "Every point z moves to z squared — lines bend into parabolas.");
+to(g, morph, 1, 2.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TzxwsdMv2mU" title="Watch a Complex Grid Deform Under z → z² — Conformal Map Animation in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="zeta"><a class="header" href="#zeta">zeta</a></h2>
+<p>The Riemann zeta function by <code>domaincolor</code> (with a real <code>zeta(z)</code> in the complex evaluator): the pole at s=1, the critical line Re=½, and the first non-trivial zeros marked.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The Riemann zeta function ζ(s), visualised by domain colouring.
+//
+//  ζ is a genuine complex function now (`zeta(z)` in the complex evaluator, via
+//  Borwein's accelerated eta series — valid through the critical strip). Domain
+//  colouring paints the complex plane: hue = phase of ζ(s), brightness = |ζ(s)|,
+//  so ZEROS are dark points and the POLE at s=1 is bright. Every non-trivial
+//  zero found sits on the critical line Re = 1/2 — the Riemann Hypothesis.
+// ============================================================================
+title("The Riemann zeta function");
+canvas(1280, 720);
+template("black");
+
+// the s-plane, coloured by ζ(s) — a tall strip up the imaginary axis so the
+// first non-trivial zeros (½ ± 14.13i) are in frame
+domaincolor(zp, (500, 330), 240, 640, `zeta(z)`, 5.4);
+colorwheel(cw, (980, 470), 72);                 // phase → hue legend
+
+equation(def, (960, 150), `\zeta(s)=\sum \frac{1}{n^{s}}`, 40);
+text(narr, (640, 700), "Colour = phase of zeta; brightness = size.", 24);
+
+// the critical line Re = 1/2 and the strip 0 &lt; Re &lt; 1
+line(cl, (511, 12), (511, 648)); color(cl, gold); dashed(cl);
+text(cllab, (700, 250), "critical line  Re = 1/2", 20); color(cllab, gold);
+
+// the first non-trivial zeros, on the critical line
+dot(z1, (511, 16)); color(z1, gold);
+dot(z2, (511, 644)); color(z2, gold);
+text(zlab, (690, 60), "zeta = 0  (½ ± 14.13i)", 20); color(zlab, gold);
+
+// the pole at s = 1
+circle(pole, (522, 330), 10); outlined(pole); color(pole, cyan);
+text(plab, (720, 330), "pole at s = 1", 20); color(plab, cyan);
+
+// --- reveal ---
+hidden(cl); hidden(cllab); hidden(z1); hidden(z2); hidden(zlab);
+hidden(pole); hidden(plab); hidden(def); hidden(cw);
+
+wait(0.4);
+show(zp);
+say(narr, "The Riemann zeta function, 1 + 1/2^s + 1/3^s + ...");
+show(def);
+wait(1.2);
+
+say(narr, "Defined for Re(s) &gt; 1, then continued everywhere but a pole at s = 1.");
+par { show(pole); show(plab); }
+wait(1.2);
+
+say(narr, "Its zeros are the dark points.");
+show(cw);
+wait(1.0);
+
+say(narr, "Every non-trivial zero found lies on the line Re = 1/2.");
+par { show(cl); show(cllab); }
+wait(0.7);
+par { show(z1); show(z2); show(zlab); pulse(z1); pulse(z2); }
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hMvtrp1wdC8" title="The Riemann Zeta Function Visualized — Pole, Critical Line & Zeros by Domain Coloring — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="euler-characteristic"><a class="header" href="#euler-characteristic">euler-characteristic</a></h2>
+<p>Euler’s formula V − E + F = 2 on a wheel graph: V and E counted, faces filled + counted by <code>regions</code>, and 6 − 10 + 6 = 2 assembled.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Euler's characteristic formula, V - E + F = 2, on a planar graph.
+//
+//  The graph is a wheel W5 (a hub joined to a 5-point rim). We count its
+//  vertices, its edges, and its faces — the faces detected and filled by
+//  `regions` (5 inner triangles), plus the one outer face — and watch
+//  V - E + F land on 2.
+// ============================================================================
+title("Euler's characteristic");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (760, 70), `V - E + F = 2`, 46);
+
+// --- the wheel graph W5 ---
+polygon(rim, (760,150),(560,295),(637,530),(883,530),(960,295));
+color(rim, cyan);
+line(k1, (760,360),(760,150)); tag(k1, spokes); color(k1, cyan);
+line(k2, (760,360),(560,295)); tag(k2, spokes); color(k2, cyan);
+line(k3, (760,360),(637,530)); tag(k3, spokes); color(k3, cyan);
+line(k4, (760,360),(883,530)); tag(k4, spokes); color(k4, cyan);
+line(k5, (760,360),(960,295)); tag(k5, spokes); color(k5, cyan);
+
+regions(cells, rim, spokes);   // fills + counts the 5 inner faces
+
+dot(hub,(760,360));
+dot(p1,(760,150)); dot(p2,(560,295)); dot(p3,(637,530));
+dot(p4,(883,530)); dot(p5,(960,295));
+
+// --- the running tally, on the left ---
+equation(tv, (250, 235), `V = 6`, 44);
+equation(te, (250, 345), `E = 10`, 44);
+equation(tf, (250, 455), `F = 6`, 44);
+text(fnote, (250, 500), "5 inside + 1 outside", 18);
+equation(sum, (760, 660), `6 - 10 + 6 = 2`, 52);
+
+// --- reveal ---
+untraced(rim); untraced(k1); untraced(k2); untraced(k3); untraced(k4); untraced(k5);
+untraced(cells);
+hidden(hub); hidden(p1); hidden(p2); hidden(p3); hidden(p4); hidden(p5);
+hidden(tv); hidden(te); hidden(tf); hidden(fnote); hidden(sum);
+
+wait(0.4);
+par { draw(rim, 1.0); draw(k1, 1.0); draw(k2, 1.0); draw(k3, 1.0); draw(k4, 1.0); draw(k5, 1.0); }
+par { show(hub); show(p1); show(p2); show(p3); show(p4); show(p5); }
+wait(0.4);
+
+// count the vertices
+par { show(tv); pulse(hub); pulse(p1); pulse(p2); pulse(p3); pulse(p4); pulse(p5); }
+wait(0.5);
+
+// count the edges
+par { show(te); pulse(rim); pulse(k1); pulse(k2); pulse(k3); pulse(k4); pulse(k5); }
+wait(0.5);
+
+// count the faces — 5 filled by `regions`, plus the outer face
+draw(cells, 1.3);
+par { show(tf); show(fnote); }
+wait(0.8);
+
+// and the characteristic lands on 2
+show(sum);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/N_PLyWLVDHQ" title="Euler's Formula V − E + F = 2, Animated on a Graph — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="euler-proof"><a class="header" href="#euler-proof">euler-proof</a></h2>
+<p>The spanning-tree / dual-tree PROOF of V − E + F = 2, built on <code>spantree</code> (run on the primal AND the dual) and <code>dual</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Why V - E + F = 2 — the spanning-tree / dual-tree proof, narrated by Manic.
+//
+//  A spanning tree of the graph uses V-1 edges (every vertex, no loop). The
+//  edges it leaves out are in bijection with the bounded faces: their duals form
+//  a spanning tree of the DUAL graph, using F-1 edges. Every edge is in exactly
+//  one of the two trees, so (V-1) + (F-1) = E, i.e. V - E + F = 2.
+//
+//  Built on `spantree` (run on the primal AND the dual) and `dual`.
+// ============================================================================
+title("Euler's formula — a proof");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (300, 66), `V - E + F = 2`, 42);
+text(narr, (760, 682), "A connected planar graph.", 26);
+
+// --- the wheel graph W5 ---
+polygon(rim, (760,150),(560,295),(637,530),(883,530),(960,295));
+color(rim, cyan);
+line(k1, (760,360),(760,150)); tag(k1, spokes); color(k1, cyan);
+line(k2, (760,360),(560,295)); tag(k2, spokes); color(k2, cyan);
+line(k3, (760,360),(637,530)); tag(k3, spokes); color(k3, cyan);
+line(k4, (760,360),(883,530)); tag(k4, spokes); color(k4, cyan);
+line(k5, (760,360),(960,295)); tag(k5, spokes); color(k5, cyan);
+
+regions(cells, rim, spokes);              // the F faces (faint context)
+opacity(cells, 0.18);
+
+dot(hub,(760,360));
+dot(p1,(760,150)); dot(p2,(560,295)); dot(p3,(637,530));
+dot(p4,(883,530)); dot(p5,(960,295));
+
+// tally
+equation(tv, (135, 200), `V = 6`, 34);
+equation(te, (135, 275), `E = 10`, 34);
+equation(tf, (135, 350), `F = 6`, 34);
+
+// the two trees (declared now, revealed in sequence)
+spantree(pt, spokes, rim);                // primal tree {pt} (green) + co-tree {pt.co} (orange)
+dual(du, rim, spokes);                     // dual: {du} edges + {du.nodes} dots
+spantree(dt, du);                          // dual's spanning tree {dt}
+color(dt, teal);
+
+equation(sum, (760, 632), `(V-1) + (F-1) = E`, 40);
+equation(nums, (760, 632), `5 + 5 = 10`, 40);
+
+// --- initial visibility ---
+untraced(rim); untraced(k1); untraced(k2); untraced(k3); untraced(k4); untraced(k5);
+untraced(cells); untraced(pt); untraced(pt.co); untraced(dt);
+hidden(hub); hidden(p1); hidden(p2); hidden(p3); hidden(p4); hidden(p5);
+hidden(tv); hidden(te); hidden(tf);
+hidden(du); hidden(du.nodes); hidden(dt.co);   // substrate + dual co-tree stay hidden
+hidden(sum); hidden(nums);
+
+// 1. the graph
+wait(0.4);
+par { draw(rim,1.0); draw(k1,1.0); draw(k2,1.0); draw(k3,1.0); draw(k4,1.0); draw(k5,1.0); }
+par { show(hub); show(p1); show(p2); show(p3); show(p4); show(p5); }
+wait(0.6);
+
+// 2. count V, E, F
+say(narr, "V vertices, E edges, F faces.");
+draw(cells, 0.9);
+par { show(tv); show(te); show(tf); }
+wait(1.0);
+
+// 3. a spanning tree — V-1 edges
+say(narr, "A spanning tree: every vertex, no loops — V-1 = 5 edges.");
+par { draw(pt, 1.4); }
+wait(1.0);
+
+// 4. the leftover (co-tree) edges
+say(narr, "That leaves E - (V-1) = 5 edges.");
+par { draw(pt.co, 1.0); }
+wait(1.0);
+
+// 5. the dual — one node per face
+say(narr, "The dual graph: one node inside each face.");
+par { show(du.nodes); }
+wait(1.0);
+
+// 6. a spanning tree of the dual — F-1 edges
+say(narr, "Its spanning tree pairs with the leftovers — F-1 = 5 edges.");
+par { draw(dt, 1.4); }
+wait(1.0);
+
+// 7. the two trees tile every edge
+say(narr, "Every edge lies in exactly one tree.");
+show(sum);
+wait(1.0);
+par { fade(sum); show(nums); }
+wait(1.0);
+
+// 8. conclusion
+say(narr, "So V - E + F = 2.");
+pulse(thm);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/rLbhBtqKFt8" title="The Spanning-Tree Proof of Euler's Formula — Primal & Dual Trees Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pythagorean-proof"><a class="header" href="#pythagorean-proof">pythagorean-proof</a></h2>
+<p>The dissection proof of a² + b² = c²: two identical (a+b)-squares, four triangles each, leaving c² on one and a²+b² on the other.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The Pythagorean theorem by dissection, a^2 + b^2 = c^2.
+//
+//  Two identical squares of side (a+b), each filled with four copies of the same
+//  right triangle. On the left the triangles leave a tilted square on the
+//  hypotenuse — c^2. On the right, the same four triangles regroup to leave a
+//  square on each leg — a^2 and b^2. Same square, same triangles, so a^2+b^2=c^2.
+//
+//  a = 120, b = 180 (so the tilted square's side is c = sqrt(120^2+180^2)).
+// ============================================================================
+title("Pythagoras by dissection");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (640, 96), `a^2 + b^2 = c^2`, 50);
+text(narr, (640, 672), "Two identical squares, side a + b.", 26);
+
+// ---- LEFT square: four triangles + c^2 ----
+polygon(sqL, (120,210),(420,210),(420,510),(120,510)); outlined(sqL); color(sqL, dim);
+// four corner triangles (legs a,b)
+polygon(la1, (120,210),(240,210),(120,390), teal);
+polygon(la2, (420,210),(420,330),(240,210), teal);
+polygon(la3, (420,510),(300,510),(420,330), teal);
+polygon(la4, (120,510),(120,390),(300,510), teal);
+opacity(la1, 0.4); opacity(la2, 0.4); opacity(la3, 0.4); opacity(la4, 0.4);
+// the tilted square on the hypotenuse
+polygon(csq, (240,210),(420,330),(300,510),(120,390), gold);
+equation(clab, (270, 360), `c^2`, 40);
+
+// ---- RIGHT square: the same four triangles + a^2 + b^2 ----
+polygon(sqR, (600,210),(900,210),(900,510),(600,510)); outlined(sqR); color(sqR, dim);
+// a^2 (top-left) and b^2 (bottom-right)
+polygon(asq, (600,210),(720,210),(720,330),(600,330), blue);
+polygon(bsq, (720,330),(900,330),(900,510),(720,510), violet);
+equation(alab, (660, 270), `a^2`, 34);
+equation(blab, (810, 420), `b^2`, 40);
+// the four triangles filling the two leftover rectangles
+polygon(ra1, (720,210),(900,210),(900,330), teal);
+polygon(ra2, (720,210),(900,330),(720,330), teal);
+polygon(ra3, (600,330),(720,330),(600,510), teal);
+polygon(ra4, (720,330),(720,510),(600,510), teal);
+opacity(ra1, 0.4); opacity(ra2, 0.4); opacity(ra3, 0.4); opacity(ra4, 0.4);
+
+// side = a + b, under each square
+brace(brL, (120,528),(420,528), "down"); text(brLt, (270,556), "a + b", 20);
+brace(brR, (600,528),(900,528), "down"); text(brRt, (750,556), "a + b", 20);
+
+// ---- reveal ----
+hidden(la1); hidden(la2); hidden(la3); hidden(la4);
+untraced(csq); hidden(clab);
+untraced(asq); untraced(bsq); hidden(alab); hidden(blab);
+hidden(ra1); hidden(ra2); hidden(ra3); hidden(ra4);
+hidden(brL); hidden(brLt); hidden(brR); hidden(brRt);
+
+wait(0.4);
+par { show(sqL); show(sqR); }
+par { show(brL); show(brR); show(brLt); show(brRt); }
+wait(0.7);
+
+say(narr, "Fill each with four copies of the same right triangle.");
+par { show(la1); show(la2); show(la3); show(la4); show(ra1); show(ra2); show(ra3); show(ra4); }
+wait(0.9);
+
+say(narr, "On the left they leave a square on the hypotenuse: c squared.");
+draw(csq, 1.0); show(clab);
+wait(1.0);
+
+say(narr, "Rearranged, the same four leave a square on each leg: a squared, b squared.");
+par { draw(asq, 0.9); draw(bsq, 0.9); }
+par { show(alab); show(blab); }
+wait(1.1);
+
+say(narr, "Same square, same four triangles — so a squared plus b squared is c squared.");
+pulse(thm);
+wait(0.6);
+par { pulse(csq); pulse(asq); pulse(bsq); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/bYPWoKFMx2Q" title="The Dissection Proof of a² + b² = c² — Pythagoras Animated in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="region-partition"><a class="header" href="#region-partition">region-partition</a></h2>
+<p><code>regions</code> fills + counts the areas a pentagram’s chords cut a disk into (16) — the planar-arrangement engine behind Moser/Euler/dissection scenes.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Region partition: five points on a circle, every chord drawn between them,
+//  and `regions` fills + counts the areas they cut the disk into. The pentagon
+//  + its diagonals (a pentagram) partition the circle into 16 regions.
+//
+//  `regions(id, boundary, dividers)` computes the planar arrangement of the
+//  boundary and every divider, then fills each enclosed face — the areas are
+//  detected for you, no coordinates for the pieces.
+// ============================================================================
+title("Region partition");
+canvas(1280, 720);
+template("black");
+
+circle(disk, (640, 360), 240);
+
+// five points on the circle
+dot(pa, (640, 120)); dot(pb, (412, 286)); dot(pc, (499, 554));
+dot(pd, (781, 554)); dot(pe, (868, 286));
+
+// all ten chords (5 sides + 5 diagonals), tagged so `regions` takes them at once
+line(s0, (640,120), (412,286)); tag(s0, chords);
+line(s1, (412,286), (499,554)); tag(s1, chords);
+line(s2, (499,554), (781,554)); tag(s2, chords);
+line(s3, (781,554), (868,286)); tag(s3, chords);
+line(s4, (868,286), (640,120)); tag(s4, chords);
+line(g0, (640,120), (499,554)); tag(g0, chords);
+line(g1, (640,120), (781,554)); tag(g1, chords);
+line(g2, (412,286), (781,554)); tag(g2, chords);
+line(g3, (412,286), (868,286)); tag(g3, chords);
+line(g4, (499,554), (868,286)); tag(g4, chords);
+
+regions(rg, disk, chords);   // fills + counts every enclosed area (16)
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5QvZ30TiFvU" title="How Many Regions Do a Pentagram's Chords Cut a Disk Into? — Planar Arrangement in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="light-and-brachistochrone"><a class="header" href="#light-and-brachistochrone">light-and-brachistochrone</a></h2>
+<p>The Brachistochrone’s optics arc: <code>refract</code> (real Snell’s law + angle sweep) → the native <code>brachistochrone</code> race where the cycloid wins.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Light and the brachistochrone — the optics half of the 2016 video.
+//
+//  Bernoulli solved "what curve gives the fastest slide?" by a leap: a sliding
+//  bead is like a ray of light, which always takes the FASTEST path. Light
+//  bends when it enters a slower medium (Snell's law); a bead falling through
+//  ever-faster layers bends the same way — and the limiting curve is a cycloid.
+//
+//  Built on the optics kit's `refract` (real Snell's law, angle sweep) and the
+//  physics kit's `brachistochrone` (four beads race, the cycloid wins).
+// ============================================================================
+title("Light and the brachistochrone");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "Which path through the water is fastest?", 24);
+
+refract(rf, (640, 360), 1.0, 1.5);            // air over glass/water — light bends
+equation(snell, (640, 84), `\frac{\sin\theta_1}{v_1}=\frac{\sin\theta_2}{v_2}`, 40);
+brachistochrone(bc, (450, 230));              // A→B racing curves (shown in act 2)
+
+// --- act 1: light refracts ---
+hidden(snell); hidden(bc);
+
+wait(0.6);
+say(narr, "Crossing into water light slows, and bends toward the normal.");
+wait(1.6);
+
+say(narr, "Steeper in means steeper out — always by Snell's law.");
+run(rf, 3.2);
+show(snell);
+wait(1.2);
+
+// --- act 2: Bernoulli's leap → the cycloid ---
+say(narr, "Bernoulli's leap: a sliding bead is like light through faster and faster layers.");
+par { fade(rf); fade(snell); }
+wait(0.8);
+
+show(bc);
+say(narr, "Its fastest path is a cycloid — the brachistochrone.");
+run(bc, 3.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GpiPv2clsIM" title="Snell's Law to the Brachistochrone — Why the Cycloid Is the Fastest Slide — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="snell-to-cycloid"><a class="header" href="#snell-to-cycloid">snell-to-cycloid</a></h2>
+<p>The derivation that connects them: layers of ever-faster media, light bending at each boundary (Snell), the zig-zag smoothing into a cycloid where sin θ/√y is constant.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Snell's law → the cycloid — the derivation that connects light to the
+//  brachistochrone (3b1b's multilayered.py).
+//
+//  Slice the medium into horizontal layers, each one letting light move faster
+//  than the last (a falling bead speeds up: v = sqrt(y)). Light bends at every
+//  boundary by Snell's law, sin(θ)/v = const. The bent path zig-zags down; as
+//  the layers get thinner it smooths into a single curve — a CYCLOID — on which
+//  sin(θ)/sqrt(y) is constant everywhere. That curve is the brachistochrone.
+//
+//  The bend angles below are the real Snell solution: v_i = sqrt(i+1),
+//  sin(θ_i) = sin(20°)·v_i, so θ steepens 20° → 57° from the vertical.
+// ============================================================================
+title("Snell's law becomes a cycloid");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "A falling bead speeds up — so slice the fall into faster and faster layers.", 22);
+
+// six layers, each faster (lighter) than the one above
+rect(l0, (640, 178), 1280, 77); color(l0, indigo); opacity(l0, 0.32);
+rect(l1, (640, 255), 1280, 77); color(l1, blue);   opacity(l1, 0.32);
+rect(l2, (640, 332), 1280, 77); color(l2, blue);   opacity(l2, 0.42);
+rect(l3, (640, 409), 1280, 77); color(l3, teal);   opacity(l3, 0.42);
+rect(l4, (640, 486), 1280, 77); color(l4, teal);   opacity(l4, 0.55);
+rect(l5, (640, 563), 1280, 77); color(l5, cyan);   opacity(l5, 0.55);
+
+// the discrete light path — bends once per boundary (Snell at each)
+line(s0, (200,140), (228,217)); tag(s0, ray); color(s0, gold);
+line(s1, (228,217), (270,294)); tag(s1, ray); color(s1, gold);
+line(s2, (270,294), (327,371)); tag(s2, ray); color(s2, gold);
+line(s3, (327,371), (399,448)); tag(s3, ray); color(s3, gold);
+line(s4, (399,448), (491,525)); tag(s4, ray); color(s4, gold);
+line(s5, (491,525), (609,602)); tag(s5, ray); color(s5, gold);
+
+// the smooth limit: a cycloid through the same endpoints
+param(cyc, (200,140), 130, 231, `t - sin(t)`, `cos(t) - 1`, (0, pi)); color(cyc, yellow);
+
+// the invariant, and one angle to illustrate it
+equation(inv, (960, 250), `\frac{\sin\theta}{\sqrt{y}} = \text{const}`, 40);
+line(nrm, (274,320), (274,430)); color(nrm, dim); dashed(nrm);   // vertical (normal)
+line(tan, (240,300), (312,428)); color(tan, red);                // tangent along the curve
+text(thlab, (300, 340), "θ", 26); color(thlab, red);
+
+// --- reveal ---
+untraced(s0); untraced(s1); untraced(s2); untraced(s3); untraced(s4); untraced(s5);
+untraced(cyc);
+hidden(inv); hidden(nrm); hidden(tan); hidden(thlab);
+
+wait(0.6);
+par { show(l0); show(l1); show(l2); show(l3); show(l4); show(l5); }
+wait(0.8);
+
+say(narr, "Light bends at every boundary — Snell's law, sin(θ)/v constant.");
+draw(s0, 0.4); draw(s1, 0.4); draw(s2, 0.4); draw(s3, 0.4); draw(s4, 0.4); draw(s5, 0.4);
+wait(0.8);
+
+say(narr, "Thinner and thinner layers — the zig-zag smooths into one curve.");
+par { fade(ray); draw(cyc, 1.4); }
+wait(1.0);
+
+say(narr, "A cycloid — and along it sin(θ)/sqrt(y) stays constant everywhere.");
+par { show(inv); show(nrm); show(tan); show(thlab); }
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/fQEH34NO5Tc" title="From Light Bending to a Cycloid — the Brachistochrone Derivation Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="cross-product-3d"><a class="header" href="#cross-product-3d">cross-product-3d</a></h2>
+<p>The 3D CROSS product (<code>cross3</code>): v × w perpendicular to the parallelogram v,w span, its length = that area, orbited to reveal the geometry behind the determinant formula.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The cross product in 3D (eola chapter8p2 — the geometric part).
+//
+//  v × w is the vector PERPENDICULAR to the plane of v and w, whose LENGTH is
+//  the area of the parallelogram they span (and whose sign follows the right
+//  hand). That geometry is what the î-ĵ-k̂ determinant formula computes.
+//
+//  Example: v=(2,1,0), w=(-1,2,0), so v×w=(0,0,5) — straight up, length 5 = the
+//  parallelogram's area (2·2 − 1·(−1)). Built on the new `cross3` builtin.
+// ============================================================================
+title("The cross product in 3D");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "Two vectors v and w in three-dimensional space.", 24);
+equation(det, (960, 130),
+  `\vec v\times\vec w=\det\!\begin{bmatrix}\hat\imath&amp;\hat\jmath&amp;\hat k\\2&amp;1&amp;0\\-1&amp;2&amp;0\end{bmatrix}`, 30);
+
+cross3(cr, (0, 0, 0), (2, 1, 0), (-1, 2, 0));
+camera3((5.5, -5.5, 5.5), (0.2, 0.4, 1.6));
+
+// --- reveal ---
+hidden(cr.p); hidden(cr.e1); hidden(cr.e2); hidden(det);
+
+wait(0.6);
+wait(1.4);                                        // v (green) and w (red) are up
+
+say(narr, "They span a parallelogram.");
+par { show(cr.e1); show(cr.e2); }
+wait(1.4);
+
+say(narr, "Their cross product v × w points perpendicular to both.");
+show(cr.p);
+wait(1.2);
+
+say(narr, "Its length equals the area of that parallelogram.");
+orbit3(75, 22, 9.5, 3.2);                          // orbit to reveal the perpendicular
+wait(1.2);
+
+say(narr, "That geometry is exactly what the determinant formula computes.");
+show(det);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nE7gxFkko3Y" title="The 3D Cross Product, Geometrically — Area, Perpendicular & the Determinant — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div><!-- GENERATED by scripts/gen-api.py; do not edit by hand. -->
 <h1 id="manic-api-reference"><a class="header" href="#manic-api-reference">Manic API reference</a></h1>
-<p>This page is generated from <a href="https://github.com/anishnath/manic/blob/main/crates/manic-lang/src/catalog.rs"><code>manic-lang</code>’s builtin catalog</a>, the same source used by parsing, editor highlighting, autocomplete, and engine/catalog regression tests. It currently lists <strong>401 builtins across 16 kits</strong>.</p>
-<p>Run <code>python3 scripts/gen-api.py</code> after changing the catalog. Run <code>python3 scripts/gen-api.py --check</code> to verify that this committed page is current.</p>
+<p>The complete index of every Manic builtin — <strong>433 builtins across 16 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
 <h2 id="reading-a-signature"><a class="header" href="#reading-a-signature">Reading a signature</a></h2>
 <ul>
 <li><code>new id</code> is the name created by a constructor.</li>
 <li><code>id or tag</code> targets an existing entity, generated part, or group.</li>
 <li>Parameters inside brackets are optional.</li>
-<li><code>…</code> means the builtin is catalogued, but its detailed parameter metadata still lives in the linked topic guide or <code>LANGUAGE.md</code>.</li>
+<li><code>…</code> means the builtin is catalogued here, but its detailed parameters are covered in the topic chapter for its kit.</li>
 <li>This is the exhaustive name index; the topic chapters remain the best place to learn composition, constraints, and examples.</li>
 </ul>
 <h2 id="standard-shapes-styling-and-motion"><a class="header" href="#standard-shapes-styling-and-motion">Standard shapes, styling, and motion</a></h2>
@@ -38546,10 +40651,13 @@ wait(1.30);
 <tr><td><code>rect(id: new id, center: (x, y), w: number, h: number)</code></td><td>constructor / setup</td><td>a rectangle</td></tr>
 <tr><td><code>image(id: new id, center: (x, y), path: string, [w: number], [h: number])</code></td><td>constructor / setup</td><td>a raster image (PNG/JPG) from a bundled asset: URI or file path, centred at a point (w×h px)</td></tr>
 <tr><td><code>svg(id: new id, center: (x, y), path: string, [size: number])</code></td><td>constructor / setup</td><td>import VECTOR artwork from an asset: URI or file path as native path entities (each subpath a traceable Polyline/Polygon), fitted to <code>size</code> px wide and centred; pieces are tagged {id} so draw/show/fade/hue/gradient/move broadcast</td></tr>
-<tr><td><code>equation(id: new id, center: (x, y), latex: string, [size: number])</code></td><td>constructor / setup</td><td>typeset a LaTeX math string centred at a point; standard \textcolor{cyan}{…} gives individual terms semantic Manic colours that follow the template. Put LaTeX in BACKTICKS; animate with show/fade/move/scale (image, not draw-on)</td></tr>
+<tr><td><code>equation(id: new id, center: (x, y), latex: string, [size: number])</code></td><td>constructor / setup</td><td>typeset a LaTeX math string centred at a point; standard \textcolor{cyan}{…} gives individual terms semantic Manic colours that follow the template. Put LaTeX in BACKTICKS; animate with show/fade/move/scale, and untraced+draw gives a left-to-right WRITE-ON wipe</td></tr>
+<tr><td><code>mathparts(…)</code></td><td>constructor / setup</td><td>mathparts(id, (x,y), <code>part0</code>, <code>part1</code>, …, [size]) — one equation split into PARTS, auto-laid-out left-to-right + baseline-aligned, centred at (x,y). Each part is its own entity {id}.0/{id}.1/… (all tagged {id}) so you can framebox/color/draw a single term. Manim’s indexable MathTex(…). Put each part in BACKTICKS; a trailing number is the size</td></tr>
+<tr><td><code>framebox(id: new id, target: id or tag, [buff: number], [color: colour])</code></td><td>constructor / setup</td><td>an outlined rectangle that SURROUNDS a target entity’s bounding box, padded by <code>buff</code> px (default 8) — a highlight box. Move it to another target with surround(box, target). Default colour gold</td></tr>
+<tr><td><code>surround(box: id or tag, target: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>move a highlight box (framebox/rect) to surround a NEW target, gliding + resizing to fit it (Manim ReplacementTransform on surrounding rectangles)</td></tr>
 <tr><td><code>line(id: new id, from: (x, y), to: (x, y))</code></td><td>constructor / setup</td><td>a line segment</td></tr>
 <tr><td><code>link(id: new id, from: id or tag, to: id or tag, [bend: number])</code></td><td>constructor / setup</td><td>a straight or bent edge that follows two moving entities</td></tr>
-<tr><td><code>arrow(id: new id, from: (x, y), to: (x, y))</code></td><td>constructor / setup</td><td>an arrow</td></tr>
+<tr><td><code>arrow(id: new id, from: (x, y), to: (x, y), [bend: number])</code></td><td>constructor / setup</td><td>an arrow (optional <code>bend</code> bows it into a curved arc)</td></tr>
 <tr><td><code>polygon(…)</code></td><td>constructor / setup</td><td>a filled polygon: polygon(id, (x1,y1), (x2,y2), (x3,y3), …, [color])</td></tr>
 <tr><td><code>dot(id: new id, at: (x, y), [r: number])</code></td><td>constructor / setup</td><td>a small filled dot</td></tr>
 <tr><td><code>cloud(…)</code></td><td>constructor / setup</td><td>a point field: N points placed by closed-form formulas of index <code>i</code> and time <code>t</code></td></tr>
@@ -38599,7 +40707,7 @@ wait(1.30);
 <tr><td><code>subtract(…)</code></td><td>constructor / setup</td><td>boolean difference a-b</td></tr>
 <tr><td><code>exclusion(…)</code></td><td>constructor / setup</td><td>boolean symmetric difference</td></tr>
 <tr><td><code>xor(…)</code></td><td>constructor / setup</td><td>boolean symmetric difference</td></tr>
-<tr><td><code>brace(…)</code></td><td>constructor / setup</td><td>a curly brace</td></tr>
+<tr><td><code>brace(id: new id, p1: (x, y), p2: (x, y), [depth: number], [direction: id or tag])</code></td><td>constructor / setup</td><td>a curly brace between two points; optional <code>depth</code> (amplitude) and <code>direction</code> (“up”/“down”/“left”/“right”) to set which way it bulges — either may be given alone, e.g. brace(b,(x1,y1),(x2,y2),“down”) or brace(b,p1,p2,30,“down”)</td></tr>
 <tr><td><code>bracelabel(…)</code></td><td>constructor / setup</td><td>a brace with a label</td></tr>
 <tr><td><code>bracetext(…)</code></td><td>constructor / setup</td><td>a brace’s text label</td></tr>
 <tr><td><code>draw(id: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>trace a stroke on</td></tr>
@@ -38624,7 +40732,16 @@ wait(1.30);
 <tr><td><code>turn(id_or_tag: id or tag, pivot: (x, y), degrees: number, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>rotate one entity or tagged arrangement rigidly around a shared pivot</td></tr>
 <tr><td><code>disintegrate(entity: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>dissolve an entity’s actual silhouette into deterministic seekable particles</td></tr>
 <tr><td><code>shift(id: id or tag, by: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>move by a delta</td></tr>
-<tr><td><code>grow(id: id or tag, to: (x, y), [dur: number])</code></td><td>animation verb</td><td>animate a line/arrow endpoint</td></tr>
+<tr><td><code>slidex(id: id or tag, x: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>slide to an absolute x, keeping y where it is</td></tr>
+<tr><td><code>slidey(id: id or tag, y: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>slide to an absolute y, keeping x where it is</td></tr>
+<tr><td><code>dock(group: id or tag, member: id or tag, target: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>shift a group rigidly so one member lands on a target point or entity</td></tr>
+<tr><td><code>groupscale(group: id or tag, factor: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>scale a group about its collective centre (not each part about its own)</td></tr>
+<tr><td><code>trail(id: id or tag, target: id or tag, [color: colour], [thickness: number])</code></td><td>constructor / setup</td><td>a growing motion trail that records where an entity has been</td></tr>
+<tr><td><code>loupe(id: new id, source: (x, y), sw: number, sh: number, display: (x, y), mag: number, [frame_color: colour], [panel_color: colour])</code></td><td>constructor / setup</td><td>a magnifier: a source frame sw<em>sh over the scene at (sx,sy) + a panel at (dx,dy) that shows that region magnified mag</em> live. Animate {id}.frame (move/scale) and the view follows. Manim’s ZoomedScene</td></tr>
+<tr><td><code>regions(…)</code></td><td>constructor / setup</td><td>fill + count the areas the dividers (chords/segments/edges — each an entity or tag) cut a boundary (polygon/rect/circle) into. Computes the planar arrangement; fills every enclosed face {id}.r0, {id}.r1, … (all tagged {id}) with a cycling palette. The number of {id}.r* parts is the region count. Variadic: regions(id, boundary, d1, d2, …)</td></tr>
+<tr><td><code>spantree(…)</code></td><td>constructor / setup</td><td>a spanning tree (forest) of the graph whose edges are the given entities/tags. Greedy union-find in argument order (list preferred edges first to shape the tree). Tree edges = green overlays {id}.t0.. (tagged {id}); leftover co-tree edges = overlays {id}.c0.. (tagged {id}.co). Works on any drawn graph, including a dual. Variadic: spantree(id, e1, e2, …)</td></tr>
+<tr><td><code>dual(…)</code></td><td>constructor / setup</td><td>the DUAL graph of a planar graph: a node at each enclosed face’s centre + one OUTER node, and a dual edge across each primal edge joining the two faces it separates (boundary edge -&gt; outer node). Nodes = dots {id}.n0.. (tagged {id}.nodes); dual edges = lines tagged {id}, so spantree(dt, id) gives the dual’s spanning tree (F-1 edges). Variadic: dual(id, boundary, d1, d2, …)</td></tr>
+<tr><td><code>grow(id: id or tag, to: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>animate a line/arrow endpoint</td></tr>
 <tr><td><code>scale(id: id or tag, factor: number, [dur: number])</code></td><td>animation verb</td><td>animate scale to a factor</td></tr>
 <tr><td><code>rotate(id: id or tag, degrees: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>animate rotation</td></tr>
 <tr><td><code>say(id: id or tag, text: string, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>crossfade text to new content</td></tr>
@@ -38639,6 +40756,7 @@ wait(1.30);
 <tr><td><code>cycle(…)</code></td><td>state-changing verb</td><td>move entities cyclically into one another’s positions along an optional arc</td></tr>
 <tr><td><code>cam(to: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>pan the camera to a point</td></tr>
 <tr><td><code>zoom(factor: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>zoom the camera</td></tr>
+<tr><td><code>followshot(target: id or tag, [offset: (x, y)])</code></td><td>state-changing verb</td><td>a moving-camera FOLLOW SHOT: the 2D camera tracks an entity, centred on it every frame (+ optional screen offset). Pair with zoom; <code>none</code> releases it (pan/zoom back to restore)</td></tr>
 <tr><td><code>karaoke(…)</code></td><td>animation verb</td><td>highlight caption words in sequence</td></tr>
 <tr><td><code>wordpop(…)</code></td><td>animation verb</td><td>pop caption words in one at a time</td></tr>
 </tbody>
@@ -38668,10 +40786,11 @@ wait(1.30);
 </thead>
 <tbody>
 <tr><td><code>cloud3(…)</code></td><td>constructor / setup</td><td>a 3D point field: N points placed by closed-form x/y/z formulas of index <code>i</code> and time <code>t</code></td></tr>
-<tr><td><code>camera3(eye: (x, y, z), target: (x, y, z), [fov: number], [projection: id or tag])</code></td><td>constructor / setup</td><td>a Z-up orbit camera</td></tr>
+<tr><td><code>camera3(eye: (x, y, z), target: (x, y, z), [fov: number], [projection: id or tag], [panel_center: (x, y)], [panel_w: number], [panel_h: number])</code></td><td>constructor / setup</td><td>a Z-up orbit camera. Optionally render the 3D scene into a canvas-space VIEWPORT panel — pass <code>(cx,cy)</code>, <code>w</code>, <code>h</code> after the projection and the 3D renders into that bordered sub-rect (a 3D inset in a 2D layout) instead of the whole canvas, using the panel’s own aspect.</td></tr>
 <tr><td><code>point3(id: new id, at: (x, y, z), [radius: number])</code></td><td>constructor / setup</td><td>a point in 3D space</td></tr>
 <tr><td><code>line3(id: new id, from: (x, y, z), to: (x, y, z))</code></td><td>constructor / setup</td><td>a 3D line segment</td></tr>
 <tr><td><code>arrow3(id: new id, from: (x, y, z), to: (x, y, z))</code></td><td>constructor / setup</td><td>a 3D vector arrow</td></tr>
+<tr><td><code>cross3(id: new id, origin: (x, y, z), v: (x, y, z), w: (x, y, z), [color: colour])</code></td><td>constructor / setup</td><td>the 3D CROSS PRODUCT v x w shown geometrically: the two vectors, the parallelogram they span, and p = v x w perpendicular to both with length = that parallelogram’s AREA (the geometric meaning behind the determinant formula). Vectors {id}.v (green), {id}.w (red), {id}.p (the cross, gold); parallelogram far edges {id}.e1/{id}.e2. All tagged {id}. Orbit with camera3.</td></tr>
 <tr><td><code>cube3(id: new id, center: (x, y, z), size: (x, y, z))</code></td><td>constructor / setup</td><td>a rotatable 3D cuboid</td></tr>
 <tr><td><code>linmap3(id: new id, center: (x, y, z), a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, [color: colour])</code></td><td>constructor / setup</td><td>a 3x3 matrix deforming the unit cube; volume = determinant</td></tr>
 <tr><td><code>eigen3(id: new id, center: (x, y, z), a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, [color: colour])</code></td><td>constructor / setup</td><td>the real eigenvector directions of a 3x3 matrix (invariant lines)</td></tr>
@@ -38720,6 +40839,7 @@ wait(1.30);
 <tr><td><code>curve3(id: new id, x: string, y: string, z: string, [domain: (x, y)])</code></td><td>constructor / setup</td><td>parametric 3D curve from x(t)/y(t)/z(t) formulas</td></tr>
 <tr><td><code>trajectory3(id: new id, dx/dt: string, dy/dt: string, dz/dt: string, start: (x, y, z), [steps: number], [dt: number])</code></td><td>constructor / setup</td><td>integrate a 3D ODE (dx/dt, dy/dt, dz/dt) with RK4 — draws strange attractors (Lorenz, …)</td></tr>
 <tr><td><code>surface3(id: new id, z: string, xdom: (x, y), ydom: (x, y), [res: number])</code></td><td>constructor / setup</td><td>filled, flat-shaded height-field surface z = f(x,y)</td></tr>
+<tr><td><code>domainsurface(id: new id, formula: string, xdom: (x, y), ydom: (x, y), [res: number], [height: number])</code></td><td>constructor / setup</td><td>DOMAIN COLOURING in 3D — the modulus surface of a complex function f(z): each grid point is z=x+iy, the surface HEIGHT is height·|f(z)| (poles clamped finite) and each vertex’s COLOUR is arg f(z) (phase hue). Orbit with camera3. Write f in z/i (e.g. <code>1/(z*z+1)</code>, <code>(z-1)/(z+1)</code>, <code>sin(z)</code>). res = grid resolution (default 48), height = vertical scale (default 1).</td></tr>
 <tr><td><code>implicit3(id: new id, formula: string, xdom: (x, y), ydom: (x, y), zdom: (x, y), [level: number], [resolution: number])</code></td><td>constructor / setup</td><td>an isosurface extracted from a bounded 3D scalar field</td></tr>
 <tr><td><code>lsystem3(id: new id, origin: (x, y, z), step: number, angle: number, iterations: number, axiom: string, rules: string, [max_symbols: number])</code></td><td>constructor / setup</td><td>a bounded deterministic branching 3D turtle grammar</td></tr>
 <tr><td><code>heightmap3(id: new id, grid: id or tag, z: string, [size: number])</code></td><td>constructor / setup</td><td>lift a 2D grid into a 3D terrain mesh: z(x,y,h), h=cell value</td></tr>
@@ -38737,6 +40857,78 @@ wait(1.30);
 <tr><td><code>model3(id: new id, path: string, center: (x, y, z), [scale: number])</code></td><td>constructor / setup</td><td>load deterministic geometry from a bundled asset: URI or safety-limited OBJ path</td></tr>
 <tr><td><code>assembly3(id: new id, path: string, center: (x, y, z), [scale: number])</code></td><td>constructor / setup</td><td>load grouped OBJ geometry as addressable id.group entities sharing one id tag</td></tr>
 <tr><td><code>tube3(id: new id, path: id or tag, radius: string, [sides: number])</code></td><td>constructor / setup</td><td>variable-radius tube around a line3, arrow3, or curve3</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="math-1"><a class="header" href="#math-1">Math</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>colorwheel(id: new id, center: (x, y), radius: number)</code></td><td>constructor / setup</td><td>the LEGEND for domain colouring: a hue disk of <code>radius</code> px where angle = phase (arg) and the centre darkens (small |z|) toward a bright rim — the key for domaincolor/domainsurface.</td></tr>
+<tr><td><code>warp(id: new id, center: (x, y), unit: number, formula: string, [range: number], [res: number])</code></td><td>constructor / setup</td><td>a coordinate grid over the complex plane that DEFORMS under a complex function z-&gt;f(z): each grid line is sampled from f (so it bends into a curve). Starts as the identity grid and morphs to the warped image when you animate it — to(id, morph, 1, dur) (broadcasts over the whole grid). Write f in <code>z</code>/<code>i</code> (e.g. <code>z*z</code>, <code>1/z</code>, <code>(z-1)/(z+1)</code>, <code>sin(z)</code>). The complex/non-linear twin of linmap and the deforming-grid companion to domaincolor. <code>range</code> = half-width in complex units (default 3, integer grid lines); <code>res</code> = samples per line (curve smoothness, default 28). Lines tagged {id}.</td></tr>
+<tr><td><code>squish(id: new id, center: (x, y), unit: number, a: number, b: number, [span: number])</code></td><td>constructor / setup</td><td>the DOT PRODUCT as a transformation (DUALITY): the whole plane collapses onto a NUMBER LINE under the 1x2 map [a b], sending (x,y) -&gt; a<em>x + b</em>y. Animate with to(id, morph, 1, dur) — the grid squishes onto the line, i-hat lands on a, j-hat on b. The gold DUAL VECTOR (a,b) ({id}.dual) is the 2D vector whose dot product IS this map (the duality). The rank-reducing sibling of gridmap; output line + ticks are {id}.line.</td></tr>
+<tr><td><code>domaincolor(id: new id, center: (x, y), w: number, h: number, formula: string, [range: number])</code></td><td>constructor / setup</td><td>domain colouring of a complex function f(z) over a w×h plane region: each pixel is z=x+iy, hue = arg f(z), brightness from |f(z)| (zeros dark, poles white). Write f in terms of the complex variable <code>z</code> and the imaginary unit <code>i</code> (e.g. <code>z^2+1</code>, <code>1/(z*z+1)</code>, <code>sin(z)</code>, <code>(z-1)/(z+1)</code>); constants pi/tau/e and functions sin/cos/tan/sinh/cosh/tanh/exp/ln/sqrt/conj/abs/re/im AND <code>zeta</code> (the Riemann zeta function, valid through the critical strip — <code>zeta(z)</code> shows the pole at s=1 and zeros as dark points). <code>range</code> = half-width in complex units along the real axis (default 4; imaginary extent scales by aspect).</td></tr>
+<tr><td><code>axes(id: new id, center: (x, y), halfw: number, halfh: number, [unit: number])</code></td><td>constructor / setup</td><td>a coordinate frame (optional tick spacing in px)</td></tr>
+<tr><td><code>coords(id: new id, origin: (x, y), xrange: (x, y), yrange: (x, y), sx: number, sy: number, [tips: number], [step: number], [numbers: number], [xname: string], [yname: string])</code></td><td>constructor / setup</td><td>a flexible coordinate frame: arbitrary ranges, per-axis scale, optional tips/ticks/auto-numbers, and optional axis names. Origin (0,0) maps to <code>origin</code>; align a plot with the same origin+sx+sy. Use xtick/ytick for custom (non-numeric) tick labels</td></tr>
+<tr><td><code>xtick(id: new id, coords: new id, value: number, [text: string])</code></td><td>constructor / setup</td><td>a tick + label on a coords frame’s x-axis at an axis VALUE (not a pixel); label is any text — number, word (“Mon”), or symbol (“π/2”) — omit to show the value</td></tr>
+<tr><td><code>ytick(id: new id, coords: new id, value: number, [text: string])</code></td><td>constructor / setup</td><td>a tick + label on a coords frame’s y-axis at an axis VALUE (see xtick)</td></tr>
+<tr><td><code>field(id: new id, formula: string)</code></td><td>constructor / setup</td><td>define a REUSABLE scalar field — a pure function of x and y: field(name, “expr”). Call it name(a, b) inside ANY formula (plot / surface3 / shader / cloud) and it INLINES, so every view samples the identical expression (author once, view many ways — provably the same field; e.g. plot name(x,0), surface3 name(x,y), a heatmap shader name((u-0.5)*8,(v-0.5)*8)). Use name(x, 0) for a 1-D slice. Body may use only x, y, pi/tau/e, and functions — pass time/extra inputs at the call site. Not an entity; references only earlier-defined fields (no cycles).</td></tr>
+<tr><td><code>plot(id: new id, center: (x, y), sx: number, sy: number, formula: function or formula, [domain: number])</code></td><td>constructor / setup</td><td>y = f(x) as a curve</td></tr>
+<tr><td><code>param(id: new id, center: (x, y), sx: number, sy: number, x: string, y: string, [tdomain: number])</code></td><td>constructor / setup</td><td>a PARAMETRIC curve (x(t), y(t)) — the twin of plot for curves that aren’t y=f(x): spirals, roses, Lissajous. Two formulas in the parameter <code>t</code>; <code>tdomain</code> is a (t0,t1) pair or a scalar giving [0,t] (default [0, tau]). sx/sy are px per unit, origin at center.</td></tr>
+<tr><td><code>polar(id: new id, center: (x, y), sx: number, sy: number, r: string, [tdomain: number])</code></td><td>constructor / setup</td><td>a POLAR curve r = f(t) with <code>t</code> the angle θ; traces (r·cos t, r·sin t). tdomain is a (t0,t1) pair or a scalar [0,t] (default [0, tau]). Roses cos(3t), spirals t, limaçons.</td></tr>
+<tr><td><code>normal(id: new id, curve: new id, x: number, [len: number])</code></td><td>constructor / setup</td><td>the normal (perpendicular) line to a curve at x</td></tr>
+<tr><td><code>slope(id: new id, curve: new id, x: number, [offset: (x, y)])</code></td><td>constructor / setup</td><td>a live readout of a curve’s slope at x</td></tr>
+<tr><td><code>slopetri(id: new id, curve: new id, x: number, [run: number])</code></td><td>constructor / setup</td><td>a slope triangle on a curve at x: a run leg (length <code>run</code>, default 1, labeled <code>{id}.one</code>) + a red rise leg up to the tangent, proving slope = rise/run. Parts <code>{id}.run/.rise/.one</code> share tag <code>{id}</code>, so <code>to(id, x, ...)</code> slides the whole triangle in lock-step.</td></tr>
+<tr><td><code>area(id: new id, curve: new id, a: number, b: number, [n: number])</code></td><td>constructor / setup</td><td>the filled region under a curve from a to b</td></tr>
+<tr><td><code>integral(id: new id, curve: new id, a: number, b: number, [at: (x, y)])</code></td><td>constructor / setup</td><td>a live readout of the integral of a curve from a to b</td></tr>
+<tr><td><code>roots(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots where a curve crosses zero</td></tr>
+<tr><td><code>deriv(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>the derivative f’ of a curve, drawn as its own curve</td></tr>
+<tr><td><code>accum(id: new id, curve: new id, [a: number], [color: colour])</code></td><td>constructor / setup</td><td>the accumulation function integral(a..x) of a curve</td></tr>
+<tr><td><code>extrema(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots at a curve’s maxima and minima (slope = 0)</td></tr>
+<tr><td><code>inflections(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots where a curve changes concavity (f’’ = 0)</td></tr>
+<tr><td><code>band(id: new id, top: new id, bottom: new id, [color: colour], [range: (x, y)])</code></td><td>constructor / setup</td><td>the filled region between two curves (optional (a,b) restricts it to that x-slice)</td></tr>
+<tr><td><code>vline(id: new id, curve: new id, x: number, [color: colour], [style: id or tag])</code></td><td>constructor / setup</td><td>a guide line from the x-axis up to a plotted curve at x; dotted by default (style: dotted/dashed/solid)</td></tr>
+<tr><td><code>mark(id: new id, curve: new id, x: number, [color: colour])</code></td><td>constructor / setup</td><td>a dot that rides a plotted curve at x, always on the graph; slide it with to(id, x, …)</td></tr>
+<tr><td><code>graphlabel(id: new id, curve: new id, latex: string, [x: number], [direction: id or tag], [color: colour])</code></td><td>constructor / setup</td><td>a LaTeX label pinned to a plotted curve at x (default: the curve’s right end), nudged clear of the line in a direction (up/down/left/right/upright/upleft/downright/downleft, default up); colour defaults to the curve’s. Put LaTeX in BACKTICKS</td></tr>
+<tr><td><code>boxto(id: new id, curve: new id, x: number, [color: colour])</code></td><td>constructor / setup</td><td>a filled rectangle from the origin (0,0) to the point (x, f(x)) on a curve (an inscribed box, area x*f(x)); slide it with to(id, x, …) — on y=k/x the area stays constant</td></tr>
+<tr><td><code>riemann(id: new id, curve: new id, a: number, b: number, [dx: number], [color: colour])</code></td><td>constructor / setup</td><td>Riemann rectangles under a curve from a to b (bars of width dx, left-endpoint sampled) — the discrete analogue of <code>area</code>; default colour green</td></tr>
+<tr><td><code>taylor(id: new id, curve: new id, a: number, n: number, [color: colour])</code></td><td>constructor / setup</td><td>the degree-n Taylor polynomial of a curve about a</td></tr>
+<tr><td><code>limit(id: new id, curve: new id, a: number, [color: colour])</code></td><td>constructor / setup</td><td>visualise lim(x-&gt;a) f(x): the value approached, with an approaching dot</td></tr>
+<tr><td><code>newton(id: new id, curve: new id, x0: number, [steps: number])</code></td><td>constructor / setup</td><td>Newton’s method zig-zag from a starting guess</td></tr>
+<tr><td><code>spline(…)</code></td><td>constructor / setup</td><td>a smooth curve through a list of points</td></tr>
+<tr><td><code>trajectory(id: new id, dx/dt: string, dy/dt: string, start: (x, y), center: (x, y), scale: number, [steps: number])</code></td><td>constructor / setup</td><td>an ODE path: dx/dt, dy/dt integrated from a start point</td></tr>
+<tr><td><code>linmap(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [span: number])</code></td><td>constructor / setup</td><td>a 2x2 matrix applied to the plane (grid + basis), shown STATICALLY as a before/after (faint identity grid + bright transformed grid). For the ANIMATED version use gridmap.</td></tr>
+<tr><td><code>gridmap(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [span: number], [a0: number], [b0: number], [c0: number], [d0: number])</code></td><td>constructor / setup</td><td>an ANIMATED 2x2 matrix transform of the plane: a coordinate grid + basis i-hat/j-hat that MORPHS from the identity to [[a,b],[c,d]] when you animate it — to(id, morph, 1, dur) sweeps all of space deforming (the iconic ‘matrices transform space’). A faint identity grid {id}.bg stays behind. The animated twin of linmap (static before/after) and the linear sibling of warp (complex). i-hat lands on the first column, j-hat on the second. Optional FROM matrix a0,b0,c0,d0 (default identity): morph BETWEEN two matrices [[a0,b0],[c0,d0]] -&gt; [[a,b],[c,d]] so a second gridmap continues where the first left off (matrix multiplication = composition).</td></tr>
+<tr><td><code>determinant(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>the unit square mapped to a parallelogram; area = det</td></tr>
+<tr><td><code>eigen(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>a matrix’s real eigenvector directions (with eigenvalues)</td></tr>
+<tr><td><code>diagonalise(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>A = P D P^-1: in the eigenbasis the matrix is a pure stretch</td></tr>
+<tr><td><code>diagonalize(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>A = P D P^-1: in the eigenbasis the matrix is a pure stretch</td></tr>
+<tr><td><code>rref(id: new id, data: string, center: (x, y), [cellw: number], [rowh: number])</code></td><td>constructor / setup</td><td>animated Gaussian elimination to reduced row-echelon form</td></tr>
+<tr><td><code>project(id: new id, center: (x, y), unit: number, b: (x, y), a: (x, y), [color: colour])</code></td><td>constructor / setup</td><td>orthogonal projection of a vector onto a line (subspace)</td></tr>
+<tr><td><code>leastsquares(id: new id, center: (x, y), unit: number, data: string, [color: colour])</code></td><td>constructor / setup</td><td>the best-fit line through a point cloud (linear regression)</td></tr>
+<tr><td><code>linsolve(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, e: number, f: number, [span: number])</code></td><td>constructor / setup</td><td>the row picture of Ax=b: two lines meeting at the solution</td></tr>
+<tr><td><code>span(id: new id, center: (x, y), unit: number, v: (x, y), [w: (x, y)], [color: colour])</code></td><td>constructor / setup</td><td>the span of one or two vectors (a line, or the whole plane)</td></tr>
+<tr><td><code>vector(id: new id, origin: (x, y), delta: (x, y), [color: colour])</code></td><td>constructor / setup</td><td>an arrow from an origin</td></tr>
+<tr><td><code>numberline(…)</code></td><td>constructor / setup</td><td>a labelled number line</td></tr>
+<tr><td><code>numberplane(…)</code></td><td>constructor / setup</td><td>a gridded coordinate plane</td></tr>
+<tr><td><code>plane(…)</code></td><td>constructor / setup</td><td>a coordinate plane</td></tr>
+<tr><td><code>complexplane(…)</code></td><td>constructor / setup</td><td>the complex plane</td></tr>
+<tr><td><code>polarplane(…)</code></td><td>constructor / setup</td><td>a polar grid</td></tr>
+<tr><td><code>matrix(id: new id, data: string, center: (x, y), [colw: number], [rowh: number])</code></td><td>constructor / setup</td><td>a bracketed matrix</td></tr>
+<tr><td><code>table(id: new id, data: string, center: (x, y), [colw: number], [rowh: number], [cols: string], [rows: string])</code></td><td>constructor / setup</td><td>a ruled table</td></tr>
+<tr><td><code>mathtable(…)</code></td><td>constructor / setup</td><td>a table of math expressions</td></tr>
+<tr><td><code>integertable(…)</code></td><td>constructor / setup</td><td>a table of integers</td></tr>
+<tr><td><code>decimaltable(…)</code></td><td>constructor / setup</td><td>a table of decimals</td></tr>
+<tr><td><code>arc(…)</code></td><td>constructor / setup</td><td>a circular arc</td></tr>
+<tr><td><code>sector(…)</code></td><td>constructor / setup</td><td>a pie sector</td></tr>
+<tr><td><code>annulus(…)</code></td><td>constructor / setup</td><td>a ring / annular sector</td></tr>
+<tr><td><code>pie(…)</code></td><td>constructor / setup</td><td>a pie chart</td></tr>
+<tr><td><code>arrowfield(…)</code></td><td>constructor / setup</td><td>a named or formula-authored bounded vector field</td></tr>
+<tr><td><code>vectorfield(…)</code></td><td>constructor / setup</td><td>a named or formula-authored bounded vector field</td></tr>
+<tr><td><code>tangent(…)</code></td><td>constructor / setup</td><td>tangent line to a curve at x (or tangent points to a circle)</td></tr>
 </tbody>
 </table>
 </div>
@@ -38770,62 +40962,6 @@ wait(1.30);
 <tr><td><code>raceline(parent: new id, [label: string], [values: string])</code></td><td>constructor / setup</td><td>add a companion LINE across the top of a bar race — a running total (auto-summed from the bars) or an explicit tracked metric: <code>raceline(parent, ["label"], ["v0 v1 …"])</code></td></tr>
 <tr><td><code>racepanel(parent: new id)</code></td><td>constructor / setup</td><td>add a multi-line HISTORY panel at the bottom of a bar race — every series drawn as a line up to a moving time-cursor, synced to the race (the classic bar+line combo): <code>racepanel(parent)</code></td></tr>
 <tr><td><code>race(parent: new id, [dur: number], [ease: new id])</code></td><td>animation verb</td><td>play the whole race: interpolate each series between periods, re-rank, slide bars to their new slots (the reorder IS the race), rescale to the running max, and tick the period + value counters</td></tr>
-</tbody>
-</table>
-</div>
-<h2 id="math-1"><a class="header" href="#math-1">Math</a></h2>
-<div class="table-wrapper">
-<table>
-<thead>
-<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
-</thead>
-<tbody>
-<tr><td><code>axes(id: new id, center: (x, y), halfw: number, halfh: number, [unit: number])</code></td><td>constructor / setup</td><td>a coordinate frame (optional tick spacing in px)</td></tr>
-<tr><td><code>field(id: new id, formula: string)</code></td><td>constructor / setup</td><td>define a REUSABLE scalar field — a pure function of x and y: field(name, “expr”). Call it name(a, b) inside ANY formula (plot / surface3 / shader / cloud) and it INLINES, so every view samples the identical expression (author once, view many ways — provably the same field; e.g. plot name(x,0), surface3 name(x,y), a heatmap shader name((u-0.5)*8,(v-0.5)*8)). Use name(x, 0) for a 1-D slice. Body may use only x, y, pi/tau/e, and functions — pass time/extra inputs at the call site. Not an entity; references only earlier-defined fields (no cycles).</td></tr>
-<tr><td><code>plot(id: new id, center: (x, y), sx: number, sy: number, formula: function or formula, [domain: number])</code></td><td>constructor / setup</td><td>y = f(x) as a curve</td></tr>
-<tr><td><code>normal(id: new id, curve: new id, x: number, [len: number])</code></td><td>constructor / setup</td><td>the normal (perpendicular) line to a curve at x</td></tr>
-<tr><td><code>slope(id: new id, curve: new id, x: number, [offset: (x, y)])</code></td><td>constructor / setup</td><td>a live readout of a curve’s slope at x</td></tr>
-<tr><td><code>area(id: new id, curve: new id, a: number, b: number, [n: number])</code></td><td>constructor / setup</td><td>the filled region under a curve from a to b</td></tr>
-<tr><td><code>integral(id: new id, curve: new id, a: number, b: number, [at: (x, y)])</code></td><td>constructor / setup</td><td>a live readout of the integral of a curve from a to b</td></tr>
-<tr><td><code>roots(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots where a curve crosses zero</td></tr>
-<tr><td><code>deriv(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>the derivative f’ of a curve, drawn as its own curve</td></tr>
-<tr><td><code>accum(id: new id, curve: new id, [a: number], [color: colour])</code></td><td>constructor / setup</td><td>the accumulation function integral(a..x) of a curve</td></tr>
-<tr><td><code>extrema(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots at a curve’s maxima and minima (slope = 0)</td></tr>
-<tr><td><code>inflections(id: new id, curve: new id, [color: colour])</code></td><td>constructor / setup</td><td>dots where a curve changes concavity (f’’ = 0)</td></tr>
-<tr><td><code>band(id: new id, top: new id, bottom: new id, [color: colour])</code></td><td>constructor / setup</td><td>the filled region between two curves</td></tr>
-<tr><td><code>taylor(id: new id, curve: new id, a: number, n: number, [color: colour])</code></td><td>constructor / setup</td><td>the degree-n Taylor polynomial of a curve about a</td></tr>
-<tr><td><code>limit(id: new id, curve: new id, a: number, [color: colour])</code></td><td>constructor / setup</td><td>visualise lim(x-&gt;a) f(x): the value approached, with an approaching dot</td></tr>
-<tr><td><code>newton(id: new id, curve: new id, x0: number, [steps: number])</code></td><td>constructor / setup</td><td>Newton’s method zig-zag from a starting guess</td></tr>
-<tr><td><code>spline(…)</code></td><td>constructor / setup</td><td>a smooth curve through a list of points</td></tr>
-<tr><td><code>trajectory(id: new id, dx/dt: string, dy/dt: string, start: (x, y), center: (x, y), scale: number, [steps: number])</code></td><td>constructor / setup</td><td>an ODE path: dx/dt, dy/dt integrated from a start point</td></tr>
-<tr><td><code>linmap(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [span: number])</code></td><td>constructor / setup</td><td>a 2x2 matrix applied to the plane (grid + basis)</td></tr>
-<tr><td><code>determinant(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>the unit square mapped to a parallelogram; area = det</td></tr>
-<tr><td><code>eigen(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>a matrix’s real eigenvector directions (with eigenvalues)</td></tr>
-<tr><td><code>diagonalise(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>A = P D P^-1: in the eigenbasis the matrix is a pure stretch</td></tr>
-<tr><td><code>diagonalize(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, [color: colour])</code></td><td>constructor / setup</td><td>A = P D P^-1: in the eigenbasis the matrix is a pure stretch</td></tr>
-<tr><td><code>rref(id: new id, data: string, center: (x, y), [cellw: number], [rowh: number])</code></td><td>constructor / setup</td><td>animated Gaussian elimination to reduced row-echelon form</td></tr>
-<tr><td><code>project(id: new id, center: (x, y), unit: number, b: (x, y), a: (x, y), [color: colour])</code></td><td>constructor / setup</td><td>orthogonal projection of a vector onto a line (subspace)</td></tr>
-<tr><td><code>leastsquares(id: new id, center: (x, y), unit: number, data: string, [color: colour])</code></td><td>constructor / setup</td><td>the best-fit line through a point cloud (linear regression)</td></tr>
-<tr><td><code>linsolve(id: new id, center: (x, y), unit: number, a: number, b: number, c: number, d: number, e: number, f: number, [span: number])</code></td><td>constructor / setup</td><td>the row picture of Ax=b: two lines meeting at the solution</td></tr>
-<tr><td><code>span(id: new id, center: (x, y), unit: number, v: (x, y), [w: (x, y)], [color: colour])</code></td><td>constructor / setup</td><td>the span of one or two vectors (a line, or the whole plane)</td></tr>
-<tr><td><code>vector(id: new id, origin: (x, y), delta: (x, y), [color: colour])</code></td><td>constructor / setup</td><td>an arrow from an origin</td></tr>
-<tr><td><code>numberline(…)</code></td><td>constructor / setup</td><td>a labelled number line</td></tr>
-<tr><td><code>numberplane(…)</code></td><td>constructor / setup</td><td>a gridded coordinate plane</td></tr>
-<tr><td><code>plane(…)</code></td><td>constructor / setup</td><td>a coordinate plane</td></tr>
-<tr><td><code>complexplane(…)</code></td><td>constructor / setup</td><td>the complex plane</td></tr>
-<tr><td><code>polarplane(…)</code></td><td>constructor / setup</td><td>a polar grid</td></tr>
-<tr><td><code>matrix(id: new id, data: string, center: (x, y), [colw: number], [rowh: number])</code></td><td>constructor / setup</td><td>a bracketed matrix</td></tr>
-<tr><td><code>table(id: new id, data: string, center: (x, y), [colw: number], [rowh: number], [cols: string], [rows: string])</code></td><td>constructor / setup</td><td>a ruled table</td></tr>
-<tr><td><code>mathtable(…)</code></td><td>constructor / setup</td><td>a table of math expressions</td></tr>
-<tr><td><code>integertable(…)</code></td><td>constructor / setup</td><td>a table of integers</td></tr>
-<tr><td><code>decimaltable(…)</code></td><td>constructor / setup</td><td>a table of decimals</td></tr>
-<tr><td><code>arc(…)</code></td><td>constructor / setup</td><td>a circular arc</td></tr>
-<tr><td><code>sector(…)</code></td><td>constructor / setup</td><td>a pie sector</td></tr>
-<tr><td><code>annulus(…)</code></td><td>constructor / setup</td><td>a ring / annular sector</td></tr>
-<tr><td><code>pie(…)</code></td><td>constructor / setup</td><td>a pie chart</td></tr>
-<tr><td><code>arrowfield(…)</code></td><td>constructor / setup</td><td>a named or formula-authored bounded vector field</td></tr>
-<tr><td><code>vectorfield(…)</code></td><td>constructor / setup</td><td>a named or formula-authored bounded vector field</td></tr>
-<tr><td><code>tangent(…)</code></td><td>constructor / setup</td><td>tangent line to a curve at x (or tangent points to a circle)</td></tr>
 </tbody>
 </table>
 </div>
@@ -38881,7 +41017,7 @@ wait(1.30);
 <tr><td><code>parabola(…)</code></td><td>constructor / setup</td><td>a parabola</td></tr>
 <tr><td><code>hyperbola(…)</code></td><td>constructor / setup</td><td>a hyperbola</td></tr>
 <tr><td><code>fullline(…)</code></td><td>constructor / setup</td><td>an infinite line through two points</td></tr>
-<tr><td><code>anglemark(…)</code></td><td>constructor / setup</td><td>an angle arc mark</td></tr>
+<tr><td><code>anglemark(…)</code></td><td>constructor / setup</td><td>an angle arc mark (optional label rides the bisector)</td></tr>
 <tr><td><code>rightangle(…)</code></td><td>constructor / setup</td><td>a right-angle square mark</td></tr>
 </tbody>
 </table>
@@ -38982,7 +41118,8 @@ wait(1.30);
 <tbody>
 <tr><td><code>freekick(id: new id, center: (x, y), speed: number, angle: number, spin: number, [scale: number], [steps: number])</code></td><td>constructor / setup</td><td>an RK4 free-kick trajectory under drag + the Magnus force (sidespin curves it); draw {id}, run(id) flies the ball</td></tr>
 <tr><td><code>pendulum(id: new id, [center: (x, y)], [length: number], [angle0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a swinging pendulum (pre-simulated); animate with swing(id)</td></tr>
-<tr><td><code>spring(id: new id, [center: (x, y)], [stiffness: number], [x0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>a mass on a spring (pre-simulated); animate with run(id)</td></tr>
+<tr><td><code>spring(id: new id, [center: (x, y)], [stiffness: number], [x0: number], [unit: number], [damping: number], [v0: number])</code></td><td>constructor / setup</td><td>a mass on a spring (pre-simulated); animate with run(id)</td></tr>
+<tr><td><code>sweep(id: new id, kind: id or tag, [center: (x, y)], [cellw: number], [cellh: number], xrange: (x, y), yrange: (x, y), [cols: number], [rows: number])</code></td><td>constructor / setup</td><td>a small-multiples GRID of one sim over a 2-D sweep of its initial conditions. <code>kind</code> is a sweepable sim (spring, pendulum, doublependulum); each declares its own two IC axes. <code>xrange</code>/<code>yrange</code> are (lo,hi) swept across <code>cols</code> columns and down <code>rows</code> rows. Cells are drawn bare (skeleton + a small velocity arrow) at a shared scale, with axis headers. Animate the whole grid in sync with run(id).</td></tr>
 <tr><td><code>doublependulum(id: new id, [center: (x, y)], [angle1: number], [angle2: number], [unit: number])</code></td><td>constructor / setup</td><td>the chaotic double pendulum (pre-simulated); animate with run(id)</td></tr>
 <tr><td><code>springpendulum(id: new id, [center: (x, y)], [angle0: number], [stretch0: number], [unit: number], [damping: number])</code></td><td>constructor / setup</td><td>an elastic pendulum (swings + bounces); animate with run(id)</td></tr>
 <tr><td><code>kapitza(id: new id, [center: (x, y)], [angle0: number], [vibeamp: number], [unit: number])</code></td><td>constructor / setup</td><td>a Kapitza pendulum — fast vibration stabilises the inverted position</td></tr>

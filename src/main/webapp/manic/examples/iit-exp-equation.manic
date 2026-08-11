@@ -1,0 +1,144 @@
+// ============================================================================
+//  iit-exp-equation.manic — a JEE Advanced exponential equation, solved with
+//  DEPTH and MOTION (curves trace in; the hidden skeleton is revealed).
+//     4^x + 6^{x^2} = 5^x + 5^{x^2}   ->   6^{x^2}-5^{x^2} = 5^x-4^x
+//  RIGOUR (MVT, math.stackexchange/2079546):
+//    6^{x^2}-5^{x^2} = x^2 * xi^{x^2-1}  (xi in (5,6)),
+//    5^x-4^x         = x   * eta^{x-1}   (eta in (4,5)),
+//    so  LHS-RHS = x^2*xi^{x^2-1} - x*eta^{x-1},  and bounding by the middle
+//    base 5 gives  sign(LHS-RHS) = sign(x^2 - x).  Hence LHS=RHS <=> x^2=x.
+//  Captions are LaTeX equations (typeset math, not ASCII), shown one at a time.
+// ============================================================================
+
+title("JEE — 4^x + 6^{x^2} = 5^x + 5^{x^2}");
+canvas(1280, 720);
+template("black");
+
+text(brow, (640, 40), "JEE ADVANCED  ·  HOW MANY REAL SOLUTIONS?");
+color(brow, dim); size(brow, 18); bold(brow); hidden(brow);
+
+equation(eq0, (640, 360), `4^{x}+6^{x^{2}}=5^{x}+5^{x^{2}}`, 40);   // lands CENTRE, big
+equation(eq1, (640, 150), `6^{x^{2}}-5^{x^{2}}\;=\;5^{x}-4^{x}`, 26);
+color(eq0, fg); color(eq1, gold); hidden(eq0); hidden(eq1);
+
+// ---- captions: typeset LaTeX (one shown at a time), bottom of frame ----
+equation(c1, (640, 690), `\text{Bases }4,5,6\ \text{·  exponents }x,\ x^{2}\ \text{·  how many real roots?}`, 22);
+equation(c2, (640, 690), `\text{Regroup: put the }x^{2}\text{-powers together, the }x\text{-powers together}`, 22);
+equation(c3, (640, 690), `L(x)=6^{x^{2}}-5^{x^{2}}\ \ge\ 0\quad(\text{even U, zero only at }x=0)`, 22);
+equation(c4, (640, 690), `R(x)=5^{x}-4^{x}\quad\text{takes the sign of }x`, 22);
+equation(c5, (640, 690), `\text{They meet at }x=0\text{ and }x=1:\quad 4+6=10=5+5`, 22);
+equation(c6, (640, 690), `\text{MVT: } L-R=x^{2}\xi^{\,x^{2}-1}-x\,\eta^{\,x-1},\quad \operatorname{sign}=\operatorname{sign}(x^{2}-x)`, 21);
+equation(c7, (640, 690), `\text{A parabola hides inside:}\quad x^{2}-x=x(x-1)`, 22);
+equation(c8, (640, 690), `x^{2}-x<0\text{ on }(0,1)\Rightarrow L<R;\quad\text{outside, } L>R`, 22);
+equation(c9, (640, 690), `\text{Secretly } x^{2}=x\ \Rightarrow\ \text{two roots, no more}`, 22);
+color(c1,dim); color(c2,dim); color(c3,dim); color(c4,dim); color(c5,dim);
+color(c6,dim); color(c7,dim); color(c8,dim); color(c9,dim);
+hidden(c1); hidden(c2); hidden(c3); hidden(c4); hidden(c5);
+hidden(c6); hidden(c7); hidden(c8); hidden(c9);
+
+// ---- axes: math origin at pixel (455,452); 270 px/x-unit, 100 px/y-unit ----
+plane(pl, (455, 452), 380, 228, 100);
+hidden(pl.grid);
+untraced(pl.x); untraced(pl.y);
+
+// the two sides of the rewritten equation, and the HIDDEN skeleton x^2 - x
+plot(Lc, (455, 452), 270, 100, "6^(x*x) - 5^(x*x)", 1.35);
+plot(Rc, (455, 452), 270, 100, "5^x - 4^x",        1.35);
+plot(Pc, (455, 452), 270, 100, "x*x - x",          1.35);
+color(Lc, gold); color(Rc, cyan); color(Pc, magenta);
+stroke(Lc, 2.6); stroke(Rc, 2.6); stroke(Pc, 2.6);
+untraced(Lc); untraced(Rc); untraced(Pc);      // start un-drawn; draw() traces them
+
+// the negative dip of the skeleton on (0,1) — swept open for effect
+area(dip, Pc, 0, 0); color(dip, magenta); hidden(dip);
+
+// a guide at x=1 tying the (1,1) crossing down to the parabola's root at (1,0)
+line(g1, (725, 250), (725, 512)); color(g1, dim); stroke(g1, 1.4); untraced(g1);
+
+// labels + ticks
+equation(Llab, (210, 246), `6^{x^{2}}-5^{x^{2}}`, 19); color(Llab, gold);    hidden(Llab);
+equation(Rlab, (760, 300), `5^{x}-4^{x}`,        19); color(Rlab, cyan);    hidden(Rlab);
+equation(Plab, (748, 505), `x^{2}-x`,            19); color(Plab, magenta); hidden(Plab);
+text(tx1, (725, 474), "1"); color(tx1, dim); size(tx1, 18); hidden(tx1);
+text(ty1, (435, 350), "1"); color(ty1, dim); size(ty1, 18); hidden(ty1);
+
+// intersections: math (0,0)->px(455,452); (1,1)->px(725,352)
+point(P0, (455, 452), "x = 0"); color(P0, lime);   hidden(P0);
+point(P1, (725, 352), "x = 1"); color(P1, orange); hidden(P1);
+
+equation(ans, (1048, 300), `\boxed{\,x=0\ \ \text{or}\ \ x=1\,}`, 28);
+color(ans, lime); hidden(ans);
+
+// ============================ the lesson ====================================
+
+step("the problem — front and centre") {
+  show(eq0, 0.6);
+  show(c1, 0.4);
+}
+wait(1.6);
+
+step("dock it to the top") {
+  show(brow, 0.4);
+  par { move(eq0, (640, 96), 0.9, smooth); scale(eq0, 0.78, 0.9); }
+}
+wait(0.3);
+
+step("one rewrite") {
+  par { fade(c1, 0.25); show(c2, 0.3); }
+  show(eq1, 0.6);
+}
+wait(1.5);
+
+step("axes") {
+  par { draw(pl.x, 0.5); draw(pl.y, 0.5); }
+  show(tx1, 0.3); show(ty1, 0.3);
+}
+wait(0.3);
+
+step("trace the left side") {
+  par { fade(c2, 0.25); show(c3, 0.3); }
+  draw(Lc, 1.2);
+  show(Llab, 0.4);
+}
+wait(1.5);
+
+step("trace the right side") {
+  par { fade(c3, 0.25); show(c4, 0.3); }
+  draw(Rc, 1.2);
+  show(Rlab, 0.4);
+}
+wait(1.5);
+
+step("two crossings") {
+  par { fade(c4, 0.25); show(c5, 0.3); }
+  show(P0, 0.4); show(P1, 0.4);
+  pulse(P0, 0.5); pulse(P1, 0.5);
+}
+wait(1.6);
+
+step("the rigorous why (MVT)") {
+  par { fade(c5, 0.25); show(c6, 0.3); }
+}
+wait(2.0);
+
+step("the hidden skeleton") {
+  par { fade(c6, 0.25); show(c7, 0.3); }
+  draw(Pc, 1.2);
+  show(Plab, 0.4);
+  draw(g1, 0.6);
+}
+wait(1.6);
+
+step("sign follows the parabola") {
+  par { fade(c7, 0.25); show(c8, 0.3); }
+  show(dip, 0.2);
+  to(dip, x, 1, 1.5);
+}
+wait(1.7);
+
+step("the answer") {
+  par { fade(c8, 0.25); show(c9, 0.3); }
+  show(ans, 0.6);
+  pulse(ans, 0.6);
+}
+wait(2.6);

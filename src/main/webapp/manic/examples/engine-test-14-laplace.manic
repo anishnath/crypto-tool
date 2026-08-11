@@ -1,0 +1,253 @@
+// ============================================================================
+//  engine-test-14-laplace.manic — reproducing the 3Blue1Brown "Laplace
+//  Transform" clip (engine-test-14-1.mp4) as a two-scene story:
+//   SCENE 1  the Laplace board — a brace over the left rectangle, whose THREE
+//            graphs (Re[e^{st}] waveform · s-plane vector to s · e^{st} spiral)
+//            stay synced to one complex-frequency parameter s; the |F(s)| pole
+//            surface (domainsurface) in the middle camera3 VIEWPORT with its
+//            cos(t)e^{-st} insets; the s-plane contour + colorwheel on the right.
+//   TRANSITION  the board fades and Scene 2 EMERGES in the left rectangle with
+//            MOTION (continuity, not a hard cut — motion-graphics.md): e^{pi i}=-1
+//            surfaces and the red pi RISES up into the unit circle as the cue.
+//   SCENE 2  Euler's identity — e^t + axes, the unit circle with pi, e^{pi i}=-1,
+//            and i^2 = -1.
+//  (Graphs sized to fit their panels — clip doesn't compose with a camera3
+//  viewport panel; see CAPABILITIES.)
+// ============================================================================
+
+title("Laplace Transform — engine test 14");
+canvas(1280, 720);
+template("black");
+
+// ---- masthead ----
+svg(creature, (108, 108), "asset:svg/pi-creature.svg", 120);
+equation(ttl, (820, 74), `\text{Laplace Transform}`, 44); color(ttl, fg);
+equation(fwd, (430, 178),
+  `F(\textcolor{gold}{s})=\int_{0}^{\infty} f(\textcolor{cyan}{t})\,e^{-\textcolor{gold}{s}\textcolor{cyan}{t}}\,dt`, 26);
+equation(inv, (930, 178),
+  `f(\textcolor{cyan}{t})=\tfrac{1}{2\pi i}\int_{a-i\infty}^{a+i\infty} F(\textcolor{gold}{s})\,e^{\textcolor{gold}{s}\textcolor{cyan}{t}}\,d\textcolor{gold}{s}`, 21);
+
+// ---- three bordered panels ----
+rect(pL, (222, 500), 372, 320); outlined(pL); outline(pL, dim);
+rect(pM, (640, 500), 372, 320); outlined(pM); outline(pM, dim);
+rect(pR, (1058, 500), 372, 320); outlined(pR); outline(pR, dim);
+
+// a brace grouping the LEFT rectangle (the signal analysis of f(t))
+brace(br, (44, 324), (400, 324), "down"); color(br, dim);
+
+// ---- LEFT panel: three graphs, all driven by the complex frequency s = -0.1 + i·(p) ----
+parameter(sfreq, (222, 648), -1.8, -1.8, -0.3, "Im s", 1);
+// 1) the damped Re[e^{st}] waveform
+plot(wave, (50, 412), 11, 26, "exp(-0.1*x)*cos(p*x)", (0, 30));
+color(wave, mint); stroke(wave, 2.4);
+bind(sfreq, wave, formula, "exp(-0.1*x)*cos(p*x)");
+equation(rel, (95, 372), `\mathrm{Re}\,[e^{st}]`, 15); color(rel, mint);
+// 2) the s-plane, with a vector to the point s = -0.1 - 0.8i (its tip tracks s)
+complexplane(spA, (132, 578), 62, 62, 30);
+arrow(svec, (132, 578), (129, 632)); color(svec, gold);
+// 3) the e^{st} spiral (a reactive param curve)
+param(spir, (318, 578), 22, 22, "exp(-0.1*t)*cos(p*t)", "exp(-0.1*t)*sin(p*t)", (0, 26));
+color(spir, cyan); stroke(spir, 2.0);
+bind(sfreq, spir, formula, "exp(-0.1*t)*cos(p*t)", "exp(-0.1*t)*sin(p*t)");
+equation(est, (360, 520), `e^{st}`, 16); color(est, gold);
+
+// ---- MIDDLE panel: the |F(s)| modulus surface, domain-coloured, in a viewport ----
+camera3((7.2, -6.4, 5.0), (0.15, 0.0, 0.9), 40, perspective, (640, 500), 372, 320);
+domainsurface(surf, "1/(z*z+1)", (-2.5, 2.5), (-2.5, 2.5), 64, 0.26);
+equation(fs, (592, 640), `|F(\textcolor{gold}{s})|`, 16); color(fs, dim);
+// insets over the panel: the integrand cos(t)·e^{-st} (a rose) and its transform
+equation(rlab, (540, 392), `\cos(t)\,e^{-st}`, 14); color(rlab, magenta);
+param(rose, (540, 430), 20, 20, "cos(t)*exp(-0.1*t)*cos(p*t)", "-cos(t)*exp(-0.1*t)*sin(p*t)", (0, 18));
+color(rose, magenta); stroke(rose, 1.6);
+bind(sfreq, rose, formula, "cos(t)*exp(-0.1*t)*cos(p*t)", "-cos(t)*exp(-0.1*t)*sin(p*t)");
+equation(ilab, (738, 392), `\int_{0}^{\infty}\!\cos(t)\,e^{-st}dt`, 12); color(ilab, gold);
+param(iarc, (738, 430), 26, 26, "t/(t*t+1)", "0-1/(t*t+1)", (0.2, 3.2));
+color(iarc, gold); stroke(iarc, 1.6);
+
+// ---- RIGHT panel: the s-plane contour + the colour-wheel legend ----
+complexplane(cpl, (1058, 500), 120, 120, 40);
+plot(contour, (1058, 500), 40, 22, "2*sin(x*2.2)/(1+x*x)", (-2.5, 2.5));
+color(contour, coral); stroke(contour, 2.2);
+colorwheel(key, (1205, 648), 30);
+equation(keyl, (1152, 610), `\arg`, 15); color(keyl, dim);
+
+// ---- Scene 2 (Euler's identity) — hidden; revealed as the board fades ----
+// a bordered LEFT rectangle framing the identity, mirroring the grid's frame so
+// the two panels read as a balanced pair (reference img_22/img_23).
+rect(eboard, (224, 400), 420, 400); outlined(eboard); outline(eboard, dim); tag(eboard, euler);
+axes(eax, (95, 487), 66, 62); tag(eax, euler);
+plot(ecurve, (95, 487), 18, 16, "exp(x)", (-4, 2.2)); color(ecurve, cyan); stroke(ecurve, 2.2); tag(ecurve, euler);
+// the derivative demo: a white tangent that SLIDES along e^t (its slope = its height),
+// with the d/dt e^t=e^t caption riding along — matching the reference's white styling.
+tangent(etan, ecurve, 0.4, 96); color(etan, fg); stroke(etan, 2.5); tag(etan, euler);
+equation(edl, (150, 455), `\tfrac{d}{dt}e^{t}=e^{t}`, 14); color(edl, fg); tag(edl, euler);
+// the slope triangle under the tangent: run "1" + red rise = e^t, so slope = height.
+// Parts share tag `etri`, so to(etri, x, ...) slides them WITH the tangent.
+slopetri(etri, ecurve, 0.4, 1); hidden(etri);
+equation(erise, (176, 420), `e^{t}`, 13); color(erise, red); tag(erise, euler);
+param(ecirc, (250, 400), 34, 34, "cos(t)", "sin(t)", (0, 6.2832)); color(ecirc, dim); stroke(ecirc, 2.0); tag(ecirc, euler);
+param(earc, (250, 400), 34, 34, "cos(t)", "sin(t)", (0, 3.14159)); color(earc, red); stroke(earc, 2.4); tag(earc, euler);
+equation(epi, (250, 424), `\pi`, 16); color(epi, red); tag(epi, euler); // starts low; rises in the transition
+line(erad, (250, 400), (284, 400)); color(erad, dim); tag(erad, euler);
+// 3b1b colour convention: i is always cyan, π is always red (same reds/cyans as the
+// circle's π-arc and this i), so the eye tracks each symbol across the identities.
+equation(eisq, (352, 396), `\textcolor{cyan}{i}^{2}=-1`, 20); tag(eisq, euler);
+equation(eeuler, (214, 540), `e^{\textcolor{red}{\pi}\textcolor{cyan}{i}}=-1`, 24); tag(eeuler, euler);
+hidden(euler);
+
+// ---- Scene 3 (00:05–00:17): the SHM phase grid — a 5×5 sweep of the mass-spring
+//      oscillator over initial position × initial velocity. One generic `sweep`
+//      builtin (physics kit) lays out the bare cells + headers; `run` animates all
+//      25 in sync. Hidden until Euler settles, then swept in with the teal arrow. ----
+sweep(phz, spring, (895, 400), 150, 80, (-2, 2), (2, -2), 5, 5);
+hidden(phz);
+// a bold teal CURVED arrow arcing from the board up-and-over into the grid; drawn
+// on (untraced → draw) so the arc sweeps in and the eye rides it into Scene 3.
+arrow(swp, (352, 228), (600, 206), -88); color(swp, mint); stroke(swp, 6); untraced(swp);
+
+// ---- Scene 4 (00:17–00:23): the exponential e^{st} with the REAL rate s swept —
+//      decay (s<0) → flat (s=0) → growth (s>0). One `plot` bound to a `parameter`;
+//      the title's live gold number is a `counter` bound to the same s. Hidden. ----
+axes(gax, (780, 400), 270, 200); color(gax, dim); tag(gax, graph);
+plot(gcurve, (780, 400), 60, 38, "exp(p*x)", (-3.6, 3.8)); color(gcurve, mint); stroke(gcurve, 3); tag(gcurve, graph);
+equation(gyl, (816, 206), `e^{st}`, 15); color(gyl, dim); tag(gyl, graph);
+equation(gxl, (1058, 412), `t`, 18); color(gxl, dim); tag(gxl, graph);
+parameter(gs, (600, 690), -0.16, -0.95, 0.5, "", 2);   // slider hidden — it only drives
+bind(gs, gcurve, formula, "exp(p*x)");
+// live colour-coded title  e^{ [s] t }  — e white · s gold (a counter) · t cyan
+equation(gte, (248, 112), `e`, 56); color(gte, fg); tag(gte, graph);
+counter(gsc, (300, 74), -0.16, 2, "", ""); color(gsc, gold); size(gsc, 36); tag(gsc, graph);
+equation(gtt, (400, 76), `t`, 34); color(gtt, cyan); tag(gtt, graph);
+bind(gs, gsc, value, "p");
+// clean single-equation symbolic title — crisp LaTeX superscript (used once s is symbolic)
+equation(esym, (250, 98), `e^{\textcolor{gold}{s}\textcolor{cyan}{t}}`, 40); hidden(esym);
+hidden(graph); hidden(gs.widget);
+
+// ---- Scene 5 (00:24–00:37): s lives on a NUMBER LINE — slide it, the graph reshapes.
+//      The graph sits on the right; a labelled real axis for s appears on the left with a
+//      gold marker + "s = value" readout (a counter bound to the same s). ----
+numberline(sl, (240, 400), 155, -2, 2, 1);                       // labelled real axis −2..2
+rect(slbox, (240, 380), 380, 140); outlined(slbox); outline(slbox, gold);
+counter(sread, (240, 332), 0.5, 1, "s = ", ""); color(sread, gold); size(sread, 26);
+bind(gs, sread, value, "p");
+dot(smk, (279, 400), 8); color(smk, gold);                       // marker rides s: x = 240 + 77.5·s
+hidden(sl); hidden(slbox); hidden(sread); hidden(smk);
+
+// ---- Scene 6 (00:37–00:53): s is a POINT IN THE COMPLEX PLANE, and e^{st} SPIRALS.
+//      CONTINUITY: the LEFT plane sits exactly on the number line (same centre + unit 77.5),
+//      so the real axis persists and the s-marker LIFTS off ℝ into ℂ. RIGHT traces e^{st} as
+//      t grows — a spiral (rotation from Im s, decay from Re s). The payoff of the story. ----
+complexplane(lp, (240, 400), 176, 158, 77.5);                    // real axis = the number line
+equation(lph, (240, 214), `\text{Complex Plane}`, 22); color(lph, fg);
+equation(sval, (352, 316), `s = -0.2 + 1.0i`, 17); color(sval, gold);   // smk lifts here → its label
+complexplane(rp, (930, 400), 176, 158, 77.5);
+param(spir6, (930, 400), 77.5, 77.5, "exp(-0.2*t)*cos(t)", "exp(-0.2*t)*sin(t)", (0, 15)); color(spir6, lime); stroke(spir6, 2.5); untraced(spir6);
+equation(whyt, (640, 72), `\text{Why}`, 48); color(whyt, fg); hidden(whyt);
+equation(ctitle, (640, 72), `\text{Wait, what does this even mean?}`, 30); color(ctitle, fg);
+svg(pc1, (300, 650), "asset:svg/pi-creature.svg", 84);
+svg(pc2, (470, 650), "asset:svg/pi-creature.svg", 84);
+svg(pc3, (820, 650), "asset:svg/pi-creature.svg", 84);
+svg(pc4, (990, 650), "asset:svg/pi-creature.svg", 84);
+hidden(lp); hidden(rp); hidden(lph); hidden(sval); hidden(ctitle);
+hidden(pc1); hidden(pc2); hidden(pc3); hidden(pc4);
+
+// ---- SCENE 1 motion: sweep s; the three left-panel graphs reshape together ----
+wait(0.6);
+par {
+  to(sfreq, value, -0.3, 4.5, smooth);
+  grow(svec, (129, 587), 4.5, smooth);
+}
+wait(0.5);
+
+// ---- TRANSITION: the Laplace board fades, the panel becomes Euler's identity ----
+par {
+  fade(ttl, 0.7); fade(fwd, 0.7); fade(inv, 0.7); fade(br, 0.7); fade(creature, 0.7);
+  fade(pL, 0.7);  // the Scene 1 left panel — replaced by the framed Euler board
+  fade(pM, 0.7); fade(surf, 0.7); fade(fs, 0.7); fade(rlab, 0.7); fade(rose, 0.7); fade(ilab, 0.7); fade(iarc, 0.7);
+  fade(pR, 0.7); fade(cpl, 0.7); fade(contour, 0.7); fade(key, 0.7); fade(keyl, 0.7);
+  fade(wave, 0.7); fade(spA, 0.7); fade(svec, 0.7); fade(spir, 0.7); fade(rel, 0.7); fade(est, 0.7);
+}
+hidden(sfreq.widget);
+// EMERGENCE (continuity — motion, not a hard cut): e^{πi}=-1 surfaces and the
+// red π RISES up into the unit circle, leading the eye into the next scene.
+show(eeuler, 0.7);
+show(epi, 0.5);
+par {
+  move(epi, (250, 354), 1.1, smooth);   // π moves up to the circle top — the emergence cue
+  show(ecirc, 0.9);
+  show(earc, 1.0);
+}
+wait(0.3);
+show(eboard, 0.6);                    // reveal the left panel's frame (aligned with the grid)
+par { show(eax, 0.5); show(ecurve, 0.9); show(erad, 0.5); show(etan, 0.9); show(edl, 0.6); show(etri, 0.9); show(erise, 0.6); }
+attach(edl, etan, (58, -14));         // the d/dt e^t=e^t label RIDES the tangent as it slides
+attach(erise, etri.rise, (14, -20));  // the red e^t rise label rides the rise leg
+wait(0.4);
+show(eisq, 0.6);
+wait(1.0);
+
+// ---- SWEEP (00:05→00:17): the eye is carried from the identity into the grid ----
+// Continuity again (motion-graphics.md): a teal arrow SWEEPS from the board over to
+// the right, and the 5×5 of oscillators emerges under its tip — not a hard cut.
+draw(swp, 1.0, smooth);               // the teal arc sweeps board → grid, leading the eye
+wait(0.2);
+par {
+  show(phz.chrome, 0.5);
+  show(phz.headers, 0.6);
+}
+show(phz.cells, 0.9);                 // the phase grid surfaces under the arrow tip
+// the grid runs AND the left board keeps moving — the tangent slides along e^t
+par {
+  run(phz, 9);                        // all 25 oscillators run in sync
+  to(etan, x, 2.0, 8.5, smooth);      // the e^t tangent slides (the left "slider" moves too)
+  to(etri, x, 2.0, 8.5, smooth);      // ...and the slope triangle (run 1 + red rise e^t) slides with it
+}
+wait(0.4);
+
+// ---- SCENE 4 (00:17→00:23): cut to the exponential e^{st}, then sweep the rate s ----
+par { fade(euler, 0.6); fade(etri, 0.6); fade(phz, 0.6); fade(swp, 0.6); }
+par { show(gax, 0.6); show(gcurve, 0.9); show(gyl, 0.5); show(gxl, 0.5); show(gte, 0.6); show(gsc, 0.6); show(gtt, 0.6); }
+to(gs, value, -0.95, 2.4, smooth);    // deepen the decay (curve steepens down-right)
+to(gs, value, 0.5, 3.6, smooth);      // through s=0 (flat) into growth (curve turns up)
+wait(0.5);
+
+// ---- SCENE 5 (00:24→00:37): make s symbolic + give it a number line, then slide s ----
+// numeric title  e^{0.50 t}  →  a single crisp symbolic equation  e^{s t}
+par { fade(gte, 0.5); fade(gsc, 0.5); fade(gtt, 0.5); show(esym, 0.6); }
+// the s number line appears on the left (the graph already sits on the right)
+par { show(sl, 0.6); show(slbox, 0.6); show(sread, 0.6); show(smk, 0.6); }
+wait(0.6);
+// slide s along the line — the gold marker, the "s =" readout, and the graph all track it
+par { to(gs, value, -0.4, 2.2, smooth); move(smk, (209, 400), 2.2, smooth); }
+par { to(gs, value, -1.0, 2.0, smooth); move(smk, (163, 400), 2.0, smooth); }
+par { to(gs, value, -0.5, 2.0, smooth); move(smk, (201, 400), 2.0, smooth); }
+wait(0.4);
+// oscillate s between −0.5 and +0.5 a few times so the decay↔growth reshape reads clearly
+par { to(gs, value,  0.5, 1.3, smooth); move(smk, (279, 400), 1.3, smooth); }
+par { to(gs, value, -0.5, 1.3, smooth); move(smk, (201, 400), 1.3, smooth); }
+par { to(gs, value,  0.5, 1.3, smooth); move(smk, (279, 400), 1.3, smooth); }
+par { to(gs, value, -0.5, 1.3, smooth); move(smk, (201, 400), 1.3, smooth); }
+par { to(gs, value,  0.5, 1.3, smooth); move(smk, (279, 400), 1.3, smooth); }
+par { to(gs, value, -0.5, 1.3, smooth); move(smk, (201, 400), 1.3, smooth); }
+wait(0.6);
+
+// ---- SCENE 6 (00:37→00:53): the complex-plane payoff — with CONTINUITY, not a cut ----
+// "Why" — the dramatic pivot (00:43): the scene is about to change under this one word.
+show(whyt, 0.6);
+wait(0.5);
+// CONTINUITY (motion-graphics.md): the number line BECOMES the real axis of the complex plane
+// (same centre + unit), so the real axis persists while the imaginary dimension grows around it.
+par { fade(slbox, 0.6); fade(sread, 0.6); fade(graph, 0.6); }
+show(lp, 0.9);                        // the complex plane grows in — its real axis = the number line
+fade(sl, 0.7);                        // the bare number line hands its axis over to the plane
+show(lph, 0.5);
+move(smk, (224, 322), 1.4, smooth);   // the s-dot LIFTS off ℝ up into ℂ — one object, transformed
+show(sval, 0.6);
+// the e^{st} title TRAVELS from top-left to head the right plane, which grows + traces the spiral
+par { move(esym, (930, 210), 1.1, smooth); show(rp, 0.9); }
+draw(spir6, 4.5, smooth);             // e^{st} spirals: rotation from Im s × decay from Re s
+wait(0.3);
+par { fade(whyt, 0.5); show(ctitle, 0.7); }   // "Why" → "Wait, what does this even mean?"
+// the π-creatures pop up to watch (the 3b1b button)
+par { show(pc1, 0.5); show(pc2, 0.6); show(pc3, 0.6); show(pc4, 0.5); }
+wait(1.0);

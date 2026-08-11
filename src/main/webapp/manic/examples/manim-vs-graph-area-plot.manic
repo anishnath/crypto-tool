@@ -1,0 +1,29 @@
+// ============================================================================
+//  GraphAreaPlot — the Manim tutorial scene, in Manic.
+//
+//  A coordinate frame with two parabolas, vertical lines up to the first curve,
+//  Riemann rectangles under it, and a shaded region between the two curves.
+//
+//  Coordinate frame: math origin (0,0) → screen (250,620); 130 px per x-unit,
+//  92 px per y-unit. Every plot below shares that same origin + scale.
+// ============================================================================
+title("Manim vs Manic — GraphAreaPlot");
+canvas(1280, 720);
+template("black");
+
+// axes over x∈[0,5], y∈[0,6] — no arrow tips, ticks numbered, axes named "x" / "y"
+coords(ax, (250, 620), (0, 5), (0, 6), 130, 92, 0, 1, 1, "x", "y");
+
+// the two curves
+plot(c1, (250, 620), 130, 92, "4*x - x*x", (0, 4));          color(c1, blue);  stroke(c1, 3);   // 4x − x²
+plot(c2, (250, 620), 130, 92, "0.8*x*x - 3*x + 4", (0, 4));  color(c2, green); stroke(c2, 3);   // 0.8x² − 3x + 4
+
+// dotted guide lines from the x-axis up to curve_1 at x = 2 and x = 3
+vline(l1, c1, 2, yellow);
+vline(l2, c1, 3, yellow);
+
+// Riemann rectangles under curve_1 on [0.3, 0.6], bars of width 0.03
+riemann(rm, c1, 0.3, 0.6, 0.03, green);
+
+// the region between the two curves on the slice [2, 3] (curve_1 on top)
+band(ar, c1, c2, grey, (2, 3)); opacity(ar, 0.5);

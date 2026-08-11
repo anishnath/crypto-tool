@@ -1,0 +1,980 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>3Blue1Brown, reproduced - Manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-979a81e0.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-b0bf7e39.js"></script>
+            <!-- seo:begin -->
+<meta name="description" content="Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…">
+<link rel="canonical" href="https://docs.maniclang.com/ex-threeb1b.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Manic — the manual">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3Blue1Brown, reproduced - Manic — the manual">
+<meta property="og:description" content="Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…">
+<meta property="og:url" content="https://docs.maniclang.com/ex-threeb1b.html">
+<meta property="og:image" content="https://i.ytimg.com/vi/d6-o7lGw5Ks/maxresdefault.jpg">
+<meta name="twitter:card" content="player">
+<meta name="twitter:title" content="3Blue1Brown, reproduced - Manic — the manual">
+<meta name="twitter:description" content="Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…">
+<meta name="twitter:image" content="https://i.ytimg.com/vi/d6-o7lGw5Ks/maxresdefault.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://docs.maniclang.com/ex-threeb1b.html#page","url":"https://docs.maniclang.com/ex-threeb1b.html","name":"3Blue1Brown, reproduced - Manic — the manual","headline":"3Blue1Brown, reproduced - Manic — the manual","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","isPartOf":{"@type":"WebSite","url":"https://docs.maniclang.com/","name":"Manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://docs.maniclang.com/"},{"@type":"ListItem","position":2,"name":"3Blue1Brown, reproduced"}]},{"@type":"VideoObject","name":"Essence of Linear Algebra in One Animation — Vectors, Basis, Determinant, Eigenvectors — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/d6-o7lGw5Ks/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/d6-o7lGw5Ks","contentUrl":"https://www.youtube.com/watch?v=d6-o7lGw5Ks","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"The Dot Product as Duality — Why It's a Squish onto a Number Line — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/kRASlv3iKDc/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/kRASlv3iKDc","contentUrl":"https://www.youtube.com/watch?v=kRASlv3iKDc","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"Watch a Complex Grid Deform Under z → z² — Conformal Map Animation in manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/TzxwsdMv2mU/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/TzxwsdMv2mU","contentUrl":"https://www.youtube.com/watch?v=TzxwsdMv2mU","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"The Riemann Zeta Function Visualized — Pole, Critical Line & Zeros by Domain Coloring — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/hMvtrp1wdC8/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/hMvtrp1wdC8","contentUrl":"https://www.youtube.com/watch?v=hMvtrp1wdC8","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"Euler's Formula V − E + F = 2, Animated on a Graph — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/N_PLyWLVDHQ/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/N_PLyWLVDHQ","contentUrl":"https://www.youtube.com/watch?v=N_PLyWLVDHQ","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"The Spanning-Tree Proof of Euler's Formula — Primal & Dual Trees Animated — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/rLbhBtqKFt8/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/rLbhBtqKFt8","contentUrl":"https://www.youtube.com/watch?v=rLbhBtqKFt8","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"The Dissection Proof of a² + b² = c² — Pythagoras Animated in manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/bYPWoKFMx2Q/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/bYPWoKFMx2Q","contentUrl":"https://www.youtube.com/watch?v=bYPWoKFMx2Q","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"How Many Regions Do a Pentagram's Chords Cut a Disk Into? — Planar Arrangement in manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/5QvZ30TiFvU/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/5QvZ30TiFvU","contentUrl":"https://www.youtube.com/watch?v=5QvZ30TiFvU","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"Snell's Law to the Brachistochrone — Why the Cycloid Is the Fastest Slide — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/GpiPv2clsIM/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/GpiPv2clsIM","contentUrl":"https://www.youtube.com/watch?v=GpiPv2clsIM","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"From Light Bending to a Cycloid — the Brachistochrone Derivation Animated — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/fQEH34NO5Tc/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/fQEH34NO5Tc","contentUrl":"https://www.youtube.com/watch?v=fQEH34NO5Tc","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"The 3D Cross Product, Geometrically — Area, Perpendicular & the Determinant — manic","description":"Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta…","thumbnailUrl":["https://i.ytimg.com/vi/nE7gxFkko3Y/maxresdefault.jpg"],"uploadDate":"2026-08-11","embedUrl":"https://www.youtube.com/embed/nE7gxFkko3Y","contentUrl":"https://www.youtube.com/watch?v=nE7gxFkko3Y","publisher":{"@type":"Organization","name":"manic"}}]}</script>
+<!-- seo:end -->
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://maniclang.com" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="3blue1brown-reproduced"><a class="header" href="#3blue1brown-reproduced">3Blue1Brown, reproduced</a></h1>
+<p>Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta function, each is a single readable <code>.manic</code> file you can open, run, and adapt.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="vectors-basis-transformations"><a class="header" href="#vectors-basis-transformations">vectors-basis-transformations</a></h2>
+<p>Essence of Linear Algebra, chapters 1–11 in one file: vectors → basis → the grid transforming (<code>gridmap</code>) → composition → determinant → inverse → the dot product (projection AND duality) → change of basis → eigenvectors → eigenbasis → functions as vectors.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Essence of Linear Algebra, chapters 1→2→3 in one arc.
+//
+//  Ch1  A vector is an arrow from the origin; its coordinates are [x, y].
+//  Ch2  Those coordinates are SCALARS: v = x·î + y·ĵ — a linear combination of
+//       the basis vectors î=(1,0), ĵ=(0,1).
+//  Ch3  A matrix is a transformation: it says where î and ĵ LAND, and the whole
+//       grid morphs to follow (`gridmap` animates it). Because v = x·î + y·ĵ,
+//       it rides along, landing at x·(new î) + y·(new ĵ).
+//
+//  Example: v = [1, 2] under [[2,1],[1,2]] (î→(2,1), ĵ→(1,2)), so v lands at
+//  1·(2,1) + 2·(1,2) = (4,5). Origin (400,470), 55 px/unit.
+// ============================================================================
+title("Vectors, basis, and transformations");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 696), "A vector is an arrow from the origin.", 24);
+
+// the plane + basis, ready to be transformed in Ch3 (starts at the identity)
+gridmap(gm, (400, 470), 55, 2, 1, 1, 2, 5);
+
+// the vector v = [1,2] and its linear-combination scaffold
+vector(v, (400, 470), (55, 110), yellow);
+vector(jj, (455, 470), (0, 110), red);           // 2·j-hat, stacked on i-hat → reaches v
+equation(vlab, (486, 352), `\vec{v}=[1,2]`, 30); color(vlab, yellow);
+equation(ilab, (472, 500), `\hat{\imath}`, 26); color(ilab, lime);
+equation(jlab, (366, 414), `\hat{\jmath}`, 26); color(jlab, red);
+equation(mtx, (980, 165), `\begin{bmatrix}2&amp;1\\1&amp;2\end{bmatrix}`, 44);
+
+// Ch4 — a second transform (90° rotation) composed on top: morph M1 → M2·M1
+gridmap(gm2, (400, 470), 55, -1, -2, 2, 1, 5, 2, 1, 1, 2);
+equation(comp4, (640, 96), `\begin{bmatrix}0&amp;-1\\1&amp;0\end{bmatrix}\begin{bmatrix}2&amp;1\\1&amp;2\end{bmatrix}=\begin{bmatrix}-1&amp;-2\\2&amp;1\end{bmatrix}`, 34);
+
+// the determinant cell (Ch5), the projection (Ch7), and the alt-basis grid (Ch8)
+determinant(dt, (400, 470), 55, 2, 1, 1, 2, gold);
+project(pr, (400, 470), 55, (1, 2), (3, 1));       // project v=(1,2) onto span(w=(3,1))
+squish(sq, (400, 470), 55, 1, 2, 5);               // Ch7 duality: dot with v = squish onto a line
+eigen(ev, (400, 470), 55, 2, 1, 1, 2, gold);       // Ch9 eigenvectors of [[2,1],[1,2]] (λ = 3, 1)
+diagonalise(dg, (400, 470), 55, 2, 1, 1, 2, gold); // Ch10 eigenbasis = a pure stretch
+coords(cf, (700, 450), (-4, 4), (-3, 3), 46, 46, 0); // Ch11 a function graph…
+plot(fn, (700, 450), 46, 46, "0.25*x*x*x - x", (-3.6, 3.6)); color(fn, mint);
+equation(deq, (700, 130), `\tfrac{d}{dx}\;\leftrightarrow\;\begin{bmatrix}0&amp;1&amp;0\\0&amp;0&amp;2\\0&amp;0&amp;0\end{bmatrix}`, 32);
+gridmap(cb, (400, 470), 55, 1, 0.7, 0.4, 1, 5);
+vector(vb, (400, 470), (55, 110), yellow);
+
+// --- initial visibility ---
+hidden(gm.i); hidden(gm.j);                       // basis revealed in Ch2
+hidden(v); hidden(vlab); hidden(jj); hidden(ilab); hidden(jlab); hidden(mtx);
+hidden(dt); hidden(dt.unit); hidden(dt.val); hidden(pr);
+hidden(sq); hidden(sq.line); hidden(sq.dual);
+hidden(ev); hidden(dg); hidden(cf); hidden(fn); hidden(deq);
+hidden(gm2); hidden(gm2.bg); hidden(gm2.i); hidden(gm2.j); hidden(comp4);
+hidden(cb); hidden(cb.bg); hidden(cb.i); hidden(cb.j); hidden(vb);
+
+// --- Ch1: a vector ---
+wait(0.5);
+par { show(v); show(vlab); }
+wait(1.3);
+
+// --- Ch2: coordinates are a linear combination of the basis ---
+say(narr, "Its coordinates are scalars: v = 1·i-hat + 2·j-hat.");
+par { show(gm.i); show(gm.j); show(ilab); show(jlab); }
+wait(0.7);
+show(jj);                                         // i-hat then two j-hats reach v
+wait(1.6);
+
+// --- Ch3: the matrix transforms space; v rides along ---
+say(narr, "A matrix moves i-hat and j-hat — and the whole grid follows.");
+show(mtx);
+par { fade(jj); fade(ilab); fade(jlab); fade(vlab); }
+par { to(gm, morph, 1, 2.2); grow(v, (620, 195), 2.2); }   // space deforms, v follows
+wait(0.6);
+say(narr, "v lands at 1·(new i-hat) + 2·(new j-hat) = (4,5).");
+wait(1.6);
+
+// --- Ch4: matrix multiplication is composition ---
+say(narr, "Ch 4 — apply one transform, then another: that is matrix multiplication.");
+show(comp4);                                       // the product, clearly placed up top
+par { fade(gm); fade(v); }
+show(gm2);                                          // starts at M1 (seamless with Ch3)
+to(gm2, morph, 1, 1.8);                             // now rotate 90°: the grid is at M2·M1
+wait(1.3);
+to(gm2, morph, 0, 1.5);                             // undo the second transform, back to M1
+par { fade(gm2); fade(comp4); }
+par { show(gm); show(v); }
+wait(0.6);
+
+// --- Ch5: the determinant is the area scale factor ---
+say(narr, "Ch 5 — the determinant is how much areas scale: 2·2 − 1·1 = 3.");
+par { show(dt); show(dt.unit); show(dt.val); }
+wait(1.9);
+par { fade(dt); fade(dt.unit); fade(dt.val); }    // fade = timeline hide (hidden is base-state only)
+
+// --- Ch6: column space + the inverse undoes the transform ---
+say(narr, "Ch 6 — the columns span the whole plane, so the inverse sends space back.");
+par { to(gm, morph, 0, 1.8); grow(v, (455, 360), 1.8); }   // reverse the morph = the inverse
+wait(1.4);
+
+// --- Ch7: the dot product — projection, and its dual (a squish onto a line) ---
+say(narr, "Ch 7 — the dot product of v and w is a projection — w's shadow on v.");
+par { fade(gm); fade(gm.bg); fade(v); fade(mtx); }
+show(pr);
+wait(1.6);
+say(narr, "It's also a squish of the whole plane onto a line — the dual vector IS v.");
+fade(pr);
+par { show(sq); show(sq.line); show(sq.dual); }
+to(sq, morph, 1, 1.9);                              // collapse space onto the number line
+wait(1.0);
+to(sq, morph, 0, 1.2);                              // and back — the dual vector remains
+wait(0.8);
+
+// --- Ch8: change of basis ---
+say(narr, "Ch 8 — change of basis: the same arrow, read on a different grid.");
+par { fade(sq); fade(sq.line); fade(sq.dual); }
+par { show(cb); show(vb); }
+to(cb, morph, 1, 1.8);                                       // the coordinate grid changes; v stays put
+wait(1.8);
+
+// --- Ch9: eigenvectors and eigenvalues ---
+say(narr, "Ch 9 — some vectors keep to their own line: eigenvectors (λ = 3 and λ = 1).");
+par { fade(cb); fade(vb); }
+show(ev);
+wait(2.0);
+
+// --- Ch10: the eigenbasis is a pure stretch ---
+say(narr, "Ch 10 — in the eigenbasis, the transformation is just a diagonal stretch.");
+fade(ev);
+show(dg);
+wait(2.0);
+
+// --- Ch11: abstract vector spaces ---
+say(narr, "Ch 11 — even functions are vectors; the derivative is a linear map with a matrix.");
+fade(dg);
+par { show(cf); show(fn); show(deq); }
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/d6-o7lGw5Ks" title="Essence of Linear Algebra in One Animation — Vectors, Basis, Determinant, Eigenvectors — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="duality-dot-product"><a class="header" href="#duality-dot-product">duality-dot-product</a></h2>
+<p>The dot product as DUALITY: the plane collapses onto a number line under a 1×2 map (<code>squish</code>), and the gold dual vector is what you dot with.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The dot product and duality (eola chapter 7 — the "why" behind chapter8p2).
+//
+//  A 1x2 matrix [a b] is a linear map from the plane to a NUMBER LINE: it sends
+//  (x,y) to a·x + b·y and squishes all of space onto the line. Every such map
+//  corresponds to a single 2D vector — the DUAL vector (a,b) — and applying the
+//  map is exactly the dot product with (a,b). That correspondence is duality.
+//
+//  Built on the new `squish` builtin. Here [a b] = [2 1].
+// ============================================================================
+title("The dot product and duality");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "A 1×2 matrix is a map from the plane to a number line.", 24);
+equation(mtx, (980, 130), `\begin{bmatrix}2&amp;1\end{bmatrix}`, 44);
+
+squish(sq, (640, 360), 70, 2, 1, 4);
+
+// --- reveal ---
+hidden(sq.dual); hidden(mtx);
+
+wait(0.6);
+show(mtx);
+wait(1.2);
+
+say(narr, "It squishes all of space onto the line — i-hat to 2, j-hat to 1.");
+to(sq, morph, 1, 2.4);
+wait(1.2);
+
+say(narr, "Every such map corresponds to a single 2D vector — the dual vector (2,1).");
+to(sq, morph, 0, 1.6);                             // un-squish, back to the plane
+show(sq.dual);
+wait(1.4);
+
+say(narr, "Applying the map is the same as dotting with (2,1). That is duality.");
+pulse(sq.dual);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kRASlv3iKDc" title="The Dot Product as Duality — Why It's a Squish onto a Number Line — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="warp-grid"><a class="header" href="#warp-grid">warp-grid</a></h2>
+<p>A complex-plane grid DEFORMS under <code>z → z²</code> (<code>warp</code>) — lines bend into the classic parabolic conformal web.</p>
+<pre><code class="language-manic">// ============================================================================
+//  A coordinate grid over the complex plane, deforming under z -&gt; f(z).
+//
+//  `warp` samples each grid line through the complex function, so straight lines
+//  bend into curves. It starts as the identity grid and morphs to the warped
+//  image when animated — `to(id, morph, 1, dur)`. Here z -&gt; z^2, the classic
+//  conformal map (the non-linear twin of `linmap`, and the deforming-grid
+//  companion to `domaincolor`).
+// ============================================================================
+title("Complex grid warp");
+canvas(1280, 720);
+template("black");
+
+warp(g, (640, 360), 82, `z*z`, 3, 40);
+equation(fn, (640, 80), `z \mapsto z^{2}`, 46);
+text(narr, (640, 672), "A grid over the complex plane.", 26);
+
+wait(0.6);
+say(narr, "Every point z moves to z squared — lines bend into parabolas.");
+to(g, morph, 1, 2.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/TzxwsdMv2mU" title="Watch a Complex Grid Deform Under z → z² — Conformal Map Animation in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="zeta"><a class="header" href="#zeta">zeta</a></h2>
+<p>The Riemann zeta function by <code>domaincolor</code> (with a real <code>zeta(z)</code> in the complex evaluator): the pole at s=1, the critical line Re=½, and the first non-trivial zeros marked.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The Riemann zeta function ζ(s), visualised by domain colouring.
+//
+//  ζ is a genuine complex function now (`zeta(z)` in the complex evaluator, via
+//  Borwein's accelerated eta series — valid through the critical strip). Domain
+//  colouring paints the complex plane: hue = phase of ζ(s), brightness = |ζ(s)|,
+//  so ZEROS are dark points and the POLE at s=1 is bright. Every non-trivial
+//  zero found sits on the critical line Re = 1/2 — the Riemann Hypothesis.
+// ============================================================================
+title("The Riemann zeta function");
+canvas(1280, 720);
+template("black");
+
+// the s-plane, coloured by ζ(s) — a tall strip up the imaginary axis so the
+// first non-trivial zeros (½ ± 14.13i) are in frame
+domaincolor(zp, (500, 330), 240, 640, `zeta(z)`, 5.4);
+colorwheel(cw, (980, 470), 72);                 // phase → hue legend
+
+equation(def, (960, 150), `\zeta(s)=\sum \frac{1}{n^{s}}`, 40);
+text(narr, (640, 700), "Colour = phase of zeta; brightness = size.", 24);
+
+// the critical line Re = 1/2 and the strip 0 &lt; Re &lt; 1
+line(cl, (511, 12), (511, 648)); color(cl, gold); dashed(cl);
+text(cllab, (700, 250), "critical line  Re = 1/2", 20); color(cllab, gold);
+
+// the first non-trivial zeros, on the critical line
+dot(z1, (511, 16)); color(z1, gold);
+dot(z2, (511, 644)); color(z2, gold);
+text(zlab, (690, 60), "zeta = 0  (½ ± 14.13i)", 20); color(zlab, gold);
+
+// the pole at s = 1
+circle(pole, (522, 330), 10); outlined(pole); color(pole, cyan);
+text(plab, (720, 330), "pole at s = 1", 20); color(plab, cyan);
+
+// --- reveal ---
+hidden(cl); hidden(cllab); hidden(z1); hidden(z2); hidden(zlab);
+hidden(pole); hidden(plab); hidden(def); hidden(cw);
+
+wait(0.4);
+show(zp);
+say(narr, "The Riemann zeta function, 1 + 1/2^s + 1/3^s + ...");
+show(def);
+wait(1.2);
+
+say(narr, "Defined for Re(s) &gt; 1, then continued everywhere but a pole at s = 1.");
+par { show(pole); show(plab); }
+wait(1.2);
+
+say(narr, "Its zeros are the dark points.");
+show(cw);
+wait(1.0);
+
+say(narr, "Every non-trivial zero found lies on the line Re = 1/2.");
+par { show(cl); show(cllab); }
+wait(0.7);
+par { show(z1); show(z2); show(zlab); pulse(z1); pulse(z2); }
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/hMvtrp1wdC8" title="The Riemann Zeta Function Visualized — Pole, Critical Line & Zeros by Domain Coloring — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="euler-characteristic"><a class="header" href="#euler-characteristic">euler-characteristic</a></h2>
+<p>Euler’s formula V − E + F = 2 on a wheel graph: V and E counted, faces filled + counted by <code>regions</code>, and 6 − 10 + 6 = 2 assembled.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Euler's characteristic formula, V - E + F = 2, on a planar graph.
+//
+//  The graph is a wheel W5 (a hub joined to a 5-point rim). We count its
+//  vertices, its edges, and its faces — the faces detected and filled by
+//  `regions` (5 inner triangles), plus the one outer face — and watch
+//  V - E + F land on 2.
+// ============================================================================
+title("Euler's characteristic");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (760, 70), `V - E + F = 2`, 46);
+
+// --- the wheel graph W5 ---
+polygon(rim, (760,150),(560,295),(637,530),(883,530),(960,295));
+color(rim, cyan);
+line(k1, (760,360),(760,150)); tag(k1, spokes); color(k1, cyan);
+line(k2, (760,360),(560,295)); tag(k2, spokes); color(k2, cyan);
+line(k3, (760,360),(637,530)); tag(k3, spokes); color(k3, cyan);
+line(k4, (760,360),(883,530)); tag(k4, spokes); color(k4, cyan);
+line(k5, (760,360),(960,295)); tag(k5, spokes); color(k5, cyan);
+
+regions(cells, rim, spokes);   // fills + counts the 5 inner faces
+
+dot(hub,(760,360));
+dot(p1,(760,150)); dot(p2,(560,295)); dot(p3,(637,530));
+dot(p4,(883,530)); dot(p5,(960,295));
+
+// --- the running tally, on the left ---
+equation(tv, (250, 235), `V = 6`, 44);
+equation(te, (250, 345), `E = 10`, 44);
+equation(tf, (250, 455), `F = 6`, 44);
+text(fnote, (250, 500), "5 inside + 1 outside", 18);
+equation(sum, (760, 660), `6 - 10 + 6 = 2`, 52);
+
+// --- reveal ---
+untraced(rim); untraced(k1); untraced(k2); untraced(k3); untraced(k4); untraced(k5);
+untraced(cells);
+hidden(hub); hidden(p1); hidden(p2); hidden(p3); hidden(p4); hidden(p5);
+hidden(tv); hidden(te); hidden(tf); hidden(fnote); hidden(sum);
+
+wait(0.4);
+par { draw(rim, 1.0); draw(k1, 1.0); draw(k2, 1.0); draw(k3, 1.0); draw(k4, 1.0); draw(k5, 1.0); }
+par { show(hub); show(p1); show(p2); show(p3); show(p4); show(p5); }
+wait(0.4);
+
+// count the vertices
+par { show(tv); pulse(hub); pulse(p1); pulse(p2); pulse(p3); pulse(p4); pulse(p5); }
+wait(0.5);
+
+// count the edges
+par { show(te); pulse(rim); pulse(k1); pulse(k2); pulse(k3); pulse(k4); pulse(k5); }
+wait(0.5);
+
+// count the faces — 5 filled by `regions`, plus the outer face
+draw(cells, 1.3);
+par { show(tf); show(fnote); }
+wait(0.8);
+
+// and the characteristic lands on 2
+show(sum);
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/N_PLyWLVDHQ" title="Euler's Formula V − E + F = 2, Animated on a Graph — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="euler-proof"><a class="header" href="#euler-proof">euler-proof</a></h2>
+<p>The spanning-tree / dual-tree PROOF of V − E + F = 2, built on <code>spantree</code> (run on the primal AND the dual) and <code>dual</code>.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Why V - E + F = 2 — the spanning-tree / dual-tree proof, narrated by Manic.
+//
+//  A spanning tree of the graph uses V-1 edges (every vertex, no loop). The
+//  edges it leaves out are in bijection with the bounded faces: their duals form
+//  a spanning tree of the DUAL graph, using F-1 edges. Every edge is in exactly
+//  one of the two trees, so (V-1) + (F-1) = E, i.e. V - E + F = 2.
+//
+//  Built on `spantree` (run on the primal AND the dual) and `dual`.
+// ============================================================================
+title("Euler's formula — a proof");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (300, 66), `V - E + F = 2`, 42);
+text(narr, (760, 682), "A connected planar graph.", 26);
+
+// --- the wheel graph W5 ---
+polygon(rim, (760,150),(560,295),(637,530),(883,530),(960,295));
+color(rim, cyan);
+line(k1, (760,360),(760,150)); tag(k1, spokes); color(k1, cyan);
+line(k2, (760,360),(560,295)); tag(k2, spokes); color(k2, cyan);
+line(k3, (760,360),(637,530)); tag(k3, spokes); color(k3, cyan);
+line(k4, (760,360),(883,530)); tag(k4, spokes); color(k4, cyan);
+line(k5, (760,360),(960,295)); tag(k5, spokes); color(k5, cyan);
+
+regions(cells, rim, spokes);              // the F faces (faint context)
+opacity(cells, 0.18);
+
+dot(hub,(760,360));
+dot(p1,(760,150)); dot(p2,(560,295)); dot(p3,(637,530));
+dot(p4,(883,530)); dot(p5,(960,295));
+
+// tally
+equation(tv, (135, 200), `V = 6`, 34);
+equation(te, (135, 275), `E = 10`, 34);
+equation(tf, (135, 350), `F = 6`, 34);
+
+// the two trees (declared now, revealed in sequence)
+spantree(pt, spokes, rim);                // primal tree {pt} (green) + co-tree {pt.co} (orange)
+dual(du, rim, spokes);                     // dual: {du} edges + {du.nodes} dots
+spantree(dt, du);                          // dual's spanning tree {dt}
+color(dt, teal);
+
+equation(sum, (760, 632), `(V-1) + (F-1) = E`, 40);
+equation(nums, (760, 632), `5 + 5 = 10`, 40);
+
+// --- initial visibility ---
+untraced(rim); untraced(k1); untraced(k2); untraced(k3); untraced(k4); untraced(k5);
+untraced(cells); untraced(pt); untraced(pt.co); untraced(dt);
+hidden(hub); hidden(p1); hidden(p2); hidden(p3); hidden(p4); hidden(p5);
+hidden(tv); hidden(te); hidden(tf);
+hidden(du); hidden(du.nodes); hidden(dt.co);   // substrate + dual co-tree stay hidden
+hidden(sum); hidden(nums);
+
+// 1. the graph
+wait(0.4);
+par { draw(rim,1.0); draw(k1,1.0); draw(k2,1.0); draw(k3,1.0); draw(k4,1.0); draw(k5,1.0); }
+par { show(hub); show(p1); show(p2); show(p3); show(p4); show(p5); }
+wait(0.6);
+
+// 2. count V, E, F
+say(narr, "V vertices, E edges, F faces.");
+draw(cells, 0.9);
+par { show(tv); show(te); show(tf); }
+wait(1.0);
+
+// 3. a spanning tree — V-1 edges
+say(narr, "A spanning tree: every vertex, no loops — V-1 = 5 edges.");
+par { draw(pt, 1.4); }
+wait(1.0);
+
+// 4. the leftover (co-tree) edges
+say(narr, "That leaves E - (V-1) = 5 edges.");
+par { draw(pt.co, 1.0); }
+wait(1.0);
+
+// 5. the dual — one node per face
+say(narr, "The dual graph: one node inside each face.");
+par { show(du.nodes); }
+wait(1.0);
+
+// 6. a spanning tree of the dual — F-1 edges
+say(narr, "Its spanning tree pairs with the leftovers — F-1 = 5 edges.");
+par { draw(dt, 1.4); }
+wait(1.0);
+
+// 7. the two trees tile every edge
+say(narr, "Every edge lies in exactly one tree.");
+show(sum);
+wait(1.0);
+par { fade(sum); show(nums); }
+wait(1.0);
+
+// 8. conclusion
+say(narr, "So V - E + F = 2.");
+pulse(thm);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/rLbhBtqKFt8" title="The Spanning-Tree Proof of Euler's Formula — Primal & Dual Trees Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="pythagorean-proof"><a class="header" href="#pythagorean-proof">pythagorean-proof</a></h2>
+<p>The dissection proof of a² + b² = c²: two identical (a+b)-squares, four triangles each, leaving c² on one and a²+b² on the other.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The Pythagorean theorem by dissection, a^2 + b^2 = c^2.
+//
+//  Two identical squares of side (a+b), each filled with four copies of the same
+//  right triangle. On the left the triangles leave a tilted square on the
+//  hypotenuse — c^2. On the right, the same four triangles regroup to leave a
+//  square on each leg — a^2 and b^2. Same square, same triangles, so a^2+b^2=c^2.
+//
+//  a = 120, b = 180 (so the tilted square's side is c = sqrt(120^2+180^2)).
+// ============================================================================
+title("Pythagoras by dissection");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (640, 96), `a^2 + b^2 = c^2`, 50);
+text(narr, (640, 672), "Two identical squares, side a + b.", 26);
+
+// ---- LEFT square: four triangles + c^2 ----
+polygon(sqL, (120,210),(420,210),(420,510),(120,510)); outlined(sqL); color(sqL, dim);
+// four corner triangles (legs a,b)
+polygon(la1, (120,210),(240,210),(120,390), teal);
+polygon(la2, (420,210),(420,330),(240,210), teal);
+polygon(la3, (420,510),(300,510),(420,330), teal);
+polygon(la4, (120,510),(120,390),(300,510), teal);
+opacity(la1, 0.4); opacity(la2, 0.4); opacity(la3, 0.4); opacity(la4, 0.4);
+// the tilted square on the hypotenuse
+polygon(csq, (240,210),(420,330),(300,510),(120,390), gold);
+equation(clab, (270, 360), `c^2`, 40);
+
+// ---- RIGHT square: the same four triangles + a^2 + b^2 ----
+polygon(sqR, (600,210),(900,210),(900,510),(600,510)); outlined(sqR); color(sqR, dim);
+// a^2 (top-left) and b^2 (bottom-right)
+polygon(asq, (600,210),(720,210),(720,330),(600,330), blue);
+polygon(bsq, (720,330),(900,330),(900,510),(720,510), violet);
+equation(alab, (660, 270), `a^2`, 34);
+equation(blab, (810, 420), `b^2`, 40);
+// the four triangles filling the two leftover rectangles
+polygon(ra1, (720,210),(900,210),(900,330), teal);
+polygon(ra2, (720,210),(900,330),(720,330), teal);
+polygon(ra3, (600,330),(720,330),(600,510), teal);
+polygon(ra4, (720,330),(720,510),(600,510), teal);
+opacity(ra1, 0.4); opacity(ra2, 0.4); opacity(ra3, 0.4); opacity(ra4, 0.4);
+
+// side = a + b, under each square
+brace(brL, (120,528),(420,528), "down"); text(brLt, (270,556), "a + b", 20);
+brace(brR, (600,528),(900,528), "down"); text(brRt, (750,556), "a + b", 20);
+
+// ---- reveal ----
+hidden(la1); hidden(la2); hidden(la3); hidden(la4);
+untraced(csq); hidden(clab);
+untraced(asq); untraced(bsq); hidden(alab); hidden(blab);
+hidden(ra1); hidden(ra2); hidden(ra3); hidden(ra4);
+hidden(brL); hidden(brLt); hidden(brR); hidden(brRt);
+
+wait(0.4);
+par { show(sqL); show(sqR); }
+par { show(brL); show(brR); show(brLt); show(brRt); }
+wait(0.7);
+
+say(narr, "Fill each with four copies of the same right triangle.");
+par { show(la1); show(la2); show(la3); show(la4); show(ra1); show(ra2); show(ra3); show(ra4); }
+wait(0.9);
+
+say(narr, "On the left they leave a square on the hypotenuse: c squared.");
+draw(csq, 1.0); show(clab);
+wait(1.0);
+
+say(narr, "Rearranged, the same four leave a square on each leg: a squared, b squared.");
+par { draw(asq, 0.9); draw(bsq, 0.9); }
+par { show(alab); show(blab); }
+wait(1.1);
+
+say(narr, "Same square, same four triangles — so a squared plus b squared is c squared.");
+pulse(thm);
+wait(0.6);
+par { pulse(csq); pulse(asq); pulse(bsq); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/bYPWoKFMx2Q" title="The Dissection Proof of a² + b² = c² — Pythagoras Animated in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="region-partition"><a class="header" href="#region-partition">region-partition</a></h2>
+<p><code>regions</code> fills + counts the areas a pentagram’s chords cut a disk into (16) — the planar-arrangement engine behind Moser/Euler/dissection scenes.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Region partition: five points on a circle, every chord drawn between them,
+//  and `regions` fills + counts the areas they cut the disk into. The pentagon
+//  + its diagonals (a pentagram) partition the circle into 16 regions.
+//
+//  `regions(id, boundary, dividers)` computes the planar arrangement of the
+//  boundary and every divider, then fills each enclosed face — the areas are
+//  detected for you, no coordinates for the pieces.
+// ============================================================================
+title("Region partition");
+canvas(1280, 720);
+template("black");
+
+circle(disk, (640, 360), 240);
+
+// five points on the circle
+dot(pa, (640, 120)); dot(pb, (412, 286)); dot(pc, (499, 554));
+dot(pd, (781, 554)); dot(pe, (868, 286));
+
+// all ten chords (5 sides + 5 diagonals), tagged so `regions` takes them at once
+line(s0, (640,120), (412,286)); tag(s0, chords);
+line(s1, (412,286), (499,554)); tag(s1, chords);
+line(s2, (499,554), (781,554)); tag(s2, chords);
+line(s3, (781,554), (868,286)); tag(s3, chords);
+line(s4, (868,286), (640,120)); tag(s4, chords);
+line(g0, (640,120), (499,554)); tag(g0, chords);
+line(g1, (640,120), (781,554)); tag(g1, chords);
+line(g2, (412,286), (781,554)); tag(g2, chords);
+line(g3, (412,286), (868,286)); tag(g3, chords);
+line(g4, (499,554), (868,286)); tag(g4, chords);
+
+regions(rg, disk, chords);   // fills + counts every enclosed area (16)
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/5QvZ30TiFvU" title="How Many Regions Do a Pentagram's Chords Cut a Disk Into? — Planar Arrangement in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="light-and-brachistochrone"><a class="header" href="#light-and-brachistochrone">light-and-brachistochrone</a></h2>
+<p>The Brachistochrone’s optics arc: <code>refract</code> (real Snell’s law + angle sweep) → the native <code>brachistochrone</code> race where the cycloid wins.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Light and the brachistochrone — the optics half of the 2016 video.
+//
+//  Bernoulli solved "what curve gives the fastest slide?" by a leap: a sliding
+//  bead is like a ray of light, which always takes the FASTEST path. Light
+//  bends when it enters a slower medium (Snell's law); a bead falling through
+//  ever-faster layers bends the same way — and the limiting curve is a cycloid.
+//
+//  Built on the optics kit's `refract` (real Snell's law, angle sweep) and the
+//  physics kit's `brachistochrone` (four beads race, the cycloid wins).
+// ============================================================================
+title("Light and the brachistochrone");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "Which path through the water is fastest?", 24);
+
+refract(rf, (640, 360), 1.0, 1.5);            // air over glass/water — light bends
+equation(snell, (640, 84), `\frac{\sin\theta_1}{v_1}=\frac{\sin\theta_2}{v_2}`, 40);
+brachistochrone(bc, (450, 230));              // A→B racing curves (shown in act 2)
+
+// --- act 1: light refracts ---
+hidden(snell); hidden(bc);
+
+wait(0.6);
+say(narr, "Crossing into water light slows, and bends toward the normal.");
+wait(1.6);
+
+say(narr, "Steeper in means steeper out — always by Snell's law.");
+run(rf, 3.2);
+show(snell);
+wait(1.2);
+
+// --- act 2: Bernoulli's leap → the cycloid ---
+say(narr, "Bernoulli's leap: a sliding bead is like light through faster and faster layers.");
+par { fade(rf); fade(snell); }
+wait(0.8);
+
+show(bc);
+say(narr, "Its fastest path is a cycloid — the brachistochrone.");
+run(bc, 3.6);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GpiPv2clsIM" title="Snell's Law to the Brachistochrone — Why the Cycloid Is the Fastest Slide — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="snell-to-cycloid"><a class="header" href="#snell-to-cycloid">snell-to-cycloid</a></h2>
+<p>The derivation that connects them: layers of ever-faster media, light bending at each boundary (Snell), the zig-zag smoothing into a cycloid where sin θ/√y is constant.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Snell's law → the cycloid — the derivation that connects light to the
+//  brachistochrone (3b1b's multilayered.py).
+//
+//  Slice the medium into horizontal layers, each one letting light move faster
+//  than the last (a falling bead speeds up: v = sqrt(y)). Light bends at every
+//  boundary by Snell's law, sin(θ)/v = const. The bent path zig-zags down; as
+//  the layers get thinner it smooths into a single curve — a CYCLOID — on which
+//  sin(θ)/sqrt(y) is constant everywhere. That curve is the brachistochrone.
+//
+//  The bend angles below are the real Snell solution: v_i = sqrt(i+1),
+//  sin(θ_i) = sin(20°)·v_i, so θ steepens 20° → 57° from the vertical.
+// ============================================================================
+title("Snell's law becomes a cycloid");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "A falling bead speeds up — so slice the fall into faster and faster layers.", 22);
+
+// six layers, each faster (lighter) than the one above
+rect(l0, (640, 178), 1280, 77); color(l0, indigo); opacity(l0, 0.32);
+rect(l1, (640, 255), 1280, 77); color(l1, blue);   opacity(l1, 0.32);
+rect(l2, (640, 332), 1280, 77); color(l2, blue);   opacity(l2, 0.42);
+rect(l3, (640, 409), 1280, 77); color(l3, teal);   opacity(l3, 0.42);
+rect(l4, (640, 486), 1280, 77); color(l4, teal);   opacity(l4, 0.55);
+rect(l5, (640, 563), 1280, 77); color(l5, cyan);   opacity(l5, 0.55);
+
+// the discrete light path — bends once per boundary (Snell at each)
+line(s0, (200,140), (228,217)); tag(s0, ray); color(s0, gold);
+line(s1, (228,217), (270,294)); tag(s1, ray); color(s1, gold);
+line(s2, (270,294), (327,371)); tag(s2, ray); color(s2, gold);
+line(s3, (327,371), (399,448)); tag(s3, ray); color(s3, gold);
+line(s4, (399,448), (491,525)); tag(s4, ray); color(s4, gold);
+line(s5, (491,525), (609,602)); tag(s5, ray); color(s5, gold);
+
+// the smooth limit: a cycloid through the same endpoints
+param(cyc, (200,140), 130, 231, `t - sin(t)`, `cos(t) - 1`, (0, pi)); color(cyc, yellow);
+
+// the invariant, and one angle to illustrate it
+equation(inv, (960, 250), `\frac{\sin\theta}{\sqrt{y}} = \text{const}`, 40);
+line(nrm, (274,320), (274,430)); color(nrm, dim); dashed(nrm);   // vertical (normal)
+line(tan, (240,300), (312,428)); color(tan, red);                // tangent along the curve
+text(thlab, (300, 340), "θ", 26); color(thlab, red);
+
+// --- reveal ---
+untraced(s0); untraced(s1); untraced(s2); untraced(s3); untraced(s4); untraced(s5);
+untraced(cyc);
+hidden(inv); hidden(nrm); hidden(tan); hidden(thlab);
+
+wait(0.6);
+par { show(l0); show(l1); show(l2); show(l3); show(l4); show(l5); }
+wait(0.8);
+
+say(narr, "Light bends at every boundary — Snell's law, sin(θ)/v constant.");
+draw(s0, 0.4); draw(s1, 0.4); draw(s2, 0.4); draw(s3, 0.4); draw(s4, 0.4); draw(s5, 0.4);
+wait(0.8);
+
+say(narr, "Thinner and thinner layers — the zig-zag smooths into one curve.");
+par { fade(ray); draw(cyc, 1.4); }
+wait(1.0);
+
+say(narr, "A cycloid — and along it sin(θ)/sqrt(y) stays constant everywhere.");
+par { show(inv); show(nrm); show(tan); show(thlab); }
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/fQEH34NO5Tc" title="From Light Bending to a Cycloid — the Brachistochrone Derivation Animated — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="cross-product-3d"><a class="header" href="#cross-product-3d">cross-product-3d</a></h2>
+<p>The 3D CROSS product (<code>cross3</code>): v × w perpendicular to the parallelogram v,w span, its length = that area, orbited to reveal the geometry behind the determinant formula.</p>
+<pre><code class="language-manic">// ============================================================================
+//  The cross product in 3D (eola chapter8p2 — the geometric part).
+//
+//  v × w is the vector PERPENDICULAR to the plane of v and w, whose LENGTH is
+//  the area of the parallelogram they span (and whose sign follows the right
+//  hand). That geometry is what the î-ĵ-k̂ determinant formula computes.
+//
+//  Example: v=(2,1,0), w=(-1,2,0), so v×w=(0,0,5) — straight up, length 5 = the
+//  parallelogram's area (2·2 − 1·(−1)). Built on the new `cross3` builtin.
+// ============================================================================
+title("The cross product in 3D");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "Two vectors v and w in three-dimensional space.", 24);
+equation(det, (960, 130),
+  `\vec v\times\vec w=\det\!\begin{bmatrix}\hat\imath&amp;\hat\jmath&amp;\hat k\\2&amp;1&amp;0\\-1&amp;2&amp;0\end{bmatrix}`, 30);
+
+cross3(cr, (0, 0, 0), (2, 1, 0), (-1, 2, 0));
+camera3((5.5, -5.5, 5.5), (0.2, 0.4, 1.6));
+
+// --- reveal ---
+hidden(cr.p); hidden(cr.e1); hidden(cr.e2); hidden(det);
+
+wait(0.6);
+wait(1.4);                                        // v (green) and w (red) are up
+
+say(narr, "They span a parallelogram.");
+par { show(cr.e1); show(cr.e2); }
+wait(1.4);
+
+say(narr, "Their cross product v × w points perpendicular to both.");
+show(cr.p);
+wait(1.2);
+
+say(narr, "Its length equals the area of that parallelogram.");
+orbit3(75, 22, 9.5, 3.2);                          // orbit to reveal the perpendicular
+wait(1.2);
+
+say(narr, "That geometry is exactly what the determinant formula computes.");
+show(det);
+wait(1.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/nE7gxFkko3Y" title="The 3D Cross Product, Geometrically — Area, Perpendicular & the Determinant — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-manim-vs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="API.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-manim-vs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="API.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

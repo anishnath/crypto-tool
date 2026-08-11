@@ -1,0 +1,42 @@
+// ============================================================================
+//  The cross product in 3D (eola chapter8p2 — the geometric part).
+//
+//  v × w is the vector PERPENDICULAR to the plane of v and w, whose LENGTH is
+//  the area of the parallelogram they span (and whose sign follows the right
+//  hand). That geometry is what the î-ĵ-k̂ determinant formula computes.
+//
+//  Example: v=(2,1,0), w=(-1,2,0), so v×w=(0,0,5) — straight up, length 5 = the
+//  parallelogram's area (2·2 − 1·(−1)). Built on the new `cross3` builtin.
+// ============================================================================
+title("The cross product in 3D");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "Two vectors v and w in three-dimensional space.", 24);
+equation(det, (960, 130),
+  `\vec v\times\vec w=\det\!\begin{bmatrix}\hat\imath&\hat\jmath&\hat k\\2&1&0\\-1&2&0\end{bmatrix}`, 30);
+
+cross3(cr, (0, 0, 0), (2, 1, 0), (-1, 2, 0));
+camera3((5.5, -5.5, 5.5), (0.2, 0.4, 1.6));
+
+// --- reveal ---
+hidden(cr.p); hidden(cr.e1); hidden(cr.e2); hidden(det);
+
+wait(0.6);
+wait(1.4);                                        // v (green) and w (red) are up
+
+say(narr, "They span a parallelogram.");
+par { show(cr.e1); show(cr.e2); }
+wait(1.4);
+
+say(narr, "Their cross product v × w points perpendicular to both.");
+show(cr.p);
+wait(1.2);
+
+say(narr, "Its length equals the area of that parallelogram.");
+orbit3(75, 22, 9.5, 3.2);                          // orbit to reveal the perpendicular
+wait(1.2);
+
+say(narr, "That geometry is exactly what the determinant formula computes.");
+show(det);
+wait(1.8);

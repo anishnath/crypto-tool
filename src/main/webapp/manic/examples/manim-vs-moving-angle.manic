@@ -1,0 +1,29 @@
+// ============================================================================
+//  A moving angle: two arms share a vertex, one arm swings, and the angle arc
+//  plus its θ label track the opening live — no updaters, just `turn`.
+//
+//  The whole rig is reactive: `segment` arms reflow to their endpoints, and
+//  `anglemark` recomputes its arc AND rides its θ label along the bisector
+//  every frame. Rotate the moving point and everything follows.
+// ============================================================================
+title("Moving angle");
+canvas(1280, 720);
+template("black");
+
+point(o,  (470, 470));           // vertex — the pivot everything turns about
+point(pr, (800, 470));           // fixed arm, along the horizontal
+point(pm, (357, 188));           // moving arm, starts at ~110°
+
+segment(l1, o, pr);
+segment(lm, o, pm);
+anglemark(ang, pr, o, pm, "θ");  // arc + θ label, both track the opening
+
+wait(0.6);
+turn(pm, o, -70, 1.6);           // close the angle down to ~40°
+wait(0.5);
+turn(pm, o, 140, 2.2);           // swing wide, past straight
+wait(0.4);
+recolor(ang.label, red, 0.5);    // paint the θ red
+wait(0.4);
+turn(pm, o, 170, 2.6);           // carry on around
+wait(0.6);

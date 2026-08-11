@@ -1,0 +1,57 @@
+// ============================================================================
+//  The Riemann zeta function ζ(s), visualised by domain colouring.
+//
+//  ζ is a genuine complex function now (`zeta(z)` in the complex evaluator, via
+//  Borwein's accelerated eta series — valid through the critical strip). Domain
+//  colouring paints the complex plane: hue = phase of ζ(s), brightness = |ζ(s)|,
+//  so ZEROS are dark points and the POLE at s=1 is bright. Every non-trivial
+//  zero found sits on the critical line Re = 1/2 — the Riemann Hypothesis.
+// ============================================================================
+title("The Riemann zeta function");
+canvas(1280, 720);
+template("black");
+
+// the s-plane, coloured by ζ(s) — a tall strip up the imaginary axis so the
+// first non-trivial zeros (½ ± 14.13i) are in frame
+domaincolor(zp, (500, 330), 240, 640, `zeta(z)`, 5.4);
+colorwheel(cw, (980, 470), 72);                 // phase → hue legend
+
+equation(def, (960, 150), `\zeta(s)=\sum \frac{1}{n^{s}}`, 40);
+text(narr, (640, 700), "Colour = phase of zeta; brightness = size.", 24);
+
+// the critical line Re = 1/2 and the strip 0 < Re < 1
+line(cl, (511, 12), (511, 648)); color(cl, gold); dashed(cl);
+text(cllab, (700, 250), "critical line  Re = 1/2", 20); color(cllab, gold);
+
+// the first non-trivial zeros, on the critical line
+dot(z1, (511, 16)); color(z1, gold);
+dot(z2, (511, 644)); color(z2, gold);
+text(zlab, (690, 60), "zeta = 0  (½ ± 14.13i)", 20); color(zlab, gold);
+
+// the pole at s = 1
+circle(pole, (522, 330), 10); outlined(pole); color(pole, cyan);
+text(plab, (720, 330), "pole at s = 1", 20); color(plab, cyan);
+
+// --- reveal ---
+hidden(cl); hidden(cllab); hidden(z1); hidden(z2); hidden(zlab);
+hidden(pole); hidden(plab); hidden(def); hidden(cw);
+
+wait(0.4);
+show(zp);
+say(narr, "The Riemann zeta function, 1 + 1/2^s + 1/3^s + ...");
+show(def);
+wait(1.2);
+
+say(narr, "Defined for Re(s) > 1, then continued everywhere but a pole at s = 1.");
+par { show(pole); show(plab); }
+wait(1.2);
+
+say(narr, "Its zeros are the dark points.");
+show(cw);
+wait(1.0);
+
+say(narr, "Every non-trivial zero found lies on the line Re = 1/2.");
+par { show(cl); show(cllab); }
+wait(0.7);
+par { show(z1); show(z2); show(zlab); pulse(z1); pulse(z2); }
+wait(1.6);

@@ -1,0 +1,77 @@
+// ============================================================================
+//  The Pythagorean theorem by dissection, a^2 + b^2 = c^2.
+//
+//  Two identical squares of side (a+b), each filled with four copies of the same
+//  right triangle. On the left the triangles leave a tilted square on the
+//  hypotenuse — c^2. On the right, the same four triangles regroup to leave a
+//  square on each leg — a^2 and b^2. Same square, same triangles, so a^2+b^2=c^2.
+//
+//  a = 120, b = 180 (so the tilted square's side is c = sqrt(120^2+180^2)).
+// ============================================================================
+title("Pythagoras by dissection");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (640, 96), `a^2 + b^2 = c^2`, 50);
+text(narr, (640, 672), "Two identical squares, side a + b.", 26);
+
+// ---- LEFT square: four triangles + c^2 ----
+polygon(sqL, (120,210),(420,210),(420,510),(120,510)); outlined(sqL); color(sqL, dim);
+// four corner triangles (legs a,b)
+polygon(la1, (120,210),(240,210),(120,390), teal);
+polygon(la2, (420,210),(420,330),(240,210), teal);
+polygon(la3, (420,510),(300,510),(420,330), teal);
+polygon(la4, (120,510),(120,390),(300,510), teal);
+opacity(la1, 0.4); opacity(la2, 0.4); opacity(la3, 0.4); opacity(la4, 0.4);
+// the tilted square on the hypotenuse
+polygon(csq, (240,210),(420,330),(300,510),(120,390), gold);
+equation(clab, (270, 360), `c^2`, 40);
+
+// ---- RIGHT square: the same four triangles + a^2 + b^2 ----
+polygon(sqR, (600,210),(900,210),(900,510),(600,510)); outlined(sqR); color(sqR, dim);
+// a^2 (top-left) and b^2 (bottom-right)
+polygon(asq, (600,210),(720,210),(720,330),(600,330), blue);
+polygon(bsq, (720,330),(900,330),(900,510),(720,510), violet);
+equation(alab, (660, 270), `a^2`, 34);
+equation(blab, (810, 420), `b^2`, 40);
+// the four triangles filling the two leftover rectangles
+polygon(ra1, (720,210),(900,210),(900,330), teal);
+polygon(ra2, (720,210),(900,330),(720,330), teal);
+polygon(ra3, (600,330),(720,330),(600,510), teal);
+polygon(ra4, (720,330),(720,510),(600,510), teal);
+opacity(ra1, 0.4); opacity(ra2, 0.4); opacity(ra3, 0.4); opacity(ra4, 0.4);
+
+// side = a + b, under each square
+brace(brL, (120,528),(420,528), "down"); text(brLt, (270,556), "a + b", 20);
+brace(brR, (600,528),(900,528), "down"); text(brRt, (750,556), "a + b", 20);
+
+// ---- reveal ----
+hidden(la1); hidden(la2); hidden(la3); hidden(la4);
+untraced(csq); hidden(clab);
+untraced(asq); untraced(bsq); hidden(alab); hidden(blab);
+hidden(ra1); hidden(ra2); hidden(ra3); hidden(ra4);
+hidden(brL); hidden(brLt); hidden(brR); hidden(brRt);
+
+wait(0.4);
+par { show(sqL); show(sqR); }
+par { show(brL); show(brR); show(brLt); show(brRt); }
+wait(0.7);
+
+say(narr, "Fill each with four copies of the same right triangle.");
+par { show(la1); show(la2); show(la3); show(la4); show(ra1); show(ra2); show(ra3); show(ra4); }
+wait(0.9);
+
+say(narr, "On the left they leave a square on the hypotenuse: c squared.");
+draw(csq, 1.0); show(clab);
+wait(1.0);
+
+say(narr, "Rearranged, the same four leave a square on each leg: a squared, b squared.");
+par { draw(asq, 0.9); draw(bsq, 0.9); }
+par { show(alab); show(blab); }
+wait(1.1);
+
+say(narr, "Same square, same four triangles — so a squared plus b squared is c squared.");
+pulse(thm);
+wait(0.6);
+par { pulse(csq); pulse(asq); pulse(bsq); }
+wait(1.4);

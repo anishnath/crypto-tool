@@ -1,0 +1,61 @@
+// ============================================================================
+//  GraphAreaPlot — the full tour. One curve, y = 4x − x², and the whole calculus
+//  toolkit moving over it, selecting different domains as it goes:
+//
+//    1. reveal the frame + curve
+//    2. DERIVATIVE — a tangent slides along the curve, slope read live
+//    3. INTEGRAL   — the area sweeps open 0→4, the value climbs to 32/3
+//    4. DOMAINS    — the interval is re-selected: [0,1], then [1,3], then [3,4]
+//    5. RIEMANN    — approximate the selected [1,3] with rectangles
+//
+//  Same declarative primitives as the static diagram — the animator only says
+//  what happens when.
+// ============================================================================
+title("GraphAreaPlot — the full tour");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (250, 620), (0, 5), (0, 6), 130, 92, 0, 1, 1, "x", "y");
+plot(c1, (250, 620), 130, 92, "4*x - x*x", (0, 4)); color(c1, blue); stroke(c1, 3);
+
+// tour props
+tangent(tg, c1, 0.4, 150); color(tg, gold); stroke(tg, 2);
+slope(sv, c1, 0.4, (22, -28)); color(sv, gold); size(sv, 24);
+area(acc, c1, 0, 0); color(acc, cyan);                       // whole-domain area, sweeps
+integral(iv, c1, 0, 0, (940, 150)); color(iv, cyan); size(iv, 30);
+area(a01, c1, 0, 1); color(a01, cyan);                       // the three selected sub-domains
+area(a13, c1, 1, 3); color(a13, gold);
+area(a34, c1, 3, 4); color(a34, magenta);
+riemann(rm, c1, 1, 3, 0.25, green);                          // Riemann on the chosen [1,3]
+
+// initial states
+hidden(ax); untraced(c1);
+hidden(tg); hidden(sv); hidden(iv);
+opacity(acc, 0.30);
+opacity(a01, 0); opacity(a13, 0); opacity(a34, 0); opacity(rm, 0);
+
+// ===== 1. reveal the frame + curve =====
+show(ax, 0.7); wait(0.2);
+draw(c1, 1.2); wait(0.4);
+
+// ===== 2. DERIVATIVE — the tangent slides, its slope read live (4 → 0 → −4) =====
+par { show(tg, 0.4); show(sv, 0.4); }
+par { to(tg, x, 3.6, 3.2, smooth); to(sv, x, 3.6, 3.2, smooth); }
+wait(0.3);
+par { fade(tg, 0.4); fade(sv, 0.4); }
+
+// ===== 3. INTEGRAL — the area sweeps open, the value climbs to 32/3 ≈ 10.67 =====
+show(iv, 0.4);
+par { to(acc, x, 4, 3.2, smooth); to(iv, x, 4, 3.2, smooth); }
+wait(0.7);
+par { fade(acc, 0.5); fade(iv, 0.4); }
+
+// ===== 4. DIFFERENT DOMAINS — re-select the interval, one slice at a time =====
+to(a01, opacity, 0.5, 0.5); wait(0.5);       // [0, 1]
+to(a13, opacity, 0.5, 0.5); wait(0.5);       // [1, 3]
+to(a34, opacity, 0.5, 0.5); wait(0.7);       // [3, 4]
+par { fade(a01, 0.5); fade(a34, 0.5); }      // keep just [1, 3]
+
+// ===== 5. RIEMANN — approximate the selected [1,3] with rectangles =====
+par { fade(a13, 0.5); to(rm, opacity, 0.75, 0.7); }
+wait(0.9);

@@ -1,0 +1,42 @@
+// ============================================================================
+//  Light and the brachistochrone — the optics half of the 2016 video.
+//
+//  Bernoulli solved "what curve gives the fastest slide?" by a leap: a sliding
+//  bead is like a ray of light, which always takes the FASTEST path. Light
+//  bends when it enters a slower medium (Snell's law); a bead falling through
+//  ever-faster layers bends the same way — and the limiting curve is a cycloid.
+//
+//  Built on the optics kit's `refract` (real Snell's law, angle sweep) and the
+//  physics kit's `brachistochrone` (four beads race, the cycloid wins).
+// ============================================================================
+title("Light and the brachistochrone");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "Which path through the water is fastest?", 24);
+
+refract(rf, (640, 360), 1.0, 1.5);            // air over glass/water — light bends
+equation(snell, (640, 84), `\frac{\sin\theta_1}{v_1}=\frac{\sin\theta_2}{v_2}`, 40);
+brachistochrone(bc, (450, 230));              // A→B racing curves (shown in act 2)
+
+// --- act 1: light refracts ---
+hidden(snell); hidden(bc);
+
+wait(0.6);
+say(narr, "Crossing into water light slows, and bends toward the normal.");
+wait(1.6);
+
+say(narr, "Steeper in means steeper out — always by Snell's law.");
+run(rf, 3.2);
+show(snell);
+wait(1.2);
+
+// --- act 2: Bernoulli's leap → the cycloid ---
+say(narr, "Bernoulli's leap: a sliding bead is like light through faster and faster layers.");
+par { fade(rf); fade(snell); }
+wait(0.8);
+
+show(bc);
+say(narr, "Its fastest path is a cycloid — the brachistochrone.");
+run(bc, 3.6);
+wait(1.6);

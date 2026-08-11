@@ -1,0 +1,136 @@
+// ============================================================================
+//  Essence of Linear Algebra, chapters 1→2→3 in one arc.
+//
+//  Ch1  A vector is an arrow from the origin; its coordinates are [x, y].
+//  Ch2  Those coordinates are SCALARS: v = x·î + y·ĵ — a linear combination of
+//       the basis vectors î=(1,0), ĵ=(0,1).
+//  Ch3  A matrix is a transformation: it says where î and ĵ LAND, and the whole
+//       grid morphs to follow (`gridmap` animates it). Because v = x·î + y·ĵ,
+//       it rides along, landing at x·(new î) + y·(new ĵ).
+//
+//  Example: v = [1, 2] under [[2,1],[1,2]] (î→(2,1), ĵ→(1,2)), so v lands at
+//  1·(2,1) + 2·(1,2) = (4,5). Origin (400,470), 55 px/unit.
+// ============================================================================
+title("Vectors, basis, and transformations");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 696), "A vector is an arrow from the origin.", 24);
+
+// the plane + basis, ready to be transformed in Ch3 (starts at the identity)
+gridmap(gm, (400, 470), 55, 2, 1, 1, 2, 5);
+
+// the vector v = [1,2] and its linear-combination scaffold
+vector(v, (400, 470), (55, 110), yellow);
+vector(jj, (455, 470), (0, 110), red);           // 2·j-hat, stacked on i-hat → reaches v
+equation(vlab, (486, 352), `\vec{v}=[1,2]`, 30); color(vlab, yellow);
+equation(ilab, (472, 500), `\hat{\imath}`, 26); color(ilab, lime);
+equation(jlab, (366, 414), `\hat{\jmath}`, 26); color(jlab, red);
+equation(mtx, (980, 165), `\begin{bmatrix}2&1\\1&2\end{bmatrix}`, 44);
+
+// Ch4 — a second transform (90° rotation) composed on top: morph M1 → M2·M1
+gridmap(gm2, (400, 470), 55, -1, -2, 2, 1, 5, 2, 1, 1, 2);
+equation(comp4, (640, 96), `\begin{bmatrix}0&-1\\1&0\end{bmatrix}\begin{bmatrix}2&1\\1&2\end{bmatrix}=\begin{bmatrix}-1&-2\\2&1\end{bmatrix}`, 34);
+
+// the determinant cell (Ch5), the projection (Ch7), and the alt-basis grid (Ch8)
+determinant(dt, (400, 470), 55, 2, 1, 1, 2, gold);
+project(pr, (400, 470), 55, (1, 2), (3, 1));       // project v=(1,2) onto span(w=(3,1))
+squish(sq, (400, 470), 55, 1, 2, 5);               // Ch7 duality: dot with v = squish onto a line
+eigen(ev, (400, 470), 55, 2, 1, 1, 2, gold);       // Ch9 eigenvectors of [[2,1],[1,2]] (λ = 3, 1)
+diagonalise(dg, (400, 470), 55, 2, 1, 1, 2, gold); // Ch10 eigenbasis = a pure stretch
+coords(cf, (700, 450), (-4, 4), (-3, 3), 46, 46, 0); // Ch11 a function graph…
+plot(fn, (700, 450), 46, 46, "0.25*x*x*x - x", (-3.6, 3.6)); color(fn, mint);
+equation(deq, (700, 130), `\tfrac{d}{dx}\;\leftrightarrow\;\begin{bmatrix}0&1&0\\0&0&2\\0&0&0\end{bmatrix}`, 32);
+gridmap(cb, (400, 470), 55, 1, 0.7, 0.4, 1, 5);
+vector(vb, (400, 470), (55, 110), yellow);
+
+// --- initial visibility ---
+hidden(gm.i); hidden(gm.j);                       // basis revealed in Ch2
+hidden(v); hidden(vlab); hidden(jj); hidden(ilab); hidden(jlab); hidden(mtx);
+hidden(dt); hidden(dt.unit); hidden(dt.val); hidden(pr);
+hidden(sq); hidden(sq.line); hidden(sq.dual);
+hidden(ev); hidden(dg); hidden(cf); hidden(fn); hidden(deq);
+hidden(gm2); hidden(gm2.bg); hidden(gm2.i); hidden(gm2.j); hidden(comp4);
+hidden(cb); hidden(cb.bg); hidden(cb.i); hidden(cb.j); hidden(vb);
+
+// --- Ch1: a vector ---
+wait(0.5);
+par { show(v); show(vlab); }
+wait(1.3);
+
+// --- Ch2: coordinates are a linear combination of the basis ---
+say(narr, "Its coordinates are scalars: v = 1·i-hat + 2·j-hat.");
+par { show(gm.i); show(gm.j); show(ilab); show(jlab); }
+wait(0.7);
+show(jj);                                         // i-hat then two j-hats reach v
+wait(1.6);
+
+// --- Ch3: the matrix transforms space; v rides along ---
+say(narr, "A matrix moves i-hat and j-hat — and the whole grid follows.");
+show(mtx);
+par { fade(jj); fade(ilab); fade(jlab); fade(vlab); }
+par { to(gm, morph, 1, 2.2); grow(v, (620, 195), 2.2); }   // space deforms, v follows
+wait(0.6);
+say(narr, "v lands at 1·(new i-hat) + 2·(new j-hat) = (4,5).");
+wait(1.6);
+
+// --- Ch4: matrix multiplication is composition ---
+say(narr, "Ch 4 — apply one transform, then another: that is matrix multiplication.");
+show(comp4);                                       // the product, clearly placed up top
+par { fade(gm); fade(v); }
+show(gm2);                                          // starts at M1 (seamless with Ch3)
+to(gm2, morph, 1, 1.8);                             // now rotate 90°: the grid is at M2·M1
+wait(1.3);
+to(gm2, morph, 0, 1.5);                             // undo the second transform, back to M1
+par { fade(gm2); fade(comp4); }
+par { show(gm); show(v); }
+wait(0.6);
+
+// --- Ch5: the determinant is the area scale factor ---
+say(narr, "Ch 5 — the determinant is how much areas scale: 2·2 − 1·1 = 3.");
+par { show(dt); show(dt.unit); show(dt.val); }
+wait(1.9);
+par { fade(dt); fade(dt.unit); fade(dt.val); }    // fade = timeline hide (hidden is base-state only)
+
+// --- Ch6: column space + the inverse undoes the transform ---
+say(narr, "Ch 6 — the columns span the whole plane, so the inverse sends space back.");
+par { to(gm, morph, 0, 1.8); grow(v, (455, 360), 1.8); }   // reverse the morph = the inverse
+wait(1.4);
+
+// --- Ch7: the dot product — projection, and its dual (a squish onto a line) ---
+say(narr, "Ch 7 — the dot product of v and w is a projection — w's shadow on v.");
+par { fade(gm); fade(gm.bg); fade(v); fade(mtx); }
+show(pr);
+wait(1.6);
+say(narr, "It's also a squish of the whole plane onto a line — the dual vector IS v.");
+fade(pr);
+par { show(sq); show(sq.line); show(sq.dual); }
+to(sq, morph, 1, 1.9);                              // collapse space onto the number line
+wait(1.0);
+to(sq, morph, 0, 1.2);                              // and back — the dual vector remains
+wait(0.8);
+
+// --- Ch8: change of basis ---
+say(narr, "Ch 8 — change of basis: the same arrow, read on a different grid.");
+par { fade(sq); fade(sq.line); fade(sq.dual); }
+par { show(cb); show(vb); }
+to(cb, morph, 1, 1.8);                                       // the coordinate grid changes; v stays put
+wait(1.8);
+
+// --- Ch9: eigenvectors and eigenvalues ---
+say(narr, "Ch 9 — some vectors keep to their own line: eigenvectors (λ = 3 and λ = 1).");
+par { fade(cb); fade(vb); }
+show(ev);
+wait(2.0);
+
+// --- Ch10: the eigenbasis is a pure stretch ---
+say(narr, "Ch 10 — in the eigenbasis, the transformation is just a diagonal stretch.");
+fade(ev);
+show(dg);
+wait(2.0);
+
+// --- Ch11: abstract vector spaces ---
+say(narr, "Ch 11 — even functions are vectors; the derivative is a linear map with a matrix.");
+fade(dg);
+par { show(cf); show(fn); show(deq); }
+wait(2.2);

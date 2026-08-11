@@ -1,0 +1,32 @@
+// ============================================================================
+//  Region partition: five points on a circle, every chord drawn between them,
+//  and `regions` fills + counts the areas they cut the disk into. The pentagon
+//  + its diagonals (a pentagram) partition the circle into 16 regions.
+//
+//  `regions(id, boundary, dividers)` computes the planar arrangement of the
+//  boundary and every divider, then fills each enclosed face — the areas are
+//  detected for you, no coordinates for the pieces.
+// ============================================================================
+title("Region partition");
+canvas(1280, 720);
+template("black");
+
+circle(disk, (640, 360), 240);
+
+// five points on the circle
+dot(pa, (640, 120)); dot(pb, (412, 286)); dot(pc, (499, 554));
+dot(pd, (781, 554)); dot(pe, (868, 286));
+
+// all ten chords (5 sides + 5 diagonals), tagged so `regions` takes them at once
+line(s0, (640,120), (412,286)); tag(s0, chords);
+line(s1, (412,286), (499,554)); tag(s1, chords);
+line(s2, (499,554), (781,554)); tag(s2, chords);
+line(s3, (781,554), (868,286)); tag(s3, chords);
+line(s4, (868,286), (640,120)); tag(s4, chords);
+line(g0, (640,120), (499,554)); tag(g0, chords);
+line(g1, (640,120), (781,554)); tag(g1, chords);
+line(g2, (412,286), (781,554)); tag(g2, chords);
+line(g3, (412,286), (868,286)); tag(g3, chords);
+line(g4, (499,554), (868,286)); tag(g4, chords);
+
+regions(rg, disk, chords);   // fills + counts every enclosed area (16)

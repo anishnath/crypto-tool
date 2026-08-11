@@ -1,0 +1,21 @@
+// ============================================================================
+//  A coordinate grid over the complex plane, deforming under z -> f(z).
+//
+//  `warp` samples each grid line through the complex function, so straight lines
+//  bend into curves. It starts as the identity grid and morphs to the warped
+//  image when animated — `to(id, morph, 1, dur)`. Here z -> z^2, the classic
+//  conformal map (the non-linear twin of `linmap`, and the deforming-grid
+//  companion to `domaincolor`).
+// ============================================================================
+title("Complex grid warp");
+canvas(1280, 720);
+template("black");
+
+warp(g, (640, 360), 82, `z*z`, 3, 40);
+equation(fn, (640, 80), `z \mapsto z^{2}`, 46);
+text(narr, (640, 672), "A grid over the complex plane.", 26);
+
+wait(0.6);
+say(narr, "Every point z moves to z squared — lines bend into parabolas.");
+to(g, morph, 1, 2.6);
+wait(1.6);

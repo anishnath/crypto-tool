@@ -1,0 +1,32 @@
+// ============================================================================
+//  Constant-area rectangle under a hyperbola.
+//
+//  A rectangle runs from the origin to a point (x, 25/x) on the curve y = 25/x.
+//  As the corner slides along the curve, the rectangle morphs from wide-and-short
+//  to tall-and-narrow — but its area (width × height = x · 25/x) stays fixed at 25.
+//  A dot rides the corner along the curve.
+// ============================================================================
+title("Constant-area rectangle");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (200, 640), (0, 10), (0, 10), 90, 55, 0, 2, 1, "x", "y");
+plot(g, (200, 640), 90, 55, "25/x", (2.5, 10)); color(g, gold); stroke(g, 3);
+
+boxto(box, g, 5); color(box, blue);       // rectangle origin → (x, 25/x); area = x·(25/x)
+mark(dot, g, 5); color(dot, fg);          // a dot riding the corner along the curve
+equation(inv, (760, 150), `x \cdot y = 25`, 30); color(inv, blue);
+
+// the axes, curve and dot are up from the start; the box is CREATED (drawn into being)
+untraced(box); hidden(inv);
+
+wait(0.4);
+draw(box, 1.3);                                        // outline traces on as the fill rises bottom-up
+wait(0.3);
+show(inv, 0.5);                                        // then reveal the invariant
+wait(0.4);
+// slide the corner along the curve — width and height trade off, area holds at 25
+par { to(box, x, 10, 1.8, smooth);  to(dot, x, 10, 1.8, smooth);  }   // wide & short
+par { to(box, x, 2.5, 2.0, smooth); to(dot, x, 2.5, 2.0, smooth); }   // tall & narrow
+par { to(box, x, 5, 1.8, smooth);   to(dot, x, 5, 1.8, smooth);   }   // back to the 5×5 square
+wait(0.6);

@@ -1,0 +1,24 @@
+// ============================================================================
+//  Custom (non-numeric) axis + tick labels — no pixel maths anywhere.
+//
+//  `coords` names the axes for you (xname / yname), and `xtick` / `ytick` place
+//  a label at an axis VALUE — the label is any text: a number, a word, or a
+//  symbol like "π/2". Here: a sine wave on a radian axis.
+// ============================================================================
+title("Custom axis labels");
+canvas(1280, 720);
+template("black");
+
+// frame: x from 0 to ~2π, y from -1.4 to 1.4; ticks every π/2; named axes
+coords(ax, (200, 380), (0, 6.6), (-1.4, 1.4), 150, 130, 0, 1.5708, 0, "θ", "sin θ");
+plot(sine, (200, 380), 150, 130, "sin(x)", (0, 6.2832)); color(sine, cyan); stroke(sine, 3);
+
+// x-axis ticks labelled in radians — text placed at each VALUE, not a pixel
+xtick(qa, ax, 1.5708, "π/2");
+xtick(qb, ax, 3.1416, "π");
+xtick(qc, ax, 4.7124, "3π/2");
+xtick(qd, ax, 6.2832, "2π");
+
+// y-axis: just the extremes
+ytick(yp, ax, 1, "1");
+ytick(ym, ax, -1, "-1");

@@ -1,0 +1,28 @@
+// ============================================================================
+//  A whole group of dots slides to a destination — rigidly, so that one chosen
+//  member (the red dot) lands exactly on a yellow target, carrying the rest of
+//  the row along with it.
+//
+//  The four dots share a tag, so the whole row moves and scales as one:
+//  `groupscale` grows it about its collective centre, then `dock` slides it so
+//  the chosen member (the red dot) lands on the target. You name the member and
+//  the target; the shift is worked out for you — no delta arithmetic.
+// ============================================================================
+title("Moving group to destination");
+canvas(1280, 720);
+template("black");
+
+point(d0, (360, 470));  tag(d0, row);
+point(d1, (470, 470));  tag(d1, row);
+point(d2, (580, 470));  tag(d2, row);   // the chosen member
+point(d3, (690, 470));  tag(d3, row);
+color(d2, red);
+
+point(dest, (940, 190));
+color(dest, yellow);
+
+wait(0.6);
+groupscale(row, 1.4, 1.0);   // grow the row about its own centre
+wait(0.3);
+dock(row, d2, dest, 1.6);    // slide the row so d2 lands on dest
+wait(0.5);

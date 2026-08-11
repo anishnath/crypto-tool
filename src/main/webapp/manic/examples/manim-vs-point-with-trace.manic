@@ -1,0 +1,21 @@
+// ============================================================================
+//  A dot leaves a trail as it moves — first swinging a half-circle around a
+//  pivot, then stepping up and to the left. The gold path records everywhere
+//  the dot has been, growing behind it as it goes.
+//
+//  `trail` samples the dot's trajectory once and replays it by time, so the
+//  path is exact and seekable — no per-frame bookkeeping.
+// ============================================================================
+title("Point with trace");
+canvas(1280, 720);
+template("black");
+
+point(dot, (540, 380));
+trail(tr, dot, gold, 3);
+
+wait(0.4);
+turn(dot, (740, 380), 180, 2.0, linear);   // swing a half-circle about the pivot
+wait(0.4);
+shift(dot, (0, -160), 1.0);                 // step up
+shift(dot, (-200, 0), 1.0);                 // step left
+wait(0.6);

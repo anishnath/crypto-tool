@@ -1,5 +1,5 @@
 {
-  "count": 369,
+  "count": 397,
   "categories": [
     {
       "slug": "algorithms",
@@ -286,6 +286,18 @@
           "file": "taylor.manic",
           "title": "Taylor",
           "desc": "Taylor polynomials of increasing degree closing in on sin(x), one additional approximation at a time."
+        },
+        {
+          "name": "iit-exp-equation",
+          "file": "iit-exp-equation.manic",
+          "title": "Iit exp equation",
+          "desc": "A JEE Advanced exponential equation solved by REWRITE, then LOOK: 4^x+6^{x^2}=5^x+5^{x^2} regroups to 6^{x^2}-5^{x^2}=5^x-4^x; the two sides trace in, meet only at x=0 and x=1, and the Mean Value Theorem reveals the hidden parabola x^2-x whose sign IS the equation's sign \u2014 so it is secretly x^2=x."
+        },
+        {
+          "name": "iit-exp-equation-short",
+          "file": "iit-exp-equation-short.manic",
+          "title": "Iit exp equation short",
+          "desc": "The 9:16 Short cut of the JEE exponential-equation proof: same rewrite -> trace -> MVT -> hidden x^2-x skeleton -> answer, laid out vertically with a CTA endcard."
         }
       ]
     },
@@ -1452,6 +1464,12 @@
           "desc": "The jellyfish cloud, now SWIMMING IN A SHADER AQUARIUM \u2014 a demo that a particle system and a per-pixel field share one frame."
         },
         {
+          "name": "cloud-siphonophore",
+          "file": "cloud-siphonophore.manic",
+          "title": "Cloud siphonophore",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud, reimagined as a bioluminescent deep-sea drifter: 12,000 points trace a morphing bell + long feathered tail (polar radius q, angle c, with a d^sin(2d-t/3) body-warp) that swims and reconfigures over time."
+        },
+        {
           "name": "cloud-plumes",
           "file": "cloud-plumes.manic",
           "title": "Cloud plumes",
@@ -1884,6 +1902,12 @@
       "title": "3D scenes",
       "examples": [
         {
+          "name": "engine-test-14-laplace",
+          "file": "engine-test-14-laplace.manic",
+          "title": "Engine test 14 laplace",
+          "desc": "A 3Blue1Brown-style **Laplace Transform** board, showcasing the domain-colouring toolkit: the |F(s)| pole surface is a domainsurface (height = magnitude, colour = phase) rendered INSIDE the middle panel via the new camera3 viewport, flanked by the Re[e^{st}] waveform, the s-plane vector, and the e^{st} spiral \u2014 three graphs kept in sync by one complex-frequency parameter (bind on a reactive param curve)."
+        },
+        {
           "name": "lorenz-attractor",
           "file": "lorenz-attractor.manic",
           "title": "Lorenz attractor",
@@ -1996,6 +2020,12 @@
           "file": "definedmotion-fourier-gallery.manic",
           "title": "Definedmotion fourier gallery",
           "desc": "Five depth-stacked Fourier families rotate at once while twenty coloured ring3 orbits drive twenty world-space partial histories per family."
+        },
+        {
+          "name": "definedmotion-fourier-gallery-v2",
+          "file": "definedmotion-fourier-gallery-v2.manic",
+          "title": "Definedmotion fourier gallery v2",
+          "desc": "The five-family gallery re-lit on the black full-colour screen: twenty coloured ring3 orbits per family rotate and draw twenty world-space histories, then a long final overview holds on all five vivid signals at once\u2014every strand readable against black."
         },
         {
           "name": "fourier-square-wave-live",
@@ -2326,6 +2356,156 @@
           "file": "onprem-advanced-web-service-v2.manic",
           "title": "Onprem advanced web service v2",
           "desc": "The same platform with real provider icons and paths coloured by relationship (request \u00b7 analytics \u00b7 telemetry \u00b7 replication)."
+        }
+      ]
+    },
+    {
+      "slug": "manim-vs",
+      "title": "Coming from Manim",
+      "examples": [
+        {
+          "name": "manim-vs-graph-area-plot",
+          "file": "manim-vs-graph-area-plot.manic",
+          "title": "Manim vs/graph area plot",
+          "desc": "A coords frame + two plots, a vline, riemann bars, and a band between curves \u2014 Manim's GraphAreaPlot, static."
+        },
+        {
+          "name": "manim-vs-graph-area-plot-animated",
+          "file": "manim-vs-graph-area-plot-animated.manic",
+          "title": "Manim vs/graph area plot animated",
+          "desc": "The same curve toured live: a sliding tangent+slope, an area sweep + integral readout, re-selected domains, then riemann bars."
+        },
+        {
+          "name": "manim-vs-custom-axis-labels",
+          "file": "manim-vs-custom-axis-labels.manic",
+          "title": "Manim vs/custom axis labels",
+          "desc": "A radian sine on coords with xtick/ytick labelling ticks at an axis VALUE (\u03c0/2) and named axes \u2014 no pixel maths."
+        },
+        {
+          "name": "manim-vs-constant-area-rectangle",
+          "file": "manim-vs-constant-area-rectangle.manic",
+          "title": "Manim vs/constant area rectangle",
+          "desc": "A rectangle rides y=25/x via boxto+mark; the corner slides but the area stays 25 \u2014 Manim's always_redraw, without the updater."
+        },
+        {
+          "name": "manim-vs-moving-camera-follow",
+          "file": "manim-vs-moving-camera-follow.manic",
+          "title": "Manim vs/moving camera follow",
+          "desc": "A dot walks a sine; followshot makes the 2D camera track it, then releases and restores the wide shot \u2014 Manim's MovingCameraScene."
+        },
+        {
+          "name": "manim-vs-moving-highlight-box",
+          "file": "manim-vs-moving-highlight-box.manic",
+          "title": "Manim vs/moving highlight box",
+          "desc": "The product rule written with mathparts (addressable terms), a framebox boxes one term, then surround glides it to the next."
+        },
+        {
+          "name": "manim-vs-moving-angle",
+          "file": "manim-vs-moving-angle.manic",
+          "title": "Manim vs/moving angle",
+          "desc": "Two arms share a vertex; one swings and anglemark's arc + its \u03b8 label track the opening live, then the label recolours \u2014 Manim's MovingAngle."
+        },
+        {
+          "name": "manim-vs-moving-dots",
+          "file": "manim-vs-moving-dots.manic",
+          "title": "Manim vs/moving dots",
+          "desc": "Two dots move on independent axes (slidex/slidey) joined by a segment that always connects them \u2014 Manim's MovingDots."
+        },
+        {
+          "name": "manim-vs-moving-group-to-destination",
+          "file": "manim-vs-moving-group-to-destination.manic",
+          "title": "Manim vs/moving group to destination",
+          "desc": "groupscale grows a tagged row about its centre, then dock slides it so one member lands on a target \u2014 Manim's MovingGroupToDestination."
+        },
+        {
+          "name": "manim-vs-point-with-trace",
+          "file": "manim-vs-point-with-trace.manic",
+          "title": "Manim vs/point with trace",
+          "desc": "A dot swings a half-circle then steps up/left; trail records the whole path behind it \u2014 sampled from the timeline, so it's exact and seekable."
+        },
+        {
+          "name": "manim-vs-sin-and-cos-plot",
+          "file": "manim-vs-sin-and-cos-plot.manic",
+          "title": "Manim vs/sin and cos plot",
+          "desc": "sin & cos on one frame with graphlabel LaTeX labels pinned to each curve, plus a vline guide at x=2\u03c0 \u2014 Manim's SinAndCosFunctionPlot."
+        },
+        {
+          "name": "manim-vs-moving-zoomed-scene",
+          "file": "manim-vs-moving-zoomed-scene.manic",
+          "title": "Manim vs/moving zoomed scene",
+          "desc": "A loupe: a frame over the scene + a panel showing that region magnified LIVE; pan the frame and the panel tracks it \u2014 Manim's ZoomedScene."
+        }
+      ]
+    },
+    {
+      "slug": "threeb1b",
+      "title": "3Blue1Brown, reproduced",
+      "examples": [
+        {
+          "name": "3b1b-eval-vectors-basis-transformations",
+          "file": "3b1b-eval-vectors-basis-transformations.manic",
+          "title": "3b1b eval/vectors basis transformations",
+          "desc": "Essence of Linear Algebra, chapters 1\u201311 in one file: vectors \u2192 basis \u2192 the grid transforming (gridmap) \u2192 composition \u2192 determinant \u2192 inverse \u2192 the dot product (projection AND duality) \u2192 change of basis \u2192 eigenvectors \u2192 eigenbasis \u2192 functions as vectors."
+        },
+        {
+          "name": "3b1b-eval-duality-dot-product",
+          "file": "3b1b-eval-duality-dot-product.manic",
+          "title": "3b1b eval/duality dot product",
+          "desc": "The dot product as DUALITY: the plane collapses onto a number line under a 1\u00d72 map (squish), and the gold dual vector is what you dot with."
+        },
+        {
+          "name": "3b1b-eval-warp-grid",
+          "file": "3b1b-eval-warp-grid.manic",
+          "title": "3b1b eval/warp grid",
+          "desc": "A complex-plane grid DEFORMS under z \u2192 z\u00b2 (warp) \u2014 lines bend into the classic parabolic conformal web."
+        },
+        {
+          "name": "3b1b-eval-zeta",
+          "file": "3b1b-eval-zeta.manic",
+          "title": "3b1b eval/zeta",
+          "desc": "The Riemann zeta function by domaincolor (with a real zeta(z) in the complex evaluator): the pole at s=1, the critical line Re=\u00bd, and the first non-trivial zeros marked."
+        },
+        {
+          "name": "3b1b-eval-euler-characteristic",
+          "file": "3b1b-eval-euler-characteristic.manic",
+          "title": "3b1b eval/euler characteristic",
+          "desc": "Euler's formula V \u2212 E + F = 2 on a wheel graph: V and E counted, faces filled + counted by regions, and 6 \u2212 10 + 6 = 2 assembled."
+        },
+        {
+          "name": "3b1b-eval-euler-proof",
+          "file": "3b1b-eval-euler-proof.manic",
+          "title": "3b1b eval/euler proof",
+          "desc": "The spanning-tree / dual-tree PROOF of V \u2212 E + F = 2, built on spantree (run on the primal AND the dual) and dual."
+        },
+        {
+          "name": "3b1b-eval-pythagorean-proof",
+          "file": "3b1b-eval-pythagorean-proof.manic",
+          "title": "3b1b eval/pythagorean proof",
+          "desc": "The dissection proof of a\u00b2 + b\u00b2 = c\u00b2: two identical (a+b)-squares, four triangles each, leaving c\u00b2 on one and a\u00b2+b\u00b2 on the other."
+        },
+        {
+          "name": "3b1b-eval-region-partition",
+          "file": "3b1b-eval-region-partition.manic",
+          "title": "3b1b eval/region partition",
+          "desc": "regions fills + counts the areas a pentagram's chords cut a disk into (16) \u2014 the planar-arrangement engine behind Moser/Euler/dissection scenes."
+        },
+        {
+          "name": "3b1b-eval-light-and-brachistochrone",
+          "file": "3b1b-eval-light-and-brachistochrone.manic",
+          "title": "3b1b eval/light and brachistochrone",
+          "desc": "The Brachistochrone's optics arc: refract (real Snell's law + angle sweep) \u2192 the native brachistochrone race where the cycloid wins."
+        },
+        {
+          "name": "3b1b-eval-snell-to-cycloid",
+          "file": "3b1b-eval-snell-to-cycloid.manic",
+          "title": "3b1b eval/snell to cycloid",
+          "desc": "The derivation that connects them: layers of ever-faster media, light bending at each boundary (Snell), the zig-zag smoothing into a cycloid where sin \u03b8/\u221ay is constant."
+        },
+        {
+          "name": "3b1b-eval-cross-product-3d",
+          "file": "3b1b-eval-cross-product-3d.manic",
+          "title": "3b1b eval/cross product 3d",
+          "desc": "The 3D CROSS product (cross3): v \u00d7 w perpendicular to the parallelogram v,w span, its length = that area, orbited to reveal the geometry behind the determinant formula."
         }
       ]
     }

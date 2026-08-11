@@ -1,0 +1,27 @@
+// ============================================================================
+//  A magnifier (loupe): a small frame sits over a detailed corner of the scene,
+//  and a panel shows that region blown up live. Move the frame and the panel
+//  tracks it — the magnified view is the real scene, redrawn zoomed.
+// ============================================================================
+title("Moving zoomed scene");
+canvas(1280, 720);
+template("black");
+
+// --- a patch of fine detail to inspect ---
+circle(a, (360, 300), 10);  color(a, red);
+circle(b, (400, 290), 7);   color(b, cyan);
+circle(c, (438, 306), 9);   color(c, green);
+circle(d, (410, 330), 5);   color(d, gold);
+text(cap, (400, 360), "detail", 16);
+dot(spot, (400, 300), 4);
+
+// --- the magnifier: frame over the patch, panel showing it 3.2x ---
+loupe(lp, (400, 310), 150, 96, (900, 360), 3.2);
+
+wait(0.4);
+show(lp.panel);
+wait(0.4);
+shift(lp.frame, (-40, -30), 1.4);   // pan the loupe — the panel follows live
+wait(0.4);
+shift(lp.frame, (60, 40), 1.4);
+wait(0.6);

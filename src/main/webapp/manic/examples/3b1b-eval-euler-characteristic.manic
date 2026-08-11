@@ -1,0 +1,63 @@
+// ============================================================================
+//  Euler's characteristic formula, V - E + F = 2, on a planar graph.
+//
+//  The graph is a wheel W5 (a hub joined to a 5-point rim). We count its
+//  vertices, its edges, and its faces — the faces detected and filled by
+//  `regions` (5 inner triangles), plus the one outer face — and watch
+//  V - E + F land on 2.
+// ============================================================================
+title("Euler's characteristic");
+canvas(1280, 720);
+template("black");
+
+equation(thm, (760, 70), `V - E + F = 2`, 46);
+
+// --- the wheel graph W5 ---
+polygon(rim, (760,150),(560,295),(637,530),(883,530),(960,295));
+color(rim, cyan);
+line(k1, (760,360),(760,150)); tag(k1, spokes); color(k1, cyan);
+line(k2, (760,360),(560,295)); tag(k2, spokes); color(k2, cyan);
+line(k3, (760,360),(637,530)); tag(k3, spokes); color(k3, cyan);
+line(k4, (760,360),(883,530)); tag(k4, spokes); color(k4, cyan);
+line(k5, (760,360),(960,295)); tag(k5, spokes); color(k5, cyan);
+
+regions(cells, rim, spokes);   // fills + counts the 5 inner faces
+
+dot(hub,(760,360));
+dot(p1,(760,150)); dot(p2,(560,295)); dot(p3,(637,530));
+dot(p4,(883,530)); dot(p5,(960,295));
+
+// --- the running tally, on the left ---
+equation(tv, (250, 235), `V = 6`, 44);
+equation(te, (250, 345), `E = 10`, 44);
+equation(tf, (250, 455), `F = 6`, 44);
+text(fnote, (250, 500), "5 inside + 1 outside", 18);
+equation(sum, (760, 660), `6 - 10 + 6 = 2`, 52);
+
+// --- reveal ---
+untraced(rim); untraced(k1); untraced(k2); untraced(k3); untraced(k4); untraced(k5);
+untraced(cells);
+hidden(hub); hidden(p1); hidden(p2); hidden(p3); hidden(p4); hidden(p5);
+hidden(tv); hidden(te); hidden(tf); hidden(fnote); hidden(sum);
+
+wait(0.4);
+par { draw(rim, 1.0); draw(k1, 1.0); draw(k2, 1.0); draw(k3, 1.0); draw(k4, 1.0); draw(k5, 1.0); }
+par { show(hub); show(p1); show(p2); show(p3); show(p4); show(p5); }
+wait(0.4);
+
+// count the vertices
+par { show(tv); pulse(hub); pulse(p1); pulse(p2); pulse(p3); pulse(p4); pulse(p5); }
+wait(0.5);
+
+// count the edges
+par { show(te); pulse(rim); pulse(k1); pulse(k2); pulse(k3); pulse(k4); pulse(k5); }
+wait(0.5);
+
+// count the faces — 5 filled by `regions`, plus the outer face
+draw(cells, 1.3);
+par { show(tf); show(fnote); }
+wait(0.8);
+
+// and the characteristic lands on 2
+show(sum);
+wait(1.4);

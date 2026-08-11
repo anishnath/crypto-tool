@@ -1,0 +1,64 @@
+// ============================================================================
+//  Snell's law → the cycloid — the derivation that connects light to the
+//  brachistochrone (3b1b's multilayered.py).
+//
+//  Slice the medium into horizontal layers, each one letting light move faster
+//  than the last (a falling bead speeds up: v = sqrt(y)). Light bends at every
+//  boundary by Snell's law, sin(θ)/v = const. The bent path zig-zags down; as
+//  the layers get thinner it smooths into a single curve — a CYCLOID — on which
+//  sin(θ)/sqrt(y) is constant everywhere. That curve is the brachistochrone.
+//
+//  The bend angles below are the real Snell solution: v_i = sqrt(i+1),
+//  sin(θ_i) = sin(20°)·v_i, so θ steepens 20° → 57° from the vertical.
+// ============================================================================
+title("Snell's law becomes a cycloid");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "A falling bead speeds up — so slice the fall into faster and faster layers.", 22);
+
+// six layers, each faster (lighter) than the one above
+rect(l0, (640, 178), 1280, 77); color(l0, indigo); opacity(l0, 0.32);
+rect(l1, (640, 255), 1280, 77); color(l1, blue);   opacity(l1, 0.32);
+rect(l2, (640, 332), 1280, 77); color(l2, blue);   opacity(l2, 0.42);
+rect(l3, (640, 409), 1280, 77); color(l3, teal);   opacity(l3, 0.42);
+rect(l4, (640, 486), 1280, 77); color(l4, teal);   opacity(l4, 0.55);
+rect(l5, (640, 563), 1280, 77); color(l5, cyan);   opacity(l5, 0.55);
+
+// the discrete light path — bends once per boundary (Snell at each)
+line(s0, (200,140), (228,217)); tag(s0, ray); color(s0, gold);
+line(s1, (228,217), (270,294)); tag(s1, ray); color(s1, gold);
+line(s2, (270,294), (327,371)); tag(s2, ray); color(s2, gold);
+line(s3, (327,371), (399,448)); tag(s3, ray); color(s3, gold);
+line(s4, (399,448), (491,525)); tag(s4, ray); color(s4, gold);
+line(s5, (491,525), (609,602)); tag(s5, ray); color(s5, gold);
+
+// the smooth limit: a cycloid through the same endpoints
+param(cyc, (200,140), 130, 231, `t - sin(t)`, `cos(t) - 1`, (0, pi)); color(cyc, yellow);
+
+// the invariant, and one angle to illustrate it
+equation(inv, (960, 250), `\frac{\sin\theta}{\sqrt{y}} = \text{const}`, 40);
+line(nrm, (274,320), (274,430)); color(nrm, dim); dashed(nrm);   // vertical (normal)
+line(tan, (240,300), (312,428)); color(tan, red);                // tangent along the curve
+text(thlab, (300, 340), "θ", 26); color(thlab, red);
+
+// --- reveal ---
+untraced(s0); untraced(s1); untraced(s2); untraced(s3); untraced(s4); untraced(s5);
+untraced(cyc);
+hidden(inv); hidden(nrm); hidden(tan); hidden(thlab);
+
+wait(0.6);
+par { show(l0); show(l1); show(l2); show(l3); show(l4); show(l5); }
+wait(0.8);
+
+say(narr, "Light bends at every boundary — Snell's law, sin(θ)/v constant.");
+draw(s0, 0.4); draw(s1, 0.4); draw(s2, 0.4); draw(s3, 0.4); draw(s4, 0.4); draw(s5, 0.4);
+wait(0.8);
+
+say(narr, "Thinner and thinner layers — the zig-zag smooths into one curve.");
+par { fade(ray); draw(cyc, 1.4); }
+wait(1.0);
+
+say(narr, "A cycloid — and along it sin(θ)/sqrt(y) stays constant everywhere.");
+par { show(inv); show(nrm); show(tan); show(thlab); }
+wait(1.8);

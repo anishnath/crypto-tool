@@ -1,0 +1,38 @@
+// ============================================================================
+//  The dot product and duality (eola chapter 7 — the "why" behind chapter8p2).
+//
+//  A 1x2 matrix [a b] is a linear map from the plane to a NUMBER LINE: it sends
+//  (x,y) to a·x + b·y and squishes all of space onto the line. Every such map
+//  corresponds to a single 2D vector — the DUAL vector (a,b) — and applying the
+//  map is exactly the dot product with (a,b). That correspondence is duality.
+//
+//  Built on the new `squish` builtin. Here [a b] = [2 1].
+// ============================================================================
+title("The dot product and duality");
+canvas(1280, 720);
+template("black");
+
+text(narr, (640, 694), "A 1×2 matrix is a map from the plane to a number line.", 24);
+equation(mtx, (980, 130), `\begin{bmatrix}2&1\end{bmatrix}`, 44);
+
+squish(sq, (640, 360), 70, 2, 1, 4);
+
+// --- reveal ---
+hidden(sq.dual); hidden(mtx);
+
+wait(0.6);
+show(mtx);
+wait(1.2);
+
+say(narr, "It squishes all of space onto the line — i-hat to 2, j-hat to 1.");
+to(sq, morph, 1, 2.4);
+wait(1.2);
+
+say(narr, "Every such map corresponds to a single 2D vector — the dual vector (2,1).");
+to(sq, morph, 0, 1.6);                             // un-squish, back to the plane
+show(sq.dual);
+wait(1.4);
+
+say(narr, "Applying the map is the same as dotting with (2,1). That is duality.");
+pulse(sq.dual);
+wait(1.8);

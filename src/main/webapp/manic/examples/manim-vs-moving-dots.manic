@@ -1,0 +1,25 @@
+// ============================================================================
+//  Two dots move on independent axes, joined by a line that always connects
+//  them. The blue dot slides right; the green dot rises; the red segment
+//  stretches to follow — reactively, with no updaters.
+//
+//  `slidex`/`slidey` push one dot along a single axis (the other coordinate
+//  stays put), and `segment` reflows to its endpoints every frame.
+// ============================================================================
+title("Moving dots");
+canvas(1280, 720);
+template("black");
+
+point(a, (440, 420));            // blue dot — will slide right
+point(b, (640, 420));            // green dot — will rise
+color(a, blue);
+color(b, green);
+
+segment(l, a, b);                // the joining line, tracks both endpoints
+color(l, red);
+
+wait(0.5);
+slidex(a, 840, 1.5);             // blue dot travels right along its row
+wait(0.3);
+slidey(b, 180, 1.5);             // green dot climbs its column
+wait(0.6);

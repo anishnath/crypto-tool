@@ -1,0 +1,22 @@
+// ============================================================================
+//  sin and cos on one coordinate frame, each curve labelled where it lives, plus
+//  a vertical guide at x = 2π with its own label.
+//
+//  `coords` gives the whole frame (ranges, ticks, numbers, axis names); the new
+//  piece is `graphlabel` — a LaTeX label that pins itself to a curve at an x and
+//  nudges clear of the line, taking the curve's colour by default.
+// ============================================================================
+title("sin and cos");
+canvas(1280, 720);
+template("black");
+
+coords(ax, (640, 360), (-10, 10), (-1.5, 1.5), 52, 105, 0, 2, 1, "x", "y");
+
+plot(sinq, (640, 360), 52, 105, "sin(x)", (-10, 10));  color(sinq, blue);
+plot(cosq, (640, 360), 52, 105, "cos(x)", (-10, 10));  color(cosq, red);
+
+graphlabel(sl, sinq, `\sin(x)`, -9, up);      // rides sin near its left end
+graphlabel(cl, cosq, `\cos(x)`);              // default: cos's right end, up
+
+vline(vl, cosq, 6.2832, yellow);              // guide up to cos at x = 2π
+graphlabel(ll, cosq, `x=2\pi`, 6.2832, upright, white);

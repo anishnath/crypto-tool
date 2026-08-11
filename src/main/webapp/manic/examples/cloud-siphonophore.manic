@@ -1,0 +1,72 @@
+// cloud-siphonophore — another @yuruyurau creature in ONE `cloud`, reimagined as a
+// bioluminescent deep-sea drifter. The reference is a tweet-sized golf:
+//   k = 5cos(i/14)cos(y/30),  e = y/8-13,  d = (k²+e²)/59 + 6,
+//   q = 90 - 5sin(atan2(k,e)·e) + k(3+sin(d²-2t)),  c = d/2 - t/18,
+//   point( q·sin c , (q + d·d^sin(2d-t/3))·cos c )
+// A morphing bell trailing a long feathered tail (10,000 points, pure in i,t). Here it
+// glows in the abyss: additive `glow` + `bloom` make it luminous, the hue drifts along
+// the body (cyan bell → violet tail), and faint marine snow sifts down past it.
+//
+//   manic examples/cloud-siphonophore.manic
+title("Siphonophore — a yuruyurau creature in the abyss");
+canvas("9:16");
+template("black");
+bloom(0.42, 0.5, 34);
+
+// ---- the abyss: a near-black depth gradient, faint cold light from above ----
+shader(abyss) {
+  let y = v;
+  let depth = smoothstep(0.0, 1.0, y);
+  let hue = mix(206, 244, depth);
+  let val = mix(0.05, 0.006, depth) + 0.02 * (1.0 - smoothstep(0.0, 0.5, y));
+  let sat = 0.8;
+}
+z(abyss, -10);
+
+// ---- the creature — the yuruyurau golf, re-lit ----
+cloud(crea, 12000, #ffffff, 0.30) {
+  let yy = i / 43.0;
+  let k = 5.0 * cos(i / 14.0) * cos(yy / 30.0);
+  let e = yy / 8.0 - 13.0;
+  let d = (k*k + e*e) / 59.0 + 6.0;
+  let T = t * 3.0;
+  let q = 90.0 - 5.0*sin(atan2(k, e) * e) + k*(3.0 + sin(d*d - T*2.0));
+  let c = d/2.0 - T/18.0;
+  let px = q * sin(c);
+  let py = (q + d * d^sin(d*2.0 - T/3.0)) * cos(c);
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 540 + px * 3.5 * grow;
+  let y = 960 + py * 3.5 * grow;
+  // bioluminescence: cyan bell (small d) → violet tail (large d), shimmering
+  let hue = mod(184.0 + d * 15.0 + 26.0*sin(yy*0.08 + t*0.4), 360);
+  let sat = 0.85;
+  let val = clamp(0.55 + 0.45*sin(d*d - T*2.0), 0.22, 1.0);
+  let r = 1.35;
+}
+glow(crea, 1);
+
+// ---- marine snow — a second tiny cloud sifting down past the creature ----
+cloud(snow, 150, #dfeeff, 0.4) {
+  let sp = 0.02 + 0.03 * rand2(i, 1.3);
+  let ph = rand2(i, 2.7);
+  let prog = fract(ph + t * sp);
+  let x = 1080 * rand2(i, 4.1) + 16 * sin(prog * tau + i);
+  let y = 1920 * prog;
+  let r = 1.4 + 3.0 * rand2(i, 5.5);
+  let hue = 200;
+  let alpha = 0.4 * sin(prog * pi);
+}
+
+// ---- annotations ----
+caption(head, "Siphonophore in the abyss", (540, 140), 32); hidden(head);
+caption(sub, "a 12,000-point cloud, glowing", (540, 206), 22); hidden(sub);
+equation(eq, (540, 1706), `p = (q\sin c,\;\; (q + d\,d^{\sin(2d-t/3)})\cos c)`, 26); hidden(eq);
+caption(lab, "one @yuruyurau golf · additive glow · bloom", (540, 1786), 19); hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(24);
