@@ -1,0 +1,67 @@
+// ============================================================================
+//  What IS a neural network — and how does it learn? 3Blue1Brown's Neural
+//  Networks (2017), chapters 1 & 3, as one journey:
+//
+//    build   — a network is layers of neurons joined by weighted connections,
+//              revealed one layer at a time (not dumped fully-formed);
+//    forward — a handwritten digit feeds in, each pixel an input, values flowing
+//              forward through the layers to ten output probabilities;
+//    loss    — compare the guess with the true label;
+//    backward— backpropagation sends the error back as gradients, layer by layer.
+//
+//  A stylised "5" (`tensor`) feeds a real deterministic `network` via `feed`,
+//  which flattens the pixels into the 144 inputs AND traces the lit strokes into
+//  the input column. Every value shown is computed, not decorative.
+// ============================================================================
+title("What is a neural network — and how it learns");
+canvas("16:9");
+template("black");
+
+// the handwritten digit as pixel brightnesses (12×12 = 144 inputs).
+// Change "5" to any 0-9 to feed a different digit — or draw your own shape with
+// `tensor(... `#`=ink `.`=blank ...)`.
+digit(img, (250, 340), "5", 18, cyan);
+
+// 144 pixels → 16 → 16 → 10 digit classes (the real MNIST shape, abbreviated ⋮)
+network(net, (830, 340), "144 16 16 10", "sigmoid sigmoid softmax", 620, 500, 7);
+
+text(narr, (640, 672), "A handwritten digit is just a grid of pixel brightnesses.", 24);
+
+hidden(img);
+hidden(net);
+hidden(narr);
+
+wait(0.4);
+show(narr);
+show(img);
+wait(1.8);
+
+// --- BUILD: the network appears one layer at a time (the journey) ---
+say(narr, "A network is layers of neurons, joined by weighted connections.");
+show(net.layer0);
+wait(0.7);
+par { show(net.transition0); show(net.layer1); }
+wait(0.5);
+par { show(net.transition1); show(net.layer2); }
+wait(0.5);
+par { show(net.transition2); show(net.layer3); }
+par { show(net.probabilities); show(net.status); }
+wait(1.0);
+
+// --- FORWARD: the digit feeds in and values flow forward ---
+say(narr, "Feed the digit in: each pixel is an input, and the values flow forward.");
+feed(net, img, 3.6, smooth);
+wait(0.6);
+
+// --- LOSS: compare the guess with the true label ---
+say(narr, "Compare the output with the true label — a five.");
+loss(net, "0 0 0 0 1 0 0 0 0 0", crossentropy, 1.6);
+wait(0.8);
+
+// --- BACKWARD: backpropagation sends the error back as gradients ---
+say(narr, "Backpropagation sends the error back through the layers, as gradients.");
+backward(net, 3.4, smooth);
+wait(1.0);
+
+say(narr, "Forward to predict, backward to learn — that is how a network trains.");
+wait(2.0);

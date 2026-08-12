@@ -1,5 +1,5 @@
 {
-  "count": 397,
+  "count": 411,
   "categories": [
     {
       "slug": "algorithms",
@@ -1242,6 +1242,24 @@
       "title": "Generative & recursive",
       "examples": [
         {
+          "name": "art-golden-angle",
+          "file": "art-golden-angle.manic",
+          "title": "Art golden angle",
+          "desc": "The golden angle as glowing particle art: 1600 seeds bloom from the centre (angle = i\u00b7137.5\u00b0, radius = \u221ai) into a sunflower."
+        },
+        {
+          "name": "art-circle-area-proof",
+          "file": "art-circle-area-proof.manic",
+          "title": "Art circle area proof",
+          "desc": "Area = \u03c0r\u00b2 as a SWARM: the same particles fill a disc, then flow into a parallelogram of the same area whose scalloped wedge-edges refine and flatten toward a rectangle (the limit)."
+        },
+        {
+          "name": "art-calculus-sine",
+          "file": "art-calculus-sine.manic",
+          "title": "Art calculus sine",
+          "desc": "Sine, its derivative, its Riemann area and a riding tangent \u2014 five index-partitioned particle families in one cloud, cross-faded in beats."
+        },
+        {
           "name": "exponential-shells",
           "file": "exponential-shells.manic",
           "title": "Exponential shells",
@@ -1444,6 +1462,18 @@
           "file": "cloud-koi.manic",
           "title": "Cloud koi",
           "desc": "Another @yuruyurau art-tweet in ONE cloud: 10,000 points in two layers (mod(i,2)) swirl into koi-like forms chasing each other."
+        },
+        {
+          "name": "glsl-medusae-glow",
+          "file": "glsl-medusae-glow.manic",
+          "title": "Glsl medusae glow",
+          "desc": "Two 'one formula' pieces sharing a frame: a raw glsl glow field draws bioluminescent medusae as pure inverse-square LIGHT traced along an epicycle (no geometry \u2014 every pixel just sums its distance to the glowing thread), with an HDR tone-map so the cores bloom instead of clipping; above it, the koi cloud swims."
+        },
+        {
+          "name": "glsl-fractal-nebula",
+          "file": "glsl-fractal-nebula.manic",
+          "title": "Glsl fractal nebula",
+          "desc": "A twigl-style 3D fractal fold as a soft gold dawn with blue frost-ferns (raw glsl, accumulated into a LOCAL vec3 \u2014 the o.rgb += in-loop idiom miscompiles on Metal), and a murmuration cloud sweeping across it: a per-pixel field and a particle system sharing one frame, both pure in (i, t)."
         },
         {
           "name": "cloud-feathers",
@@ -2434,6 +2464,42 @@
           "file": "manim-vs-moving-zoomed-scene.manic",
           "title": "Manim vs/moving zoomed scene",
           "desc": "A loupe: a frame over the scene + a panel showing that region magnified LIVE; pan the frame and the panel tracks it \u2014 Manim's ZoomedScene."
+        },
+        {
+          "name": "manim-vs-deform-homotopy",
+          "file": "manim-vs-deform-homotopy.manic",
+          "title": "Manim vs/deform homotopy",
+          "desc": "deform \u2014 a continuous homotopy: over its duration it remaps a shape's outline by (u(x,y,t), v(x,y,t)) each frame."
+        },
+        {
+          "name": "manim-vs-first-class-shapes",
+          "file": "manim-vs-first-class-shapes.manic",
+          "title": "Manim vs/first class shapes",
+          "desc": "Every core shape owns its FILL and its OUTLINE \u2014 each with its own colour and opacity \u2014 and DRAWS ITSELF ON."
+        },
+        {
+          "name": "manim-vs-show-styles",
+          "file": "manim-vs-show-styles.manic",
+          "title": "Manim vs/show styles",
+          "desc": "The reveal family on one page: a plain show fade-in, a grow-in from an anchor (hidden(id, from) \u2192 show), and a pen draw-on (untraced+draw) \u2014 how a shape first appears is a base-setter + verb pair, not a special effect."
+        },
+        {
+          "name": "manim-vs-indication",
+          "file": "manim-vs-indication.manic",
+          "title": "Manim vs/indication",
+          "desc": "The attention flourishes \u2014 pulse, flash, wiggle, blink, circumscribe, spotlight, passflash \u2014 each a temporary emphasis that returns the shape to rest, on any entity or tagged group (Manim's Indicate / Flash / Circumscribe / FocusOn family)."
+        },
+        {
+          "name": "manim-vs-spiral-cycle-restore",
+          "file": "manim-vs-spiral-cycle-restore.manic",
+          "title": "Manim vs/spiral cycle restore",
+          "desc": "Three position moves: spiralin reveals a group by spiralling its members into place, cycle slides each entity to the next's spot along an arc, and savestate+restore remembers home and snaps back \u2014 Manim's SpiralIn / CyclicReplace / save_state+Restore."
+        },
+        {
+          "name": "manim-vs-circle-area-proof",
+          "file": "manim-vs-circle-area-proof.manic",
+          "title": "Manim vs/circle area proof",
+          "desc": "The area-of-a-circle LIMIT proof: each stage is a fresh disc CUT into N wedges and ANIMATED \u2014 every wedge spins about its tip and slides into a tip-to-tail strip."
         }
       ]
     },
@@ -2506,6 +2572,24 @@
           "file": "3b1b-eval-cross-product-3d.manic",
           "title": "3b1b eval/cross product 3d",
           "desc": "The 3D CROSS product (cross3): v \u00d7 w perpendicular to the parallelogram v,w span, its length = that area, orbited to reveal the geometry behind the determinant formula."
+        },
+        {
+          "name": "3b1b-eval-mnist-network",
+          "file": "3b1b-eval-mnist-network.manic",
+          "title": "3b1b eval/mnist network",
+          "desc": "Neural Networks ch.1 & 3: a stylised digit (digit) feeds a real 144\u219216\u219216\u219210 network \u2014 the pixels ARE the inputs \u2014 then the forward pass computes, loss compares to the true label, and backward sends gradients back."
+        },
+        {
+          "name": "3b1b-eval-gradient-partials",
+          "file": "3b1b-eval-gradient-partials.manic",
+          "title": "3b1b eval/gradient partials",
+          "desc": "How a network learns: f(x,y) as a cost landscape; slice3 holds one variable constant so a cross-section's steepness IS the partial derivative; gradient3 stacks them into \u2207f (uphill); descend3 rolls a ball down \u2212\u2207f into the valley \u2014 with a movie camera that swings to reveal the stack."
+        },
+        {
+          "name": "3b1b-eval-high-dimensions",
+          "file": "3b1b-eval-high-dimensions.manic",
+          "title": "3b1b eval/high dimensions",
+          "desc": "Thinking outside the 10-D box: a point in N-dimensional space drawn as N dials (sliders)."
         }
       ]
     }

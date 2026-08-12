@@ -1,0 +1,70 @@
+// First-class shapes — EVERY core Manic shape owns its FILL and its OUTLINE (each
+// its own colour + opacity) and DRAWS ITSELF ON. Not just circles: rect, polygon,
+// ellipse, line, arrow — all the same first-class treatment. All native Manic: the
+// ctors are unchanged, style is the usual t=0 modifiers, the reveal is untraced+draw.
+//
+//   color(id, c)         → the FILL colour       outline(id, c) → the RING colour
+//   opacity(id, v, fill) → the FILL opacity      opacity(id, v, stroke) → the RING opacity
+//   outlined(id)         → hollow (fill off)     filled(id) → solid (fill on)
+//   untraced(id); draw(id) → the shape draws itself on (Manim's Create)
+//
+// Closed shapes (circle/rect/polygon/ellipse) have a fill you can make translucent
+// or drop; open paths (line/arrow) are stroke-only but still draw themselves on.
+//
+//   manic examples/manim-vs/first-class-shapes.manic
+title("First-class shapes");
+canvas("16:9");
+template("black");
+
+// ── closed shapes: fill + outline, three postures ───────────────────────────
+// SOLID filled — draws on, fill washes in behind the pen.
+circle(cc, (220, 250), 72); color(cc, cyan);
+untraced(cc);
+
+// HOLLOW ring — outlined() drops the fill; outline() colours the ring.
+rect(rc, (490, 250), 160, 120); outline(rc, gold); outlined(rc);
+untraced(rc);
+
+// TRANSLUCENT fill under a crisp rim — opacity(id,v,fill) touches only the interior.
+polygon(tri, (720, 185), (802, 320), (638, 320)); color(tri, magenta); outline(tri, white);
+opacity(tri, 0.45, fill); opacity(tri, 1.0, stroke);
+untraced(tri);
+
+// ELLIPSE is a stroke-only curve (no fill layer), so `color` sets its stroke — a
+// naturally hollow conic. Draws on like any path.
+ellipse(el, (1010, 250), 96, 60, 0); color(el, lime); stroke(el, 3);
+untraced(el);
+
+// ── open paths: stroke-only, but they draw on too ───────────────────────────
+line(seg, (170, 470), (440, 470)); color(seg, cyan); stroke(seg, 3);
+untraced(seg);
+
+arrow(arw, (560, 510), (860, 430)); color(arw, gold);
+untraced(arw);
+
+text(cap, (640, 610), "every shape owns its fill + outline, and draws itself on", 22);
+hidden(cap);
+
+// ── timeline: verbs only. Watch each shape create. ──────────────────────────
+wait(0.4);
+show(cap);
+wait(0.8);
+
+say(cap, "Closed shapes: solid, hollow, translucent fill — each drawn on.");
+draw(cc);
+wait(0.5);
+draw(rc);
+wait(0.5);
+draw(tri);
+wait(0.5);
+draw(el);
+wait(1.2);
+
+say(cap, "Open paths draw on too — a line, an arrow.");
+par { draw(seg); draw(arw); }
+wait(1.2);
+
+// once drawn they're ordinary styled shapes — every verb still works (kit rule).
+say(cap, "Then the usual verbs keep working — pulse, flash.");
+par { pulse(tri); flash(cc); }
+wait(1.4);

@@ -1,0 +1,75 @@
+// Area = πr², as a SWARM — and the LIMIT that finishes the proof.
+// The same particles fill a disc, flow into a lumpy wedge-strip, then the humps
+// MULTIPLY and FLATTEN (4 → 8 → 16 wedges …) until the edge is straight: a
+// πr × r rectangle. Nothing is added or removed — the count is the area (πr²),
+// conserved the whole way. One `cloud`, all formula-driven.
+//
+//   manic examples/art-circle-area-proof.manic
+title("Area of a circle = πr²");
+canvas("16:9");
+template("black");
+
+// on-screen heading, top-centre, held throughout
+text(hdr, (640, 74), "Circle Area of Proof — Manic", 32);
+
+cloud(swarm, 3200) {
+  // ---- uniform grid index → (fx, fy) in the unit square ---------------------
+  let cols = 80;
+  let ci = mod(i, cols);
+  let ri = (i - ci) / cols;              // integer row 0..39
+  let fx = ci / 79;                       // 0..1 across the width
+  let fy = ri / 39;                       // 0..1 top → bottom
+  // a little hash jitter so the grid reads as a filled field, not a lattice
+  let jx = (mod(sin(i * 12.9898) * 43758.5453, 1) - 0.5) * 7;
+  let jy = (mod(sin(i * 78.2330) * 43758.5453, 1) - 0.5) * 7;
+
+  // ---- destination: a parallelogram with SCALLOPED (wedge) edges ------------
+  let wdt = 565; let hlf = 90;            // base πr ≈ 565, height r = 180
+  let x0 = 313; let yc = 340; let slnt = 90;
+  // refinement s: 0 (few coarse wedges) → 1 (many fine wedges → rectangle)
+  let s = 0.5 * (1 + tanh((t - 5.6) * 0.7));
+  let nh = 2 + 6 * s;                      // humps per edge: 2 → 8
+  let amp = 48 * (1 - s) + 2;              // hump depth: 50 → 2 (flattens)
+  let wv = amp * cos(6.2831853 * nh * fx);
+  let topE = yc - hlf - wv;               // top edge bulges up at the humps
+  let botE = yc + hlf + wv;               // bottom edge bulges down
+  let sx = x0 + fx * wdt + (1 - fy) * slnt + jx;
+  let sy = topE + fy * (botE - topE) + jy;
+
+  // ---- start: a uniform disc of the SAME area (golden-angle sunflower) ------
+  let gr = sqrt((i + 0.5) / 3200);
+  let ang = i * 2.399963;
+  let dx = 640 + 180 * gr * cos(ang);
+  let dy = 340 + 180 * gr * sin(ang);
+
+  // ---- blend disc → strip, then the strip refines to a rectangle ------------
+  let b = 0.5 * (1 + tanh((t - 3.2) * 1.1));
+  let x = dx * (1 - b) + sx * b;
+  let y = dy * (1 - b) + sy * b;
+
+  let hue = mod(330 - gr * 140, 360);      // Manic neon: magenta core → cyan rim
+  let sat = 0.9;
+  let val = 0.6;                           // <1 shows the hue; additive glow re-brightens overlaps
+  // varied radius > 2.5px → true ROUND discs (≤2.5px render as squares), with size grain
+  let rnd = mod(sin(i * 91.7) * 43758.5453, 1);
+  let r = 2.8 + 2.2 * rnd;
+}
+
+// additive glow: dense/overlapping points accumulate into light — soft nebula cores
+glow(swarm, 4);
+
+text(cap, (640, 630), "π r² particles — a disc's worth.", 24);
+hidden(cap);
+
+wait(0.6);
+show(cap);
+wait(1.8);
+
+say(cap, "Cut into wedges and re-lay them — a lumpy strip.");
+wait(2.2);
+
+say(cap, "More wedges, finer and finer — the humps flatten…");
+wait(2.6);
+
+say(cap, "…in the limit, a πr × r rectangle. Area = π r².");
+wait(2.4);

@@ -1,0 +1,26 @@
+// deform — a continuous homotopy: over its duration, `deform` animates t: 0→1 and
+// remaps an entity's outline points by (u(x,y,t), v(x,y,t)) every frame. Manim's
+// `Homotopy` / `ApplyWave` / `ComplexHomotopy` in one verb (the animated twin of
+// the static `warp`). Write t=0 as the identity (`u=x`, `v=y`) for a clean start.
+//
+//   manic examples/deform-homotopy.manic
+title("Deform — a continuous homotopy");
+canvas("16:9");
+template("black");
+
+circle(ring, (380, 330), 140); color(ring, cyan);
+rect(box, (940, 330), 230, 230); color(box, gold);
+text(narr, (640, 636), "One verb, any point-map of (x, y, t).", 24);
+
+wait(0.6);
+
+say(narr, "A wave ripples through a shape — v = y + amp·sin(x·k + t)·sin(π·t).");
+deform(ring, "x", "y + 34*sin(x*0.05 + t*9)*sin(3.14159*t)", 2.8, smooth);
+wait(1.6);
+
+say(narr, "A twist — shear that grows from centre, then unwinds. Same verb.");
+deform(box, "x + (y-330)*0.45*sin(3.14159*t)", "y - (x-940)*0.45*sin(3.14159*t)", 2.8, smooth);
+wait(2.0);
+
+say(narr, "Author the identity at t=0, and any continuous deformation follows.");
+wait(2.0);

@@ -1,0 +1,44 @@
+// ============================================================================
+//  Thinking in high dimensions — 3Blue1Brown's "10-dimensional box" device: a
+//  point in N-dimensional space is just N numbers, drawn as N dials. You can't
+//  picture 7 axes, but you CAN watch 7 sliders move together.
+//
+//  Put the point on the unit sphere and the coordinates obey x₁²+…+x₇² = 1 — a
+//  fixed budget of "real estate" spread across the axes. Spread it evenly and
+//  every coordinate is tiny (1/√7); pile it into a few and the rest go slack.
+//  The corner (1,1,…,1) sits √7 away — and √N in N-D — which is why high
+//  dimensions feel so vast.
+//
+//  `sliders` is the rack; `setsliders` drives all dials at once and shows Σxᵢ².
+// ============================================================================
+title("Thinking in high dimensions");
+canvas("16:9");
+template("black");
+
+sliders(pt, 7, (640, 340), 820, 360, gold);
+text(narr, (640, 656), "A point in 7-D space is just seven numbers — one dial each.", 24);
+
+hidden(narr);
+
+wait(0.4);
+show(narr);
+wait(2.4);
+
+say(narr, "Put it on the unit sphere: x₁² + … + x₇² = 1 — a fixed budget.");
+setsliders(pt, "0.38 0.38 0.38 0.38 0.38 0.38 0.38", 1.6);
+wait(2.2);
+
+say(narr, "Spread evenly, every coordinate is tiny — only 1 over root 7.");
+wait(2.2);
+
+say(narr, "Pile the budget into a few, and the rest fall slack — Σx² stays 1.");
+setsliders(pt, "0.86 0.42 0.22 0.13 0.10 0.06 0.04", 1.6);
+wait(2.4);
+
+say(narr, "Swing it around — the total never leaves the sphere.");
+setsliders(pt, "-0.30 0.55 -0.62 0.28 0.34 -0.18 0.12", 1.6);
+wait(2.2);
+
+say(narr, "And the corner (1,…,1) sits √7 away — √N in N-D. High space is vast.");
+setsliders(pt, "1 1 1 1 1 1 1", 1.8);
+wait(2.6);

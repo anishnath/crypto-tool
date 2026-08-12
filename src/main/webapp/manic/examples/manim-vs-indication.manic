@@ -1,0 +1,42 @@
+// Attention cues — ways to draw the eye to an object, each returning to its base
+// state. Alongside the existing `pulse` (a scale bump) and `flash` (a radial
+// burst), this adds `wiggle` (scale + rotate jiggle), `circumscribe` (a line
+// drawn round it, then gone), `spotlight` (a disc converges onto it), `blink`,
+// and `passflash` (a light travels the outline).
+// Manim's Indicate / Flash / Wiggle / Circumscribe / FocusOn / Blink / ShowPassingFlash.
+//
+//   manic examples/manim-vs/indication.manic
+title("Attention cues — indicate an object");
+canvas("16:9");
+template("black");
+
+circle(a, (240, 320), 56); color(a, cyan);
+rect(b, (520, 320), 112, 112); color(b, gold);
+circle(c, (800, 320), 56); color(c, lime);
+equation(d, (1050, 315), `E=mc^2`, 30); color(d, magenta);
+text(narr, (640, 560), "Five ways to draw the eye — each returns to base.", 24);
+
+hidden(narr);
+wait(0.5);
+show(narr);
+wait(1.4);
+
+say(narr, "wiggle — a scale-and-rotate jiggle (the rotate cousin of shake).");
+wiggle(a, 0.8);
+wait(1.4);
+
+say(narr, "circumscribe — a line drawn round it, then gone.");
+circumscribe(b, magenta, 1.1);
+wait(1.4);
+
+say(narr, "spotlight — a translucent disc converges onto it.");
+spotlight(c, 1.4);
+wait(1.4);
+
+say(narr, "blink — flash out and in.");
+blink(d, 0.8);
+wait(1.4);
+
+say(narr, "passflash — a light travels the outline.");
+passflash(b, cyan, 1.3);
+wait(1.6);

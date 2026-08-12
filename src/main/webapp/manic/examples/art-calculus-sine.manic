@@ -1,0 +1,90 @@
+// Sine, its derivative, its Riemann area & a riding tangent — all PARTICLE ART.
+// 12000 dots in five families, one formula, no plot/coords/riemann built-ins:
+//   0  SINE ribbon         (cyan)   — a thick glowing wave-swarm
+//   1  COSINE ribbon        (gold)   — the derivative, cos x = the slope
+//   2  coordinate GRID      (faint)  — the x/y plane in dots
+//   3  RIEMANN columns      (magenta)— particles fill the strips under the wave
+//   4  riding TANGENT swarm  (white)  — a line that tilts to cos x as it sweeps
+// The families CROSS-FADE in beats so each idea reads on its own, then a finale.
+//
+//   manic examples/art-calculus-sine.manic
+title("Sine · derivative · area");
+canvas("16:9");
+template("black");
+
+text(hdr, (640, 70), "Sine · its Derivative · its Area — Manic", 30);
+
+cloud(field, 12000) {
+  let g = floor(i / 2400);                       // family 0..4
+  let m0 = clamp(1 - max(g,   -g),   0, 1);
+  let m1 = clamp(1 - max(g-1, 1-g),  0, 1);
+  let m2 = clamp(1 - max(g-2, 2-g),  0, 1);
+  let m3 = clamp(1 - max(g-3, 3-g),  0, 1);
+  let m4 = clamp(1 - max(g-4, 4-g),  0, 1);
+  let li = mod(i, 2400);
+  let loc = li / 2399;
+
+  let ox = 640; let oy = 384;
+  let sx = 92; let sy = 118;
+  let mx = (loc * 2 - 1) * 3.14159;              // math x ∈ [-π, π]
+  let ph = mx + t * 0.9;                          // the wave travels (gentle)
+  let sp = rand(i) + rand(i + 4051) - 1;          // -1..1, dense near 0
+  let asp = max(sp, -sp);
+
+  // 0/1 — thick sine & cosine ribbons
+  let wvX  = ox + mx * sx;
+  let sinY = oy - (sin(ph) + sp * 0.24) * sy;
+  let cosY = oy - (cos(ph) + sp * 0.24) * sy;
+
+  // 2 — faint particle grid
+  let gridX = ox + (mod(li, 52) / 51 * 2 - 1) * 320;
+  let gridY = oy - (floor(li / 52) / 51 * 2 - 1) * 178;
+
+  // 3 — Riemann columns: 16 strips, particles fill axis → sin height (signed)
+  let bi = floor(loc * 16);
+  let barMX = 0.0 - 3.14159 + (bi + 0.5) / 16 * 6.28318;
+  let barH = sin(barMX + t * 0.9);
+  let rmX = ox + barMX * sx + (rand(i + 11) - 0.5) * (6.28318 / 16 * sx * 0.78);
+  let rmY = oy - rand(i + 23) * barH * sy;
+
+  // 4 — a tangent line that sweeps and tilts to the slope cos(x0)
+  let x0 = 0.0 - 2.3 + mod(t * 0.4, 1) * 4.6;
+  let ss = (loc * 2 - 1) * 0.9;
+  let tanH = sin(x0 + t * 0.9) + cos(x0 + t * 0.9) * ss;   // value + slope·offset
+  let tgX = ox + (x0 + ss) * sx;
+  let tgY = oy - tanH * sy + (rand(i + 77) - 0.5) * 8;
+
+  let x = (m0 + m1) * wvX + m2 * gridX + m3 * rmX + m4 * tgX;
+  let y = m0 * sinY + m1 * cosY + m2 * gridY + m3 * rmY + m4 * tgY;
+
+  // ---- beats: each idea rises, then clears for the next ----------------------
+  let rmA = clamp((t - 4.5) * 1.0, 0, 1) * clamp((10.0 - t) * 1.0, 0, 1); // area 4.5–10
+  let tgA = clamp((t - 9.5) * 1.0, 0, 1);                                 // tangent 9.5→end
+  let cosDim = 1 - 0.55 * rmA;                    // derivative steps back while area shows
+
+  let hue = m0 * 192 + m1 * 46 + m2 * 210 + m3 * 328 + m4 * 50;
+  let sat = m0 * 1.0 + m1 * 1.0 + m2 * 0.3 + m3 * 0.8 + m4 * 0.3;
+  let core = 0.5 * (1 - 0.7 * asp);
+  let val = m0 * core + m1 * core + m2 * 0.14 + m3 * 0.32 + m4 * 0.75;
+  let alpha = m0 * 1.0 + m1 * cosDim + m2 * 0.45 + m3 * rmA * 0.8 + m4 * tgA;
+  let r = m2 * 1.8 + (m0 + m1) * (2.4 + rand(i + 88))
+        + m3 * (2.2 + rand(i + 5)) + m4 * (2.7 + rand(i + 9));
+}
+
+glow(field, 2);
+
+text(cap, (640, 700), "cyan sin x   ·   gold cos x — its slope.", 22);
+hidden(cap);
+
+wait(1.0);
+show(cap);
+wait(3.4);
+
+say(cap, "Riemann strips — the area under the wave, in dots.");
+wait(5.0);
+
+say(cap, "The sum clears; a tangent rides — its tilt IS cos x.");
+wait(4.0);
+
+say(cap, "A function, its slope, its area — one swarm.");
+wait(3.2);

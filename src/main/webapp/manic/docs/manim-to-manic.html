@@ -34,7 +34,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-979a81e0.js";
+            window.path_to_searchindex_js = "searchindex-0e58da26.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b0bf7e39.js"></script>
@@ -246,11 +246,25 @@ render instructions. Manic’s verbs — <code>show</code>, <code>draw</code>, <
 <tr><td><code>Dot</code> + <code>add_updater(move_to(c2p(t, f(t))))</code></td><td><code>mark(id, curve, x)</code> then <code>to(id, x, …)</code></td><td>A dot that rides a curve — no updater.</td></tr>
 <tr><td><code>always_redraw(Rectangle origin→(t, k/t))</code></td><td><code>boxto(id, curve, x)</code></td><td>Reactive inscribed rectangle; the constant-area demo in one line.</td></tr>
 <tr><td><code>MathTex("a","+","b")</code> (indexable)</td><td><code>mathparts(id, (x,y), </code> <code>`a`</code> <code>, </code> <code>`+`</code> <code>, </code> <code>`b`</code> <code>)</code></td><td>Auto-laid-out, baseline-aligned, addressable parts <code>{id}.0</code>, <code>{id}.1</code>, …</td></tr>
+<tr><td><code>Circle()</code> / <code>Square()</code> (a stroke-first ring)</td><td><code>circle(id, (x,y), r); outlined(id)</code></td><td><code>outlined</code> drops the fill → a ring; <code>filled</code> reverts. Manic’s default is a filled disc, so opt into the ring with <code>outlined</code>.</td></tr>
+<tr><td><code>circle.set_fill(PINK, opacity=0.5)</code></td><td><code>color(id, pink); opacity(id, 0.5, fill)</code></td><td><code>color</code> sets the fill colour; the <code>fill</code> layer word gives it its <strong>own</strong> opacity, independent of the rim.</td></tr>
+<tr><td><code>circle.set_stroke(BLUE, width=4, opacity=0.6)</code></td><td><code>outline(id, blue); stroke(id, 4); opacity(id, 0.6, stroke)</code></td><td>The <code>stroke</code>/<code>outline</code> layer word gives the rim its own opacity. On a hollow shape, colour the ring with <code>outline</code>, not <code>color</code>.</td></tr>
+<tr><td><code>self.play(Create(circle))</code></td><td><code>untraced(id); draw(id)</code></td><td>The shape draws itself on — the outline traces while the (translucent) fill washes in behind it. Same base-setter+verb idiom as <code>hidden</code>+<code>show</code>. See <code>examples/manim-vs/first-class-shapes.manic</code>.</td></tr>
 <tr><td><code>Write(text)</code></td><td><code>untraced(e); draw(e)</code></td><td>A left-to-right write-on wipe.</td></tr>
 <tr><td><code>SurroundingRectangle(term, buff=.1)</code></td><td><code>framebox(id, target, [buff])</code></td><td>Outlined box fitted to a target’s bbox + pad.</td></tr>
 <tr><td><code>ReplacementTransform(box1, box2)</code></td><td><code>surround(box, newTarget)</code></td><td>Glides + resizes the box to a new target — one verb, no second box.</td></tr>
+<tr><td><code>SpiralIn</code></td><td><code>spiralin(group)</code></td><td>Members spiral into place from a rotated, shrunken offset, staggered.</td></tr>
+<tr><td><code>mob.save_state()</code> / <code>Restore(mob)</code></td><td><code>savestate(id)</code> then <code>restore(id)</code></td><td>Snapshot a transform, animate back to it later.</td></tr>
+<tr><td><code>CyclicReplace</code> / <code>Swap</code></td><td><code>cycle(a, b, c, …, [dur], [arc°])</code></td><td>Each entity moves to the next’s position along an arc (default 90°).</td></tr>
+<tr><td><code>Clockwise</code> / <code>CounterclockwiseTransform</code></td><td><code>cycle(…, arc°)</code> (signed arc)</td><td>Points travel an oriented arc, set by the arc-degrees argument.</td></tr>
 <tr><td><code>Line(...).rotate(theta)</code> about a vertex</td><td><code>turn(point, vertex, degrees, dur)</code></td><td>Rotate a point about a pivot; attached arms/arcs follow.</td></tr>
 <tr><td><code>Angle(l1, l2)</code> + <code>add_updater</code></td><td><code>anglemark(id, a, b, c, ["θ"])</code></td><td>Reactive arc; optional label rides the bisector as the angle opens.</td></tr>
+<tr><td><code>Indicate</code> / <code>Flash</code></td><td><code>pulse(id)</code> / <code>flash(id)</code></td><td>Attention: a scale bump / a radial burst.</td></tr>
+<tr><td><code>Wiggle</code></td><td><code>wiggle(id)</code></td><td>Scale-pulse + oscillating rotation — the rotate cousin of <code>shake</code>.</td></tr>
+<tr><td><code>Circumscribe</code> / <code>CircleIndicate</code></td><td><code>circumscribe(id, [color])</code></td><td>A temporary outlined box drawn round the target, then faded — works on a group (tag) too.</td></tr>
+<tr><td><code>FocusOn</code></td><td><code>spotlight(id)</code></td><td>A translucent disc converges onto the target, then fades.</td></tr>
+<tr><td><code>Blink</code></td><td><code>blink(id)</code></td><td>Blink out-and-in twice.</td></tr>
+<tr><td><code>ShowPassingFlash</code> / <code>FlashAround</code></td><td><code>passflash(id, [color])</code></td><td>A luminous sliver travels the entity’s outline (closed shapes → light circles it).</td></tr>
 <tr><td><code>x = ValueTracker(0)</code> + <code>set_x</code> updater</td><td><code>slidex(id, x, dur)</code> / <code>slidey(id, y, dur)</code></td><td>Move one coordinate to an absolute value, keeping the other.</td></tr>
 <tr><td><code>VGroup(...).scale(1.4)</code></td><td><code>groupscale(tag, 1.4)</code></td><td>Scales about the group’s <strong>collective</strong> centroid.</td></tr>
 <tr><td><code>group.animate.shift(dest − group[i])</code></td><td><code>dock(tag, member, target)</code></td><td>Slides the group so one member lands on the target — no delta maths.</td></tr>
@@ -258,9 +272,11 @@ render instructions. Manic’s verbs — <code>show</code>, <code>draw</code>, <
 <tr><td><code>self.camera.frame.animate.move_to(dot)</code></td><td><code>followshot(id)</code></td><td>The 2D camera tracks an entity; <code>followshot(none)</code> releases.</td></tr>
 <tr><td><code>frame.animate.scale(0.5)</code></td><td><code>zoom(2, …)</code></td><td>⚠️ Inverted: Manim’s smaller frame = Manic’s <code>zoom &gt; 1</code>.</td></tr>
 <tr><td><code>ZoomedScene</code> + <code>activate_zooming()</code></td><td><code>loupe(id, (sx,sy), w, h, (dx,dy), mag)</code></td><td>A live magnifier: a frame over the scene + a panel showing that region enlarged.</td></tr>
+<tr><td><code>Homotopy</code> / <code>ApplyWave</code> / <code>ComplexHomotopy</code></td><td><code>deform(id, "u(x,y,t)", "v(x,y,t)")</code></td><td>Continuous homotopy — remap a shape’s outline points by <code>(u,v,t)</code> each frame; the animated twin of <code>warp</code>. Write <code>t=0</code> as the identity (<code>u=x</code>). A wave: <code>"y + 30*sin(x*0.04 + t*tau)*sin(pi*t)"</code>.</td></tr>
 <tr><td><code>self.play(a, b)</code> (parallel)</td><td><code>par { a; b; }</code></td><td>Run verbs together.</td></tr>
 <tr><td><code>self.wait(t)</code></td><td><code>wait(t)</code></td><td>Same.</td></tr>
 <tr><td><code>self.play(FadeIn/FadeOut)</code></td><td><code>show(id)</code> / <code>fade(id)</code></td><td>See the note on <code>hidden</code> below.</td></tr>
+<tr><td><code>GrowFromCenter</code> / <code>GrowFromEdge</code> / <code>GrowArrow</code> / <code>GrowFromPoint</code></td><td><code>hidden(id, from)</code> then <code>show(id)</code></td><td>The reveal <em>style</em> lives on <code>hidden</code> (like <code>untraced</code> arms <code>draw</code>): <code>from</code> = <code>center</code> | <code>up</code>/<code>down</code>/<code>left</code>/<code>right</code> (a bbox edge) | <code>tail</code> (an arrow’s start) | a point <code>(x,y)</code>. Scale-in from that anchor; omit <code>from</code> → fade-in.</td></tr>
 </tbody>
 </table>
 </div>
@@ -291,6 +307,41 @@ moment comes.</li>
 </ol>
 <p>If a Manim move isn’t in the table, check the <a href="API.html">API reference</a> — Manic’s
 vocabulary is broad, and there’s usually a builtin that says it in one line.</p>
+<h2 id="beyond-the-core-domain-kits"><a class="header" href="#beyond-the-core-domain-kits">Beyond the core: domain kits</a></h2>
+<p>Here’s the biggest difference the table above doesn’t show. Manim is a <em>general</em>
+animation library: for a neural network you hand-build a <code>NetworkMobject</code> out of
+<code>Circle</code>s and <code>Line</code>s and fake the activations; for a slider you subclass
+<code>NumberLine</code>; for a gradient surface you wire up a <code>Surface</code> and animate the
+vectors yourself. (That is literally how the 3Blue1Brown neural-network,
+high-dimensions, and gradient-descent videos are made.)</p>
+<p>Manic ships <strong>kits</strong> that <em>compute</em> the object for you — the maths is real, not
+drawn — and because every kit object is an ordinary tagged entity, the core
+rhetoric (<code>framebox</code>, <code>brace</code>, <code>arrow</code>, <code>say</code>, <code>equation</code>, <code>pulse</code>) dresses it
+directly.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>You’d hand-build in Manim</th><th>A Manic kit gives you</th></tr>
+</thead>
+<tbody>
+<tr><td>a <code>NetworkMobject</code> of circles + edges, activations faked</td><td><code>network</code> + <code>forward</code> / <code>loss</code> / <code>backward</code> / <code>update</code> — a real feed-forward net with <strong>computed</strong> activations and gradients (large layers auto-abbreviate with <code>⋮</code>)</td></tr>
+<tr><td>an image <code>Mobject</code> + hand-wired lines to the input neurons</td><td><code>feed(net, digit)</code> — flattens a <code>tensor</code>/<code>digit</code> into the inputs and traces the lit strokes in</td></tr>
+<tr><td>a <code>Surface</code> + hand-animated gradient arrows</td><td><code>surface3</code> + <code>slice3</code> (the partial-derivative cross-section) + <code>gradient3</code> + <code>descend3</code> (a ball rolling down −∇f, with its trail)</td></tr>
+<tr><td>a rack of <code>NumberLine</code>s for a high-dimensional point</td><td><code>sliders</code> + <code>setsliders</code> — N coordinate dials with a live Σxᵢ²</td></tr>
+<tr><td>a physics sim animated by hand</td><td>the physics kit’s integrated sims (spring, pendulum, orbits, …) run on a real solver</td></tr>
+</tbody>
+</table>
+</div>
+<p>Because they are just entities, you mix core and kit freely — this is the whole
+point of the language:</p>
+<pre><code class="language-manic">network(net, (600, 360), "4 6 3", "relu softmax");
+framebox(fb, net.hidden, 14);      // core box around a whole KIT layer (a group)
+brace(br, (720, 165), (720, 555), 26, right);
+surround(fb, net.output, 1.0);     // glide the box across, layer by layer
+pulse(net.output);                 // flash the prediction
+</code></pre>
+<p>The kit computes the <em>object</em>; the core gives you the <em>explanation</em>. See the
+<a href="ml.html">ML kit</a>, the <a href="3d.html">3D chapter</a>, and the <a href="kits.html">kits overview</a>.</p>
 <h2 id="where-to-go-next"><a class="header" href="#where-to-go-next">Where to go next</a></h2>
 <ul>
 <li><a href="ex-manim-vs.html"><strong>Coming from Manim</strong> gallery</a> — every scene above, runnable.</li>

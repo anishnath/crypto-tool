@@ -1,0 +1,59 @@
+// Circle area = πr², the LIMIT proof. Each stage is a fresh disc that is CUT into
+// N wedges and then ANIMATED — every wedge spins about its tip and slides into a
+// tip-to-tail strip. 4 → 8 → 16 → 32: with more wedges the humps shrink and the
+// strip flattens toward a πr × r rectangle. Area πr² all along.
+//
+// A disc cut into N equal sectors, alternated up/down, tessellates: consecutive
+// tips advance r·sin(π/N) and the up/down tip-lines sit r·cos(π/N) apart. Wedge k
+// starts at angle k·(360/N); to point up it spins to centre 270°, to point down 90°.
+// Everything is a `for` loop over those formulas — no hand-placed geometry.
+//
+//   manic examples/manim-vs/circle-area-proof.manic
+title("Area of a circle = πr²");
+canvas("16:9");
+template("black");
+
+text(hdr, (640, 66), "Cut a disc into wedges, re-lay them — flatter each time — Manic", 26);
+
+// ---- BUILD every stage's wedges as an assembled disc at (640,300), hidden -----
+let sw = 90.0;
+for k in 0..4  { sector(w4{k},  (640,300), 150, k*sw, sw); filled(w4{k});  hue(w4{k},  190 + (k - 2*floor(k/2))*140); tag(w4{k},  g4);  }
+let sw = 45.0;
+for k in 0..8  { sector(w8{k},  (640,300), 150, k*sw, sw); filled(w8{k});  hue(w8{k},  190 + (k - 2*floor(k/2))*140); tag(w8{k},  g8);  }
+let sw = 22.5;
+for k in 0..16 { sector(w16{k}, (640,300), 150, k*sw, sw); filled(w16{k}); hue(w16{k}, 190 + (k - 2*floor(k/2))*140); tag(w16{k}, g16); }
+let sw = 11.25;
+for k in 0..32 { sector(w32{k}, (640,300), 150, k*sw, sw); filled(w32{k}); hue(w32{k}, 190 + (k - 2*floor(k/2))*140); tag(w32{k}, g32); }
+
+hidden(g4); hidden(g8); hidden(g16); hidden(g32);
+text(cap, (640, 690), "", 24); hidden(cap);
+wait(0.3); show(cap);
+
+// ---- ANIMATE each stage: show the cut disc, then spin+slide into the strip ----
+// stage 4
+let half = 45.0; let ar = pi/4; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 3*adv/2;
+say(cap, "4 wedges — spin them up/down and slide them tip-to-tail.");
+show(g4, 0.6); wait(1.0);
+par { for k in 0..4  { move(w4{k},  (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.8, smooth); spin(w4{k},  270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.8); } }
+wait(1.6); fade(g4, 0.5);
+
+// stage 8
+let half = 22.5; let ar = pi/8; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 7*adv/2;
+say(cap, "8 wedges — flatter already.");
+show(g8, 0.6); wait(0.9);
+par { for k in 0..8  { move(w8{k},  (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.7, smooth); spin(w8{k},  270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.7); } }
+wait(1.5); fade(g8, 0.5);
+
+// stage 16
+let half = 11.25; let ar = pi/16; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 15*adv/2;
+say(cap, "16 wedges — the humps shrink.");
+show(g16, 0.6); wait(0.9);
+par { for k in 0..16 { move(w16{k}, (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.7, smooth); spin(w16{k}, 270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.7); } }
+wait(1.5); fade(g16, 0.5);
+
+// stage 32 — the limit
+let half = 5.625; let ar = pi/32; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 31*adv/2;
+say(cap, "32 wedges — a πr × r rectangle. Area = π r².");
+show(g32, 0.6); wait(0.9);
+par { for k in 0..32 { move(w32{k}, (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.7, smooth); spin(w32{k}, 270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.7); } }
+wait(2.6);

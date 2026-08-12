@@ -1,0 +1,41 @@
+// Three motion moves: `spiralin` reveals a group by spiralling its members into
+// place; `cycle` rotates positions along an arc (each slides to the next's spot);
+// `savestate` + `restore` remembers where each started and snaps it home. Shown on
+// two rows so each reads cleanly. Manim's SpiralIn / CyclicReplace / save_state + Restore.
+//
+//   manic examples/manim-vs/spiral-cycle-restore.manic
+title("Spiral in · cycle · restore");
+canvas("16:9");
+template("black");
+
+// top row — spiralin reveal
+circle(a1, (470, 210), 34); color(a1, cyan);
+circle(a2, (570, 210), 34); color(a2, lime);
+circle(a3, (670, 210), 34); color(a3, gold);
+circle(a4, (770, 210), 34); color(a4, magenta);
+tag(a1, top); tag(a2, top); tag(a3, top); tag(a4, top);
+
+// bottom row — cycle, then restore to home
+circle(b1, (500, 450), 40); color(b1, cyan);
+circle(b2, (640, 450), 40); color(b2, lime);
+circle(b3, (780, 450), 40); color(b3, gold);
+savestate(b1); savestate(b2); savestate(b3);   // remember each home
+
+text(narr, (640, 630), "Reveal, rearrange, return.", 22);
+hidden(narr);
+
+wait(0.4);
+show(narr);
+wait(1.2);
+
+say(narr, "spiralin — the top group spirals into place, staggered.");
+spiralin(top, 1.6);
+wait(1.4);
+
+say(narr, "cycle — each bottom dot slides to the next's spot along a 90° arc.");
+cycle(b1, b2, b3, 1.3, 90);
+wait(1.6);
+
+say(narr, "restore — savestate remembered home, so each snaps back.");
+par { restore(b1, 0.8); restore(b2, 0.8); restore(b3, 0.8); }
+wait(1.6);

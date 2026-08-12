@@ -1,0 +1,81 @@
+// ============================================================================
+//  How a neural network learns — the gradient, and gradient descent. 3Blue1Brown's
+//  "Gradient descent" segment (gradient.py), the full arc:
+//
+//    cost      — a network's cost is a function of MANY weights; picture it as a
+//                landscape over just two;
+//    partials  — to read ∂f/∂y, HOLD x constant → the surface slices to one curve,
+//                and its steepness IS the partial (slice3); likewise ∂f/∂x;
+//    gradient  — stack the two partials → ∇f, the direction of steepest ascent;
+//    descent   — to LEARN, step the other way: follow −∇f DOWNHILL until the ball
+//                settles in a valley — a minimum of the cost (descend3).
+//
+//  Narrated with captions (no character rigs). Every curve, slope, and step is
+//  computed from the real surface.
+// ============================================================================
+title("How a neural network learns: gradient descent");
+canvas("16:9");
+template("black");
+
+camera3((6, -8.5, 5.5), (0, 0, 0.7), 40);
+axes3(world, (0, 0, 0), 2.4);
+surface3(f, "exp(-x*x + cos(2*y))", (-2, 2), (-2, 2), 34);
+opacity(f, 0.42);
+
+slice3(sx, f, x, 0.6, 0.4, #ff3ea5);   // hold x → cross-section along y (∂f/∂y)
+slice3(sy, f, y, 0.4, 0.6, #ffb020);   // hold y → cross-section along x (∂f/∂x)
+gradient3(grad, f, 0.6, 0.4);
+descend3(desc, f, 0.7, 0.35, 0.25, 45, #7cff3e);
+
+equation(feq, (232, 96), `f(x,y)=e^{-x^2+\cos 2y}`, 28);
+equation(ceq, (232, 150), `\text{cost } C(w_1,\dots,w_n)`, 24); color(ceq, dim);
+equation(geq, (1040, 632), `\nabla f=\begin{bmatrix}\partial f/\partial x\\ \partial f/\partial y\end{bmatrix}`, 28);
+text(narr, (640, 668), "A network's cost is one number over millions of weights.", 24);
+
+hidden(sx); hidden(sx.slope);
+hidden(sy); hidden(sy.slope);
+hidden(grad); hidden(geq); hidden(narr);
+hidden(desc); hidden(desc.ball);
+untraced(desc); untraced(desc.ball);   // start un-drawn so the descent can roll on
+
+// A MOVIE camera runs concurrently with the story: it swings around and up so the
+// stacked slices + gradient are never hidden behind the peak, then drops low to
+// follow the ball rolling into the valley. (orbit3 composes in `par`.)
+par {
+  seq {
+    orbit3(-18, 26, 9.5, 5.0, smooth);   // establish: front-left, slightly high
+    orbit3(40, 36, 9.2, 6.5, smooth);    // swing right & rise to reveal the STACK
+    orbit3(62, 22, 8.4, 6.0, smooth);    // drop low, come round to watch the descent
+    orbit3(74, 24, 8.4, 4.5, smooth);    // settle on the valley
+  }
+  seq {
+    wait(0.5);
+    show(narr);
+    show(ceq);
+    wait(2.2);
+
+    say(narr, "Picture it as a landscape over just two of them.");
+    wait(2.0);
+
+    say(narr, "To read ∂f/∂y, hold x constant — that slices the surface to one curve.");
+    par { show(sx); show(sx.slope); }
+    wait(2.4);
+
+    say(narr, "Hold y constant instead, and this slice's steepness is ∂f/∂x.");
+    par { show(sy); show(sy.slope); }
+    wait(2.4);
+
+    say(narr, "Stack the two partials and you get the gradient — steepest ascent.");
+    par { show(grad); show(geq); }
+    wait(2.8);
+
+    say(narr, "To LEARN, step the other way: downhill, along −∇f.");
+    par { show(desc); show(desc.ball); }
+    par { draw(desc, 3.0); draw(desc.ball, 3.0); }   // the ball rolls, the trail draws
+    wait(0.6);
+
+    say(narr, "It rolls into a valley — a minimum of the cost. That is learning.");
+    pulse(desc.ball);
+    wait(2.6);
+  }
+}

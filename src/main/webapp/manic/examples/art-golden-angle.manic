@@ -1,0 +1,49 @@
+// The Golden Angle — why sunflowers spiral. 1600 seeds, each placed one turn of
+// 137.5° from the last (φ's angle), at radius √i. That single angle packs the
+// plane with no gaps and no seam — nudge it a fraction and spiral voids tear open.
+// Pure formula-driven `cloud`: angle = i·div, radius = √i.
+//
+//   manic examples/art-golden-angle.manic
+title("The Golden Angle — 137.5°");
+canvas("16:9");
+template("black");
+
+text(hdr, (640, 74), "The Golden Angle — Manic", 32);
+
+cloud(seeds, 1600) {
+  let g = 137.507;                                  // φ's angle: 360·(1 − 1/φ) degrees
+  // between t≈5 and t≈8 the divergence dips 0.7° off golden — watch gaps open
+  let bump = 0.25 * (1 + tanh((t - 5.0) * 2.4)) * (1 + tanh((8.0 - t) * 2.4));
+  let div = g - bump * 0.7;
+  let ang = i * div * 0.0174533;                     // degrees → radians
+  let rad = 7.3 * sqrt(i + 0.5);                      // √i spacing → uniform density
+  let x = 640 + rad * cos(ang);
+  let y = 392 + rad * sin(ang);
+  // bloom: seeds appear from the centre outward over the first ~3 s
+  let born = i / 1600;
+  let alpha = 0.5 * (1 + tanh((t - born * 3.0 - 0.4) * 4));
+  let hue = mod(48 - rad * 0.14, 360);               // gold core → magenta rim
+  let sat = 0.9;
+  let val = 0.62;                                     // <1 shows hue; glow re-brightens
+  let rnd = mod(sin(i * 17.1) * 43758.5453, 1);
+  let r = 2.9 + 1.4 * rnd;                            // round discs (>2.5px), size grain
+}
+
+// additive glow: overlapping seeds bloom into light — a lit sunflower head
+glow(seeds, 4);
+
+text(cap, (640, 700), "1600 seeds, each turned 137.5° from the last.", 22);
+hidden(cap);
+
+wait(0.8);
+show(cap);
+wait(2.6);
+
+say(cap, "The golden angle — φ's turn. Perfect packing, no seam.");
+wait(2.0);
+
+say(cap, "A fraction off, and spiral voids tear open…");
+wait(2.8);
+
+say(cap, "…only 137.5° fills the head without a gap.");
+wait(2.2);

@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-979a81e0.js";
+            window.path_to_searchindex_js = "searchindex-0e58da26.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b0bf7e39.js"></script>
@@ -599,8 +599,9 @@ begins. They take the entity name first, then a value:</p>
 <tr><td><code>gradient(id, c1, c2, ..., [mode])</code></td><td>multi-stop gradient: along a path stroke, a linear (angle°) / <code>radial</code> fill, or a computed <code>"speed"</code>/<code>"curvature"</code> quantity on strokes</td><td><code>gradient(wave, blue, cyan, gold, 270);</code></td></tr>
 <tr><td><code>size(id, n)</code></td><td>text size</td><td><code>size(cap, 30);</code></td></tr>
 <tr><td><code>glow(id, n)</code></td><td>neon halo strength</td><td><code>glow(sun, 8);</code></td></tr>
-<tr><td><code>opacity(id, 0..1)</code></td><td>transparency</td><td><code>opacity(sun, 0.5);</code></td></tr>
-<tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>turn fill / outline on</td><td><code>filled(box);</code></td></tr>
+<tr><td><code>opacity(id, 0..1, [layer])</code></td><td>transparency; add <code>fill</code> or <code>stroke</code> to set just <strong>that layer</strong>, independent of the other</td><td><code>opacity(box, 0.4, fill);</code></td></tr>
+<tr><td><code>filled(id)</code> / <code>outlined(id)</code></td><td>solid (fill on, rim off) / hollow (rim on, fill off)</td><td><code>outlined(box);</code></td></tr>
+<tr><td><code>outline(id, c)</code></td><td>set the <strong>rim</strong> colour (and turn the rim on) — does <strong>not</strong> drop the fill</td><td><code>outline(box, gold);</code></td></tr>
 <tr><td><code>hue(id, deg)</code></td><td>colour by an angle (0–360) — per-entity colour in loops</td><td><code>hue(seg, 200);</code></td></tr>
 <tr><td><code>z(id, n)</code></td><td>draw order (higher = on top)</td><td><code>z(box, 5);</code></td></tr>
 <tr><td><code>sticky(id)</code></td><td>pin to the screen so it stays put through a <code>cam</code>/<code>zoom</code> (a HUD)</td><td><code>sticky(caption);</code></td></tr>
@@ -612,11 +613,20 @@ begins. They take the entity name first, then a value:</p>
 “regions of interest.” A <code>filled</code> disc or sector sitting <em>on top of</em> axes and
 construction lines hides what’s underneath — even at low opacity. Reserve solid
 fills for backdrop wells <em>behind</em> the diagram, not overlays.</p>
-<p><code>circle</code> defaults to <strong>filled + outlined</strong> (neon UI). For math constructions
-always pair <code>outlined(id)</code> — <code>outline(id, color)</code> alone only recolors the rim
-and leaves the fill on. Contact points that land on crossings should be
-<strong>open / dashed rings</strong> (<code>outlined</code> + <code>dashed</code>), not <code>dot</code> — a solid marker
-paints over the intersection you are trying to show.</p>
+<p><code>circle</code> defaults to <strong>filled + outlined</strong>, with a soft slate rim (<code>#9AA6C9</code>)
+that reads cleanly over axes. For math constructions always pair <code>outlined(id)</code>
+— <code>outline(id, color)</code> alone only recolors the rim and leaves the fill on.
+Contact points that land on crossings should be <strong>open / dashed rings</strong>
+(<code>outlined</code> + <code>dashed</code>), not <code>dot</code> — a solid marker paints over the
+intersection you are trying to show.</p>
+</blockquote>
+<blockquote>
+<p><strong>A shape owns its fill and its rim separately.</strong> <code>color(id, c)</code> sets the fill,
+<code>outline(id, c)</code> sets the rim, and <code>opacity</code> can target <em>one</em> layer:
+<code>opacity(id, 0.4, fill)</code> gives a <strong>translucent interior under a crisp rim</strong> — a
+filled shape you can still see the construction through — while <code>opacity(id, v, stroke)</code> fades just the rim. On a <strong>hollow</strong> shape (<code>outlined</code>) the fill is off,
+so colour the visible ring with <code>outline</code>, not <code>color</code>. (Paths — <code>line</code>, <code>arrow</code>,
+<code>ellipse</code> — are stroke-only: <code>color</code> sets their stroke and there is no fill layer.)</p>
 </blockquote>
 <p>And two that decide <em>how a shape first appears</em>:</p>
 <div class="table-wrapper">
@@ -7874,11 +7884,25 @@ render instructions. Manic’s verbs — <code>show</code>, <code>draw</code>, <
 <tr><td><code>Dot</code> + <code>add_updater(move_to(c2p(t, f(t))))</code></td><td><code>mark(id, curve, x)</code> then <code>to(id, x, …)</code></td><td>A dot that rides a curve — no updater.</td></tr>
 <tr><td><code>always_redraw(Rectangle origin→(t, k/t))</code></td><td><code>boxto(id, curve, x)</code></td><td>Reactive inscribed rectangle; the constant-area demo in one line.</td></tr>
 <tr><td><code>MathTex("a","+","b")</code> (indexable)</td><td><code>mathparts(id, (x,y), </code> <code>`a`</code> <code>, </code> <code>`+`</code> <code>, </code> <code>`b`</code> <code>)</code></td><td>Auto-laid-out, baseline-aligned, addressable parts <code>{id}.0</code>, <code>{id}.1</code>, …</td></tr>
+<tr><td><code>Circle()</code> / <code>Square()</code> (a stroke-first ring)</td><td><code>circle(id, (x,y), r); outlined(id)</code></td><td><code>outlined</code> drops the fill → a ring; <code>filled</code> reverts. Manic’s default is a filled disc, so opt into the ring with <code>outlined</code>.</td></tr>
+<tr><td><code>circle.set_fill(PINK, opacity=0.5)</code></td><td><code>color(id, pink); opacity(id, 0.5, fill)</code></td><td><code>color</code> sets the fill colour; the <code>fill</code> layer word gives it its <strong>own</strong> opacity, independent of the rim.</td></tr>
+<tr><td><code>circle.set_stroke(BLUE, width=4, opacity=0.6)</code></td><td><code>outline(id, blue); stroke(id, 4); opacity(id, 0.6, stroke)</code></td><td>The <code>stroke</code>/<code>outline</code> layer word gives the rim its own opacity. On a hollow shape, colour the ring with <code>outline</code>, not <code>color</code>.</td></tr>
+<tr><td><code>self.play(Create(circle))</code></td><td><code>untraced(id); draw(id)</code></td><td>The shape draws itself on — the outline traces while the (translucent) fill washes in behind it. Same base-setter+verb idiom as <code>hidden</code>+<code>show</code>. See <code>examples/manim-vs/first-class-shapes.manic</code>.</td></tr>
 <tr><td><code>Write(text)</code></td><td><code>untraced(e); draw(e)</code></td><td>A left-to-right write-on wipe.</td></tr>
 <tr><td><code>SurroundingRectangle(term, buff=.1)</code></td><td><code>framebox(id, target, [buff])</code></td><td>Outlined box fitted to a target’s bbox + pad.</td></tr>
 <tr><td><code>ReplacementTransform(box1, box2)</code></td><td><code>surround(box, newTarget)</code></td><td>Glides + resizes the box to a new target — one verb, no second box.</td></tr>
+<tr><td><code>SpiralIn</code></td><td><code>spiralin(group)</code></td><td>Members spiral into place from a rotated, shrunken offset, staggered.</td></tr>
+<tr><td><code>mob.save_state()</code> / <code>Restore(mob)</code></td><td><code>savestate(id)</code> then <code>restore(id)</code></td><td>Snapshot a transform, animate back to it later.</td></tr>
+<tr><td><code>CyclicReplace</code> / <code>Swap</code></td><td><code>cycle(a, b, c, …, [dur], [arc°])</code></td><td>Each entity moves to the next’s position along an arc (default 90°).</td></tr>
+<tr><td><code>Clockwise</code> / <code>CounterclockwiseTransform</code></td><td><code>cycle(…, arc°)</code> (signed arc)</td><td>Points travel an oriented arc, set by the arc-degrees argument.</td></tr>
 <tr><td><code>Line(...).rotate(theta)</code> about a vertex</td><td><code>turn(point, vertex, degrees, dur)</code></td><td>Rotate a point about a pivot; attached arms/arcs follow.</td></tr>
 <tr><td><code>Angle(l1, l2)</code> + <code>add_updater</code></td><td><code>anglemark(id, a, b, c, ["θ"])</code></td><td>Reactive arc; optional label rides the bisector as the angle opens.</td></tr>
+<tr><td><code>Indicate</code> / <code>Flash</code></td><td><code>pulse(id)</code> / <code>flash(id)</code></td><td>Attention: a scale bump / a radial burst.</td></tr>
+<tr><td><code>Wiggle</code></td><td><code>wiggle(id)</code></td><td>Scale-pulse + oscillating rotation — the rotate cousin of <code>shake</code>.</td></tr>
+<tr><td><code>Circumscribe</code> / <code>CircleIndicate</code></td><td><code>circumscribe(id, [color])</code></td><td>A temporary outlined box drawn round the target, then faded — works on a group (tag) too.</td></tr>
+<tr><td><code>FocusOn</code></td><td><code>spotlight(id)</code></td><td>A translucent disc converges onto the target, then fades.</td></tr>
+<tr><td><code>Blink</code></td><td><code>blink(id)</code></td><td>Blink out-and-in twice.</td></tr>
+<tr><td><code>ShowPassingFlash</code> / <code>FlashAround</code></td><td><code>passflash(id, [color])</code></td><td>A luminous sliver travels the entity’s outline (closed shapes → light circles it).</td></tr>
 <tr><td><code>x = ValueTracker(0)</code> + <code>set_x</code> updater</td><td><code>slidex(id, x, dur)</code> / <code>slidey(id, y, dur)</code></td><td>Move one coordinate to an absolute value, keeping the other.</td></tr>
 <tr><td><code>VGroup(...).scale(1.4)</code></td><td><code>groupscale(tag, 1.4)</code></td><td>Scales about the group’s <strong>collective</strong> centroid.</td></tr>
 <tr><td><code>group.animate.shift(dest − group[i])</code></td><td><code>dock(tag, member, target)</code></td><td>Slides the group so one member lands on the target — no delta maths.</td></tr>
@@ -7886,9 +7910,11 @@ render instructions. Manic’s verbs — <code>show</code>, <code>draw</code>, <
 <tr><td><code>self.camera.frame.animate.move_to(dot)</code></td><td><code>followshot(id)</code></td><td>The 2D camera tracks an entity; <code>followshot(none)</code> releases.</td></tr>
 <tr><td><code>frame.animate.scale(0.5)</code></td><td><code>zoom(2, …)</code></td><td>⚠️ Inverted: Manim’s smaller frame = Manic’s <code>zoom &gt; 1</code>.</td></tr>
 <tr><td><code>ZoomedScene</code> + <code>activate_zooming()</code></td><td><code>loupe(id, (sx,sy), w, h, (dx,dy), mag)</code></td><td>A live magnifier: a frame over the scene + a panel showing that region enlarged.</td></tr>
+<tr><td><code>Homotopy</code> / <code>ApplyWave</code> / <code>ComplexHomotopy</code></td><td><code>deform(id, "u(x,y,t)", "v(x,y,t)")</code></td><td>Continuous homotopy — remap a shape’s outline points by <code>(u,v,t)</code> each frame; the animated twin of <code>warp</code>. Write <code>t=0</code> as the identity (<code>u=x</code>). A wave: <code>"y + 30*sin(x*0.04 + t*tau)*sin(pi*t)"</code>.</td></tr>
 <tr><td><code>self.play(a, b)</code> (parallel)</td><td><code>par { a; b; }</code></td><td>Run verbs together.</td></tr>
 <tr><td><code>self.wait(t)</code></td><td><code>wait(t)</code></td><td>Same.</td></tr>
 <tr><td><code>self.play(FadeIn/FadeOut)</code></td><td><code>show(id)</code> / <code>fade(id)</code></td><td>See the note on <code>hidden</code> below.</td></tr>
+<tr><td><code>GrowFromCenter</code> / <code>GrowFromEdge</code> / <code>GrowArrow</code> / <code>GrowFromPoint</code></td><td><code>hidden(id, from)</code> then <code>show(id)</code></td><td>The reveal <em>style</em> lives on <code>hidden</code> (like <code>untraced</code> arms <code>draw</code>): <code>from</code> = <code>center</code> | <code>up</code>/<code>down</code>/<code>left</code>/<code>right</code> (a bbox edge) | <code>tail</code> (an arrow’s start) | a point <code>(x,y)</code>. Scale-in from that anchor; omit <code>from</code> → fade-in.</td></tr>
 </tbody>
 </table>
 </div>
@@ -7919,6 +7945,41 @@ moment comes.</li>
 </ol>
 <p>If a Manim move isn’t in the table, check the <a href="#manic-api-reference">API reference</a> — Manic’s
 vocabulary is broad, and there’s usually a builtin that says it in one line.</p>
+<h2 id="beyond-the-core-domain-kits"><a class="header" href="#beyond-the-core-domain-kits">Beyond the core: domain kits</a></h2>
+<p>Here’s the biggest difference the table above doesn’t show. Manim is a <em>general</em>
+animation library: for a neural network you hand-build a <code>NetworkMobject</code> out of
+<code>Circle</code>s and <code>Line</code>s and fake the activations; for a slider you subclass
+<code>NumberLine</code>; for a gradient surface you wire up a <code>Surface</code> and animate the
+vectors yourself. (That is literally how the 3Blue1Brown neural-network,
+high-dimensions, and gradient-descent videos are made.)</p>
+<p>Manic ships <strong>kits</strong> that <em>compute</em> the object for you — the maths is real, not
+drawn — and because every kit object is an ordinary tagged entity, the core
+rhetoric (<code>framebox</code>, <code>brace</code>, <code>arrow</code>, <code>say</code>, <code>equation</code>, <code>pulse</code>) dresses it
+directly.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>You’d hand-build in Manim</th><th>A Manic kit gives you</th></tr>
+</thead>
+<tbody>
+<tr><td>a <code>NetworkMobject</code> of circles + edges, activations faked</td><td><code>network</code> + <code>forward</code> / <code>loss</code> / <code>backward</code> / <code>update</code> — a real feed-forward net with <strong>computed</strong> activations and gradients (large layers auto-abbreviate with <code>⋮</code>)</td></tr>
+<tr><td>an image <code>Mobject</code> + hand-wired lines to the input neurons</td><td><code>feed(net, digit)</code> — flattens a <code>tensor</code>/<code>digit</code> into the inputs and traces the lit strokes in</td></tr>
+<tr><td>a <code>Surface</code> + hand-animated gradient arrows</td><td><code>surface3</code> + <code>slice3</code> (the partial-derivative cross-section) + <code>gradient3</code> + <code>descend3</code> (a ball rolling down −∇f, with its trail)</td></tr>
+<tr><td>a rack of <code>NumberLine</code>s for a high-dimensional point</td><td><code>sliders</code> + <code>setsliders</code> — N coordinate dials with a live Σxᵢ²</td></tr>
+<tr><td>a physics sim animated by hand</td><td>the physics kit’s integrated sims (spring, pendulum, orbits, …) run on a real solver</td></tr>
+</tbody>
+</table>
+</div>
+<p>Because they are just entities, you mix core and kit freely — this is the whole
+point of the language:</p>
+<pre><code class="language-manic">network(net, (600, 360), "4 6 3", "relu softmax");
+framebox(fb, net.hidden, 14);      // core box around a whole KIT layer (a group)
+brace(br, (720, 165), (720, 555), 26, right);
+surround(fb, net.output, 1.0);     // glide the box across, layer by layer
+pulse(net.output);                 // flash the prediction
+</code></pre>
+<p>The kit computes the <em>object</em>; the core gives you the <em>explanation</em>. See the
+<a href="#machine-learning--models-made-visible">ML kit</a>, the <a href="#going-3d">3D chapter</a>, and the <a href="#kits--domain-knowledge-ordinary-manic-composition">kits overview</a>.</p>
 <h2 id="where-to-go-next"><a class="header" href="#where-to-go-next">Where to go next</a></h2>
 <ul>
 <li><a href="#coming-from-manim"><strong>Coming from Manim</strong> gallery</a> — every scene above, runnable.</li>
@@ -7943,14 +8004,14 @@ vocabulary is broad, and there’s usually a builtin that says it in one line.</
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 11 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 68 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 73 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
 <li><a href="#3d-scenes">3D scenes</a> — 51 examples</li>
 <li><a href="#diagrams">Diagrams</a> — 24 examples</li>
-<li><a href="#coming-from-manim">Coming from Manim</a> — 12 examples</li>
-<li><a href="#3blue1brown-reproduced">3Blue1Brown, reproduced</a> — 11 examples</li>
+<li><a href="#coming-from-manim">Coming from Manim</a> — 18 examples</li>
+<li><a href="#3blue1brown-reproduced">3Blue1Brown, reproduced</a> — 14 examples</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="algorithms--data-structures"><a class="header" href="#algorithms--data-structures">Algorithms &amp; data structures</a></h1>
@@ -22259,6 +22320,235 @@ wait(1.0);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="art-golden-angle"><a class="header" href="#art-golden-angle">art-golden-angle</a></h2>
+<p>The golden angle as glowing particle art: 1600 seeds bloom from the centre (<code>angle = i·137.5°</code>, <code>radius = √i</code>) into a sunflower. Nudge the divergence a fraction off φ and spiral voids tear open — only 137.5° packs the head seamlessly. Pure <code>cloud</code>, additive <code>glow</code>.</p>
+<pre><code class="language-manic">// The Golden Angle — why sunflowers spiral. 1600 seeds, each placed one turn of
+// 137.5° from the last (φ's angle), at radius √i. That single angle packs the
+// plane with no gaps and no seam — nudge it a fraction and spiral voids tear open.
+// Pure formula-driven `cloud`: angle = i·div, radius = √i.
+//
+//   manic examples/art-golden-angle.manic
+title("The Golden Angle — 137.5°");
+canvas("16:9");
+template("black");
+
+text(hdr, (640, 74), "The Golden Angle — Manic", 32);
+
+cloud(seeds, 1600) {
+  let g = 137.507;                                  // φ's angle: 360·(1 − 1/φ) degrees
+  // between t≈5 and t≈8 the divergence dips 0.7° off golden — watch gaps open
+  let bump = 0.25 * (1 + tanh((t - 5.0) * 2.4)) * (1 + tanh((8.0 - t) * 2.4));
+  let div = g - bump * 0.7;
+  let ang = i * div * 0.0174533;                     // degrees → radians
+  let rad = 7.3 * sqrt(i + 0.5);                      // √i spacing → uniform density
+  let x = 640 + rad * cos(ang);
+  let y = 392 + rad * sin(ang);
+  // bloom: seeds appear from the centre outward over the first ~3 s
+  let born = i / 1600;
+  let alpha = 0.5 * (1 + tanh((t - born * 3.0 - 0.4) * 4));
+  let hue = mod(48 - rad * 0.14, 360);               // gold core → magenta rim
+  let sat = 0.9;
+  let val = 0.62;                                     // &lt;1 shows hue; glow re-brightens
+  let rnd = mod(sin(i * 17.1) * 43758.5453, 1);
+  let r = 2.9 + 1.4 * rnd;                            // round discs (&gt;2.5px), size grain
+}
+
+// additive glow: overlapping seeds bloom into light — a lit sunflower head
+glow(seeds, 4);
+
+text(cap, (640, 700), "1600 seeds, each turned 137.5° from the last.", 22);
+hidden(cap);
+
+wait(0.8);
+show(cap);
+wait(2.6);
+
+say(cap, "The golden angle — φ's turn. Perfect packing, no seam.");
+wait(2.0);
+
+say(cap, "A fraction off, and spiral voids tear open…");
+wait(2.8);
+
+say(cap, "…only 137.5° fills the head without a gap.");
+wait(2.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/DCYwGMK3-qg" title="The Golden Angle 137.5° — Why Sunflowers Spiral, as Particle Art — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="art-circle-area-proof"><a class="header" href="#art-circle-area-proof">art-circle-area-proof</a></h2>
+<p>Area = πr² as a SWARM: the same particles fill a disc, then flow into a parallelogram of the same area whose scalloped wedge-edges refine and flatten toward a rectangle (the limit). Nothing is added or removed — the conserved count IS the proof.</p>
+<pre><code class="language-manic">// Area = πr², as a SWARM — and the LIMIT that finishes the proof.
+// The same particles fill a disc, flow into a lumpy wedge-strip, then the humps
+// MULTIPLY and FLATTEN (4 → 8 → 16 wedges …) until the edge is straight: a
+// πr × r rectangle. Nothing is added or removed — the count is the area (πr²),
+// conserved the whole way. One `cloud`, all formula-driven.
+//
+//   manic examples/art-circle-area-proof.manic
+title("Area of a circle = πr²");
+canvas("16:9");
+template("black");
+
+// on-screen heading, top-centre, held throughout
+text(hdr, (640, 74), "Circle Area of Proof — Manic", 32);
+
+cloud(swarm, 3200) {
+  // ---- uniform grid index → (fx, fy) in the unit square ---------------------
+  let cols = 80;
+  let ci = mod(i, cols);
+  let ri = (i - ci) / cols;              // integer row 0..39
+  let fx = ci / 79;                       // 0..1 across the width
+  let fy = ri / 39;                       // 0..1 top → bottom
+  // a little hash jitter so the grid reads as a filled field, not a lattice
+  let jx = (mod(sin(i * 12.9898) * 43758.5453, 1) - 0.5) * 7;
+  let jy = (mod(sin(i * 78.2330) * 43758.5453, 1) - 0.5) * 7;
+
+  // ---- destination: a parallelogram with SCALLOPED (wedge) edges ------------
+  let wdt = 565; let hlf = 90;            // base πr ≈ 565, height r = 180
+  let x0 = 313; let yc = 340; let slnt = 90;
+  // refinement s: 0 (few coarse wedges) → 1 (many fine wedges → rectangle)
+  let s = 0.5 * (1 + tanh((t - 5.6) * 0.7));
+  let nh = 2 + 6 * s;                      // humps per edge: 2 → 8
+  let amp = 48 * (1 - s) + 2;              // hump depth: 50 → 2 (flattens)
+  let wv = amp * cos(6.2831853 * nh * fx);
+  let topE = yc - hlf - wv;               // top edge bulges up at the humps
+  let botE = yc + hlf + wv;               // bottom edge bulges down
+  let sx = x0 + fx * wdt + (1 - fy) * slnt + jx;
+  let sy = topE + fy * (botE - topE) + jy;
+
+  // ---- start: a uniform disc of the SAME area (golden-angle sunflower) ------
+  let gr = sqrt((i + 0.5) / 3200);
+  let ang = i * 2.399963;
+  let dx = 640 + 180 * gr * cos(ang);
+  let dy = 340 + 180 * gr * sin(ang);
+
+  // ---- blend disc → strip, then the strip refines to a rectangle ------------
+  let b = 0.5 * (1 + tanh((t - 3.2) * 1.1));
+  let x = dx * (1 - b) + sx * b;
+  let y = dy * (1 - b) + sy * b;
+
+  let hue = mod(330 - gr * 140, 360);      // Manic neon: magenta core → cyan rim
+  let sat = 0.9;
+  let val = 0.6;                           // &lt;1 shows the hue; additive glow re-brightens overlaps
+  // varied radius &gt; 2.5px → true ROUND discs (≤2.5px render as squares), with size grain
+  let rnd = mod(sin(i * 91.7) * 43758.5453, 1);
+  let r = 2.8 + 2.2 * rnd;
+}
+
+// additive glow: dense/overlapping points accumulate into light — soft nebula cores
+glow(swarm, 4);
+
+text(cap, (640, 630), "π r² particles — a disc's worth.", 24);
+hidden(cap);
+
+wait(0.6);
+show(cap);
+wait(1.8);
+
+say(cap, "Cut into wedges and re-lay them — a lumpy strip.");
+wait(2.2);
+
+say(cap, "More wedges, finer and finer — the humps flatten…");
+wait(2.6);
+
+say(cap, "…in the limit, a πr × r rectangle. Area = π r².");
+wait(2.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RLUzSfLZ-2k" title="Area of a Circle = πr² — a Particle-Swarm Proof (Disc → Rectangle) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="art-calculus-sine"><a class="header" href="#art-calculus-sine">art-calculus-sine</a></h2>
+<p>Sine, its derivative, its Riemann area and a riding tangent — five index-partitioned particle families in one <code>cloud</code>, cross-faded in beats. Thick glowing wave-ribbons with bright cores over a particle coordinate-grid: the swarm is the subject, not a plotted line.</p>
+<pre><code class="language-manic">// Sine, its derivative, its Riemann area &amp; a riding tangent — all PARTICLE ART.
+// 12000 dots in five families, one formula, no plot/coords/riemann built-ins:
+//   0  SINE ribbon         (cyan)   — a thick glowing wave-swarm
+//   1  COSINE ribbon        (gold)   — the derivative, cos x = the slope
+//   2  coordinate GRID      (faint)  — the x/y plane in dots
+//   3  RIEMANN columns      (magenta)— particles fill the strips under the wave
+//   4  riding TANGENT swarm  (white)  — a line that tilts to cos x as it sweeps
+// The families CROSS-FADE in beats so each idea reads on its own, then a finale.
+//
+//   manic examples/art-calculus-sine.manic
+title("Sine · derivative · area");
+canvas("16:9");
+template("black");
+
+text(hdr, (640, 70), "Sine · its Derivative · its Area — Manic", 30);
+
+cloud(field, 12000) {
+  let g = floor(i / 2400);                       // family 0..4
+  let m0 = clamp(1 - max(g,   -g),   0, 1);
+  let m1 = clamp(1 - max(g-1, 1-g),  0, 1);
+  let m2 = clamp(1 - max(g-2, 2-g),  0, 1);
+  let m3 = clamp(1 - max(g-3, 3-g),  0, 1);
+  let m4 = clamp(1 - max(g-4, 4-g),  0, 1);
+  let li = mod(i, 2400);
+  let loc = li / 2399;
+
+  let ox = 640; let oy = 384;
+  let sx = 92; let sy = 118;
+  let mx = (loc * 2 - 1) * 3.14159;              // math x ∈ [-π, π]
+  let ph = mx + t * 0.9;                          // the wave travels (gentle)
+  let sp = rand(i) + rand(i + 4051) - 1;          // -1..1, dense near 0
+  let asp = max(sp, -sp);
+
+  // 0/1 — thick sine &amp; cosine ribbons
+  let wvX  = ox + mx * sx;
+  let sinY = oy - (sin(ph) + sp * 0.24) * sy;
+  let cosY = oy - (cos(ph) + sp * 0.24) * sy;
+
+  // 2 — faint particle grid
+  let gridX = ox + (mod(li, 52) / 51 * 2 - 1) * 320;
+  let gridY = oy - (floor(li / 52) / 51 * 2 - 1) * 178;
+
+  // 3 — Riemann columns: 16 strips, particles fill axis → sin height (signed)
+  let bi = floor(loc * 16);
+  let barMX = 0.0 - 3.14159 + (bi + 0.5) / 16 * 6.28318;
+  let barH = sin(barMX + t * 0.9);
+  let rmX = ox + barMX * sx + (rand(i + 11) - 0.5) * (6.28318 / 16 * sx * 0.78);
+  let rmY = oy - rand(i + 23) * barH * sy;
+
+  // 4 — a tangent line that sweeps and tilts to the slope cos(x0)
+  let x0 = 0.0 - 2.3 + mod(t * 0.4, 1) * 4.6;
+  let ss = (loc * 2 - 1) * 0.9;
+  let tanH = sin(x0 + t * 0.9) + cos(x0 + t * 0.9) * ss;   // value + slope·offset
+  let tgX = ox + (x0 + ss) * sx;
+  let tgY = oy - tanH * sy + (rand(i + 77) - 0.5) * 8;
+
+  let x = (m0 + m1) * wvX + m2 * gridX + m3 * rmX + m4 * tgX;
+  let y = m0 * sinY + m1 * cosY + m2 * gridY + m3 * rmY + m4 * tgY;
+
+  // ---- beats: each idea rises, then clears for the next ----------------------
+  let rmA = clamp((t - 4.5) * 1.0, 0, 1) * clamp((10.0 - t) * 1.0, 0, 1); // area 4.5–10
+  let tgA = clamp((t - 9.5) * 1.0, 0, 1);                                 // tangent 9.5→end
+  let cosDim = 1 - 0.55 * rmA;                    // derivative steps back while area shows
+
+  let hue = m0 * 192 + m1 * 46 + m2 * 210 + m3 * 328 + m4 * 50;
+  let sat = m0 * 1.0 + m1 * 1.0 + m2 * 0.3 + m3 * 0.8 + m4 * 0.3;
+  let core = 0.5 * (1 - 0.7 * asp);
+  let val = m0 * core + m1 * core + m2 * 0.14 + m3 * 0.32 + m4 * 0.75;
+  let alpha = m0 * 1.0 + m1 * cosDim + m2 * 0.45 + m3 * rmA * 0.8 + m4 * tgA;
+  let r = m2 * 1.8 + (m0 + m1) * (2.4 + rand(i + 88))
+        + m3 * (2.2 + rand(i + 5)) + m4 * (2.7 + rand(i + 9));
+}
+
+glow(field, 2);
+
+text(cap, (640, 700), "cyan sin x   ·   gold cos x — its slope.", 22);
+hidden(cap);
+
+wait(1.0);
+show(cap);
+wait(3.4);
+
+say(cap, "Riemann strips — the area under the wave, in dots.");
+wait(5.0);
+
+say(cap, "The sum clears; a tangent rides — its tilt IS cos x.");
+wait(4.0);
+
+say(cap, "A function, its slope, its area — one swarm.");
+wait(3.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/gqi8A5NIWQc" title="Sine, its Derivative & its Area — Calculus as Glowing Particle Art — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="exponential-shells"><a class="header" href="#exponential-shells">exponential-shells</a></h2>
 <p>A living <strong>de Sitter volume</strong> — ∭ a(t) ∝ e^{Ht} rendered as ~320,000 points of light. A grainy
 multicolour spherical CAP meets a family of exponentially-growing spherical SHELLS tangent at a
@@ -24925,6 +25215,200 @@ show(lab);
 wait(25);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/nitUXhxOaoc" title="Generative Particle Art — Two Koi from One Formula — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="glsl-medusae-glow"><a class="header" href="#glsl-medusae-glow">glsl-medusae-glow</a></h2>
+<p>Two ‘one formula’ pieces sharing a frame: a raw <code>glsl</code> glow field draws bioluminescent medusae as
+pure inverse-square LIGHT traced along an epicycle (no geometry — every pixel just sums its distance
+to the glowing thread), with an HDR tone-map so the cores bloom instead of clipping; above it, the
+koi <code>cloud</code> swims. A particle system and a per-pixel field on one stage, both pure in (i, t).</p>
+<pre><code class="language-manic">// glsl-medusae-glow — four bioluminescent medusae drawn as pure LIGHT. Each is a
+// two-frequency (epicyclic) orbit; we trace 55 time-lagged beads along it and add
+// inverse-square glow, so the filament reads as a bright creature trailing into the
+// dark. No geometry, no particles — every pixel just asks "how close am I to each
+// glowing thread?" and sums the light. Runs on manic's raw glsl() path (Shadertoy
+// mainImage, iTime/iResolution) — pure in (pixel, time), so it scrubs and records.
+//
+// Our take on the classic compact glow-medusae shader: the epicycle + inverse-square
+// core is kept exactly; the elevation is honest post — a faint deep-sea backing and a
+// tone-map so the cores bloom softly instead of clipping to flat white.
+//
+//   manic examples/glsl-medusae-glow.manic
+title("Koi through a field of living light");
+canvas("16:9");
+template("black");
+
+glsl(field, `
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec2  r = iResolution.xy;
+    float t = iTime;
+
+    // aspect-correct coords, centre pushed to the LOWER third so the koi above
+    // has clear space (y runs about -0.66 .. +0.34 top to bottom here)
+    vec2 u = (fragCoord - vec2(0.5, 0.34) * r) / r.y;
+
+    vec3 col = vec3(0.0);
+
+    // four medusae — each its own hue, speed, and inner/outer frequency ratio
+    for (float j = 0.0; j &lt; 4.0; j++) {
+        float s = 1.0 + j;                                  // base angular speed
+        float k = 2.0 + j;                                  // small-loop frequency ratio
+        vec3  h = 0.5 + 0.5 * cos(j * 9.0 + vec3(1.0, 2.0, 3.0)); // per-medusa hue
+
+        // nearest squared distance from this pixel to the glowing filament
+        float d = 1e9;
+        for (float i = 0.0; i &lt; 55.0; i++) {
+            float e = t * 0.5 - i * 0.03;                   // time-lagged phase down the trail
+            vec2  b = vec2(cos(e * s),     sin(e * s))     * 0.10   // large epicycle
+                    + vec2(cos(e * s * k), sin(e * s * k)) * 0.04;  // small epicycle
+            d = min(d, dot(u - b, u - b));
+        }
+
+        // inverse-square light: a bright thread with a soft, wide halo
+        col += h * 3e-5 / (d + 5e-9);
+    }
+
+    // --- our elevation: honest post, same field underneath ---
+    col += vec3(0.010, 0.028, 0.060) * (1.0 - length(u) * 0.6); // deep-sea backing
+    col  = 1.0 - exp(-col * 1.2);                               // HDR bloom, cores don't clip
+    col  = pow(col, vec3(0.85));                                // gentle gamma lift
+
+    fragColor = vec4(col, 1.0);
+}
+`);
+
+// ---- the koi: 10,000 points in two layers (mod i,2) swirl into koi chasing each
+// other, from cloud-koi. A polar plot (radius q, angle c). Same formula as the
+// standalone piece — only recentred + rescaled for this 16:9 stage — so the fish
+// swim THROUGH the glow field above. Pure in (i, t); it scrubs and records.
+cloud(koi, 10000, #ffffff, 0.6) {
+  let s = i/790;
+  let m = 0;                                       // one koi is enough (was mod i,2 = two)
+  let sw = 0.5*(1 + sign(8 - s));                 // (y&lt;8 ? … : …)
+  let scr = noise(s*2, 0);                         // ~ the JS y^9 XOR scramble
+  let kbase = sw*(9 + scr*6) + (1 - sw)*(4 + cos(s));
+  let k = kbase * cos(i + t/4);
+  let e = s/3 - 13;
+  let d = hypot(k, e) + cos(e + t*2 + m*4);
+  let q = s*k/5*(2 + sin(d*2 + s - t*4)) + 80;
+  let c = d/4 - t/2 + m*3;
+  let px = q*cos(c);
+  let py = q*sin(c) + d*9 - 130;                   // recentre the d*9+60 offset
+  let grow = tanh(t*0.5 + 0.12);
+  let x = 640 + px * 1.3 * grow;                   // 16:9 stage: koi in the UPPER half…
+  let y = 285 + py * 1.3 * grow;                   // …with the glow core sitting clear in the lower third
+  let hue = mod(m*90 + i*0.03 + t*14, 360);
+}
+
+// ---- textbook annotations (kept off the glow, backed for legibility) ----
+caption(head, "Koi through a field of living light", (640, 66), 30);
+plate(head);
+caption(sub, "two formulas, no simulation — a glow field and a koi cloud", (640, 112), 20);
+plate(sub);
+hidden(head);
+hidden(sub);
+
+equation(eq, (640, 636), `b(e)=0.1\,(\cos es,\sin es)+0.04\,(\cos esk,\sin esk)`, 26);
+plate(eq);
+caption(lab, "medusae: light traced along an epicycle · koi: 10,000 polar points", (640, 682), 18);
+plate(lab);
+hidden(eq);
+hidden(lab);
+
+// let the field breathe, then bring the story in over it
+wait(2.0);
+show(head);
+wait(1.6);
+show(sub);
+wait(3.0);
+show(eq);
+show(lab);
+wait(18);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4rnY_1VHJBs" title="Bioluminescent Medusae from Pure Light — a GLSL Glow Shader + a Koi Cloud in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="glsl-fractal-nebula"><a class="header" href="#glsl-fractal-nebula">glsl-fractal-nebula</a></h2>
+<p>A twigl-style 3D fractal fold as a soft gold dawn with blue frost-ferns (raw <code>glsl</code>, accumulated
+into a LOCAL vec3 — the <code>o.rgb +=</code> in-loop idiom miscompiles on Metal), and a murmuration <code>cloud</code>
+sweeping across it: a per-pixel field and a particle system sharing one frame, both pure in (i, t).</p>
+<pre><code class="language-manic">// glsl-fractal-nebula — a twigl-style 3D fractal fold as a soft gold dawn field
+// with blue frost-ferns (raw `glsl`, accumulated into a LOCAL vec3 — the `o.rgb +=`
+// in-loop idiom miscompiles on the Metal backend), and a murmuration `cloud`
+// sweeping across it: a per-pixel field and a particle system sharing one frame.
+// Both pure in (pixel/i, t), so the whole scene scrubs and records.
+//
+//   manic examples/glsl-fractal-nebula.manic
+title("A fractal dawn, and a murmuration");
+canvas("16:9");
+template("black");
+
+glsl(scene, `
+mat3 rotate3D(float angle, vec3 axis){
+    axis = normalize(axis);
+    float s = sin(angle), c = cos(angle), oc = 1.0 - c;
+    return mat3(
+        oc*axis.x*axis.x + c,        oc*axis.x*axis.y - axis.z*s, oc*axis.z*axis.x + axis.y*s,
+        oc*axis.x*axis.y + axis.z*s, oc*axis.y*axis.y + c,        oc*axis.y*axis.z - axis.x*s,
+        oc*axis.z*axis.x - axis.y*s, oc*axis.y*axis.z + axis.x*s, oc*axis.z*axis.z + c
+    );
+}
+vec3 hsv(float h, float s, float v){
+    vec3 rgb = clamp(abs(mod(h*6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+    return v * mix(vec3(1.0), rgb, s);
+}
+
+void mainImage(out vec4 o, in vec2 FC){
+    vec2  r = iResolution.xy;
+    float t = iTime;
+
+    vec3  col = vec3(0.0);            // accumulate here, not into o
+    float i = 0., g = 0., e = 0., s = 0.;
+    for(int n = 0; n &lt; 98; n++){
+        i += 1.0;
+        vec3 p = vec3((FC.xy-.5*r)/r.y*5. + vec2(0,9), g)
+               * rotate3D(-1.1 - cos(t*.15)*.1, vec3(1, 11.+sin(t)*.15, -1.5));
+        s = 2.;
+        for(int j = 0; j &lt; 19; j++){
+            s *= e = 7.1/dot(p, p*.51);
+            p = vec3(.08,4,-1) - abs(abs(p)*e - vec3(3,4,3));
+        }
+        g += p.y/s;
+        s = log2(s)/exp(e);
+        col += .01 - hsv(.1, g*.016 - e*.3, s/2e2);   // original's o.rgb += …, into the local
+    }
+
+    o = vec4(col, 1.0);
+}
+`);
+
+// a murmuration sweeping across the still dawn field — a cohesive blob of birds
+// (golden-angle scatter, denser core) whose centre sweeps a path, stretched along
+// motion and banked into each turn, breathing organically. Pure in (i, t).
+cloud(flock, 9000, #e8f6ff, 0.8) {
+  let s = i/9000;                              // 0..1 through the flock
+  let ang = i*2.39996;                         // golden-angle scatter
+  let rad = sqrt(s);                           // wispy toward the edge
+  let sw = ang + rad*3*sin(t*0.5) + t*0.6;     // the interior swirls (shape-shifting)
+  let taper = 1 - 0.45*s;                      // tail thins out
+  let ex = rad*cos(sw)*235*taper;              // elongated along motion…
+  let ey = rad*sin(sw)*88*taper;               // …narrower across
+  let turb = 70*rad*rad;                       // tendrils: turbulence grows at the edge
+  let bx = ex + turb*sin(i*0.7 + t*2.2);
+  let by = ey + turb*cos(i*0.9 + t*1.9);
+  let phase = t*0.45;
+  let cx = 640 + 330*sin(phase);               // the flock sweeps left↔right…
+  let cy = 250 + 80*sin(phase*1.6 + 0.7);      // …rising and dipping
+  let bank = 0.6*cos(phase);                   // and banks into each turn
+  let rx = bx*cos(bank) - by*sin(bank);
+  let ry = bx*sin(bank) + by*cos(bank);
+  let grow = tanh(t*0.6 + 0.1);
+  let x = cx + rx*grow;
+  let y = cy + ry*grow;
+  let hue = mod(210 + s*14 + t*5, 360);
+}
+
+wait(12);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/6CyNb1OMI9k" title="A Fractal Dawn & a Murmuration — a GLSL Fractal Field + a Particle Cloud in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="cloud-feathers"><a class="header" href="#cloud-feathers">cloud-feathers</a></h2>
 <p>Another @yuruyurau art-tweet in ONE <code>cloud</code>: 20,000 points in FOUR layers (<code>mod(i,4)</code>) fan into
@@ -39900,6 +40384,327 @@ wait(0.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/VXt0mCl2PZE" title="A Live Magnifier / Loupe That Tracks the Scene — Manim ZoomedScene in manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="deform-homotopy"><a class="header" href="#deform-homotopy">deform-homotopy</a></h2>
+<p><code>deform</code> — a continuous homotopy: over its duration it remaps a shape’s outline by <code>(u(x,y,t), v(x,y,t))</code> each frame. A wave ripples through a circle, then a twist shears a square and unwinds — Manim’s <code>Homotopy</code>/<code>ApplyWave</code>/<code>ComplexHomotopy</code> in one verb (the animated twin of <code>warp</code>).</p>
+<pre><code class="language-manic">// deform — a continuous homotopy: over its duration, `deform` animates t: 0→1 and
+// remaps an entity's outline points by (u(x,y,t), v(x,y,t)) every frame. Manim's
+// `Homotopy` / `ApplyWave` / `ComplexHomotopy` in one verb (the animated twin of
+// the static `warp`). Write t=0 as the identity (`u=x`, `v=y`) for a clean start.
+//
+//   manic examples/deform-homotopy.manic
+title("Deform — a continuous homotopy");
+canvas("16:9");
+template("black");
+
+circle(ring, (380, 330), 140); color(ring, cyan);
+rect(box, (940, 330), 230, 230); color(box, gold);
+text(narr, (640, 636), "One verb, any point-map of (x, y, t).", 24);
+
+wait(0.6);
+
+say(narr, "A wave ripples through a shape — v = y + amp·sin(x·k + t)·sin(π·t).");
+deform(ring, "x", "y + 34*sin(x*0.05 + t*9)*sin(3.14159*t)", 2.8, smooth);
+wait(1.6);
+
+say(narr, "A twist — shear that grows from centre, then unwinds. Same verb.");
+deform(box, "x + (y-330)*0.45*sin(3.14159*t)", "y - (x-940)*0.45*sin(3.14159*t)", 2.8, smooth);
+wait(2.0);
+
+say(narr, "Author the identity at t=0, and any continuous deformation follows.");
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/azwvZs9SEG4" title="Continuous Homotopy — a Wave & a Twist Through a Shape (Manim ApplyWave) in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="first-class-shapes"><a class="header" href="#first-class-shapes">first-class-shapes</a></h2>
+<p>Every core shape owns its FILL and its OUTLINE — each with its own colour and opacity — and DRAWS ITSELF ON. Circle, rect, polygon, ellipse, line, arrow: solid, hollow (<code>outlined</code>), or a translucent fill under a crisp rim (<code>opacity(id, v, fill)</code>), each revealed with <code>untraced</code>+<code>draw</code> — Manim’s stylable Mobject + <code>Create</code>, native.</p>
+<pre><code class="language-manic">// First-class shapes — EVERY core Manic shape owns its FILL and its OUTLINE (each
+// its own colour + opacity) and DRAWS ITSELF ON. Not just circles: rect, polygon,
+// ellipse, line, arrow — all the same first-class treatment. All native Manic: the
+// ctors are unchanged, style is the usual t=0 modifiers, the reveal is untraced+draw.
+//
+//   color(id, c)         → the FILL colour       outline(id, c) → the RING colour
+//   opacity(id, v, fill) → the FILL opacity      opacity(id, v, stroke) → the RING opacity
+//   outlined(id)         → hollow (fill off)     filled(id) → solid (fill on)
+//   untraced(id); draw(id) → the shape draws itself on (Manim's Create)
+//
+// Closed shapes (circle/rect/polygon/ellipse) have a fill you can make translucent
+// or drop; open paths (line/arrow) are stroke-only but still draw themselves on.
+//
+//   manic examples/manim-vs/first-class-shapes.manic
+title("First-class shapes");
+canvas("16:9");
+template("black");
+
+// ── closed shapes: fill + outline, three postures ───────────────────────────
+// SOLID filled — draws on, fill washes in behind the pen.
+circle(cc, (220, 250), 72); color(cc, cyan);
+untraced(cc);
+
+// HOLLOW ring — outlined() drops the fill; outline() colours the ring.
+rect(rc, (490, 250), 160, 120); outline(rc, gold); outlined(rc);
+untraced(rc);
+
+// TRANSLUCENT fill under a crisp rim — opacity(id,v,fill) touches only the interior.
+polygon(tri, (720, 185), (802, 320), (638, 320)); color(tri, magenta); outline(tri, white);
+opacity(tri, 0.45, fill); opacity(tri, 1.0, stroke);
+untraced(tri);
+
+// ELLIPSE is a stroke-only curve (no fill layer), so `color` sets its stroke — a
+// naturally hollow conic. Draws on like any path.
+ellipse(el, (1010, 250), 96, 60, 0); color(el, lime); stroke(el, 3);
+untraced(el);
+
+// ── open paths: stroke-only, but they draw on too ───────────────────────────
+line(seg, (170, 470), (440, 470)); color(seg, cyan); stroke(seg, 3);
+untraced(seg);
+
+arrow(arw, (560, 510), (860, 430)); color(arw, gold);
+untraced(arw);
+
+text(cap, (640, 610), "every shape owns its fill + outline, and draws itself on", 22);
+hidden(cap);
+
+// ── timeline: verbs only. Watch each shape create. ──────────────────────────
+wait(0.4);
+show(cap);
+wait(0.8);
+
+say(cap, "Closed shapes: solid, hollow, translucent fill — each drawn on.");
+draw(cc);
+wait(0.5);
+draw(rc);
+wait(0.5);
+draw(tri);
+wait(0.5);
+draw(el);
+wait(1.2);
+
+say(cap, "Open paths draw on too — a line, an arrow.");
+par { draw(seg); draw(arw); }
+wait(1.2);
+
+// once drawn they're ordinary styled shapes — every verb still works (kit rule).
+say(cap, "Then the usual verbs keep working — pulse, flash.");
+par { pulse(tri); flash(cc); }
+wait(1.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/9-Duuab0zFE" title="First-Class Shapes — Per-Layer Fill, Outline & Translucency, Drawn On (Manim Create) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="show-styles"><a class="header" href="#show-styles">show-styles</a></h2>
+<p>The reveal family on one page: a plain <code>show</code> fade-in, a grow-in from an anchor (<code>hidden(id, from)</code> → <code>show</code>), and a pen <code>draw</code>-on (<code>untraced</code>+<code>draw</code>) — how a shape first appears is a base-setter + verb pair, not a special effect.</p>
+<pre><code class="language-manic">// The show family — reveal styles. `show` brings an entity onto the scene; the
+// STYLE is chosen by how you `hidden` it first (the base-setter), exactly like
+// `untraced` arms `draw`. Plain `hidden(id)` → fade-in; `hidden(id, from)` arms a
+// GROW-IN from an anchor: `center` | `up`/`down`/`left`/`right` (a bbox edge) |
+// `tail` (an arrow's start) | a point `(x,y)`. Manim's FadeIn + GrowFromCenter/
+// Edge/Arrow/Point, all under one reveal verb.
+//
+//   manic examples/manim-vs/show-styles.manic
+title("The show family — reveal styles");
+canvas("16:9");
+template("black");
+
+circle(s1, (220, 300), 58); color(s1, cyan);
+circle(s2, (450, 300), 58); color(s2, lime);
+rect(s3, (680, 300), 116, 116); color(s3, gold);
+arrow(s4, (880, 360), (1020, 235)); color(s4, magenta);
+circle(s5, (1150, 300), 58); color(s5, #ff8c1a);
+text(narr, (640, 600), "The show family — one verb, many reveal styles.", 24);
+
+// how you HIDE it picks the reveal style:
+hidden(s1);              // plain           → fade-in         (FadeIn)
+hidden(s2, center);      // from centre     → pop in          (GrowFromCenter)
+hidden(s3, up);          // from top edge   → unfold          (GrowFromEdge)
+hidden(s4, tail);        // from arrow tail → extend          (GrowArrow)
+hidden(s5, (1150, 520)); // from a point    → fly + grow      (GrowFromPoint)
+hidden(narr);
+
+wait(0.4);
+show(narr);
+wait(1.6);
+
+say(narr, "show — a fade-in. (Manim FadeIn)");
+show(s1, 0.7);
+wait(1.5);
+
+say(narr, "hidden(center) + show — grow from the centre. (GrowFromCenter)");
+show(s2, 0.7);
+wait(1.6);
+
+say(narr, "hidden(up) — unfold from a bounding edge. (GrowFromEdge)");
+show(s3, 0.7);
+wait(1.6);
+
+say(narr, "hidden(tail) on an arrow — grow from the tail to the tip. (GrowArrow)");
+show(s4, 0.7);
+wait(1.6);
+
+say(narr, "hidden((x,y)) — grow from any point. (GrowFromPoint)");
+show(s5, 0.8);
+wait(1.8);
+
+say(narr, "The style lives on `hidden` — like `untraced` arms `draw`.");
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/kv3EpAyIWY8" title="How a Shape First Appears — Fade-In, Grow-In & Draw-On Reveal Styles in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="indication"><a class="header" href="#indication">indication</a></h2>
+<p>The attention flourishes — <code>pulse</code>, <code>flash</code>, <code>wiggle</code>, <code>blink</code>, <code>circumscribe</code>, <code>spotlight</code>, <code>passflash</code> — each a temporary emphasis that returns the shape to rest, on any entity or tagged group (Manim’s Indicate / Flash / Circumscribe / FocusOn family).</p>
+<pre><code class="language-manic">// Attention cues — ways to draw the eye to an object, each returning to its base
+// state. Alongside the existing `pulse` (a scale bump) and `flash` (a radial
+// burst), this adds `wiggle` (scale + rotate jiggle), `circumscribe` (a line
+// drawn round it, then gone), `spotlight` (a disc converges onto it), `blink`,
+// and `passflash` (a light travels the outline).
+// Manim's Indicate / Flash / Wiggle / Circumscribe / FocusOn / Blink / ShowPassingFlash.
+//
+//   manic examples/manim-vs/indication.manic
+title("Attention cues — indicate an object");
+canvas("16:9");
+template("black");
+
+circle(a, (240, 320), 56); color(a, cyan);
+rect(b, (520, 320), 112, 112); color(b, gold);
+circle(c, (800, 320), 56); color(c, lime);
+equation(d, (1050, 315), `E=mc^2`, 30); color(d, magenta);
+text(narr, (640, 560), "Five ways to draw the eye — each returns to base.", 24);
+
+hidden(narr);
+wait(0.5);
+show(narr);
+wait(1.4);
+
+say(narr, "wiggle — a scale-and-rotate jiggle (the rotate cousin of shake).");
+wiggle(a, 0.8);
+wait(1.4);
+
+say(narr, "circumscribe — a line drawn round it, then gone.");
+circumscribe(b, magenta, 1.1);
+wait(1.4);
+
+say(narr, "spotlight — a translucent disc converges onto it.");
+spotlight(c, 1.4);
+wait(1.4);
+
+say(narr, "blink — flash out and in.");
+blink(d, 0.8);
+wait(1.4);
+
+say(narr, "passflash — a light travels the outline.");
+passflash(b, cyan, 1.3);
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/KcJ3dnhEWC0" title="Attention Flourishes — Pulse, Flash, Wiggle, Circumscribe & Spotlight (Manim Indicate) in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="spiral-cycle-restore"><a class="header" href="#spiral-cycle-restore">spiral-cycle-restore</a></h2>
+<p>Three position moves: <code>spiralin</code> reveals a group by spiralling its members into place, <code>cycle</code> slides each entity to the next’s spot along an arc, and <code>savestate</code>+<code>restore</code> remembers home and snaps back — Manim’s <code>SpiralIn</code> / <code>CyclicReplace</code> / <code>save_state</code>+<code>Restore</code>.</p>
+<pre><code class="language-manic">// Three motion moves: `spiralin` reveals a group by spiralling its members into
+// place; `cycle` rotates positions along an arc (each slides to the next's spot);
+// `savestate` + `restore` remembers where each started and snaps it home. Shown on
+// two rows so each reads cleanly. Manim's SpiralIn / CyclicReplace / save_state + Restore.
+//
+//   manic examples/manim-vs/spiral-cycle-restore.manic
+title("Spiral in · cycle · restore");
+canvas("16:9");
+template("black");
+
+// top row — spiralin reveal
+circle(a1, (470, 210), 34); color(a1, cyan);
+circle(a2, (570, 210), 34); color(a2, lime);
+circle(a3, (670, 210), 34); color(a3, gold);
+circle(a4, (770, 210), 34); color(a4, magenta);
+tag(a1, top); tag(a2, top); tag(a3, top); tag(a4, top);
+
+// bottom row — cycle, then restore to home
+circle(b1, (500, 450), 40); color(b1, cyan);
+circle(b2, (640, 450), 40); color(b2, lime);
+circle(b3, (780, 450), 40); color(b3, gold);
+savestate(b1); savestate(b2); savestate(b3);   // remember each home
+
+text(narr, (640, 630), "Reveal, rearrange, return.", 22);
+hidden(narr);
+
+wait(0.4);
+show(narr);
+wait(1.2);
+
+say(narr, "spiralin — the top group spirals into place, staggered.");
+spiralin(top, 1.6);
+wait(1.4);
+
+say(narr, "cycle — each bottom dot slides to the next's spot along a 90° arc.");
+cycle(b1, b2, b3, 1.3, 90);
+wait(1.6);
+
+say(narr, "restore — savestate remembered home, so each snaps back.");
+par { restore(b1, 0.8); restore(b2, 0.8); restore(b3, 0.8); }
+wait(1.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/q2JI-e-5Mc8" title="Spiral-In, Cyclic Replace & Save/Restore Position — Group Motion in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="circle-area-proof"><a class="header" href="#circle-area-proof">circle-area-proof</a></h2>
+<p>The area-of-a-circle LIMIT proof: each stage is a fresh disc CUT into N wedges and ANIMATED — every wedge spins about its tip and slides into a tip-to-tail strip. 4 → 8 → 16 → 32 flattens the humps toward a πr × r rectangle, area πr² throughout. Every strip is <code>for</code>-loop generated from the tessellation formulas (<code>adv = r·sin(π/N)</code>, <code>drop = r·cos(π/N)</code>).</p>
+<pre><code class="language-manic">// Circle area = πr², the LIMIT proof. Each stage is a fresh disc that is CUT into
+// N wedges and then ANIMATED — every wedge spins about its tip and slides into a
+// tip-to-tail strip. 4 → 8 → 16 → 32: with more wedges the humps shrink and the
+// strip flattens toward a πr × r rectangle. Area πr² all along.
+//
+// A disc cut into N equal sectors, alternated up/down, tessellates: consecutive
+// tips advance r·sin(π/N) and the up/down tip-lines sit r·cos(π/N) apart. Wedge k
+// starts at angle k·(360/N); to point up it spins to centre 270°, to point down 90°.
+// Everything is a `for` loop over those formulas — no hand-placed geometry.
+//
+//   manic examples/manim-vs/circle-area-proof.manic
+title("Area of a circle = πr²");
+canvas("16:9");
+template("black");
+
+text(hdr, (640, 66), "Cut a disc into wedges, re-lay them — flatter each time — Manic", 26);
+
+// ---- BUILD every stage's wedges as an assembled disc at (640,300), hidden -----
+let sw = 90.0;
+for k in 0..4  { sector(w4{k},  (640,300), 150, k*sw, sw); filled(w4{k});  hue(w4{k},  190 + (k - 2*floor(k/2))*140); tag(w4{k},  g4);  }
+let sw = 45.0;
+for k in 0..8  { sector(w8{k},  (640,300), 150, k*sw, sw); filled(w8{k});  hue(w8{k},  190 + (k - 2*floor(k/2))*140); tag(w8{k},  g8);  }
+let sw = 22.5;
+for k in 0..16 { sector(w16{k}, (640,300), 150, k*sw, sw); filled(w16{k}); hue(w16{k}, 190 + (k - 2*floor(k/2))*140); tag(w16{k}, g16); }
+let sw = 11.25;
+for k in 0..32 { sector(w32{k}, (640,300), 150, k*sw, sw); filled(w32{k}); hue(w32{k}, 190 + (k - 2*floor(k/2))*140); tag(w32{k}, g32); }
+
+hidden(g4); hidden(g8); hidden(g16); hidden(g32);
+text(cap, (640, 690), "", 24); hidden(cap);
+wait(0.3); show(cap);
+
+// ---- ANIMATE each stage: show the cut disc, then spin+slide into the strip ----
+// stage 4
+let half = 45.0; let ar = pi/4; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 3*adv/2;
+say(cap, "4 wedges — spin them up/down and slide them tip-to-tail.");
+show(g4, 0.6); wait(1.0);
+par { for k in 0..4  { move(w4{k},  (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.8, smooth); spin(w4{k},  270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.8); } }
+wait(1.6); fade(g4, 0.5);
+
+// stage 8
+let half = 22.5; let ar = pi/8; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 7*adv/2;
+say(cap, "8 wedges — flatter already.");
+show(g8, 0.6); wait(0.9);
+par { for k in 0..8  { move(w8{k},  (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.7, smooth); spin(w8{k},  270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.7); } }
+wait(1.5); fade(g8, 0.5);
+
+// stage 16
+let half = 11.25; let ar = pi/16; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 15*adv/2;
+say(cap, "16 wedges — the humps shrink.");
+show(g16, 0.6); wait(0.9);
+par { for k in 0..16 { move(w16{k}, (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.7, smooth); spin(w16{k}, 270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.7); } }
+wait(1.5); fade(g16, 0.5);
+
+// stage 32 — the limit
+let half = 5.625; let ar = pi/32; let adv = 150*sin(ar); let drop = 150*cos(ar); let x0 = 640 - 31*adv/2;
+say(cap, "32 wedges — a πr × r rectangle. Area = π r².");
+show(g32, 0.6); wait(0.9);
+par { for k in 0..32 { move(w32{k}, (x0 + k*adv, 440 - (k - 2*floor(k/2))*drop), 1.7, smooth); spin(w32{k}, 270 - (k - 2*floor(k/2))*180 - (2*k+1)*half, 1.7); } }
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/RdOPOELpnWg" title="Area of a Circle = πr² — Cut into Wedges, 4→8→16→32 to a Rectangle — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="3blue1brown-reproduced"><a class="header" href="#3blue1brown-reproduced">3Blue1Brown, reproduced</a></h1>
 <p>Real 3Blue1Brown lessons rebuilt in Manic — the math visualised and narrated with Manic captions. From the Essence of Linear Algebra to the Riemann zeta function, each is a single readable <code>.manic</code> file you can open, run, and adapt.</p>
@@ -40629,9 +41434,216 @@ wait(1.8);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/nE7gxFkko3Y" title="The 3D Cross Product, Geometrically — Area, Perpendicular & the Determinant — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="mnist-network"><a class="header" href="#mnist-network">mnist-network</a></h2>
+<p>Neural Networks ch.1 &amp; 3: a stylised digit (<code>digit</code>) <code>feed</code>s a real <code>144→16→16→10</code> <code>network</code> — the pixels ARE the inputs — then the forward pass computes, <code>loss</code> compares to the true label, and <code>backward</code> sends gradients back. The network builds layer by layer, not fully-formed.</p>
+<pre><code class="language-manic">// ============================================================================
+//  What IS a neural network — and how does it learn? 3Blue1Brown's Neural
+//  Networks (2017), chapters 1 &amp; 3, as one journey:
+//
+//    build   — a network is layers of neurons joined by weighted connections,
+//              revealed one layer at a time (not dumped fully-formed);
+//    forward — a handwritten digit feeds in, each pixel an input, values flowing
+//              forward through the layers to ten output probabilities;
+//    loss    — compare the guess with the true label;
+//    backward— backpropagation sends the error back as gradients, layer by layer.
+//
+//  A stylised "5" (`tensor`) feeds a real deterministic `network` via `feed`,
+//  which flattens the pixels into the 144 inputs AND traces the lit strokes into
+//  the input column. Every value shown is computed, not decorative.
+// ============================================================================
+title("What is a neural network — and how it learns");
+canvas("16:9");
+template("black");
+
+// the handwritten digit as pixel brightnesses (12×12 = 144 inputs).
+// Change "5" to any 0-9 to feed a different digit — or draw your own shape with
+// `tensor(... `#`=ink `.`=blank ...)`.
+digit(img, (250, 340), "5", 18, cyan);
+
+// 144 pixels → 16 → 16 → 10 digit classes (the real MNIST shape, abbreviated ⋮)
+network(net, (830, 340), "144 16 16 10", "sigmoid sigmoid softmax", 620, 500, 7);
+
+text(narr, (640, 672), "A handwritten digit is just a grid of pixel brightnesses.", 24);
+
+hidden(img);
+hidden(net);
+hidden(narr);
+
+wait(0.4);
+show(narr);
+show(img);
+wait(1.8);
+
+// --- BUILD: the network appears one layer at a time (the journey) ---
+say(narr, "A network is layers of neurons, joined by weighted connections.");
+show(net.layer0);
+wait(0.7);
+par { show(net.transition0); show(net.layer1); }
+wait(0.5);
+par { show(net.transition1); show(net.layer2); }
+wait(0.5);
+par { show(net.transition2); show(net.layer3); }
+par { show(net.probabilities); show(net.status); }
+wait(1.0);
+
+// --- FORWARD: the digit feeds in and values flow forward ---
+say(narr, "Feed the digit in: each pixel is an input, and the values flow forward.");
+feed(net, img, 3.6, smooth);
+wait(0.6);
+
+// --- LOSS: compare the guess with the true label ---
+say(narr, "Compare the output with the true label — a five.");
+loss(net, "0 0 0 0 1 0 0 0 0 0", crossentropy, 1.6);
+wait(0.8);
+
+// --- BACKWARD: backpropagation sends the error back as gradients ---
+say(narr, "Backpropagation sends the error back through the layers, as gradients.");
+backward(net, 3.4, smooth);
+wait(1.0);
+
+say(narr, "Forward to predict, backward to learn — that is how a network trains.");
+wait(2.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/BQmPxrT4xd0" title="How a Neural Network Reads a Digit — Forward Pass, Loss & Backprop, Computed — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="gradient-partials"><a class="header" href="#gradient-partials">gradient-partials</a></h2>
+<p>How a network learns: <code>f(x,y)</code> as a cost landscape; <code>slice3</code> holds one variable constant so a cross-section’s steepness IS the partial derivative; <code>gradient3</code> stacks them into ∇f (uphill); <code>descend3</code> rolls a ball down −∇f into the valley — with a movie camera that swings to reveal the stack.</p>
+<pre><code class="language-manic">// ============================================================================
+//  How a neural network learns — the gradient, and gradient descent. 3Blue1Brown's
+//  "Gradient descent" segment (gradient.py), the full arc:
+//
+//    cost      — a network's cost is a function of MANY weights; picture it as a
+//                landscape over just two;
+//    partials  — to read ∂f/∂y, HOLD x constant → the surface slices to one curve,
+//                and its steepness IS the partial (slice3); likewise ∂f/∂x;
+//    gradient  — stack the two partials → ∇f, the direction of steepest ascent;
+//    descent   — to LEARN, step the other way: follow −∇f DOWNHILL until the ball
+//                settles in a valley — a minimum of the cost (descend3).
+//
+//  Narrated with captions (no character rigs). Every curve, slope, and step is
+//  computed from the real surface.
+// ============================================================================
+title("How a neural network learns: gradient descent");
+canvas("16:9");
+template("black");
+
+camera3((6, -8.5, 5.5), (0, 0, 0.7), 40);
+axes3(world, (0, 0, 0), 2.4);
+surface3(f, "exp(-x*x + cos(2*y))", (-2, 2), (-2, 2), 34);
+opacity(f, 0.42);
+
+slice3(sx, f, x, 0.6, 0.4, #ff3ea5);   // hold x → cross-section along y (∂f/∂y)
+slice3(sy, f, y, 0.4, 0.6, #ffb020);   // hold y → cross-section along x (∂f/∂x)
+gradient3(grad, f, 0.6, 0.4);
+descend3(desc, f, 0.7, 0.35, 0.25, 45, #7cff3e);
+
+equation(feq, (232, 96), `f(x,y)=e^{-x^2+\cos 2y}`, 28);
+equation(ceq, (232, 150), `\text{cost } C(w_1,\dots,w_n)`, 24); color(ceq, dim);
+equation(geq, (1040, 632), `\nabla f=\begin{bmatrix}\partial f/\partial x\\ \partial f/\partial y\end{bmatrix}`, 28);
+text(narr, (640, 668), "A network's cost is one number over millions of weights.", 24);
+
+hidden(sx); hidden(sx.slope);
+hidden(sy); hidden(sy.slope);
+hidden(grad); hidden(geq); hidden(narr);
+hidden(desc); hidden(desc.ball);
+untraced(desc); untraced(desc.ball);   // start un-drawn so the descent can roll on
+
+// A MOVIE camera runs concurrently with the story: it swings around and up so the
+// stacked slices + gradient are never hidden behind the peak, then drops low to
+// follow the ball rolling into the valley. (orbit3 composes in `par`.)
+par {
+  seq {
+    orbit3(-18, 26, 9.5, 5.0, smooth);   // establish: front-left, slightly high
+    orbit3(40, 36, 9.2, 6.5, smooth);    // swing right &amp; rise to reveal the STACK
+    orbit3(62, 22, 8.4, 6.0, smooth);    // drop low, come round to watch the descent
+    orbit3(74, 24, 8.4, 4.5, smooth);    // settle on the valley
+  }
+  seq {
+    wait(0.5);
+    show(narr);
+    show(ceq);
+    wait(2.2);
+
+    say(narr, "Picture it as a landscape over just two of them.");
+    wait(2.0);
+
+    say(narr, "To read ∂f/∂y, hold x constant — that slices the surface to one curve.");
+    par { show(sx); show(sx.slope); }
+    wait(2.4);
+
+    say(narr, "Hold y constant instead, and this slice's steepness is ∂f/∂x.");
+    par { show(sy); show(sy.slope); }
+    wait(2.4);
+
+    say(narr, "Stack the two partials and you get the gradient — steepest ascent.");
+    par { show(grad); show(geq); }
+    wait(2.8);
+
+    say(narr, "To LEARN, step the other way: downhill, along −∇f.");
+    par { show(desc); show(desc.ball); }
+    par { draw(desc, 3.0); draw(desc.ball, 3.0); }   // the ball rolls, the trail draws
+    wait(0.6);
+
+    say(narr, "It rolls into a valley — a minimum of the cost. That is learning.");
+    pulse(desc.ball);
+    wait(2.6);
+  }
+}
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/_gn6qym15Kw" title="Gradient Descent, Geometrically — Partial Derivatives, ∇f & a Ball Rolling Downhill — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="high-dimensions"><a class="header" href="#high-dimensions">high-dimensions</a></h2>
+<p>Thinking outside the 10-D box: a point in N-dimensional space drawn as N dials (<code>sliders</code>). Put it on the unit sphere and Σxᵢ²=1 is a fixed budget — spread evenly every coordinate is tiny, and the corner sits √N away.</p>
+<pre><code class="language-manic">// ============================================================================
+//  Thinking in high dimensions — 3Blue1Brown's "10-dimensional box" device: a
+//  point in N-dimensional space is just N numbers, drawn as N dials. You can't
+//  picture 7 axes, but you CAN watch 7 sliders move together.
+//
+//  Put the point on the unit sphere and the coordinates obey x₁²+…+x₇² = 1 — a
+//  fixed budget of "real estate" spread across the axes. Spread it evenly and
+//  every coordinate is tiny (1/√7); pile it into a few and the rest go slack.
+//  The corner (1,1,…,1) sits √7 away — and √N in N-D — which is why high
+//  dimensions feel so vast.
+//
+//  `sliders` is the rack; `setsliders` drives all dials at once and shows Σxᵢ².
+// ============================================================================
+title("Thinking in high dimensions");
+canvas("16:9");
+template("black");
+
+sliders(pt, 7, (640, 340), 820, 360, gold);
+text(narr, (640, 656), "A point in 7-D space is just seven numbers — one dial each.", 24);
+
+hidden(narr);
+
+wait(0.4);
+show(narr);
+wait(2.4);
+
+say(narr, "Put it on the unit sphere: x₁² + … + x₇² = 1 — a fixed budget.");
+setsliders(pt, "0.38 0.38 0.38 0.38 0.38 0.38 0.38", 1.6);
+wait(2.2);
+
+say(narr, "Spread evenly, every coordinate is tiny — only 1 over root 7.");
+wait(2.2);
+
+say(narr, "Pile the budget into a few, and the rest fall slack — Σx² stays 1.");
+setsliders(pt, "0.86 0.42 0.22 0.13 0.10 0.06 0.04", 1.6);
+wait(2.4);
+
+say(narr, "Swing it around — the total never leaves the sphere.");
+setsliders(pt, "-0.30 0.55 -0.62 0.28 0.34 -0.18 0.12", 1.6);
+wait(2.2);
+
+say(narr, "And the corner (1,…,1) sits √7 away — √N in N-D. High space is vast.");
+setsliders(pt, "1 1 1 1 1 1 1", 1.8);
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/XZH5iO-LX0s" title="Thinking in 10 Dimensions — a High-D Point as a Rack of Sliders — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <div style="break-before: page; page-break-before: always;"></div><!-- GENERATED by scripts/gen-api.py; do not edit by hand. -->
 <h1 id="manic-api-reference"><a class="header" href="#manic-api-reference">Manic API reference</a></h1>
-<p>The complete index of every Manic builtin — <strong>433 builtins across 16 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
+<p>The complete index of every Manic builtin — <strong>447 builtins across 16 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
 <h2 id="reading-a-signature"><a class="header" href="#reading-a-signature">Reading a signature</a></h2>
 <ul>
 <li><code>new id</code> is the name created by a constructor.</li>
@@ -40665,7 +41677,7 @@ wait(1.8);
 <tr><td><code>raymarch(…)</code></td><td>constructor / setup</td><td>a 3D SDF scene, ray-marched per pixel: <code>let d</code> = signed distance to the scene at (x,y,z,t)</td></tr>
 <tr><td><code>glsl(id: new id, source: string)</code></td><td>constructor / setup</td><td>run a raw GLSL fragment shader (Shadertoy mainImage, iTime/iResolution) at full resolution</td></tr>
 <tr><td><code>particles(id: new id, container: id or tag, count: number, [radius: number], [seed: number], [layout: string])</code></td><td>constructor / setup</td><td>deterministic small dots inside a circle or rectangle; optional random/grid/ring layout</td></tr>
-<tr><td><code>text(id: new id, at: (x, y), text: string)</code></td><td>constructor / setup</td><td>a text label</td></tr>
+<tr><td><code>text(id: new id, at: (x, y), text: string, [size: number])</code></td><td>constructor / setup</td><td>a text label; optional trailing point size (default 28)</td></tr>
 <tr><td><code>label(…)</code></td><td>constructor / setup</td><td>a label pinned to an entity</td></tr>
 <tr><td><code>caption(id: new id, words: string, at: (x, y), [size: number], [color: colour])</code></td><td>constructor / setup</td><td>a row of caption words (karaoke/pop)</td></tr>
 <tr><td><code>support(id: new id, center: (x, y), [len: number], [dir: string])</code></td><td>constructor / setup</td><td>a hatched fixed support (wall/ceiling/floor) for mechanics diagrams; dir = open side</td></tr>
@@ -40687,7 +41699,7 @@ wait(1.8);
 <tr><td><code>gradient(…)</code></td><td>constructor / setup</td><td>multi-stop gradient on the primary paint: gradient(id, c1, c2, …, [mode]) — along a path stroke by arc length, a linear (angle°) / radial fill, or a computed “speed”/“curvature” quantity on strokes</td></tr>
 <tr><td><code>glow(id: id or tag, amount: number)</code></td><td>constructor / setup</td><td>set neon glow amount</td></tr>
 <tr><td><code>plate(id: id or tag, [opacity: number])</code></td><td>constructor / setup</td><td>give TEXT a legibility backing: a theme-aware (template background) chip sized to the glyphs so a caption/title stays readable over a busy shader or field — plate(id, [opacity]); default opacity 0.55</td></tr>
-<tr><td><code>opacity(id: id or tag, value: number)</code></td><td>constructor / setup</td><td>set opacity 0..1</td></tr>
+<tr><td><code>opacity(id: id or tag, value: number, [layer: id or tag])</code></td><td>constructor / setup</td><td>set opacity 0..1. Optional trailing <code>fill</code> / <code>stroke</code> word sets just THAT layer’s opacity, independent of the other — a translucent interior under a crisp outline (a shape carries its own fill and stroke opacity, like set_fill/set_stroke). Omit the word → whole entity</td></tr>
 <tr><td><code>hue(id: id or tag, degrees: number, [s: number], [l: number])</code></td><td>constructor / setup</td><td>drive colour by an HSL hue</td></tr>
 <tr><td><code>rot(id: id or tag, degrees: number)</code></td><td>constructor / setup</td><td>set rotation (degrees)</td></tr>
 <tr><td><code>z(id: id or tag, z: number)</code></td><td>constructor / setup</td><td>set draw order</td></tr>
@@ -40696,9 +41708,9 @@ wait(1.8);
 <tr><td><code>tag(id: id or tag, tag: new id)</code></td><td>constructor / setup</td><td>add a group tag</td></tr>
 <tr><td><code>bold(id: id or tag)</code></td><td>constructor / setup</td><td>use the bold mono font</td></tr>
 <tr><td><code>display(id: id or tag)</code></td><td>constructor / setup</td><td>mark visible</td></tr>
-<tr><td><code>hidden(id: id or tag)</code></td><td>constructor / setup</td><td>start hidden (opacity 0)</td></tr>
-<tr><td><code>filled(id: id or tag)</code></td><td>constructor / setup</td><td>turn the fill on</td></tr>
-<tr><td><code>outlined(id: id or tag)</code></td><td>constructor / setup</td><td>turn the outline on</td></tr>
+<tr><td><code>hidden(id: id or tag, [from: id or tag])</code></td><td>constructor / setup</td><td>start hidden (opacity 0). Optional <code>from</code> arms a GROW-IN reveal for <code>show</code> (scale 0 at the anchor -&gt; home): center | up/down/left/right (a bbox edge) | tail (an arrow’s start) | a point (x,y). The reveal STYLE lives on hidden, exactly like <code>untraced</code> arms <code>draw</code></td></tr>
+<tr><td><code>filled(id: id or tag)</code></td><td>constructor / setup</td><td>SOLID posture: fill on, outline off — the default for circle/rect/polygon. Reverts a hollow shape</td></tr>
+<tr><td><code>outlined(id: id or tag)</code></td><td>constructor / setup</td><td>HOLLOW posture: outline on, fill off — a ring/frame you can draw-on (untraced+draw) and give a translucent fill via opacity(id, a, fill). The stroke-first look</td></tr>
 <tr><td><code>untraced(id: id or tag)</code></td><td>constructor / setup</td><td>start undrawn, ready for draw-on</td></tr>
 <tr><td><code>union(…)</code></td><td>constructor / setup</td><td>boolean union of two shapes</td></tr>
 <tr><td><code>intersect(…)</code></td><td>constructor / setup</td><td>boolean intersection</td></tr>
@@ -40713,7 +41725,7 @@ wait(1.8);
 <tr><td><code>draw(id: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>trace a stroke on</td></tr>
 <tr><td><code>flow(path: id or tag, [dur: number], [direction: id or tag], [mode: id or tag])</code></td><td>animation verb</td><td>send a directional luminous pulse or finite continuous stream over a path</td></tr>
 <tr><td><code>erase(id: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>reverse of draw</td></tr>
-<tr><td><code>show(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>fade in</td></tr>
+<tr><td><code>show(id: id or tag, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>reveal an entity: a fade-in, OR a GROW-IN if it was armed with <code>hidden(id, from)</code> (scale 0 at the anchor -&gt; home). One reveal verb; the style is picked by how you hid it</td></tr>
 <tr><td><code>fade(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>fade out</td></tr>
 <tr><td><code>flash(id: id or tag, [color: colour], [dur: number], [ease: easing])</code></td><td>animation verb</td><td>flash a colour, then restore</td></tr>
 <tr><td><code>recolor(id: id or tag, color: colour, [dur: number])</code></td><td>animation verb</td><td>permanently change colour</td></tr>
@@ -40736,6 +41748,16 @@ wait(1.8);
 <tr><td><code>slidey(id: id or tag, y: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>slide to an absolute y, keeping x where it is</td></tr>
 <tr><td><code>dock(group: id or tag, member: id or tag, target: (x, y), [dur: number], [ease: easing])</code></td><td>animation verb</td><td>shift a group rigidly so one member lands on a target point or entity</td></tr>
 <tr><td><code>groupscale(group: id or tag, factor: number, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>scale a group about its collective centre (not each part about its own)</td></tr>
+<tr><td><code>sliders(id: new id, n: number, center: (x, y), [width: number], [height: number], [color: colour])</code></td><td>constructor / setup</td><td>a rack of N vertical coordinate dials, each a value in [-1,1] (a point in N-D space as N dials); setsliders drives them and shows the running sum of squares</td></tr>
+<tr><td><code>setsliders(sliders: id or tag, values: string, [dur: number], [ease: easing])</code></td><td>animation verb</td><td>animate every dial of a sliders rack to its value in [-1,1] (one value per dial) and update the sum-of-squares readout</td></tr>
+<tr><td><code>deform(id: id or tag, u: string, v: string, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>continuous homotopy: over dur, animate t:0-&gt;1 and remap an entity’s outline points by (u(x,y,t), v(x,y,t)) each frame — the animated twin of warp. Write t=0 as the identity (u=x, v=y). e.g. a wave: v = y + amp<em>sin(x</em>k + t)<em>sin(pi</em>t)</td></tr>
+<tr><td><code>wiggle(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>an attention WIGGLE: a there-and-back scale pulse + oscillating rotation, returning to base. The rotate+scale cousin of <code>shake</code> (which is translation only)</td></tr>
+<tr><td><code>blink(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>blink an entity out-and-in twice over dur to draw the eye</td></tr>
+<tr><td><code>circumscribe(id: id or tag, [color: colour], [dur: number])</code></td><td>state-changing verb</td><td>draw a temporary outlined rectangle around an entity or group, then fade it — a transient surround to call attention. Creates {id}.circ</td></tr>
+<tr><td><code>spotlight(id: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>a translucent disc converges onto an entity then fades — a converging spotlight that draws focus to it. Creates {id}.spot</td></tr>
+<tr><td><code>passflash(id: id or tag, [color: colour], [dur: number])</code></td><td>state-changing verb</td><td>a luminous sliver travels along an entity’s outline once, then vanishes (closed shapes: the light circles the whole outline). Creates {id}.pass</td></tr>
+<tr><td><code>savestate(id: id or tag)</code></td><td>constructor / setup</td><td>snapshot an entity’s transform (pos/scale/rotation/colour/opacity); <code>restore(id, ...)</code> later animates it back to how it started</td></tr>
+<tr><td><code>spiralin(group: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>reveal a group’s members by spiralling them in from a rotated, shrunken offset while fading up, staggered</td></tr>
 <tr><td><code>trail(id: id or tag, target: id or tag, [color: colour], [thickness: number])</code></td><td>constructor / setup</td><td>a growing motion trail that records where an entity has been</td></tr>
 <tr><td><code>loupe(id: new id, source: (x, y), sw: number, sh: number, display: (x, y), mag: number, [frame_color: colour], [panel_color: colour])</code></td><td>constructor / setup</td><td>a magnifier: a source frame sw<em>sh over the scene at (sx,sy) + a panel at (dx,dy) that shows that region magnified mag</em> live. Animate {id}.frame (move/scale) and the view follows. Manim’s ZoomedScene</td></tr>
 <tr><td><code>regions(…)</code></td><td>constructor / setup</td><td>fill + count the areas the dividers (chords/segments/edges — each an entity or tag) cut a boundary (polygon/rect/circle) into. Computes the planar arrangement; fills every enclosed face {id}.r0, {id}.r1, … (all tagged {id}) with a cycling palette. The number of {id}.r* parts is the region count. Variadic: regions(id, boundary, d1, d2, …)</td></tr>
@@ -40844,6 +41866,8 @@ wait(1.8);
 <tr><td><code>lsystem3(id: new id, origin: (x, y, z), step: number, angle: number, iterations: number, axiom: string, rules: string, [max_symbols: number])</code></td><td>constructor / setup</td><td>a bounded deterministic branching 3D turtle grammar</td></tr>
 <tr><td><code>heightmap3(id: new id, grid: id or tag, z: string, [size: number])</code></td><td>constructor / setup</td><td>lift a 2D grid into a 3D terrain mesh: z(x,y,h), h=cell value</td></tr>
 <tr><td><code>gradient3(id: new id, surface: new id, x: number, y: number, [color: colour])</code></td><td>constructor / setup</td><td>steepest-ascent arrow on a surface3 at (x,y)</td></tr>
+<tr><td><code>slice3(id: new id, surface: new id, axis: id or tag, value: number, [at: number], [color: colour])</code></td><td>constructor / setup</td><td>the geometric partial derivative: cut a surface3 at a constant coordinate (axis = x or y) and draw the cross-section curve riding the surface, whose steepness is the partial along the free axis; with <code>at</code>, also draw the tangent whose slope is that partial at that point</td></tr>
+<tr><td><code>descend3(id: new id, surface: new id, x: number, y: number, [rate: number], [steps: number], [color: colour])</code></td><td>constructor / setup</td><td>gradient DESCENT on a surface3: from a start (x,y), step against the gradient (rate, steps) and trace the path the ball rolls downhill to a minimum; draw the path to roll it on, {id}.ball marks the start</td></tr>
 <tr><td><code>tangentplane3(id: new id, surface: new id, x: number, y: number, [color: colour])</code></td><td>constructor / setup</td><td>the plane tangent to a surface3 at (x,y)</td></tr>
 <tr><td><code>volume3(id: new id, surface: new id, [res: number], [color: colour])</code></td><td>constructor / setup</td><td>the volume under a surface3 as a grid of columns</td></tr>
 <tr><td><code>param3(id: new id, x: string, y: string, z: string, udom: (x, y), vdom: (x, y), [res: number])</code></td><td>constructor / setup</td><td>parametric surface x(u,v),y(u,v),z(u,v) — tori, shells, Möbius</td></tr>
@@ -41172,12 +42196,14 @@ wait(1.8);
 <tr><td><code>network(id: new id, center: (x, y), layers: string, activations: string, [width: number], [height: number], [seed: number])</code></td><td>constructor / setup</td><td>a deterministic feed-forward neural network with responsive layered layout and stable node/edge tags</td></tr>
 <tr><td><code>activation(id: new id, center: (x, y), function: id or tag, [width: number], [height: number])</code></td><td>constructor / setup</td><td>a truthful plot of linear, ReLU, sigmoid, or tanh</td></tr>
 <tr><td><code>forward(network: id or tag, input: string, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>compute and progressively reveal one feed-forward pass with real activations and output values</td></tr>
+<tr><td><code>feed(network: id or tag, image: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>the image-&gt;input bridge: flatten a tensor/image into the network input, draw connector lines into the input nodes, and run the forward pass (tensor cell count must equal the input-layer width)</td></tr>
 <tr><td><code>loss(network: id or tag, target: string, [kind: id or tag], [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>compare the latest network output with a target using cross-entropy or mean-squared error</td></tr>
 <tr><td><code>backward(network: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>compute exact reverse-mode gradients and reveal them from output to input</td></tr>
 <tr><td><code>update(network: id or tag, [learning_rate: number], [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>apply one gradient-descent parameter update and recompute the prediction and loss</td></tr>
 <tr><td><code>checkpoint(id: new id, network: id or tag)</code></td><td>state-changing verb</td><td>save one network’s exact parameters, prediction, target, and loss for a later rollback</td></tr>
-<tr><td><code>restore(network: id or tag, checkpoint: id or tag, [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>animate and exactly restore a checkpointed network state; this is rollback, not dataset-level unlearning</td></tr>
-<tr><td><code>tensor(id: new id, center: (x, y), values: string, [cell: number], [color: colour])</code></td><td>constructor / setup</td><td>a finite numeric grid; semicolons separate rows and vertical bars separate channels</td></tr>
+<tr><td><code>restore(target: id or tag, [checkpoint: id or tag], [dur: number], [ease: easing])</code></td><td>state-changing verb</td><td>restore(target, …): a network form <code>restore(network, checkpoint, [dur], [ease])</code> exactly rolls back a checkpointed network state; the general form <code>restore(id, [dur], [ease])</code> animates ANY entity that was <code>savestate</code>d back to its snapshot (pos/scale/rotation/colour/opacity)</td></tr>
+<tr><td><code>tensor(id: new id, center: (x, y), values: string, [cell: number], [color: colour])</code></td><td>constructor / setup</td><td>a finite numeric grid; semicolons separate rows and vertical bars separate channels. Draw it instead as pixel-art with <code>#</code>=ink, <code>.</code>=blank, 1-9 = grayscale (a <code>#</code> anywhere switches to art mode; whitespace is ignored)</td></tr>
+<tr><td><code>digit(id: new id, center: (x, y), digit: string, [cell: number], [color: colour])</code></td><td>constructor / setup</td><td>a stylised handwritten digit 0-9 as a 12x12 pixel-art tensor (144 cells), ready to feed into a 144-input network</td></tr>
 <tr><td><code>kernel(id: new id, center: (x, y), values: string, [cell: number], [color: colour])</code></td><td>constructor / setup</td><td>a finite convolution kernel with one grid per input channel</td></tr>
 <tr><td><code>convolve(id: new id, input: id or tag, kernel: id or tag, center: (x, y), [stride: number], [padding: number], [bias: number], [activation: id or tag], [cell: number])</code></td><td>constructor / setup</td><td>compute a feature map from an input tensor and kernel with validated stride, padding, bias, and activation</td></tr>
 <tr><td><code>pool(id: new id, input: id or tag, center: (x, y), kind: id or tag, [window: number], [stride: number], [padding: number], [cell: number])</code></td><td>constructor / setup</td><td>compute deterministic max or average pooling independently across tensor channels</td></tr>

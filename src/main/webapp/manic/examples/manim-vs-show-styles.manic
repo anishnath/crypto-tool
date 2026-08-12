@@ -1,0 +1,53 @@
+// The show family — reveal styles. `show` brings an entity onto the scene; the
+// STYLE is chosen by how you `hidden` it first (the base-setter), exactly like
+// `untraced` arms `draw`. Plain `hidden(id)` → fade-in; `hidden(id, from)` arms a
+// GROW-IN from an anchor: `center` | `up`/`down`/`left`/`right` (a bbox edge) |
+// `tail` (an arrow's start) | a point `(x,y)`. Manim's FadeIn + GrowFromCenter/
+// Edge/Arrow/Point, all under one reveal verb.
+//
+//   manic examples/manim-vs/show-styles.manic
+title("The show family — reveal styles");
+canvas("16:9");
+template("black");
+
+circle(s1, (220, 300), 58); color(s1, cyan);
+circle(s2, (450, 300), 58); color(s2, lime);
+rect(s3, (680, 300), 116, 116); color(s3, gold);
+arrow(s4, (880, 360), (1020, 235)); color(s4, magenta);
+circle(s5, (1150, 300), 58); color(s5, #ff8c1a);
+text(narr, (640, 600), "The show family — one verb, many reveal styles.", 24);
+
+// how you HIDE it picks the reveal style:
+hidden(s1);              // plain           → fade-in         (FadeIn)
+hidden(s2, center);      // from centre     → pop in          (GrowFromCenter)
+hidden(s3, up);          // from top edge   → unfold          (GrowFromEdge)
+hidden(s4, tail);        // from arrow tail → extend          (GrowArrow)
+hidden(s5, (1150, 520)); // from a point    → fly + grow      (GrowFromPoint)
+hidden(narr);
+
+wait(0.4);
+show(narr);
+wait(1.6);
+
+say(narr, "show — a fade-in. (Manim FadeIn)");
+show(s1, 0.7);
+wait(1.5);
+
+say(narr, "hidden(center) + show — grow from the centre. (GrowFromCenter)");
+show(s2, 0.7);
+wait(1.6);
+
+say(narr, "hidden(up) — unfold from a bounding edge. (GrowFromEdge)");
+show(s3, 0.7);
+wait(1.6);
+
+say(narr, "hidden(tail) on an arrow — grow from the tail to the tip. (GrowArrow)");
+show(s4, 0.7);
+wait(1.6);
+
+say(narr, "hidden((x,y)) — grow from any point. (GrowFromPoint)");
+show(s5, 0.8);
+wait(1.8);
+
+say(narr, "The style lives on `hidden` — like `untraced` arms `draw`.");
+wait(2.0);
