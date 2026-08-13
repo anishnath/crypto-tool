@@ -882,6 +882,17 @@
         <url-pattern>/ManicFunctionality</url-pattern>
     </servlet-mapping>
 
+    <!-- Private Worker → 8gwifi → render-host activation bridge. This is not
+         a browser endpoint; it requires MANIC_RENDER_BRIDGE_KEY. -->
+    <servlet>
+        <servlet-name>ManicRenderBridgeServlet</servlet-name>
+        <servlet-class>z.y.x.manic.servlet.ManicRenderBridgeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManicRenderBridgeServlet</servlet-name>
+        <url-pattern>/ManicRenderBridgeFunctionality</url-pattern>
+    </servlet-mapping>
+
     <!-- Serve the manic-lang WebAssembly module with the correct MIME type so
          browsers stream-compile it (needed by manic/wasm/manic_lang_bg.wasm). -->
     <mime-mapping>
