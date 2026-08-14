@@ -62,9 +62,12 @@ public final class ManicRenderBridgeServlet extends HttpServlet {
             return;
         }
 
-        String jobId = jobId(readBody(req));
-        if (jobId == null) {
-            sendError(resp, 400, "invalid_job_id", "Body must contain a valid rnd_ job_id.");
+        String requestBody = readBody(req);
+        String jobId = jobId(requestBody);
+        String action = action(requestBody);
+        if (jobId == null || action == null) {
+            sendError(resp, 400, "invalid_render_request",
+                "Body must contain a valid rnd_ job_id and an optional cancel action.");
             return;
         }
 
@@ -82,7 +85,9 @@ public final class ManicRenderBridgeServlet extends HttpServlet {
             if (requestId != null && requestId.matches("[A-Za-z0-9._:-]{1,128}")) {
                 post.setHeader("X-Request-Id", requestId);
             }
-            post.setEntity(new StringEntity("{\"job_id\":\"" + escape(jobId) + "\"}",
+            String payload = "{\"job_id\":\"" + escape(jobId) + "\""
+                + ("cancel".equals(action) ? ",\"action\":\"cancel\"" : "") + "}";
+            post.setEntity(new StringEntity(payload,
                 ContentType.APPLICATION_JSON));
 
             HttpResponse upstream = client.execute(post);
@@ -141,6 +146,18 @@ public final class ManicRenderBridgeServlet extends HttpServlet {
             if (value == null || !value.has("job_id") || value.get("job_id").isJsonNull()) return null;
             String jobId = value.get("job_id").getAsString();
             return jobId != null && jobId.matches("rnd_[A-Za-z0-9_-]{8,128}") ? jobId : null;
+        } catch (Exception ignored) {
+            return null;
+        }
+    }
+
+    /** Returns an empty action for activation, {@code cancel} for cancellation, or null if invalid. */
+    private static String action(String body) {
+        if (body == null) return null;
+        try {
+            JsonObject value = new JsonParser().parse(body).getAsJsonObject();
+            if (value == null || !value.has("action") || value.get("action").isJsonNull()) return "";
+            return "cancel".equals(value.get("action").getAsString()) ? "cancel" : null;
         } catch (Exception ignored) {
             return null;
         }
