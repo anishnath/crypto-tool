@@ -66,7 +66,9 @@ the correct Creator safe profile.
 - **Constructors** (t=0): shapes, modifiers, kit figures — build the cast.
 - **Timeline** (runtime): verbs + `par`/`seq`/`stagger` — play in order.
 
-Constructors and timeline may be written in any order.
+Constructors and timeline may be written in any order. But they may not be
+**mixed**: a timeline block holds animation only, so every constructor stays at
+the top level. See gotcha 2.
 
 ---
 
@@ -81,7 +83,39 @@ Constructors and timeline may be written in any order.
    start) | a point `(x,y)`. Manim's GrowFromCenter/Edge/Arrow/Point; the reveal
    STYLE lives on `hidden`, just like `untraced` arms `draw`.
 2. **Top-level verbs run in SEQUENCE** (one after another). For simultaneous
-   motion wrap them in `par { ... }`.
+   motion wrap them in `par { ... }`. **A block holds ANIMATION ONLY** —
+   `par`/`seq`/`stagger`/`step`/`during` may contain verbs and nested blocks,
+   never a constructor. Declaring an entity inside the `step` that reveals it is
+   the most common structural error in generated files, and it is a hard error,
+   not a warning:
+
+   ```
+   // ✗ WRONG — a constructor cannot be inside a block
+   step("contradiction") {
+     equation(eq, (cx, 342), `x_n>n\,x_1`, 50);
+     color(eq, gold);
+     hidden(eq);
+     show(eq, 0.8);
+   }
+
+   // ✓ RIGHT — declare, style and hide ABOVE the timeline; animate inside
+   equation(eq, (cx, 342), `x_n>n\,x_1`, 50);
+   color(eq, gold);
+   hidden(eq);
+   step("contradiction") {
+     show(eq, 0.8);
+   }
+   ```
+
+   This covers every constructor (shapes, `text`, `equation`, kit figures) **and
+   every build-time modifier** (`color`, `size`, `hidden`, `untraced`, `z`,
+   `stroke`, `opacity`, `bold`, `filled`, …) — those set the entity's starting
+   state at t=0 and have no duration, so they cannot be a beat. To change a
+   property *during* the story, use the verb for it instead:
+   `recolor(id, color, [dur])` for colour, `fade(id, [dur])` / `show(id, [dur])`
+   for visibility, `to(id, prop, value, [dur], [ease])` for any numeric property.
+   Since a constructor may be written *after* the beat that animates it, keeping
+   the whole cast above the script is always safe.
 3. **Multiplication:** implicit works only after a **number** — `2sx`, `3(x+1)`,
    `(a+b)c`, `2pi`, `110cos(x)` all fine. Everywhere else use an explicit `*`:
    - **Two names/constants** → `dx*sx` (not `dxsx`), `tau*i` (not `taui`), `r*x`.
