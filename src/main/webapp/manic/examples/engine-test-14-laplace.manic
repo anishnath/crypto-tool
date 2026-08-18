@@ -96,10 +96,12 @@ equation(eeuler, (214, 540), `e^{\textcolor{red}{\pi}\textcolor{cyan}{i}}=-1`, 2
 hidden(euler);
 
 // ---- Scene 3 (00:05–00:17): the SHM phase grid — a 5×5 sweep of the mass-spring
-//      oscillator over initial position × initial velocity. One generic `sweep`
-//      builtin (physics kit) lays out the bare cells + headers; `run` animates all
-//      25 in sync. Hidden until Euler settles, then swept in with the teal arrow. ----
-sweep(phz, spring, (895, 400), 150, 80, (-2, 2), (2, -2), 5, 5);
+//      oscillator over initial position × initial velocity. `sweep` rebuilds the
+//      oscillator you authored below once per cell, varying two of its OWN named
+//      parameters (`x0`, `v0`); `run` animates all 25 in sync. Hidden until Euler
+//      settles, then swept in with the teal arrow. ----
+spring(phzcell, (0, 0), 10, 0, 120, 0, 0); hidden(phzcell);
+sweep(phz, phzcell, x0, (-2, 2), v0, (2, -2), (895, 400), 5, 5, 150, 80, 0, 0);
 hidden(phz);
 // a bold teal CURVED arrow arcing from the board up-and-over into the grid; drawn
 // on (untraced → draw) so the arc sweeps in and the eye rides it into Scene 3.

@@ -1,0 +1,252 @@
+// multivariable-chain-rule — 3Blue1Brown's `_2018/mvcr.py`, whose single scene is called
+// `ComputationalNetwork` for a reason: the multivariable chain rule is taught as a GRAPH,
+// and the graph is the one backpropagation runs on.
+//
+//   x ──→ f = x²      ──→ h = f²g
+//    └──→ g = cos(πx) ──┘
+//
+//   ACT I    build the network, box by box, edge by edge
+//   ACT II   feed one number forward: x=2 → f=4, g=1 → h=16
+//   ACT III  the question — nudge x, and h swings THIRTY-TWO times as far
+//   ACT IV   one derivative per EDGE, and one term per PATH from x to h
+//   ACT V    assemble, substitute, evaluate: 32 + 0 = 32
+//   ACT VI   the same rule with a thousand nodes has another name
+//
+// Written with ordinary vocabulary: `mathparts` makes each term of the rule its own entity
+// so a `framebox` can `surround` them in turn, `rewrite` carries one equation through its
+// symbolic → substituted → evaluated states, and the sensitivity beat is a one-point
+// `cloud` reading the scene `parameter` — the only way to put a dot where a NONLINEAR
+// function of a live value says it goes.
+//
+//   manic examples/multivariable-chain-rule.manic
+title("The Multivariable Chain Rule — One Term Per Path");
+canvas("16:9");
+template("black");
+bloom(0.28, 0.55, 20);
+
+// ---- type ----
+text(ttl, (640, 92), "The Multivariable Chain Rule");
+display(ttl); size(ttl, 46); bold(ttl); color(ttl, fg); hidden(ttl);
+text(sub, (640, 146), "one term per path through the graph");
+display(sub); size(sub, 22); color(sub, dim); hidden(sub);
+text(cap, (640, 664), ""); display(cap); size(cap, 23); color(cap, fg); hidden(cap);
+text(act, (1060, 620), ""); display(act); size(act, 19); color(act, gold); hidden(act);
+
+// ================================ THE NETWORK ================================
+// four boxed formulas. The colour of a letter is the colour of its node, everywhere it
+// appears — that is the whole reading aid, and LaTeX does it inline.
+equation(ex, (196, 300), `\textcolor{gold}{x}`, 34);
+equation(ef, (520, 206), `\textcolor{cyan}{f} = \textcolor{gold}{x}^2`, 30);
+equation(eg, (520, 396), `\textcolor{lime}{g} = \cos(\pi \textcolor{gold}{x})`, 30);
+equation(eh, (912, 300), `\textcolor{magenta}{h} = \textcolor{cyan}{f}^2 \textcolor{lime}{g}`, 30);
+hidden(ex); hidden(ef); hidden(eg); hidden(eh);
+framebox(bx, ex, 14); color(bx, dim); untraced(bx);
+framebox(bf, ef, 14); color(bf, dim); untraced(bf);
+framebox(bg, eg, 14); color(bg, dim); untraced(bg);
+framebox(bh, eh, 14); color(bh, dim); untraced(bh);
+
+// the four edges, each an arrow between two boxes
+arrow(axf, (250, 282), (410, 218)); color(axf, dim); untraced(axf);
+arrow(axg, (250, 318), (410, 384)); color(axg, dim); untraced(axg);
+arrow(afh, (636, 218), (800, 282)); color(afh, dim); untraced(afh);
+arrow(agh, (636, 384), (800, 318)); color(agh, dim); untraced(agh);
+tag(axf, edges); tag(axg, edges); tag(afh, edges); tag(agh, edges);
+
+// ---- the forward pass ----
+equation(vx, (196, 352), `= \textcolor{gold}{2}`, 26); color(vx, gold); hidden(vx);
+equation(vf, (520, 256), `= \textcolor{cyan}{4}`, 26); color(vf, cyan); hidden(vf);
+equation(vg, (520, 446), `= \textcolor{lime}{1}`, 26); color(vg, lime); hidden(vg);
+equation(vh, (912, 352), `= \textcolor{magenta}{16}`, 26); color(vh, magenta); hidden(vh);
+
+// ---- one derivative per edge ----
+equation(dfx, (300, 196), `\frac{df}{dx} = 2x`, 24); color(dfx, cyan); hidden(dfx);
+equation(dgx, (300, 424), `\frac{dg}{dx} = -\pi\sin(\pi x)`, 24); color(dgx, lime); hidden(dgx);
+equation(dhf, (742, 196), `\frac{\partial h}{\partial f} = 2fg`, 24); color(dhf, cyan); hidden(dhf);
+equation(dhg, (742, 424), `\frac{\partial h}{\partial g} = f^2`, 24); color(dhg, lime); hidden(dhg);
+
+// ================================ THE SENSITIVITY ================================
+// x lives on 0..4, h on 0..32 — the same nudge is small on one line and large on the other
+parameter(xv, (150, 606), 2, 1.8, 2.2, "x", 3); hidden(xv.widget);
+numberline(xline, (400, 300), 200, 0, 4, 1); color(xline, dim); hidden(xline);
+numberline(hline, (900, 440), 260, 0, 32, 8); color(hline, dim); hidden(hline);
+text(xtag, (400, 236), "x"); display(xtag); size(xtag, 24); color(xtag, gold); hidden(xtag);
+equation(htag, (900, 372), `h = x^4\cos(\pi x)`, 26); color(htag, magenta); hidden(htag);
+dot(xdot, (400, 300), 8); color(xdot, gold); hidden(xdot);
+bind(xv, xdot, x, 380, 420);      // 1.8 and 2.2 in the line's OWN pixels: a small nudge
+// the h dot has to sit where a nonlinear function of the live parameter says: one point,
+// one formula, re-evaluated every frame
+cloud(hdot, 1, magenta) {
+  let hv = xv*xv*xv*xv*cos(pi*xv);
+  let x = 640 + 520*hv/32;        // the line's 0 is at 640, its 32 at 1160
+  let y = 440;
+  let r = 8;
+}
+hidden(hdot);
+
+// ================================ THE RULE ================================
+// each part is its own entity, so a highlight box can visit them one at a time
+mathparts(rule, (640, 520),
+  `\frac{dh}{dx} =`,
+  `\;\frac{df}{dx}\frac{\partial h}{\partial f}`,
+  `\; + \;`,
+  `\frac{dg}{dx}\frac{\partial h}{\partial g}`,
+  30);
+color(rule.0, fg); color(rule.1, cyan); color(rule.2, dim); color(rule.3, lime);
+hidden(rule);
+framebox(mark, rule.1, 10); color(mark, gold); hidden(mark);
+
+equation(subst, (640, 588), `= (2\cdot 2)(2\cdot 4\cdot 1) \; + \; (-\pi\sin 2\pi)(4^2)`, 28);
+color(subst, fg); hidden(subst);
+
+// ================================ THE CODA ================================
+network(net, (640, 380), "3 5 4 2", "relu relu softmax", 620, 380, 7);
+hidden(net);
+
+// ================================= ACT I =================================
+show(ttl, 0.9);
+show(sub, 0.7);
+wait(1.2);
+show(cap, 0.3);
+say(cap, "One input. Two things computed from it. One thing computed from those two.");
+par { fade(ttl, 0.8); fade(sub, 0.8); }
+show(ex, 0.5);
+draw(bx, 0.5);
+wait(0.5);
+par { draw(axf, 0.6); draw(axg, 0.6); }
+par { show(ef, 0.6); show(eg, 0.6); }
+par { draw(bf, 0.5); draw(bg, 0.5); }
+wait(0.6);
+say(cap, "Both of them feed the same last box, so x reaches h along TWO different paths.");
+par { draw(afh, 0.6); draw(agh, 0.6); }
+show(eh, 0.6);
+draw(bh, 0.5);
+wait(2.0);
+
+// ================================= ACT II =================================
+say(act, "II · feed it forward");
+show(act, 0.4);
+say(cap, "Put in x = 2. Everything downstream follows: f is 4, g is 1, so h is 16.");
+stagger(0.5) {
+  show(vx, 0.4);
+  show(vf, 0.4);
+  show(vg, 0.4);
+  show(vh, 0.4);
+}
+wait(1.8);
+
+// ================================= ACT III =================================
+say(act, "III · how sensitive is h?");
+say(cap, "Now the only question that matters: nudge x a little — how far does h move?");
+par {
+  to(ex, opacity, 0.25, 0.6);
+  to(ef, opacity, 0.25, 0.6);
+  to(eg, opacity, 0.25, 0.6);
+  to(eh, opacity, 0.25, 0.6);
+  to(vx, opacity, 0.2, 0.6);
+  to(vf, opacity, 0.2, 0.6);
+  to(vg, opacity, 0.2, 0.6);
+  to(vh, opacity, 0.2, 0.6);
+  to(edges, opacity, 0.2, 0.6);
+  to(bx, opacity, 0.15, 0.6);
+  to(bf, opacity, 0.15, 0.6);
+  to(bg, opacity, 0.15, 0.6);
+  to(bh, opacity, 0.15, 0.6);
+}
+par { show(xline, 0.5); show(hline, 0.5); }
+par { show(xtag, 0.4); show(htag, 0.5); show(xdot, 0.4); show(hdot, 0.4); }
+wait(0.8);
+say(cap, "Watch the two dots. The same wiggle, on two very different scales.");
+to(xv, value, 2.2, 1.1, smooth);
+to(xv, value, 1.8, 1.6, smooth);
+to(xv, value, 2, 0.9, smooth);
+wait(0.6);
+say(cap, "x moved a fifth of a unit. h moved six. The ratio it settles on is dh/dx = 32.");
+wait(2.4);
+
+// ================================= ACT IV =================================
+say(act, "IV · one derivative per edge");
+par {
+  fade(xline, 0.5); fade(hline, 0.5); fade(xtag, 0.4); fade(htag, 0.5);
+  fade(xdot, 0.4); fade(hdot, 0.4);
+  to(ex, opacity, 1, 0.6);
+  to(ef, opacity, 1, 0.6);
+  to(eg, opacity, 1, 0.6);
+  to(eh, opacity, 1, 0.6);
+  to(edges, opacity, 1, 0.6);
+  to(bx, opacity, 1, 0.6);
+  to(bf, opacity, 1, 0.6);
+  to(bg, opacity, 1, 0.6);
+  to(bh, opacity, 1, 0.6);
+  to(vx, opacity, 0.35, 0.6);
+  to(vf, opacity, 0.35, 0.6);
+  to(vg, opacity, 0.35, 0.6);
+  to(vh, opacity, 0.35, 0.6);
+}
+say(cap, "Every EDGE carries a derivative: how much its head moves when its tail moves.");
+par { show(dfx, 0.5); show(dgx, 0.5); }
+wait(1.4);
+say(cap, "The last two are PARTIAL — hold the other input still while you wiggle this one.");
+par { show(dhf, 0.5); show(dhg, 0.5); }
+wait(2.2);
+say(cap, "Follow the top path: x changes f, f changes h. Multiply the two.");
+par { pulse(axf, 0.8); pulse(afh, 0.8); }
+wait(1.6);
+say(cap, "Then the bottom path: x changes g, g changes h. Multiply those too — and ADD.");
+par { pulse(axg, 0.8); pulse(agh, 0.8); }
+wait(2.0);
+
+// ================================= ACT V =================================
+say(act, "V · assemble it");
+say(cap, "That is the whole rule: one product per path, summed over every path.");
+show(rule, 0.8);
+wait(1.2);
+show(mark, 0.5);
+say(cap, "The top path — df/dx times the partial of h in f.");
+wait(1.6);
+surround(mark, rule.3, 0.8, smooth);
+say(cap, "The bottom path — dg/dx times the partial of h in g. Nothing else contributes.");
+wait(2.0);
+fade(mark, 0.5);
+say(cap, "Substitute what we know at x = 2, where f = 4 and g = 1.");
+show(subst, 0.8);
+wait(2.2);
+say(cap, "Sine of two pi is zero, so the bottom path contributes NOTHING here. 32 plus 0.");
+rewrite(subst, `= 32 \; + \; 0 \;=\; \textcolor{magenta}{32}`, 1.4, smooth);
+wait(2.6);
+say(cap, "The same 32 the wiggling dots found — and h = x⁴cos(πx) agrees, if you expand it.");
+wait(2.4);
+
+// ================================= ACT VI =================================
+say(act, "VI · at scale");
+par {
+  fade(ex, 0.6); fade(ef, 0.6); fade(eg, 0.6); fade(eh, 0.6);
+  fade(bx, 0.5); fade(bf, 0.5); fade(bg, 0.5); fade(bh, 0.5);
+  fade(edges, 0.5);
+  fade(vx, 0.4); fade(vf, 0.4); fade(vg, 0.4); fade(vh, 0.4);
+  fade(dfx, 0.5); fade(dgx, 0.5); fade(dhf, 0.5); fade(dhg, 0.5);
+  fade(rule, 0.7); fade(subst, 0.7);
+}
+say(cap, "Four boxes and two paths. Now give the same rule a few thousand of each.");
+show(net, 1.0);
+forward(net, "0.9 0.2 0.6", 2.0);
+wait(0.6);
+loss(net, "1 0", crossentropy, 1.2);
+say(cap, "Every weight is an edge, every edge carries a derivative, every path gets summed.");
+backward(net, 3.0, smooth);
+wait(1.6);
+say(cap, "Run it backwards and the chain rule has another name: backpropagation.");
+wait(2.6);
+
+// ================================= ENDCARD =================================
+par {
+  fade(net, 0.9);
+  fade(cap, 0.7);
+  fade(act, 0.6);
+}
+text(end1, (640, 340), "One product per path. Sum over paths.");
+display(end1); size(end1, 42); bold(end1); color(end1, fg); hidden(end1);
+text(end2, (640, 420), "— manic");
+display(end2); size(end2, 26); color(end2, cyan); hidden(end2);
+show(end1, 0.9);
+show(end2, 0.7);
+wait(2.4);

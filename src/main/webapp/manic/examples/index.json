@@ -1,5 +1,5 @@
 {
-  "count": 411,
+  "count": 421,
   "categories": [
     {
       "slug": "algorithms",
@@ -1498,6 +1498,66 @@
           "file": "cloud-siphonophore.manic",
           "title": "Cloud siphonophore",
           "desc": "Another @yuruyurau art-tweet in ONE cloud, reimagined as a bioluminescent deep-sea drifter: 12,000 points trace a morphing bell + long feathered tail (polar radius q, angle c, with a d^sin(2d-t/3) body-warp) that swims and reconfigures over time."
+        },
+        {
+          "name": "probability-as-area",
+          "file": "probability-as-area.manic",
+          "title": "Probability as area",
+          "desc": "The two models 3Blue1Brown built the unreleased 'Essence of Probability' on, both area arguments rather than formulas."
+        },
+        {
+          "name": "multivariable-chain-rule",
+          "file": "multivariable-chain-rule.manic",
+          "title": "Multivariable chain rule",
+          "desc": "3Blue1Brown's _2018/mvcr.py, whose single scene is called ComputationalNetwork for a reason: the multivariable chain rule taught as a GRAPH, and the graph is the one backpropagation runs on."
+        },
+        {
+          "name": "sphere-area",
+          "file": "sphere-area.manic",
+          "title": "Sphere area",
+          "desc": "Why a sphere's area is 4piR^2 \u2014 3Blue1Brown's _2018/sphere_area.py, which is to say why a sphere is exactly FOUR of its own shadows."
+        },
+        {
+          "name": "quaternions",
+          "file": "quaternions.manic",
+          "title": "Quaternions",
+          "desc": "Quaternions, as 3Blue1Brown builds them in _2018/quaternions.py \u2014 not a formula with four letters in it, but four pictures, each the last one with a dimension added."
+        },
+        {
+          "name": "dominos-one-push",
+          "file": "dominos-one-push.manic",
+          "title": "Dominos one push",
+          "desc": "The whole domino story in one film, from 3Blue1Brown's 2017 experiments."
+        },
+        {
+          "name": "dominos-any-shape",
+          "file": "dominos-any-shape.manic",
+          "title": "Dominos any shape",
+          "desc": "Dominos v2 \u2014 the same slab physics standing along ANY parametric curve, seen from above (a standing domino is a short bar, a fallen one a long bar lying forward)."
+        },
+        {
+          "name": "dominos",
+          "file": "dominos.manic",
+          "title": "Dominos",
+          "desc": "A toppling wave, and what sets its speed \u2014 from 3Blue1Brown's 2017 domino EXPERIMENTS (19 data files of frame numbers at 1000-5000 fps)."
+        },
+        {
+          "name": "cloud-ink-pair",
+          "file": "cloud-ink-pair.manic",
+          "title": "Cloud ink pair",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud, staged on PAPER instead of in the dark: two fish circling in ink."
+        },
+        {
+          "name": "cloud-krill",
+          "file": "cloud-krill.manic",
+          "title": "Cloud krill",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud: a compact, densely bristled swimmer, pale and cold-lit on a specimen plate."
+        },
+        {
+          "name": "cloud-crinoid",
+          "file": "cloud-crinoid.manic",
+          "title": "Cloud crinoid",
+          "desc": "Another @yuruyurau art-tweet in ONE cloud, reimagined as a gold feather star combing the current: 10,000 points trace a curved spine with dozens of hooked barbs that sweep and re-comb as the angle c = d - t/3 turns, over d = mag(4cos(i/29), y/4-16) - 5."
         },
         {
           "name": "cloud-plumes",

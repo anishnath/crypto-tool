@@ -1,0 +1,58 @@
+// cloud-ink-pair — another @yuruyurau creature in ONE `cloud`, reimagined as a brush
+// study: two fish circling on paper. The reference is a tweet-sized golf:
+//   k = 5cos(i/44),  e = y/2-15,  d = mag(k,e)/3,  c = d/2 - t/3 + (i%2)·3,  y = i/253
+//   point( (79 + d² + k²)·sin c + 200 + d³/4·cos(3t - d²/4) ,
+//          99cos(c/2) + 4sin 2k + y/(77 sin(e/2) + 1e-4)·k·e + 200 )
+// The whole trick is `(i%2)·3`: every other point is phase-shifted by 3 radians, so ONE
+// formula draws TWO animals — a mirrored pair, orbiting a shared centre as `c` turns.
+// The near-vertical dotted streaks are the original's own doing: `77 sin(e/2)` passes
+// through zero, and the author's `+1e-4` guard bounds the blow-up instead of removing
+// it. We keep the guard and the streaks; they fall like rain behind the pair.
+//
+// So this one is staged on PAPER rather than in the dark: `template("paper")`, no bloom,
+// ink pooling dark along the bodies (`alpha` falls off with `d`) and drying to almost
+// nothing at the fin tips. p5's semi-transparent `stroke(w,96)` was always ink.
+//
+// Faithful notes: p5's `mag` is `hypot`, `%` is `mod`, `**` is `^`; the p5 draw loop
+// advances t by PI/80 per FRAME, so a frame-rate-free `t*1.0` stands in for it. Pure in
+// (i, t) — it scrubs, seeks and records exactly, which the p5 original cannot do.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau).
+//
+//   manic examples/cloud-ink-pair.manic
+title("Two, in ink — a pair from one formula");
+canvas("square");
+template("paper");
+
+// ---- the pair — `mod(i,2)` splits one formula into two animals ----
+// Framing is the original's own, scaled: p5 draws into 400×400 about (200,200), so
+// ×2.7 about (540,540) reproduces it at 1080, rain-streaks running off frame and all.
+cloud(pair, 10000, #14141a, 0.95) {
+  let yy = i / 253.0;
+  let k = 5.0 * cos(i / 44.0);
+  let e = yy / 2.0 - 15.0;
+  let d = hypot(k, e) / 3.0;
+  let T = t * 1.0;
+  let c = d/2.0 - T/3.0 + mod(i, 2) * 3.0;
+  let px = (79.0 + d*d + k*k) * sin(c) + (d^3)/4.0 * cos(T*3.0 - d*d/4.0);
+  let py = 99.0*cos(c/2.0) + 4.0*sin(k*2.0) + yy/(77.0*sin(e/2.0) + 0.0001) * k * e;
+  let x = 540 + px * 2.7;
+  let y = 540 + py * 2.7;
+  // ink pools along the body, dries out toward the fins
+  let alpha = clamp(0.9 - d * 0.07, 0.16, 0.92);
+  let r = 1.3;
+}
+
+// ---- annotations ----
+caption(head, "Two, in ink", (540, 96), 34); hidden(head);
+caption(sub, "one formula, split by mod(i,2)", (540, 152), 21); hidden(sub);
+equation(eq, (540, 946), `c=\tfrac{d}{2}-\tfrac{t}{3}+(i\bmod 2)\cdot 3`, 25); hidden(eq);
+caption(lab, "manic", (540, 1006), 18); hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(24);

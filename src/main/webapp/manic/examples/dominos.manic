@@ -1,0 +1,87 @@
+// dominos — a toppling wave, and what sets its speed.
+//
+// From 3Blue1Brown's 2017 `dominos/domino_play.py`, which is not an animation of falling
+// dominos at all: it plots 19 real experiments (frame numbers at 1000–5000 fps, one per
+// tap) to measure how fast the toppling wave travels, and a `Test` scene that draws the
+// geometry — how far a domino must tip before it reaches the next one.
+//
+// That geometry is the whole model. Each domino is a rigid slab pivoting on its leading
+// base edge, so it must be pushed past its balance angle atan(t/h) before gravity helps,
+// and it reaches its neighbour at the contact angle asin(spacing/height) — the arc 3b1b
+// draws. Contact is SUSTAINED: the faller leans on the next one and keeps driving it, so
+// the weight of the whole leaning group carries the wave. Nothing here sets the speed
+// directly: it emerges from spacing, height, thickness and the per-impact loss.
+//
+// Lengths are in millimetres, so the experiment's own numbers go straight in — 45 mm
+// tall, 7.5438 mm thick, 9.38 mm apart is 3b1b's main dataset.
+//
+//   manic examples/dominos.manic
+title("Dominos — the wave nobody sets the speed of");
+canvas("16:9");
+template("black");
+
+// ---- the row: real domino numbers, tagged so core verbs reach it ----
+dominos(row, (470, 300), 14, 45, 7.5438, 9.38, 2, 0.6, 6);
+color(row, cyan);          // one verb, the whole row
+color(row.d0, gold);       // ...or one piece
+framebox(first, row.d0, 7); color(first, gold); untraced(first);
+
+text(head, (640, 74), "One push, fourteen dominos");
+display(head); size(head, 34); bold(head); color(head, fg); hidden(head);
+text(cap, (640, 654), ""); display(cap); size(cap, 24); color(cap, dim); hidden(cap);
+
+equation(geo, (950, 250), `\theta_c=\arcsin\!\frac{s}{h}=12^{\circ}`, 26);
+color(geo, gold); hidden(geo);
+equation(bal, (950, 320), `\theta_b=\arctan\!\frac{t}{h}=9.5^{\circ}`, 26);
+color(bal, magenta); hidden(bal);
+text(geonote, (950, 392), "tip past 9.5° or it stands back up");
+display(geonote); size(geonote, 19); color(geonote, dim); hidden(geonote);
+
+// ---- the grid: the same row rebuilt over spacing × per-impact loss ----
+// `sweep` re-invokes the SAME constructor per cell, varying two of its own named
+// parameters — so this grid is 12 independent chains, some of which die out.
+dominos(cell, (0, 0), 10, 45, 7.5438, 9.38, 1.05, 0.6, 6); hidden(cell);
+sweep(grid, cell, spacing, (9, 40), transfer, (0.9, 0.45), (640, 430), 4, 3, 250, 130, 0, 0);
+hidden(grid);
+text(gridhead, (640, 138), "Wider gaps run faster — until nothing arrives");
+display(gridhead); size(gridhead, 27); bold(gridhead); color(gridhead, fg); hidden(gridhead);
+text(gridnote, (640, 646), "");
+display(gridnote); size(gridnote, 21); color(gridnote, dim); hidden(gridnote);
+
+// ---- Act 1: one row falls ----
+show(head, 0.6);
+show(cap, 0.3);
+say(cap, "Fourteen slabs, one nudge. Nothing in the file says how fast the wave travels.");
+show(row, 0.7);
+draw(first, 0.5);
+wait(0.6);
+run(row, 4.2);
+wait(0.5);
+say(cap, "Each slab has to tip past its own balance angle, then it reaches the next one.");
+par { show(geo, 0.6); show(bal, 0.6); }
+show(geonote, 0.5);
+wait(2.6);
+
+// ---- Act 2: the same row, swept over spacing and loss ----
+par {
+  fade(row, 0.6);
+  fade(first, 0.4);
+  fade(cap, 0.4);
+  fade(geo, 0.5);
+  fade(bal, 0.5);
+  fade(geonote, 0.5);
+  fade(head, 0.5);
+}
+show(gridhead, 0.6);
+show(gridnote, 0.3);
+say(gridnote, "Twelve chains: gap across, per-impact loss down. Some never finish.");
+par {
+  show(grid.chrome, 0.5);
+  show(grid.headers, 0.6);
+}
+show(grid.cells, 0.8);
+wait(0.4);
+run(grid, 7);
+wait(0.6);
+say(gridnote, "Speed is an outcome here, not a setting — the geometry decides it.");
+wait(2.2);

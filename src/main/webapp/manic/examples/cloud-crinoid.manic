@@ -1,0 +1,72 @@
+// cloud-crinoid — another @yuruyurau creature in ONE `cloud`, reimagined as a gold
+// feather star combing the current. The reference is a tweet-sized golf:
+//   k = 4cos(i/29),  e = y/4-16,  d = mag(k,e)-5,  c = d-t/3,  y = i/295
+//   point( (d²/0.7 - 2k² + y)·cos c + 200 ,
+//          3sin 2k + cos(y)/k + (y/9)k(3+sin(9e-3d+t)) + 79sin(c/3) + d²/3·sin(t-d²/7) + 200 )
+// One curved spine with dozens of hooked barbs that sweep and re-comb as `c` turns —
+// which is what a crinoid does for a living: perch on rock, fan its arms, strain the
+// water. So the `shader` behind it is the reef wall it clings to (mottled warm stone),
+// the arms run bone at the spine → amber at the barb tips, and `cos(y)/k` keeps its
+// division-by-almost-zero spikes: four flecks a frame, drifting plankton.
+//
+// Faithful notes: p5's `mag` is `hypot`; `**` is `^`; the p5 draw loop advances t by
+// PI/40 per FRAME, so a frame-rate-free `t*2.0` stands in for it. Pure in (i, t) —
+// it scrubs, seeks and records exactly, which the p5 original cannot do.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau).
+//
+//   manic examples/cloud-crinoid.manic
+title("Crinoid — combing the current");
+canvas("square");
+template("black");
+bloom(0.34, 0.55, 26);
+
+// ---- the reef wall it perches on: mottled warm stone, darker toward the edges ----
+shader(wall) {
+  let x = (u - 0.5) * asp;
+  let y = v - 0.5;
+  let d = sqrt(x*x + y*y);
+  let grain = 0.5 + 0.5*fbm(u*7.0, v*7.0);
+  let mott = 0.5 + 0.5*fbm(u*2.2 + 3.0, v*2.2);
+  let vig = 1.0 - 0.85*smoothstep(0.15, 0.72, d);
+  let hue = 28 + 10.0*mott;
+  let sat = 0.34 - 0.12*grain;
+  let val = (0.055 + 0.055*mott + 0.018*grain) * vig + 0.012;
+}
+z(wall, -10);
+
+// ---- the animal — the yuruyurau golf, re-lit and framed ----
+// The swept envelope of the formula is 315×185 wide over a full cycle of `c`, so
+// scale 2.95 about (556, 435) centres it in the square at every t, not just at t=0.
+cloud(arms, 10000, #ffffff, 0.34) {
+  let yy = i / 295.0;
+  let k = 4.0 * cos(i / 29.0);
+  let e = yy / 4.0 - 16.0;
+  let d = hypot(k, e) - 5.0;
+  let T = t * 2.0;
+  let c = d - T / 3.0;
+  let px = (d*d/0.7 - k*k*2.0 + yy) * cos(c);
+  let py = 3.0*sin(k*2.0) + cos(yy)/k + yy/9.0*k*(3.0 + sin(e*9.0 - d*3.0 + T)) + 79.0*sin(c/3.0) + d*d/3.0*sin(T - d*d/7.0);
+  let x = 556 + px * 2.95;
+  let y = 435 + py * 2.95;
+  // bone along the spine (small d) → amber where the barbs thin out (large d)
+  let hue = mod(44.0 - d * 1.1, 360);
+  let sat = clamp(0.10 + d * 0.045, 0.06, 0.62);
+  let val = clamp(0.72 + 0.28*sin(e*9.0 - d*3.0 + T), 0.34, 1.0);
+  let r = 1.25;
+}
+glow(arms, 1);
+
+// ---- annotations ----
+caption(head, "Crinoid", (540, 96), 34); hidden(head);
+caption(sub, "one formula, ten thousand points", (540, 152), 21); hidden(sub);
+equation(eq, (540, 946), `k=4\cos\tfrac{i}{29},\quad d=\mathrm{mag}\!\left(k,\tfrac{y}{4}-16\right)-5,\quad c=d-\tfrac{t}{3}`, 25); hidden(eq);
+caption(lab, "manic", (540, 1006), 18); hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(24);

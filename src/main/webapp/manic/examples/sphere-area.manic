@@ -1,0 +1,233 @@
+// sphere-area — 3Blue1Brown's `_2018/sphere_area.py`: why the area of a sphere is 4πR²,
+// which is to say why it is exactly FOUR of its own shadows.
+//
+//   ACT I    the question — a sphere, its shadow, and the factor of four
+//   ACT II   Archimedes' map — cut the sphere into tiles (`pieces3`) and push every tile
+//            radially outward onto the enclosing cylinder. Nothing tears: each tile gets
+//            WIDER by R/d and SHORTER by d/R, and R/d · d/R = 1, so area is preserved.
+//   ACT III  unwrap that cylinder — a flat 2πR × 2R rectangle
+//   ACT IV   and four discs, each unrolled ring by ring into a right triangle of area πR²,
+//            tile it exactly. Four circles. That is the whole answer.
+//
+// The sphere, the cylinder and the flat rectangle are ONE `param3` on one parameter journey
+// (0 → sphere, 1 → cylinder, 2 → unwrapped), and the tiles are `pieces3` of it — so the
+// pieces are re-sampled from the surface's own formulas every frame and travel with it.
+// The four unrolling discs are `cloud`s reading the same kind of parameter. R = 1 throughout,
+// so the numbers on screen are the theorem: 2π · 2 = 4π.
+//
+//   manic examples/sphere-area.manic
+title("Sphere Area — Four Circles, Wrapped");
+canvas("16:9");
+template("black");
+bloom(0.3, 0.5, 22);
+
+// ---- type ----
+text(ttl, (640, 96), "Why 4πR²?");
+display(ttl); size(ttl, 52); bold(ttl); color(ttl, fg); hidden(ttl);
+text(sub, (640, 152), "a sphere is exactly four of its own shadows");
+display(sub); size(sub, 22); color(sub, dim); hidden(sub);
+text(cap, (640, 664), ""); display(cap); size(cap, 23); color(cap, fg); hidden(cap);
+text(act, (1050, 622), ""); display(act); size(act, 19); color(act, gold); hidden(act);
+
+// ================================ THE 3-D STAGE ================================
+camera3((4.6, -5.4, 3.2), (0, 0, 0), 46, perspective);
+
+// One surface, three shapes. `map` = 0 the unit sphere, 1 the enclosing cylinder (every
+// point pushed straight out from the axis, keeping its height), 2 that cylinder unwrapped
+// into the flat 2π × 2 rectangle. `clamp` splits the journey into its two halves.
+parameter(map, (150, 606), 0, 0, 2, "map", 2); hidden(map.widget);
+param3(shell,
+  "(1-clamp(p-1,0,1))*((1-clamp(p,0,1))*sin(v) + clamp(p,0,1))*cos(u) + clamp(p-1,0,1)*(u-pi)",
+  "(1-clamp(p-1,0,1))*((1-clamp(p,0,1))*sin(v) + clamp(p,0,1))*sin(u) - clamp(p-1,0,1)*cos(v)",
+  "(1-clamp(p-1,0,1))*cos(v)",
+  (0, tau), (0.02, 3.12), 28);
+bind(map, shell, formula,
+  "(1-clamp(p-1,0,1))*((1-clamp(p,0,1))*sin(v) + clamp(p,0,1))*cos(u) + clamp(p-1,0,1)*(u-pi)",
+  "(1-clamp(p-1,0,1))*((1-clamp(p,0,1))*sin(v) + clamp(p,0,1))*sin(u) - clamp(p-1,0,1)*cos(v)",
+  "(1-clamp(p-1,0,1))*cos(v)");
+color(shell, cyan); finish3(shell, "wire=1"); hidden(shell);
+
+// the same surface as 336 loose tiles — they re-sample the surface every frame, so the
+// whole tiling rides the map out onto the cylinder and then flat
+pieces3(tiles, shell, 24, 14, 0.12);
+hue(tiles, 196);
+hue(tiles.row7, 320);            // one latitude band, to watch a single row travel
+hidden(tiles);
+
+// the shadow: the disc the sphere covers, on the ground
+param3(shade, "v*cos(u)", "v*sin(u)", "-1.05", (0, tau), (0.02, 1), 24);
+color(shade, gold); hidden(shade);
+grid3(floor, (0, 0, -1.06), 2, 0.5); color(floor, dim); hidden(floor);
+
+// ================================ THE 2-D STAGE ================================
+// the unwrapped rectangle, in screen space. R = 110px, so it is 2piR = 691 wide and 2R = 220
+// tall, and four discs of radius R fit in a row above it — the areas on screen are the ones
+// in the argument, not a convenient cartoon.
+rect(sheet, (640, 430), 691, 220); outlined(sheet); outline(sheet, dim); hidden(sheet);
+text(wlab, (640, 566), "2πR"); display(wlab); size(wlab, 22); color(wlab, cyan); hidden(wlab);
+text(hlab, (250, 430), "2R"); display(hlab); size(hlab, 22); color(hlab, magenta); hidden(hlab);
+equation(area, (640, 214), `2\pi R \cdot 2R = 4\pi R^2`, 34); color(area, gold); hidden(area);
+
+// Four discs, each unrolled ring by ring into a right triangle that lands in the sheet: a
+// ring of radius r straightens into a segment 2*pi*r long, so the stack of them IS a
+// triangle of base 2piR, height R, area piR^2. Two of them tile each half of the sheet.
+// 12,000 points as 300 angles x 40 radii, so the long outer rings stay solid when straight.
+parameter(un, (150, 606), 0, 0, 1, "unrolled", 2); hidden(un.widget);
+cloud(d0, 12000, cyan) {
+  let r = (mod(i, 40) + 0.5)/40;
+  let th = floor(i/40) * 0.020944;
+  let x = (1-un)*(200 + 110*r*cos(th)) + un*(294 + 110*r*th);
+  let y = (1-un)*(170 + 110*r*sin(th)) + un*(320 + 110*r);
+  let rr = 1.5;
+  let hue = 196;
+}
+cloud(d1, 12000, cyan) {
+  let r = (mod(i, 40) + 0.5)/40;
+  let th = floor(i/40) * 0.020944;
+  let x = (1-un)*(420 + 110*r*cos(th)) + un*(985 - 110*r*th);
+  let y = (1-un)*(170 + 110*r*sin(th)) + un*(430 - 110*r);
+  let rr = 1.5;
+  let hue = 220;
+}
+cloud(d2, 12000, cyan) {
+  let r = (mod(i, 40) + 0.5)/40;
+  let th = floor(i/40) * 0.020944;
+  let x = (1-un)*(640 + 110*r*cos(th)) + un*(294 + 110*r*th);
+  let y = (1-un)*(170 + 110*r*sin(th)) + un*(430 + 110*r);
+  let rr = 1.5;
+  let hue = 288;
+}
+cloud(d3, 12000, cyan) {
+  let r = (mod(i, 40) + 0.5)/40;
+  let th = floor(i/40) * 0.020944;
+  let x = (1-un)*(860 + 110*r*cos(th)) + un*(985 - 110*r*th);
+  let y = (1-un)*(170 + 110*r*sin(th)) + un*(540 - 110*r);
+  let rr = 1.5;
+  let hue = 324;
+}
+hidden(d0); hidden(d1); hidden(d2); hidden(d3);
+
+// ---- the lemma, as a cross-section ----
+circle(cs, (420, 380), 150); outlined(cs); outline(cs, dim); hidden(cs);
+line(axis, (420, 200), (420, 560)); color(axis, dim); hidden(axis);
+line(wall, (570, 200), (570, 560)); color(wall, cyan); hidden(wall);
+line(ray, (420, 380), (570, 275)); color(ray, gold); untraced(ray);
+line(dseg, (420, 294), (543, 294)); color(dseg, magenta); untraced(dseg);
+dot(tile, (543, 294), 5); color(tile, cyan); hidden(tile);
+text(dlab, (478, 270), "d"); display(dlab); size(dlab, 20); color(dlab, magenta); hidden(dlab);
+text(rlab, (492, 352), "R"); display(rlab); size(rlab, 20); color(rlab, gold); hidden(rlab);
+equation(wide, (860, 320), `\text{width} \times \tfrac{R}{d}`, 30); color(wide, cyan); hidden(wide);
+equation(short, (860, 396), `\text{height} \times \tfrac{d}{R}`, 30); color(short, magenta); hidden(short);
+equation(one, (860, 480), `\tfrac{R}{d}\cdot\tfrac{d}{R}=1`, 30); color(one, gold); hidden(one);
+
+// ================================= ACT I =================================
+show(ttl, 0.9);
+show(sub, 0.7);
+wait(1.4);
+show(cap, 0.3);
+say(cap, "A sphere of radius R. Roll it in your hand: how much surface is there?");
+show(shell, 0.9);
+show(floor, 0.5);
+orbit3(34, 22, 4.6, 2.6, smooth);
+wait(0.8);
+par { fade(ttl, 0.8); fade(sub, 0.8); }
+say(cap, "Here is its shadow — a circle of area πR². The sphere's area is exactly four of those.");
+show(shade, 0.8);
+pulse(shade, 0.9);
+wait(2.2);
+say(cap, "Four. Not π, not 2π. Four circles' worth of paper, wrapped on a ball. Why?");
+wait(2.4);
+
+// ================================= ACT II =================================
+say(act, "II · onto a cylinder");
+show(act, 0.4);
+par { fade(shade, 0.6); fade(floor, 0.5); }
+say(cap, "Cut the surface into tiles. Nothing about the sphere has changed yet.");
+par { fade(shell, 0.7); show(tiles, 0.9); }
+wait(1.6);
+say(cap, "Now push every tile straight out from the axis, onto the cylinder that encloses it.");
+show(map.widget, 0.5);
+to(map, value, 1, 3.2, smooth);
+wait(1.0);
+say(cap, "Watch one band. It moved out, so it got wider — and it tilted flat, so it got shorter.");
+pulse(tiles.row7, 0.9);
+wait(2.2);
+
+say(cap, "That trade is exact. Cut the ball in half and it is two similar triangles.");
+par {
+  fade(tiles, 0.8);
+  fade(map.widget, 0.5);
+}
+show(cs, 0.6);
+show(axis, 0.5);
+show(wall, 0.6);
+wait(0.6);
+draw(ray, 0.7);
+draw(dseg, 0.5);
+show(tile, 0.4);
+show(dlab, 0.4);
+show(rlab, 0.4);
+wait(1.4);
+say(cap, "A tile at distance d from the axis lands at distance R, so its width scales by R/d.");
+show(wide, 0.7);
+wait(2.0);
+say(cap, "And the surface there leans by the same ratio, so its height squishes by d/R.");
+show(short, 0.7);
+wait(2.0);
+say(cap, "One stretch, one squish, the same number. The tile's AREA never changed.");
+show(one, 0.8);
+wait(2.4);
+
+// ================================= ACT III =================================
+say(act, "III · unwrap it");
+par {
+  fade(cs, 0.6); fade(axis, 0.5); fade(wall, 0.5); fade(ray, 0.5); fade(dseg, 0.5);
+  fade(dlab, 0.4); fade(rlab, 0.4); fade(tile, 0.4); fade(wide, 0.6); fade(short, 0.6); fade(one, 0.6);
+}
+say(cap, "So the sphere and the cylinder have the same area — and a cylinder unrolls flat.");
+show(tiles, 0.8);
+orbit3(-96, 54, 6.4, 2.4, smooth);
+to(map, value, 2, 3.0, smooth);
+wait(1.2);
+say(cap, "A rectangle. Its height is 2R, and its width is the cylinder's circumference, 2πR.");
+wait(2.4);
+par { fade(tiles, 0.9); }
+show(sheet, 0.7);
+show(wlab, 0.5);
+show(hlab, 0.5);
+wait(1.0);
+show(area, 0.9);
+say(cap, "Two π R, times two R. Four π R squared — the sphere's area, with nothing left over.");
+wait(2.8);
+
+// ================================= ACT IV =================================
+say(act, "IV · and the four circles");
+fade(area, 0.7);
+say(cap, "One thing is still owed: why FOUR circles fill that rectangle. Here are four.");
+par {
+  show(d0, 0.6); show(d1, 0.6); show(d2, 0.6); show(d3, 0.6);
+}
+wait(1.6);
+say(cap, "Unroll each one ring by ring. A ring of radius r straightens into a line 2πr long.");
+show(un.widget, 0.5);
+to(un, value, 1, 3.4, smooth);
+wait(1.0);
+say(cap, "Each circle becomes a right triangle: base 2πR, height R, area πR². Four of them —");
+wait(2.4);
+say(cap, "— and they tile the rectangle exactly. A sphere is four of its own shadows.");
+show(area, 0.9);
+wait(3.0);
+
+// ================================= ENDCARD =================================
+par {
+  fade(d0, 0.8); fade(d1, 0.8); fade(d2, 0.8); fade(d3, 0.8);
+  fade(sheet, 0.6); fade(wlab, 0.5); fade(hlab, 0.5); fade(area, 0.8);
+  fade(un.widget, 0.5); fade(cap, 0.7); fade(act, 0.6);
+}
+text(end1, (640, 340), "Push it out, unroll it, count the circles.");
+display(end1); size(end1, 42); bold(end1); color(end1, fg); hidden(end1);
+text(end2, (640, 420), "— manic");
+display(end2); size(end2, 26); color(end2, cyan); hidden(end2);
+show(end1, 0.9);
+show(end2, 0.7);
+wait(2.4);

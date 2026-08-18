@@ -1,0 +1,90 @@
+// dominos-any-shape — dominos v2: stand them along ANY curve, place them one by one,
+// then push the first one over.
+//
+// v1 (`examples/dominos.manic`) is the side view of a straight row, built from
+// 3Blue1Brown's 2017 domino experiments. This is the same slab physics seen from
+// ABOVE — where a standing domino is a short bar and a fallen one is a long bar lying
+// forward along the path — which is what makes an arbitrary arrangement legible.
+//
+// The shape is a `param`-style formula pair, so anything you can write, you can topple:
+// a spiral, a heart, a figure of eight. `count` sets the spacing (equal arc length), so
+// asking for more dominos tightens the gaps and slows the wave; the physics is unchanged
+// (balance angle atan(t/h), contact at asin(s/h), sustained contact carrying the wave)
+// and nothing sets the speed — it emerges from the geometry.
+//
+// The placing-one-by-one beat needs no new vocabulary: the run's pieces are ordinary
+// entities `{id}.d{i}`, so `stagger` over a `for` loop lays them down in order.
+//
+//   manic examples/dominos-any-shape.manic
+title("Dominos, any shape you like");
+canvas("16:9");
+template("black");
+bloom(0.3, 0.5, 20);
+
+text(head, (640, 70), "Dominos, any shape you like");
+display(head); size(head, 34); bold(head); color(head, fg); hidden(head);
+text(cap, (640, 660), ""); display(cap); size(cap, 23); color(cap, dim); hidden(cap);
+text(shape, (640, 618), ""); display(shape); size(shape, 20); color(shape, gold); hidden(shape);
+
+// ---- three arrangements, same physics ----
+// a spiral: r = t, so the gap between turns stays constant
+dominopath(spiral, (640, 372), 13, 13, "t*cos(t)", "t*sin(t)", 96, (1.4, 19.2), 45, 7.5438, 1.7, 0.7, 8);
+hidden(spiral.dominos); untraced(spiral.path);   // pieces fade in; the guide is armed for draw-on
+
+// a heart — the classic parametric one, closed, so the wave runs all the way round
+dominopath(heart, (640, 356), 12.5, 12.5,
+  "16*sin(t)^3", "13*cos(t)-5*cos(2*t)-2*cos(3*t)-cos(4*t)", 58, (0, 6.2832), 45, 7.5438, 1.7, 0.7, 8);
+hidden(heart.dominos); untraced(heart.path);   // pieces fade in; the guide is armed for draw-on
+
+// a figure of eight: a lissajous with a 1:2 frequency ratio
+dominopath(eight, (640, 372), 300, 150, "sin(t)", "sin(2*t)", 84, (0, 6.2832), 45, 7.5438, 1.7, 0.72, 8);
+hidden(eight.dominos); untraced(eight.path);   // pieces fade in; the guide is armed for draw-on
+
+// ---- Act 1: the spiral, laid down one domino at a time ----
+show(head, 0.6);
+show(cap, 0.3);
+say(cap, "Ninety-six dominos, standing along a spiral. Watch them go down one by one.");
+draw(spiral.path, 1.2, smooth);
+show(shape, 0.4);
+say(shape, "r = t");
+stagger(0.017) {
+  for i in 0..96 {
+    show(spiral.d{i}, 0.16);
+  }
+}
+wait(0.5);
+say(cap, "One push at the middle, and the wave winds outward. Nothing here sets its speed.");
+run(spiral, 5.5);
+wait(0.8);
+
+// ---- Act 2: the same physics, a heart ----
+par { fade(spiral, 0.7); fade(spiral.path, 0.5); }
+say(cap, "Change the formula, keep the physics. A closed curve topples all the way round.");
+draw(heart.path, 1.0, smooth);
+say(shape, "x = 16 sin³t,  y = 13 cos t − 5 cos 2t − 2 cos 3t − cos 4t");
+size(shape, 17);
+stagger(0.022) {
+  for i in 0..58 {
+    show(heart.d{i}, 0.18);
+  }
+}
+wait(0.4);
+run(heart, 5.0);
+wait(0.8);
+
+// ---- Act 3: a figure of eight, and the wave crosses its own middle ----
+par { fade(heart, 0.7); fade(heart.path, 0.5); }
+say(cap, "A lissajous at 1:2 — the run crosses itself, and the wave passes straight through.");
+say(shape, "x = sin t,  y = sin 2t");
+size(shape, 20);
+draw(eight.path, 1.0, smooth);
+stagger(0.018) {
+  for i in 0..84 {
+    show(eight.d{i}, 0.16);
+  }
+}
+wait(0.4);
+run(eight, 5.0);
+wait(0.6);
+say(cap, "Same slab, same contact angle, same emergent speed — only the path changed.");
+wait(2.0);

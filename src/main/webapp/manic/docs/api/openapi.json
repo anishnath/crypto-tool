@@ -1,0 +1,156 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Manic Platform API",
+    "version": "0.1.0",
+    "description": "The Manic Platform API validates .manic source, manages projects and keys, starts hosted renders, and runs Manic AI. The Rust Manic engine remains local and portable; this API is the authenticated cloud control plane.\n\nAll endpoints below are shipped. A caller must supply an mk_live_… or mk_test_… API key for API-key operations, or a Cognito access token for account operations. Never place a production API key in browser code."
+  },
+  "servers": [
+    { "url": "https://api.maniclang.com/v1", "description": "Production" }
+  ],
+  "tags": [
+    { "name": "Validation", "description": "Validate Manic source synchronously without using credits." },
+    { "name": "Renders", "description": "Queue and monitor hosted exports." },
+    { "name": "AI", "description": "Generate, refine, or diagnose a Manic document." },
+    { "name": "Projects", "description": "Versioned Manic documents and browser projects." },
+    { "name": "Usage", "description": "Credit, plan, and available model information." },
+    { "name": "API keys", "description": "Cognito-account management of scoped API keys." }
+  ],
+  "paths": {
+    "/check": {
+      "post": {
+        "tags": ["Validation"],
+        "operationId": "checkManicSource",
+        "summary": "Validate Manic source",
+        "description": "Requires the `check` scope. A saved document additionally requires `projects:read`. This endpoint does not reserve or consume credits.",
+        "security": [{ "ApiKeyAuth": ["check"] }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CheckRequest" }, "examples": { "inline": { "value": { "source": "title(\"Hello\");\ncanvas(\"16:9\");\ncircle(sun, (cx, cy), 90);\nshow(sun, 0.6);" } } } } } },
+        "responses": { "200": { "description": "Validation result", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CheckResponse" } } } }, "401": { "$ref": "#/components/responses/Error" }, "403": { "$ref": "#/components/responses/Error" }, "422": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/renders": {
+      "post": {
+        "tags": ["Renders"],
+        "operationId": "createRender",
+        "summary": "Queue a hosted render",
+        "description": "Requires `render:create` for an API key. Set an `Idempotency-Key` header and reuse it after a network failure. Source is validated before a job and export reservation are created. FPS above the caller tier ceiling is clamped rather than rejected.",
+        "security": [{ "ApiKeyAuth": ["render:create"] }, { "CognitoBearer": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RenderRequest" }, "examples": { "inlineMp4": { "value": { "source": "title(\"Hello\");\ncanvas(\"16:9\");\ncircle(sun, (cx, cy), 90);\nshow(sun, 0.6);", "fps": 30, "format": "mp4" } } } } } },
+        "responses": { "202": { "description": "Queued", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RenderJob" } } } }, "200": { "description": "Idempotent replay", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RenderJob" } } } }, "402": { "$ref": "#/components/responses/Error" }, "409": { "$ref": "#/components/responses/Error" }, "422": { "$ref": "#/components/responses/Error" }, "503": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/jobs": {
+      "get": {
+        "tags": ["Renders"], "operationId": "listRenderJobs", "summary": "List hosted render jobs", "description": "Requires `jobs:read` for an API key.",
+        "security": [{ "ApiKeyAuth": ["jobs:read"] }, { "CognitoBearer": [] }],
+        "parameters": [{ "name": "limit", "in": "query", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 } }, { "name": "before", "in": "query", "schema": { "type": "integer" } }],
+        "responses": { "200": { "description": "Render jobs", "content": { "application/json": { "schema": { "type": "object", "required": ["data", "request_id"], "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/RenderJob" } }, "next_before": { "type": ["integer", "null"] }, "request_id": { "type": "string" } } } } } }, "401": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/jobs/{jobId}": {
+      "get": {
+        "tags": ["Renders", "AI"], "operationId": "getJob", "summary": "Read a render or AI job", "description": "A `rnd_…` id returns a hosted render job; a `run_…` id returns an AI job. Requires `jobs:read` for API-key access.",
+        "security": [{ "ApiKeyAuth": ["jobs:read"] }, { "CognitoBearer": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/JobId" }],
+        "responses": { "200": { "description": "Job state", "content": { "application/json": { "schema": { "oneOf": [{ "$ref": "#/components/schemas/RenderJob" }, { "$ref": "#/components/schemas/AiJob" }] } } } }, "404": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/jobs/{jobId}/cancel": {
+      "post": {
+        "tags": ["Renders"], "operationId": "cancelRenderJob", "summary": "Request cancellation of a render", "description": "Requires `render:cancel` for an API key. Cancellation is cooperative: poll the job until it is terminal.",
+        "security": [{ "ApiKeyAuth": ["render:cancel"] }, { "CognitoBearer": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/RenderJobId" }],
+        "responses": { "200": { "description": "Cancellation state", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RenderJob" } } } }, "409": { "$ref": "#/components/responses/Error" }, "404": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/jobs/{jobId}/artifacts/{artifact}": {
+      "get": {
+        "tags": ["Renders"], "operationId": "downloadRenderArtifact", "summary": "Download a private render artifact", "description": "Requires `jobs:read` for an API key. Completed job responses normally include public one-hour R2 URLs; this endpoint is the authenticated fallback.",
+        "security": [{ "ApiKeyAuth": ["jobs:read"] }, { "CognitoBearer": [] }],
+        "parameters": [{ "$ref": "#/components/parameters/RenderJobId" }, { "name": "artifact", "in": "path", "required": true, "schema": { "type": "string", "enum": ["output", "markers"] } }],
+        "responses": { "200": { "description": "The artifact bytes", "content": { "video/mp4": { "schema": { "type": "string", "format": "binary" } }, "application/json": { "schema": { "type": "object" } } } }, "404": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/ai/models": {
+      "get": { "tags": ["AI"], "operationId": "listAiModels", "summary": "List enabled AI models", "responses": { "200": { "description": "Enabled models", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AiModelsResponse" } } } } } }
+    },
+    "/ai/runs": {
+      "post": {
+        "tags": ["AI"], "operationId": "createAiRun", "summary": "Create an AI authoring job", "description": "Requires `ai:generate` for an API key. Requests are asynchronous and token-metered. Set an `Idempotency-Key` header.",
+        "security": [{ "ApiKeyAuth": ["ai:generate"] }, { "CognitoBearer": [] }], "parameters": [{ "$ref": "#/components/parameters/IdempotencyKey" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AiRunRequest" }, "examples": { "create": { "value": { "intent": "create", "prompt": "Explain the Pythagorean theorem with a moving right triangle.", "policy": { "model": "gpt-5.6-terra", "max_repairs": 2 } } } } } } },
+        "responses": { "202": { "description": "Queued", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AiRunAccepted" } } } }, "402": { "$ref": "#/components/responses/Error" }, "409": { "$ref": "#/components/responses/Error" }, "422": { "$ref": "#/components/responses/Error" } }
+      }
+    },
+    "/catalog/offers": {
+      "get": { "tags": ["Usage"], "operationId": "listOffers", "summary": "List purchasable Manic offers", "responses": { "200": { "description": "Catalogue", "content": { "application/json": { "schema": { "type": "object", "properties": { "offers": { "type": "array", "items": { "type": "object" } }, "request_id": { "type": "string" } } } } } } } }
+    },
+    "/credits/status": {
+      "get": { "tags": ["Usage"], "operationId": "getCreditStatus", "summary": "Read account or installation credits", "description": "Accepts a Manic API key or an installation proof. Account calls report owner-meter balances; installation calls include trial and offline permit information.", "security": [{ "ApiKeyAuth": [] }], "responses": { "200": { "description": "Credit status", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreditStatus" } } } }, "401": { "$ref": "#/components/responses/Error" } } }
+    },
+    "/projects/default": {
+      "get": { "tags": ["Projects"], "operationId": "getDefaultProject", "summary": "Get the caller's default project", "security": [{ "ApiKeyAuth": ["projects:read"] }], "responses": { "200": { "description": "Project", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProjectEnvelope" } } } } } }
+    },
+    "/projects/{projectId}/documents": {
+      "get": { "tags": ["Projects"], "operationId": "listDocuments", "summary": "List a project's documents", "security": [{ "ApiKeyAuth": ["projects:read"] }], "parameters": [{ "$ref": "#/components/parameters/ProjectId" }], "responses": { "200": { "description": "Documents", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DocumentsEnvelope" } } } } } }
+    },
+    "/projects/{projectId}/documents/{path}": {
+      "get": { "tags": ["Projects"], "operationId": "getDocument", "summary": "Read a versioned Manic document", "security": [{ "ApiKeyAuth": ["projects:read"] }], "parameters": [{ "$ref": "#/components/parameters/ProjectId" }, { "$ref": "#/components/parameters/DocumentPath" }, { "name": "revision", "in": "query", "schema": { "type": "integer", "minimum": 1 } }], "responses": { "200": { "description": "Document", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Document" } } } } } },
+      "put": { "tags": ["Projects"], "operationId": "saveDocument", "summary": "Create a document revision", "description": "Requires `projects:write`. Sending `base_revision` detects concurrent edits and returns `stale_revision` if another write won first.", "security": [{ "ApiKeyAuth": ["projects:write"] }], "parameters": [{ "$ref": "#/components/parameters/ProjectId" }, { "$ref": "#/components/parameters/DocumentPath" }], "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SaveDocumentRequest" } } } }, "responses": { "200": { "description": "Saved revision", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SaveDocumentResponse" } } } }, "409": { "$ref": "#/components/responses/Error" } } }
+    },
+    "/api-keys": {
+      "get": { "tags": ["API keys"], "operationId": "listApiKeys", "summary": "List API keys", "description": "Account-management endpoint; requires a Cognito access token for an organization owner or admin.", "security": [{ "CognitoBearer": [] }], "responses": { "200": { "description": "Managed API keys", "content": { "application/json": { "schema": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/ApiKey" } }, "request_id": { "type": "string" } } } } } } } },
+      "post": { "tags": ["API keys"], "operationId": "createApiKey", "summary": "Create a scoped API key", "description": "The raw `secret` appears only in this response. Store it immediately.", "security": [{ "CognitoBearer": [] }], "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateApiKeyRequest" } } } }, "responses": { "201": { "description": "Created key and one-time secret", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreatedApiKey" } } } }, "422": { "$ref": "#/components/responses/Error" } } }
+    },
+    "/api-keys/{apiKeyId}": {
+      "get": { "tags": ["API keys"], "operationId": "getApiKey", "summary": "Get API-key metadata", "security": [{ "CognitoBearer": [] }], "parameters": [{ "$ref": "#/components/parameters/ApiKeyId" }], "responses": { "200": { "description": "Key metadata", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ApiKey" } } } } } },
+      "delete": { "tags": ["API keys"], "operationId": "revokeApiKey", "summary": "Revoke an API key", "security": [{ "CognitoBearer": [] }], "parameters": [{ "$ref": "#/components/parameters/ApiKeyId" }], "responses": { "204": { "description": "Revoked" } } }
+    },
+    "/api-keys/{apiKeyId}/rotate": {
+      "post": { "tags": ["API keys"], "operationId": "rotateApiKey", "summary": "Rotate an API key", "description": "The original key is revoked and the raw replacement secret appears once.", "security": [{ "CognitoBearer": [] }], "parameters": [{ "$ref": "#/components/parameters/ApiKeyId" }], "responses": { "201": { "description": "Replacement key", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreatedApiKey" } } } } } }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "mk_live_… or mk_test_…", "description": "Use `Authorization: Bearer mk_live_…`. `X-API-Key` is also accepted by the API." },
+      "CognitoBearer": { "type": "http", "scheme": "bearer", "bearerFormat": "Cognito access token" }
+    },
+    "parameters": {
+      "IdempotencyKey": { "name": "Idempotency-Key", "in": "header", "required": true, "schema": { "type": "string", "minLength": 1, "maxLength": 200 } },
+      "JobId": { "name": "jobId", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^(rnd|run)_[a-f0-9]{32}$" } },
+      "RenderJobId": { "name": "jobId", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^rnd_[a-f0-9]{32}$" } },
+      "ProjectId": { "name": "projectId", "in": "path", "required": true, "schema": { "type": "string" } },
+      "DocumentPath": { "name": "path", "in": "path", "required": true, "allowReserved": true, "schema": { "type": "string", "example": "main.manic" } },
+      "ApiKeyId": { "name": "apiKeyId", "in": "path", "required": true, "schema": { "type": "string", "pattern": "^key_[a-f0-9]{32}$" } }
+    },
+    "responses": { "Error": { "description": "Structured API error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorEnvelope" } } } } },
+    "schemas": {
+      "CheckRequest": { "oneOf": [{ "type": "object", "required": ["source"], "additionalProperties": false, "properties": { "source": { "type": "string", "maxLength": 1000000 } } }, { "type": "object", "required": ["document_ref"], "additionalProperties": false, "properties": { "document_ref": { "$ref": "#/components/schemas/DocumentRef" } } }] },
+      "CheckResponse": { "type": "object", "required": ["ok", "engine_version", "diagnostics", "request_id"], "properties": { "ok": { "type": "boolean" }, "engine_version": { "type": "string" }, "diagnostics": { "type": "array", "items": { "$ref": "#/components/schemas/Diagnostic" } }, "document": { "oneOf": [{ "$ref": "#/components/schemas/DocumentRef" }, { "type": "null" }] }, "request_id": { "type": "string" } } },
+      "Diagnostic": { "type": "object", "properties": { "severity": { "type": "string", "enum": ["error", "warning", "info"] }, "message": { "type": "string" }, "line": { "type": ["integer", "null"] }, "column": { "type": ["integer", "null"] } } },
+      "DocumentRef": { "type": "object", "required": ["project_id", "path"], "properties": { "project_id": { "type": "string" }, "path": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*\\.manic$" }, "revision": { "type": "integer", "minimum": 1 } } },
+      "RenderRequest": { "type": "object", "additionalProperties": false, "oneOf": [{ "required": ["source"] }, { "required": ["document_ref"] }], "properties": { "source": { "type": "string", "maxLength": 1000000 }, "document_ref": { "$ref": "#/components/schemas/DocumentRef" }, "fps": { "type": "integer", "minimum": 1 }, "format": { "type": "string", "enum": ["mp4", "gif", "webm", "mov", "still"], "default": "mp4" }, "canvas": { "type": "string", "description": "Named canvas or WIDTHxHEIGHT." }, "stage": { "type": "string" }, "from": { "type": "number", "minimum": 0 }, "to": { "type": "number", "minimum": 0 }, "from_stage": { "type": "string" }, "to_stage": { "type": "string" }, "still": { "type": "number", "minimum": 0 }, "quality": { "$ref": "#/components/schemas/RenderQuality" }, "assets": { "type": "array", "maxItems": 20, "items": { "$ref": "#/components/schemas/RenderAsset" } } } },
+      "RenderQuality": { "type": "object", "additionalProperties": false, "properties": { "scale": { "type": "number", "minimum": 0.25, "maximum": 4 }, "msaa": { "type": "integer", "enum": [1, 2, 4, 8, 16] }, "encoder_preset": { "type": "string", "enum": ["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow"] }, "crt": { "type": "boolean" }, "alpha": { "type": "boolean", "description": "Not available for hosted renders yet." } } },
+      "RenderAsset": { "type": "object", "required": ["mount", "content_base64"], "additionalProperties": false, "properties": { "mount": { "type": "string", "description": "Safe job-relative mount used as asset:<mount> in source." }, "content_base64": { "type": "string", "format": "byte" }, "media_type": { "type": "string" } } },
+      "RenderJob": { "type": "object", "required": ["id", "status", "progress", "attempts", "cache_hit", "created_at", "request_id"], "properties": { "id": { "type": "string", "pattern": "^rnd_" }, "status": { "type": "string", "enum": ["queued", "running", "succeeded", "failed", "cancelled", "timed_out"] }, "progress": { "type": "number", "minimum": 0, "maximum": 1 }, "attempts": { "type": "integer" }, "cache_hit": { "type": "boolean" }, "created_at": { "type": "integer" }, "started_at": { "type": ["integer", "null"] }, "finished_at": { "type": ["integer", "null"] }, "result": { "type": ["object", "null"], "properties": { "artifacts": { "type": "object", "properties": { "output": { "type": "string", "format": "uri" }, "markers": { "type": "string", "format": "uri" } } } } }, "failure": { "type": ["object", "null"], "properties": { "code": { "type": "string" }, "message": { "type": "string" } } }, "request_id": { "type": "string" } } },
+      "AiRunRequest": { "type": "object", "required": ["intent"], "additionalProperties": false, "properties": { "intent": { "type": "string", "enum": ["create", "refine", "diagnose"] }, "prompt": { "type": "string", "maxLength": 20000 }, "document": { "type": "object", "properties": { "source": { "type": "string" }, "revision": { "oneOf": [{ "type": "string" }, { "type": "integer" }] } } }, "thread_id": { "type": "string" }, "policy": { "type": "object", "properties": { "model": { "type": "string" }, "max_repairs": { "type": "integer", "minimum": 0, "maximum": 10 } } } } },
+      "AiRunAccepted": { "type": "object", "required": ["id", "type", "status", "request_id"], "properties": { "id": { "type": "string", "pattern": "^run_" }, "type": { "type": "string", "const": "ai" }, "status": { "type": "string", "const": "queued" }, "request_id": { "type": "string" } } },
+      "AiJob": { "type": "object", "required": ["id", "type", "status", "request_id"], "properties": { "id": { "type": "string", "pattern": "^run_" }, "type": { "type": "string", "const": "ai" }, "status": { "type": "string", "enum": ["queued", "running", "succeeded", "failed"] }, "result": { "type": ["object", "null"] }, "usage": { "type": "object" }, "failure": { "type": "object" }, "request_id": { "type": "string" } } },
+      "AiModelsResponse": { "type": "object", "required": ["models", "request_id"], "properties": { "models": { "type": "array", "items": { "type": "object", "properties": { "id": { "type": "string" }, "provider": { "type": "string" }, "display_name": { "type": "string" } } } }, "request_id": { "type": "string" } } },
+      "CreditStatus": { "type": "object", "properties": { "exports": { "$ref": "#/components/schemas/Meter" }, "ai_tokens": { "$ref": "#/components/schemas/Meter" }, "request_id": { "type": "string" } } },
+      "Meter": { "type": "object", "properties": { "granted": { "type": "integer" }, "used": { "type": "integer" }, "reserved": { "type": "integer" }, "revoked": { "type": "integer" }, "available": { "type": "integer" } } },
+      "ProjectEnvelope": { "type": "object", "properties": { "project": { "$ref": "#/components/schemas/Project" }, "request_id": { "type": "string" } } },
+      "Project": { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "status": { "type": "string" }, "created_at": { "type": "integer" }, "updated_at": { "type": "integer" } } },
+      "DocumentsEnvelope": { "type": "object", "properties": { "project": { "$ref": "#/components/schemas/Project" }, "documents": { "type": "array", "items": { "$ref": "#/components/schemas/DocumentSummary" } }, "request_id": { "type": "string" } } },
+      "DocumentSummary": { "type": "object", "properties": { "path": { "type": "string" }, "revision": { "type": "integer" }, "updated_at": { "type": "integer" } } },
+      "Document": { "type": "object", "properties": { "project_id": { "type": "string" }, "path": { "type": "string" }, "revision": { "type": "integer" }, "source": { "type": "string" }, "updated_at": { "type": "integer" }, "request_id": { "type": "string" } } },
+      "SaveDocumentRequest": { "type": "object", "required": ["source"], "additionalProperties": false, "properties": { "source": { "type": "string", "maxLength": 1000000 }, "base_revision": { "type": "integer", "minimum": 1 } } },
+      "SaveDocumentResponse": { "type": "object", "properties": { "project_id": { "type": "string" }, "path": { "type": "string" }, "revision": { "type": "integer" }, "updated_at": { "type": "integer" }, "request_id": { "type": "string" } } },
+      "CreateApiKeyRequest": { "type": "object", "required": ["name", "scopes"], "additionalProperties": false, "properties": { "name": { "type": "string" }, "organization_id": { "type": "string" }, "scopes": { "type": "array", "items": { "type": "string", "enum": ["check", "render:create", "render:cancel", "jobs:read", "projects:read", "projects:write", "ai:generate"] } }, "rate_limit_per_minute": { "type": "integer" }, "expires_at": { "type": "integer" } } },
+      "ApiKey": { "type": "object", "properties": { "id": { "type": "string" }, "organization_id": { "type": "string" }, "name": { "type": "string" }, "prefix": { "type": "string" }, "scopes": { "type": "array", "items": { "type": "string" } }, "status": { "type": "string" }, "created_at": { "type": "integer" }, "expires_at": { "type": ["integer", "null"] }, "last_used_at": { "type": ["integer", "null"] } } },
+      "CreatedApiKey": { "allOf": [{ "$ref": "#/components/schemas/ApiKey" }, { "type": "object", "required": ["secret"], "properties": { "secret": { "type": "string", "description": "Shown once only." }, "request_id": { "type": "string" } } }] },
+      "ErrorEnvelope": { "type": "object", "required": ["error"], "properties": { "error": { "type": "object", "required": ["code", "message", "request_id"], "properties": { "code": { "type": "string", "example": "validation_failed" }, "message": { "type": "string" }, "details": {}, "request_id": { "type": "string" } } } } }
+    }
+  }
+}

@@ -1,0 +1,237 @@
+// quaternions — the argument 3Blue1Brown builds in `_2018/quaternions.py`, which is not
+// "here is a formula with four letters in it" but a chain of four pictures, each one the
+// last one with a dimension added:
+//
+//   ACT I    multiplying complex numbers TURNS the plane          (`warp`, z → q·z)
+//   ACT II   a circle is a line, seen from the pole               (stereographic, 2-D)
+//   ACT III  a sphere is a plane, seen from the pole              (`param3` + `bind`)
+//   ACT IV   the unit quaternions are a 3-SPHERE — project it into 3-space and left
+//            multiplication becomes a visible flow                (`cloud3` + `parameter`)
+//
+// The point of the sequence is that you never see four dimensions; you see a shadow of
+// them, and multiplication is a rigid turn of the thing casting it.
+//
+// Everything here is driven by scene `parameter`s rather than by time, so each picture is
+// a DIAL you can stop anywhere — including the 3-sphere, whose 5,000 particles are a
+// closed-form function of (i, dial): a Hamilton product, then a projection.
+//
+//   manic examples/quaternions.manic
+title("Quaternions — Turning in Four Dimensions");
+canvas("16:9");
+template("black");
+bloom(0.32, 0.55, 24);
+
+// ---- type ----
+text(ttl, (640, 92), "Quaternions");
+display(ttl); size(ttl, 54); bold(ttl); color(ttl, fg); hidden(ttl);
+text(sub, (640, 148), "turning in four dimensions");
+display(sub); size(sub, 23); color(sub, dim); hidden(sub);
+text(cap, (640, 662), ""); display(cap); size(cap, 23); color(cap, fg); hidden(cap);
+text(act, (1122, 620), ""); display(act); size(act, 19); color(act, gold); hidden(act);
+
+// ============================ ACT I — a turn of the plane ============================
+// z → (1+i)z turns AND stretches; z → (cos60 + i sin60)z only turns, because |q| = 1.
+warp(gstretch, (770, 366), 64, `(1+i)*z`, 3, 34); color(gstretch, dim); hidden(gstretch);
+warp(gturn, (770, 366), 64, `(0.5+0.8660254*i)*z`, 3, 34); color(gturn, cyan); hidden(gturn);
+equation(eq1, (228, 340), `z \mapsto (1+i)\,z`, 30); color(eq1, gold); hidden(eq1);
+equation(eq2, (228, 340), `z \mapsto (\cos 60^{\circ}+i\sin 60^{\circ})\,z`, 26);
+color(eq2, gold); hidden(eq2);
+
+// ============================ ACT II — the circle and the line ======================
+parameter(flat, (168, 596), 0, 0, 1, "projected", 2); hidden(flat.widget);
+circle(hoop, (640, 300), 140); outlined(hoop); outline(hoop, dim); hidden(hoop);
+line(axis, (140, 440), (1140, 440)); color(axis, dim); hidden(axis);
+dot(pole, (640, 160), 6); color(pole, gold); hidden(pole);
+text(plab, (640, 132), "the pole you look from");
+display(plab); size(plab, 17); color(plab, gold); hidden(plab);
+// three rays of the construction: from the pole, through a point of the circle, to the line
+line(ray1, (640, 160), (831, 440)); color(ray1, magenta); untraced(ray1);
+line(ray2, (640, 160), (448, 440)); color(ray2, magenta); untraced(ray2);
+line(ray3, (640, 160), (1032, 440)); color(ray3, magenta); untraced(ray3);
+// the circle's own points, which slide out along those rays as `flat` opens
+// x_line = 2·tan(a/2): a point near the pole lands far away, and the pole itself never lands
+cloud(beads, 520, cyan) {
+  let a = -2.0 + (i/520)*4.0;
+  let px = sin(a);
+  let py = -cos(a);
+  let xl = 2*sin(a)/(1 + cos(a));
+  let x = 640 + 140*(px*(1-flat) + xl*flat);
+  let y = 300 - 140*(py*(1-flat) - flat);
+  let r = 2.4;
+  let hue = 188 + 18*flat;
+}
+hidden(beads);
+
+// ============================ ACT III & IV — the 3-D stage =========================
+camera3((4.8, -5.4, 3.6), (0, 0, 0), 44, perspective);
+
+// The sphere, morphing into its own stereographic projection — the same picture as ACT II
+// with one more dimension, and the same dial. It is parametrized AROUND the pole you look
+// from (`v` is the angle away from it, stopping just short at 2.45 rad), so the flattened
+// picture is an honest disc: radius tan(v/2), the pole itself infinitely far out.
+parameter(proj, (168, 596), 0, 0, 1, "projected", 2); hidden(proj.widget);
+param3(ball,
+  "(1-p)*sin(v)*cos(u) + 0.4*p*sin(v)*cos(u)/(1+cos(v))",
+  "(1-p)*sin(v)*sin(u) + 0.4*p*sin(v)*sin(u)/(1+cos(v))",
+  "(1-p)*cos(v)",
+  (0, tau), (0.16, 2.45), 26);
+bind(proj, ball, formula,
+  "(1-p)*sin(v)*cos(u) + 0.4*p*sin(v)*cos(u)/(1+cos(v))",
+  "(1-p)*sin(v)*sin(u) + 0.4*p*sin(v)*sin(u)/(1+cos(v))",
+  "(1-p)*cos(v)");
+color(ball, cyan); finish3(ball, "wire=1"); hidden(ball);   // a wire globe reads as a GRID, and the grid is what gets carried to the plane
+
+// THE 3-SPHERE. Every unit quaternion q = w + xi + yj + zk with |q| = 1 lives on it: a
+// 3-dimensional surface in 4-space, so it has no picture — but its shadow in 3-space does.
+// The twelve circles below are HOPF FIBRES over a ring of directions: great circles of the
+// 3-sphere, every pair of them linked, which stereographic projection carries to linked
+// circles here. Each is sampled by ARC LENGTH (the `atan2` reparametrization), or the
+// projection would bunch every dot at the near side. `dial` left-multiplies all 6,000 of
+// them by cos θ + j sin θ — a rigid turn of the 3-sphere, which the shadow has to bend to
+// follow. The pole is set just outside (`d = rw + 1.12`) so no circle ever runs off to
+// infinity mid-turn.
+parameter(dial, (150, 596), 0, 0, 1, "θ", 2); hidden(dial.widget);
+cloud3(s3, 6000, #00e5ff, 0.6) {
+  let f = mod(i, 12);                       // which fibre
+  let a0 = 0.95;                            // the ring of directions they sit over
+  let ph = f * 0.5235988;                   // where this one sits around that ring
+  let u = floor(i/12) * 0.0125664;          // 500 samples along the fibre
+  let c = cos(a0);
+  let ec = sqrt((1+c)/(1-c));
+  let sp = 2*atan2(ec*sin(u/2), cos(u/2));  // uniform spacing AFTER projection
+  let qw = c*cos(sp);                       // the fibre itself: a great circle of S³
+  let qx = c*sin(sp);
+  let qy = sin(a0)*cos(sp + ph);
+  let qz = sin(a0)*sin(sp + ph);
+  let ang = dial * tau;
+  let m0 = cos(ang);
+  let m2 = sin(ang);
+  let rw = m0*qw - m2*qy;                   // the Hamilton product (cos θ + j sin θ)·q
+  let rx = m0*qx + m2*qz;
+  let ry = m0*qy + m2*qw;
+  let rz = m0*qz - m2*qx;
+  let d = rw + 1.12;
+  let x = rx / d;
+  let y = ry / d;
+  let z = rz / d;
+  let r = 0.013;
+  let hue = 186 + 100*f/12;
+  let alpha = 0.6;
+}
+glow(s3, 2); hidden(s3);
+equation(ham, (250, 210), `i^2=j^2=k^2=ijk=-1`, 27); color(ham, gold); hidden(ham);
+text(hlab, (250, 262), "Hamilton, on a bridge in Dublin, 1843");
+display(hlab); size(hlab, 17); color(hlab, dim); hidden(hlab);
+
+// ================================= ACT I =================================
+show(ttl, 0.9);
+show(sub, 0.7);
+wait(1.5);
+show(cap, 0.3);
+say(cap, "Start in the complex plane, where multiplying does something to ALL of it.");
+par { fade(ttl, 0.8); fade(sub, 0.8); }
+show(gstretch, 0.7);
+show(eq1, 0.6);
+wait(0.6);
+to(gstretch, morph, 1, 2.0, smooth);
+wait(0.9);
+say(cap, "Multiply by 1+i and the plane turns — and stretches, since 1+i is longer than 1.");
+wait(2.0);
+par { fade(gstretch, 0.6); fade(eq1, 0.5); }
+say(cap, "Pick a number of length exactly one, and the stretching stops.");
+show(gturn, 0.6);
+show(eq2, 0.6);
+to(gturn, morph, 1, 2.2, smooth);
+wait(1.4);
+say(cap, "A unit complex number IS a rotation. That is the whole idea — the rest is dimensions.");
+wait(2.6);
+
+// ================================= ACT II =================================
+par { fade(gturn, 0.8); fade(eq2, 0.6); }
+say(act, "II · a circle is a line");
+show(act, 0.4);
+say(cap, "Before four dimensions, do two. Here is a circle, and a line it just touches.");
+show(hoop, 0.7);
+show(axis, 0.6);
+show(beads, 0.7);
+wait(1.4);
+say(cap, "Stand at the top. Look through any point of the circle, and you land on the line.");
+show(pole, 0.5);
+show(plab, 0.4);
+par { draw(ray1, 0.6); draw(ray2, 0.6); draw(ray3, 0.7); }
+wait(1.8);
+say(cap, "Every point of the circle has its own place on the line — so let them go there.");
+show(flat.widget, 0.5);
+to(flat, value, 1, 2.6, smooth);
+wait(1.0);
+say(cap, "The circle became the line. Only the pole is missing — it would land infinitely far.");
+wait(2.4);
+say(cap, "One missing point, in exchange for a flat picture. It works in any dimension.");
+wait(2.6);
+
+// ================================= ACT III =================================
+par {
+  fade(beads, 0.8); fade(hoop, 0.6); fade(axis, 0.6);
+  fade(ray1, 0.5); fade(ray2, 0.5); fade(ray3, 0.5);
+  fade(pole, 0.5); fade(plab, 0.5); fade(flat.widget, 0.5);
+}
+say(act, "III · a sphere is a plane");
+say(cap, "One dimension up: a sphere, and the same pole to look from.");
+show(ball, 0.9);
+orbit3(28, 22, 4.8, 2.6, smooth);
+wait(1.0);
+say(cap, "Open the same dial. The sphere peels off the pole and lies down flat.");
+show(proj.widget, 0.5);
+to(proj, value, 1, 3.0, smooth);
+wait(1.2);
+say(cap, "A sphere is a plane plus one point. Nothing tore; the pole was sent away.");
+orbit3(64, 62, 4.9, 3.0, smooth);
+wait(2.2);
+
+// ================================= ACT IV =================================
+par { fade(ball, 0.9); fade(proj.widget, 0.5); }
+say(act, "IV · the unit quaternions");
+say(cap, "Now four. Take every quaternion of length one: w² + x² + y² + z² = 1.");
+show(ham, 0.7);
+show(hlab, 0.5);
+wait(1.8);
+say(cap, "A three-dimensional surface in four-dimensional space: a 3-sphere. It has no picture.");
+wait(2.2);
+say(cap, "But it has a shadow. Project from a pole, as before, and it fits in this room.");
+par {
+  fade(ham, 0.8);
+  fade(hlab, 0.6);
+}
+show(s3, 1.2);
+orbit3(-24, 22, 4.6, 3.2, smooth);
+wait(1.2);
+say(cap, "Six thousand of them, on twelve great circles — and every pair is linked.");
+wait(2.2);
+
+say(cap, "Multiply every one by cos θ + j sin θ — Act I's move, one dimension up.");
+show(dial.widget, 0.6);
+to(dial, value, 0.5, 4.0, smooth);
+wait(0.4);
+say(cap, "Nothing is being deformed. The 3-sphere is turning rigidly; only its shadow bends.");
+to(dial, value, 1, 4.0, smooth);
+wait(0.6);
+say(cap, "Half a turn of the dial sent 1 to −1. A full turn brings every point home.");
+orbit3(78, -18, 5.0, 4.0, smooth);
+wait(2.0);
+say(cap, "A quaternion multiplication: a rotation you can only watch in shadow.");
+wait(2.6);
+
+// ================================= ENDCARD =================================
+par {
+  fade(s3, 1.2);
+  fade(dial.widget, 0.6);
+  fade(cap, 0.7);
+  fade(act, 0.6);
+}
+text(end1, (640, 336), "Four dimensions, watched from three.");
+display(end1); size(end1, 44); bold(end1); color(end1, fg); hidden(end1);
+text(end2, (640, 416), "— manic");
+display(end2); size(end2, 26); color(end2, cyan); hidden(end2);
+show(end1, 0.9);
+show(end2, 0.7);
+wait(2.4);

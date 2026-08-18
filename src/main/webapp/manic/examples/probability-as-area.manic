@@ -1,0 +1,173 @@
+// probability-as-area — the two models 3Blue1Brown built the (unreleased) "Essence of
+// Probability" series on, both of which are area arguments rather than formulas.
+//
+//   ACT I   the BRICK ROW (`_2018/eop/reusables/brick_row.py`): one brick of probability
+//           1, and every coin flip splits each brick in two. Bricks with the same number
+//           of heads merge, so the widths become C(n,k)/2^n and the binomial distribution
+//           EMERGES from repeatedly halving area — 1 : 4 : 6 : 4 : 1 by level four.
+//   ACT II  the AREA MODEL (`_2018/eop/chapter1/area_model_bayes.py`): a unit square cut
+//           by the prior across and the test's accuracy down, so Bayes' theorem is just
+//           one bright rectangle over two.
+//
+// Written with ordinary manic vocabulary — the binomial coefficients are build-time
+// `prod`/`sum` reductions over the loop index, and the splits are `to(id, width, …)` /
+// `to(id, height, …)`. Growth is about a rect's centre, so each one is paired with
+// `to(id, x, …)` / `to(id, y, …)` in a `par` to anchor the edge that should stay put.
+//
+//   manic examples/probability-as-area.manic
+title("Probability is area you keep splitting");
+canvas("16:9");
+template("black");
+bloom(0.3, 0.5, 22);
+
+text(head, (640, 76), "Probability is area you keep splitting");
+display(head); size(head, 36); bold(head); color(head, fg); hidden(head);
+text(cap, (640, 660), ""); display(cap); size(cap, 23); color(cap, fg); hidden(cap);
+
+// ---- ACT I — the brick row ----
+let tw = 880;      // the row is one unit of probability, 880px wide
+let x0 = 200;
+for k in 0..5 {
+  rect(b{k}, (x0, 330), 0, 104);
+  hue(b{k}, 188 + 26*k);
+}
+rect(frame, (x0 + tw/2, 330), tw, 104); outlined(frame); outline(frame, dim); hidden(frame);
+text(counts, (640, 262), ""); display(counts); size(counts, 26); color(counts, gold); hidden(counts);
+text(flips, (640, 420), ""); display(flips); size(flips, 21); color(flips, dim); hidden(flips);
+
+// ---- ACT II — the area model ----
+// a unit square: the prior runs ACROSS (10% of people are ill), the test's accuracy runs
+// DOWN (it catches 90% of the ill, and wrongly flags 5% of the well)
+let sq = 396;
+let sqx = 640;                       // left edge — the diagram sits right, the maths left
+let sqy = 168;                       // top edge
+rect(ill, (sqx, sqy), 0, 0); hue(ill, 320);            // ill AND positive
+rect(illn, (sqx, sqy), 0, 0); hue(illn, 300);          // ill AND negative
+rect(wellp, (sqx, sqy), 0, 0); hue(wellp, 196);        // well AND positive (false alarm)
+rect(well, (sqx + sq/2, sqy + sq/2), sq, sq); hue(well, 208);  // everyone, to begin with
+hidden(ill); hidden(illn); hidden(wellp); hidden(well);
+rect(border, (sqx + sq/2, sqy + sq/2), sq, sq); outlined(border); outline(border, dim); hidden(border);
+
+text(xlab, (sqx + sq/2, sqy + sq + 34), ""); display(xlab); size(xlab, 19); color(xlab, dim); hidden(xlab);
+text(ylab, (sqx - 74, sqy + sq/2), ""); display(ylab); size(ylab, 19); color(ylab, dim); hidden(ylab);
+equation(bayes, (300, 366), `P(\text{ill}\mid+)=\frac{0.09}{0.09+0.045}=\tfrac{2}{3}`, 27);
+color(bayes, gold); hidden(bayes);
+
+// ============================ ACT I ============================
+show(head, 0.7);
+show(cap, 0.3);
+say(cap, "Start with one brick. Its width is the whole of probability: one.");
+show(frame, 0.5);
+par { to(b0, width, tw, 0.6, smooth); to(b0, x, x0 + tw/2, 0.6, smooth); }
+say(counts, "1");
+wait(1.2);
+
+say(cap, "A coin flip splits every brick in two — heads to the left, tails to the right.");
+show(flips, 0.4);
+// each flip: the widths become C(L,k)/2^L. The product is naturally zero for k > L, so a
+// brick that does not exist yet simply has no width.
+for L in 1..5 {
+  par {
+    for k in 0..5 {
+      to(b{k}, width, tw * prod(j in 1..k+1 : (L - k + j)/j) / 2^L, 0.85, smooth);
+      to(b{k}, x,
+         x0 + tw*sum(m in 0..k : prod(j in 1..m+1 : (L - m + j)/j))/2^L
+            + tw*prod(j in 1..k+1 : (L - k + j)/j)/(2*2^L),
+         0.85, smooth);
+    }
+  }
+  wait(0.75);
+}
+show(counts, 0.4);
+say(counts, "1   4   6   4   1");
+say(flips, "four flips · widths are C(4,k) / 16");
+wait(1.0);
+say(cap, "Bricks with the same number of heads merge, and the binomial falls out of the area.");
+wait(2.4);
+
+// ============================ ACT II ============================
+par {
+  fade(counts, 0.5);
+  fade(flips, 0.5);
+  fade(frame, 0.5);
+  for k in 0..5 {
+    fade(b{k}, 0.6);
+  }
+}
+say(cap, "The same trick answers a harder question. One square: everybody.");
+show(well, 0.5);
+show(border, 0.5);
+wait(1.4);
+
+say(cap, "Cut it ACROSS by how common the illness is — one person in ten.");
+show(xlab, 0.4);
+say(xlab, "10% ill  ·  90% well");
+show(ill, 0.01);
+par {
+  // the well column keeps its right edge; the ill column takes the left tenth
+  to(well, width, 0.9*sq, 0.9, smooth);
+  to(well, x, sqx + 0.55*sq, 0.9, smooth);
+  to(ill, width, 0.1*sq, 0.9, smooth);
+  to(ill, x, sqx + 0.05*sq, 0.9, smooth);
+  to(ill, height, sq, 0.9, smooth);
+  to(ill, y, sqy + sq/2, 0.9, smooth);
+}
+wait(1.6);
+
+say(cap, "Now cut it DOWN by what the test does: it catches 90% of the ill —");
+show(ylab, 0.4);
+say(ylab, "test + / −");
+show(illn, 0.01);
+par {
+  to(ill, height, 0.9*sq, 0.9, smooth);
+  to(ill, y, sqy + 0.45*sq, 0.9, smooth);
+  to(illn, width, 0.1*sq, 0.9, smooth);
+  to(illn, x, sqx + 0.05*sq, 0.9, smooth);
+  to(illn, height, 0.1*sq, 0.9, smooth);
+  to(illn, y, sqy + 0.95*sq, 0.9, smooth);
+}
+wait(1.4);
+say(cap, "— and wrongly flags 5% of the well. That thin strip is the false alarms.");
+show(wellp, 0.01);
+par {
+  to(well, height, 0.95*sq, 0.9, smooth);
+  to(well, y, sqy + 0.525*sq, 0.9, smooth);
+  to(wellp, width, 0.9*sq, 0.9, smooth);
+  to(wellp, x, sqx + 0.55*sq, 0.9, smooth);
+  to(wellp, height, 0.05*sq, 0.9, smooth);
+  to(wellp, y, sqy + 0.025*sq, 0.9, smooth);
+}
+wait(1.8);
+
+say(cap, "A positive test means you are in one of the two bright rectangles. Which one is bigger?");
+par {
+  fade(illn, 0.6);
+  fade(well, 0.6);
+}
+par {
+  pulse(ill, 0.8);
+  pulse(wellp, 0.8);
+}
+wait(1.6);
+say(cap, "The false alarms are only half the size — so a positive means two chances in three, not ninety percent.");
+show(bayes, 0.8);
+wait(3.0);
+
+// ============================ ENDCARD ============================
+par {
+  fade(ill, 0.8);
+  fade(wellp, 0.8);
+  fade(border, 0.6);
+  fade(xlab, 0.5);
+  fade(ylab, 0.5);
+  fade(bayes, 0.8);
+  fade(cap, 0.6);
+  fade(head, 0.6);
+}
+text(end1, (640, 348), "Two models, one idea: keep the area, cut it up.");
+display(end1); size(end1, 40); bold(end1); color(end1, fg); hidden(end1);
+text(end2, (640, 420), "— manic");
+display(end2); size(end2, 26); color(end2, cyan); hidden(end2);
+show(end1, 0.9);
+show(end2, 0.7);
+wait(2.4);

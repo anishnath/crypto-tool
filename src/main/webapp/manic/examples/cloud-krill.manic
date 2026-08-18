@@ -1,0 +1,77 @@
+// cloud-krill — another @yuruyurau creature in ONE `cloud`: a compact, densely bristled
+// swimmer, pale and cold-lit. It is the same golf as `cloud-crinoid.manic` with three
+// constants changed — worth knowing, because these tweet-sized formulas are a parameter
+// space you can walk, not a single drawing:
+//
+//   crinoid      e = y/4 - 16    d = mag(k,e) - 5    + d²/3·sin(t - d²/7)
+//   this one     e = y/5 - 13    d = mag(k,e) - 4    + d²/3·cos(t - d²/9)
+//
+// Everything else is identical — k = 4cos(i/29), c = d - t/3, y = i/295, and
+//   point( (d²/0.7 - 2k² + y)·cos c + 200 ,
+//          3sin 2k + cos(y)/k + (y/9)k(3 + sin(9e - 3d + t)) + 79sin(c/3) + … + 200 )
+// Shortening the spine (`-4`) and slowing the body taper (`y/5`) pulls the long sweeping
+// arms in: where the crinoid fans wide, this is compact, dense and coiled — a stubbier
+// relative on the same skeleton. The phase change from `sin` to `cos` in the last term
+// re-times the breathing against the sweep, so the two never move alike.
+//
+// Staged as a specimen plate rather than a scene: no reef wall, no warm stone — a cold
+// dark ground, a pale bone-blue body, and the three changed constants typeset below it.
+//
+// Faithful notes: p5's `mag` is `hypot`, `**` is `^`; the p5 draw loop advances t by
+// PI/60 per FRAME, so a frame-rate-free `t*1.333` stands in for it (the crinoid's
+// PI/40 became `t*2.0`, so the two run at the same relative pace). `cos(y)/k` keeps its
+// division-by-almost-zero flecks. Pure in (i, t), so it scrubs, seeks and records.
+//
+// Original idea by @yuruyurau (https://x.com/yuruyurau).
+//
+//   manic examples/cloud-krill.manic
+title("Krill — ten thousand points, one closed form");
+canvas("square");
+template("black");
+bloom(0.3, 0.55, 22);
+
+// ---- a cold, near-empty field: this is a plate, not a habitat ----
+shader(field) {
+  let x = (u - 0.5) * asp;
+  let y = v - 0.5;
+  let d = sqrt(x*x + y*y);
+  let vig = 1.0 - 0.9*smoothstep(0.1, 0.75, d);
+  let hue = 214;
+  let sat = 0.5;
+  let val = 0.028 * vig + 0.008;
+}
+z(field, -10);
+
+// ---- the animal — swept envelope is 222×459, so ×2.2 about (540,540) fills the plate ----
+cloud(body, 10000, #ffffff, 0.34) {
+  let yy = i / 295.0;
+  let k = 4.0 * cos(i / 29.0);
+  let e = yy / 5.0 - 13.0;
+  let d = hypot(k, e) - 4.0;
+  let T = t * 1.333;
+  let c = d - T / 3.0;
+  let px = (d*d/0.7 - k*k*2.0 + yy) * cos(c);
+  let py = 3.0*sin(k*2.0) + cos(yy)/k + yy/9.0*k*(3.0 + sin(e*9.0 - d*3.0 + T)) + 79.0*sin(c/3.0) + (d*d)/3.0*cos(T - d*d/9.0);
+  let x = 540 + px * 2.2;
+  let y = 540 + py * 2.2;
+  // bone-blue: pale at the spine, cooling toward the barb tips
+  let hue = mod(206.0 + d * 2.2, 360);
+  let sat = clamp(0.06 + d * 0.05, 0.04, 0.5);
+  let val = clamp(0.74 + 0.26*sin(e*9.0 - d*3.0 + T), 0.36, 1.0);
+  let r = 1.25;
+}
+glow(body, 1);
+
+// ---- annotations ----
+caption(head, "Krill", (540, 96), 34); hidden(head);
+caption(sub, "ten thousand points, one closed form", (540, 152), 21); hidden(sub);
+equation(eq, (540, 950), `k=4\cos\tfrac{i}{29},\quad d=\mathrm{mag}\!\left(k,\tfrac{y}{5}-13\right)-4,\quad c=d-\tfrac{t}{3}`, 24); hidden(eq);
+caption(lab, "manic", (540, 1010), 18); hidden(lab);
+
+show(head);
+wait(1.4);
+show(sub);
+wait(2.6);
+show(eq);
+show(lab);
+wait(24);
