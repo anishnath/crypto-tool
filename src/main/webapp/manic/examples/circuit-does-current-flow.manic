@@ -1,0 +1,94 @@
+// Does current flow?
+//
+// The oldest question in electricity, answered by a circuit that draws itself and then gets
+// taken apart. Every number on screen is solved: the schematic is built one component at a
+// time and each PREFIX of it is analysed, so nothing moves until the loop closes — and when
+// the return wire is cut, the lamp's current goes to zero because the circuit that is left
+// was solved from scratch, not because anything was dimmed.
+//
+// Nothing here is a circuit-specific animation verb. The drawing, the framing and the
+// close-up are Manic's core kit; the physics is Modified Nodal Analysis.
+
+title("does current flow?");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 44), "maniclang.com");
+display(brand);
+size(brand, 22);
+color(brand, dim);
+
+circuit(loop, (600, 400), `
+  dc-voltage 0 6 0 0 v=9
+  wire       0 0 4 0
+  switch     4 0 7 0 closed=1
+  wire       7 0 11 0
+  lamp       11 0 11 6 r=180 name=L1
+  wire       11 6 6 6 name=RET
+  wire       6 6 0 6
+  ground     0 6
+`, 58);
+
+// The animator's dial on the current: a little quicker than the circuit's own pace, because a
+// short film wants pace. `speed` scales every branch by the same factor, so the ratio between
+// branches — the only thing dot speed is allowed to mean — is untouched. `current` also takes a
+// shape (circle, square, diamond), a colour (any palette name or #rrggbb) and a size.
+current(loop, 1.6);
+
+probe(loop, L1, (70, -6));
+
+// the highlight box is declared up front and hidden — a ctor belongs above the timeline
+framebox(ring, loop.L1, 10);
+hidden(ring);
+
+text(q1, (640, 118), "one loop, one lamp");
+hidden(q1);
+size(q1, 30);
+color(q1, cyan);
+
+text(q2, (640, 118), "cut the return: still a lamp, no current");
+hidden(q2);
+size(q2, 30);
+color(q2, magenta);
+
+text(q3, (640, 118), "put it back");
+hidden(q3);
+size(q3, 30);
+color(q3, lime);
+
+// the schematic draws itself in netlist order, and the current starts by itself when the
+// last wire closes the loop
+show(q1, 0.5);
+run(loop, 7.0);
+wait(0.4);
+
+// look closely at the one component that is doing the work
+par {
+  zoom(1.7, 1.2);
+  cam((820, 420), 1.2);
+  show(ring, 0.8);
+}
+wait(1.0);
+par {
+  zoom(1.0, 1.0);
+  cam((640, 360), 1.0);
+  fade(ring, 0.6);
+}
+
+// take the return wire out — and the lamp goes dark because there is nothing to light it
+par {
+  fade(q1, 0.4);
+  show(q2, 0.4);
+}
+cut(loop, RET, 0.9);
+run(loop, 3.5);
+wait(0.6);
+
+// and back
+par {
+  fade(q2, 0.4);
+  show(q3, 0.4);
+}
+reconnect(loop, RET, 0.9);
+run(loop, 3.5);
+wait(0.8);

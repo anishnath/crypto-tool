@@ -1,0 +1,368 @@
+// spiral-families — the six spirals nature keeps reusing, side by side, each one a single
+// closed-form formula and about five thousand points of light.
+//
+//   Fibonacci      r = a·φ^(2θ/π)        nautilus shells, galaxies
+//   Vogel          θ = n · 137.5°        sunflower seeds, pinecones
+//   Archimedean    r = a + bθ            watch springs, coiled rope
+//   Fermat         r = a·√θ              optical lenses (both arms)
+//   Logarithmic    r = a·e^(bθ)          hurricanes (three arms)
+//   Curlicue       φ = 2πφ·n²            fractal art
+//
+// Every panel is one `cloud`: position, size and colour are closed-form functions of the
+// point index `i` and live time `t`, so each spiral genuinely turns yet the whole plate stays
+// a pure function of `t` — it scrubs and records exactly. The unfurl is not a keyframe
+// either: each point's opacity is `saturate((t − start)·rate − i/N)`, so the light travels
+// out from the centre because of arithmetic, not animation.
+//
+// Two honest notes. A LOGARITHMIC spiral has arc length proportional to radius, so the
+// Fibonacci and hurricane panels sample uniformly in RADIUS — that is what makes their
+// windings even instead of piling up at the rim. And the curlicue here is the quadratic-angle
+// form: a cloud formula is pure in `(i, t)`, so it cannot accumulate the running sum of unit
+// steps the classical curlicue is built from.
+//
+//   manic examples/spiral-families.manic
+title("Six Spirals Nature Keeps Reusing — manic");
+canvas("16:9");
+template("black");
+bloom(0.38, 0.46, 26);
+
+// the mark, above everything, for the whole film
+text(brand, (640, 28), "maniclang.com");
+display(brand); size(brand, 19); color(brand, cyan); opacity(brand, 0.8); plate(brand, 0.5); z(brand, 100);
+
+text(ttl, (640, 70), "Six spirals nature keeps reusing");
+display(ttl); size(ttl, 30); bold(ttl); color(ttl, fg); hidden(ttl);
+
+// A background that obeys the same law the panels do: the level sets of (angle − ln r / b)
+// ARE logarithmic spirals, so this is one giant log spiral used as wallpaper. Its eye sits
+// below the frame, so the plate gets broad sweeping arms instead of a bullseye behind the
+// grid, and the very top stays clean where the mark and the title live. Kept in a 0.02–0.10
+// brightness band on purpose: it has to elevate the six spirals, never compete with them.
+shader(bg) {
+  let x = (u - 0.5)*asp*1.25;
+  let y = v + 0.62;
+  let rr = length(x, y) + 0.02;
+  let a = atan2(y, x);
+  let ph = a - log(rr)/0.42;
+  let arms = 0.5 + 0.5*sin(2.0*ph + t*0.16);
+  let fine = 0.5 + 0.5*sin(5.0*ph - t*0.09);
+  let swirl = 0.68*arms + 0.32*fine;
+  let grain = 0.5 + 0.5*fbm(x*3.4 + t*0.02, y*3.4);
+  let top = smoothstep(0.0, 0.3, v);
+  let hue = 238 - 34.0*swirl;
+  let sat = 0.76 - 0.22*swirl;
+  let val = 0.016 + 0.078*swirl*top + 0.013*grain*top;
+}
+z(bg, -10);
+
+// UZUMAKI — how far the whole plate has been drawn into a single spiral. Every panel's cloud
+// reads this parameter BY NAME, so the finale is not six separate animations: it is one number,
+// and each swarm swirls toward the centre because its own formula says so.
+parameter(pull, (150, 690), 0, 0, 1, "uzumaki", 2); hidden(pull.widget);
+
+shader(vortex) {
+  let x = (u - 0.5)*asp;
+  let y = v - 0.5;
+  let rr = length(x, y) + 0.02;
+  let a = atan2(y, x);
+  // a violent domain warp: the ANGLE itself is kneaded by noise, so the arms tear as they turn
+  let w = 0.6*snoise(x*3.2 + t*0.15, y*3.2 - t*0.1);
+  let ph = a + w - log(rr)/0.17;
+  let arms = 0.5 + 0.5*sin(4.0*ph + t*1.1);
+  let core = gaussian(rr, 0.17);
+  let edge = saturate(1.25 - rr*1.15);
+  let hue = 292 - 46.0*arms + 34.0*core;
+  let sat = 0.86 - 0.34*core;
+  let val = (0.05 + 0.52*arms*arms + 0.55*core)*edge;
+  let alpha = pull*saturate(0.12 + 1.15*arms*arms + core)*edge;
+}
+z(vortex, -5);
+
+// ============================== panel furniture ==============================
+// three columns, two rows: names above each spiral, its formula under the name, and what
+// grows that way underneath the light
+text(n1, (235, 116), "Fibonacci"); text(n2, (640, 116), "Vogel");
+text(n3, (1045, 116), "Archimedean"); text(n4, (235, 398), "Fermat");
+text(n5, (640, 398), "Logarithmic"); text(n6, (1045, 398), "Curlicue");
+display(n1); display(n2); display(n3); display(n4); display(n5); display(n6);
+size(n1, 22); size(n2, 22); size(n3, 22); size(n4, 22); size(n5, 22); size(n6, 22);
+bold(n1); bold(n2); bold(n3); bold(n4); bold(n5); bold(n6);
+hue(n1, 45); hue(n2, 92); hue(n3, 190); hue(n4, 215); hue(n5, 320); hue(n6, 272);
+hidden(n1); hidden(n2); hidden(n3); hidden(n4); hidden(n5); hidden(n6);
+
+equation(f1, (235, 150), `r = a\,\varphi^{2\theta/\pi}`, 21);
+equation(f2, (640, 150), `\theta_n = n \cdot 137.5^{\circ}`, 21);
+equation(f3, (1045, 150), `r = a + b\,\theta`, 21);
+equation(f4, (235, 432), `r = a\sqrt{\theta}`, 21);
+equation(f5, (640, 432), `r = a\,e^{b\theta}`, 21);
+equation(f6, (1045, 440), `z_n = \sum_{m<n} e^{i\pi\varphi m^2}`, 16);
+hue(f1, 45); hue(f2, 92); hue(f3, 190); hue(f4, 215); hue(f5, 320); hue(f6, 272);
+hidden(f1); hidden(f2); hidden(f3); hidden(f4); hidden(f5); hidden(f6);
+
+text(w1, (235, 366), "nautilus shells · galaxies");
+text(w2, (640, 366), "sunflower seeds · pinecones");
+text(w3, (1045, 366), "watch springs · coiled rope");
+text(w4, (235, 648), "optical lenses");
+text(w5, (640, 648), "hurricanes");
+text(w6, (1045, 648), "fractal art");
+display(w1); display(w2); display(w3); display(w4); display(w5); display(w6);
+size(w1, 17); size(w2, 17); size(w3, 17); size(w4, 17); size(w5, 17); size(w6, 17);
+color(w1, dim); color(w2, dim); color(w3, dim);
+color(w4, dim); color(w5, dim); color(w6, dim);
+hidden(w1); hidden(w2); hidden(w3); hidden(w4); hidden(w5); hidden(w6);
+
+// ============================== 1 · FIBONACCI ==============================
+// the golden spiral: every quarter turn multiplies the radius by φ = 1.618…, which is a
+// logarithmic spiral with b = ln(φ)/(π/2) = 0.3063. Sampled uniformly in RADIUS, because a
+// log spiral's arc length grows with its radius.
+cloud(s1, 5200, gold, 0.85) {
+  let u = i/5200;
+  let rr = 1.2 + 76*u;
+  let th = log(rr/0.04)/0.3063 + 0.16*t;
+  let px = 235 + rr*cos(th);
+  let py = 258 - rr*sin(th);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 0.9 + 1.5*u;
+  let hue = 38 + 26*u;
+  let sat = 0.85;
+  let val = 0.72 + 0.28*u;
+  let alpha = saturate((t - 1.0)*2.4 - u*1.9);
+}
+glow(s1, 2);
+
+// ============================== 2 · VOGEL ==============================
+// phyllotaxis: seed n at 137.5° from the last and √n out. No two seeds crowd, which is why
+// sunflowers, pinecones and pineapples all settle on this one.
+cloud(s2, 1500, lime, 0.9) {
+  let n = i + 1;
+  let u = i/1500;
+  let rr = 78*sqrt(n/1500);
+  let th = n*2.39996 + 0.16*t;
+  let px = 640 + rr*cos(th);
+  let py = 258 - rr*sin(th);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 1.3 + 1.4*u;
+  let hue = 76 + 40*u;
+  let sat = 0.8;
+  let val = 0.7 + 0.3*u;
+  let alpha = saturate((t - 2.0)*2.4 - u*1.9);
+}
+glow(s2, 2);
+
+// ============================== 3 · ARCHIMEDEAN ==============================
+// equal spacing every turn — the coil of a watch spring or a rope on a deck. Sampled
+// uniformly in θ, since that IS the defining regularity.
+cloud(s3, 5200, cyan, 0.85) {
+  let u = i/5200;
+  let th = u*37.7;
+  let rr = 3.5 + 1.98*th;
+  let px = 1045 + rr*cos(th + 0.16*t);
+  let py = 258 - rr*sin(th + 0.16*t);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 1.0 + 1.1*u;
+  let hue = 184 + 24*u;
+  let sat = 0.8;
+  let val = 0.72 + 0.28*u;
+  let alpha = saturate((t - 3.0)*2.4 - u*1.9);
+}
+glow(s3, 2);
+
+// ============================== 4 · FERMAT ==============================
+// r = a√θ, and the real thing has BOTH arms — `mod(i,2)` picks one, so the panel shows the
+// full双 curve. Equal AREA per turn, which is why lens and mirror designers use it.
+cloud(s4, 5200, cyan, 0.85) {
+  let u = i/5200;
+  let arm = mod(i, 2)*pi;
+  let th = u*30;
+  let rr = 14.2*sqrt(th);
+  let px = 235 + rr*cos(th + arm + 0.16*t);
+  let py = 540 - rr*sin(th + arm + 0.16*t);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 1.0 + 1.0*u;
+  let hue = 206 + 26*u;
+  let sat = 0.82;
+  let val = 0.7 + 0.3*u;
+  let alpha = saturate((t - 4.0)*2.4 - u*1.9);
+}
+glow(s4, 2);
+
+// ============================== 5 · LOGARITHMIC ==============================
+// the same law as Fibonacci with a fatter pitch, and three arms — a hurricane's rainbands.
+// Again sampled uniformly in radius; the bright core is the eye.
+cloud(s5, 5400, magenta, 0.85) {
+  let u = i/5400;
+  let arm = mod(i, 3)*2.0944;
+  let rr = 1.0 + 77*u;
+  let th = log(rr/1.6)/0.30 + arm + 0.34*t;
+  let px = 640 + rr*cos(th);
+  let py = 540 - rr*sin(th);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 0.9 + 1.4*u;
+  let hue = 300 + 40*u;
+  let sat = 0.78;
+  let val = 0.95 - 0.3*u;
+  let alpha = saturate((t - 5.0)*2.4 - u*1.9);
+}
+glow(s5, 2);
+
+// ============================== 6 · CURLICUE ==============================
+// The REAL curlicue, not a stand-in: z_n is the running sum of unit steps, each turned by
+// π·s·m². A `cloud` cannot do this — its formulas are pure in (i, t) and cannot accumulate —
+// but a build-time `sum` reduction over the loop index computes the exact partial sum, so the
+// path is drawn as 360 real segments. The golden fraction makes the classic branching,
+// self-similar clusters; nothing here is random and nothing is recursive.
+for n in 0..360 {
+  line(s6{n},
+       (975 + 6.5*sum(m in 0..n : cos(pi*0.618034*m*m)),
+        566 - 6.5*sum(m in 0..n : sin(pi*0.618034*m*m))),
+       (975 + 6.5*sum(m in 0..n+1 : cos(pi*0.618034*m*m)),
+        566 - 6.5*sum(m in 0..n+1 : sin(pi*0.618034*m*m))));
+  hue(s6{n}, 258 + n/11);
+  untraced(s6{n});
+  tag(s6{n}, s6);
+}
+glow(s6, 2);
+
+// ---- the uzumaki finale ----
+svg(maki1, (250, 366), "asset:svg/emoji/1f365.svg", 74); hidden(maki1);
+svg(maki2, (1030, 366), "asset:svg/emoji/1f365.svg", 74); hidden(maki2);
+text(uzulab, (640, 648), "UZUMAKI");
+display(uzulab); size(uzulab, 38); bold(uzulab); color(uzulab, fg); plate(uzulab, 0.62); z(uzulab, 50); hidden(uzulab);
+
+// ================================= the film =================================
+show(ttl, 1.0);
+wait(0.5);
+
+// each panel introduces itself as its own light arrives — the name, the formula and what grows
+// that way are already on screen, so the film does not narrate them
+stagger(1.0) {
+  par { show(n1, 0.5); show(f1, 0.5); show(w1, 0.4); }
+  par { show(n2, 0.5); show(f2, 0.5); show(w2, 0.4); }
+  par { show(n3, 0.5); show(f3, 0.5); show(w3, 0.4); }
+  par { show(n4, 0.5); show(f4, 0.5); show(w4, 0.4); }
+  par { show(n5, 0.5); show(f5, 0.5); show(w5, 0.4); }
+  par { show(n6, 0.5); show(f6, 0.5); show(w6, 0.4); }
+}
+draw(s6, 2.4, smooth);
+wait(1.0);
+// they all turn, so the dwell is not dead time
+wait(4.0);
+wait(3.6);
+
+// ============================== UZUMAKI ==============================
+par {
+  fade(n1, 0.7); fade(n2, 0.7); fade(n3, 0.7); fade(n4, 0.7); fade(n5, 0.7); fade(n6, 0.7);
+  fade(f1, 0.7); fade(f2, 0.7); fade(f3, 0.7); fade(f4, 0.7); fade(f5, 0.7); fade(f6, 0.7);
+  fade(w1, 0.6); fade(w2, 0.6); fade(w3, 0.6); fade(w4, 0.6); fade(w5, 0.6); fade(w6, 0.6);
+  fade(ttl, 0.8);
+}
+wait(1.4);
+// one number does all of this: each swarm reads `pull` and swirls in on its own account,
+// and the curlicue path swings round with them
+par {
+  to(pull, value, 1, 4.6, smooth);
+  turn(s6, (640, 360), 80, 4.6, smooth);
+  to(s6, opacity, 0.2, 4.6, smooth);
+}
+wait(1.8);
+// the merged spiral gets a beat on its own, then steps back so the word can sit on it
+par {
+  to(s1, opacity, 0.17, 1.0); to(s2, opacity, 0.17, 1.0); to(s3, opacity, 0.17, 1.0);
+  to(s4, opacity, 0.17, 1.0); to(s5, opacity, 0.17, 1.0);
+}
+par { show(maki1, 0.7); show(maki2, 0.7); }
+show(uzulab, 0.9);
+wait(2.8);
+
+// ================================= endcard =================================
+par {
+  fade(maki1, 0.6); fade(maki2, 0.6);
+  fade(uzulab, 0.7);
+  to(pull, value, 0.42, 1.6, smooth);
+}
+wait(2.8);

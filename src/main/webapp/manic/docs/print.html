@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9fe11d60.js";
+            window.path_to_searchindex_js = "searchindex-b6574f79.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b0623ced.js"></script>
+        <script src="toc-0494ae29.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -202,6 +202,8 @@ networks, or cinematic 3D stories.</p>
 <p>Manic was created by <strong>Anish Nath</strong>. Follow its development, examples, and new
 visual-language experiments on X:
 <strong><a href="https://x.com/anish2good">@anish2good</a></strong>.</p>
+<p>Looking for the website, browser workspace, API, extension, or source code?
+They are collected on the <strong><a href="#manic-links">Manic links</a></strong> page.</p>
 <h2 id="the-whole-idea-in-30-seconds"><a class="header" href="#the-whole-idea-in-30-seconds">The whole idea in 30 seconds</a></h2>
 <p>A manic file has two parts:</p>
 <ol>
@@ -234,6 +236,29 @@ manic yourfile.manic --record out # render to out/out.mp4
 <a href="#create-a-polished-reel">Create a polished Reel →</a></p>
 <p>Choosing the visual surface? Manic defaults to full semantic colour on an exact
 black canvas; compare every option in <a href="#templates--choose-the-whole-visual-system">Templates →</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="manic-links"><a class="header" href="#manic-links">Manic links</a></h1>
+<p>Everything public about Manic, collected in one place.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Destination</th><th>Link</th><th>Use it for</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Manic home</strong></td><td><a href="https://maniclang.com">maniclang.com</a></td><td>Product overview, downloads, and plans.</td></tr>
+<tr><td><strong>Manic Create</strong></td><td><a href="https://app.maniclang.com/create">app.maniclang.com/create</a></td><td>Write, check, preview, and render a Manic project in the browser.</td></tr>
+<tr><td><strong>Examples gallery</strong></td><td><a href="https://app.maniclang.com/gallery">app.maniclang.com/gallery</a></td><td>Browse runnable stories and open one in Create.</td></tr>
+<tr><td><strong>Manic account</strong></td><td><a href="https://app.maniclang.com/account">app.maniclang.com/account</a></td><td>Sign in, manage API keys, credits, and billing.</td></tr>
+<tr><td><strong>Documentation</strong></td><td><a href="https://docs.maniclang.com">docs.maniclang.com</a></td><td>Learn the language, CLI, kits, assets, and production workflow.</td></tr>
+<tr><td><strong>Interactive API reference</strong></td><td><a href="https://docs.maniclang.com/api/">docs.maniclang.com/api/</a></td><td>Explore and try the hosted Platform REST API.</td></tr>
+<tr><td><strong>Platform API base URL</strong></td><td><a href="https://api.maniclang.com">api.maniclang.com</a></td><td>Base URL for API clients: <code>https://api.maniclang.com/v1/...</code>.</td></tr>
+<tr><td><strong>Chrome extension</strong></td><td><a href="https://chromewebstore.google.com/detail/manic-animate/flfaaiodbopfkglohengfcgplejoffle">Manic Animate on Chrome Web Store</a></td><td>Turn selected web-page text, equations, and diagrams into an editable Manic project.</td></tr>
+<tr><td><strong>Source and releases</strong></td><td><a href="https://github.com/maniclang-x/manic">github.com/maniclang-x/manic</a></td><td>Installation scripts, release archives, engine source, and issue tracking.</td></tr>
+<tr><td><strong>Updates</strong></td><td><a href="https://x.com/anish2good">@anish2good on X</a> · <a href="https://www.reddit.com/r/maniclang/">r/maniclang</a></td><td>Follow releases, examples, and discussion.</td></tr>
+</tbody>
+</table>
+</div>
+<p>For browser-based creation, start with <strong><a href="https://app.maniclang.com/create">Manic Create</a></strong>. For automated workflows, create a scoped key in <strong><a href="https://app.maniclang.com/account">Manic Account</a></strong>, then use the <strong><a href="https://docs.maniclang.com/api/">interactive API reference</a></strong>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="install-manic"><a class="header" href="#install-manic">Install Manic</a></h1>
 <p>Manic is a compiled desktop command-line application. The installer includes
@@ -1331,7 +1356,7 @@ blueprint without editing the source.</p>
 stories a clean, cinema-dark canvas while preserving semantic accents:</p>
 <pre><code class="language-manic">canvas("9:16");
 // template("black") is optional because black is the default.
-creator(me, "@anish2good yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social");
+creator(me, "@anish2good yt=zarigatongy x=@anish2good web=maniclang.com footer=social");
 quiz(q, "Which statement is true?");
 </code></pre>
 <p>Choose <code>mono</code> for an intentionally black-and-white identity, <code>shorts</code> for a
@@ -1625,7 +1650,7 @@ different catalog root.</p>
 <p>Every <code>svg()</code> import takes an <strong><code>asset:svg/&lt;set&gt;/&lt;name&gt;.svg</code></strong> URI (or your own
 file path). The bundled catalogue covers <strong>6,404 shapes across four sets</strong>,
 vendored by <code>scripts/fetch-svg-assets.sh</code> and screened with
-<code>manic svgcheck assets/svg</code>. Licences: <a href="https://github.com/anishnath/manic"><code>assets/svg/LICENSES.md</code></a>.</p>
+<code>manic svgcheck assets/svg</code>. Licences: <a href="https://github.com/maniclang-x/manic/blob/main/assets/svg/LICENSES.md"><code>assets/svg/LICENSES.md</code></a>.</p>
 <h2 id="reference-notation"><a class="header" href="#reference-notation">Reference notation</a></h2>
 <pre><code class="language-manic">svg(logo, (cx, cy), "asset:svg/lucide/rocket.svg", 300);   // an icon
 svg(fin,  (cx, cy), "asset:svg/flags/in.svg",       220);   // a flag (ISO code)
@@ -1706,10 +1731,10 @@ positioning, resizing, recolouring, and animating.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- GENERATED by scripts/gen-svg-index.py — do not edit by hand.
      Re-run after changing bundled assets (fetch-svg-assets.sh calls it). -->
 <h1 id="svg-asset-catalogue"><a class="header" href="#svg-asset-catalogue">SVG asset catalogue</a></h1>
-<p>Every one of the <strong>6,408</strong> bundled SVG vectors, by set — so you can find an asset without the CLI. Drop any of them in with:</p>
+<p>Every one of the <strong>6,429</strong> bundled SVG vectors, by set — so you can find an asset without the CLI. Drop any of them in with:</p>
 <pre><code class="language-manic">svg(id, (x, y), "asset:svg/&lt;set&gt;/&lt;name&gt;.svg", size);
 </code></pre>
-<p>Names are searchable — use your browser’s find (<strong>⌘/Ctrl-F</strong>). Licences are per set; see <a href="https://8gwifi.org/manic"><code>assets/svg/LICENSES.md</code></a> for full attribution. For a quick start with plain-English emoji names, see the <a href="#emoji-friendly-aliases">friendly aliases</a>.</p>
+<p>Names are searchable — use your browser’s find (<strong>⌘/Ctrl-F</strong>). Licences are per set; see <a href="https://github.com/maniclang-x/manic/blob/main/assets/svg/LICENSES.md"><code>assets/svg/LICENSES.md</code></a> for full attribution. For a quick start with plain-English emoji names, see the <a href="#emoji-friendly-aliases">friendly aliases</a>.</p>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -1719,7 +1744,7 @@ positioning, resizing, recolouring, and animating.</p>
 <tr><td>Lucide</td><td style="text-align: right">1,756</td><td>ISC</td><td><code>asset:svg/lucide/&lt;name&gt;.svg</code></td></tr>
 <tr><td>Heroicons</td><td style="text-align: right">324</td><td>MIT</td><td><code>asset:svg/heroicons/&lt;name&gt;.svg</code></td></tr>
 <tr><td>Flags</td><td style="text-align: right">271</td><td>MIT</td><td><code>asset:svg/flags/&lt;name&gt;.svg</code></td></tr>
-<tr><td>Emoji</td><td style="text-align: right">4,052</td><td>CC-BY 4.0</td><td><code>asset:svg/emoji/&lt;name&gt;.svg</code></td></tr>
+<tr><td>Emoji</td><td style="text-align: right">4,073</td><td>CC-BY 4.0</td><td><code>asset:svg/emoji/&lt;name&gt;.svg</code></td></tr>
 <tr><td>Physics</td><td style="text-align: right">5</td><td>CC0</td><td><code>asset:svg/physics/&lt;name&gt;.svg</code></td></tr>
 </tbody>
 </table>
@@ -1737,10 +1762,10 @@ positioning, resizing, recolouring, and animating.</p>
 <p><code>asset:svg/flags/&lt;name&gt;.svg</code></p>
 <p><code>ad</code> · <code>ae</code> · <code>af</code> · <code>ag</code> · <code>ai</code> · <code>al</code> · <code>am</code> · <code>ao</code> · <code>aq</code> · <code>ar</code> · <code>arab</code> · <code>as</code> · <code>asean</code> · <code>at</code> · <code>au</code> · <code>aw</code> · <code>ax</code> · <code>az</code> · <code>ba</code> · <code>bb</code> · <code>bd</code> · <code>be</code> · <code>bf</code> · <code>bg</code> · <code>bh</code> · <code>bi</code> · <code>bj</code> · <code>bl</code> · <code>bm</code> · <code>bn</code> · <code>bo</code> · <code>bq</code> · <code>br</code> · <code>bs</code> · <code>bt</code> · <code>bv</code> · <code>bw</code> · <code>by</code> · <code>bz</code> · <code>ca</code> · <code>cc</code> · <code>cd</code> · <code>cefta</code> · <code>cf</code> · <code>cg</code> · <code>ch</code> · <code>ci</code> · <code>ck</code> · <code>cl</code> · <code>cm</code> · <code>cn</code> · <code>co</code> · <code>cp</code> · <code>cr</code> · <code>cu</code> · <code>cv</code> · <code>cw</code> · <code>cx</code> · <code>cy</code> · <code>cz</code> · <code>de</code> · <code>dg</code> · <code>dj</code> · <code>dk</code> · <code>dm</code> · <code>do</code> · <code>dz</code> · <code>eac</code> · <code>ec</code> · <code>ee</code> · <code>eg</code> · <code>eh</code> · <code>er</code> · <code>es</code> · <code>es-ct</code> · <code>es-ga</code> · <code>es-pv</code> · <code>et</code> · <code>eu</code> · <code>fi</code> · <code>fj</code> · <code>fk</code> · <code>fm</code> · <code>fo</code> · <code>fr</code> · <code>ga</code> · <code>gb</code> · <code>gb-eng</code> · <code>gb-nir</code> · <code>gb-sct</code> · <code>gb-wls</code> · <code>gd</code> · <code>ge</code> · <code>gf</code> · <code>gg</code> · <code>gh</code> · <code>gi</code> · <code>gl</code> · <code>gm</code> · <code>gn</code> · <code>gp</code> · <code>gq</code> · <code>gr</code> · <code>gs</code> · <code>gt</code> · <code>gu</code> · <code>gw</code> · <code>gy</code> · <code>hk</code> · <code>hm</code> · <code>hn</code> · <code>hr</code> · <code>ht</code> · <code>hu</code> · <code>ic</code> · <code>id</code> · <code>ie</code> · <code>il</code> · <code>im</code> · <code>in</code> · <code>io</code> · <code>iq</code> · <code>ir</code> · <code>is</code> · <code>it</code> · <code>je</code> · <code>jm</code> · <code>jo</code> · <code>jp</code> · <code>ke</code> · <code>kg</code> · <code>kh</code> · <code>ki</code> · <code>km</code> · <code>kn</code> · <code>kp</code> · <code>kr</code> · <code>kw</code> · <code>ky</code> · <code>kz</code> · <code>la</code> · <code>lb</code> · <code>lc</code> · <code>li</code> · <code>lk</code> · <code>lr</code> · <code>ls</code> · <code>lt</code> · <code>lu</code> · <code>lv</code> · <code>ly</code> · <code>ma</code> · <code>mc</code> · <code>md</code> · <code>me</code> · <code>mf</code> · <code>mg</code> · <code>mh</code> · <code>mk</code> · <code>ml</code> · <code>mm</code> · <code>mn</code> · <code>mo</code> · <code>mp</code> · <code>mq</code> · <code>mr</code> · <code>ms</code> · <code>mt</code> · <code>mu</code> · <code>mv</code> · <code>mw</code> · <code>mx</code> · <code>my</code> · <code>mz</code> · <code>na</code> · <code>nc</code> · <code>ne</code> · <code>nf</code> · <code>ng</code> · <code>ni</code> · <code>nl</code> · <code>no</code> · <code>np</code> · <code>nr</code> · <code>nu</code> · <code>nz</code> · <code>om</code> · <code>pa</code> · <code>pc</code> · <code>pe</code> · <code>pf</code> · <code>pg</code> · <code>ph</code> · <code>pk</code> · <code>pl</code> · <code>pm</code> · <code>pn</code> · <code>pr</code> · <code>ps</code> · <code>pt</code> · <code>pw</code> · <code>py</code> · <code>qa</code> · <code>re</code> · <code>ro</code> · <code>rs</code> · <code>ru</code> · <code>rw</code> · <code>sa</code> · <code>sb</code> · <code>sc</code> · <code>sd</code> · <code>se</code> · <code>sg</code> · <code>sh</code> · <code>sh-ac</code> · <code>sh-hl</code> · <code>sh-ta</code> · <code>si</code> · <code>sj</code> · <code>sk</code> · <code>sl</code> · <code>sm</code> · <code>sn</code> · <code>so</code> · <code>sr</code> · <code>ss</code> · <code>st</code> · <code>sv</code> · <code>sx</code> · <code>sy</code> · <code>sz</code> · <code>tc</code> · <code>td</code> · <code>tf</code> · <code>tg</code> · <code>th</code> · <code>tj</code> · <code>tk</code> · <code>tl</code> · <code>tm</code> · <code>tn</code> · <code>to</code> · <code>tr</code> · <code>tt</code> · <code>tv</code> · <code>tw</code> · <code>tz</code> · <code>ua</code> · <code>ug</code> · <code>um</code> · <code>un</code> · <code>us</code> · <code>uy</code> · <code>uz</code> · <code>va</code> · <code>vc</code> · <code>ve</code> · <code>vg</code> · <code>vi</code> · <code>vn</code> · <code>vu</code> · <code>wf</code> · <code>ws</code> · <code>xk</code> · <code>xx</code> · <code>ye</code> · <code>yt</code> · <code>za</code> · <code>zm</code> · <code>zw</code></p>
 <hr>
-<h2 id="emoji--twemoji--full-colour-emoji--4052--cc-by-40"><a class="header" href="#emoji--twemoji--full-colour-emoji--4052--cc-by-40">Emoji — Twemoji — full-colour emoji · 4,052 · CC-BY 4.0</a></h2>
+<h2 id="emoji--twemoji--full-colour-emoji--4073--cc-by-40"><a class="header" href="#emoji--twemoji--full-colour-emoji--4073--cc-by-40">Emoji — Twemoji — full-colour emoji · 4,073 · CC-BY 4.0</a></h2>
 <p><code>asset:svg/emoji/&lt;name&gt;.svg</code></p>
-<p><strong>Friendly aliases (43)</strong> — plain-English names, the easy way in:</p>
-<p><code>bell</code> · <code>brain</code> · <code>bulb</code> · <code>car</code> · <code>chart</code> · <code>check</code> · <code>clap</code> · <code>cloud</code> · <code>computer</code> · <code>cross</code> · <code>door</code> · <code>earth</code> · <code>eyes</code> · <code>fire</code> · <code>flag</code> · <code>goat</code> · <code>grinning</code> · <code>heart</code> · <code>hourglass</code> · <code>joy</code> · <code>key</code> · <code>lock</code> · <code>mail</code> · <code>money</code> · <code>moon</code> · <code>muscle</code> · <code>party</code> · <code>phone</code> · <code>rainbow</code> · <code>rocket</code> · <code>smile</code> · <code>sob</code> · <code>star</code> · <code>sun</code> · <code>target</code> · <code>thinking</code> · <code>thumbsdown</code> · <code>thumbsup</code> · <code>trophy</code> · <code>warning</code> · <code>wave</code> · <code>wink</code> · <code>zap</code></p>
+<p><strong>Friendly aliases (64)</strong> — plain-English names, the easy way in:</p>
+<p><code>bell</code> · <code>brain</code> · <code>bulb</code> · <code>car</code> · <code>chart</code> · <code>check</code> · <code>clap</code> · <code>cloud</code> · <code>comet</code> · <code>computer</code> · <code>crescentmoon</code> · <code>cross</code> · <code>door</code> · <code>earth</code> · <code>eyes</code> · <code>fire</code> · <code>firstquarter</code> · <code>flag</code> · <code>fullmoon</code> · <code>glowstar</code> · <code>goat</code> · <code>grinning</code> · <code>heart</code> · <code>hourglass</code> · <code>joy</code> · <code>jupiter</code> · <code>key</code> · <code>lastquarter</code> · <code>lock</code> · <code>mail</code> · <code>mars</code> · <code>mercury</code> · <code>milkyway</code> · <code>money</code> · <code>moon</code> · <code>muscle</code> · <code>neptune</code> · <code>newmoon</code> · <code>party</code> · <code>phone</code> · <code>rainbow</code> · <code>rocket</code> · <code>saturn</code> · <code>smile</code> · <code>sob</code> · <code>star</code> · <code>sun</code> · <code>sunface</code> · <code>target</code> · <code>telescope</code> · <code>thinking</code> · <code>thumbsdown</code> · <code>thumbsup</code> · <code>trophy</code> · <code>uranus</code> · <code>venus</code> · <code>waningcrescent</code> · <code>waninggibbous</code> · <code>warning</code> · <code>wave</code> · <code>waxingcrescent</code> · <code>waxinggibbous</code> · <code>wink</code> · <code>zap</code></p>
 <p><strong>All emoji (4,009)</strong> are also addressable by their Unicode codepoint filename (e.g. <code>1f680</code> = 🚀). Expand to browse every one:</p>
 <details>
 <summary>Show all 4,009 emoji codepoints</summary>
@@ -1818,7 +1843,7 @@ the rewrite in <code>par</code>.</p>
 template("black"); // optional: black is the DSL default
 
 creator(me, "@anish2good name=Proof_Daily tagline=Think_then_prove \
-yt=zarigatongy x=@anish2good web=8gwifi.org/manic \
+yt=zarigatongy x=@anish2good web=maniclang.com \
 accent=cyan secondary=magenta footer=signature cta=Save_and_share safe=reels");
 
 quiz(q, "Your short question",
@@ -1863,7 +1888,7 @@ dominant, while a small two-colour rail and arrow chip carry the accent palette.
 On a black template, reserve bright colour for those details and keep CTA copy
 short enough to read in one glance.</p>
 <p>For a channel-link row without external assets, choose <code>footer=social</code> and set
-the platform values directly: <code>yt=zarigatongy x=@anish2good web=8gwifi.org/manic</code>. Manic draws matching normalized icons and keeps the text
+the platform values directly: <code>yt=zarigatongy x=@anish2good web=maniclang.com</code>. Manic draws matching normalized icons and keeps the text
 inside the responsive footer. Use two or three identities for the clearest
 phone-size close; a larger platform set automatically becomes icon-only.</p>
 <h2 id="complete-reel"><a class="header" href="#complete-reel">Complete Reel</a></h2>
@@ -4386,13 +4411,42 @@ distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberr
 <code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
 Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
 geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
+<h2 id="circuit"><a class="header" href="#circuit">circuit</a></h2>
+<p>A netlist in, a <strong>working schematic</strong> out — Modified Nodal Analysis under easy
+builtins, so every voltage, current and glow on screen was <em>solved</em>, not drawn,
+and pre-simulated at build time so it scrubs and records exactly.</p>
+<pre><code class="language-manic">circuit(rc, (640, 360), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 5 0 r=1k name=R1
+  capacitor  5 0 5 4 c=1u
+  wire       5 4 0 4
+  ground     0 4
+`);
+probe(rc, (5, 0));      // 63.2% of 5 V at one time constant
+run(rc, 6);             // draws itself, then charges
+cut(rc, R1, 0.8);       // take the resistor out …
+run(rc, 3);             // … and nothing flows
+</code></pre>
+<p>The <strong>topology comes from the geometry</strong> — coinciding points, or points joined by
+a <code>wire</code>, are the same node, so there are no node numbers to write. The schematic
+<strong>draws itself</strong> one component at a time and each <em>prefix</em> of the netlist is really
+solved, so nothing flows until the loop closes. A <strong>lamp glows because it is
+dissipating power</strong>. <code>cut</code> re-solves what is left from scratch, which is why
+breaking a series loop darkens every lamp in it.</p>
+<p>44 component types: passives and sources, six kinds of switch, junctions
+(<code>diode</code>/<code>led</code>/<code>zener</code>), eight transistors (bipolar, MOSFET, JFET, Darlington),
+<code>opamp</code>/<code>comparator</code>/<code>schmitt</code>/<code>vco</code>/<code>transmission-line</code>, and the logic family
+down to flip-flops. <code>current(id, speed, shape, color, size)</code> is the animator’s
+dial; <code>probe</code> and <code>scope</code> are the instruments. Everything is an ordinary tagged
+entity, so <code>framebox</code>, <code>zoom</code>, <code>cam</code> and <code>pulse</code> do the presentation.</p>
+<p>See the <a href="#circuits--draw-one-and-it-works">circuits guide</a> for the end-to-end walkthrough.</p>
 <h2 id="creator"><a class="header" href="#creator">creator</a></h2>
 <p>A <strong>format</strong> layer (not a subject): responsive, pre-timed social-video templates
 a content creator fills in—question, answers, media and a reusable profile. V2
 adapts the same source to 9:16, 4:5, 1:1 and 16:9, with named platform safe areas,
 a polished studio default, configurable motion/timers, responsive footers and end cards.</p>
 <pre><code class="language-manic">canvas("9:16"); template("shorts");
-creator(me, "@anish2good name=Math_With_Me yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=magenta");
+creator(me, "@anish2good name=Math_With_Me yt=zarigatongy x=@anish2good web=maniclang.com footer=social accent=magenta");
 quiz(q, "What is 7 x 8?", "studio labels=letters pace=calm motion=calm");
 option(q, "54"); option(q, "56", correct); option(q, "48"); option(q, "63");
 timerstyle(q, "look=segments position=media finish=pulse");
@@ -4415,7 +4469,7 @@ vector-drawn with normalized native marks for YouTube, X, Instagram, TikTok,
 Facebook, LinkedIn, GitHub, web, and email. Profile values appear beside up to
 three icons; no image or SVG assets are required.</p>
 <hr>
-<p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
+<p>Each kit has a full reference at <a href="https://docs.maniclang.com">https://docs.maniclang.com</a>, and you can see them
 all in motion in the <a href="#examples-gallery">Examples gallery</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="machine-learning--models-made-visible"><a class="header" href="#machine-learning--models-made-visible">Machine learning — models made visible</a></h1>
@@ -6051,6 +6105,269 @@ card — the chart running <em>inside</em> a <code>par</code> while the voice-ov
 <li><a href="#charts-german-elections">Bar + history panel</a> — from a real CSV</li>
 <li><a href="#creator-race-quiz">Race-chart quiz Short</a> — voiced, problem→proof→CTA</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="circuits--draw-one-and-it-works"><a class="header" href="#circuits--draw-one-and-it-works">Circuits — draw one, and it works</a></h1>
+<p>The <strong>circuit kit</strong> takes a netlist and gives you a schematic that <strong>draws itself,
+carries real current, and answers questions</strong>. The numbers are not painted on:
+every voltage, current and glow comes from a Modified Nodal Analysis solve of the
+circuit you typed, pre-simulated at build time so it scrubs and records exactly.</p>
+<p>Three ideas:</p>
+<ol>
+<li><strong>Type</strong> the circuit — <code>circuit(id, center, netlist)</code></li>
+<li><strong>Play</strong> it — <code>run(id, seconds)</code></li>
+<li><strong>Take something out</strong> — <code>cut(id, part)</code> / <code>reconnect(id, part)</code></li>
+</ol>
+<pre><code class="language-manic">canvas("16:9"); template("paper");
+
+circuit(rc, (640, 360), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 5 0 r=1k
+  capacitor  5 0 5 4 c=1u
+  wire       5 4 0 4
+  ground     0 4
+`);
+probe(rc, (5, 0));
+run(rc, 6);
+</code></pre>
+<p>That block draws a schematic one component at a time, starts the current the
+moment the loop closes, and reads the capacitor charging to 63.2% of the supply
+at exactly one time constant — because it solved an RC circuit.</p>
+<hr>
+<h2 id="the-netlist"><a class="header" href="#the-netlist">The netlist</a></h2>
+<p>One component per line. Two grid points, then optional <code>key=value</code> parameters:</p>
+<pre><code class="language-text">&lt;type&gt; &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; [key=value …]
+ground &lt;x&gt; &lt;y&gt;
+# a comment
+</code></pre>
+<p><strong>The topology comes from the geometry.</strong> Points that coincide — or are joined by
+a <code>wire</code> — are the same electrical node. There are no node numbers to write and
+none to get wrong:</p>
+<pre><code class="language-manic">circuit(divider, (640, 360), `
+  dc-voltage 0 6 0 0 v=9
+  resistor   0 0 4 0 r=3k     # these two share the point (4,0),
+  resistor   4 0 4 6 r=1k     # so that IS the divider's tap
+  wire       4 6 0 6
+  ground     0 6
+`);
+</code></pre>
+<p>Values take SI suffixes — <code>1k</code>, <code>4.7u</code>, <code>100n</code>, <code>10m</code>, <code>2M</code>. Lowercase <code>m</code> is
+milli and <code>M</code> is mega (SPICE’s habit of writing mega as <code>M</code> is a trap, so it is
+not one here).</p>
+<h3 id="a-three-pin-part-still-takes-two-coordinates"><a class="header" href="#a-three-pin-part-still-takes-two-coordinates">A three-pin part still takes two coordinates</a></h3>
+<p>Its extra pins are <strong>derived</strong>, and this is the one thing worth memorising:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>part</th><th>pins</th></tr>
+</thead>
+<tbody>
+<tr><td>transistors, <code>opamp</code>, gates, <code>comparator</code>, <code>vco</code>, <code>ideal-switch</code>, <code>spdt-switch</code></td><td>third pin one step <strong>below the second</strong> coordinate</td></tr>
+<tr><td>flip-flops</td><td>two outputs, one and two steps below the second coordinate</td></tr>
+<tr><td><code>relay</code></td><td>third below the second, <strong>fourth below the first</strong></td></tr>
+<tr><td><code>transmission-line</code>, dependent sources</td><td>output pair below <strong>both</strong> written points</td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">circuit(amp, (640, 360), `
+  bjt-npn 3 3 6 3     # base (3,3) · collector (6,3) · EMITTER (6,4)
+  …
+`);
+</code></pre>
+<p>If a pin ends up connected to nothing, the error names it and its coordinate
+rather than saying “the circuit will not settle”.</p>
+<hr>
+<h2 id="it-draws-itself"><a class="header" href="#it-draws-itself">It draws itself</a></h2>
+<p>A netlist is already written in the order a teacher would draw the circuit, so
+that is the default: components arrive one at a time, traced on, and <strong>each
+prefix of the netlist is really solved</strong>.</p>
+<p>So nothing flows while the loop is open — the charge dots do not move because
+there is nothing to move them — and the instant the closing component lands,
+current appears everywhere at once. A probe reads <code>0.00 mA</code> and then the true
+value. Nobody animates that.</p>
+<p>The sixth argument is the share of <code>run</code> spent drawing:</p>
+<pre><code class="language-manic">circuit(rc, (640, 360), `…`, 46, 1, 0.35);   // the default
+circuit(rc, (640, 360), `…`, 46, 1, 0);      // already drawn at t = 0
+</code></pre>
+<p>Use <code>build 0</code> when the first frame matters — a film’s opening shot, a thumbnail —
+because a self-drawing circuit is <strong>invisible until a <code>run</code> plays it</strong>. (The
+editor warns if you forget the <code>run</code>.)</p>
+<hr>
+<h2 id="reading-it-probes-and-scopes"><a class="header" href="#reading-it-probes-and-scopes">Reading it: probes and scopes</a></h2>
+<p><code>probe</code> puts a live number on the schematic. Point it at a <strong>grid point</strong> for that
+node’s voltage, or name a <strong>part</strong> for its current:</p>
+<pre><code class="language-manic">circuit(rc, (560, 340), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 5 0 r=1k name=R1
+  capacitor  5 0 5 4 c=1u
+  wire       5 4 0 4
+  ground     0 4
+`);
+probe(rc, (5, 0));          // volts at the capacitor's top
+probe(rc, R1, (80, -20));   // amps through R1, label nudged clear
+scope(rc, (5, 0), (1020, 300), 380, 150);
+run(rc, 6);
+</code></pre>
+<p>A <code>scope</code> traces the pre-simulated waveform with a sweep line that keeps step
+with <code>run</code>, and labels both axes with their real extent. Its window belongs to
+the circuit it was declared against — after a <code>cut</code>, declare another one or use a
+<code>probe</code>, which does follow across.</p>
+<hr>
+<h2 id="the-current-you-can-see"><a class="header" href="#the-current-you-can-see">The current you can see</a></h2>
+<p>Charge dots ride every branch. Their position is <code>∫I dt</code> — accumulated <strong>charge</strong>
+— from the same branch currents the solver produced, so a branch carrying twice
+the current always moves twice as fast, and a dot and a probe can never disagree.</p>
+<p><code>current</code> is the animator’s dial. It changes nothing about the physics:</p>
+<pre><code class="language-manic">current(rc, 2);                          // twice the pace
+current(rc, 1.4, diamond, crimson, 4);   // speed, shape, colour, size
+</code></pre>
+<ul>
+<li><code>speed</code> multiplies <strong>every</strong> branch by the same factor, so the proportionality
+survives — 1 is the circuit’s own pace, 2 is a fast cut, 0.5 is one you can talk
+over.</li>
+<li><code>shape</code> is <code>circle</code> (default), <code>square</code> or <code>diamond</code>.</li>
+<li><code>color</code> takes any palette name <strong>or</strong> <code>#rrggbb</code>. The default is gold, the
+conventional-current colour; cyan is the usual choice for electron flow.</li>
+</ul>
+<p>A branch with no current shows <strong>no dots at all</strong>, rather than a frozen row of
+them — a stalled queue of dots reads as current, which is the one misreading worth
+designing against.</p>
+<hr>
+<h2 id="a-lamp-glows-because-it-is-dissipating-power"><a class="header" href="#a-lamp-glows-because-it-is-dissipating-power">A lamp glows because it is dissipating power</a></h2>
+<p><code>lamp</code> and <code>led</code> carry a halo whose opacity is <code>P / P_ref</code>, with <code>P = V·I</code> from
+the same series a probe reads. Two lamps in series share one current, so they
+light equally; a 300 Ω lamp in series with a 100 Ω one comes out three times
+brighter, because at one current <code>P = I²R</code>.</p>
+<p>The reference is fixed by the circuit as first built, so brightness is comparable
+across the schematic and a <code>cut</code> genuinely darkens it. The halo is an ordinary
+entity tagged <code>{id}.glow</code>:</p>
+<pre><code class="language-manic">color(fig.glow, orange);   // a warm glow reads as light on `paper`
+</code></pre>
+<hr>
+<h2 id="take-something-out-and-mean-it"><a class="header" href="#take-something-out-and-mean-it">Take something out, and mean it</a></h2>
+<p><code>cut</code> removes a component from the <strong>circuit</strong>, not from the picture: what is left
+is re-analysed and re-solved from scratch. Break a series loop and the current
+stops everywhere, and a meter on another branch falls to zero on its own.</p>
+<pre><code class="language-manic">run(fig, 6);            // both lamps lit
+cut(fig, L1, 0.8);      // one filament breaks
+run(fig, 3);            // … and neither glows
+reconnect(fig, L1);     // mend it
+run(fig, 3);            // both back
+</code></pre>
+<p>Address the part by its netlist <code>name=</code>, or by position as <code>c0</code>, <code>c1</code>, … Each
+<code>run</code> after a change replays the circuit that now exists. A cut that leaves
+something unsolvable (cutting the only source) is refused, with the part named.</p>
+<p><strong><code>cut</code> decides the physics; you decide the theatre.</strong> By default the component
+fades out with its label, every dot and glow goes with it, and each probe moves to
+what it now reads. If the story is a <em>broken filament</em> rather than a lamp taken
+out of its holder, bring the symbol back and mark the break:</p>
+<pre><code class="language-manic">cut(fig, L1, 1.0);
+par {
+  show(fig.L1, 0.4);      // the lamp is still there …
+  show(break1, 0.35);     // … it just cannot carry anything
+}
+</code></pre>
+<hr>
+<h2 id="everything-is-an-ordinary-entity"><a class="header" href="#everything-is-an-ordinary-entity">Everything is an ordinary entity</a></h2>
+<p>The kit adds no animation vocabulary. Every piece is a normal tagged entity, so
+the core verbs work:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>address</th><th>what it is</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{id}.c{k}</code></td><td>the k-th component, in netlist order</td></tr>
+<tr><td><code>{id}.&lt;name&gt;</code></td><td>a component you gave <code>name=X</code></td></tr>
+<tr><td><code>{id}.parts</code></td><td>every component (stroke batch)</td></tr>
+<tr><td><code>{id}.labels</code></td><td>the value labels</td></tr>
+<tr><td><code>{id}.nodes</code> · <code>{id}.n{node}</code></td><td>junction dots</td></tr>
+<tr><td><code>{id}.charge</code></td><td>the charge dots</td></tr>
+<tr><td><code>{id}.glow</code></td><td>lamp/LED halos</td></tr>
+<tr><td><code>{id}.probes</code> · <code>{id}.scopes</code></td><td>readouts</td></tr>
+<tr><td><code>{id}.&lt;type&gt;s</code></td><td>every part of one type — <code>{id}.resistors</code>, <code>{id}.lamps</code></td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">framebox(ring, fig.L1, 10);   // ring the component you are talking about
+par { zoom(1.7, 1.2); cam((820, 420), 1.2); }
+pulse(fig.L2);
+color(fig.resistors, indigo);
+erase(fig.parts, 0.4);        // erase the STROKES …
+fade(fig.labels, 0.3);        // … and fade what is not a stroke
+</code></pre>
+<p>That last pair is the one gotcha: <code>erase</code>/<code>draw</code> are stroke verbs, so on a bare
+circuit id they leave the labels and dots behind. Address <code>{id}.parts</code> and fade
+the rest.</p>
+<hr>
+<h2 id="what-is-in-the-kit"><a class="header" href="#what-is-in-the-kit">What is in the kit</a></h2>
+<p>44 component types, from the 102-preset library the solver was ported from:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>group</th><th>types</th></tr>
+</thead>
+<tbody>
+<tr><td>passive + sources</td><td><code>wire</code> <code>ground</code> <code>resistor</code> <code>capacitor</code> <code>polarized-cap</code> <code>inductor</code> <code>dc-voltage</code> <code>ac-voltage</code> <code>dc-current</code> <code>clock</code> <code>lamp</code></td></tr>
+<tr><td>switching</td><td><code>switch</code> <code>push-switch</code> <code>spdt-switch</code> <code>ideal-switch</code> <code>relay</code> <code>fuse</code></td></tr>
+<tr><td>junctions</td><td><code>diode</code> <code>led</code> <code>zener</code></td></tr>
+<tr><td>transistors</td><td><code>bjt-npn</code> <code>bjt-pnp</code> <code>mosfet-n</code> <code>mosfet-p</code> <code>jfet-n</code> <code>jfet-p</code> <code>darlington-npn</code> <code>darlington-pnp</code></td></tr>
+<tr><td>analogue</td><td><code>opamp</code> <code>comparator</code> <code>schmitt</code> <code>vco</code> <code>transmission-line</code></td></tr>
+<tr><td>combinational logic</td><td><code>and-gate</code> <code>or-gate</code> <code>nand-gate</code> <code>nor-gate</code> <code>xor-gate</code> <code>not-gate</code> <code>logic-input</code> <code>logic-output</code></td></tr>
+<tr><td>sequential logic</td><td><code>d-flipflop</code> <code>sr-flipflop</code> <code>jk-flipflop</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Junctions, transistors and op-amps are solved by Newton–Raphson with voltage
+limiting; capacitors and inductors use trapezoidal companion models; a Darlington
+really is two transistors sharing an internal node, and a transmission line really
+is a ladder of L–C sections, which is why a step arrives <strong>late</strong>.</p>
+<hr>
+<h2 id="the-physics-you-can-rely-on"><a class="header" href="#the-physics-you-can-rely-on">The physics you can rely on</a></h2>
+<ul>
+<li><strong>KCL and KVL hold by construction.</strong> Every node row of the matrix is a current
+balance and every voltage source adds a row that pins its branch, so any
+solution the kit accepts satisfies both to solver precision.</li>
+<li><strong>The timestep is the circuit’s, not the frame rate’s.</strong> It integrates at the
+smallest time constant the circuit demands and decimates the <em>output</em> down to
+playback. Coarsening the integration would change the answer; coarsening what is
+stored cannot.</li>
+<li><strong>It is pure in <code>t</code>.</strong> The whole transient is solved at build time, so scrubbing
+backwards — including back through a construction or a cut — is exact.</li>
+<li><strong>Closed-form checks, in the test suite.</strong> Ohm’s law, series/parallel, a
+divider’s tap, an RC step at 63.2% of one time constant, RL rise, series-RLC
+resonance at <code>1/(2π√(LC))</code>, a diode’s forward drop, a half-wave rectifier’s
+floor, β² gain on a Darlington, a 1 µs delay line arriving at 1 µs.</li>
+</ul>
+<hr>
+<h2 id="end-to-end-a-class-9-question"><a class="header" href="#end-to-end-a-class-9-question">End to end: a class-9 question</a></h2>
+<p><em>“If the filament of one of the lamps is broken, will the other glow? Justify your
+answer.”</em> The answer is nowhere in this file — it comes out of the solver.</p>
+<pre><code class="language-manic">canvas("16:9"); template("paper");
+
+circuit(fig, (560, 330), `
+  lamp       1 0 5 0 r=120 name=L1
+  lamp       5 0 9 0 r=120 name=L2
+  wire       9 0 9 4
+  wire       9 4 6 4
+  dc-voltage 6 4 4 4 v=6
+  wire       4 4 1 4
+  wire       1 4 1 0
+  ground     6 4
+`, 62, 0, 0);
+
+current(fig, 1.4, circle, crimson, 4);
+color(fig.glow, orange);
+probe(fig, L1, (-14, -52));
+
+run(fig, 6);          // one current, so both lamps light equally
+cut(fig, L1, 1.0);    // break one filament
+run(fig, 4);          // both dark, and the meter reads 0.00 mA
+reconnect(fig, L1, 1.0);
+run(fig, 4);          // mended
+</code></pre>
+<p>A series circuit is one path. Break it anywhere and you have broken it
+everywhere — and here that sentence is a measurement, not a claim.</p>
+<p>See the <a href="#circuits--schematics-that-work">circuits gallery</a> for the full scenes.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="diagrams--draw-a-system-then-watch-it-work"><a class="header" href="#diagrams--draw-a-system-then-watch-it-work">Diagrams — draw a system, then watch it work</a></h1>
 <p>Declare a technical diagram as text and manic animates it — <strong>architecture
@@ -7998,13 +8315,14 @@ pulse(net.output);                 // flash the prediction
 <li><a href="#linear-algebra--tables">Linear algebra &amp; tables</a> — 13 examples</li>
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 14 examples</li>
 <li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
-<li><a href="#physics--simulations">Physics — simulations</a> — 58 examples</li>
+<li><a href="#physics--simulations">Physics — simulations</a> — 59 examples</li>
+<li><a href="#circuits--schematics-that-work">Circuits — schematics that work</a> — 3 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 5 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 11 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
 <li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
-<li><a href="#generative--recursive">Generative &amp; recursive</a> — 83 examples</li>
+<li><a href="#generative--recursive">Generative &amp; recursive</a> — 84 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
 <li><a href="#boolean-shapes">Boolean shapes</a> — 1 example</li>
@@ -15514,6 +15832,387 @@ wait(1.30);
 <h1 id="physics--simulations"><a class="header" href="#physics--simulations">Physics — simulations</a></h1>
 <p>Each simulation is <strong>pre-simulated with RK4</strong> at build time — deterministic and replayable — and its parts are ordinary manic entities the whole language composes with. The phase / time / well / energy views are optional and generic: any sim inherits them.</p>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="tides"><a class="header" href="#tides">tides</a></h2>
+<p>How the Moon moves every ocean — and why the popular sentence is wrong. “It pulls the water”
+predicts ONE bulge and one high tide a day; the sea gives two. Seen from over the north pole:
+the Moon laps its orbit, a tide gauge shows two highs a day, then the wrong picture is drawn
+properly and demolished. The fix is the whole subject - gravity is a GRADIENT, so subtracting
+the pull on Earth’s centre leaves a quadrupole that points outward at BOTH ends. The tidal
+field is one formula, (2x,-y), with its radial part projected out (water cannot leave the
+surface), and 12,000 parcels of water are <code>advect</code>ed through it - so the two bulges are
+computed by RK4, not drawn. Then the planet turns underneath them while the Moon moves on its
+honest 13.2 degrees a day (the equilibrium bulge’s axis is a bound <code>parameter</code>, so the tide
+tracks the Moon): the coast comes home, the Moon has not, and the extra 13 degrees of turning
+IS the 50 minutes a tide runs late each day. The Sun pulls 179x harder and raises 46% of the
+tide because a difference falls off as 1/d^3; add its 12.00-hour clock to the Moon’s 12.4206
+and the 14.77-day spring/neap fortnight emerges from two cosines with nothing else typed in.
+Ends honestly: the real ocean is not two bulges gliding around a smooth planet - Fundy swings
+16 m, much of the Mediterranean nothing. The Moon writes the forcing; the coastline decides.</p>
+<pre><code class="language-manic">// tides — how the Moon moves every ocean on Earth, and why the popular sentence is wrong.
+//
+// "The Moon's gravity pulls on the oceans" predicts ONE bulge and one high tide a day. The
+// sea gives two. The fix is the whole subject: what raises a tide is not the pull but the
+// DIFFERENCE in pull across the planet — a gradient, and a gradient has two ends.
+//
+//   ACT I    the fact: two highs a day, every day
+//   ACT II   the wrong picture, stated properly before it is demolished
+//   ACT III  the gradient — subtract the pull on Earth's centre and a QUADRUPOLE is left.
+//            The ocean is 12,000 parcels of water `advect`ed through it, so the two bulges
+//            are computed, not drawn. Then the planet turns under them and one coast passes
+//            through both: two high tides a day, from one Moon
+//   ACT IV   sideways, not up: 1.1 micrometres per second squared, a ten-millionth of
+//            gravity. Nothing is lifted; water is herded
+//   ACT V    the Sun pulls 179x harder and loses, because tides go as 1/d^3. Add the two
+//            and the spring/neap fortnight EMERGES from two cosines
+//   ACT VI   the honest part: the real ocean is not two bulges gliding around
+//
+// The whole film is one stage — the view down on the north pole, so Earth's rotation is an
+// ordinary in-plane `turn` and the water can stay where the Moon put it. The tidal field is
+// one formula: with the Moon along +x it is (2x, -y). Water cannot leave the surface, so what
+// moves it is the TANGENTIAL part — the radial component projected out, F - (F.r)r — which is
+// exactly why a tide is a horizontal shove and not a lift.
+//
+//   manic examples/tides.manic
+title("Tides — How the Moon Moves Every Ocean — manic");
+canvas("16:9");
+template("black");
+bloom(0.3, 0.52, 22);
+
+// ---- the mark, up top and above everything, for the whole film ----
+text(brand, (640, 32), "maniclang.com");
+display(brand); size(brand, 19); color(brand, cyan); opacity(brand, 0.72); z(brand, 100);
+
+// ---- type ----
+text(ttl, (640, 92), "How the Moon Moves Every Ocean");
+display(ttl); size(ttl, 46); bold(ttl); color(ttl, fg); hidden(ttl);
+text(sub, (640, 146), "and why \"it pulls the water up\" is the wrong answer");
+display(sub); size(sub, 22); color(sub, dim); hidden(sub);
+text(cap, (640, 668), ""); display(cap); size(cap, 23); color(cap, fg); hidden(cap);
+text(act, (1060, 624), ""); display(act); size(act, 19); color(act, gold); hidden(act);
+
+// ================================ THE STAGE ================================
+// Earth seen from over the north pole, 300 px across, so its surface is at radius 150.
+svg(earth, (640, 360), "asset:svg/emoji/1f30e.svg", 300);
+circle(orbit, (640, 360), 300); outlined(orbit); outline(orbit, dim);
+opacity(orbit, 0.45); hidden(orbit);
+svg(moon, (940, 360), "asset:svg/emoji/1f315.svg", 82);
+text(moonlab, (940, 470), "the Moon — one lap: 27.3 days");
+display(moonlab); size(moonlab, 17); color(moonlab, dim); hidden(moonlab);
+// one coast, riding the surface
+dot(coast, (640, 210), 9); color(coast, gold); hidden(coast);
+text(coastlab, (640, 176), "one coast");
+display(coastlab); size(coastlab, 17); color(coastlab, gold); hidden(coastlab);
+
+// a tide gauge: the Moon's own constituent, 12.4206 hours, over two days
+coords(gauge, (210, 468), (0, 48), (-1.4, 1.4), 19, 54, 0, 12, 1, "hours", "");
+color(gauge, dim); hidden(gauge);
+plot(trace, (210, 468), 19, 54, "cos(x/12.4206*tau)", (0, 48));
+color(trace, cyan); untraced(trace); hidden(trace);
+text(twice, (640, 262), "two highs, every day");
+display(twice); size(twice, 21); color(twice, gold); hidden(twice);
+
+// ---- ACT II — the wrong picture ----
+for k in 0..7 {
+  arrow(pull{k}, (556, 240 + k*40), (700, 240 + k*40));
+  color(pull{k}, gold);
+  untraced(pull{k});
+  tag(pull{k}, pulls);
+}
+// r(t) = R(1 + e·cos t): one bulge facing the Moon — what "it pulls the water" predicts
+param(wrong, (640, 360), 150, 150,
+  "(1 + 0.14*cos(t))*cos(t)", "(1 + 0.14*cos(t))*sin(t)", (0, tau));
+color(wrong, gold); untraced(wrong);
+text(wronglab, (640, 566), "one bulge  ⇒  one high tide a day");
+display(wronglab); size(wronglab, 21); color(wronglab, gold); hidden(wronglab);
+text(nope, (640, 606), "✗  the sea gives two");
+display(nope); size(nope, 21); color(nope, magenta); hidden(nope);
+
+// ---- ACT III — the gradient ----
+dot(pnear, (790, 360), 7); color(pnear, gold); hidden(pnear);
+dot(pmid, (640, 360), 7); color(pmid, fg); hidden(pmid);
+dot(pfar, (490, 360), 7); color(pfar, gold); hidden(pfar);
+arrow(gnear, (790, 360), (916, 360)); color(gnear, gold); untraced(gnear);
+arrow(gmid, (640, 360), (750, 360)); color(gmid, fg); untraced(gmid);
+arrow(gfar, (490, 360), (587, 360)); color(gfar, gold); untraced(gfar);
+text(g1, (640, 182), "one pull, unequally felt — gravity falls off as 1/d²");
+display(g1); size(g1, 20); color(g1, dim); hidden(g1);
+arrow(tnear, (790, 360), (862, 360)); color(tnear, magenta); untraced(tnear);
+arrow(tfar, (490, 360), (418, 360)); color(tfar, magenta); untraced(tfar);
+text(g2, (640, 182), "subtract the pull on the centre — the whole planet already falls with it");
+display(g2); size(g2, 20); color(g2, magenta); hidden(g2);
+
+// THE TIDAL FIELD, tangential part only: F - (F·r̂)r̂ with F = (2x, -y). The epsilon keeps the
+// planet's centre finite, where the projection is undefined.
+vectorfield(tide, (640, 360), 470, 290,
+  "0.42*(2*x - x*(2*x*x - y*y)/(x*x + y*y + 0.02))",
+  "0.42*(-y - y*(2*x*x - y*y)/(x*x + y*y + 0.02))", 15);
+color(tide, dim); opacity(tide, 0.55); hidden(tide);
+
+// the ocean: a shell of water on the surface, which the field herds
+cloud(sea, 12000, cyan, 0.75) {
+  let a = (i/12000)*tau;
+  let w = mod(i, 7) - 3;
+  let x = 640 + (153 + w*1.7)*cos(a);
+  let y = 360 + (153 + w*1.7)*sin(a);
+  let r = 1.5;
+  let hue = 192 + 10*w;
+}
+glow(sea, 2); hidden(sea);
+// and the shape all that herding is heading for: the equilibrium tide, a prolate ellipsoid
+// r(t) = R(1 + e(3cos²t − 1)/2) — with e drawn about 200,000x too big to be visible at all
+parameter(phi, (150, 600), 0, 0, 0.4, "the Moon has moved on", 2); hidden(phi.widget);
+param(bulge, (640, 360), 150, 150,
+  "(1 + 0.12*(3*cos(t-p)*cos(t-p) - 1)/2)*cos(t)",
+  "(1 + 0.12*(3*cos(t-p)*cos(t-p) - 1)/2)*sin(t)", (0, tau));
+bind(phi, bulge, formula,
+  "(1 + 0.12*(3*cos(t-p)*cos(t-p) - 1)/2)*cos(t)",
+  "(1 + 0.12*(3*cos(t-p)*cos(t-p) - 1)/2)*sin(t)");
+color(bulge, gold); untraced(bulge);
+text(twolab, (640, 578), "two bulges  ⇒  two high tides a day  ✓");
+display(twolab); size(twolab, 21); color(twolab, gold); hidden(twolab);
+text(spinlab, (640, 606), "");
+display(spinlab); size(spinlab, 20); color(spinlab, cyan); hidden(spinlab);
+
+// ---- ACT IV — how gentle it is ----
+equation(tiny, (640, 244), `a_{\text{tide}}=\frac{2GMr}{d^3}=1.1\times10^{-6}\ \mathrm{m/s^2}`, 30);
+color(tiny, magenta); hidden(tiny);
+equation(vsg, (640, 322), `\frac{a_{\text{tide}}}{g}\approx 10^{-7}`, 32);
+color(vsg, gold); hidden(vsg);
+text(gentle, (640, 400), "it could not lift a puddle — but it can shove an ocean sideways for six hours");
+display(gentle); size(gentle, 20); color(gentle, dim); hidden(gentle);
+
+// ---- ACT V — the Sun loses, and the beat ----
+equation(sunpull, (640, 240), `\frac{F_{\odot}}{F_{\text{Moon}}} = 179`, 30);
+color(sunpull, gold); hidden(sunpull);
+equation(suntide, (640, 328), `\frac{a_{\odot}}{a_{\text{Moon}}} = 0.46`, 30);
+color(suntide, cyan); hidden(suntide);
+text(cube, (640, 404), "a pull goes as 1/d², a difference in pull as 1/d³ — and the Sun is 390× farther");
+display(cube); size(cube, 20); color(cube, dim); hidden(cube);
+
+// two constituents added: the Moon's 12.4206 h and the Sun's 12.000 h. Nothing here sets a
+// fortnight — the 14.77-day spring/neap envelope is what two cosines DO.
+coords(month, (160, 470), (0, 720), (-1.7, 1.7), 1.34, 46, 0, 168, 1, "hours", "");
+color(month, dim); hidden(month);
+plot(beat, (160, 470), 1.34, 46, "cos(x/12.4206*tau) + 0.46*cos(x/12*tau)", (0, 720));
+color(beat, cyan); untraced(beat); hidden(beat);
+text(springlab, (635, 330), "spring");
+display(springlab); size(springlab, 18); color(springlab, gold); hidden(springlab);
+text(neaplab, (397, 330), "neap");
+display(neaplab); size(neaplab, 18); color(neaplab, magenta); hidden(neaplab);
+text(fortnight, (640, 602), "14.77 days, spring to spring — and nobody typed that number in");
+display(fortnight); size(fortnight, 20); color(fortnight, gold); hidden(fortnight);
+
+// ---- ACT VI — the honest part ----
+text(truth1, (640, 244), "The real ocean is not two bulges gliding around a smooth planet.");
+display(truth1); size(truth1, 24); color(truth1, fg); hidden(truth1);
+text(truth2, (640, 312), "Continents are in the way. Basins ring. The tide turns around fixed nodes.");
+display(truth2); size(truth2, 21); color(truth2, dim); hidden(truth2);
+text(fundy, (400, 400), "Bay of Fundy:  16 m");
+display(fundy); size(fundy, 22); color(fundy, gold); hidden(fundy);
+text(med, (890, 400), "much of the Mediterranean:  ~0");
+display(med); size(med, 22); color(med, magenta); hidden(med);
+text(truth3, (640, 480), "The Moon writes the forcing. The coastline decides the tide.");
+display(truth3); size(truth3, 22); color(truth3, cyan); hidden(truth3);
+
+// ================================= ACT I =================================
+show(ttl, 0.9);
+show(sub, 0.7);
+wait(1.3);
+show(cap, 0.3);
+say(cap, "Every coast on Earth does this twice a day, and has done for four billion years.");
+par { fade(ttl, 0.8); fade(sub, 0.8); }
+show(earth, 0.9);
+par { show(orbit, 0.6); show(moon, 0.7); show(moonlab, 0.5); }
+wait(0.4);
+say(cap, "One Moon, one lap of us every 27.3 days. Everything that follows comes from that.");
+// a rigidly turned label arrives upside down, so it steps off for the lap
+fade(moonlab, 0.4);
+par {
+  turn(moon, (640, 360), 360, 4.2, smooth);
+  turn(earth, (640, 360), 90, 4.2, smooth);
+}
+show(moonlab, 0.4);
+wait(0.4);
+say(cap, "A tide gauge on any coast, two days of it: high, low, high, low, high.");
+// the gauge needs the whole width, so the planet steps out for a moment
+par { fade(earth, 0.7); fade(moon, 0.6); fade(moonlab, 0.4); fade(orbit, 0.5); }
+// while the stage is dark the Moon takes up its working position, far off to the right,
+// where the tidal field's formula puts it
+move(moon, (1150, 360), 0.01);
+move(moonlab, (1150, 436), 0.01);
+say(moonlab, "the Moon");
+show(gauge, 0.6);
+show(trace, 0.4);
+draw(trace, 2.0, smooth);
+show(twice, 0.5);
+wait(1.4);
+say(cap, "Two a day. That number is the whole puzzle — and the usual explanation gets it wrong.");
+wait(2.2);
+
+// ================================= ACT II =================================
+say(act, "II · the wrong picture");
+show(act, 0.4);
+par { fade(gauge, 0.6); fade(trace, 0.6); fade(twice, 0.5); }
+say(cap, "The Moon's gravity pulls on the oceans. So far, so true.");
+par { show(earth, 0.8); show(moon, 0.6); show(moonlab, 0.4); }
+wait(0.5);
+stagger(0.07) {
+  for k in 0..7 {
+    draw(pull{k}, 0.5);
+  }
+}
+wait(1.2);
+say(cap, "Pull the water toward the Moon and it heaps up on the near side. One heap.");
+draw(wrong, 1.2, smooth);
+show(wronglab, 0.5);
+wait(1.8);
+say(cap, "Which is one high tide a day. The sea gives two. Something is missing.");
+show(nope, 0.6);
+wait(2.2);
+
+// ================================= ACT III =================================
+say(act, "III · the difference, not the pull");
+par { fade(pulls, 0.6); fade(wrong, 0.6); fade(wronglab, 0.5); fade(nope, 0.5); }
+say(cap, "Three places: the near side, the centre, the far side.");
+par { show(pnear, 0.4); show(pmid, 0.4); show(pfar, 0.4); }
+wait(0.7);
+say(cap, "Gravity weakens with distance, so those three pulls are not the same size.");
+show(g1, 0.5);
+stagger(0.22) {
+  draw(gnear, 0.6);
+  draw(gmid, 0.6);
+  draw(gfar, 0.6);
+}
+wait(1.8);
+say(cap, "But the planet is already falling around its centre. Subtract that pull from all three.");
+par { fade(g1, 0.5); fade(gnear, 0.5); fade(gmid, 0.5); fade(gfar, 0.5); }
+show(g2, 0.6);
+par { draw(tnear, 0.7); draw(tfar, 0.7); }
+wait(1.8);
+say(cap, "What is left points AWAY at both ends. A gradient has two ends. There is the two.");
+wait(2.2);
+say(cap, "Do that at every point at once, and this is the field the Moon leaves behind.");
+par { fade(g2, 0.5); fade(tnear, 0.5); fade(tfar, 0.5); fade(pnear, 0.4); fade(pmid, 0.4); fade(pfar, 0.4); }
+show(tide, 0.9);
+wait(1.4);
+say(cap, "Now put twelve thousand parcels of water on the surface and let the field push them.");
+show(sea, 0.8);
+wait(0.5);
+advect(sea, tide, 6.5, 0.55);
+wait(0.4);
+say(cap, "Nothing was placed by hand. The water went where the arrows converge — and there are two.");
+draw(bulge, 1.4, smooth);
+show(twolab, 0.6);
+wait(2.2);
+// the payoff: the water stays where the Moon put it, and the planet turns underneath
+say(cap, "The bulges belong to the Moon, not to the planet. So turn the planet underneath them.");
+// the field's arrows are fixed to the Moon's OLD direction, so they bow out before it moves
+par { show(coast, 0.5); show(coastlab, 0.4); fade(sea, 0.8); fade(tide, 0.8); }
+wait(0.9);
+say(spinlab, "one rotation = one day");
+show(spinlab, 0.4);
+// one day: Earth turns once, and the Moon does not wait — it moves on 360/27.3 = 13.2 degrees,
+// taking the tide's axis with it
+par {
+  fade(coastlab, 0.5);
+  turn(earth, (640, 360), 360, 7.0, linear);
+  turn(coast, (640, 360), 360, 7.0, linear);
+  turn(moon, (640, 360), 13.2, 7.0, linear);
+  to(phi, value, 0.23, 7.0, linear);
+}
+say(cap, "One coast, one day, two bulges crossed. Two high tides — and the water never travelled.");
+wait(2.2);
+// and the reason tide tables slip: the coast is back where it started, the Moon is not
+say(cap, "But look: the coast is home and the Moon has moved on thirteen degrees.");
+say(spinlab, "the Moon moved on 13° while the planet turned once");
+wait(2.0);
+say(cap, "So the coast has to chase it — about fifty minutes more of turning, every single day.");
+par {
+  turn(earth, (640, 360), 13.2, 1.6, smooth);
+  turn(coast, (640, 360), 13.2, 1.6, smooth);
+}
+say(spinlab, "one tidal day = 24 h 50 min");
+wait(2.4);
+
+// ================================= ACT IV =================================
+say(act, "IV · sideways, not up");
+// the caption turns over with the stage, so no frame is left empty under a stale line
+say(cap, "One more correction, and it is the one that surprises people. Look how gentle this is.");
+par {
+  fade(coast, 0.4); fade(spinlab, 0.4); fade(bulge, 0.6); fade(twolab, 0.5);
+  fade(earth, 0.8); fade(moon, 0.6); fade(moonlab, 0.4);
+}
+show(tiny, 0.8);
+wait(1.6);
+show(vsg, 0.7);
+say(cap, "A ten-millionth of the gravity holding that ocean down.");
+wait(1.8);
+show(gentle, 0.6);
+say(cap, "Nothing gets lifted. Water gets nudged SIDEWAYS for six hours, and arrives.");
+wait(2.4);
+
+// ================================= ACT V =================================
+say(act, "V · the Sun loses");
+par { fade(tiny, 0.7); fade(vsg, 0.7); fade(gentle, 0.6); }
+say(cap, "The Sun pulls Earth a hundred and seventy-nine times harder than the Moon does.");
+show(sunpull, 0.8);
+wait(1.6);
+say(cap, "And raises less than half the tide, because a DIFFERENCE falls off faster than a pull.");
+show(suntide, 0.8);
+show(cube, 0.6);
+wait(2.4);
+par { fade(sunpull, 0.6); fade(suntide, 0.6); fade(cube, 0.5); }
+say(cap, "So the ocean answers two clocks: 12.42 hours for the Moon, 12.00 for the Sun.");
+show(month, 0.6);
+show(beat, 0.4);
+draw(beat, 3.0, smooth);
+wait(0.6);
+say(cap, "Add them. Where the two clocks agree the tides run big; where they fight, small.");
+par { show(springlab, 0.5); show(neaplab, 0.5); }
+wait(1.6);
+say(cap, "Spring tides, neap tides — a fortnight apart, out of two cosines and nothing else.");
+show(fortnight, 0.7);
+wait(2.4);
+
+// ================================= ACT VI =================================
+say(act, "VI · the honest part");
+par {
+  fade(month, 0.6); fade(beat, 0.6); fade(springlab, 0.4); fade(neaplab, 0.4);
+  fade(fortnight, 0.6);
+}
+show(truth1, 0.8);
+say(cap, "Everything so far is the FORCING. It is not the tide you can go and watch.");
+wait(1.8);
+show(truth2, 0.7);
+say(cap, "Water cannot chase the Moon around a planet with two continents in the way.");
+wait(1.8);
+par { show(fundy, 0.6); show(med, 0.6); }
+say(cap, "One bay rings like an organ pipe and swings sixteen metres. Another barely moves.");
+wait(2.2);
+show(truth3, 0.8);
+wait(2.4);
+
+// ================================= ENDCARD =================================
+par {
+  fade(truth1, 0.7); fade(truth2, 0.6); fade(truth3, 0.7);
+  fade(fundy, 0.5); fade(med, 0.5); fade(cap, 0.6); fade(act, 0.5);
+}
+text(end1, (640, 318), "The Moon does not lift the sea.");
+display(end1); size(end1, 40); bold(end1); color(end1, fg); hidden(end1);
+text(end2, (640, 380), "It pulls one side harder than the other.");
+display(end2); size(end2, 30); color(end2, cyan); hidden(end2);
+text(end3, (640, 458), "and the ocean charges interest: 3.8 cm of Moon a year, paid out of Earth's spin");
+display(end3); size(end3, 19); color(end3, dim); hidden(end3);
+text(end4, (640, 522), "— manic");
+display(end4); size(end4, 24); color(end4, gold); hidden(end4);
+show(end1, 0.9);
+show(end2, 0.8);
+show(end3, 0.7);
+show(end4, 0.6);
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/HXPh-YeIues" title="How the Moon Moves Every Ocean — Why There Are TWO High Tides a Day — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="pendulum"><a class="header" href="#pendulum">pendulum</a></h2>
 <p>One pendulum shown four ways from a single deterministic swing: the motion (with a
 velocity arrow + KE/PE bars), the phase portrait (θ vs ω), a time series, the
@@ -18438,6 +19137,481 @@ pulse(force, 0.8);
 wait(1.6);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/nkQF8PlAiDE" title="Why a Spinning Ball Curves — Streamlines Around a Spinning Cylinder in manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="circuits--schematics-that-work"><a class="header" href="#circuits--schematics-that-work">Circuits — schematics that work</a></h1>
+<p>A netlist in, a working schematic out: Modified Nodal Analysis under easy builtins, so every voltage, current and glow on screen was <strong>solved</strong> rather than drawn. The schematic draws itself one component at a time and each PREFIX of it is solved, so nothing flows until the loop closes; <code>cut</code> takes a component out of the circuit and what is left is re-solved from scratch. See the <a href="#circuits--draw-one-and-it-works">circuits guide</a>.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="circuit-broken-filament"><a class="header" href="#circuit-broken-filament">circuit-broken-filament</a></h2>
+<p><strong>NCERT Class 9, Fig. 3.17, Q3</strong> — <em>if the filament of one of the lamps is broken, will
+the other glow?</em> Two lamps in series share one current, and each lamp’s halo carries
+P = V·I, so when <code>cut</code> breaks one filament BOTH go dark and the meter falls to 0.00 mA on
+its own. The answer is nowhere in the file. <code>cut</code> decides the physics and the scene decides
+the theatre: since the question is about a broken filament rather than a lamp removed from
+its holder, the symbol comes back with <code>show</code> and a slash marks the break.</p>
+<pre><code class="language-manic">// Class 9 · NCERT Science, Fig. 3.17, question 3
+//
+//   "If the filament of one of the lamps is broken, will the other glow?
+//    Justify your answer."
+//
+// The answer is not asserted anywhere in this file. Two lamps sit in series across a cell; the
+// solver gives them one shared current, and each lamp's halo carries P = V·I on its opacity, so
+// they light because they are dissipating power. `cut` takes one filament out of the circuit —
+// the circuit that is left is re-analysed and re-solved from scratch — and both lamps go dark
+// because both are now dissipating nothing. The meter falls to zero on its own.
+//
+// A series circuit is one path. Break it anywhere and you have broken it everywhere.
+
+title("if one filament breaks");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+// ── the schematic, drawn the way the book draws it: two lamps, one cell, one loop ──
+
+circuit(fig, (560, 330), `
+  lamp       1 0 5 0 r=120 name=L1
+  lamp       5 0 9 0 r=120 name=L2
+  wire       9 0 9 4
+  wire       9 4 6 4
+  dc-voltage 6 4 4 4 v=6
+  wire       4 4 1 4
+  wire       1 4 1 0
+  ground     6 4
+`, 62, 0, 0);
+
+current(fig, 1.4, circle, crimson, 4);
+probe(fig, L1, (-14, -52));
+
+// The halo behind a lamp is the lamp's own colour by default; on a cream page a warm one reads as
+// light. It is an ordinary entity tagged {id}.glow, so a core verb restyles it.
+color(fig.glow, orange);
+
+// The object beside the symbol, because a beginner meeting ⊗ for the first time has no reason
+// to know it means a lamp. Vector art, so it draws and fades like anything else.
+svg(bulb, (1090, 250), "assets/svg/heroicons/light-bulb.svg", 118);
+color(bulb, gold);
+hidden(bulb);
+
+text(l1, (1090, 340), "the lamp");
+hidden(l1);
+size(l1, 22);
+color(l1, dim);
+
+// ── the question, and then the answer ──
+
+text(q, (640, 120), "one filament breaks — does the other still glow?");
+hidden(q);
+size(q, 30);
+color(q, ink);
+
+// The break itself. `cut` decides the PHYSICS; the theatre is the author's, and this question is
+// about a broken filament rather than a lamp taken out of its holder — so the symbol stays on the
+// page and a slash marks the break. The lamp is still there. It just cannot carry anything.
+// L1's symbol sits at (436, 206): a circuit is placed by the CENTRE of its bounding box, so a
+// grid point lands at `origin + p × unit` where `origin = centre − span/2 − lo × unit`. Here that
+// is (250, 206), and L1 spans grid x 1→5, so its middle is x = 250 + 3 × 62.
+line(break1, (418, 188), (454, 224));
+hidden(break1);
+color(break1, crimson);
+stroke(break1, 3);
+
+text(a1, (1075, 470), "one path,");
+hidden(a1);
+size(a1, 26);
+color(a1, crimson);
+
+text(a2, (1075, 508), "one current");
+hidden(a2);
+size(a2, 26);
+color(a2, crimson);
+
+text(a3, (1075, 560), "break it anywhere");
+hidden(a3);
+size(a3, 26);
+color(a3, ink);
+
+text(a4, (1075, 598), "and it is broken");
+hidden(a4);
+size(a4, 26);
+color(a4, ink);
+
+text(a5, (1075, 636), "everywhere");
+hidden(a5);
+size(a5, 26);
+color(a5, ink);
+
+// ── the beats ──
+
+show(q, 0.6);
+wait(0.3);
+
+// the loop closes and both lamps come up together: one current, so one brightness
+run(fig, 6.0);
+
+par {
+  show(bulb, 0.7);
+  show(l1, 0.5);
+}
+wait(0.6);
+par {
+  show(a1, 0.4);
+  show(a2, 0.4);
+}
+wait(1.0);
+
+// break the filament of one lamp
+cut(fig, L1, 1.0);
+par {
+  // the lamp comes back to the page — it was never removed, only broken
+  show(fig.L1, 0.4);
+  // `show`, not `draw`: `hidden` is an OPACITY, and `draw` animates trace — a hidden entity
+  // traced all the way in is still invisible
+  show(break1, 0.35);
+  fade(bulb, 0.6);
+  fade(l1, 0.6);
+}
+run(fig, 4.0);
+wait(0.4);
+
+par {
+  show(a3, 0.4);
+  show(a4, 0.4);
+  show(a5, 0.4);
+}
+wait(1.4);
+
+// mend it, and the whole loop lights again
+par {
+  fade(break1, 0.4);
+  reconnect(fig, L1, 1.0);
+}
+run(fig, 4.0);
+wait(0.9);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/97H-XAuud3Y" title="If One Filament Breaks, Does the Other Lamp Glow? — a Solved Circuit Answers (Class 9) — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="circuit-does-current-flow"><a class="header" href="#circuit-does-current-flow">circuit-does-current-flow</a></h2>
+<p>The teaching beat end to end: a battery, a switch, a lamp and the wires between them
+drawn in a teacher’s order, the lamp lighting the moment the last wire closes the loop
+(because that prefix was solved), a <code>zoom</code>+<code>cam</code>+<code>framebox</code> close-up, then <code>cut</code> on the
+return wire — dots stop, lamp dark, probe to zero — and <code>reconnect</code>.</p>
+<pre><code class="language-manic">// Does current flow?
+//
+// The oldest question in electricity, answered by a circuit that draws itself and then gets
+// taken apart. Every number on screen is solved: the schematic is built one component at a
+// time and each PREFIX of it is analysed, so nothing moves until the loop closes — and when
+// the return wire is cut, the lamp's current goes to zero because the circuit that is left
+// was solved from scratch, not because anything was dimmed.
+//
+// Nothing here is a circuit-specific animation verb. The drawing, the framing and the
+// close-up are Manic's core kit; the physics is Modified Nodal Analysis.
+
+title("does current flow?");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 44), "maniclang.com");
+display(brand);
+size(brand, 22);
+color(brand, dim);
+
+circuit(loop, (600, 400), `
+  dc-voltage 0 6 0 0 v=9
+  wire       0 0 4 0
+  switch     4 0 7 0 closed=1
+  wire       7 0 11 0
+  lamp       11 0 11 6 r=180 name=L1
+  wire       11 6 6 6 name=RET
+  wire       6 6 0 6
+  ground     0 6
+`, 58);
+
+// The animator's dial on the current: a little quicker than the circuit's own pace, because a
+// short film wants pace. `speed` scales every branch by the same factor, so the ratio between
+// branches — the only thing dot speed is allowed to mean — is untouched. `current` also takes a
+// shape (circle, square, diamond), a colour (any palette name or #rrggbb) and a size.
+current(loop, 1.6);
+
+probe(loop, L1, (70, -6));
+
+// the highlight box is declared up front and hidden — a ctor belongs above the timeline
+framebox(ring, loop.L1, 10);
+hidden(ring);
+
+text(q1, (640, 118), "one loop, one lamp");
+hidden(q1);
+size(q1, 30);
+color(q1, cyan);
+
+text(q2, (640, 118), "cut the return: still a lamp, no current");
+hidden(q2);
+size(q2, 30);
+color(q2, magenta);
+
+text(q3, (640, 118), "put it back");
+hidden(q3);
+size(q3, 30);
+color(q3, lime);
+
+// the schematic draws itself in netlist order, and the current starts by itself when the
+// last wire closes the loop
+show(q1, 0.5);
+run(loop, 7.0);
+wait(0.4);
+
+// look closely at the one component that is doing the work
+par {
+  zoom(1.7, 1.2);
+  cam((820, 420), 1.2);
+  show(ring, 0.8);
+}
+wait(1.0);
+par {
+  zoom(1.0, 1.0);
+  cam((640, 360), 1.0);
+  fade(ring, 0.6);
+}
+
+// take the return wire out — and the lamp goes dark because there is nothing to light it
+par {
+  fade(q1, 0.4);
+  show(q2, 0.4);
+}
+cut(loop, RET, 0.9);
+run(loop, 3.5);
+wait(0.6);
+
+// and back
+par {
+  fade(q2, 0.4);
+  show(q3, 0.4);
+}
+reconnect(loop, RET, 0.9);
+run(loop, 3.5);
+wait(0.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/iL8PtBBt0BA" title="Does Current Flow? Cut One Wire and Watch the Lamp Go Out — Circuit Animation — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="circuit-kit-promo"><a class="header" href="#circuit-kit-promo">circuit-kit-promo</a></h2>
+<p>Six circuits on a textbook page, each erasing itself, drawing itself back, naming itself
+and running its own current — Ohm’s law, a divider, RC, RL, a rectifier and an LED — then
+the whole board alive at once. Six <code>current(...)</code> styles: shape, colour and pace, with the
+proportionality between branches untouched.</p>
+<pre><code class="language-manic">// The circuit kit, in six circuits.
+//
+// A contact sheet that comes alive: six real circuits on screen from the first frame, then each
+// one erases itself, draws itself back, names itself and runs its own current — a different
+// shape, colour and pace for every panel. The last beat runs all six at once.
+//
+// Every dot on screen is a charge integral of a solved branch current, so the six panels are
+// running at honestly different speeds because their currents differ, not because six numbers
+// were typed. Nothing here is a circuit-specific animation verb: erase, draw, show and par are
+// Manic's core kit.
+
+title("six circuits");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 22);
+color(brand, dim);
+
+// ── the board: complete from t = 0, so the first frame is already the whole kit ──
+
+circuit(ohm, (250, 240), `
+  dc-voltage 0 4 0 0 v=9
+  resistor   0 0 4 0 r=1k
+  wire       4 0 4 4
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(divider, (640, 240), `
+  dc-voltage 0 4 0 0 v=9
+  resistor   0 0 4 0 r=3k
+  resistor   4 0 4 4 r=1k
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(rc, (1030, 240), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 4 0 r=1k
+  capacitor  4 0 4 4 c=10u
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(rl, (250, 512), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 4 0 r=100
+  inductor   4 0 4 4 l=10m
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(rect, (640, 512), `
+  ac-voltage 0 4 0 0 v=5 f=60
+  diode      0 0 3 0
+  resistor   3 0 3 4 r=1k
+  wire       3 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(led, (1030, 512), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 3 0 r=330
+  led        3 0 3 4
+  wire       3 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+// ── a different current in every panel: shape, colour, pace ──
+//
+// Inks chosen for the `paper` template: on cream, gold and amber wash out, so these are the
+// darker end of the palette — the colours a textbook would actually print in.
+
+current(ohm, 1, circle, crimson, 3);
+current(divider, 1.5, circle, indigo, 3);
+current(rc, 1.2, square, green, 3);
+current(rl, 2, diamond, purple, 4);
+current(rect, 1.6, diamond, orange, 4);
+current(led, 2.5, circle, magenta, 4);
+
+// ── the names, which arrive as each panel takes its turn ──
+
+text(n1, (250, 352), "Ohm's law");
+hidden(n1);
+size(n1, 24);
+color(n1, crimson);
+
+text(n2, (640, 352), "voltage divider");
+hidden(n2);
+size(n2, 24);
+color(n2, indigo);
+
+text(n3, (1030, 352), "RC charging");
+hidden(n3);
+size(n3, 24);
+color(n3, green);
+
+text(n4, (250, 624), "RL current rise");
+hidden(n4);
+size(n4, 24);
+color(n4, purple);
+
+text(n5, (640, 624), "half-wave rectifier");
+hidden(n5);
+size(n5, 24);
+color(n5, orange);
+
+text(n6, (1030, 624), "LED + series resistor");
+hidden(n6);
+size(n6, 24);
+color(n6, magenta);
+
+// ── six beats: clear to nothing, draw, name, run ──
+//
+// The erase has to go to a real zero state, and that means addressing the RIGHT tags. `erase` is
+// a stroke verb — it traces a shape out — so on the bare circuit id it would take the component
+// strokes away and leave the value labels and the charge dots sitting there, and a text entity
+// under `trace` reveals PART of its characters ("10mH" erasing down to "1"). So the strokes are
+// erased, and everything that is not a stroke is faded.
+
+wait(0.8);
+
+par {
+  erase(ohm.parts, 0.35);
+  fade(ohm.labels, 0.3);
+  fade(ohm.charge, 0.2);
+}
+par {
+  draw(ohm.parts, 0.85);
+  show(ohm.labels, 0.5);
+}
+show(n1, 0.3);
+run(ohm, 2.0);
+
+par {
+  erase(divider.parts, 0.35);
+  fade(divider.labels, 0.3);
+  fade(divider.charge, 0.2);
+}
+par {
+  draw(divider.parts, 0.85);
+  show(divider.labels, 0.5);
+}
+show(n2, 0.3);
+run(divider, 2.0);
+
+par {
+  erase(rc.parts, 0.35);
+  fade(rc.labels, 0.3);
+  fade(rc.charge, 0.2);
+}
+par {
+  draw(rc.parts, 0.85);
+  show(rc.labels, 0.5);
+}
+show(n3, 0.3);
+run(rc, 2.0);
+
+par {
+  erase(rl.parts, 0.35);
+  fade(rl.labels, 0.3);
+  fade(rl.charge, 0.2);
+}
+par {
+  draw(rl.parts, 0.85);
+  show(rl.labels, 0.5);
+}
+show(n4, 0.3);
+run(rl, 2.0);
+
+par {
+  erase(rect.parts, 0.35);
+  fade(rect.labels, 0.3);
+  fade(rect.charge, 0.2);
+}
+par {
+  draw(rect.parts, 0.85);
+  show(rect.labels, 0.5);
+}
+show(n5, 0.3);
+run(rect, 2.0);
+
+par {
+  erase(led.parts, 0.35);
+  fade(led.labels, 0.3);
+  fade(led.charge, 0.2);
+}
+par {
+  draw(led.parts, 0.85);
+  show(led.labels, 0.5);
+}
+show(n6, 0.3);
+run(led, 2.0);
+
+// ── and the whole board alive at once ──
+
+wait(0.3);
+par {
+  run(ohm, 5.0);
+  run(divider, 5.0);
+  run(rc, 5.0);
+  run(rl, 5.0);
+  run(rect, 5.0);
+  run(led, 5.0);
+}
+wait(0.7);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/pgLtFushEUQ" title="Six Circuits That Draw Themselves — Ohm's Law, RC, RL, Rectifier & LED, All Solved — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="optics--light-as-geometry"><a class="header" href="#optics--light-as-geometry">Optics — light as geometry</a></h1>
@@ -22320,6 +23494,395 @@ wait(1.0);
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="generative--recursive"><a class="header" href="#generative--recursive">Generative &amp; recursive</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="spiral-families"><a class="header" href="#spiral-families">spiral-families</a></h2>
+<p>The six spirals nature keeps reusing, side by side, with no narration at all — every panel is
+one closed-form formula and thousands of points of light, and the plate explains itself.
+FIBONACCI r = a<em>phi^(2t/pi) (nautilus, galaxies), VOGEL 137.5 degrees per seed (sunflowers,
+pinecones), ARCHIMEDEAN r = a + b</em>t (watch springs), FERMAT r = a<em>sqrt(t) with BOTH arms
+(lens design), LOGARITHMIC r = a</em>e^(b<em>t) with three arms (hurricane rainbands), and the real
+CURLICUE - the running sum of unit steps each turned by pi</em>phi*m^2, which a <code>cloud</code> can never
+do (its formulas are pure in (i,t) and cannot accumulate), so it is computed exactly by
+build-time <code>sum</code> reductions over the loop index and drawn as 360 real segments. Physics
+respected: the log spirals sample uniformly in RADIUS, since their arc length grows with
+radius, and each panel unfurls from its centre because opacity is saturate((t-start)*k - i/N)</p>
+<ul>
+<li>arithmetic, not keyframes. The background is the same law as wallpaper: level sets of
+(angle - ln r / b) ARE logarithmic spirals. Then the UZUMAKI finale: one bound <code>parameter</code>
+draws all six families off their panels into a single CHAOTIC maelstrom - every point riding
+its own pitch, arm and phase from fract(sin(i)) hashes, with noise kneading the radius - while
+a torn-spiral <code>shader</code> vortex reads the same number and rises with them.</li>
+</ul>
+<pre><code class="language-manic">// spiral-families — the six spirals nature keeps reusing, side by side, each one a single
+// closed-form formula and about five thousand points of light.
+//
+//   Fibonacci      r = a·φ^(2θ/π)        nautilus shells, galaxies
+//   Vogel          θ = n · 137.5°        sunflower seeds, pinecones
+//   Archimedean    r = a + bθ            watch springs, coiled rope
+//   Fermat         r = a·√θ              optical lenses (both arms)
+//   Logarithmic    r = a·e^(bθ)          hurricanes (three arms)
+//   Curlicue       φ = 2πφ·n²            fractal art
+//
+// Every panel is one `cloud`: position, size and colour are closed-form functions of the
+// point index `i` and live time `t`, so each spiral genuinely turns yet the whole plate stays
+// a pure function of `t` — it scrubs and records exactly. The unfurl is not a keyframe
+// either: each point's opacity is `saturate((t − start)·rate − i/N)`, so the light travels
+// out from the centre because of arithmetic, not animation.
+//
+// Two honest notes. A LOGARITHMIC spiral has arc length proportional to radius, so the
+// Fibonacci and hurricane panels sample uniformly in RADIUS — that is what makes their
+// windings even instead of piling up at the rim. And the curlicue here is the quadratic-angle
+// form: a cloud formula is pure in `(i, t)`, so it cannot accumulate the running sum of unit
+// steps the classical curlicue is built from.
+//
+//   manic examples/spiral-families.manic
+title("Six Spirals Nature Keeps Reusing — manic");
+canvas("16:9");
+template("black");
+bloom(0.38, 0.46, 26);
+
+// the mark, above everything, for the whole film
+text(brand, (640, 28), "maniclang.com");
+display(brand); size(brand, 19); color(brand, cyan); opacity(brand, 0.8); plate(brand, 0.5); z(brand, 100);
+
+text(ttl, (640, 70), "Six spirals nature keeps reusing");
+display(ttl); size(ttl, 30); bold(ttl); color(ttl, fg); hidden(ttl);
+
+// A background that obeys the same law the panels do: the level sets of (angle − ln r / b)
+// ARE logarithmic spirals, so this is one giant log spiral used as wallpaper. Its eye sits
+// below the frame, so the plate gets broad sweeping arms instead of a bullseye behind the
+// grid, and the very top stays clean where the mark and the title live. Kept in a 0.02–0.10
+// brightness band on purpose: it has to elevate the six spirals, never compete with them.
+shader(bg) {
+  let x = (u - 0.5)*asp*1.25;
+  let y = v + 0.62;
+  let rr = length(x, y) + 0.02;
+  let a = atan2(y, x);
+  let ph = a - log(rr)/0.42;
+  let arms = 0.5 + 0.5*sin(2.0*ph + t*0.16);
+  let fine = 0.5 + 0.5*sin(5.0*ph - t*0.09);
+  let swirl = 0.68*arms + 0.32*fine;
+  let grain = 0.5 + 0.5*fbm(x*3.4 + t*0.02, y*3.4);
+  let top = smoothstep(0.0, 0.3, v);
+  let hue = 238 - 34.0*swirl;
+  let sat = 0.76 - 0.22*swirl;
+  let val = 0.016 + 0.078*swirl*top + 0.013*grain*top;
+}
+z(bg, -10);
+
+// UZUMAKI — how far the whole plate has been drawn into a single spiral. Every panel's cloud
+// reads this parameter BY NAME, so the finale is not six separate animations: it is one number,
+// and each swarm swirls toward the centre because its own formula says so.
+parameter(pull, (150, 690), 0, 0, 1, "uzumaki", 2); hidden(pull.widget);
+
+shader(vortex) {
+  let x = (u - 0.5)*asp;
+  let y = v - 0.5;
+  let rr = length(x, y) + 0.02;
+  let a = atan2(y, x);
+  // a violent domain warp: the ANGLE itself is kneaded by noise, so the arms tear as they turn
+  let w = 0.6*snoise(x*3.2 + t*0.15, y*3.2 - t*0.1);
+  let ph = a + w - log(rr)/0.17;
+  let arms = 0.5 + 0.5*sin(4.0*ph + t*1.1);
+  let core = gaussian(rr, 0.17);
+  let edge = saturate(1.25 - rr*1.15);
+  let hue = 292 - 46.0*arms + 34.0*core;
+  let sat = 0.86 - 0.34*core;
+  let val = (0.05 + 0.52*arms*arms + 0.55*core)*edge;
+  let alpha = pull*saturate(0.12 + 1.15*arms*arms + core)*edge;
+}
+z(vortex, -5);
+
+// ============================== panel furniture ==============================
+// three columns, two rows: names above each spiral, its formula under the name, and what
+// grows that way underneath the light
+text(n1, (235, 116), "Fibonacci"); text(n2, (640, 116), "Vogel");
+text(n3, (1045, 116), "Archimedean"); text(n4, (235, 398), "Fermat");
+text(n5, (640, 398), "Logarithmic"); text(n6, (1045, 398), "Curlicue");
+display(n1); display(n2); display(n3); display(n4); display(n5); display(n6);
+size(n1, 22); size(n2, 22); size(n3, 22); size(n4, 22); size(n5, 22); size(n6, 22);
+bold(n1); bold(n2); bold(n3); bold(n4); bold(n5); bold(n6);
+hue(n1, 45); hue(n2, 92); hue(n3, 190); hue(n4, 215); hue(n5, 320); hue(n6, 272);
+hidden(n1); hidden(n2); hidden(n3); hidden(n4); hidden(n5); hidden(n6);
+
+equation(f1, (235, 150), `r = a\,\varphi^{2\theta/\pi}`, 21);
+equation(f2, (640, 150), `\theta_n = n \cdot 137.5^{\circ}`, 21);
+equation(f3, (1045, 150), `r = a + b\,\theta`, 21);
+equation(f4, (235, 432), `r = a\sqrt{\theta}`, 21);
+equation(f5, (640, 432), `r = a\,e^{b\theta}`, 21);
+equation(f6, (1045, 440), `z_n = \sum_{m&lt;n} e^{i\pi\varphi m^2}`, 16);
+hue(f1, 45); hue(f2, 92); hue(f3, 190); hue(f4, 215); hue(f5, 320); hue(f6, 272);
+hidden(f1); hidden(f2); hidden(f3); hidden(f4); hidden(f5); hidden(f6);
+
+text(w1, (235, 366), "nautilus shells · galaxies");
+text(w2, (640, 366), "sunflower seeds · pinecones");
+text(w3, (1045, 366), "watch springs · coiled rope");
+text(w4, (235, 648), "optical lenses");
+text(w5, (640, 648), "hurricanes");
+text(w6, (1045, 648), "fractal art");
+display(w1); display(w2); display(w3); display(w4); display(w5); display(w6);
+size(w1, 17); size(w2, 17); size(w3, 17); size(w4, 17); size(w5, 17); size(w6, 17);
+color(w1, dim); color(w2, dim); color(w3, dim);
+color(w4, dim); color(w5, dim); color(w6, dim);
+hidden(w1); hidden(w2); hidden(w3); hidden(w4); hidden(w5); hidden(w6);
+
+// ============================== 1 · FIBONACCI ==============================
+// the golden spiral: every quarter turn multiplies the radius by φ = 1.618…, which is a
+// logarithmic spiral with b = ln(φ)/(π/2) = 0.3063. Sampled uniformly in RADIUS, because a
+// log spiral's arc length grows with its radius.
+cloud(s1, 5200, gold, 0.85) {
+  let u = i/5200;
+  let rr = 1.2 + 76*u;
+  let th = log(rr/0.04)/0.3063 + 0.16*t;
+  let px = 235 + rr*cos(th);
+  let py = 258 - rr*sin(th);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 0.9 + 1.5*u;
+  let hue = 38 + 26*u;
+  let sat = 0.85;
+  let val = 0.72 + 0.28*u;
+  let alpha = saturate((t - 1.0)*2.4 - u*1.9);
+}
+glow(s1, 2);
+
+// ============================== 2 · VOGEL ==============================
+// phyllotaxis: seed n at 137.5° from the last and √n out. No two seeds crowd, which is why
+// sunflowers, pinecones and pineapples all settle on this one.
+cloud(s2, 1500, lime, 0.9) {
+  let n = i + 1;
+  let u = i/1500;
+  let rr = 78*sqrt(n/1500);
+  let th = n*2.39996 + 0.16*t;
+  let px = 640 + rr*cos(th);
+  let py = 258 - rr*sin(th);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 1.3 + 1.4*u;
+  let hue = 76 + 40*u;
+  let sat = 0.8;
+  let val = 0.7 + 0.3*u;
+  let alpha = saturate((t - 2.0)*2.4 - u*1.9);
+}
+glow(s2, 2);
+
+// ============================== 3 · ARCHIMEDEAN ==============================
+// equal spacing every turn — the coil of a watch spring or a rope on a deck. Sampled
+// uniformly in θ, since that IS the defining regularity.
+cloud(s3, 5200, cyan, 0.85) {
+  let u = i/5200;
+  let th = u*37.7;
+  let rr = 3.5 + 1.98*th;
+  let px = 1045 + rr*cos(th + 0.16*t);
+  let py = 258 - rr*sin(th + 0.16*t);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 1.0 + 1.1*u;
+  let hue = 184 + 24*u;
+  let sat = 0.8;
+  let val = 0.72 + 0.28*u;
+  let alpha = saturate((t - 3.0)*2.4 - u*1.9);
+}
+glow(s3, 2);
+
+// ============================== 4 · FERMAT ==============================
+// r = a√θ, and the real thing has BOTH arms — `mod(i,2)` picks one, so the panel shows the
+// full双 curve. Equal AREA per turn, which is why lens and mirror designers use it.
+cloud(s4, 5200, cyan, 0.85) {
+  let u = i/5200;
+  let arm = mod(i, 2)*pi;
+  let th = u*30;
+  let rr = 14.2*sqrt(th);
+  let px = 235 + rr*cos(th + arm + 0.16*t);
+  let py = 540 - rr*sin(th + arm + 0.16*t);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 1.0 + 1.0*u;
+  let hue = 206 + 26*u;
+  let sat = 0.82;
+  let val = 0.7 + 0.3*u;
+  let alpha = saturate((t - 4.0)*2.4 - u*1.9);
+}
+glow(s4, 2);
+
+// ============================== 5 · LOGARITHMIC ==============================
+// the same law as Fibonacci with a fatter pitch, and three arms — a hurricane's rainbands.
+// Again sampled uniformly in radius; the bright core is the eye.
+cloud(s5, 5400, magenta, 0.85) {
+  let u = i/5400;
+  let arm = mod(i, 3)*2.0944;
+  let rr = 1.0 + 77*u;
+  let th = log(rr/1.6)/0.30 + arm + 0.34*t;
+  let px = 640 + rr*cos(th);
+  let py = 540 - rr*sin(th);
+  let dx = px - 640;
+  let dy = py - 360;
+  let dd = hypot(dx, dy)*(1 - 0.30*pull);
+  let aa = atan2(dy, dx) + pull*2.6;
+  let sx = 640 + dd*cos(aa);
+  let sy = 360 + dd*sin(aa);
+  // The destination is a CHAOTIC spiral, not a tidy one. Two hashes give every point its own
+  // pitch, its own arm and its own phase, and drifting noise kneads the radius — so the six
+  // families do not line up into one clean curve, they collapse into a maelstrom that is
+  // still, everywhere, logarithmic. Deterministic chaos: no rand(), just fract(sin(i)).
+  let h1 = fract(sin(i*12.9898)*43758.545);
+  let h2 = fract(sin(i*78.233)*12345.678);
+  let arm = floor(h2*5)*1.2566;
+  let pitch = 0.20 + 0.26*h1;
+  let trr = 10 + 244*u + 34*snoise(u*7.0 + h2*9.0, t*0.25);
+  let tth = log(max(trr, 8)/0.05)/pitch + arm + 0.5*t + 2.4*h1;
+  let x = (1 - pull)*sx + pull*(640 + trr*cos(tth));
+  let y = (1 - pull)*sy + pull*(360 - trr*sin(tth));
+  let r = 0.9 + 1.4*u;
+  let hue = 300 + 40*u;
+  let sat = 0.78;
+  let val = 0.95 - 0.3*u;
+  let alpha = saturate((t - 5.0)*2.4 - u*1.9);
+}
+glow(s5, 2);
+
+// ============================== 6 · CURLICUE ==============================
+// The REAL curlicue, not a stand-in: z_n is the running sum of unit steps, each turned by
+// π·s·m². A `cloud` cannot do this — its formulas are pure in (i, t) and cannot accumulate —
+// but a build-time `sum` reduction over the loop index computes the exact partial sum, so the
+// path is drawn as 360 real segments. The golden fraction makes the classic branching,
+// self-similar clusters; nothing here is random and nothing is recursive.
+for n in 0..360 {
+  line(s6{n},
+       (975 + 6.5*sum(m in 0..n : cos(pi*0.618034*m*m)),
+        566 - 6.5*sum(m in 0..n : sin(pi*0.618034*m*m))),
+       (975 + 6.5*sum(m in 0..n+1 : cos(pi*0.618034*m*m)),
+        566 - 6.5*sum(m in 0..n+1 : sin(pi*0.618034*m*m))));
+  hue(s6{n}, 258 + n/11);
+  untraced(s6{n});
+  tag(s6{n}, s6);
+}
+glow(s6, 2);
+
+// ---- the uzumaki finale ----
+svg(maki1, (250, 366), "asset:svg/emoji/1f365.svg", 74); hidden(maki1);
+svg(maki2, (1030, 366), "asset:svg/emoji/1f365.svg", 74); hidden(maki2);
+text(uzulab, (640, 648), "UZUMAKI");
+display(uzulab); size(uzulab, 38); bold(uzulab); color(uzulab, fg); plate(uzulab, 0.62); z(uzulab, 50); hidden(uzulab);
+
+// ================================= the film =================================
+show(ttl, 1.0);
+wait(0.5);
+
+// each panel introduces itself as its own light arrives — the name, the formula and what grows
+// that way are already on screen, so the film does not narrate them
+stagger(1.0) {
+  par { show(n1, 0.5); show(f1, 0.5); show(w1, 0.4); }
+  par { show(n2, 0.5); show(f2, 0.5); show(w2, 0.4); }
+  par { show(n3, 0.5); show(f3, 0.5); show(w3, 0.4); }
+  par { show(n4, 0.5); show(f4, 0.5); show(w4, 0.4); }
+  par { show(n5, 0.5); show(f5, 0.5); show(w5, 0.4); }
+  par { show(n6, 0.5); show(f6, 0.5); show(w6, 0.4); }
+}
+draw(s6, 2.4, smooth);
+wait(1.0);
+// they all turn, so the dwell is not dead time
+wait(4.0);
+wait(3.6);
+
+// ============================== UZUMAKI ==============================
+par {
+  fade(n1, 0.7); fade(n2, 0.7); fade(n3, 0.7); fade(n4, 0.7); fade(n5, 0.7); fade(n6, 0.7);
+  fade(f1, 0.7); fade(f2, 0.7); fade(f3, 0.7); fade(f4, 0.7); fade(f5, 0.7); fade(f6, 0.7);
+  fade(w1, 0.6); fade(w2, 0.6); fade(w3, 0.6); fade(w4, 0.6); fade(w5, 0.6); fade(w6, 0.6);
+  fade(ttl, 0.8);
+}
+wait(1.4);
+// one number does all of this: each swarm reads `pull` and swirls in on its own account,
+// and the curlicue path swings round with them
+par {
+  to(pull, value, 1, 4.6, smooth);
+  turn(s6, (640, 360), 80, 4.6, smooth);
+  to(s6, opacity, 0.2, 4.6, smooth);
+}
+wait(1.8);
+// the merged spiral gets a beat on its own, then steps back so the word can sit on it
+par {
+  to(s1, opacity, 0.17, 1.0); to(s2, opacity, 0.17, 1.0); to(s3, opacity, 0.17, 1.0);
+  to(s4, opacity, 0.17, 1.0); to(s5, opacity, 0.17, 1.0);
+}
+par { show(maki1, 0.7); show(maki2, 0.7); }
+show(uzulab, 0.9);
+wait(2.8);
+
+// ================================= endcard =================================
+par {
+  fade(maki1, 0.6); fade(maki2, 0.6);
+  fade(uzulab, 0.7);
+  to(pull, value, 0.42, 1.6, smooth);
+}
+wait(2.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/oviZxMF0mZc" title="Six Spirals Nature Keeps Reusing — Fibonacci, Vogel, Fermat, Curlicue & the Uzumaki — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="art-golden-angle"><a class="header" href="#art-golden-angle">art-golden-angle</a></h2>
 <p>The golden angle as glowing particle art: 1600 seeds bloom from the centre (<code>angle = i·137.5°</code>, <code>radius = √i</code>) into a sunflower. Nudge the divergence a fraction off φ and spiral voids tear open — only 137.5° packs the head seamlessly. Pure <code>cloud</code>, additive <code>glow</code>.</p>
 <pre><code class="language-manic">// The Golden Angle — why sunflowers spiral. 1600 seeds, each placed one turn of
@@ -43247,7 +44810,7 @@ it never exposes render-host or provisioning endpoints.</p>
 semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/blob/main/API.md">platform API contract</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- GENERATED by scripts/gen-api.py; do not edit by hand. -->
 <h1 id="manic-api-reference"><a class="header" href="#manic-api-reference">Manic API reference</a></h1>
-<p>The complete index of every Manic builtin — <strong>453 builtins across 17 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
+<p>The complete index of every Manic builtin — <strong>459 builtins across 18 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
 <h2 id="reading-a-signature"><a class="header" href="#reading-a-signature">Reading a signature</a></h2>
 <ul>
 <li><code>new id</code> is the name created by a constructor.</li>
@@ -43680,6 +45243,22 @@ semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/
 <tr><td><code>bfs(g: id or tag, start: id or tag)</code></td><td>state-changing verb</td><td>breadth-first traversal (queue)</td></tr>
 <tr><td><code>dfs(g: id or tag, start: id or tag)</code></td><td>state-changing verb</td><td>depth-first traversal (stack)</td></tr>
 <tr><td><code>dijkstra(g: id or tag, start: id or tag)</code></td><td>state-changing verb</td><td>single-source shortest paths</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="circuit-1"><a class="header" href="#circuit-1">Circuit</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>circuit(id: new id, center: (x, y), netlist: string, [unit: number], [labels: number], [build: number])</code></td><td>constructor / setup</td><td>draw a schematic from a netlist and solve it. One component per line — <code>&lt;type&gt; &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; [key=value …]</code>, <code>ground &lt;x&gt; &lt;y&gt;</code>, <code>#</code> comments — placed on an integer grid, and the TOPOLOGY comes from the geometry: points that coincide (or are joined by a <code>wire</code>) are the same node, so there are no node numbers to write. Known types: wire, ground, resistor, capacitor, inductor, dc-voltage, ac-voltage, dc-current, switch, lamp, diode, led, zener, bjt-npn, bjt-pnp, mosfet-n, mosfet-p, opamp (junctions, transistors and op-amps are solved by Newton–Raphson; <code>is=</code>/<code>n=</code> set a junction, <code>vz=</code> a zener’s breakdown, <code>beta=</code> a bipolar’s gain, <code>vth=</code>/<code>kp=</code> a MOSFET, <code>gain=</code>/<code>rail=</code> an op-amp) — plus DIGITAL: and-gate, or-gate, nand-gate, nor-gate, xor-gate, not-gate, logic-input (<code>state=1</code>), logic-output. A gate’s output is a real 5 V / 0 V node, held for one timestep, so a chain settles a gate-delay at a time. SEQUENTIAL: d-flipflop, sr-flipflop, jk-flipflop — four pins each (the two outputs are the derived pins one and two steps below the second coordinate), and each output is separately driven, so Q and Q̄ are real complementary nodes. SWITCHING AND THRESHOLDS: clock (a square wave, <code>value</code> is its frequency in Hz), push-switch (normally OPEN, closed only while pressed), spdt-switch (three pins: common, then a throw on each of the derived pins, <code>state=1</code> selects the first), ideal-switch (three pins: a control pin that carries no current, then the two terminals it connects — <code>threshold=</code> sets the control voltage it closes above), fuse (<code>rating=</code> amps; it blows once and stays open, and the symbol shows it), comparator (three pins: V+, V−, output — 5 V when V+ is higher), schmitt (<code>vhi=</code>/<code>vlo=</code> its two switching points, which is what stops it chattering on a noisy crossing), polarized-cap (a capacitor that draws its polarity). MORE DEVICES: jfet-n/jfet-p (<code>idss=</code>/<code>vpinch=</code>) — a DEPLETION transistor, conducting at zero gate voltage and pinched off by a negative one, which is the opposite of a MOSFET; relay (<code>coilr=</code>/<code>pullin=</code>) — FOUR pins, a coil and the contacts it closes, two circuits coupled mechanically rather than electrically; vco (<code>fcenter=</code>/<code>gain=</code> hertz per volt, three pins: control, output, ground) — a square wave whose frequency follows its control pin, integrated as a phase so the frequency can move without the waveform jumping. A THREE-pin part still takes two coordinates — its third pin sits one grid step below the second, and a relay’s fourth sits below its FIRST. COMPOSITES, built out of INTERNAL nodes the geometry never names: darlington-npn/darlington-pnp (<code>beta1=</code>) is genuinely two transistors sharing a base–emitter connection, so it carries both the β₁·β₂ gain and the two-junction 1.2 V base drop; transmission-line (<code>z0=</code>/<code>delay=</code>/<code>sections=</code>, FOUR pins — the input pair are the written points, the output pair hang below them) is a ladder of L–C sections, which is what a DELAY actually is, so a step arrives late rather than instantly (more sections = a cleaner edge; the delay itself is exact either way). Values take SI suffixes (<code>1k</code>, <code>4.7u</code>, <code>100n</code>). Parts are <code>{id}.c{k}</code> (and <code>{id}.&lt;name&gt;</code> when a line says <code>name=R1</code>), tagged {id} + {id}.parts + <code>{id}.&lt;type&gt;s</code>; junction dots are <code>{id}.n{node}</code>, tagged {id}.nodes; value text is tagged {id}.labels. <code>unit</code> is px per grid step (default 46); <code>labels</code> 0 hides the values. <strong>The schematic DRAWS ITSELF by default</strong>, one component at a time in netlist order — the netlist is already the order a teacher would draw it in — and each PREFIX of it is really solved, so nothing flows until the loop closes and then everything does at once. <code>build</code> is the share of <code>run</code> spent drawing (default 0.35): it needs a <code>run(id, dur)</code> to play, and <code>build</code> 0 gives the finished schematic at t=0 instead, which is what a film’s opening frame wants. Value labels, junction dots and probes arrive with the component they belong to. Solved by Modified Nodal Analysis, so KCL and KVL hold by construction</td></tr>
+<tr><td><code>probe(circuit: new id, at: (x, y), [offset: (x, y)])</code></td><td>constructor / setup</td><td>a live readout on a circuit, in either of two forms. Given a GRID POINT a component touches, it reads that node’s VOLTAGE; given the bareword NAME of a part (<code>name=R1</code> on its netlist line), it reads the CURRENT through it, in amps scaled to a readable unit. Either way it shows a ring where the measurement is taken and a number beside it, and the number follows the transient when you <code>run</code> the circuit. Optional (dx,dy) moves the label. Entities are <code>{id}.v{node}</code> (or <code>{id}.i{name}</code>) + <code>.at</code>, tagged {id} + {id}.probes</td></tr>
+<tr><td><code>current(circuit: new id, [speed: number], [shape: id or tag], [color: colour], [size: number])</code></td><td>constructor / setup</td><td>how a circuit’s current READS — presentation only, the solver never sees it. <code>speed</code> multiplies every branch by the same factor (1 = the circuit’s own pace, 2 = twice as fast), so a branch carrying twice the current still moves twice as fast: the PROPORTIONALITY is what carries the meaning and scaling it uniformly cannot lie. <code>shape</code> is circle (default), square or diamond; <code>color</code> any palette name or <code>#rrggbb</code> (default gold, the conventional-current colour — cyan is the usual choice for electron flow); <code>size</code> is the radius in px (default 3). Write it after the <code>circuit</code> it restyles</td></tr>
+<tr><td><code>cut(circuit: new id, part: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>TAKE A COMPONENT OUT of a circuit — and mean it. The circuit that is left is re-analysed and re-solved from scratch, so breaking a loop really does stop the current everywhere, and a meter on another branch falls to zero on its own. Address the part by its netlist <code>name=</code>, or by position as <code>c0</code>, <code>c1</code>, … The component fades out (with its value label), every charge dot goes with it, and each probe moves to what it now reads; the next <code>run(id, dur)</code> replays the circuit that remains. Cutting one wire of a loop leaves the gap where it was, which is the whole demonstration</td></tr>
+<tr><td><code>reconnect(circuit: new id, part: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>put a <code>cut</code> component back: the same mechanism in the other direction, so the circuit is solved again with it in place and the next <code>run</code> shows the current returning. (Named <code>reconnect</code>, not <code>restore</code>, because <code>restore</code> is already the general savestate rollback verb)</td></tr>
+<tr><td><code>scope(circuit: new id, at: (x, y), center: (x, y), [w: number], [h: number])</code></td><td>constructor / setup</td><td>the WAVEFORM of a circuit node or part: a trace of the pre-simulated transient with a sweep line that keeps step with <code>run</code>. <code>at</code> is a grid point (that node’s voltage) or the bareword name of a part (its current), exactly like <code>probe</code>. Both axes are labelled with their real extent — the peak the trace reaches and the time window the circuit chose for itself — because a curve without a scale is decoration. Parts are <code>{id}.scope.&lt;what&gt;.curve</code> / <code>.frame</code> / <code>.sweep</code> / <code>.vscale</code> / <code>.tscale</code> (+ <code>.zero</code> when the trace crosses zero), all tagged {id} + {id}.scopes; the trace is a plain polyline, so <code>draw</code> traces it on</td></tr>
 </tbody>
 </table>
 </div>

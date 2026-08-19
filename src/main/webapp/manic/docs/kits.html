@@ -34,10 +34,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9fe11d60.js";
+            window.path_to_searchindex_js = "searchindex-b6574f79.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b0623ced.js"></script>
+        <script src="toc-0494ae29.js"></script>
             <!-- seo:begin -->
 <meta name="description" content="The words so far ( circle , move , flash , for …) are the core . On top of that, manic ships kits — bundles of higher-level figures for a domain. You use…">
 <link rel="canonical" href="https://docs.maniclang.com/kits.html">
@@ -327,13 +327,42 @@ distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberr
 <code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
 Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
 geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
+<h2 id="circuit"><a class="header" href="#circuit">circuit</a></h2>
+<p>A netlist in, a <strong>working schematic</strong> out — Modified Nodal Analysis under easy
+builtins, so every voltage, current and glow on screen was <em>solved</em>, not drawn,
+and pre-simulated at build time so it scrubs and records exactly.</p>
+<pre><code class="language-manic">circuit(rc, (640, 360), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 5 0 r=1k name=R1
+  capacitor  5 0 5 4 c=1u
+  wire       5 4 0 4
+  ground     0 4
+`);
+probe(rc, (5, 0));      // 63.2% of 5 V at one time constant
+run(rc, 6);             // draws itself, then charges
+cut(rc, R1, 0.8);       // take the resistor out …
+run(rc, 3);             // … and nothing flows
+</code></pre>
+<p>The <strong>topology comes from the geometry</strong> — coinciding points, or points joined by
+a <code>wire</code>, are the same node, so there are no node numbers to write. The schematic
+<strong>draws itself</strong> one component at a time and each <em>prefix</em> of the netlist is really
+solved, so nothing flows until the loop closes. A <strong>lamp glows because it is
+dissipating power</strong>. <code>cut</code> re-solves what is left from scratch, which is why
+breaking a series loop darkens every lamp in it.</p>
+<p>44 component types: passives and sources, six kinds of switch, junctions
+(<code>diode</code>/<code>led</code>/<code>zener</code>), eight transistors (bipolar, MOSFET, JFET, Darlington),
+<code>opamp</code>/<code>comparator</code>/<code>schmitt</code>/<code>vco</code>/<code>transmission-line</code>, and the logic family
+down to flip-flops. <code>current(id, speed, shape, color, size)</code> is the animator’s
+dial; <code>probe</code> and <code>scope</code> are the instruments. Everything is an ordinary tagged
+entity, so <code>framebox</code>, <code>zoom</code>, <code>cam</code> and <code>pulse</code> do the presentation.</p>
+<p>See the <a href="circuits.html">circuits guide</a> for the end-to-end walkthrough.</p>
 <h2 id="creator"><a class="header" href="#creator">creator</a></h2>
 <p>A <strong>format</strong> layer (not a subject): responsive, pre-timed social-video templates
 a content creator fills in—question, answers, media and a reusable profile. V2
 adapts the same source to 9:16, 4:5, 1:1 and 16:9, with named platform safe areas,
 a polished studio default, configurable motion/timers, responsive footers and end cards.</p>
 <pre><code class="language-manic">canvas("9:16"); template("shorts");
-creator(me, "@anish2good name=Math_With_Me yt=zarigatongy x=@anish2good web=8gwifi.org/manic footer=social accent=magenta");
+creator(me, "@anish2good name=Math_With_Me yt=zarigatongy x=@anish2good web=maniclang.com footer=social accent=magenta");
 quiz(q, "What is 7 x 8?", "studio labels=letters pace=calm motion=calm");
 option(q, "54"); option(q, "56", correct); option(q, "48"); option(q, "63");
 timerstyle(q, "look=segments position=media finish=pulse");
@@ -356,7 +385,7 @@ vector-drawn with normalized native marks for YouTube, X, Instagram, TikTok,
 Facebook, LinkedIn, GitHub, web, and email. Profile values appear beside up to
 three icons; no image or SVG assets are required.</p>
 <hr>
-<p>Each kit has a full reference at <a href="https://8gwifi.org/manic">https://8gwifi.org/manic</a>, and you can see them
+<p>Each kit has a full reference at <a href="https://docs.maniclang.com">https://docs.maniclang.com</a>, and you can see them
 all in motion in the <a href="examples.html">Examples gallery</a>.</p>
 
                     </main>

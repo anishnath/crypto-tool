@@ -1,0 +1,208 @@
+// The circuit kit, in six circuits.
+//
+// A contact sheet that comes alive: six real circuits on screen from the first frame, then each
+// one erases itself, draws itself back, names itself and runs its own current — a different
+// shape, colour and pace for every panel. The last beat runs all six at once.
+//
+// Every dot on screen is a charge integral of a solved branch current, so the six panels are
+// running at honestly different speeds because their currents differ, not because six numbers
+// were typed. Nothing here is a circuit-specific animation verb: erase, draw, show and par are
+// Manic's core kit.
+
+title("six circuits");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 22);
+color(brand, dim);
+
+// ── the board: complete from t = 0, so the first frame is already the whole kit ──
+
+circuit(ohm, (250, 240), `
+  dc-voltage 0 4 0 0 v=9
+  resistor   0 0 4 0 r=1k
+  wire       4 0 4 4
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(divider, (640, 240), `
+  dc-voltage 0 4 0 0 v=9
+  resistor   0 0 4 0 r=3k
+  resistor   4 0 4 4 r=1k
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(rc, (1030, 240), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 4 0 r=1k
+  capacitor  4 0 4 4 c=10u
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(rl, (250, 512), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 4 0 r=100
+  inductor   4 0 4 4 l=10m
+  wire       4 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(rect, (640, 512), `
+  ac-voltage 0 4 0 0 v=5 f=60
+  diode      0 0 3 0
+  resistor   3 0 3 4 r=1k
+  wire       3 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+circuit(led, (1030, 512), `
+  dc-voltage 0 4 0 0 v=5
+  resistor   0 0 3 0 r=330
+  led        3 0 3 4
+  wire       3 4 0 4
+  ground     0 4
+`, 40, 1, 0);
+
+// ── a different current in every panel: shape, colour, pace ──
+//
+// Inks chosen for the `paper` template: on cream, gold and amber wash out, so these are the
+// darker end of the palette — the colours a textbook would actually print in.
+
+current(ohm, 1, circle, crimson, 3);
+current(divider, 1.5, circle, indigo, 3);
+current(rc, 1.2, square, green, 3);
+current(rl, 2, diamond, purple, 4);
+current(rect, 1.6, diamond, orange, 4);
+current(led, 2.5, circle, magenta, 4);
+
+// ── the names, which arrive as each panel takes its turn ──
+
+text(n1, (250, 352), "Ohm's law");
+hidden(n1);
+size(n1, 24);
+color(n1, crimson);
+
+text(n2, (640, 352), "voltage divider");
+hidden(n2);
+size(n2, 24);
+color(n2, indigo);
+
+text(n3, (1030, 352), "RC charging");
+hidden(n3);
+size(n3, 24);
+color(n3, green);
+
+text(n4, (250, 624), "RL current rise");
+hidden(n4);
+size(n4, 24);
+color(n4, purple);
+
+text(n5, (640, 624), "half-wave rectifier");
+hidden(n5);
+size(n5, 24);
+color(n5, orange);
+
+text(n6, (1030, 624), "LED + series resistor");
+hidden(n6);
+size(n6, 24);
+color(n6, magenta);
+
+// ── six beats: clear to nothing, draw, name, run ──
+//
+// The erase has to go to a real zero state, and that means addressing the RIGHT tags. `erase` is
+// a stroke verb — it traces a shape out — so on the bare circuit id it would take the component
+// strokes away and leave the value labels and the charge dots sitting there, and a text entity
+// under `trace` reveals PART of its characters ("10mH" erasing down to "1"). So the strokes are
+// erased, and everything that is not a stroke is faded.
+
+wait(0.8);
+
+par {
+  erase(ohm.parts, 0.35);
+  fade(ohm.labels, 0.3);
+  fade(ohm.charge, 0.2);
+}
+par {
+  draw(ohm.parts, 0.85);
+  show(ohm.labels, 0.5);
+}
+show(n1, 0.3);
+run(ohm, 2.0);
+
+par {
+  erase(divider.parts, 0.35);
+  fade(divider.labels, 0.3);
+  fade(divider.charge, 0.2);
+}
+par {
+  draw(divider.parts, 0.85);
+  show(divider.labels, 0.5);
+}
+show(n2, 0.3);
+run(divider, 2.0);
+
+par {
+  erase(rc.parts, 0.35);
+  fade(rc.labels, 0.3);
+  fade(rc.charge, 0.2);
+}
+par {
+  draw(rc.parts, 0.85);
+  show(rc.labels, 0.5);
+}
+show(n3, 0.3);
+run(rc, 2.0);
+
+par {
+  erase(rl.parts, 0.35);
+  fade(rl.labels, 0.3);
+  fade(rl.charge, 0.2);
+}
+par {
+  draw(rl.parts, 0.85);
+  show(rl.labels, 0.5);
+}
+show(n4, 0.3);
+run(rl, 2.0);
+
+par {
+  erase(rect.parts, 0.35);
+  fade(rect.labels, 0.3);
+  fade(rect.charge, 0.2);
+}
+par {
+  draw(rect.parts, 0.85);
+  show(rect.labels, 0.5);
+}
+show(n5, 0.3);
+run(rect, 2.0);
+
+par {
+  erase(led.parts, 0.35);
+  fade(led.labels, 0.3);
+  fade(led.charge, 0.2);
+}
+par {
+  draw(led.parts, 0.85);
+  show(led.labels, 0.5);
+}
+show(n6, 0.3);
+run(led, 2.0);
+
+// ── and the whole board alive at once ──
+
+wait(0.3);
+par {
+  run(ohm, 5.0);
+  run(divider, 5.0);
+  run(rc, 5.0);
+  run(rl, 5.0);
+  run(rect, 5.0);
+  run(led, 5.0);
+}
+wait(0.7);

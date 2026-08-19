@@ -1,5 +1,5 @@
 {
-  "count": 421,
+  "count": 426,
   "categories": [
     {
       "slug": "algorithms",
@@ -540,6 +540,12 @@
       "title": "Physics \u2014 simulations",
       "examples": [
         {
+          "name": "tides",
+          "file": "tides.manic",
+          "title": "Tides",
+          "desc": "How the Moon moves every ocean \u2014 and why the popular sentence is wrong."
+        },
+        {
           "name": "pendulum",
           "file": "pendulum.manic",
           "title": "Pendulum",
@@ -886,6 +892,30 @@
           "file": "spinning-cylinder-flow.manic",
           "title": "Spinning cylinder flow",
           "desc": "Potential flow around a spinning cylinder \u2014 WHY a spun ball curves."
+        }
+      ]
+    },
+    {
+      "slug": "circuits",
+      "title": "Circuits \u2014 schematics that work",
+      "examples": [
+        {
+          "name": "circuit-broken-filament",
+          "file": "circuit-broken-filament.manic",
+          "title": "Circuit broken filament",
+          "desc": "**NCERT Class 9, Fig."
+        },
+        {
+          "name": "circuit-does-current-flow",
+          "file": "circuit-does-current-flow.manic",
+          "title": "Circuit does current flow",
+          "desc": "The teaching beat end to end: a battery, a switch, a lamp and the wires between them drawn in a teacher's order, the lamp lighting the moment the last wire closes the loop (because that prefix was solved), a zoom+cam+framebox close-up, then cut on the return wire \u2014 dots stop, lamp dark, probe to zero \u2014 and reconnect."
+        },
+        {
+          "name": "circuit-kit-promo",
+          "file": "circuit-kit-promo.manic",
+          "title": "Circuit kit promo",
+          "desc": "Six circuits on a textbook page, each erasing itself, drawing itself back, naming itself and running its own current \u2014 Ohm's law, a divider, RC, RL, a rectifier and an LED \u2014 then the whole board alive at once."
         }
       ]
     },
@@ -1241,6 +1271,12 @@
       "slug": "generative",
       "title": "Generative & recursive",
       "examples": [
+        {
+          "name": "spiral-families",
+          "file": "spiral-families.manic",
+          "title": "Spiral families",
+          "desc": "The six spirals nature keeps reusing, side by side, with no narration at all \u2014 every panel is one closed-form formula and thousands of points of light, and the plate explains itself."
+        },
         {
           "name": "art-golden-angle",
           "file": "art-golden-angle.manic",

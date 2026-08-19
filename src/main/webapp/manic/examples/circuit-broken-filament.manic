@@ -1,0 +1,143 @@
+// Class 9 · NCERT Science, Fig. 3.17, question 3
+//
+//   "If the filament of one of the lamps is broken, will the other glow?
+//    Justify your answer."
+//
+// The answer is not asserted anywhere in this file. Two lamps sit in series across a cell; the
+// solver gives them one shared current, and each lamp's halo carries P = V·I on its opacity, so
+// they light because they are dissipating power. `cut` takes one filament out of the circuit —
+// the circuit that is left is re-analysed and re-solved from scratch — and both lamps go dark
+// because both are now dissipating nothing. The meter falls to zero on its own.
+//
+// A series circuit is one path. Break it anywhere and you have broken it everywhere.
+
+title("if one filament breaks");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+// ── the schematic, drawn the way the book draws it: two lamps, one cell, one loop ──
+
+circuit(fig, (560, 330), `
+  lamp       1 0 5 0 r=120 name=L1
+  lamp       5 0 9 0 r=120 name=L2
+  wire       9 0 9 4
+  wire       9 4 6 4
+  dc-voltage 6 4 4 4 v=6
+  wire       4 4 1 4
+  wire       1 4 1 0
+  ground     6 4
+`, 62, 0, 0);
+
+current(fig, 1.4, circle, crimson, 4);
+probe(fig, L1, (-14, -52));
+
+// The halo behind a lamp is the lamp's own colour by default; on a cream page a warm one reads as
+// light. It is an ordinary entity tagged {id}.glow, so a core verb restyles it.
+color(fig.glow, orange);
+
+// The object beside the symbol, because a beginner meeting ⊗ for the first time has no reason
+// to know it means a lamp. Vector art, so it draws and fades like anything else.
+svg(bulb, (1090, 250), "assets/svg/heroicons/light-bulb.svg", 118);
+color(bulb, gold);
+hidden(bulb);
+
+text(l1, (1090, 340), "the lamp");
+hidden(l1);
+size(l1, 22);
+color(l1, dim);
+
+// ── the question, and then the answer ──
+
+text(q, (640, 120), "one filament breaks — does the other still glow?");
+hidden(q);
+size(q, 30);
+color(q, ink);
+
+// The break itself. `cut` decides the PHYSICS; the theatre is the author's, and this question is
+// about a broken filament rather than a lamp taken out of its holder — so the symbol stays on the
+// page and a slash marks the break. The lamp is still there. It just cannot carry anything.
+// L1's symbol sits at (436, 206): a circuit is placed by the CENTRE of its bounding box, so a
+// grid point lands at `origin + p × unit` where `origin = centre − span/2 − lo × unit`. Here that
+// is (250, 206), and L1 spans grid x 1→5, so its middle is x = 250 + 3 × 62.
+line(break1, (418, 188), (454, 224));
+hidden(break1);
+color(break1, crimson);
+stroke(break1, 3);
+
+text(a1, (1075, 470), "one path,");
+hidden(a1);
+size(a1, 26);
+color(a1, crimson);
+
+text(a2, (1075, 508), "one current");
+hidden(a2);
+size(a2, 26);
+color(a2, crimson);
+
+text(a3, (1075, 560), "break it anywhere");
+hidden(a3);
+size(a3, 26);
+color(a3, ink);
+
+text(a4, (1075, 598), "and it is broken");
+hidden(a4);
+size(a4, 26);
+color(a4, ink);
+
+text(a5, (1075, 636), "everywhere");
+hidden(a5);
+size(a5, 26);
+color(a5, ink);
+
+// ── the beats ──
+
+show(q, 0.6);
+wait(0.3);
+
+// the loop closes and both lamps come up together: one current, so one brightness
+run(fig, 6.0);
+
+par {
+  show(bulb, 0.7);
+  show(l1, 0.5);
+}
+wait(0.6);
+par {
+  show(a1, 0.4);
+  show(a2, 0.4);
+}
+wait(1.0);
+
+// break the filament of one lamp
+cut(fig, L1, 1.0);
+par {
+  // the lamp comes back to the page — it was never removed, only broken
+  show(fig.L1, 0.4);
+  // `show`, not `draw`: `hidden` is an OPACITY, and `draw` animates trace — a hidden entity
+  // traced all the way in is still invisible
+  show(break1, 0.35);
+  fade(bulb, 0.6);
+  fade(l1, 0.6);
+}
+run(fig, 4.0);
+wait(0.4);
+
+par {
+  show(a3, 0.4);
+  show(a4, 0.4);
+  show(a5, 0.4);
+}
+wait(1.4);
+
+// mend it, and the whole loop lights again
+par {
+  fade(break1, 0.4);
+  reconnect(fig, L1, 1.0);
+}
+run(fig, 4.0);
+wait(0.9);
