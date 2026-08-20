@@ -1,0 +1,558 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chemistry — molecules that know their own shape - Manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-ea8e5a0f.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-b41398ea.js"></script>
+            <!-- seo:begin -->
+<meta name="description" content="The chemistry kit loads a real molecule from a real file. molecule3 reads an MDL structure file — an .sdf from PubChem’s Download → SDF , or a .mol from…">
+<link rel="canonical" href="https://docs.maniclang.com/chemistry.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Manic — the manual">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chemistry — molecules that know their own shape - Manic — the manual">
+<meta property="og:description" content="The chemistry kit loads a real molecule from a real file. molecule3 reads an MDL structure file — an .sdf from PubChem’s Download → SDF , or a .mol from…">
+<meta property="og:url" content="https://docs.maniclang.com/chemistry.html">
+<meta property="og:image" content="https://maniclang.com/manic-logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Chemistry — molecules that know their own shape - Manic — the manual">
+<meta name="twitter:description" content="The chemistry kit loads a real molecule from a real file. molecule3 reads an MDL structure file — an .sdf from PubChem’s Download → SDF , or a .mol from…">
+<meta name="twitter:image" content="https://maniclang.com/manic-logo.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://docs.maniclang.com/chemistry.html#page","url":"https://docs.maniclang.com/chemistry.html","name":"Chemistry — molecules that know their own shape - Manic — the manual","headline":"Chemistry — molecules that know their own shape - Manic — the manual","description":"The chemistry kit loads a real molecule from a real file. molecule3 reads an MDL structure file — an .sdf from PubChem’s Download → SDF , or a .mol from…","isPartOf":{"@type":"WebSite","url":"https://docs.maniclang.com/","name":"Manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://docs.maniclang.com/"},{"@type":"ListItem","position":2,"name":"Chemistry — molecules that know their own shape"}]}]}</script>
+<!-- seo:end -->
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://maniclang.com" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="chemistry--molecules-that-know-their-own-shape"><a class="header" href="#chemistry--molecules-that-know-their-own-shape">Chemistry — molecules that know their own shape</a></h1>
+<p>The <strong>chemistry kit</strong> loads a real molecule from a real file. <code>molecule3</code> reads an
+MDL structure file — an <code>.sdf</code> from PubChem’s <em>Download → SDF</em>, or a <code>.mol</code> from
+RDKit or Open Babel — and lays out its atoms and bonds as ordinary 3-D entities.</p>
+<p>The point is that <strong>nothing about the shape is authored</strong>. The coordinates are the
+file’s, in Ångströms, so a bond angle on screen is the angle in the conformer
+someone computed. Hand-placing atoms gets a molecule that looks plausible; this
+gets one that is right.</p>
+<pre><code class="language-manic">canvas("16:9"); template("black");
+camera3((0, -14, 4), (0, 0, 0), 40);
+
+molecule3(caf, "asset:molecules/caffeine.sdf");
+wait(4);
+</code></pre>
+<p>Three lines, and caffeine is on screen with its real geometry, turning slowly —
+because a shape only reads in three dimensions. Flat, methane is four lines from a
+dot.</p>
+<hr>
+<h2 id="the-options"><a class="header" href="#the-options">The options</a></h2>
+<p>Everything past the path is optional:</p>
+<pre><code class="language-manic">molecule3(id, path, [center], [scale], [spec])
+</code></pre>
+<ul>
+<li><strong><code>center</code></strong> — where to put it, default the origin. The molecule is centred on
+its own centroid first, so it lands in front of the camera whatever the file’s
+coordinates happened to be.</li>
+<li><strong><code>scale</code></strong> — world units per Ångström, default 1.5. A small molecule is then a
+few units across, which is the scale the rest of the <a href="3d.html">3-D kit</a> works at.</li>
+<li><strong><code>spec</code></strong> — a bounded <code>key=value</code> string, below.</li>
+</ul>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>key</th><th>values</th><th>meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>style</code></td><td><code>ball</code> (default) · <code>sticks</code> · <code>wireframe</code> · <code>spacefill</code></td><td>how it is drawn</td></tr>
+<tr><td><code>hydrogens</code></td><td><code>1</code> (default) · <code>0</code></td><td><code>0</code> drops them <strong>and their bonds</strong></td></tr>
+<tr><td><code>spin</code></td><td>degrees per second, default <code>24</code></td><td><code>0</code> holds it still</td></tr>
+<tr><td><code>axis</code></td><td><code>z</code> (default) · <code>x</code> · <code>y</code></td><td>which axis the turn is about</td></tr>
+<tr><td><code>turn</code> / <code>tilt</code></td><td>degrees</td><td>a static orientation, applied once</td></tr>
+<tr><td><code>record</code></td><td><code>1</code> (default)</td><td>which molecule of a multi-record SDF</td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">molecule3(caf, "asset:molecules/caffeine.sdf", (0,0,0), 0.9, "style=sticks hydrogens=0");
+molecule3(bz,  "asset:molecules/benzene.sdf",  (0,0,0), 1.2, "spin=0 tilt=90");
+molecule3(eth, "asset:molecules/alkanes.sdf",  (0,0,0), 2.0, "record=2");
+</code></pre>
+<h3 id="the-four-styles-answer-four-questions"><a class="header" href="#the-four-styles-answer-four-questions">The four styles answer four questions</a></h3>
+<ul>
+<li><strong>ball &amp; stick</strong> — what is bonded to what, <em>and</em> the shape. The textbook default.</li>
+<li><strong>sticks</strong> — the same connectivity with the spheres out of the way of the
+geometry. Bonds are two-tone, split at the midpoint and coloured by the atom
+each half touches, so a bond still says what it joins.</li>
+<li><strong>wireframe</strong> — thin lines only, for a large structure where anything solid
+hides it.</li>
+<li><strong>spacefill</strong> — full covalent radii, no bonds: the shape the molecule presents
+to the world, which is the one that decides what it fits into.</li>
+</ul>
+<h3 id="hiding-hydrogens"><a class="header" href="#hiding-hydrogens">Hiding hydrogens</a></h3>
+<p>Half the atoms in an organic molecule are hydrogens, and often they are noise.
+<code>hydrogens=0</code> removes them, removes the bonds that reached them (or the molecule
+sprouts sticks into empty space), and re-centres on what is left — so the molecule
+does not drift off the axis it spins about.</p>
+<h3 id="animation-is-the-default"><a class="header" href="#animation-is-the-default">Animation is the default</a></h3>
+<p>The turn is <strong>on unless you switch it off</strong>, and it costs no timeline verb: it is a
+pure function of <code>t</code>, on the same per-frame path a <a href="art.html"><code>cloud</code></a> recomputes on.
+So it scrubs backwards exactly and records identically every run.</p>
+<p>It rotates the molecule <strong>about its own axis</strong>, not around the world origin, and it
+writes the entity’s sync-owned <em>home</em> — which means <code>shift3</code> and friends still work
+on top of it. A molecule can travel and turn at once, rigidly.</p>
+<hr>
+<h2 id="structural-formulae--the-flat-drawing"><a class="header" href="#structural-formulae--the-flat-drawing">Structural formulae — the flat drawing</a></h2>
+<p><code>structure</code> is the other half of the kit: the <strong>skeletal formula</strong> a chemist puts on
+paper, in 2-D.</p>
+<pre><code class="language-manic">canvas("16:9"); template("paper");
+structure(glc, "asset:molecules/glucose-2d.sdf", (400, 360), 62);
+wait(3);
+</code></pre>
+<p>That draws the pyranose ring with its five <code>OH</code> groups, its ring oxygen lettered,
+its carbons as bare vertices, and <strong>wedge and hash bonds</strong> where the file records
+stereochemistry — glucose’s 2-D record carries four of them, which is the
+difference between one sugar and another.</p>
+<p>Every convention is derived from the file rather than authored:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>what you see</th><th>what justifies it</th></tr>
+</thead>
+<tbody>
+<tr><td>a carbon is a bare vertex</td><td>the element is <code>C</code></td></tr>
+<tr><td>hydrogens on carbon vanish</td><td>they are bonded to a <code>C</code></td></tr>
+<tr><td>an oxygen reads <code>OH</code></td><td>it has one explicit <code>H</code> neighbour</td></tr>
+<tr><td>a nitrogen reads <code>NH2</code></td><td>it has two</td></tr>
+<tr><td>a double bond leans <strong>into</strong> the ring</td><td>the crowded side, from the neighbours’ own coordinates — no ring detection needed</td></tr>
+<tr><td>a bond is a solid wedge</td><td>the molfile’s fourth bond column says <code>1</code></td></tr>
+<tr><td>a lone carbon reads <code>CH4</code></td><td>a single bare vertex is not a drawing of methane</td></tr>
+</tbody>
+</table>
+</div>
+<p>Bonds stop short of a letter, so no line runs under text.</p>
+<pre><code class="language-manic">structure(id, source, [center], [unit], [spec])
+</code></pre>
+<p><code>source</code> is either a <strong>file</strong> or a <strong>SMILES string</strong> — see
+<a href="#from-a-smiles-string">From a SMILES string</a> below.</p>
+<p><code>unit</code> is <strong>pixels per bond</strong> (default 64) — a 2-D record is laid out on a
+1.0-per-bond grid, so it means exactly what it says.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>key</th><th>values</th><th>meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>carbons</code></td><td><code>0</code> (default) · <code>1</code></td><td>letter every carbon too — the explicit style a first lesson uses</td></tr>
+<tr><td><code>hydrogens</code></td><td><code>0</code> (default) · <code>1</code></td><td>draw them as their own vertices instead of folding them in</td></tr>
+<tr><td><code>labels</code></td><td><code>text</code> (default) · <code>latex</code></td><td>how the letters are set</td></tr>
+<tr><td><code>color</code></td><td>any palette name or <code>#rrggbb</code></td><td>the bond and carbon colour</td></tr>
+<tr><td><code>record</code></td><td><code>1</code> (default)</td><td>which molecule of a multi-record file</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="typeset-labels"><a class="header" href="#typeset-labels">Typeset labels</a></h3>
+<p><code>labels=latex</code> sets each label through the same LaTeX engine as <code>equation</code>, so a
+subscript is a real subscript and a charge is raised:</p>
+<pre><code class="language-manic">structure(gly, "asset:molecules/glycine-2d.sdf", (400, 360), 74, "labels=latex");
+</code></pre>
+<p><code>NH2</code> becomes <strong>NH₂</strong>, <code>SO4^2-</code> becomes SO₄²⁻, and element symbols stay upright
+(<code>\mathrm{}</code>) because an element is not a variable — italic <code>O</code> is wrong in a way a
+chemist notices at once. Element colours carry through the tint.</p>
+<p>The cost is one rasterised image per <strong>distinct</strong> label, not per label: glucose has
+six lettered atoms but only two distinct strings (<code>OH</code> and <code>O</code>), so it costs two.
+Plain text stays the default because it is free and legible at any size — reach for
+LaTeX when the frame is going in front of an audience.</p>
+<h3 id="it-needs-the-2-d-record"><a class="header" href="#it-needs-the-2-d-record">It needs the 2-D record</a></h3>
+<p>PubChem serves both, and they are not interchangeable:</p>
+<pre><code>…/compound/cid/5793/record/SDF?record_type=2d     ← for `structure`
+…/compound/cid/5793/record/SDF?record_type=3d     ← for `molecule3`
+</code></pre>
+<p>The 2-D coordinates are laid out <em>for depiction</em> — a clean grid, regular hexagons,
+nothing overlapping. A 3-D conformer flattened is a tangle of crossing bonds, so
+<code>structure</code> <strong>refuses</strong> one and names the fix. The bundled 2-D files are
+<code>asset:molecules/&lt;name&gt;-2d.sdf</code>.</p>
+<h3 id="from-a-smiles-string"><a class="header" href="#from-a-smiles-string">From a SMILES string</a></h3>
+<p>A file is not always what you have. A reaction record, a paper, a database export
+gives you <strong>SMILES</strong> — a molecule as a line of text — and <code>structure</code> takes one
+directly:</p>
+<pre><code class="language-manic">structure(eth, "CCO", (300, 360), 70);            // ethanol
+structure(asp, "CC(=O)Oc1ccccc1C(=O)O", (800, 360), 54);   // aspirin
+</code></pre>
+<p>There is no second builtin and no conversion step: a string that does not <em>look</em>
+like a file — no <code>asset:</code>, no <code>/</code>, no <code>.sdf</code> or <code>.mol</code> — is read as SMILES. So the
+two forms never collide, and a scene can mix them freely.</p>
+<p>The difference is where the coordinates come from. A file <strong>carries</strong> its depiction;
+a SMILES string does not, so the layout is <strong>computed</strong>:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>what you get</th><th>the rule behind it</th></tr>
+</thead>
+<tbody>
+<tr><td>a chain zig-zags</td><td>each bond turns 60° from the last, so the interior angle is the tetrahedral 120°</td></tr>
+<tr><td>a ring is a regular polygon</td><td>closed on its own circumcircle, whatever its size</td></tr>
+<tr><td>a fused ring reflects across the shared bond</td><td>so naphthalene reads as naphthalene, not as two rings on top of each other</td></tr>
+<tr><td>a substituent points <strong>out</strong> of its ring</td><td>radially, away from the ring centre — toluene’s methyl never points inward</td></tr>
+<tr><td>an aromatic ring gets real double bonds</td><td>the lowercase <code>c1ccccc1</code> form is Kekulé-ised across the whole aromatic system</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>The layout is checked before it is drawn</strong>, and this is the whole safety argument.
+Overlapping atoms, crossing bonds and a stretched bond are <em>refused</em> — with the
+2-D-file fix named — rather than drawn as a tangle:</p>
+<pre><code class="language-manic">structure(m, "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5");
+</code></pre>
+<pre><code>error: the layout for `CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5` is
+not clean enough to draw: the bond between atoms 20 and 21 came out 4.00 bond-lengths
+long. Laying a molecule out from SMILES is reliable for chains, single rings and
+simply fused systems; a complex polycyclic needs a real depiction. Use a 2-D structure
+file instead — asset:molecules/&lt;name&gt;-2d.sdf if it is bundled, or a PubChem download
+with record_type=2d
+</code></pre>
+<p>That is morphine: five fused rings <em>including a bridge</em>, which is exactly what
+growing a layout outward cannot place. Fused systems that grow outward are fine, and
+that covers more than it sounds like — a steroid’s four rings, a substituted
+phenanthroline, a linear or angular aromatic all draw correctly. A <strong>bridged or caged</strong>
+skeleton does not, and says so.</p>
+<p>The point is that nothing draws <em>wrong</em>. It either draws, or it tells you what to do
+instead — because a plausible-but-incorrect structural formula is worse than no
+drawing at all.</p>
+<p>One consequence is worth knowing, because it will look like a bug otherwise: <strong>the
+layout grows along the string</strong>, so two SMILES for the <em>same</em> molecule need not behave
+the same. The 4,7-dimethoxy-1,10-phenanthroline in
+<code>examples/reaction-ord-screen.manic</code> is the case in point:</p>
+<pre><code class="language-manic">structure(l, "COC1=CC=NC2=C3N=CC=C(OC)C3=CC=C12");   // refused — a bond 3.6 long
+structure(l, "COC1=CC=NC2=C1C=CC1=C2N=CC=C1OC");     // the same molecule, draws cleanly
+</code></pre>
+<p>Where the ring closures fall decides the order the rings get placed in, and one order
+paints the layout into a corner. If a string you did not write is refused, a canonical
+form of it — from PubChem, RDKit or Open Babel — is worth trying before reaching for a
+file. But when the exact string matters to the scene, use the depiction file and say
+why; that is what the escape hatch is for.</p>
+<p>Atoms are numbered in <strong>written</strong> order from zero, which is often the most useful
+handle you could ask for. <code>CC(=O)O</code> writes its hydroxyl oxygen last, at <code>a3</code>:</p>
+<pre><code class="language-manic">structure(acid, "CC(=O)O", (190, 348), 76);
+recolor(acid.a3, crimson, 0.6);   // the OH that is about to leave
+</code></pre>
+<p>Only <em>lettered</em> atoms get a label entity, so <code>a{i}</code> addresses heteroatoms — which is
+usually what a lesson wants to point at anyway.</p>
+<p>See <code>examples/reaction-esterification.manic</code>, which builds A + B → C entirely from
+SMILES and marks the atoms that become the water.</p>
+<h3 id="writing-it-on"><a class="header" href="#writing-it-on">Writing it on</a></h3>
+<p>Because bonds are paths and labels are text, the handwriting effect is a core-kit
+idiom — nothing chemistry-specific:</p>
+<pre><code class="language-manic">structure(caf, "asset:molecules/caffeine-2d.sdf", (350, 372), 54);
+untraced(caf.bonds);
+hidden(caf.labels);
+
+stagger(0.05) { draw(caf.bonds, 0.4); }   // bond by bond
+show(caf.labels, 0.6);
+</code></pre>
+<p>Address <code>{id}.bonds</code>, not <code>{id}.b0…</code>: a skeletal drawing skips every C–H bond, so
+the surviving ids keep the file’s numbering <strong>with gaps in it</strong>.</p>
+<p>And since these are 2-D entities, <code>framebox</code> and <code>brace</code> work on them — which they
+do not on <code>molecule3</code>.</p>
+<h2 id="addressing-the-chemistry"><a class="header" href="#addressing-the-chemistry">Addressing the chemistry</a></h2>
+<p>Every piece is a plain tagged entity, so the core kit does the presentation:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>address</th><th>what it is</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{id}.a{i}</code></td><td>the i-th atom, in file order</td></tr>
+<tr><td><code>{id}.b{k}</code></td><td>the k-th bond (<code>.{n}</code> per line of a multiple bond, <code>.h{0,1}</code> per half)</td></tr>
+<tr><td><code>{id}.atoms</code> · <code>{id}.bonds</code></td><td>the two groups</td></tr>
+<tr><td><code>{id}.multibonds</code></td><td>only the double and triple bonds</td></tr>
+<tr><td><strong><code>{id}.&lt;element&gt;</code></strong></td><td><strong>every atom of one element</strong> — <code>{id}.O</code>, <code>{id}.N</code>, <code>{id}.Fe</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>That last one is the useful one, because it is how a lesson actually talks:</p>
+<pre><code class="language-manic">color(caf.N, cyan);       // "the nitrogens"
+pulse(caf.O);             // "watch the oxygens"
+view3(caf.N, "front");    // fly the camera to frame them
+opacity(caf.H, 0.25);     // push the hydrogens back
+</code></pre>
+<p><code>show</code>, <code>fade</code>, <code>hidden</code>, <code>color</code>, <code>hue</code>, <code>opacity</code>, <code>pulse</code>, <code>to</code>, <code>draw</code> +
+<code>untraced</code>, <code>shift3</code>, <code>rotate3</code>, <code>orbit3</code>, <code>camera3</code>, <code>finish3</code> and <code>view3</code> all
+work on a molecule, a group or one element.</p>
+<p><strong>Two limits worth knowing.</strong> <code>framebox</code> and <code>brace</code> measure 2-D screen bounds and
+do not see 3-D entities at all — that is true of <code>model3</code> and <code>sphere3</code> as much as
+a molecule; <code>view3</code> is the 3-D framing verb. And <code>draw</code> traces the <em>bonds</em> on (a
+bond is a path); an atom is a sphere, so it swells rather than draws.</p>
+<hr>
+<h2 id="the-bundled-molecules"><a class="header" href="#the-bundled-molecules">The bundled molecules</a></h2>
+<p><strong>192 molecules, 392 files</strong> under <code>asset:molecules/</code> — byte-exact PubChem
+downloads, most with both a 3-D conformer (<code>&lt;name&gt;.sdf</code>) and a 2-D depiction
+(<code>&lt;name&gt;-2d.sdf</code>). Enough to teach from without downloading anything.</p>
+<p>Grouped the way a syllabus is: inorganics and gases · hydrocarbons · aromatics and
+heterocycles · alcohols, carbonyls, acids and solvents · sugars · <strong>all twenty amino
+acids</strong> · nucleobases and nucleotides · vitamins · lipids, steroids and hormones ·
+neurotransmitters · medicines · flavours and famous molecules · industrial monomers.</p>
+<p>The full table with compound ids is
+<a href="https://github.com/anishnath/manic/blob/main/assets/molecules/INDEX.md"><code>assets/molecules/INDEX.md</code></a>.</p>
+<p>Some have <strong>no 3-D conformer</strong> — mostly salts, metal complexes and the largest
+molecules — so only the <code>-2d</code> file exists. And three names are deliberately absent:
+cellulose, starch and haemoglobin are polymers or proteins rather than compounds, so
+PubChem has no single record for them.</p>
+<p>Three honest caveats:</p>
+<ol>
+<li><strong>They are computed conformers, not measured structures.</strong> PubChem optimises
+with MMFF94, so a bond length sits within about 0.05 Å of the experimental value
+rather than on it. Right for teaching shape; not a source for a number you
+intend to quote.</li>
+<li><strong>Some have no 3-D conformer at all</strong> — mostly the inorganics and salts — so the
+2-D depiction is bundled and every z is zero. Such a molecule lies flat, and
+tilting it will show it edge-on.</li>
+<li><strong>PubChem writes benzene in Kekulé form</strong>, alternating single and double, rather
+than as a delocalised ring. That is the file being explicit, not the reader
+guessing.</li>
+</ol>
+<h3 id="your-own-file"><a class="header" href="#your-own-file">Your own file</a></h3>
+<p>Any <code>.sdf</code> or <code>.mol</code> works — pass a path instead of an <code>asset:</code> URI. From PubChem:</p>
+<pre><code>https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/2519/record/SDF?record_type=3d
+</code></pre>
+<p>A <strong>V3000</strong> molfile is refused with the command to convert it, rather than
+mis-parsed: <code>obabel in.sdf -O out.sdf --outputV2000</code>.</p>
+<hr>
+<h2 id="an-example-end-to-end"><a class="header" href="#an-example-end-to-end">An example end to end</a></h2>
+<p><em>Why molecules have shapes</em> — four molecules, four geometries, and not one
+coordinate in the script:</p>
+<pre><code class="language-manic">canvas("16:9"); template("black");
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+molecule3(w,  "asset:molecules/water.sdf",          (-6.4, 0, 0), 1.5);
+molecule3(am, "asset:molecules/ammonia.sdf",        (-2.1, 0, 0), 1.5);
+molecule3(me, "asset:molecules/methane.sdf",        ( 2.2, 0, 0), 1.5);
+molecule3(co, "asset:molecules/carbon-dioxide.sdf", ( 6.6, 0, 0), 1.5);
+
+text(t1, (196, 566), "bent");        text(t3, (760, 566), "tetrahedral");
+text(t2, (452, 566), "pyramidal");   text(t4, (1060, 566), "linear");
+wait(6);
+</code></pre>
+<p>The labels are shape <em>classes</em>, not measurements — the geometry on screen is the
+file’s, and there is no number in the script to disagree with it.</p>
+<p>See the <a href="ex-chemistry.html">chemistry gallery</a> for the full scenes.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="charts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="circuits.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="charts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="circuits.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

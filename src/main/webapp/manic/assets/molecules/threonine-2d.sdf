@@ -1,0 +1,144 @@
+6288
+  -OEChem-08202606062D
+
+ 17 16  0     1  0  0  0  0  0999 V2000
+    6.0010   -0.0950    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    2.5369   -0.0950    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    3.4030    1.4050    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    4.2690   -1.0950    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0
+    5.1350    0.4050    0.0000 C   0  0  1  0  0  0  0  0  0  0  0  0
+    4.2690   -0.0950    0.0000 C   0  0  1  0  0  0  0  0  0  0  0  0
+    5.1350    1.4050    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.4030    0.4050    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.7321   -0.4050    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    5.1350   -0.2150    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    5.7550    1.4050    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    5.1350    2.0250    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    4.5150    1.4050    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    3.7321   -1.4050    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    4.8059   -1.4050    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    6.5380    0.2150    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+    2.0000    0.2150    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+  5  1  1  1  0  0  0
+  1 16  1  0  0  0  0
+  2  8  1  0  0  0  0
+  2 17  1  0  0  0  0
+  3  8  2  0  0  0  0
+  6  4  1  6  0  0  0
+  4 14  1  0  0  0  0
+  4 15  1  0  0  0  0
+  5  6  1  0  0  0  0
+  5  7  1  0  0  0  0
+  5 10  1  0  0  0  0
+  6  8  1  0  0  0  0
+  6  9  1  0  0  0  0
+  7 11  1  0  0  0  0
+  7 12  1  0  0  0  0
+  7 13  1  0  0  0  0
+M  END
+> <PUBCHEM_COMPOUND_CID>
+6288
+
+> <PUBCHEM_COMPOUND_CANONICALIZED>
+1
+
+> <PUBCHEM_CACTVS_COMPLEXITY>
+93.3
+
+> <PUBCHEM_CACTVS_HBOND_ACCEPTOR>
+4
+
+> <PUBCHEM_CACTVS_HBOND_DONOR>
+3
+
+> <PUBCHEM_CACTVS_ROTATABLE_BOND>
+2
+
+> <PUBCHEM_CACTVS_SUBSKEYS>
+AAADccBiMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHgAQCAAACDzhgAYCCABAAgAIAACQCAAAAAAAAAAAAIGAAAACEBQAAAAAQAAFMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
+
+> <PUBCHEM_IUPAC_OPENEYE_NAME>
+(2S,3R)-2-amino-3-hydroxy-butanoic acid
+
+> <PUBCHEM_IUPAC_CAS_NAME>
+(2S,3R)-2-amino-3-hydroxybutanoic acid
+
+> <PUBCHEM_IUPAC_NAME_MARKUP>
+(2<I>S</I>,3<I>R</I>)-2-amino-3-hydroxybutanoic acid
+
+> <PUBCHEM_IUPAC_NAME>
+(2S,3R)-2-amino-3-hydroxybutanoic acid
+
+> <PUBCHEM_IUPAC_SYSTEMATIC_NAME>
+(2S,3R)-2-azanyl-3-oxidanyl-butanoic acid
+
+> <PUBCHEM_IUPAC_TRADITIONAL_NAME>
+(2S,3R)-2-amino-3-hydroxy-butyric acid
+
+> <PUBCHEM_IUPAC_INCHI>
+InChI=1S/C4H9NO3/c1-2(6)3(5)4(7)8/h2-3,6H,5H2,1H3,(H,7,8)/t2-,3+/m1/s1
+
+> <PUBCHEM_IUPAC_INCHIKEY>
+AYFVYJQAPQTCCC-GBXIJSLDSA-N
+
+> <PUBCHEM_XLOGP3>
+-2.9
+
+> <PUBCHEM_EXACT_MASS>
+119.058243149
+
+> <PUBCHEM_MOLECULAR_FORMULA>
+C4H9NO3
+
+> <PUBCHEM_MOLECULAR_WEIGHT>
+119.12
+
+> <PUBCHEM_SMILES>
+C[C@H]([C@@H](C(=O)O)N)O
+
+> <PUBCHEM_CONNECTIVITY_SMILES>
+CC(C(C(=O)O)N)O
+
+> <PUBCHEM_CACTVS_TPSA>
+83.6
+
+> <PUBCHEM_MONOISOTOPIC_WEIGHT>
+119.058243149
+
+> <PUBCHEM_TOTAL_CHARGE>
+0
+
+> <PUBCHEM_HEAVY_ATOM_COUNT>
+8
+
+> <PUBCHEM_ATOM_DEF_STEREO_COUNT>
+2
+
+> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ISOTOPIC_ATOM_COUNT>
+0
+
+> <PUBCHEM_COMPONENT_COUNT>
+1
+
+> <PUBCHEM_CACTVS_TAUTO_COUNT>
+-1
+
+> <PUBCHEM_COORDINATE_TYPE>
+1
+5
+255
+
+> <PUBCHEM_BONDANNOTATIONS>
+5  1  5
+6  4  6
+
+$$$$

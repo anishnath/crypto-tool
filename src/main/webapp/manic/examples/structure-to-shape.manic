@@ -1,0 +1,100 @@
+// The flat formula and the real shape are the same molecule
+//
+// This is the step students actually get stuck on. A structural formula is a page of lines and
+// letters; a molecule is a lump in three dimensions. Told they are the same thing, most people
+// nod and privately keep two unrelated pictures.
+//
+// So: draw the formula on, bond by bond, the way you would on paper. Then put the real geometry
+// beside it, turning, from the same compound in PubChem. Both sides are read from files — the
+// left from the 2-D depiction record, the right from the 3-D conformer — so nothing here is an
+// artist's impression of the other.
+
+title("the formula and the shape");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 42), "maniclang.com");
+display(brand);
+size(brand, 19);
+color(brand, dim);
+
+// The 3-D scene covers the whole canvas, so the molecule is put at the ORIGIN and the camera is
+// aimed off to the left instead — which slides the subject into the right half of the frame and
+// keeps it there while it turns. Moving the molecule sideways instead pushes it toward the camera
+// and it grows and clips.
+camera3((0, -18, 5), (-4.2, 0, 0), 32);
+
+// ── the page: a structural formula, drawn by hand ──
+
+structure(flat, "asset:molecules/caffeine-2d.sdf", (350, 372), 54);
+untraced(flat.bonds);
+hidden(flat.labels);
+
+// ── the substance: the same compound's 3-D conformer ──
+
+molecule3(solid, "asset:molecules/caffeine.sdf", (0, 0, 0), 0.66, "spin=22");
+hidden(solid);
+
+text(t1, (350, 128), "caffeine, as it is written");
+size(t1, 26); color(t1, ink); hidden(t1);
+text(t2, (350, 660), "one line per bond, letters where a chemist letters them");
+size(t2, 19); color(t2, dim); hidden(t2);
+
+text(t3, (966, 128), "caffeine, as it is");
+size(t3, 26); color(t3, ink); hidden(t3);
+text(t4, (966, 660), "the same compound, its computed 3-D conformer");
+size(t4, 19); color(t4, dim); hidden(t4);
+
+// ── beat 1: write the formula ──
+
+wait(0.6);
+show(t1, 0.5);
+
+// Drawn bond by bond, in the file's own order — the handwriting effect, from the core kit's
+// `stagger` and `draw`. Nothing chemistry-specific about it.
+//
+// Addressed by TAG, not by index: a skeletal drawing skips every C–H bond, so the surviving bond
+// ids are the file's own numbering with gaps in it. `{id}.bonds` is whatever was actually drawn.
+stagger(0.05) {
+  draw(flat.bonds, 0.4);
+}
+show(flat.labels, 0.6);
+show(t2, 0.5);
+wait(1.4);
+
+// ── beat 2: and here is the thing itself ──
+
+par { show(solid, 0.9); show(t3, 0.5); }
+show(t4, 0.5);
+wait(2.0);
+
+// ── beat 3: the same nitrogens, on both sides at once ──
+//
+// Four nitrogens on the page and four in the solid. Recolouring them is one verb per side, because
+// both kits tag an atom by its element — so "the nitrogens" is something you can say to the
+// scene, not a set of indices you have to look up.
+
+text(t5, (640, 596), "four nitrogens, the same four");
+size(t5, 23); color(t5, indigo); hidden(t5);
+
+// `recolor`, not `color`: `color` is a build-time setting and belongs above the timeline, while
+// `recolor` is the verb that changes a colour DURING the story.
+par {
+  recolor(flat.N, indigo, 0.7);
+  recolor(solid.N, indigo, 0.7);
+  show(t5, 0.5);
+}
+wait(2.6);
+
+// ── beat 4: and the oxygens ──
+
+text(t6, (640, 596), "and the two oxygens");
+size(t6, 23); color(t6, red); hidden(t6);
+
+par { fade(t5, 0.35); }
+par {
+  pulse(flat.O);
+  pulse(solid.O);
+  show(t6, 0.5);
+}
+wait(2.8);

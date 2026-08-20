@@ -11,7 +11,7 @@
 
 title("six circuits");
 canvas("16:9");
-template("paper");
+template("black");
 
 text(brand, (640, 40), "maniclang.com");
 display(brand);
@@ -19,13 +19,17 @@ size(brand, 22);
 color(brand, dim);
 
 // ── the board: complete from t = 0, so the first frame is already the whole kit ──
+//
+// No `ground` line anywhere: a ground is a REFERENCE, not a component. MNA needs one node to
+// measure from, and with none written the kit elects the source's negative terminal — so a single
+// loop solves identically either way, and the symbol would only be clutter. Write one when a
+// circuit has several sources or loops and you want to say which node is zero.
 
 circuit(ohm, (250, 240), `
   dc-voltage 0 4 0 0 v=9
   resistor   0 0 4 0 r=1k
   wire       4 0 4 4
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(divider, (640, 240), `
@@ -33,7 +37,6 @@ circuit(divider, (640, 240), `
   resistor   0 0 4 0 r=3k
   resistor   4 0 4 4 r=1k
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(rc, (1030, 240), `
@@ -41,7 +44,6 @@ circuit(rc, (1030, 240), `
   resistor   0 0 4 0 r=1k
   capacitor  4 0 4 4 c=10u
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(rl, (250, 512), `
@@ -49,7 +51,6 @@ circuit(rl, (250, 512), `
   resistor   0 0 4 0 r=100
   inductor   4 0 4 4 l=10m
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(rect, (640, 512), `
@@ -57,7 +58,6 @@ circuit(rect, (640, 512), `
   diode      0 0 3 0
   resistor   3 0 3 4 r=1k
   wire       3 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(led, (1030, 512), `
@@ -65,7 +65,6 @@ circuit(led, (1030, 512), `
   resistor   0 0 3 0 r=330
   led        3 0 3 4
   wire       3 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 // ── a different current in every panel: shape, colour, pace ──

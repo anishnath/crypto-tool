@@ -1,0 +1,149 @@
+// A + B → C, the way a textbook draws it
+//
+// Esterification: acetic acid and ethanol give ethyl acetate and water. The classic school
+// reaction, and the classic school diagram — reactants, a plus, an arrow with its conditions,
+// products.
+//
+// There is no reaction builtin in Manic and this scene does not need one. Every molecule is a
+// SMILES string laid out by the chemistry kit; the plus signs, the arrow, the conditions and the
+// whole choreography are the core kit. What the kit contributes is that the structures are real:
+// the geometry is computed from the graph, not drawn by hand, so the ester bond in the product is
+// the same bond that formed.
+//
+// The teaching beat is the middle one. The acid's -OH and the alcohol's -H are marked BEFORE the
+// arrow, and the same colour turns up in the water afterwards — so the question "where did the
+// water come from?" is answered by watching, not by being told.
+
+title("esterification");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 18);
+color(brand, dim);
+
+text(heading, (640, 108), "acid + alcohol gives an ester, and water");
+size(heading, 30);
+color(heading, ink);
+hidden(heading);
+
+// ── the cast, all from SMILES strings ──
+
+structure(acid, "CC(=O)O", (190, 348), 76);
+structure(alc, "CCO", (487, 348), 76);
+structure(ester, "CC(=O)OCC", (900, 348), 66);
+structure(water, "O", (1198, 348), 60);
+
+// Everything starts as bare geometry, drawn on beat by beat.
+untraced(acid.bonds);
+untraced(alc.bonds);
+untraced(ester.bonds);
+hidden(acid.labels);
+hidden(alc.labels);
+hidden(ester.labels);
+hidden(water);
+
+// names under each structure
+text(n1, (190, 500), "acetic acid");
+text(n2, (487, 500), "ethanol");
+text(n3, (900, 500), "ethyl acetate");
+text(n4, (1198, 500), "water");
+for i in 1..5 {
+  size(n{i}, 21);
+  color(n{i}, dim);
+  hidden(n{i});
+}
+
+// the arithmetic of the diagram
+text(plus1, (348, 352), "+");
+text(plus2, (1105, 352), "+");
+size(plus1, 34); size(plus2, 34);
+color(plus1, ink); color(plus2, ink);
+hidden(plus1); hidden(plus2);
+
+// the arrow, and what sits over it
+arrow(rx, (640, 352), (782, 352));
+color(rx, ink);
+stroke(rx, 2.6);
+untraced(rx);
+
+text(cond, (711, 312), "H2SO4");
+size(cond, 19);
+color(cond, crimson);
+hidden(cond);
+text(cond2, (711, 390), "heat");
+size(cond2, 19);
+color(cond2, dim);
+hidden(cond2);
+
+// what the marked atoms become — declared up front, revealed later
+text(note, (640, 600), "the acid gives up an OH, the alcohol an H — together, water");
+size(note, 22);
+color(note, crimson);
+hidden(note);
+
+// ── 1. the reactants, written on ──
+
+wait(0.5);
+show(heading, 0.6);
+wait(0.3);
+
+stagger(0.09) { draw(acid.bonds, 0.45); }
+par { show(acid.labels, 0.5); show(n1, 0.4); }
+wait(0.35);
+show(plus1, 0.3);
+stagger(0.09) { draw(alc.bonds, 0.45); }
+par { show(alc.labels, 0.5); show(n2, 0.4); }
+wait(1.0);
+
+// ── 2. mark what is about to leave ──
+//
+// SMILES atoms are numbered in the order they are written, so `CC(=O)O` puts its hydroxyl oxygen
+// last — a3 — and `CCO` puts its oxygen at a2. That is the -OH and the -H that become water.
+
+par {
+  recolor(acid.a3, crimson, 0.6);
+  recolor(alc.a2, crimson, 0.6);
+}
+par { pulse(acid.a3); pulse(alc.a2); }
+wait(1.2);
+
+// ── 3. the arrow ──
+
+par {
+  draw(rx, 0.7);
+  show(cond, 0.5);
+  show(cond2, 0.5);
+}
+wait(0.8);
+
+// ── 4. the product, and the water it leaves behind ──
+
+stagger(0.07) { draw(ester.bonds, 0.4); }
+par { show(ester.labels, 0.5); show(n3, 0.4); }
+wait(0.5);
+show(plus2, 0.3);
+par { show(water, 0.6); show(n4, 0.4); }
+
+// the water carries the colour of the atoms it was made from
+recolor(water.O, crimson, 0.7);
+par { pulse(water.O); show(note, 0.6); }
+wait(2.6);
+
+// ── 5. and the bond that was made ──
+
+framebox(made, ester.O, 16, crimson);
+hidden(made);
+
+text(bond, (640, 600), "and the bond that was made joins them");
+size(bond, 21);
+color(bond, dim);
+hidden(bond);
+
+par {
+  fade(note, 0.4);
+  show(made, 0.6);
+  show(bond, 0.5);
+}
+wait(2.8);

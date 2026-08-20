@@ -1,0 +1,120 @@
+// Why molecules have shapes
+//
+// Four molecules, four shapes — and not one coordinate in this file. Each `molecule3` reads a
+// PubChem structure file (a real "Download → SDF"), so every bond angle you see is the one in the
+// conformer someone computed: water bent, ammonia pyramidal, methane tetrahedral, carbon dioxide
+// dead straight.
+//
+// They turn on their own axes because that is the default — and it is the whole argument for doing
+// this in three dimensions. On a flat page methane is four lines from a dot and "tetrahedral" is a
+// claim you take on trust; turning, the shape is simply visible. Same for ammonia's pyramid, which
+// flat looks like a T.
+
+title("why molecules have shapes");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 44), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+// Looking down at about 30°, not along the plane: caffeine is FLAT, and edge-on a flat molecule
+// is a line. The elevation also happens to be what makes methane's tetrahedron read.
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+// Four PubChem downloads, laid out left to right at one magnification, so they are genuinely
+// comparable in size. `spin` is degrees per second — the default; `spin=0` would hold one still.
+molecule3(waterm, "asset:molecules/water.sdf", (-6.4, 0, 0), 1.5, "spin=26");
+molecule3(ammonia, "asset:molecules/ammonia.sdf", (-2.1, 0, 0), 1.5, "spin=26");
+molecule3(methane, "asset:molecules/methane.sdf", (2.2, 0, 0), 1.5, "spin=26");
+molecule3(co2, "asset:molecules/carbon-dioxide.sdf", (6.6, 0, 0), 1.5, "spin=26");
+
+hidden(waterm);
+hidden(ammonia);
+hidden(methane);
+hidden(co2);
+
+// Formulae and shape CLASSES — not measurements. The geometry on screen is the file's, and nothing
+// here restates it as a number.
+text(t1, (196, 560), "H2O");
+text(s1, (196, 600), "bent");
+text(t2, (452, 560), "NH3");
+text(s2, (452, 600), "pyramidal");
+text(t3, (760, 560), "CH4");
+text(s3, (760, 600), "tetrahedral");
+text(t4, (1060, 560), "CO2");
+text(s4, (1060, 600), "linear");
+
+for i in 1..5 {
+  hidden(t{i});
+  hidden(s{i});
+  size(t{i}, 30);
+  size(s{i}, 22);
+  color(s{i}, dim);
+}
+color(t1, red);
+color(t2, blue);
+color(t3, silver);
+color(t4, red);
+
+// ── one at a time, each already turning as it arrives ──
+
+wait(0.7);
+par { show(waterm, 0.7); show(t1, 0.5); show(s1, 0.5); }
+wait(0.9);
+par { show(ammonia, 0.7); show(t2, 0.5); show(s2, 0.5); }
+wait(0.9);
+par { show(methane, 0.7); show(t3, 0.5); show(s3, 0.5); }
+wait(0.9);
+par { show(co2, 0.7); show(t4, 0.5); show(s4, 0.5); }
+wait(1.6);
+
+// ── the four styles a chemistry viewer offers, on the one molecule ──
+//
+// Same file, same coordinates, four questions. Ball-and-stick shows what is bonded to what;
+// sticks gets the spheres out of the way of the geometry; hiding the hydrogens leaves the carbon
+// skeleton an organic chemist actually draws; space-filling shows the shape the molecule presents
+// to the world — which is the one that explains why it fits somewhere, or does not.
+
+par {
+  fade(waterm, 0.5); fade(ammonia, 0.5); fade(methane, 0.5); fade(co2, 0.5);
+  fade(t1, 0.4); fade(s1, 0.4); fade(t2, 0.4); fade(s2, 0.4);
+  fade(t3, 0.4); fade(s3, 0.4); fade(t4, 0.4); fade(s4, 0.4);
+}
+
+// No `tilt` here on purpose. Caffeine is FLAT and lies in the xy plane, so turning it about the
+// vertical keeps it in its own plane and it presents the same face to the camera throughout. Lean
+// it with `tilt` and the spin walks it through edge-on, where a flat molecule is a line — `tilt`
+// and `axis=x|y|z` are there for when you want that (a molecule rolling end over end), not for a
+// comparison like this one.
+molecule3(c1, "asset:molecules/caffeine.sdf", (-8.4, 0, 0), 0.52, "style=ball");
+molecule3(c2, "asset:molecules/caffeine.sdf", (-2.8, 0, 0), 0.52, "style=sticks");
+molecule3(c3, "asset:molecules/caffeine.sdf", (2.8, 0, 0), 0.52, "style=sticks hydrogens=0");
+molecule3(c4, "asset:molecules/caffeine.sdf", (8.4, 0, 0), 0.52, "style=spacefill");
+hidden(c1); hidden(c2); hidden(c3); hidden(c4);
+
+text(cap, (640, 130), "caffeine, four ways to look at it");
+hidden(cap);
+size(cap, 28);
+color(cap, cyan);
+
+text(k1, (222, 600), "ball & stick");
+text(k2, (492, 600), "sticks");
+text(k3, (770, 600), "no hydrogens");
+text(k4, (1052, 600), "space-filling");
+for i in 1..5 {
+  hidden(k{i});
+  size(k{i}, 21);
+  color(k{i}, dim);
+}
+
+show(cap, 0.5);
+par { show(c1, 0.6); show(k1, 0.4); }
+wait(0.7);
+par { show(c2, 0.6); show(k2, 0.4); }
+wait(0.7);
+par { show(c3, 0.6); show(k3, 0.4); }
+wait(0.7);
+par { show(c4, 0.6); show(k4, 0.4); }
+wait(3.0);

@@ -34,10 +34,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b6574f79.js";
+            window.path_to_searchindex_js = "searchindex-ea8e5a0f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-0494ae29.js"></script>
+        <script src="toc-b41398ea.js"></script>
             <!-- seo:begin -->
 <meta name="description" content="The words so far ( circle , move , flash , for …) are the core . On top of that, manic ships kits — bundles of higher-level figures for a domain. You use…">
 <link rel="canonical" href="https://docs.maniclang.com/kits.html">
@@ -327,6 +327,31 @@ distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberr
 <code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
 Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
 geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
+<h2 id="chem"><a class="header" href="#chem">chem</a></h2>
+<p><strong>Real molecules, from real files</strong> — <code>molecule3</code> reads an MDL structure file (a
+PubChem <em>Download → SDF</em>, or a <code>.mol</code>) and lays out its atoms and bonds as ordinary
+3-D entities. Nothing about the shape is authored: the coordinates are the file’s,
+in Ångströms.</p>
+<pre><code class="language-manic">camera3((0, -14, 4), (0, 0, 0), 40);
+molecule3(caf, "asset:molecules/caffeine.sdf");        // turns by default
+color(caf.N, cyan);                                    // every nitrogen
+molecule3(bz, "asset:molecules/benzene.sdf", (6,0,0), 1.2, "style=sticks hydrogens=0");
+</code></pre>
+<p>Four styles (ball &amp; stick, sticks, wireframe, space-filling), hydrogens on or off,
+and a slow turn about its own axis <strong>on by default</strong>, because a shape only reads in
+three dimensions. Atoms are CPK/Jmol coloured and sized by covalent radius; every
+atom is tagged by its element, so <code>color(caf.N, cyan)</code> addresses the chemistry
+rather than an index. 26 molecules bundled.</p>
+<p><code>structure</code> is the flat half: the <strong>skeletal formula</strong> from a file’s 2-D depiction
+coordinates — carbons as bare vertices, <code>OH</code>/<code>NH2</code> folded from the explicit
+hydrogens, double bonds leaning into the ring, wedge and hash bonds where the file
+records stereochemistry.</p>
+<pre><code class="language-manic">template("paper");
+structure(glc, "asset:molecules/glucose-2d.sdf", (400, 360), 62);
+untraced(glc.bonds);
+stagger(0.05) { draw(glc.bonds, 0.4); }   // written on, bond by bond
+</code></pre>
+<p>See the <a href="chemistry.html">chemistry guide</a>.</p>
 <h2 id="circuit"><a class="header" href="#circuit">circuit</a></h2>
 <p>A netlist in, a <strong>working schematic</strong> out — Modified Nodal Analysis under easy
 builtins, so every voltage, current and glow on screen was <em>solved</em>, not drawn,

@@ -37,10 +37,10 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b6574f79.js";
+            window.path_to_searchindex_js = "searchindex-ea8e5a0f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-0494ae29.js"></script>
+        <script src="toc-b41398ea.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -4411,6 +4411,31 @@ distance images a nearby point. Analysis: <code>rayfan</code> (the ray-fan aberr
 <code>spotdiagram</code> (the on-axis spot at focus) · <code>fieldspot(id, [center], [preset], [field])</code> (the <strong>off-axis</strong> spot — a coma comet / astigmatic blur, with an
 Airy-disk diffraction-limit overlay). A rainbow glows on the dark bench; the
 geometric ray diagrams also take <code>template("paper")</code> for a textbook look.</p>
+<h2 id="chem"><a class="header" href="#chem">chem</a></h2>
+<p><strong>Real molecules, from real files</strong> — <code>molecule3</code> reads an MDL structure file (a
+PubChem <em>Download → SDF</em>, or a <code>.mol</code>) and lays out its atoms and bonds as ordinary
+3-D entities. Nothing about the shape is authored: the coordinates are the file’s,
+in Ångströms.</p>
+<pre><code class="language-manic">camera3((0, -14, 4), (0, 0, 0), 40);
+molecule3(caf, "asset:molecules/caffeine.sdf");        // turns by default
+color(caf.N, cyan);                                    // every nitrogen
+molecule3(bz, "asset:molecules/benzene.sdf", (6,0,0), 1.2, "style=sticks hydrogens=0");
+</code></pre>
+<p>Four styles (ball &amp; stick, sticks, wireframe, space-filling), hydrogens on or off,
+and a slow turn about its own axis <strong>on by default</strong>, because a shape only reads in
+three dimensions. Atoms are CPK/Jmol coloured and sized by covalent radius; every
+atom is tagged by its element, so <code>color(caf.N, cyan)</code> addresses the chemistry
+rather than an index. 26 molecules bundled.</p>
+<p><code>structure</code> is the flat half: the <strong>skeletal formula</strong> from a file’s 2-D depiction
+coordinates — carbons as bare vertices, <code>OH</code>/<code>NH2</code> folded from the explicit
+hydrogens, double bonds leaning into the ring, wedge and hash bonds where the file
+records stereochemistry.</p>
+<pre><code class="language-manic">template("paper");
+structure(glc, "asset:molecules/glucose-2d.sdf", (400, 360), 62);
+untraced(glc.bonds);
+stagger(0.05) { draw(glc.bonds, 0.4); }   // written on, bond by bond
+</code></pre>
+<p>See the <a href="#chemistry--molecules-that-know-their-own-shape">chemistry guide</a>.</p>
 <h2 id="circuit"><a class="header" href="#circuit">circuit</a></h2>
 <p>A netlist in, a <strong>working schematic</strong> out — Modified Nodal Analysis under easy
 builtins, so every voltage, current and glow on screen was <em>solved</em>, not drawn,
@@ -6106,6 +6131,313 @@ card — the chart running <em>inside</em> a <code>par</code> while the voice-ov
 <li><a href="#creator-race-quiz">Race-chart quiz Short</a> — voiced, problem→proof→CTA</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chemistry--molecules-that-know-their-own-shape"><a class="header" href="#chemistry--molecules-that-know-their-own-shape">Chemistry — molecules that know their own shape</a></h1>
+<p>The <strong>chemistry kit</strong> loads a real molecule from a real file. <code>molecule3</code> reads an
+MDL structure file — an <code>.sdf</code> from PubChem’s <em>Download → SDF</em>, or a <code>.mol</code> from
+RDKit or Open Babel — and lays out its atoms and bonds as ordinary 3-D entities.</p>
+<p>The point is that <strong>nothing about the shape is authored</strong>. The coordinates are the
+file’s, in Ångströms, so a bond angle on screen is the angle in the conformer
+someone computed. Hand-placing atoms gets a molecule that looks plausible; this
+gets one that is right.</p>
+<pre><code class="language-manic">canvas("16:9"); template("black");
+camera3((0, -14, 4), (0, 0, 0), 40);
+
+molecule3(caf, "asset:molecules/caffeine.sdf");
+wait(4);
+</code></pre>
+<p>Three lines, and caffeine is on screen with its real geometry, turning slowly —
+because a shape only reads in three dimensions. Flat, methane is four lines from a
+dot.</p>
+<hr>
+<h2 id="the-options"><a class="header" href="#the-options">The options</a></h2>
+<p>Everything past the path is optional:</p>
+<pre><code class="language-manic">molecule3(id, path, [center], [scale], [spec])
+</code></pre>
+<ul>
+<li><strong><code>center</code></strong> — where to put it, default the origin. The molecule is centred on
+its own centroid first, so it lands in front of the camera whatever the file’s
+coordinates happened to be.</li>
+<li><strong><code>scale</code></strong> — world units per Ångström, default 1.5. A small molecule is then a
+few units across, which is the scale the rest of the <a href="#going-3d">3-D kit</a> works at.</li>
+<li><strong><code>spec</code></strong> — a bounded <code>key=value</code> string, below.</li>
+</ul>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>key</th><th>values</th><th>meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>style</code></td><td><code>ball</code> (default) · <code>sticks</code> · <code>wireframe</code> · <code>spacefill</code></td><td>how it is drawn</td></tr>
+<tr><td><code>hydrogens</code></td><td><code>1</code> (default) · <code>0</code></td><td><code>0</code> drops them <strong>and their bonds</strong></td></tr>
+<tr><td><code>spin</code></td><td>degrees per second, default <code>24</code></td><td><code>0</code> holds it still</td></tr>
+<tr><td><code>axis</code></td><td><code>z</code> (default) · <code>x</code> · <code>y</code></td><td>which axis the turn is about</td></tr>
+<tr><td><code>turn</code> / <code>tilt</code></td><td>degrees</td><td>a static orientation, applied once</td></tr>
+<tr><td><code>record</code></td><td><code>1</code> (default)</td><td>which molecule of a multi-record SDF</td></tr>
+</tbody>
+</table>
+</div>
+<pre><code class="language-manic">molecule3(caf, "asset:molecules/caffeine.sdf", (0,0,0), 0.9, "style=sticks hydrogens=0");
+molecule3(bz,  "asset:molecules/benzene.sdf",  (0,0,0), 1.2, "spin=0 tilt=90");
+molecule3(eth, "asset:molecules/alkanes.sdf",  (0,0,0), 2.0, "record=2");
+</code></pre>
+<h3 id="the-four-styles-answer-four-questions"><a class="header" href="#the-four-styles-answer-four-questions">The four styles answer four questions</a></h3>
+<ul>
+<li><strong>ball &amp; stick</strong> — what is bonded to what, <em>and</em> the shape. The textbook default.</li>
+<li><strong>sticks</strong> — the same connectivity with the spheres out of the way of the
+geometry. Bonds are two-tone, split at the midpoint and coloured by the atom
+each half touches, so a bond still says what it joins.</li>
+<li><strong>wireframe</strong> — thin lines only, for a large structure where anything solid
+hides it.</li>
+<li><strong>spacefill</strong> — full covalent radii, no bonds: the shape the molecule presents
+to the world, which is the one that decides what it fits into.</li>
+</ul>
+<h3 id="hiding-hydrogens"><a class="header" href="#hiding-hydrogens">Hiding hydrogens</a></h3>
+<p>Half the atoms in an organic molecule are hydrogens, and often they are noise.
+<code>hydrogens=0</code> removes them, removes the bonds that reached them (or the molecule
+sprouts sticks into empty space), and re-centres on what is left — so the molecule
+does not drift off the axis it spins about.</p>
+<h3 id="animation-is-the-default"><a class="header" href="#animation-is-the-default">Animation is the default</a></h3>
+<p>The turn is <strong>on unless you switch it off</strong>, and it costs no timeline verb: it is a
+pure function of <code>t</code>, on the same per-frame path a <a href="art.html"><code>cloud</code></a> recomputes on.
+So it scrubs backwards exactly and records identically every run.</p>
+<p>It rotates the molecule <strong>about its own axis</strong>, not around the world origin, and it
+writes the entity’s sync-owned <em>home</em> — which means <code>shift3</code> and friends still work
+on top of it. A molecule can travel and turn at once, rigidly.</p>
+<hr>
+<h2 id="structural-formulae--the-flat-drawing"><a class="header" href="#structural-formulae--the-flat-drawing">Structural formulae — the flat drawing</a></h2>
+<p><code>structure</code> is the other half of the kit: the <strong>skeletal formula</strong> a chemist puts on
+paper, in 2-D.</p>
+<pre><code class="language-manic">canvas("16:9"); template("paper");
+structure(glc, "asset:molecules/glucose-2d.sdf", (400, 360), 62);
+wait(3);
+</code></pre>
+<p>That draws the pyranose ring with its five <code>OH</code> groups, its ring oxygen lettered,
+its carbons as bare vertices, and <strong>wedge and hash bonds</strong> where the file records
+stereochemistry — glucose’s 2-D record carries four of them, which is the
+difference between one sugar and another.</p>
+<p>Every convention is derived from the file rather than authored:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>what you see</th><th>what justifies it</th></tr>
+</thead>
+<tbody>
+<tr><td>a carbon is a bare vertex</td><td>the element is <code>C</code></td></tr>
+<tr><td>hydrogens on carbon vanish</td><td>they are bonded to a <code>C</code></td></tr>
+<tr><td>an oxygen reads <code>OH</code></td><td>it has one explicit <code>H</code> neighbour</td></tr>
+<tr><td>a nitrogen reads <code>NH2</code></td><td>it has two</td></tr>
+<tr><td>a double bond leans <strong>into</strong> the ring</td><td>the crowded side, from the neighbours’ own coordinates — no ring detection needed</td></tr>
+<tr><td>a bond is a solid wedge</td><td>the molfile’s fourth bond column says <code>1</code></td></tr>
+<tr><td>a lone carbon reads <code>CH4</code></td><td>a single bare vertex is not a drawing of methane</td></tr>
+</tbody>
+</table>
+</div>
+<p>Bonds stop short of a letter, so no line runs under text.</p>
+<pre><code class="language-manic">structure(id, source, [center], [unit], [spec])
+</code></pre>
+<p><code>source</code> is either a <strong>file</strong> or a <strong>SMILES string</strong> — see
+<a href="#from-a-smiles-string">From a SMILES string</a> below.</p>
+<p><code>unit</code> is <strong>pixels per bond</strong> (default 64) — a 2-D record is laid out on a
+1.0-per-bond grid, so it means exactly what it says.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>key</th><th>values</th><th>meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>carbons</code></td><td><code>0</code> (default) · <code>1</code></td><td>letter every carbon too — the explicit style a first lesson uses</td></tr>
+<tr><td><code>hydrogens</code></td><td><code>0</code> (default) · <code>1</code></td><td>draw them as their own vertices instead of folding them in</td></tr>
+<tr><td><code>labels</code></td><td><code>text</code> (default) · <code>latex</code></td><td>how the letters are set</td></tr>
+<tr><td><code>color</code></td><td>any palette name or <code>#rrggbb</code></td><td>the bond and carbon colour</td></tr>
+<tr><td><code>record</code></td><td><code>1</code> (default)</td><td>which molecule of a multi-record file</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="typeset-labels"><a class="header" href="#typeset-labels">Typeset labels</a></h3>
+<p><code>labels=latex</code> sets each label through the same LaTeX engine as <code>equation</code>, so a
+subscript is a real subscript and a charge is raised:</p>
+<pre><code class="language-manic">structure(gly, "asset:molecules/glycine-2d.sdf", (400, 360), 74, "labels=latex");
+</code></pre>
+<p><code>NH2</code> becomes <strong>NH₂</strong>, <code>SO4^2-</code> becomes SO₄²⁻, and element symbols stay upright
+(<code>\mathrm{}</code>) because an element is not a variable — italic <code>O</code> is wrong in a way a
+chemist notices at once. Element colours carry through the tint.</p>
+<p>The cost is one rasterised image per <strong>distinct</strong> label, not per label: glucose has
+six lettered atoms but only two distinct strings (<code>OH</code> and <code>O</code>), so it costs two.
+Plain text stays the default because it is free and legible at any size — reach for
+LaTeX when the frame is going in front of an audience.</p>
+<h3 id="it-needs-the-2-d-record"><a class="header" href="#it-needs-the-2-d-record">It needs the 2-D record</a></h3>
+<p>PubChem serves both, and they are not interchangeable:</p>
+<pre><code>…/compound/cid/5793/record/SDF?record_type=2d     ← for `structure`
+…/compound/cid/5793/record/SDF?record_type=3d     ← for `molecule3`
+</code></pre>
+<p>The 2-D coordinates are laid out <em>for depiction</em> — a clean grid, regular hexagons,
+nothing overlapping. A 3-D conformer flattened is a tangle of crossing bonds, so
+<code>structure</code> <strong>refuses</strong> one and names the fix. The bundled 2-D files are
+<code>asset:molecules/&lt;name&gt;-2d.sdf</code>.</p>
+<h3 id="from-a-smiles-string"><a class="header" href="#from-a-smiles-string">From a SMILES string</a></h3>
+<p>A file is not always what you have. A reaction record, a paper, a database export
+gives you <strong>SMILES</strong> — a molecule as a line of text — and <code>structure</code> takes one
+directly:</p>
+<pre><code class="language-manic">structure(eth, "CCO", (300, 360), 70);            // ethanol
+structure(asp, "CC(=O)Oc1ccccc1C(=O)O", (800, 360), 54);   // aspirin
+</code></pre>
+<p>There is no second builtin and no conversion step: a string that does not <em>look</em>
+like a file — no <code>asset:</code>, no <code>/</code>, no <code>.sdf</code> or <code>.mol</code> — is read as SMILES. So the
+two forms never collide, and a scene can mix them freely.</p>
+<p>The difference is where the coordinates come from. A file <strong>carries</strong> its depiction;
+a SMILES string does not, so the layout is <strong>computed</strong>:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>what you get</th><th>the rule behind it</th></tr>
+</thead>
+<tbody>
+<tr><td>a chain zig-zags</td><td>each bond turns 60° from the last, so the interior angle is the tetrahedral 120°</td></tr>
+<tr><td>a ring is a regular polygon</td><td>closed on its own circumcircle, whatever its size</td></tr>
+<tr><td>a fused ring reflects across the shared bond</td><td>so naphthalene reads as naphthalene, not as two rings on top of each other</td></tr>
+<tr><td>a substituent points <strong>out</strong> of its ring</td><td>radially, away from the ring centre — toluene’s methyl never points inward</td></tr>
+<tr><td>an aromatic ring gets real double bonds</td><td>the lowercase <code>c1ccccc1</code> form is Kekulé-ised across the whole aromatic system</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>The layout is checked before it is drawn</strong>, and this is the whole safety argument.
+Overlapping atoms, crossing bonds and a stretched bond are <em>refused</em> — with the
+2-D-file fix named — rather than drawn as a tangle:</p>
+<pre><code class="language-manic">structure(m, "CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5");
+</code></pre>
+<pre><code>error: the layout for `CN1CC[C@]23c4c5ccc(O)c4O[C@H]2[C@@H](O)C=C[C@H]3[C@H]1C5` is
+not clean enough to draw: the bond between atoms 20 and 21 came out 4.00 bond-lengths
+long. Laying a molecule out from SMILES is reliable for chains, single rings and
+simply fused systems; a complex polycyclic needs a real depiction. Use a 2-D structure
+file instead — asset:molecules/&lt;name&gt;-2d.sdf if it is bundled, or a PubChem download
+with record_type=2d
+</code></pre>
+<p>That is morphine: five fused rings <em>including a bridge</em>, which is exactly what
+growing a layout outward cannot place. Fused systems that grow outward are fine, and
+that covers more than it sounds like — a steroid’s four rings, a substituted
+phenanthroline, a linear or angular aromatic all draw correctly. A <strong>bridged or caged</strong>
+skeleton does not, and says so.</p>
+<p>The point is that nothing draws <em>wrong</em>. It either draws, or it tells you what to do
+instead — because a plausible-but-incorrect structural formula is worse than no
+drawing at all.</p>
+<p>One consequence is worth knowing, because it will look like a bug otherwise: <strong>the
+layout grows along the string</strong>, so two SMILES for the <em>same</em> molecule need not behave
+the same. The 4,7-dimethoxy-1,10-phenanthroline in
+<code>examples/reaction-ord-screen.manic</code> is the case in point:</p>
+<pre><code class="language-manic">structure(l, "COC1=CC=NC2=C3N=CC=C(OC)C3=CC=C12");   // refused — a bond 3.6 long
+structure(l, "COC1=CC=NC2=C1C=CC1=C2N=CC=C1OC");     // the same molecule, draws cleanly
+</code></pre>
+<p>Where the ring closures fall decides the order the rings get placed in, and one order
+paints the layout into a corner. If a string you did not write is refused, a canonical
+form of it — from PubChem, RDKit or Open Babel — is worth trying before reaching for a
+file. But when the exact string matters to the scene, use the depiction file and say
+why; that is what the escape hatch is for.</p>
+<p>Atoms are numbered in <strong>written</strong> order from zero, which is often the most useful
+handle you could ask for. <code>CC(=O)O</code> writes its hydroxyl oxygen last, at <code>a3</code>:</p>
+<pre><code class="language-manic">structure(acid, "CC(=O)O", (190, 348), 76);
+recolor(acid.a3, crimson, 0.6);   // the OH that is about to leave
+</code></pre>
+<p>Only <em>lettered</em> atoms get a label entity, so <code>a{i}</code> addresses heteroatoms — which is
+usually what a lesson wants to point at anyway.</p>
+<p>See <code>examples/reaction-esterification.manic</code>, which builds A + B → C entirely from
+SMILES and marks the atoms that become the water.</p>
+<h3 id="writing-it-on"><a class="header" href="#writing-it-on">Writing it on</a></h3>
+<p>Because bonds are paths and labels are text, the handwriting effect is a core-kit
+idiom — nothing chemistry-specific:</p>
+<pre><code class="language-manic">structure(caf, "asset:molecules/caffeine-2d.sdf", (350, 372), 54);
+untraced(caf.bonds);
+hidden(caf.labels);
+
+stagger(0.05) { draw(caf.bonds, 0.4); }   // bond by bond
+show(caf.labels, 0.6);
+</code></pre>
+<p>Address <code>{id}.bonds</code>, not <code>{id}.b0…</code>: a skeletal drawing skips every C–H bond, so
+the surviving ids keep the file’s numbering <strong>with gaps in it</strong>.</p>
+<p>And since these are 2-D entities, <code>framebox</code> and <code>brace</code> work on them — which they
+do not on <code>molecule3</code>.</p>
+<h2 id="addressing-the-chemistry"><a class="header" href="#addressing-the-chemistry">Addressing the chemistry</a></h2>
+<p>Every piece is a plain tagged entity, so the core kit does the presentation:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>address</th><th>what it is</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{id}.a{i}</code></td><td>the i-th atom, in file order</td></tr>
+<tr><td><code>{id}.b{k}</code></td><td>the k-th bond (<code>.{n}</code> per line of a multiple bond, <code>.h{0,1}</code> per half)</td></tr>
+<tr><td><code>{id}.atoms</code> · <code>{id}.bonds</code></td><td>the two groups</td></tr>
+<tr><td><code>{id}.multibonds</code></td><td>only the double and triple bonds</td></tr>
+<tr><td><strong><code>{id}.&lt;element&gt;</code></strong></td><td><strong>every atom of one element</strong> — <code>{id}.O</code>, <code>{id}.N</code>, <code>{id}.Fe</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>That last one is the useful one, because it is how a lesson actually talks:</p>
+<pre><code class="language-manic">color(caf.N, cyan);       // "the nitrogens"
+pulse(caf.O);             // "watch the oxygens"
+view3(caf.N, "front");    // fly the camera to frame them
+opacity(caf.H, 0.25);     // push the hydrogens back
+</code></pre>
+<p><code>show</code>, <code>fade</code>, <code>hidden</code>, <code>color</code>, <code>hue</code>, <code>opacity</code>, <code>pulse</code>, <code>to</code>, <code>draw</code> +
+<code>untraced</code>, <code>shift3</code>, <code>rotate3</code>, <code>orbit3</code>, <code>camera3</code>, <code>finish3</code> and <code>view3</code> all
+work on a molecule, a group or one element.</p>
+<p><strong>Two limits worth knowing.</strong> <code>framebox</code> and <code>brace</code> measure 2-D screen bounds and
+do not see 3-D entities at all — that is true of <code>model3</code> and <code>sphere3</code> as much as
+a molecule; <code>view3</code> is the 3-D framing verb. And <code>draw</code> traces the <em>bonds</em> on (a
+bond is a path); an atom is a sphere, so it swells rather than draws.</p>
+<hr>
+<h2 id="the-bundled-molecules"><a class="header" href="#the-bundled-molecules">The bundled molecules</a></h2>
+<p><strong>192 molecules, 392 files</strong> under <code>asset:molecules/</code> — byte-exact PubChem
+downloads, most with both a 3-D conformer (<code>&lt;name&gt;.sdf</code>) and a 2-D depiction
+(<code>&lt;name&gt;-2d.sdf</code>). Enough to teach from without downloading anything.</p>
+<p>Grouped the way a syllabus is: inorganics and gases · hydrocarbons · aromatics and
+heterocycles · alcohols, carbonyls, acids and solvents · sugars · <strong>all twenty amino
+acids</strong> · nucleobases and nucleotides · vitamins · lipids, steroids and hormones ·
+neurotransmitters · medicines · flavours and famous molecules · industrial monomers.</p>
+<p>The full table with compound ids is
+<a href="https://github.com/anishnath/manic/blob/main/assets/molecules/INDEX.md"><code>assets/molecules/INDEX.md</code></a>.</p>
+<p>Some have <strong>no 3-D conformer</strong> — mostly salts, metal complexes and the largest
+molecules — so only the <code>-2d</code> file exists. And three names are deliberately absent:
+cellulose, starch and haemoglobin are polymers or proteins rather than compounds, so
+PubChem has no single record for them.</p>
+<p>Three honest caveats:</p>
+<ol>
+<li><strong>They are computed conformers, not measured structures.</strong> PubChem optimises
+with MMFF94, so a bond length sits within about 0.05 Å of the experimental value
+rather than on it. Right for teaching shape; not a source for a number you
+intend to quote.</li>
+<li><strong>Some have no 3-D conformer at all</strong> — mostly the inorganics and salts — so the
+2-D depiction is bundled and every z is zero. Such a molecule lies flat, and
+tilting it will show it edge-on.</li>
+<li><strong>PubChem writes benzene in Kekulé form</strong>, alternating single and double, rather
+than as a delocalised ring. That is the file being explicit, not the reader
+guessing.</li>
+</ol>
+<h3 id="your-own-file"><a class="header" href="#your-own-file">Your own file</a></h3>
+<p>Any <code>.sdf</code> or <code>.mol</code> works — pass a path instead of an <code>asset:</code> URI. From PubChem:</p>
+<pre><code>https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/2519/record/SDF?record_type=3d
+</code></pre>
+<p>A <strong>V3000</strong> molfile is refused with the command to convert it, rather than
+mis-parsed: <code>obabel in.sdf -O out.sdf --outputV2000</code>.</p>
+<hr>
+<h2 id="an-example-end-to-end"><a class="header" href="#an-example-end-to-end">An example end to end</a></h2>
+<p><em>Why molecules have shapes</em> — four molecules, four geometries, and not one
+coordinate in the script:</p>
+<pre><code class="language-manic">canvas("16:9"); template("black");
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+molecule3(w,  "asset:molecules/water.sdf",          (-6.4, 0, 0), 1.5);
+molecule3(am, "asset:molecules/ammonia.sdf",        (-2.1, 0, 0), 1.5);
+molecule3(me, "asset:molecules/methane.sdf",        ( 2.2, 0, 0), 1.5);
+molecule3(co, "asset:molecules/carbon-dioxide.sdf", ( 6.6, 0, 0), 1.5);
+
+text(t1, (196, 566), "bent");        text(t3, (760, 566), "tetrahedral");
+text(t2, (452, 566), "pyramidal");   text(t4, (1060, 566), "linear");
+wait(6);
+</code></pre>
+<p>The labels are shape <em>classes</em>, not measurements — the geometry on screen is the
+file’s, and there is no number in the script to disagree with it.</p>
+<p>See the <a href="#chemistry--real-molecules">chemistry gallery</a> for the full scenes.</p>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="circuits--draw-one-and-it-works"><a class="header" href="#circuits--draw-one-and-it-works">Circuits — draw one, and it works</a></h1>
 <p>The <strong>circuit kit</strong> takes a netlist and gives you a schematic that <strong>draws itself,
 carries real current, and answers questions</strong>. The numbers are not painted on:
@@ -6124,7 +6456,6 @@ circuit(rc, (640, 360), `
   resistor   0 0 5 0 r=1k
   capacitor  5 0 5 4 c=1u
   wire       5 4 0 4
-  ground     0 4
 `);
 probe(rc, (5, 0));
 run(rc, 6);
@@ -6153,6 +6484,13 @@ none to get wrong:</p>
 <p>Values take SI suffixes — <code>1k</code>, <code>4.7u</code>, <code>100n</code>, <code>10m</code>, <code>2M</code>. Lowercase <code>m</code> is
 milli and <code>M</code> is mega (SPICE’s habit of writing mega as <code>M</code> is a trap, so it is
 not one here).</p>
+<h3 id="ground-is-a-reference-not-a-component"><a class="header" href="#ground-is-a-reference-not-a-component"><code>ground</code> is a reference, not a component</a></h3>
+<p>The solver needs one node to measure everything else from. With no <code>ground</code> line
+the kit elects the first source’s negative terminal, so <strong>a single loop solves
+identically either way</strong> — the symbol adds nothing and a textbook figure of a cell
+and a lamp does not draw one. Write a <code>ground</code> when several sources or loops make
+it worth saying which node is zero, or when the schematic’s convention wants the
+symbol.</p>
 <h3 id="a-three-pin-part-still-takes-two-coordinates"><a class="header" href="#a-three-pin-part-still-takes-two-coordinates">A three-pin part still takes two coordinates</a></h3>
 <p>Its extra pins are <strong>derived</strong>, and this is the one thing worth memorising:</p>
 <div class="table-wrapper">
@@ -8316,6 +8654,7 @@ pulse(net.output);                 // flash the prediction
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 14 examples</li>
 <li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
 <li><a href="#physics--simulations">Physics — simulations</a> — 59 examples</li>
+<li><a href="#chemistry--real-molecules">Chemistry — real molecules</a> — 5 examples</li>
 <li><a href="#circuits--schematics-that-work">Circuits — schematics that work</a> — 3 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 5 examples</li>
@@ -19139,6 +19478,881 @@ wait(1.6);
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/nkQF8PlAiDE" title="Why a Spinning Ball Curves — Streamlines Around a Spinning Cylinder in manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="chemistry--real-molecules"><a class="header" href="#chemistry--real-molecules">Chemistry — real molecules</a></h1>
+<p><code>molecule3</code> reads an MDL structure file — a PubChem <em>Download → SDF</em>, or a <code>.mol</code> from RDKit — and lays out its atoms and bonds as ordinary 3-D entities. <strong>Nothing about the shape is authored:</strong> the coordinates are the file’s, in Ångströms, so a bond angle on screen is the one in the conformer someone computed. Atoms are CPK/Jmol coloured and sized by covalent radius; the molecule turns about its own axis by default, because a shape only reads in three dimensions. <code>structure</code> is the flat half — the <strong>skeletal formula</strong> a chemist puts on paper, with carbons as bare vertices, <code>OH</code> and <code>NH2</code> folded from the file’s explicit hydrogens, double bonds leaning into the ring, and wedge/hash bonds where the file records stereochemistry. See the <a href="#chemistry--molecules-that-know-their-own-shape">chemistry guide</a>.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="chemistry-kit-promo"><a class="header" href="#chemistry-kit-promo">chemistry-kit-promo</a></h2>
+<p>Five things a structure file can teach, in one scene and with no coordinate in the script:
+four molecules with four geometries (bent, pyramidal, tetrahedral, linear); the bond-order
+ladder, where a C-C, a C=C and a C≡C visibly tighten left to right because the files simply
+disagree about how far apart two carbons sit; salt against water, where the ionic pair has NO
+bond in its file and so no stick on the screen; caffeine in all four viewer styles; and
+cholesterol beside paclitaxel at 74 and 113 atoms.</p>
+<pre><code class="language-manic">// Molecules, from files that know their own shape
+//
+// Six things you can teach from a structure file, and not a coordinate in this script. Every atom
+// position comes from a PubChem download, so each claim below is a measurement rather than a
+// drawing: shape, bond order, isotope, ionic vs covalent, conformation, and scale.
+//
+// The molecules turn because that is the default. A shape only reads in three dimensions — flat,
+// methane is four lines from a dot.
+
+title("real molecules, real geometry");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 42), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+// ── 1. shape: four molecules, four geometries ──
+
+molecule3(waterm, "asset:molecules/water.sdf", (-6.4, 0, 0), 1.5);
+molecule3(ammonia, "asset:molecules/ammonia.sdf", (-2.1, 0, 0), 1.5);
+molecule3(methane, "asset:molecules/methane.sdf", (2.2, 0, 0), 1.5);
+molecule3(co2, "asset:molecules/carbon-dioxide.sdf", (6.6, 0, 0), 1.5);
+hidden(waterm); hidden(ammonia); hidden(methane); hidden(co2);
+
+text(h1, (640, 120), "the same four atoms count — four different shapes");
+size(h1, 27); color(h1, cyan); hidden(h1);
+
+text(n1, (196, 566), "H2O");     text(v1, (196, 604), "bent");
+text(n2, (452, 566), "NH3");     text(v2, (452, 604), "pyramidal");
+text(n3, (760, 566), "CH4");     text(v3, (760, 604), "tetrahedral");
+text(n4, (1060, 566), "CO2");    text(v4, (1060, 604), "linear");
+for i in 1..5 {
+  size(n{i}, 29); size(v{i}, 21); color(v{i}, dim);
+  hidden(n{i}); hidden(v{i});
+}
+color(n1, red); color(n2, blue); color(n3, silver); color(n4, red);
+
+wait(0.5);
+show(h1, 0.5);
+par { show(waterm, 0.6); show(n1, 0.4); show(v1, 0.4); }
+wait(0.5);
+par { show(ammonia, 0.6); show(n2, 0.4); show(v2, 0.4); }
+wait(0.5);
+par { show(methane, 0.6); show(n3, 0.4); show(v3, 0.4); }
+wait(0.5);
+par { show(co2, 0.6); show(n4, 0.4); show(v4, 0.4); }
+wait(2.0);
+
+// ── 2. bond order: a stronger bond is a shorter one ──
+//
+// Three carbon–carbon bonds, side by side and at one magnification. Nothing scales them to make
+// the point; the files simply disagree about how far apart two carbons sit.
+
+par {
+  fade(waterm, 0.4); fade(ammonia, 0.4); fade(methane, 0.4); fade(co2, 0.4); fade(h1, 0.4);
+  fade(n1, 0.3); fade(v1, 0.3); fade(n2, 0.3); fade(v2, 0.3);
+  fade(n3, 0.3); fade(v3, 0.3); fade(n4, 0.3); fade(v4, 0.3);
+}
+
+// Hydrogens off and spin off, so each molecule is reduced to the ONE bond being compared and
+// holds still long enough to compare it. Ethane comes from record 2 of the bundled alkane file —
+// an SDF is a library as often as it is a molecule.
+molecule3(ethane, "asset:molecules/alkanes.sdf", (-5.8, 0, 0), 2.6, "hydrogens=0 spin=0 record=2");
+molecule3(ethene, "asset:molecules/ethene.sdf", (0, 0, 0), 2.6, "hydrogens=0 spin=0");
+molecule3(ethyne, "asset:molecules/ethyne.sdf", (5.8, 0, 0), 2.6, "hydrogens=0 spin=0");
+hidden(ethane); hidden(ethene); hidden(ethyne);
+
+text(h2, (640, 120), "one bond, two bonds, three — and it pulls tighter each time");
+size(h2, 27); color(h2, lime); hidden(h2);
+text(b1, (300, 580), "C-C  single");
+text(b2, (640, 580), "C=C  double");
+text(b3, (980, 580), "C≡C  triple");
+for i in 1..4 { size(b{i}, 22); color(b{i}, dim); hidden(b{i}); }
+
+show(h2, 0.5);
+par { show(ethane, 0.6); show(b1, 0.4); }
+wait(0.5);
+par { show(ethene, 0.6); show(b2, 0.4); }
+wait(0.5);
+par { show(ethyne, 0.6); show(b3, 0.4); }
+wait(2.2);
+
+// ── 3. ionic against covalent ──
+//
+// Salt has no bonds in its file at all — two ions, drawn apart because nothing joins them. Water
+// does. That distinction is in the data, not in the drawing.
+
+par {
+  fade(ethane, 0.4); fade(ethene, 0.4); fade(ethyne, 0.4); fade(h2, 0.4);
+  fade(b1, 0.3); fade(b2, 0.3); fade(b3, 0.3);
+}
+
+molecule3(salt, "asset:molecules/sodium-chloride.sdf", (-4.4, 0, 0), 1.9);
+molecule3(wat2, "asset:molecules/water.sdf", (4.4, 0, 0), 1.9);
+hidden(salt); hidden(wat2);
+
+text(h3, (640, 120), "no bond in the file, no stick on the screen");
+size(h3, 27); color(h3, amber); hidden(h3);
+text(c1, (330, 580), "NaCl - two ions, nothing between them");
+text(c2, (980, 580), "H2O - bonded");
+for i in 1..3 { size(c{i}, 21); color(c{i}, dim); hidden(c{i}); }
+
+show(h3, 0.5);
+par { show(salt, 0.6); show(c1, 0.4); }
+wait(0.6);
+par { show(wat2, 0.6); show(c2, 0.4); }
+wait(2.2);
+
+// ── 4. what a molecule really looks like ──
+//
+// Caffeine four ways. Ball-and-stick shows what is bonded to what; hiding the hydrogens leaves the
+// skeleton a chemist draws; space-filling shows the shape the molecule presents to the world,
+// which is the one that decides what it fits into.
+
+par {
+  fade(salt, 0.4); fade(wat2, 0.4); fade(h3, 0.4); fade(c1, 0.3); fade(c2, 0.3);
+}
+
+molecule3(k1, "asset:molecules/caffeine.sdf", (-8.4, 0, 0), 0.52, "style=ball");
+molecule3(k2, "asset:molecules/caffeine.sdf", (-2.8, 0, 0), 0.52, "style=sticks");
+molecule3(k3, "asset:molecules/caffeine.sdf", (2.8, 0, 0), 0.52, "style=sticks hydrogens=0");
+molecule3(k4, "asset:molecules/caffeine.sdf", (8.4, 0, 0), 0.52, "style=spacefill");
+hidden(k1); hidden(k2); hidden(k3); hidden(k4);
+
+text(h4, (640, 120), "caffeine - one file, four questions");
+size(h4, 27); color(h4, magenta); hidden(h4);
+text(s1, (222, 596), "ball &amp; stick");
+text(s2, (492, 596), "sticks");
+text(s3, (770, 596), "no hydrogens");
+text(s4, (1052, 596), "space-filling");
+for i in 1..5 { size(s{i}, 20); color(s{i}, dim); hidden(s{i}); }
+
+show(h4, 0.5);
+par { show(k1, 0.5); show(s1, 0.4); }
+wait(0.45);
+par { show(k2, 0.5); show(s2, 0.4); }
+wait(0.45);
+par { show(k3, 0.5); show(s3, 0.4); }
+wait(0.45);
+par { show(k4, 0.5); show(s4, 0.4); }
+wait(2.4);
+
+// ── 5. and the scale it goes to ──
+//
+// Cholesterol is 74 atoms; paclitaxel is 113. Same builtin, same three lines.
+
+par {
+  fade(k1, 0.4); fade(k2, 0.4); fade(k3, 0.4); fade(k4, 0.4); fade(h4, 0.4);
+  fade(s1, 0.3); fade(s2, 0.3); fade(s3, 0.3); fade(s4, 0.3);
+}
+
+molecule3(chol, "asset:molecules/cholesterol.sdf", (-5.2, 0, 0), 0.62, "hydrogens=0");
+molecule3(taxol, "asset:molecules/paclitaxel.sdf", (5.0, 0, 0), 0.46, "hydrogens=0");
+hidden(chol); hidden(taxol);
+
+text(h5, (640, 120), "and it does not care how big the molecule gets");
+size(h5, 27); color(h5, cyan); hidden(h5);
+text(g1, (330, 596), "cholesterol - 74 atoms");
+text(g2, (980, 596), "paclitaxel - 113 atoms");
+for i in 1..3 { size(g{i}, 21); color(g{i}, dim); hidden(g{i}); }
+
+show(h5, 0.5);
+par { show(chol, 0.6); show(g1, 0.4); }
+wait(0.7);
+par { show(taxol, 0.6); show(g2, 0.4); }
+wait(2.6);
+
+// ── the close ──
+
+par {
+  fade(chol, 0.5); fade(taxol, 0.5); fade(h5, 0.4); fade(g1, 0.3); fade(g2, 0.3);
+}
+
+molecule3(last, "asset:molecules/caffeine.sdf", (0, 0, 0), 1.15, "spin=18");
+hidden(last);
+
+text(end1, (640, 168), "three lines of Manic");
+size(end1, 34); color(end1, silver); hidden(end1);
+text(end2, (640, 578), "molecule3(caf, \"asset:molecules/caffeine.sdf\");");
+size(end2, 23); color(end2, lime); hidden(end2);
+text(end3, (640, 616), "every angle measured, not drawn");
+size(end3, 21); color(end3, dim); hidden(end3);
+
+par { show(last, 0.8); show(end1, 0.6); }
+wait(0.6);
+par { show(end2, 0.5); show(end3, 0.5); }
+wait(3.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GDHGxHnHm14" title="Real Molecules, Real Geometry — Bond Order, Shape & Space-Filling from PubChem Files — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reaction-esterification"><a class="header" href="#reaction-esterification">reaction-esterification</a></h2>
+<p><strong>A + B → C, the way a textbook draws it</strong> — and there is no reaction builtin behind it.
+Acetic acid and ethanol give ethyl acetate and water; every molecule is a SMILES string laid out
+by the chemistry kit, and the plus signs, the arrow, the conditions and the whole choreography
+are the core kit. What the kit contributes is that the structures are REAL: the geometry is
+computed from the graph, so the ester bond in the product is the same bond that formed. The
+teaching beat is the middle one — the acid’s -OH and the alcohol’s -H are marked BEFORE the
+arrow, and the same colour turns up in the water afterwards, so “where did the water come from?”
+is answered by watching rather than by being told. SMILES atoms are numbered in written order,
+which is why <code>acid.a3</code> is the hydroxyl oxygen that leaves.</p>
+<pre><code class="language-manic">// A + B → C, the way a textbook draws it
+//
+// Esterification: acetic acid and ethanol give ethyl acetate and water. The classic school
+// reaction, and the classic school diagram — reactants, a plus, an arrow with its conditions,
+// products.
+//
+// There is no reaction builtin in Manic and this scene does not need one. Every molecule is a
+// SMILES string laid out by the chemistry kit; the plus signs, the arrow, the conditions and the
+// whole choreography are the core kit. What the kit contributes is that the structures are real:
+// the geometry is computed from the graph, not drawn by hand, so the ester bond in the product is
+// the same bond that formed.
+//
+// The teaching beat is the middle one. The acid's -OH and the alcohol's -H are marked BEFORE the
+// arrow, and the same colour turns up in the water afterwards — so the question "where did the
+// water come from?" is answered by watching, not by being told.
+
+title("esterification");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 18);
+color(brand, dim);
+
+text(heading, (640, 108), "acid + alcohol gives an ester, and water");
+size(heading, 30);
+color(heading, ink);
+hidden(heading);
+
+// ── the cast, all from SMILES strings ──
+
+structure(acid, "CC(=O)O", (190, 348), 76);
+structure(alc, "CCO", (487, 348), 76);
+structure(ester, "CC(=O)OCC", (900, 348), 66);
+structure(water, "O", (1198, 348), 60);
+
+// Everything starts as bare geometry, drawn on beat by beat.
+untraced(acid.bonds);
+untraced(alc.bonds);
+untraced(ester.bonds);
+hidden(acid.labels);
+hidden(alc.labels);
+hidden(ester.labels);
+hidden(water);
+
+// names under each structure
+text(n1, (190, 500), "acetic acid");
+text(n2, (487, 500), "ethanol");
+text(n3, (900, 500), "ethyl acetate");
+text(n4, (1198, 500), "water");
+for i in 1..5 {
+  size(n{i}, 21);
+  color(n{i}, dim);
+  hidden(n{i});
+}
+
+// the arithmetic of the diagram
+text(plus1, (348, 352), "+");
+text(plus2, (1105, 352), "+");
+size(plus1, 34); size(plus2, 34);
+color(plus1, ink); color(plus2, ink);
+hidden(plus1); hidden(plus2);
+
+// the arrow, and what sits over it
+arrow(rx, (640, 352), (782, 352));
+color(rx, ink);
+stroke(rx, 2.6);
+untraced(rx);
+
+text(cond, (711, 312), "H2SO4");
+size(cond, 19);
+color(cond, crimson);
+hidden(cond);
+text(cond2, (711, 390), "heat");
+size(cond2, 19);
+color(cond2, dim);
+hidden(cond2);
+
+// what the marked atoms become — declared up front, revealed later
+text(note, (640, 600), "the acid gives up an OH, the alcohol an H — together, water");
+size(note, 22);
+color(note, crimson);
+hidden(note);
+
+// ── 1. the reactants, written on ──
+
+wait(0.5);
+show(heading, 0.6);
+wait(0.3);
+
+stagger(0.09) { draw(acid.bonds, 0.45); }
+par { show(acid.labels, 0.5); show(n1, 0.4); }
+wait(0.35);
+show(plus1, 0.3);
+stagger(0.09) { draw(alc.bonds, 0.45); }
+par { show(alc.labels, 0.5); show(n2, 0.4); }
+wait(1.0);
+
+// ── 2. mark what is about to leave ──
+//
+// SMILES atoms are numbered in the order they are written, so `CC(=O)O` puts its hydroxyl oxygen
+// last — a3 — and `CCO` puts its oxygen at a2. That is the -OH and the -H that become water.
+
+par {
+  recolor(acid.a3, crimson, 0.6);
+  recolor(alc.a2, crimson, 0.6);
+}
+par { pulse(acid.a3); pulse(alc.a2); }
+wait(1.2);
+
+// ── 3. the arrow ──
+
+par {
+  draw(rx, 0.7);
+  show(cond, 0.5);
+  show(cond2, 0.5);
+}
+wait(0.8);
+
+// ── 4. the product, and the water it leaves behind ──
+
+stagger(0.07) { draw(ester.bonds, 0.4); }
+par { show(ester.labels, 0.5); show(n3, 0.4); }
+wait(0.5);
+show(plus2, 0.3);
+par { show(water, 0.6); show(n4, 0.4); }
+
+// the water carries the colour of the atoms it was made from
+recolor(water.O, crimson, 0.7);
+par { pulse(water.O); show(note, 0.6); }
+wait(2.6);
+
+// ── 5. and the bond that was made ──
+
+framebox(made, ester.O, 16, crimson);
+hidden(made);
+
+text(bond, (640, 600), "and the bond that was made joins them");
+size(bond, 21);
+color(bond, dim);
+hidden(bond);
+
+par {
+  fade(note, 0.4);
+  show(made, 0.6);
+  show(bond, 0.5);
+}
+wait(2.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WWtGvxhfX4Q" title="A + B → C — Esterification Drawn From SMILES, With No Reaction Builtin — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reaction-ord-screen"><a class="header" href="#reaction-ord-screen">reaction-ord-screen</a></h2>
+<p><strong>One real experiment, from the record.</strong> Open Reaction Database
+ord-00550a5de34040cea861e1ce0aca6f9e: a C-N coupling run in a single well of a 1536-well plate.
+Five solutions assemble across the top in the order the robot added them, each drawn on from the
+record’s own SMILES, with the record’s own amounts; then the conditions; then the outcome. The
+scheme is never taken away, so the last frame holds the whole experiment at once — which is the
+only honest way to show a result that depends on all of it. And the result is the point: 0.000%
+of the product they were aiming at, 5.201% of the other isomer. The reaction went, just not
+where they aimed it. The apparatus is RIGGED rather than slid — each instrument is split across
+two SVG files so its moving part is its own entity, and the head dips, the foil seals, the mixer
+block shakes and its indicator heats, all on core verbs.</p>
+<pre><code class="language-manic">// A C–N coupling, built the way the record reads it
+//
+// Open Reaction Database ord-00550a5de34040cea861e1ce0aca6f9e — Cernak lab, Michigan,
+// doi 10.1021/jacs.6c05959. Sample XZ_01-115-60_3_K3.
+//
+// The scheme ASSEMBLES and then stays: five solutions across the top in the order the robot added
+// them, the arrow and its conditions, then the outcome. Nothing is taken away, so by the last frame
+// the whole experiment is on screen at once — which is how the record itself is laid out, and the
+// only honest way to show a reaction whose answer depends on all of it.
+//
+// Every structure is drawn on from the record's own SMILES. Every number is the record's own,
+// including the two that matter: 0.000% of the product they wanted, and 5.201% of the isomer they
+// did not.
+
+title("a C-N coupling, one well of 1536");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the apparatus, RIGGED: parts that move are their own entities ──
+//
+// Each instrument is split across files so that its moving part is a separate manic entity.
+// A machine imported as one file can only be shifted as a blob, which is motion that ignores the
+// chemistry; imported as parts, the head travels while the frame holds still and the mixer block
+// shakes while its feet do not. Nothing here needs a new builtin — `shift`, `recolor`, `shake` and
+// `pulse` are the core kit, and they work because `svg()` emits a native entity per subpath rather
+// than a texture.
+//
+// The rail is a `rect`, not artwork: it is a straight line whose length has to match the row it
+// serves, so a primitive is both simpler and parametric.
+
+rect(rail, (574, 43), 1012, 4);
+color(rail, dim);
+opacity(rail, 0.4);
+hidden(rail);
+
+// The head hangs off the rail. Placement is arithmetic, not eyeballing: the two files share one
+// coordinate system, so with the head at 62px wide (scale 62/144 = 0.43) its centre sits
+// (74 - 127) * 0.43 = 23px below the rail, and the tips reach 30px below that. Rest is 66, so
+// the tips sit at 96 and a 10px dip reaches 106 — still clear of the role labels at 118.
+svg(hd, (150, 66), "asset:svg/chem/liquid-handler-head.svg", 62);
+hidden(hd);
+
+// the plate the additions go into, off at the end of the rail
+svg(plate, (1180, 132), "asset:svg/chem/plate-1536.svg", 170);
+hidden(plate);
+
+// the foil seal, waiting off-frame to the right — a 0.2 microlitre well does not survive
+// eighteen hours at 60 C unsealed
+svg(foil, (1292, 132), "asset:svg/chem/foil-seal.svg", 170);
+hidden(foil);
+
+// The mixer, in the empty quarter under the arrow. Same trick: body and block are separate files,
+// so `shake` moves the block alone.
+svg(mxBody, (280, 582), "asset:svg/chem/thermomixer-body.svg", 200);
+hidden(mxBody);
+svg(mxBlock, (280, 535), "asset:svg/chem/thermomixer-block.svg", 165);
+hidden(mxBlock);
+// the heat indicator changes over time, so it is a primitive rather than baked artwork
+circle(led, (240, 577), 5);
+color(led, dim);
+hidden(led);
+
+// ── the five solutions, left to right, in addition order ──
+//
+// Each cell is the reagent and the DMSO it arrived in, because that is what went into the well.
+
+structure(a1, "C[Si](C)(C)[O-].[Na+]",              (108, 196), 30);
+// The ligand comes from a 2-D depiction FILE, not its SMILES — and the reason is worth knowing.
+// The layout grows ALONG the string, so the order the ring closures are written in matters: the
+// record's own `COC1=CC=NC2=C3N=CC=C(OC)C3=CC=C12` strands a bond 3.6 lengths long and is refused,
+// while PubChem's canonical form of the SAME molecule draws cleanly. Rather than quietly swap in a
+// different string than the record's, use the depiction — which is what the refusal points at.
+// Everything else in the scene is the record's SMILES, verbatim.
+structure(a2, "asset:molecules/dimethoxyphenanthroline-2d.sdf", (330, 200), 21);
+structure(a3, "[Cu]O[Cu]",                          (556, 196), 34);
+structure(a4, "C1=CC=C(C2CCNCC2)C=C1",              (760, 196), 28);
+structure(a5, "IC1=CC=CN=C1",                       (960, 196), 32);
+structure(d1, "CS(C)=O", (196, 196), 22);
+structure(d2, "CS(C)=O", (430, 196), 22);
+structure(d3, "CS(C)=O", (640, 196), 22);
+structure(d4, "CS(C)=O", (856, 196), 22);
+structure(d5, "CS(C)=O", (1044, 196), 22);
+// Written out rather than looped: `a{i}.bonds` does not interpolate — a loop index reaches an id
+// but not a dotted tag on it, which is a known gap logged in CAPABILITIES.
+untraced(a1.bonds); untraced(a2.bonds); untraced(a3.bonds); untraced(a4.bonds); untraced(a5.bonds);
+untraced(d1.bonds); untraced(d2.bonds); untraced(d3.bonds); untraced(d4.bonds); untraced(d5.bonds);
+hidden(a1.labels); hidden(a2.labels); hidden(a3.labels); hidden(a4.labels); hidden(a5.labels);
+hidden(d1.labels); hidden(d2.labels); hidden(d3.labels); hidden(d4.labels); hidden(d5.labels);
+
+// role, name, amount — kept to three short lines per cell
+text(r1, (150, 118), "base");
+text(r2, (378, 118), "ligand");
+text(r3, (598, 118), "catalyst");
+text(r4, (806, 118), "nucleophile");
+text(r5, (1004, 118), "electrophile");
+for i in 1..6 { size(r{i}, 19); color(r{i}, ink); hidden(r{i}); }
+
+text(v1, (150, 286), "0.08 umol");
+text(v2, (378, 286), "0.004 umol");
+text(v3, (598, 286), "0.004 umol");
+text(v4, (806, 286), "0.06 umol");
+text(v5, (1004, 286), "0.04 umol");
+for i in 1..6 { size(v{i}, 17); color(v{i}, crimson); hidden(v{i}); }
+
+// the addition-order strip, which is the whole point of showing them in a row
+text(o1, (150, 318), "1");
+text(o2, (378, 318), "2");
+text(o3, (598, 318), "3");
+text(o4, (806, 318), "4");
+text(o5, (1004, 318), "5");
+for i in 1..6 { size(o{i}, 22); color(o{i}, dim); hidden(o{i}); }
+
+rect(strip, (577, 318), 1010, 34);
+color(strip, dim);
+outlined(strip);
+stroke(strip, 1.2);
+opacity(strip, 0.35);
+hidden(strip);
+
+// ── the arrow, and what happens over it ──
+
+arrow(rx, (240, 470), (470, 470));
+color(rx, ink);
+stroke(rx, 3);
+untraced(rx);
+
+text(c1, (355, 418), "60 °C · dry nitrogen");
+text(c2, (355, 444), "800 rpm · 18 h");
+for i in 1..3 { size(c{i}, 19); color(c{i}, ink); hidden(c{i}); }
+
+// ── the outcome ──
+
+structure(p1, "C1(N2CCC(C3=CC=CC=C3)CC2)=CC=CN=C1", (612, 500), 30);
+structure(p2, "Cn1c(=O)c2c(ncn2C)n(C)c1=O",         (826, 500), 28);
+structure(p3, "C1(N2CCC(C3=CC=CC=C3)CC2)=CC=NC=C1", (1010, 500), 30);
+untraced(p1.bonds); untraced(p2.bonds); untraced(p3.bonds);
+hidden(p1.labels); hidden(p2.labels); hidden(p3.labels);
+
+text(y1, (612, 620), "0.000%");
+size(y1, 30); color(y1, crimson); hidden(y1);
+text(y2, (826, 620), "standard");
+size(y2, 20); color(y2, dim); hidden(y2);
+text(y3, (1010, 620), "5.201%");
+size(y3, 30); color(y3, indigo); hidden(y3);
+
+text(y1b, (612, 654), "the target");
+size(y1b, 17); color(y1b, dim); hidden(y1b);
+text(y3b, (1010, 654), "the other isomer");
+size(y3b, 17); color(y3b, dim); hidden(y3b);
+
+text(cite, (640, 700), "ORD ord-00550a5de34040cea861e1ce0aca6f9e · doi 10.1021/jacs.6c05959");
+size(cite, 13); color(cite, dim); hidden(cite);
+
+// ── ACT 1: where this happens ──
+
+wait(0.4);
+par { show(plate, 0.7); show(cite, 0.5); }
+par { show(rail, 0.5); show(hd, 0.6); show(strip, 0.5); }
+// the head is charged, and stays charged: the tips are `hd.p3`..`hd.p6`, four of the seven
+// subpaths in the head file, addressable because an imported SVG is entities and not a picture
+par {
+  recolor(hd.p3, indigo, 0.4);
+  recolor(hd.p4, indigo, 0.4);
+  recolor(hd.p5, indigo, 0.4);
+  recolor(hd.p6, indigo, 0.4);
+}
+wait(0.6);
+
+// ── ACT 2: five additions. The head DIPS at each one; each cell draws on and STAYS. ──
+//
+// The dip is the beat: the head goes down as the reagent goes in, so the machine is doing the
+// thing the addition-order strip is counting, rather than sliding past it.
+
+par { show(r1, 0.3); show(o1, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a1.bonds, 0.7); draw(d1.bonds, 0.5); }
+par { show(a1.labels, 0.4); show(d1.labels, 0.4); show(v1, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (228, 0), 0.5); show(r2, 0.3); show(o2, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a2.bonds, 0.9); draw(d2.bonds, 0.5); }
+par { show(a2.labels, 0.4); show(d2.labels, 0.4); show(v2, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (220, 0), 0.5); show(r3, 0.3); show(o3, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a3.bonds, 0.6); draw(d3.bonds, 0.5); }
+par { show(a3.labels, 0.4); show(d3.labels, 0.4); show(v3, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (208, 0), 0.5); show(r4, 0.3); show(o4, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a4.bonds, 0.9); draw(d4.bonds, 0.5); }
+par { show(a4.labels, 0.4); show(d4.labels, 0.4); show(v4, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (198, 0), 0.5); show(r5, 0.3); show(o5, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a5.bonds, 0.7); draw(d5.bonds, 0.5); }
+par { show(a5.labels, 0.4); show(d5.labels, 0.4); show(v5, 0.4); }
+shift(hd, (0, -10), 0.25);
+// the limiting reagent, marked where it stands
+par { recolor(v5, indigo, 0.5); pulse(a5.I); }
+wait(0.8);
+
+// ── ACT 3: seal it, heat it, shake it. ──
+//
+// Three separate motions on three separate parts, which is the whole reason the instruments were
+// split into files: the foil travels, the block shakes, the indicator changes colour.
+
+par { fade(hd, 0.4); fade(rail, 0.4); }
+par { show(foil, 0.3); shift(foil, (-112, 0), 0.7); }
+wait(0.2);
+
+par { show(mxBody, 0.5); show(mxBlock, 0.5); show(led, 0.4); }
+par { draw(rx, 0.8); show(c1, 0.4); show(c2, 0.4); }
+recolor(led, crimson, 0.5);          // 60 C, and the block starts to move
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+wait(0.7);
+
+// ── ACT 4: the outcome — A + B → C, and what actually came out ──
+
+// the bench has done its job; the chemistry is what is left
+par { fade(mxBody, 0.5); fade(mxBlock, 0.5); fade(led, 0.4); }
+par { draw(p2.bonds, 0.7); show(p2.labels, 0.4); }
+show(y2, 0.4);
+wait(0.5);
+
+par { draw(p1.bonds, 0.9); show(p1.labels, 0.4); }
+par { show(y1, 0.5); show(y1b, 0.4); }
+wait(1.0);
+
+par { draw(p3.bonds, 0.9); show(p3.labels, 0.4); }
+par { show(y3, 0.5); show(y3b, 0.4); }
+wait(1.2);
+
+// the one difference between them, marked on both
+par { recolor(p1.N, crimson, 0.6); recolor(p3.N, indigo, 0.6); }
+par { pulse(p1.N); pulse(p3.N); }
+wait(1.0);
+
+// No closing line. The two marked nitrogens and the two numbers under them are the reading of it,
+// and saying it in words as well only tells the viewer what they have just been shown.
+wait(3.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xrTsh3Kl1q4" title="0.000% of What They Wanted — One Real Reaction From the Open Reaction Database — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="structure-to-shape"><a class="header" href="#structure-to-shape">structure-to-shape</a></h2>
+<p><strong>The step students actually get stuck on.</strong> A structural formula is a page of lines and
+letters; a molecule is a lump in three dimensions, and told they are the same thing most
+people nod and privately keep two unrelated pictures. So the formula writes itself on bond by
+bond (<code>untraced</code> + <code>stagger { draw(...) }</code> — core verbs, nothing chemistry-specific), then the
+same compound’s 3-D conformer appears beside it, turning. Then <code>recolor</code> marks the four
+nitrogens on BOTH sides at once, because each kit tags an atom by its element — so “the
+nitrogens” is something you can say to the scene rather than a set of indices to look up.
+The left side is read from the 2-D depiction record, the right from the 3-D conformer.</p>
+<pre><code class="language-manic">// The flat formula and the real shape are the same molecule
+//
+// This is the step students actually get stuck on. A structural formula is a page of lines and
+// letters; a molecule is a lump in three dimensions. Told they are the same thing, most people
+// nod and privately keep two unrelated pictures.
+//
+// So: draw the formula on, bond by bond, the way you would on paper. Then put the real geometry
+// beside it, turning, from the same compound in PubChem. Both sides are read from files — the
+// left from the 2-D depiction record, the right from the 3-D conformer — so nothing here is an
+// artist's impression of the other.
+
+title("the formula and the shape");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 42), "maniclang.com");
+display(brand);
+size(brand, 19);
+color(brand, dim);
+
+// The 3-D scene covers the whole canvas, so the molecule is put at the ORIGIN and the camera is
+// aimed off to the left instead — which slides the subject into the right half of the frame and
+// keeps it there while it turns. Moving the molecule sideways instead pushes it toward the camera
+// and it grows and clips.
+camera3((0, -18, 5), (-4.2, 0, 0), 32);
+
+// ── the page: a structural formula, drawn by hand ──
+
+structure(flat, "asset:molecules/caffeine-2d.sdf", (350, 372), 54);
+untraced(flat.bonds);
+hidden(flat.labels);
+
+// ── the substance: the same compound's 3-D conformer ──
+
+molecule3(solid, "asset:molecules/caffeine.sdf", (0, 0, 0), 0.66, "spin=22");
+hidden(solid);
+
+text(t1, (350, 128), "caffeine, as it is written");
+size(t1, 26); color(t1, ink); hidden(t1);
+text(t2, (350, 660), "one line per bond, letters where a chemist letters them");
+size(t2, 19); color(t2, dim); hidden(t2);
+
+text(t3, (966, 128), "caffeine, as it is");
+size(t3, 26); color(t3, ink); hidden(t3);
+text(t4, (966, 660), "the same compound, its computed 3-D conformer");
+size(t4, 19); color(t4, dim); hidden(t4);
+
+// ── beat 1: write the formula ──
+
+wait(0.6);
+show(t1, 0.5);
+
+// Drawn bond by bond, in the file's own order — the handwriting effect, from the core kit's
+// `stagger` and `draw`. Nothing chemistry-specific about it.
+//
+// Addressed by TAG, not by index: a skeletal drawing skips every C–H bond, so the surviving bond
+// ids are the file's own numbering with gaps in it. `{id}.bonds` is whatever was actually drawn.
+stagger(0.05) {
+  draw(flat.bonds, 0.4);
+}
+show(flat.labels, 0.6);
+show(t2, 0.5);
+wait(1.4);
+
+// ── beat 2: and here is the thing itself ──
+
+par { show(solid, 0.9); show(t3, 0.5); }
+show(t4, 0.5);
+wait(2.0);
+
+// ── beat 3: the same nitrogens, on both sides at once ──
+//
+// Four nitrogens on the page and four in the solid. Recolouring them is one verb per side, because
+// both kits tag an atom by its element — so "the nitrogens" is something you can say to the
+// scene, not a set of indices you have to look up.
+
+text(t5, (640, 596), "four nitrogens, the same four");
+size(t5, 23); color(t5, indigo); hidden(t5);
+
+// `recolor`, not `color`: `color` is a build-time setting and belongs above the timeline, while
+// `recolor` is the verb that changes a colour DURING the story.
+par {
+  recolor(flat.N, indigo, 0.7);
+  recolor(solid.N, indigo, 0.7);
+  show(t5, 0.5);
+}
+wait(2.6);
+
+// ── beat 4: and the oxygens ──
+
+text(t6, (640, 596), "and the two oxygens");
+size(t6, 23); color(t6, red); hidden(t6);
+
+par { fade(t5, 0.35); }
+par {
+  pulse(flat.O);
+  pulse(solid.O);
+  show(t6, 0.5);
+}
+wait(2.8);
+</code></pre>
+<div class="manic-video" data-video="ex-structure-to-shape"></div>
+
+<h2 id="molecule-shapes"><a class="header" href="#molecule-shapes">molecule-shapes</a></h2>
+<p>Why molecules have shapes — water bent, ammonia pyramidal, methane tetrahedral, carbon
+dioxide linear, each turning on its own axis. The labels are shape CLASSES, not
+measurements: the geometry is the file’s and there is no number in the script to disagree
+with it. Then caffeine four ways — ball &amp; stick, sticks, hydrogens hidden (the skeleton a
+chemist draws), and space-filling.</p>
+<pre><code class="language-manic">// Why molecules have shapes
+//
+// Four molecules, four shapes — and not one coordinate in this file. Each `molecule3` reads a
+// PubChem structure file (a real "Download → SDF"), so every bond angle you see is the one in the
+// conformer someone computed: water bent, ammonia pyramidal, methane tetrahedral, carbon dioxide
+// dead straight.
+//
+// They turn on their own axes because that is the default — and it is the whole argument for doing
+// this in three dimensions. On a flat page methane is four lines from a dot and "tetrahedral" is a
+// claim you take on trust; turning, the shape is simply visible. Same for ammonia's pyramid, which
+// flat looks like a T.
+
+title("why molecules have shapes");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 44), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+// Looking down at about 30°, not along the plane: caffeine is FLAT, and edge-on a flat molecule
+// is a line. The elevation also happens to be what makes methane's tetrahedron read.
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+// Four PubChem downloads, laid out left to right at one magnification, so they are genuinely
+// comparable in size. `spin` is degrees per second — the default; `spin=0` would hold one still.
+molecule3(waterm, "asset:molecules/water.sdf", (-6.4, 0, 0), 1.5, "spin=26");
+molecule3(ammonia, "asset:molecules/ammonia.sdf", (-2.1, 0, 0), 1.5, "spin=26");
+molecule3(methane, "asset:molecules/methane.sdf", (2.2, 0, 0), 1.5, "spin=26");
+molecule3(co2, "asset:molecules/carbon-dioxide.sdf", (6.6, 0, 0), 1.5, "spin=26");
+
+hidden(waterm);
+hidden(ammonia);
+hidden(methane);
+hidden(co2);
+
+// Formulae and shape CLASSES — not measurements. The geometry on screen is the file's, and nothing
+// here restates it as a number.
+text(t1, (196, 560), "H2O");
+text(s1, (196, 600), "bent");
+text(t2, (452, 560), "NH3");
+text(s2, (452, 600), "pyramidal");
+text(t3, (760, 560), "CH4");
+text(s3, (760, 600), "tetrahedral");
+text(t4, (1060, 560), "CO2");
+text(s4, (1060, 600), "linear");
+
+for i in 1..5 {
+  hidden(t{i});
+  hidden(s{i});
+  size(t{i}, 30);
+  size(s{i}, 22);
+  color(s{i}, dim);
+}
+color(t1, red);
+color(t2, blue);
+color(t3, silver);
+color(t4, red);
+
+// ── one at a time, each already turning as it arrives ──
+
+wait(0.7);
+par { show(waterm, 0.7); show(t1, 0.5); show(s1, 0.5); }
+wait(0.9);
+par { show(ammonia, 0.7); show(t2, 0.5); show(s2, 0.5); }
+wait(0.9);
+par { show(methane, 0.7); show(t3, 0.5); show(s3, 0.5); }
+wait(0.9);
+par { show(co2, 0.7); show(t4, 0.5); show(s4, 0.5); }
+wait(1.6);
+
+// ── the four styles a chemistry viewer offers, on the one molecule ──
+//
+// Same file, same coordinates, four questions. Ball-and-stick shows what is bonded to what;
+// sticks gets the spheres out of the way of the geometry; hiding the hydrogens leaves the carbon
+// skeleton an organic chemist actually draws; space-filling shows the shape the molecule presents
+// to the world — which is the one that explains why it fits somewhere, or does not.
+
+par {
+  fade(waterm, 0.5); fade(ammonia, 0.5); fade(methane, 0.5); fade(co2, 0.5);
+  fade(t1, 0.4); fade(s1, 0.4); fade(t2, 0.4); fade(s2, 0.4);
+  fade(t3, 0.4); fade(s3, 0.4); fade(t4, 0.4); fade(s4, 0.4);
+}
+
+// No `tilt` here on purpose. Caffeine is FLAT and lies in the xy plane, so turning it about the
+// vertical keeps it in its own plane and it presents the same face to the camera throughout. Lean
+// it with `tilt` and the spin walks it through edge-on, where a flat molecule is a line — `tilt`
+// and `axis=x|y|z` are there for when you want that (a molecule rolling end over end), not for a
+// comparison like this one.
+molecule3(c1, "asset:molecules/caffeine.sdf", (-8.4, 0, 0), 0.52, "style=ball");
+molecule3(c2, "asset:molecules/caffeine.sdf", (-2.8, 0, 0), 0.52, "style=sticks");
+molecule3(c3, "asset:molecules/caffeine.sdf", (2.8, 0, 0), 0.52, "style=sticks hydrogens=0");
+molecule3(c4, "asset:molecules/caffeine.sdf", (8.4, 0, 0), 0.52, "style=spacefill");
+hidden(c1); hidden(c2); hidden(c3); hidden(c4);
+
+text(cap, (640, 130), "caffeine, four ways to look at it");
+hidden(cap);
+size(cap, 28);
+color(cap, cyan);
+
+text(k1, (222, 600), "ball &amp; stick");
+text(k2, (492, 600), "sticks");
+text(k3, (770, 600), "no hydrogens");
+text(k4, (1052, 600), "space-filling");
+for i in 1..5 {
+  hidden(k{i});
+  size(k{i}, 21);
+  color(k{i}, dim);
+}
+
+show(cap, 0.5);
+par { show(c1, 0.6); show(k1, 0.4); }
+wait(0.7);
+par { show(c2, 0.6); show(k2, 0.4); }
+wait(0.7);
+par { show(c3, 0.6); show(k3, 0.4); }
+wait(0.7);
+par { show(c4, 0.6); show(k4, 0.4); }
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/fPHLX9N5ElQ" title="Why Molecules Have Shapes — Bent, Pyramidal, Tetrahedral & Linear, Measured Not Drawn — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="circuits--schematics-that-work"><a class="header" href="#circuits--schematics-that-work">Circuits — schematics that work</a></h1>
 <p>A netlist in, a working schematic out: Modified Nodal Analysis under easy builtins, so every voltage, current and glow on screen was <strong>solved</strong> rather than drawn. The schematic draws itself one component at a time and each PREFIX of it is solved, so nothing flows until the loop closes; <code>cut</code> takes a component out of the circuit and what is left is re-solved from scratch. See the <a href="#circuits--draw-one-and-it-works">circuits guide</a>.</p>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
@@ -19172,6 +20386,9 @@ size(brand, 20);
 color(brand, dim);
 
 // ── the schematic, drawn the way the book draws it: two lamps, one cell, one loop ──
+//
+// And no ground symbol, exactly as the book draws it: a ground only NAMES the reference node, and
+// this loop has nothing to reference. The kit elects the cell's negative terminal.
 
 circuit(fig, (560, 330), `
   lamp       1 0 5 0 r=120 name=L1
@@ -19181,7 +20398,6 @@ circuit(fig, (560, 330), `
   dc-voltage 6 4 4 4 v=6
   wire       4 4 1 4
   wire       1 4 1 0
-  ground     6 4
 `, 62, 0, 0);
 
 current(fig, 1.4, circle, crimson, 4);
@@ -19293,7 +20509,7 @@ par {
 run(fig, 4.0);
 wait(0.9);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/97H-XAuud3Y" title="If One Filament Breaks, Does the Other Lamp Glow? — a Solved Circuit Answers (Class 9) — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/sYNwOSVP48Q" title="If One Filament Breaks, Does the Other Lamp Glow? — a Solved Circuit Answers (Class 9) — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="circuit-does-current-flow"><a class="header" href="#circuit-does-current-flow">circuit-does-current-flow</a></h2>
 <p>The teaching beat end to end: a battery, a switch, a lamp and the wires between them
@@ -19328,7 +20544,6 @@ circuit(loop, (600, 400), `
   lamp       11 0 11 6 r=180 name=L1
   wire       11 6 6 6 name=RET
   wire       6 6 0 6
-  ground     0 6
 `, 58);
 
 // The animator's dial on the current: a little quicker than the circuit's own pace, because a
@@ -19395,7 +20610,7 @@ reconnect(loop, RET, 0.9);
 run(loop, 3.5);
 wait(0.8);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/iL8PtBBt0BA" title="Does Current Flow? Cut One Wire and Watch the Lamp Go Out — Circuit Animation — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/4UUbj68zZJo" title="Does Current Flow? Cut One Wire and Watch the Lamp Go Out — Circuit Animation — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <h2 id="circuit-kit-promo"><a class="header" href="#circuit-kit-promo">circuit-kit-promo</a></h2>
 <p>Six circuits on a textbook page, each erasing itself, drawing itself back, naming itself
@@ -19415,7 +20630,7 @@ proportionality between branches untouched.</p>
 
 title("six circuits");
 canvas("16:9");
-template("paper");
+template("black");
 
 text(brand, (640, 40), "maniclang.com");
 display(brand);
@@ -19423,13 +20638,17 @@ size(brand, 22);
 color(brand, dim);
 
 // ── the board: complete from t = 0, so the first frame is already the whole kit ──
+//
+// No `ground` line anywhere: a ground is a REFERENCE, not a component. MNA needs one node to
+// measure from, and with none written the kit elects the source's negative terminal — so a single
+// loop solves identically either way, and the symbol would only be clutter. Write one when a
+// circuit has several sources or loops and you want to say which node is zero.
 
 circuit(ohm, (250, 240), `
   dc-voltage 0 4 0 0 v=9
   resistor   0 0 4 0 r=1k
   wire       4 0 4 4
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(divider, (640, 240), `
@@ -19437,7 +20656,6 @@ circuit(divider, (640, 240), `
   resistor   0 0 4 0 r=3k
   resistor   4 0 4 4 r=1k
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(rc, (1030, 240), `
@@ -19445,7 +20663,6 @@ circuit(rc, (1030, 240), `
   resistor   0 0 4 0 r=1k
   capacitor  4 0 4 4 c=10u
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(rl, (250, 512), `
@@ -19453,7 +20670,6 @@ circuit(rl, (250, 512), `
   resistor   0 0 4 0 r=100
   inductor   4 0 4 4 l=10m
   wire       4 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(rect, (640, 512), `
@@ -19461,7 +20677,6 @@ circuit(rect, (640, 512), `
   diode      0 0 3 0
   resistor   3 0 3 4 r=1k
   wire       3 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 circuit(led, (1030, 512), `
@@ -19469,7 +20684,6 @@ circuit(led, (1030, 512), `
   resistor   0 0 3 0 r=330
   led        3 0 3 4
   wire       3 4 0 4
-  ground     0 4
 `, 40, 1, 0);
 
 // ── a different current in every panel: shape, colour, pace ──
@@ -19611,7 +20825,7 @@ par {
 }
 wait(0.7);
 </code></pre>
-<div class="manic-video"><iframe src="https://www.youtube.com/embed/pgLtFushEUQ" title="Six Circuits That Draw Themselves — Ohm's Law, RC, RL, Rectifier & LED, All Solved — manic" allowfullscreen loading="lazy"></iframe></div>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Y4WQeREIp3g" title="Six Circuits That Draw Themselves — Ohm's Law, RC, RL, Rectifier & LED, All Solved — manic" allowfullscreen loading="lazy"></iframe></div>
 
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="optics--light-as-geometry"><a class="header" href="#optics--light-as-geometry">Optics — light as geometry</a></h1>
@@ -44810,7 +46024,7 @@ it never exposes render-host or provisioning endpoints.</p>
 semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/blob/main/API.md">platform API contract</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- GENERATED by scripts/gen-api.py; do not edit by hand. -->
 <h1 id="manic-api-reference"><a class="header" href="#manic-api-reference">Manic API reference</a></h1>
-<p>The complete index of every Manic builtin — <strong>459 builtins across 18 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
+<p>The complete index of every Manic builtin — <strong>461 builtins across 19 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
 <h2 id="reading-a-signature"><a class="header" href="#reading-a-signature">Reading a signature</a></h2>
 <ul>
 <li><code>new id</code> is the name created by a constructor.</li>
@@ -45253,7 +46467,7 @@ semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/
 <tr><th>API</th><th>Kind</th><th>What it does</th></tr>
 </thead>
 <tbody>
-<tr><td><code>circuit(id: new id, center: (x, y), netlist: string, [unit: number], [labels: number], [build: number])</code></td><td>constructor / setup</td><td>draw a schematic from a netlist and solve it. One component per line — <code>&lt;type&gt; &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; [key=value …]</code>, <code>ground &lt;x&gt; &lt;y&gt;</code>, <code>#</code> comments — placed on an integer grid, and the TOPOLOGY comes from the geometry: points that coincide (or are joined by a <code>wire</code>) are the same node, so there are no node numbers to write. Known types: wire, ground, resistor, capacitor, inductor, dc-voltage, ac-voltage, dc-current, switch, lamp, diode, led, zener, bjt-npn, bjt-pnp, mosfet-n, mosfet-p, opamp (junctions, transistors and op-amps are solved by Newton–Raphson; <code>is=</code>/<code>n=</code> set a junction, <code>vz=</code> a zener’s breakdown, <code>beta=</code> a bipolar’s gain, <code>vth=</code>/<code>kp=</code> a MOSFET, <code>gain=</code>/<code>rail=</code> an op-amp) — plus DIGITAL: and-gate, or-gate, nand-gate, nor-gate, xor-gate, not-gate, logic-input (<code>state=1</code>), logic-output. A gate’s output is a real 5 V / 0 V node, held for one timestep, so a chain settles a gate-delay at a time. SEQUENTIAL: d-flipflop, sr-flipflop, jk-flipflop — four pins each (the two outputs are the derived pins one and two steps below the second coordinate), and each output is separately driven, so Q and Q̄ are real complementary nodes. SWITCHING AND THRESHOLDS: clock (a square wave, <code>value</code> is its frequency in Hz), push-switch (normally OPEN, closed only while pressed), spdt-switch (three pins: common, then a throw on each of the derived pins, <code>state=1</code> selects the first), ideal-switch (three pins: a control pin that carries no current, then the two terminals it connects — <code>threshold=</code> sets the control voltage it closes above), fuse (<code>rating=</code> amps; it blows once and stays open, and the symbol shows it), comparator (three pins: V+, V−, output — 5 V when V+ is higher), schmitt (<code>vhi=</code>/<code>vlo=</code> its two switching points, which is what stops it chattering on a noisy crossing), polarized-cap (a capacitor that draws its polarity). MORE DEVICES: jfet-n/jfet-p (<code>idss=</code>/<code>vpinch=</code>) — a DEPLETION transistor, conducting at zero gate voltage and pinched off by a negative one, which is the opposite of a MOSFET; relay (<code>coilr=</code>/<code>pullin=</code>) — FOUR pins, a coil and the contacts it closes, two circuits coupled mechanically rather than electrically; vco (<code>fcenter=</code>/<code>gain=</code> hertz per volt, three pins: control, output, ground) — a square wave whose frequency follows its control pin, integrated as a phase so the frequency can move without the waveform jumping. A THREE-pin part still takes two coordinates — its third pin sits one grid step below the second, and a relay’s fourth sits below its FIRST. COMPOSITES, built out of INTERNAL nodes the geometry never names: darlington-npn/darlington-pnp (<code>beta1=</code>) is genuinely two transistors sharing a base–emitter connection, so it carries both the β₁·β₂ gain and the two-junction 1.2 V base drop; transmission-line (<code>z0=</code>/<code>delay=</code>/<code>sections=</code>, FOUR pins — the input pair are the written points, the output pair hang below them) is a ladder of L–C sections, which is what a DELAY actually is, so a step arrives late rather than instantly (more sections = a cleaner edge; the delay itself is exact either way). Values take SI suffixes (<code>1k</code>, <code>4.7u</code>, <code>100n</code>). Parts are <code>{id}.c{k}</code> (and <code>{id}.&lt;name&gt;</code> when a line says <code>name=R1</code>), tagged {id} + {id}.parts + <code>{id}.&lt;type&gt;s</code>; junction dots are <code>{id}.n{node}</code>, tagged {id}.nodes; value text is tagged {id}.labels. <code>unit</code> is px per grid step (default 46); <code>labels</code> 0 hides the values. <strong>The schematic DRAWS ITSELF by default</strong>, one component at a time in netlist order — the netlist is already the order a teacher would draw it in — and each PREFIX of it is really solved, so nothing flows until the loop closes and then everything does at once. <code>build</code> is the share of <code>run</code> spent drawing (default 0.35): it needs a <code>run(id, dur)</code> to play, and <code>build</code> 0 gives the finished schematic at t=0 instead, which is what a film’s opening frame wants. Value labels, junction dots and probes arrive with the component they belong to. Solved by Modified Nodal Analysis, so KCL and KVL hold by construction</td></tr>
+<tr><td><code>circuit(id: new id, center: (x, y), netlist: string, [unit: number], [labels: number], [build: number])</code></td><td>constructor / setup</td><td>draw a schematic from a netlist and solve it. One component per line — <code>&lt;type&gt; &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; [key=value …]</code>, <code>ground &lt;x&gt; &lt;y&gt;</code>, <code>#</code> comments — placed on an integer grid, and the TOPOLOGY comes from the geometry: points that coincide (or are joined by a <code>wire</code>) are the same node, so there are no node numbers to write. <code>ground</code> is a REFERENCE, not a component: the solver needs one node to measure from, and with no ground line the kit elects the first source’s negative terminal — so a single loop solves identically either way and the symbol is just clutter. Write one when several sources or loops make it worth saying which node is zero. Known types: wire, ground, resistor, capacitor, inductor, dc-voltage, ac-voltage, dc-current, switch, lamp, diode, led, zener, bjt-npn, bjt-pnp, mosfet-n, mosfet-p, opamp (junctions, transistors and op-amps are solved by Newton–Raphson; <code>is=</code>/<code>n=</code> set a junction, <code>vz=</code> a zener’s breakdown, <code>beta=</code> a bipolar’s gain, <code>vth=</code>/<code>kp=</code> a MOSFET, <code>gain=</code>/<code>rail=</code> an op-amp) — plus DIGITAL: and-gate, or-gate, nand-gate, nor-gate, xor-gate, not-gate, logic-input (<code>state=1</code>), logic-output. A gate’s output is a real 5 V / 0 V node, held for one timestep, so a chain settles a gate-delay at a time. SEQUENTIAL: d-flipflop, sr-flipflop, jk-flipflop — four pins each (the two outputs are the derived pins one and two steps below the second coordinate), and each output is separately driven, so Q and Q̄ are real complementary nodes. SWITCHING AND THRESHOLDS: clock (a square wave, <code>value</code> is its frequency in Hz), push-switch (normally OPEN, closed only while pressed), spdt-switch (three pins: common, then a throw on each of the derived pins, <code>state=1</code> selects the first), ideal-switch (three pins: a control pin that carries no current, then the two terminals it connects — <code>threshold=</code> sets the control voltage it closes above), fuse (<code>rating=</code> amps; it blows once and stays open, and the symbol shows it), comparator (three pins: V+, V−, output — 5 V when V+ is higher), schmitt (<code>vhi=</code>/<code>vlo=</code> its two switching points, which is what stops it chattering on a noisy crossing), polarized-cap (a capacitor that draws its polarity). MORE DEVICES: jfet-n/jfet-p (<code>idss=</code>/<code>vpinch=</code>) — a DEPLETION transistor, conducting at zero gate voltage and pinched off by a negative one, which is the opposite of a MOSFET; relay (<code>coilr=</code>/<code>pullin=</code>) — FOUR pins, a coil and the contacts it closes, two circuits coupled mechanically rather than electrically; vco (<code>fcenter=</code>/<code>gain=</code> hertz per volt, three pins: control, output, ground) — a square wave whose frequency follows its control pin, integrated as a phase so the frequency can move without the waveform jumping. A THREE-pin part still takes two coordinates — its third pin sits one grid step below the second, and a relay’s fourth sits below its FIRST. COMPOSITES, built out of INTERNAL nodes the geometry never names: darlington-npn/darlington-pnp (<code>beta1=</code>) is genuinely two transistors sharing a base–emitter connection, so it carries both the β₁·β₂ gain and the two-junction 1.2 V base drop; transmission-line (<code>z0=</code>/<code>delay=</code>/<code>sections=</code>, FOUR pins — the input pair are the written points, the output pair hang below them) is a ladder of L–C sections, which is what a DELAY actually is, so a step arrives late rather than instantly (more sections = a cleaner edge; the delay itself is exact either way). Values take SI suffixes (<code>1k</code>, <code>4.7u</code>, <code>100n</code>). Parts are <code>{id}.c{k}</code> (and <code>{id}.&lt;name&gt;</code> when a line says <code>name=R1</code>), tagged {id} + {id}.parts + <code>{id}.&lt;type&gt;s</code>; junction dots are <code>{id}.n{node}</code>, tagged {id}.nodes; value text is tagged {id}.labels. <code>unit</code> is px per grid step (default 46); <code>labels</code> 0 hides the values. <strong>The schematic DRAWS ITSELF by default</strong>, one component at a time in netlist order — the netlist is already the order a teacher would draw it in — and each PREFIX of it is really solved, so nothing flows until the loop closes and then everything does at once. <code>build</code> is the share of <code>run</code> spent drawing (default 0.35): it needs a <code>run(id, dur)</code> to play, and <code>build</code> 0 gives the finished schematic at t=0 instead, which is what a film’s opening frame wants. Value labels, junction dots and probes arrive with the component they belong to. Solved by Modified Nodal Analysis, so KCL and KVL hold by construction</td></tr>
 <tr><td><code>probe(circuit: new id, at: (x, y), [offset: (x, y)])</code></td><td>constructor / setup</td><td>a live readout on a circuit, in either of two forms. Given a GRID POINT a component touches, it reads that node’s VOLTAGE; given the bareword NAME of a part (<code>name=R1</code> on its netlist line), it reads the CURRENT through it, in amps scaled to a readable unit. Either way it shows a ring where the measurement is taken and a number beside it, and the number follows the transient when you <code>run</code> the circuit. Optional (dx,dy) moves the label. Entities are <code>{id}.v{node}</code> (or <code>{id}.i{name}</code>) + <code>.at</code>, tagged {id} + {id}.probes</td></tr>
 <tr><td><code>current(circuit: new id, [speed: number], [shape: id or tag], [color: colour], [size: number])</code></td><td>constructor / setup</td><td>how a circuit’s current READS — presentation only, the solver never sees it. <code>speed</code> multiplies every branch by the same factor (1 = the circuit’s own pace, 2 = twice as fast), so a branch carrying twice the current still moves twice as fast: the PROPORTIONALITY is what carries the meaning and scaling it uniformly cannot lie. <code>shape</code> is circle (default), square or diamond; <code>color</code> any palette name or <code>#rrggbb</code> (default gold, the conventional-current colour — cyan is the usual choice for electron flow); <code>size</code> is the radius in px (default 3). Write it after the <code>circuit</code> it restyles</td></tr>
 <tr><td><code>cut(circuit: new id, part: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>TAKE A COMPONENT OUT of a circuit — and mean it. The circuit that is left is re-analysed and re-solved from scratch, so breaking a loop really does stop the current everywhere, and a meter on another branch falls to zero on its own. Address the part by its netlist <code>name=</code>, or by position as <code>c0</code>, <code>c1</code>, … The component fades out (with its value label), every charge dot goes with it, and each probe moves to what it now reads; the next <code>run(id, dur)</code> replays the circuit that remains. Cutting one wire of a loop leaves the gap where it was, which is the whole demonstration</td></tr>
@@ -45277,6 +46491,18 @@ semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/
 <tr><td><code>gridastar(id: id or tag, start: (x, y), goal: (x, y), [heuristic: id or tag])</code></td><td>state-changing verb</td><td>A* pathfinding with a heuristic (manhattan/euclidean/diagonal)</td></tr>
 <tr><td><code>evolve(id: id or tag, rule: string)</code></td><td>constructor / setup</td><td>pre-simulate one CA generation (“life” or a Golly rulestring)</td></tr>
 <tr><td><code>collapse(id: id or tag, tileset: string, [seed: number])</code></td><td>constructor / setup</td><td>pre-simulate a seeded Wave-Function-Collapse settling</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="chem-1"><a class="header" href="#chem-1">Chem</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>API</th><th>Kind</th><th>What it does</th></tr>
+</thead>
+<tbody>
+<tr><td><code>structure(id: new id, source: string, [center: (x, y)], [unit: number], [spec: string])</code></td><td>constructor / setup</td><td>a SKELETAL STRUCTURAL FORMULA — the flat drawing a chemist puts on paper — from an MDL structure file’s 2-D depiction coordinates. Every convention is derived from the file, not authored: a carbon is a bare VERTEX, hydrogens on carbon vanish, a heteroatom is lettered with its hydrogens folded in (an oxygen with one explicit H becomes <code>OH</code>, a nitrogen with two becomes <code>NH2</code>), a double bond’s second line leans toward the CROWDED side — which inside a ring is the ring centre, and falls out of the neighbours’ own coordinates without detecting rings — and a bond is a wedge or a hash where the molfile’s fourth bond column records stereochemistry. Bonds stop short of a letter so no line runs under text. <code>unit</code> is PIXELS PER BOND (default 64; a 2-D record is laid out on a 1.0-per-bond grid, so this is literally how big a bond should be). <code>spec</code> takes <code>carbons=1</code> (letter every carbon too — the explicit style a first lesson uses), <code>hydrogens=1</code> (draw them as their own vertices instead of folding them in), <code>labels=text|latex</code> (<code>latex</code> TYPESETS the label so a subscript is a real subscript — NH₂ rather than NH2 — and a charge is raised; costs one rasterised image per DISTINCT label, so a molecule with six hydroxyls costs one), <code>color=</code>, <code>record=</code>. Entities: bonds <code>{id}.b{k}</code> (the FILE’s numbering, so it has gaps where C–H bonds were skipped — address <code>{id}.bonds</code> instead), labels <code>{id}.a{i}</code>, tagged {id} + <code>{id}.bonds</code> / <code>{id}.labels</code> / <code>{id}.multibonds</code> / <code>{id}.wedges</code> / <code>{id}.hashes</code>, and every label also by its element (<code>{id}.O</code>, <code>{id}.N</code>). These are 2-D entities, so <code>framebox</code> and <code>brace</code> work on them (unlike <code>molecule3</code>), and <code>untraced</code> + <code>stagger { draw({id}.bonds) }</code> writes the formula on bond by bond. <strong>Needs the 2-D record</strong> — a 3-D conformer flattened is a tangle of crossing bonds, so one is refused with the <code>record_type=2d</code> fix named. Bundled as <code>asset:molecules/&lt;name&gt;-2d.sdf</code>. <code>source</code> ALSO takes a <strong>SMILES string</strong> in place of a path — <code>structure(e, "CCO")</code> is ethanol — and then the coordinates are COMPUTED, not read: a chain zig-zags at the tetrahedral angle, a ring closes as a regular polygon, a fused ring reflects across the bond it shares, a substituent points radially out of its ring, and an aromatic ring is Kekulé-ised so the alternating double bonds are real bonds. A string is read as SMILES when it does not look like a file (no <code>asset:</code>, no <code>/</code>, no <code>.sdf</code>/<code>.mol</code>), so the two forms never collide. The layout is CHECKED before it is drawn — overlapping atoms, crossing bonds or a stretched bond are REFUSED with the 2-D-file fix named, rather than drawn as a tangle, because a plausible-but-wrong formula is worse than none. Chains, single rings and outward-growing FUSED systems are reliable, and that covers a steroid’s four rings, a substituted phenanthroline and the aromatics; a BRIDGED or caged skeleton (morphine) is what gets refused. SMILES atoms are numbered in WRITTEN order, so <code>CC(=O)O</code> puts its hydroxyl oxygen last and <code>{id}.a4</code> addresses it</td></tr>
+<tr><td><code>molecule3(id: new id, path: string, [center: (x, y, z)], [scale: number], [style: id or tag], [record: number])</code></td><td>constructor / setup</td><td>a REAL MOLECULE from an MDL structure file — <code>.sdf</code> (what a PubChem “Download → SDF” gives you) or <code>.mol</code>, as an <code>asset:</code> URI or a path. Nothing about the shape is authored: the atom coordinates are the file’s, in Ångströms, so a bond angle on screen is the one someone computed. Atoms are spheres coloured by the CPK/Jmol convention and sized by covalent radius; bonds are sticks, with a double bond drawn as two parallel lines and a triple as three. <code>center</code> defaults to the origin and the molecule is centred on its own centroid; <code>scale</code> is world units per Ångström (default 1, which puts a small molecule at the few-units scale the rest of the 3D kit works at); <code>style</code> is ball (default), spacefill (full radii, no bonds — the shape the molecule presents to the world) or wireframe (bonds only); <code>record</code> picks one molecule out of a multi-record SDF, counting from 1. Atoms are <code>{id}.a{i}</code> and bonds <code>{id}.b{k}</code> (<code>{id}.b{k}.{n}</code> for each line of a multiple bond), tagged {id} + <code>{id}.atoms</code> / <code>{id}.bonds</code> / <code>{id}.multibonds</code> — and every atom is ALSO tagged by its element (<code>{id}.O</code>, <code>{id}.C</code>), so <code>color(caf.N, cyan)</code> addresses the chemistry rather than an index. Bundled: water, methane, ammonia, benzene, carbon-dioxide under <code>asset:molecules/</code>. A V3000 file is refused with the way to convert it</td></tr>
 </tbody>
 </table>
 </div>

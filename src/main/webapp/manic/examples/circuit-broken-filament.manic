@@ -21,6 +21,9 @@ size(brand, 20);
 color(brand, dim);
 
 // ── the schematic, drawn the way the book draws it: two lamps, one cell, one loop ──
+//
+// And no ground symbol, exactly as the book draws it: a ground only NAMES the reference node, and
+// this loop has nothing to reference. The kit elects the cell's negative terminal.
 
 circuit(fig, (560, 330), `
   lamp       1 0 5 0 r=120 name=L1
@@ -30,7 +33,6 @@ circuit(fig, (560, 330), `
   dc-voltage 6 4 4 4 v=6
   wire       4 4 1 4
   wire       1 4 1 0
-  ground     6 4
 `, 62, 0, 0);
 
 current(fig, 1.4, circle, crimson, 4);

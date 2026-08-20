@@ -1,0 +1,253 @@
+// A C–N coupling, built the way the record reads it
+//
+// Open Reaction Database ord-00550a5de34040cea861e1ce0aca6f9e — Cernak lab, Michigan,
+// doi 10.1021/jacs.6c05959. Sample XZ_01-115-60_3_K3.
+//
+// The scheme ASSEMBLES and then stays: five solutions across the top in the order the robot added
+// them, the arrow and its conditions, then the outcome. Nothing is taken away, so by the last frame
+// the whole experiment is on screen at once — which is how the record itself is laid out, and the
+// only honest way to show a reaction whose answer depends on all of it.
+//
+// Every structure is drawn on from the record's own SMILES. Every number is the record's own,
+// including the two that matter: 0.000% of the product they wanted, and 5.201% of the isomer they
+// did not.
+
+title("a C-N coupling, one well of 1536");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the apparatus, RIGGED: parts that move are their own entities ──
+//
+// Each instrument is split across files so that its moving part is a separate manic entity.
+// A machine imported as one file can only be shifted as a blob, which is motion that ignores the
+// chemistry; imported as parts, the head travels while the frame holds still and the mixer block
+// shakes while its feet do not. Nothing here needs a new builtin — `shift`, `recolor`, `shake` and
+// `pulse` are the core kit, and they work because `svg()` emits a native entity per subpath rather
+// than a texture.
+//
+// The rail is a `rect`, not artwork: it is a straight line whose length has to match the row it
+// serves, so a primitive is both simpler and parametric.
+
+rect(rail, (574, 43), 1012, 4);
+color(rail, dim);
+opacity(rail, 0.4);
+hidden(rail);
+
+// The head hangs off the rail. Placement is arithmetic, not eyeballing: the two files share one
+// coordinate system, so with the head at 62px wide (scale 62/144 = 0.43) its centre sits
+// (74 - 127) * 0.43 = 23px below the rail, and the tips reach 30px below that. Rest is 66, so
+// the tips sit at 96 and a 10px dip reaches 106 — still clear of the role labels at 118.
+svg(hd, (150, 66), "asset:svg/chem/liquid-handler-head.svg", 62);
+hidden(hd);
+
+// the plate the additions go into, off at the end of the rail
+svg(plate, (1180, 132), "asset:svg/chem/plate-1536.svg", 170);
+hidden(plate);
+
+// the foil seal, waiting off-frame to the right — a 0.2 microlitre well does not survive
+// eighteen hours at 60 C unsealed
+svg(foil, (1292, 132), "asset:svg/chem/foil-seal.svg", 170);
+hidden(foil);
+
+// The mixer, in the empty quarter under the arrow. Same trick: body and block are separate files,
+// so `shake` moves the block alone.
+svg(mxBody, (280, 582), "asset:svg/chem/thermomixer-body.svg", 200);
+hidden(mxBody);
+svg(mxBlock, (280, 535), "asset:svg/chem/thermomixer-block.svg", 165);
+hidden(mxBlock);
+// the heat indicator changes over time, so it is a primitive rather than baked artwork
+circle(led, (240, 577), 5);
+color(led, dim);
+hidden(led);
+
+// ── the five solutions, left to right, in addition order ──
+//
+// Each cell is the reagent and the DMSO it arrived in, because that is what went into the well.
+
+structure(a1, "C[Si](C)(C)[O-].[Na+]",              (108, 196), 30);
+// The ligand comes from a 2-D depiction FILE, not its SMILES — and the reason is worth knowing.
+// The layout grows ALONG the string, so the order the ring closures are written in matters: the
+// record's own `COC1=CC=NC2=C3N=CC=C(OC)C3=CC=C12` strands a bond 3.6 lengths long and is refused,
+// while PubChem's canonical form of the SAME molecule draws cleanly. Rather than quietly swap in a
+// different string than the record's, use the depiction — which is what the refusal points at.
+// Everything else in the scene is the record's SMILES, verbatim.
+structure(a2, "asset:molecules/dimethoxyphenanthroline-2d.sdf", (330, 200), 21);
+structure(a3, "[Cu]O[Cu]",                          (556, 196), 34);
+structure(a4, "C1=CC=C(C2CCNCC2)C=C1",              (760, 196), 28);
+structure(a5, "IC1=CC=CN=C1",                       (960, 196), 32);
+structure(d1, "CS(C)=O", (196, 196), 22);
+structure(d2, "CS(C)=O", (430, 196), 22);
+structure(d3, "CS(C)=O", (640, 196), 22);
+structure(d4, "CS(C)=O", (856, 196), 22);
+structure(d5, "CS(C)=O", (1044, 196), 22);
+// Written out rather than looped: `a{i}.bonds` does not interpolate — a loop index reaches an id
+// but not a dotted tag on it, which is a known gap logged in CAPABILITIES.
+untraced(a1.bonds); untraced(a2.bonds); untraced(a3.bonds); untraced(a4.bonds); untraced(a5.bonds);
+untraced(d1.bonds); untraced(d2.bonds); untraced(d3.bonds); untraced(d4.bonds); untraced(d5.bonds);
+hidden(a1.labels); hidden(a2.labels); hidden(a3.labels); hidden(a4.labels); hidden(a5.labels);
+hidden(d1.labels); hidden(d2.labels); hidden(d3.labels); hidden(d4.labels); hidden(d5.labels);
+
+// role, name, amount — kept to three short lines per cell
+text(r1, (150, 118), "base");
+text(r2, (378, 118), "ligand");
+text(r3, (598, 118), "catalyst");
+text(r4, (806, 118), "nucleophile");
+text(r5, (1004, 118), "electrophile");
+for i in 1..6 { size(r{i}, 19); color(r{i}, ink); hidden(r{i}); }
+
+text(v1, (150, 286), "0.08 umol");
+text(v2, (378, 286), "0.004 umol");
+text(v3, (598, 286), "0.004 umol");
+text(v4, (806, 286), "0.06 umol");
+text(v5, (1004, 286), "0.04 umol");
+for i in 1..6 { size(v{i}, 17); color(v{i}, crimson); hidden(v{i}); }
+
+// the addition-order strip, which is the whole point of showing them in a row
+text(o1, (150, 318), "1");
+text(o2, (378, 318), "2");
+text(o3, (598, 318), "3");
+text(o4, (806, 318), "4");
+text(o5, (1004, 318), "5");
+for i in 1..6 { size(o{i}, 22); color(o{i}, dim); hidden(o{i}); }
+
+rect(strip, (577, 318), 1010, 34);
+color(strip, dim);
+outlined(strip);
+stroke(strip, 1.2);
+opacity(strip, 0.35);
+hidden(strip);
+
+// ── the arrow, and what happens over it ──
+
+arrow(rx, (240, 470), (470, 470));
+color(rx, ink);
+stroke(rx, 3);
+untraced(rx);
+
+text(c1, (355, 418), "60 °C · dry nitrogen");
+text(c2, (355, 444), "800 rpm · 18 h");
+for i in 1..3 { size(c{i}, 19); color(c{i}, ink); hidden(c{i}); }
+
+// ── the outcome ──
+
+structure(p1, "C1(N2CCC(C3=CC=CC=C3)CC2)=CC=CN=C1", (612, 500), 30);
+structure(p2, "Cn1c(=O)c2c(ncn2C)n(C)c1=O",         (826, 500), 28);
+structure(p3, "C1(N2CCC(C3=CC=CC=C3)CC2)=CC=NC=C1", (1010, 500), 30);
+untraced(p1.bonds); untraced(p2.bonds); untraced(p3.bonds);
+hidden(p1.labels); hidden(p2.labels); hidden(p3.labels);
+
+text(y1, (612, 620), "0.000%");
+size(y1, 30); color(y1, crimson); hidden(y1);
+text(y2, (826, 620), "standard");
+size(y2, 20); color(y2, dim); hidden(y2);
+text(y3, (1010, 620), "5.201%");
+size(y3, 30); color(y3, indigo); hidden(y3);
+
+text(y1b, (612, 654), "the target");
+size(y1b, 17); color(y1b, dim); hidden(y1b);
+text(y3b, (1010, 654), "the other isomer");
+size(y3b, 17); color(y3b, dim); hidden(y3b);
+
+text(cite, (640, 700), "ORD ord-00550a5de34040cea861e1ce0aca6f9e · doi 10.1021/jacs.6c05959");
+size(cite, 13); color(cite, dim); hidden(cite);
+
+// ── ACT 1: where this happens ──
+
+wait(0.4);
+par { show(plate, 0.7); show(cite, 0.5); }
+par { show(rail, 0.5); show(hd, 0.6); show(strip, 0.5); }
+// the head is charged, and stays charged: the tips are `hd.p3`..`hd.p6`, four of the seven
+// subpaths in the head file, addressable because an imported SVG is entities and not a picture
+par {
+  recolor(hd.p3, indigo, 0.4);
+  recolor(hd.p4, indigo, 0.4);
+  recolor(hd.p5, indigo, 0.4);
+  recolor(hd.p6, indigo, 0.4);
+}
+wait(0.6);
+
+// ── ACT 2: five additions. The head DIPS at each one; each cell draws on and STAYS. ──
+//
+// The dip is the beat: the head goes down as the reagent goes in, so the machine is doing the
+// thing the addition-order strip is counting, rather than sliding past it.
+
+par { show(r1, 0.3); show(o1, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a1.bonds, 0.7); draw(d1.bonds, 0.5); }
+par { show(a1.labels, 0.4); show(d1.labels, 0.4); show(v1, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (228, 0), 0.5); show(r2, 0.3); show(o2, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a2.bonds, 0.9); draw(d2.bonds, 0.5); }
+par { show(a2.labels, 0.4); show(d2.labels, 0.4); show(v2, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (220, 0), 0.5); show(r3, 0.3); show(o3, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a3.bonds, 0.6); draw(d3.bonds, 0.5); }
+par { show(a3.labels, 0.4); show(d3.labels, 0.4); show(v3, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (208, 0), 0.5); show(r4, 0.3); show(o4, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a4.bonds, 0.9); draw(d4.bonds, 0.5); }
+par { show(a4.labels, 0.4); show(d4.labels, 0.4); show(v4, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (198, 0), 0.5); show(r5, 0.3); show(o5, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a5.bonds, 0.7); draw(d5.bonds, 0.5); }
+par { show(a5.labels, 0.4); show(d5.labels, 0.4); show(v5, 0.4); }
+shift(hd, (0, -10), 0.25);
+// the limiting reagent, marked where it stands
+par { recolor(v5, indigo, 0.5); pulse(a5.I); }
+wait(0.8);
+
+// ── ACT 3: seal it, heat it, shake it. ──
+//
+// Three separate motions on three separate parts, which is the whole reason the instruments were
+// split into files: the foil travels, the block shakes, the indicator changes colour.
+
+par { fade(hd, 0.4); fade(rail, 0.4); }
+par { show(foil, 0.3); shift(foil, (-112, 0), 0.7); }
+wait(0.2);
+
+par { show(mxBody, 0.5); show(mxBlock, 0.5); show(led, 0.4); }
+par { draw(rx, 0.8); show(c1, 0.4); show(c2, 0.4); }
+recolor(led, crimson, 0.5);          // 60 C, and the block starts to move
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+wait(0.7);
+
+// ── ACT 4: the outcome — A + B → C, and what actually came out ──
+
+// the bench has done its job; the chemistry is what is left
+par { fade(mxBody, 0.5); fade(mxBlock, 0.5); fade(led, 0.4); }
+par { draw(p2.bonds, 0.7); show(p2.labels, 0.4); }
+show(y2, 0.4);
+wait(0.5);
+
+par { draw(p1.bonds, 0.9); show(p1.labels, 0.4); }
+par { show(y1, 0.5); show(y1b, 0.4); }
+wait(1.0);
+
+par { draw(p3.bonds, 0.9); show(p3.labels, 0.4); }
+par { show(y3, 0.5); show(y3b, 0.4); }
+wait(1.2);
+
+// the one difference between them, marked on both
+par { recolor(p1.N, crimson, 0.6); recolor(p3.N, indigo, 0.6); }
+par { pulse(p1.N); pulse(p3.N); }
+wait(1.0);
+
+// No closing line. The two marked nitrogens and the two numbers under them are the reading of it,
+// and saying it in words as well only tells the viewer what they have just been shown.
+wait(3.4);

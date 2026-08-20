@@ -1,0 +1,1126 @@
+<!DOCTYPE HTML>
+<html lang="en" class="navy sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chemistry — real molecules - Manic — the manual</title>
+
+
+        <!-- Custom HTML head -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-15400965.svg">
+        <link rel="shortcut icon" href="favicon-6e0dc181.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/manic-02f8c6bc.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "navy";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-ea8e5a0f.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-b41398ea.js"></script>
+            <!-- seo:begin -->
+<meta name="description" content="molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…">
+<link rel="canonical" href="https://docs.maniclang.com/ex-chemistry.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:site_name" content="Manic — the manual">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chemistry — real molecules - Manic — the manual">
+<meta property="og:description" content="molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…">
+<meta property="og:url" content="https://docs.maniclang.com/ex-chemistry.html">
+<meta property="og:image" content="https://i.ytimg.com/vi/GDHGxHnHm14/maxresdefault.jpg">
+<meta name="twitter:card" content="player">
+<meta name="twitter:title" content="Chemistry — real molecules - Manic — the manual">
+<meta name="twitter:description" content="molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…">
+<meta name="twitter:image" content="https://i.ytimg.com/vi/GDHGxHnHm14/maxresdefault.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","@id":"https://docs.maniclang.com/ex-chemistry.html#page","url":"https://docs.maniclang.com/ex-chemistry.html","name":"Chemistry — real molecules - Manic — the manual","headline":"Chemistry — real molecules - Manic — the manual","description":"molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…","isPartOf":{"@type":"WebSite","url":"https://docs.maniclang.com/","name":"Manic — the manual"},"inLanguage":"en"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"manic docs","item":"https://docs.maniclang.com/"},{"@type":"ListItem","position":2,"name":"Chemistry — real molecules"}]},{"@type":"VideoObject","name":"Real Molecules, Real Geometry — Bond Order, Shape & Space-Filling from PubChem Files — manic","description":"molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…","thumbnailUrl":["https://i.ytimg.com/vi/GDHGxHnHm14/maxresdefault.jpg"],"uploadDate":"2026-08-20","embedUrl":"https://www.youtube.com/embed/GDHGxHnHm14","contentUrl":"https://www.youtube.com/watch?v=GDHGxHnHm14","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"A + B → C — Esterification Drawn From SMILES, With No Reaction Builtin — manic","description":"molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…","thumbnailUrl":["https://i.ytimg.com/vi/WWtGvxhfX4Q/maxresdefault.jpg"],"uploadDate":"2026-08-20","embedUrl":"https://www.youtube.com/embed/WWtGvxhfX4Q","contentUrl":"https://www.youtube.com/watch?v=WWtGvxhfX4Q","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"0.000% of What They Wanted — One Real Reaction From the Open Reaction Database — manic","description":"molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…","thumbnailUrl":["https://i.ytimg.com/vi/xrTsh3Kl1q4/maxresdefault.jpg"],"uploadDate":"2026-08-20","embedUrl":"https://www.youtube.com/embed/xrTsh3Kl1q4","contentUrl":"https://www.youtube.com/watch?v=xrTsh3Kl1q4","publisher":{"@type":"Organization","name":"manic"}},{"@type":"VideoObject","name":"Why Molecules Have Shapes — Bent, Pyramidal, Tetrahedral & Linear, Measured Not Drawn — manic","description":"molecule3 reads an MDL structure file — a PubChem Download → SDF , or a .mol from RDKit — and lays out its atoms and bonds as ordinary 3-D entities…","thumbnailUrl":["https://i.ytimg.com/vi/fPHLX9N5ElQ/maxresdefault.jpg"],"uploadDate":"2026-08-20","embedUrl":"https://www.youtube.com/embed/fPHLX9N5ElQ","contentUrl":"https://www.youtube.com/watch?v=fPHLX9N5ElQ","publisher":{"@type":"Organization","name":"manic"}}]}</script>
+<!-- seo:end -->
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Manic — the manual</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://maniclang.com" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="chemistry--real-molecules"><a class="header" href="#chemistry--real-molecules">Chemistry — real molecules</a></h1>
+<p><code>molecule3</code> reads an MDL structure file — a PubChem <em>Download → SDF</em>, or a <code>.mol</code> from RDKit — and lays out its atoms and bonds as ordinary 3-D entities. <strong>Nothing about the shape is authored:</strong> the coordinates are the file’s, in Ångströms, so a bond angle on screen is the one in the conformer someone computed. Atoms are CPK/Jmol coloured and sized by covalent radius; the molecule turns about its own axis by default, because a shape only reads in three dimensions. <code>structure</code> is the flat half — the <strong>skeletal formula</strong> a chemist puts on paper, with carbons as bare vertices, <code>OH</code> and <code>NH2</code> folded from the file’s explicit hydrogens, double bonds leaning into the ring, and wedge/hash bonds where the file records stereochemistry. See the <a href="chemistry.html">chemistry guide</a>.</p>
+<p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="chemistry-kit-promo"><a class="header" href="#chemistry-kit-promo">chemistry-kit-promo</a></h2>
+<p>Five things a structure file can teach, in one scene and with no coordinate in the script:
+four molecules with four geometries (bent, pyramidal, tetrahedral, linear); the bond-order
+ladder, where a C-C, a C=C and a C≡C visibly tighten left to right because the files simply
+disagree about how far apart two carbons sit; salt against water, where the ionic pair has NO
+bond in its file and so no stick on the screen; caffeine in all four viewer styles; and
+cholesterol beside paclitaxel at 74 and 113 atoms.</p>
+<pre><code class="language-manic">// Molecules, from files that know their own shape
+//
+// Six things you can teach from a structure file, and not a coordinate in this script. Every atom
+// position comes from a PubChem download, so each claim below is a measurement rather than a
+// drawing: shape, bond order, isotope, ionic vs covalent, conformation, and scale.
+//
+// The molecules turn because that is the default. A shape only reads in three dimensions — flat,
+// methane is four lines from a dot.
+
+title("real molecules, real geometry");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 42), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+// ── 1. shape: four molecules, four geometries ──
+
+molecule3(waterm, "asset:molecules/water.sdf", (-6.4, 0, 0), 1.5);
+molecule3(ammonia, "asset:molecules/ammonia.sdf", (-2.1, 0, 0), 1.5);
+molecule3(methane, "asset:molecules/methane.sdf", (2.2, 0, 0), 1.5);
+molecule3(co2, "asset:molecules/carbon-dioxide.sdf", (6.6, 0, 0), 1.5);
+hidden(waterm); hidden(ammonia); hidden(methane); hidden(co2);
+
+text(h1, (640, 120), "the same four atoms count — four different shapes");
+size(h1, 27); color(h1, cyan); hidden(h1);
+
+text(n1, (196, 566), "H2O");     text(v1, (196, 604), "bent");
+text(n2, (452, 566), "NH3");     text(v2, (452, 604), "pyramidal");
+text(n3, (760, 566), "CH4");     text(v3, (760, 604), "tetrahedral");
+text(n4, (1060, 566), "CO2");    text(v4, (1060, 604), "linear");
+for i in 1..5 {
+  size(n{i}, 29); size(v{i}, 21); color(v{i}, dim);
+  hidden(n{i}); hidden(v{i});
+}
+color(n1, red); color(n2, blue); color(n3, silver); color(n4, red);
+
+wait(0.5);
+show(h1, 0.5);
+par { show(waterm, 0.6); show(n1, 0.4); show(v1, 0.4); }
+wait(0.5);
+par { show(ammonia, 0.6); show(n2, 0.4); show(v2, 0.4); }
+wait(0.5);
+par { show(methane, 0.6); show(n3, 0.4); show(v3, 0.4); }
+wait(0.5);
+par { show(co2, 0.6); show(n4, 0.4); show(v4, 0.4); }
+wait(2.0);
+
+// ── 2. bond order: a stronger bond is a shorter one ──
+//
+// Three carbon–carbon bonds, side by side and at one magnification. Nothing scales them to make
+// the point; the files simply disagree about how far apart two carbons sit.
+
+par {
+  fade(waterm, 0.4); fade(ammonia, 0.4); fade(methane, 0.4); fade(co2, 0.4); fade(h1, 0.4);
+  fade(n1, 0.3); fade(v1, 0.3); fade(n2, 0.3); fade(v2, 0.3);
+  fade(n3, 0.3); fade(v3, 0.3); fade(n4, 0.3); fade(v4, 0.3);
+}
+
+// Hydrogens off and spin off, so each molecule is reduced to the ONE bond being compared and
+// holds still long enough to compare it. Ethane comes from record 2 of the bundled alkane file —
+// an SDF is a library as often as it is a molecule.
+molecule3(ethane, "asset:molecules/alkanes.sdf", (-5.8, 0, 0), 2.6, "hydrogens=0 spin=0 record=2");
+molecule3(ethene, "asset:molecules/ethene.sdf", (0, 0, 0), 2.6, "hydrogens=0 spin=0");
+molecule3(ethyne, "asset:molecules/ethyne.sdf", (5.8, 0, 0), 2.6, "hydrogens=0 spin=0");
+hidden(ethane); hidden(ethene); hidden(ethyne);
+
+text(h2, (640, 120), "one bond, two bonds, three — and it pulls tighter each time");
+size(h2, 27); color(h2, lime); hidden(h2);
+text(b1, (300, 580), "C-C  single");
+text(b2, (640, 580), "C=C  double");
+text(b3, (980, 580), "C≡C  triple");
+for i in 1..4 { size(b{i}, 22); color(b{i}, dim); hidden(b{i}); }
+
+show(h2, 0.5);
+par { show(ethane, 0.6); show(b1, 0.4); }
+wait(0.5);
+par { show(ethene, 0.6); show(b2, 0.4); }
+wait(0.5);
+par { show(ethyne, 0.6); show(b3, 0.4); }
+wait(2.2);
+
+// ── 3. ionic against covalent ──
+//
+// Salt has no bonds in its file at all — two ions, drawn apart because nothing joins them. Water
+// does. That distinction is in the data, not in the drawing.
+
+par {
+  fade(ethane, 0.4); fade(ethene, 0.4); fade(ethyne, 0.4); fade(h2, 0.4);
+  fade(b1, 0.3); fade(b2, 0.3); fade(b3, 0.3);
+}
+
+molecule3(salt, "asset:molecules/sodium-chloride.sdf", (-4.4, 0, 0), 1.9);
+molecule3(wat2, "asset:molecules/water.sdf", (4.4, 0, 0), 1.9);
+hidden(salt); hidden(wat2);
+
+text(h3, (640, 120), "no bond in the file, no stick on the screen");
+size(h3, 27); color(h3, amber); hidden(h3);
+text(c1, (330, 580), "NaCl - two ions, nothing between them");
+text(c2, (980, 580), "H2O - bonded");
+for i in 1..3 { size(c{i}, 21); color(c{i}, dim); hidden(c{i}); }
+
+show(h3, 0.5);
+par { show(salt, 0.6); show(c1, 0.4); }
+wait(0.6);
+par { show(wat2, 0.6); show(c2, 0.4); }
+wait(2.2);
+
+// ── 4. what a molecule really looks like ──
+//
+// Caffeine four ways. Ball-and-stick shows what is bonded to what; hiding the hydrogens leaves the
+// skeleton a chemist draws; space-filling shows the shape the molecule presents to the world,
+// which is the one that decides what it fits into.
+
+par {
+  fade(salt, 0.4); fade(wat2, 0.4); fade(h3, 0.4); fade(c1, 0.3); fade(c2, 0.3);
+}
+
+molecule3(k1, "asset:molecules/caffeine.sdf", (-8.4, 0, 0), 0.52, "style=ball");
+molecule3(k2, "asset:molecules/caffeine.sdf", (-2.8, 0, 0), 0.52, "style=sticks");
+molecule3(k3, "asset:molecules/caffeine.sdf", (2.8, 0, 0), 0.52, "style=sticks hydrogens=0");
+molecule3(k4, "asset:molecules/caffeine.sdf", (8.4, 0, 0), 0.52, "style=spacefill");
+hidden(k1); hidden(k2); hidden(k3); hidden(k4);
+
+text(h4, (640, 120), "caffeine - one file, four questions");
+size(h4, 27); color(h4, magenta); hidden(h4);
+text(s1, (222, 596), "ball &amp; stick");
+text(s2, (492, 596), "sticks");
+text(s3, (770, 596), "no hydrogens");
+text(s4, (1052, 596), "space-filling");
+for i in 1..5 { size(s{i}, 20); color(s{i}, dim); hidden(s{i}); }
+
+show(h4, 0.5);
+par { show(k1, 0.5); show(s1, 0.4); }
+wait(0.45);
+par { show(k2, 0.5); show(s2, 0.4); }
+wait(0.45);
+par { show(k3, 0.5); show(s3, 0.4); }
+wait(0.45);
+par { show(k4, 0.5); show(s4, 0.4); }
+wait(2.4);
+
+// ── 5. and the scale it goes to ──
+//
+// Cholesterol is 74 atoms; paclitaxel is 113. Same builtin, same three lines.
+
+par {
+  fade(k1, 0.4); fade(k2, 0.4); fade(k3, 0.4); fade(k4, 0.4); fade(h4, 0.4);
+  fade(s1, 0.3); fade(s2, 0.3); fade(s3, 0.3); fade(s4, 0.3);
+}
+
+molecule3(chol, "asset:molecules/cholesterol.sdf", (-5.2, 0, 0), 0.62, "hydrogens=0");
+molecule3(taxol, "asset:molecules/paclitaxel.sdf", (5.0, 0, 0), 0.46, "hydrogens=0");
+hidden(chol); hidden(taxol);
+
+text(h5, (640, 120), "and it does not care how big the molecule gets");
+size(h5, 27); color(h5, cyan); hidden(h5);
+text(g1, (330, 596), "cholesterol - 74 atoms");
+text(g2, (980, 596), "paclitaxel - 113 atoms");
+for i in 1..3 { size(g{i}, 21); color(g{i}, dim); hidden(g{i}); }
+
+show(h5, 0.5);
+par { show(chol, 0.6); show(g1, 0.4); }
+wait(0.7);
+par { show(taxol, 0.6); show(g2, 0.4); }
+wait(2.6);
+
+// ── the close ──
+
+par {
+  fade(chol, 0.5); fade(taxol, 0.5); fade(h5, 0.4); fade(g1, 0.3); fade(g2, 0.3);
+}
+
+molecule3(last, "asset:molecules/caffeine.sdf", (0, 0, 0), 1.15, "spin=18");
+hidden(last);
+
+text(end1, (640, 168), "three lines of Manic");
+size(end1, 34); color(end1, silver); hidden(end1);
+text(end2, (640, 578), "molecule3(caf, \"asset:molecules/caffeine.sdf\");");
+size(end2, 23); color(end2, lime); hidden(end2);
+text(end3, (640, 616), "every angle measured, not drawn");
+size(end3, 21); color(end3, dim); hidden(end3);
+
+par { show(last, 0.8); show(end1, 0.6); }
+wait(0.6);
+par { show(end2, 0.5); show(end3, 0.5); }
+wait(3.2);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/GDHGxHnHm14" title="Real Molecules, Real Geometry — Bond Order, Shape & Space-Filling from PubChem Files — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reaction-esterification"><a class="header" href="#reaction-esterification">reaction-esterification</a></h2>
+<p><strong>A + B → C, the way a textbook draws it</strong> — and there is no reaction builtin behind it.
+Acetic acid and ethanol give ethyl acetate and water; every molecule is a SMILES string laid out
+by the chemistry kit, and the plus signs, the arrow, the conditions and the whole choreography
+are the core kit. What the kit contributes is that the structures are REAL: the geometry is
+computed from the graph, so the ester bond in the product is the same bond that formed. The
+teaching beat is the middle one — the acid’s -OH and the alcohol’s -H are marked BEFORE the
+arrow, and the same colour turns up in the water afterwards, so “where did the water come from?”
+is answered by watching rather than by being told. SMILES atoms are numbered in written order,
+which is why <code>acid.a3</code> is the hydroxyl oxygen that leaves.</p>
+<pre><code class="language-manic">// A + B → C, the way a textbook draws it
+//
+// Esterification: acetic acid and ethanol give ethyl acetate and water. The classic school
+// reaction, and the classic school diagram — reactants, a plus, an arrow with its conditions,
+// products.
+//
+// There is no reaction builtin in Manic and this scene does not need one. Every molecule is a
+// SMILES string laid out by the chemistry kit; the plus signs, the arrow, the conditions and the
+// whole choreography are the core kit. What the kit contributes is that the structures are real:
+// the geometry is computed from the graph, not drawn by hand, so the ester bond in the product is
+// the same bond that formed.
+//
+// The teaching beat is the middle one. The acid's -OH and the alcohol's -H are marked BEFORE the
+// arrow, and the same colour turns up in the water afterwards — so the question "where did the
+// water come from?" is answered by watching, not by being told.
+
+title("esterification");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 40), "maniclang.com");
+display(brand);
+size(brand, 18);
+color(brand, dim);
+
+text(heading, (640, 108), "acid + alcohol gives an ester, and water");
+size(heading, 30);
+color(heading, ink);
+hidden(heading);
+
+// ── the cast, all from SMILES strings ──
+
+structure(acid, "CC(=O)O", (190, 348), 76);
+structure(alc, "CCO", (487, 348), 76);
+structure(ester, "CC(=O)OCC", (900, 348), 66);
+structure(water, "O", (1198, 348), 60);
+
+// Everything starts as bare geometry, drawn on beat by beat.
+untraced(acid.bonds);
+untraced(alc.bonds);
+untraced(ester.bonds);
+hidden(acid.labels);
+hidden(alc.labels);
+hidden(ester.labels);
+hidden(water);
+
+// names under each structure
+text(n1, (190, 500), "acetic acid");
+text(n2, (487, 500), "ethanol");
+text(n3, (900, 500), "ethyl acetate");
+text(n4, (1198, 500), "water");
+for i in 1..5 {
+  size(n{i}, 21);
+  color(n{i}, dim);
+  hidden(n{i});
+}
+
+// the arithmetic of the diagram
+text(plus1, (348, 352), "+");
+text(plus2, (1105, 352), "+");
+size(plus1, 34); size(plus2, 34);
+color(plus1, ink); color(plus2, ink);
+hidden(plus1); hidden(plus2);
+
+// the arrow, and what sits over it
+arrow(rx, (640, 352), (782, 352));
+color(rx, ink);
+stroke(rx, 2.6);
+untraced(rx);
+
+text(cond, (711, 312), "H2SO4");
+size(cond, 19);
+color(cond, crimson);
+hidden(cond);
+text(cond2, (711, 390), "heat");
+size(cond2, 19);
+color(cond2, dim);
+hidden(cond2);
+
+// what the marked atoms become — declared up front, revealed later
+text(note, (640, 600), "the acid gives up an OH, the alcohol an H — together, water");
+size(note, 22);
+color(note, crimson);
+hidden(note);
+
+// ── 1. the reactants, written on ──
+
+wait(0.5);
+show(heading, 0.6);
+wait(0.3);
+
+stagger(0.09) { draw(acid.bonds, 0.45); }
+par { show(acid.labels, 0.5); show(n1, 0.4); }
+wait(0.35);
+show(plus1, 0.3);
+stagger(0.09) { draw(alc.bonds, 0.45); }
+par { show(alc.labels, 0.5); show(n2, 0.4); }
+wait(1.0);
+
+// ── 2. mark what is about to leave ──
+//
+// SMILES atoms are numbered in the order they are written, so `CC(=O)O` puts its hydroxyl oxygen
+// last — a3 — and `CCO` puts its oxygen at a2. That is the -OH and the -H that become water.
+
+par {
+  recolor(acid.a3, crimson, 0.6);
+  recolor(alc.a2, crimson, 0.6);
+}
+par { pulse(acid.a3); pulse(alc.a2); }
+wait(1.2);
+
+// ── 3. the arrow ──
+
+par {
+  draw(rx, 0.7);
+  show(cond, 0.5);
+  show(cond2, 0.5);
+}
+wait(0.8);
+
+// ── 4. the product, and the water it leaves behind ──
+
+stagger(0.07) { draw(ester.bonds, 0.4); }
+par { show(ester.labels, 0.5); show(n3, 0.4); }
+wait(0.5);
+show(plus2, 0.3);
+par { show(water, 0.6); show(n4, 0.4); }
+
+// the water carries the colour of the atoms it was made from
+recolor(water.O, crimson, 0.7);
+par { pulse(water.O); show(note, 0.6); }
+wait(2.6);
+
+// ── 5. and the bond that was made ──
+
+framebox(made, ester.O, 16, crimson);
+hidden(made);
+
+text(bond, (640, 600), "and the bond that was made joins them");
+size(bond, 21);
+color(bond, dim);
+hidden(bond);
+
+par {
+  fade(note, 0.4);
+  show(made, 0.6);
+  show(bond, 0.5);
+}
+wait(2.8);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/WWtGvxhfX4Q" title="A + B → C — Esterification Drawn From SMILES, With No Reaction Builtin — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="reaction-ord-screen"><a class="header" href="#reaction-ord-screen">reaction-ord-screen</a></h2>
+<p><strong>One real experiment, from the record.</strong> Open Reaction Database
+ord-00550a5de34040cea861e1ce0aca6f9e: a C-N coupling run in a single well of a 1536-well plate.
+Five solutions assemble across the top in the order the robot added them, each drawn on from the
+record’s own SMILES, with the record’s own amounts; then the conditions; then the outcome. The
+scheme is never taken away, so the last frame holds the whole experiment at once — which is the
+only honest way to show a result that depends on all of it. And the result is the point: 0.000%
+of the product they were aiming at, 5.201% of the other isomer. The reaction went, just not
+where they aimed it. The apparatus is RIGGED rather than slid — each instrument is split across
+two SVG files so its moving part is its own entity, and the head dips, the foil seals, the mixer
+block shakes and its indicator heats, all on core verbs.</p>
+<pre><code class="language-manic">// A C–N coupling, built the way the record reads it
+//
+// Open Reaction Database ord-00550a5de34040cea861e1ce0aca6f9e — Cernak lab, Michigan,
+// doi 10.1021/jacs.6c05959. Sample XZ_01-115-60_3_K3.
+//
+// The scheme ASSEMBLES and then stays: five solutions across the top in the order the robot added
+// them, the arrow and its conditions, then the outcome. Nothing is taken away, so by the last frame
+// the whole experiment is on screen at once — which is how the record itself is laid out, and the
+// only honest way to show a reaction whose answer depends on all of it.
+//
+// Every structure is drawn on from the record's own SMILES. Every number is the record's own,
+// including the two that matter: 0.000% of the product they wanted, and 5.201% of the isomer they
+// did not.
+
+title("a C-N coupling, one well of 1536");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the apparatus, RIGGED: parts that move are their own entities ──
+//
+// Each instrument is split across files so that its moving part is a separate manic entity.
+// A machine imported as one file can only be shifted as a blob, which is motion that ignores the
+// chemistry; imported as parts, the head travels while the frame holds still and the mixer block
+// shakes while its feet do not. Nothing here needs a new builtin — `shift`, `recolor`, `shake` and
+// `pulse` are the core kit, and they work because `svg()` emits a native entity per subpath rather
+// than a texture.
+//
+// The rail is a `rect`, not artwork: it is a straight line whose length has to match the row it
+// serves, so a primitive is both simpler and parametric.
+
+rect(rail, (574, 43), 1012, 4);
+color(rail, dim);
+opacity(rail, 0.4);
+hidden(rail);
+
+// The head hangs off the rail. Placement is arithmetic, not eyeballing: the two files share one
+// coordinate system, so with the head at 62px wide (scale 62/144 = 0.43) its centre sits
+// (74 - 127) * 0.43 = 23px below the rail, and the tips reach 30px below that. Rest is 66, so
+// the tips sit at 96 and a 10px dip reaches 106 — still clear of the role labels at 118.
+svg(hd, (150, 66), "asset:svg/chem/liquid-handler-head.svg", 62);
+hidden(hd);
+
+// the plate the additions go into, off at the end of the rail
+svg(plate, (1180, 132), "asset:svg/chem/plate-1536.svg", 170);
+hidden(plate);
+
+// the foil seal, waiting off-frame to the right — a 0.2 microlitre well does not survive
+// eighteen hours at 60 C unsealed
+svg(foil, (1292, 132), "asset:svg/chem/foil-seal.svg", 170);
+hidden(foil);
+
+// The mixer, in the empty quarter under the arrow. Same trick: body and block are separate files,
+// so `shake` moves the block alone.
+svg(mxBody, (280, 582), "asset:svg/chem/thermomixer-body.svg", 200);
+hidden(mxBody);
+svg(mxBlock, (280, 535), "asset:svg/chem/thermomixer-block.svg", 165);
+hidden(mxBlock);
+// the heat indicator changes over time, so it is a primitive rather than baked artwork
+circle(led, (240, 577), 5);
+color(led, dim);
+hidden(led);
+
+// ── the five solutions, left to right, in addition order ──
+//
+// Each cell is the reagent and the DMSO it arrived in, because that is what went into the well.
+
+structure(a1, "C[Si](C)(C)[O-].[Na+]",              (108, 196), 30);
+// The ligand comes from a 2-D depiction FILE, not its SMILES — and the reason is worth knowing.
+// The layout grows ALONG the string, so the order the ring closures are written in matters: the
+// record's own `COC1=CC=NC2=C3N=CC=C(OC)C3=CC=C12` strands a bond 3.6 lengths long and is refused,
+// while PubChem's canonical form of the SAME molecule draws cleanly. Rather than quietly swap in a
+// different string than the record's, use the depiction — which is what the refusal points at.
+// Everything else in the scene is the record's SMILES, verbatim.
+structure(a2, "asset:molecules/dimethoxyphenanthroline-2d.sdf", (330, 200), 21);
+structure(a3, "[Cu]O[Cu]",                          (556, 196), 34);
+structure(a4, "C1=CC=C(C2CCNCC2)C=C1",              (760, 196), 28);
+structure(a5, "IC1=CC=CN=C1",                       (960, 196), 32);
+structure(d1, "CS(C)=O", (196, 196), 22);
+structure(d2, "CS(C)=O", (430, 196), 22);
+structure(d3, "CS(C)=O", (640, 196), 22);
+structure(d4, "CS(C)=O", (856, 196), 22);
+structure(d5, "CS(C)=O", (1044, 196), 22);
+// Written out rather than looped: `a{i}.bonds` does not interpolate — a loop index reaches an id
+// but not a dotted tag on it, which is a known gap logged in CAPABILITIES.
+untraced(a1.bonds); untraced(a2.bonds); untraced(a3.bonds); untraced(a4.bonds); untraced(a5.bonds);
+untraced(d1.bonds); untraced(d2.bonds); untraced(d3.bonds); untraced(d4.bonds); untraced(d5.bonds);
+hidden(a1.labels); hidden(a2.labels); hidden(a3.labels); hidden(a4.labels); hidden(a5.labels);
+hidden(d1.labels); hidden(d2.labels); hidden(d3.labels); hidden(d4.labels); hidden(d5.labels);
+
+// role, name, amount — kept to three short lines per cell
+text(r1, (150, 118), "base");
+text(r2, (378, 118), "ligand");
+text(r3, (598, 118), "catalyst");
+text(r4, (806, 118), "nucleophile");
+text(r5, (1004, 118), "electrophile");
+for i in 1..6 { size(r{i}, 19); color(r{i}, ink); hidden(r{i}); }
+
+text(v1, (150, 286), "0.08 umol");
+text(v2, (378, 286), "0.004 umol");
+text(v3, (598, 286), "0.004 umol");
+text(v4, (806, 286), "0.06 umol");
+text(v5, (1004, 286), "0.04 umol");
+for i in 1..6 { size(v{i}, 17); color(v{i}, crimson); hidden(v{i}); }
+
+// the addition-order strip, which is the whole point of showing them in a row
+text(o1, (150, 318), "1");
+text(o2, (378, 318), "2");
+text(o3, (598, 318), "3");
+text(o4, (806, 318), "4");
+text(o5, (1004, 318), "5");
+for i in 1..6 { size(o{i}, 22); color(o{i}, dim); hidden(o{i}); }
+
+rect(strip, (577, 318), 1010, 34);
+color(strip, dim);
+outlined(strip);
+stroke(strip, 1.2);
+opacity(strip, 0.35);
+hidden(strip);
+
+// ── the arrow, and what happens over it ──
+
+arrow(rx, (240, 470), (470, 470));
+color(rx, ink);
+stroke(rx, 3);
+untraced(rx);
+
+text(c1, (355, 418), "60 °C · dry nitrogen");
+text(c2, (355, 444), "800 rpm · 18 h");
+for i in 1..3 { size(c{i}, 19); color(c{i}, ink); hidden(c{i}); }
+
+// ── the outcome ──
+
+structure(p1, "C1(N2CCC(C3=CC=CC=C3)CC2)=CC=CN=C1", (612, 500), 30);
+structure(p2, "Cn1c(=O)c2c(ncn2C)n(C)c1=O",         (826, 500), 28);
+structure(p3, "C1(N2CCC(C3=CC=CC=C3)CC2)=CC=NC=C1", (1010, 500), 30);
+untraced(p1.bonds); untraced(p2.bonds); untraced(p3.bonds);
+hidden(p1.labels); hidden(p2.labels); hidden(p3.labels);
+
+text(y1, (612, 620), "0.000%");
+size(y1, 30); color(y1, crimson); hidden(y1);
+text(y2, (826, 620), "standard");
+size(y2, 20); color(y2, dim); hidden(y2);
+text(y3, (1010, 620), "5.201%");
+size(y3, 30); color(y3, indigo); hidden(y3);
+
+text(y1b, (612, 654), "the target");
+size(y1b, 17); color(y1b, dim); hidden(y1b);
+text(y3b, (1010, 654), "the other isomer");
+size(y3b, 17); color(y3b, dim); hidden(y3b);
+
+text(cite, (640, 700), "ORD ord-00550a5de34040cea861e1ce0aca6f9e · doi 10.1021/jacs.6c05959");
+size(cite, 13); color(cite, dim); hidden(cite);
+
+// ── ACT 1: where this happens ──
+
+wait(0.4);
+par { show(plate, 0.7); show(cite, 0.5); }
+par { show(rail, 0.5); show(hd, 0.6); show(strip, 0.5); }
+// the head is charged, and stays charged: the tips are `hd.p3`..`hd.p6`, four of the seven
+// subpaths in the head file, addressable because an imported SVG is entities and not a picture
+par {
+  recolor(hd.p3, indigo, 0.4);
+  recolor(hd.p4, indigo, 0.4);
+  recolor(hd.p5, indigo, 0.4);
+  recolor(hd.p6, indigo, 0.4);
+}
+wait(0.6);
+
+// ── ACT 2: five additions. The head DIPS at each one; each cell draws on and STAYS. ──
+//
+// The dip is the beat: the head goes down as the reagent goes in, so the machine is doing the
+// thing the addition-order strip is counting, rather than sliding past it.
+
+par { show(r1, 0.3); show(o1, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a1.bonds, 0.7); draw(d1.bonds, 0.5); }
+par { show(a1.labels, 0.4); show(d1.labels, 0.4); show(v1, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (228, 0), 0.5); show(r2, 0.3); show(o2, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a2.bonds, 0.9); draw(d2.bonds, 0.5); }
+par { show(a2.labels, 0.4); show(d2.labels, 0.4); show(v2, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (220, 0), 0.5); show(r3, 0.3); show(o3, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a3.bonds, 0.6); draw(d3.bonds, 0.5); }
+par { show(a3.labels, 0.4); show(d3.labels, 0.4); show(v3, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (208, 0), 0.5); show(r4, 0.3); show(o4, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a4.bonds, 0.9); draw(d4.bonds, 0.5); }
+par { show(a4.labels, 0.4); show(d4.labels, 0.4); show(v4, 0.4); }
+shift(hd, (0, -10), 0.25);
+
+par { shift(hd, (198, 0), 0.5); show(r5, 0.3); show(o5, 0.3); }
+par { shift(hd, (0, 10), 0.25); pulse(hd); }
+par { draw(a5.bonds, 0.7); draw(d5.bonds, 0.5); }
+par { show(a5.labels, 0.4); show(d5.labels, 0.4); show(v5, 0.4); }
+shift(hd, (0, -10), 0.25);
+// the limiting reagent, marked where it stands
+par { recolor(v5, indigo, 0.5); pulse(a5.I); }
+wait(0.8);
+
+// ── ACT 3: seal it, heat it, shake it. ──
+//
+// Three separate motions on three separate parts, which is the whole reason the instruments were
+// split into files: the foil travels, the block shakes, the indicator changes colour.
+
+par { fade(hd, 0.4); fade(rail, 0.4); }
+par { show(foil, 0.3); shift(foil, (-112, 0), 0.7); }
+wait(0.2);
+
+par { show(mxBody, 0.5); show(mxBlock, 0.5); show(led, 0.4); }
+par { draw(rx, 0.8); show(c1, 0.4); show(c2, 0.4); }
+recolor(led, crimson, 0.5);          // 60 C, and the block starts to move
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+shake(mxBlock, 0.5);
+wait(0.7);
+
+// ── ACT 4: the outcome — A + B → C, and what actually came out ──
+
+// the bench has done its job; the chemistry is what is left
+par { fade(mxBody, 0.5); fade(mxBlock, 0.5); fade(led, 0.4); }
+par { draw(p2.bonds, 0.7); show(p2.labels, 0.4); }
+show(y2, 0.4);
+wait(0.5);
+
+par { draw(p1.bonds, 0.9); show(p1.labels, 0.4); }
+par { show(y1, 0.5); show(y1b, 0.4); }
+wait(1.0);
+
+par { draw(p3.bonds, 0.9); show(p3.labels, 0.4); }
+par { show(y3, 0.5); show(y3b, 0.4); }
+wait(1.2);
+
+// the one difference between them, marked on both
+par { recolor(p1.N, crimson, 0.6); recolor(p3.N, indigo, 0.6); }
+par { pulse(p1.N); pulse(p3.N); }
+wait(1.0);
+
+// No closing line. The two marked nitrogens and the two numbers under them are the reading of it,
+// and saying it in words as well only tells the viewer what they have just been shown.
+wait(3.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/xrTsh3Kl1q4" title="0.000% of What They Wanted — One Real Reaction From the Open Reaction Database — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="structure-to-shape"><a class="header" href="#structure-to-shape">structure-to-shape</a></h2>
+<p><strong>The step students actually get stuck on.</strong> A structural formula is a page of lines and
+letters; a molecule is a lump in three dimensions, and told they are the same thing most
+people nod and privately keep two unrelated pictures. So the formula writes itself on bond by
+bond (<code>untraced</code> + <code>stagger { draw(...) }</code> — core verbs, nothing chemistry-specific), then the
+same compound’s 3-D conformer appears beside it, turning. Then <code>recolor</code> marks the four
+nitrogens on BOTH sides at once, because each kit tags an atom by its element — so “the
+nitrogens” is something you can say to the scene rather than a set of indices to look up.
+The left side is read from the 2-D depiction record, the right from the 3-D conformer.</p>
+<pre><code class="language-manic">// The flat formula and the real shape are the same molecule
+//
+// This is the step students actually get stuck on. A structural formula is a page of lines and
+// letters; a molecule is a lump in three dimensions. Told they are the same thing, most people
+// nod and privately keep two unrelated pictures.
+//
+// So: draw the formula on, bond by bond, the way you would on paper. Then put the real geometry
+// beside it, turning, from the same compound in PubChem. Both sides are read from files — the
+// left from the 2-D depiction record, the right from the 3-D conformer — so nothing here is an
+// artist's impression of the other.
+
+title("the formula and the shape");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 42), "maniclang.com");
+display(brand);
+size(brand, 19);
+color(brand, dim);
+
+// The 3-D scene covers the whole canvas, so the molecule is put at the ORIGIN and the camera is
+// aimed off to the left instead — which slides the subject into the right half of the frame and
+// keeps it there while it turns. Moving the molecule sideways instead pushes it toward the camera
+// and it grows and clips.
+camera3((0, -18, 5), (-4.2, 0, 0), 32);
+
+// ── the page: a structural formula, drawn by hand ──
+
+structure(flat, "asset:molecules/caffeine-2d.sdf", (350, 372), 54);
+untraced(flat.bonds);
+hidden(flat.labels);
+
+// ── the substance: the same compound's 3-D conformer ──
+
+molecule3(solid, "asset:molecules/caffeine.sdf", (0, 0, 0), 0.66, "spin=22");
+hidden(solid);
+
+text(t1, (350, 128), "caffeine, as it is written");
+size(t1, 26); color(t1, ink); hidden(t1);
+text(t2, (350, 660), "one line per bond, letters where a chemist letters them");
+size(t2, 19); color(t2, dim); hidden(t2);
+
+text(t3, (966, 128), "caffeine, as it is");
+size(t3, 26); color(t3, ink); hidden(t3);
+text(t4, (966, 660), "the same compound, its computed 3-D conformer");
+size(t4, 19); color(t4, dim); hidden(t4);
+
+// ── beat 1: write the formula ──
+
+wait(0.6);
+show(t1, 0.5);
+
+// Drawn bond by bond, in the file's own order — the handwriting effect, from the core kit's
+// `stagger` and `draw`. Nothing chemistry-specific about it.
+//
+// Addressed by TAG, not by index: a skeletal drawing skips every C–H bond, so the surviving bond
+// ids are the file's own numbering with gaps in it. `{id}.bonds` is whatever was actually drawn.
+stagger(0.05) {
+  draw(flat.bonds, 0.4);
+}
+show(flat.labels, 0.6);
+show(t2, 0.5);
+wait(1.4);
+
+// ── beat 2: and here is the thing itself ──
+
+par { show(solid, 0.9); show(t3, 0.5); }
+show(t4, 0.5);
+wait(2.0);
+
+// ── beat 3: the same nitrogens, on both sides at once ──
+//
+// Four nitrogens on the page and four in the solid. Recolouring them is one verb per side, because
+// both kits tag an atom by its element — so "the nitrogens" is something you can say to the
+// scene, not a set of indices you have to look up.
+
+text(t5, (640, 596), "four nitrogens, the same four");
+size(t5, 23); color(t5, indigo); hidden(t5);
+
+// `recolor`, not `color`: `color` is a build-time setting and belongs above the timeline, while
+// `recolor` is the verb that changes a colour DURING the story.
+par {
+  recolor(flat.N, indigo, 0.7);
+  recolor(solid.N, indigo, 0.7);
+  show(t5, 0.5);
+}
+wait(2.6);
+
+// ── beat 4: and the oxygens ──
+
+text(t6, (640, 596), "and the two oxygens");
+size(t6, 23); color(t6, red); hidden(t6);
+
+par { fade(t5, 0.35); }
+par {
+  pulse(flat.O);
+  pulse(solid.O);
+  show(t6, 0.5);
+}
+wait(2.8);
+</code></pre>
+<div class="manic-video" data-video="ex-structure-to-shape"></div>
+
+<h2 id="molecule-shapes"><a class="header" href="#molecule-shapes">molecule-shapes</a></h2>
+<p>Why molecules have shapes — water bent, ammonia pyramidal, methane tetrahedral, carbon
+dioxide linear, each turning on its own axis. The labels are shape CLASSES, not
+measurements: the geometry is the file’s and there is no number in the script to disagree
+with it. Then caffeine four ways — ball &amp; stick, sticks, hydrogens hidden (the skeleton a
+chemist draws), and space-filling.</p>
+<pre><code class="language-manic">// Why molecules have shapes
+//
+// Four molecules, four shapes — and not one coordinate in this file. Each `molecule3` reads a
+// PubChem structure file (a real "Download → SDF"), so every bond angle you see is the one in the
+// conformer someone computed: water bent, ammonia pyramidal, methane tetrahedral, carbon dioxide
+// dead straight.
+//
+// They turn on their own axes because that is the default — and it is the whole argument for doing
+// this in three dimensions. On a flat page methane is four lines from a dot and "tetrahedral" is a
+// claim you take on trust; turning, the shape is simply visible. Same for ammonia's pyramid, which
+// flat looks like a T.
+
+title("why molecules have shapes");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 44), "maniclang.com");
+display(brand);
+size(brand, 20);
+color(brand, dim);
+
+// Looking down at about 30°, not along the plane: caffeine is FLAT, and edge-on a flat molecule
+// is a line. The elevation also happens to be what makes methane's tetrahedron read.
+camera3((0, -15, 8.5), (0, 0, 0), 40);
+
+// Four PubChem downloads, laid out left to right at one magnification, so they are genuinely
+// comparable in size. `spin` is degrees per second — the default; `spin=0` would hold one still.
+molecule3(waterm, "asset:molecules/water.sdf", (-6.4, 0, 0), 1.5, "spin=26");
+molecule3(ammonia, "asset:molecules/ammonia.sdf", (-2.1, 0, 0), 1.5, "spin=26");
+molecule3(methane, "asset:molecules/methane.sdf", (2.2, 0, 0), 1.5, "spin=26");
+molecule3(co2, "asset:molecules/carbon-dioxide.sdf", (6.6, 0, 0), 1.5, "spin=26");
+
+hidden(waterm);
+hidden(ammonia);
+hidden(methane);
+hidden(co2);
+
+// Formulae and shape CLASSES — not measurements. The geometry on screen is the file's, and nothing
+// here restates it as a number.
+text(t1, (196, 560), "H2O");
+text(s1, (196, 600), "bent");
+text(t2, (452, 560), "NH3");
+text(s2, (452, 600), "pyramidal");
+text(t3, (760, 560), "CH4");
+text(s3, (760, 600), "tetrahedral");
+text(t4, (1060, 560), "CO2");
+text(s4, (1060, 600), "linear");
+
+for i in 1..5 {
+  hidden(t{i});
+  hidden(s{i});
+  size(t{i}, 30);
+  size(s{i}, 22);
+  color(s{i}, dim);
+}
+color(t1, red);
+color(t2, blue);
+color(t3, silver);
+color(t4, red);
+
+// ── one at a time, each already turning as it arrives ──
+
+wait(0.7);
+par { show(waterm, 0.7); show(t1, 0.5); show(s1, 0.5); }
+wait(0.9);
+par { show(ammonia, 0.7); show(t2, 0.5); show(s2, 0.5); }
+wait(0.9);
+par { show(methane, 0.7); show(t3, 0.5); show(s3, 0.5); }
+wait(0.9);
+par { show(co2, 0.7); show(t4, 0.5); show(s4, 0.5); }
+wait(1.6);
+
+// ── the four styles a chemistry viewer offers, on the one molecule ──
+//
+// Same file, same coordinates, four questions. Ball-and-stick shows what is bonded to what;
+// sticks gets the spheres out of the way of the geometry; hiding the hydrogens leaves the carbon
+// skeleton an organic chemist actually draws; space-filling shows the shape the molecule presents
+// to the world — which is the one that explains why it fits somewhere, or does not.
+
+par {
+  fade(waterm, 0.5); fade(ammonia, 0.5); fade(methane, 0.5); fade(co2, 0.5);
+  fade(t1, 0.4); fade(s1, 0.4); fade(t2, 0.4); fade(s2, 0.4);
+  fade(t3, 0.4); fade(s3, 0.4); fade(t4, 0.4); fade(s4, 0.4);
+}
+
+// No `tilt` here on purpose. Caffeine is FLAT and lies in the xy plane, so turning it about the
+// vertical keeps it in its own plane and it presents the same face to the camera throughout. Lean
+// it with `tilt` and the spin walks it through edge-on, where a flat molecule is a line — `tilt`
+// and `axis=x|y|z` are there for when you want that (a molecule rolling end over end), not for a
+// comparison like this one.
+molecule3(c1, "asset:molecules/caffeine.sdf", (-8.4, 0, 0), 0.52, "style=ball");
+molecule3(c2, "asset:molecules/caffeine.sdf", (-2.8, 0, 0), 0.52, "style=sticks");
+molecule3(c3, "asset:molecules/caffeine.sdf", (2.8, 0, 0), 0.52, "style=sticks hydrogens=0");
+molecule3(c4, "asset:molecules/caffeine.sdf", (8.4, 0, 0), 0.52, "style=spacefill");
+hidden(c1); hidden(c2); hidden(c3); hidden(c4);
+
+text(cap, (640, 130), "caffeine, four ways to look at it");
+hidden(cap);
+size(cap, 28);
+color(cap, cyan);
+
+text(k1, (222, 600), "ball &amp; stick");
+text(k2, (492, 600), "sticks");
+text(k3, (770, 600), "no hydrogens");
+text(k4, (1052, 600), "space-filling");
+for i in 1..5 {
+  hidden(k{i});
+  size(k{i}, 21);
+  color(k{i}, dim);
+}
+
+show(cap, 0.5);
+par { show(c1, 0.6); show(k1, 0.4); }
+wait(0.7);
+par { show(c2, 0.6); show(k2, 0.4); }
+wait(0.7);
+par { show(c3, 0.6); show(k3, 0.4); }
+wait(0.7);
+par { show(c4, 0.6); show(k4, 0.4); }
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/fPHLX9N5ElQ" title="Why Molecules Have Shapes — Bent, Pyramidal, Tetrahedral & Linear, Measured Not Drawn — manic" allowfullscreen loading="lazy"></iframe></div>
+
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ex-physics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="ex-circuits.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ex-physics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="ex-circuits.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

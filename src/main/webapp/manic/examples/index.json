@@ -1,5 +1,5 @@
 {
-  "count": 426,
+  "count": 431,
   "categories": [
     {
       "slug": "algorithms",
@@ -892,6 +892,42 @@
           "file": "spinning-cylinder-flow.manic",
           "title": "Spinning cylinder flow",
           "desc": "Potential flow around a spinning cylinder \u2014 WHY a spun ball curves."
+        }
+      ]
+    },
+    {
+      "slug": "chemistry",
+      "title": "Chemistry \u2014 real molecules",
+      "examples": [
+        {
+          "name": "chemistry-kit-promo",
+          "file": "chemistry-kit-promo.manic",
+          "title": "Chemistry kit promo",
+          "desc": "Five things a structure file can teach, in one scene and with no coordinate in the script: four molecules with four geometries (bent, pyramidal, tetrahedral, linear); the bond-order ladder, where a C-C, a C=C and a C\u2261C visibly tighten left to right because the files simply disagree about how far apart two carbons sit; salt against water, where the ionic pair has NO bond in its file and so no stick on the screen; caffeine in all four viewer styles; and cholesterol beside paclitaxel at 74 and 113 atoms."
+        },
+        {
+          "name": "reaction-esterification",
+          "file": "reaction-esterification.manic",
+          "title": "Reaction esterification",
+          "desc": "**A + B \u2192 C, the way a textbook draws it** \u2014 and there is no reaction builtin behind it."
+        },
+        {
+          "name": "reaction-ord-screen",
+          "file": "reaction-ord-screen.manic",
+          "title": "Reaction ord screen",
+          "desc": "**One real experiment, from the record.** Open Reaction Database ord-00550a5de34040cea861e1ce0aca6f9e: a C-N coupling run in a single well of a 1536-well plate."
+        },
+        {
+          "name": "structure-to-shape",
+          "file": "structure-to-shape.manic",
+          "title": "Structure to shape",
+          "desc": "**The step students actually get stuck on.** A structural formula is a page of lines and letters; a molecule is a lump in three dimensions, and told they are the same thing most people nod and privately keep two unrelated pictures."
+        },
+        {
+          "name": "molecule-shapes",
+          "file": "molecule-shapes.manic",
+          "title": "Molecule shapes",
+          "desc": "Why molecules have shapes \u2014 water bent, ammonia pyramidal, methane tetrahedral, carbon dioxide linear, each turning on its own axis."
         }
       ]
     },

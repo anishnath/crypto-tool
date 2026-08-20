@@ -26,7 +26,6 @@ circuit(loop, (600, 400), `
   lamp       11 0 11 6 r=180 name=L1
   wire       11 6 6 6 name=RET
   wire       6 6 0 6
-  ground     0 6
 `, 58);
 
 // The animator's dial on the current: a little quicker than the circuit's own pace, because a
