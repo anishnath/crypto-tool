@@ -1,5 +1,5 @@
 {
-  "count": 431,
+  "count": 435,
   "categories": [
     {
       "slug": "algorithms",
@@ -904,6 +904,30 @@
           "file": "chemistry-kit-promo.manic",
           "title": "Chemistry kit promo",
           "desc": "Five things a structure file can teach, in one scene and with no coordinate in the script: four molecules with four geometries (bent, pyramidal, tetrahedral, linear); the bond-order ladder, where a C-C, a C=C and a C\u2261C visibly tighten left to right because the files simply disagree about how far apart two carbons sit; salt against water, where the ionic pair has NO bond in its file and so no stick on the screen; caffeine in all four viewer styles; and cholesterol beside paclitaxel at 74 and 113 atoms."
+        },
+        {
+          "name": "nmr-ethanol",
+          "file": "nmr-ethanol.manic",
+          "title": "Nmr ethanol",
+          "desc": "**A spectrometer sweeping, in hertz.** One pen moves left to right and everything follows it: the ink appears under the nib, the frequency readout runs, the camera pushes in on whichever protons the pen has just reached, and their colour arrives on the turning molecule at the moment their peak does."
+        },
+        {
+          "name": "mechanism-sn2",
+          "file": "mechanism-sn2.manic",
+          "title": "Mechanism sn2",
+          "desc": "**A mechanism, with the curly arrows aimed at real atoms.** Hydroxide and bromoethane \u2014 the SN2 every organic course opens with."
+        },
+        {
+          "name": "equilibrium",
+          "file": "equilibrium.manic",
+          "title": "Equilibrium",
+          "desc": "**Why \"nothing is happening\" is the wrong reading.** Two views of one reversible reaction, side by side, because the misconception lives in the gap between them: the concentrations flatten out and stop moving, while the two RATES meet at a value that is equal *and not zero*."
+        },
+        {
+          "name": "titration",
+          "file": "titration.manic",
+          "title": "Titration",
+          "desc": "**A titration where the curve is solved, not drawn.** 25.0 mL of 0.100 M HCl against 0.100 M NaOH, phenolphthalein."
         },
         {
           "name": "reaction-esterification",

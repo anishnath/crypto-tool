@@ -34,7 +34,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ea8e5a0f.js";
+            window.path_to_searchindex_js = "searchindex-8f1d47f8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b41398ea.js"></script>
@@ -416,6 +416,125 @@ show(caf.labels, 0.6);
 the surviving ids keep the file’s numbering <strong>with gaps in it</strong>.</p>
 <p>And since these are 2-D entities, <code>framebox</code> and <code>brace</code> work on them — which they
 do not on <code>molecule3</code>.</p>
+<h3 id="a-molecule-that-couldnt-exist-is-refused"><a class="header" href="#a-molecule-that-couldnt-exist-is-refused">A molecule that couldn’t exist is refused</a></h3>
+<pre><code class="language-manic">structure(x, "C(C)(C)(C)(C)C");
+</code></pre>
+<pre><code>error: `C(C)(C)(C)(C)C`: this is not a molecule that can exist: atom 1 is C with
+5 bonds, but C takes 4. If it is meant to be an ion, say so — `[C+]` or `[C-]` —
+since a charge changes what a valence is allowed to be.
+</code></pre>
+<p>This is a <strong>separate check from the layout one</strong>, and it has to be. That carbon with
+five bonds lays out perfectly cleanly — no crossings, no overlaps, every bond the right
+length — so the geometry gate passes it and draws a confident picture of something
+impossible. Asking “is this readable?” and asking “is there anything to draw?” are
+different questions.</p>
+<p>The rule is bond-order sum against the element’s allowed valences, <strong>adjusted for formal
+charge</strong>, which is what keeps it useful rather than pedantic:</p>
+<pre><code class="language-manic">structure(a, "O(C)(C)C");         // refused — three bonds on a neutral oxygen
+structure(b, "[N+](C)(C)(C)C");   // fine — that is an ammonium ion
+</code></pre>
+<p>It runs on files too, not only SMILES strings — a hand-edited or carelessly converted
+file is exactly where a bad valence turns up.</p>
+<p><strong>What it does not catch,</strong> stated plainly: it is a <em>capacity</em> check, asking whether the
+atom could accommodate that many bonds. Nitrogen’s allowed valences are 3 and 5, so a
+neutral four-bonded nitrogen slips through — 5 could hold it, even though such a
+nitrogen is really an ammonium missing its charge.</p>
+<p>The stricter alternative — requiring the count to <em>equal</em> an allowed valence — was
+measured against the bundled library and rejected. It refuses <strong>nitric oxide</strong> (a
+genuine radical, and a molecule any biology lesson wants), ferrocene and cyanocobalamin.
+Rejecting those to catch a four-bonded nitrogen is a bad trade, so the looser rule
+stands. Hypervalent sulfur and phosphorus, metal complexes and aromatics all pass
+either way.</p>
+<h3 id="what-its-called"><a class="header" href="#what-its-called">What it’s called</a></h3>
+<p>A structure carries its own names, as two captions under the drawing:</p>
+<pre><code class="language-manic">structure(caf, "asset:molecules/caffeine-2d.sdf", (400, 300), 56);
+
+show(caf.name, 0.4);    // caffeine
+show(caf.iupac, 0.4);   // 1,3,7-trimethylpurine-2,6-dione
+</code></pre>
+<p>The gap between those two lines <strong>is</strong> the nomenclature lesson. Reveal the word,
+then reveal the systematic name, and the point makes itself — no narration needed.</p>
+<p>Both start <strong>hidden</strong>, so <code>show</code> is the entire opt-in and no existing scene changes.</p>
+<p>The two names come from different places, and the difference is worth understanding:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th></th><th>source</th><th>available for</th></tr>
+</thead>
+<tbody>
+<tr><td><code>{id}.iupac</code></td><td>the record’s own name, or generated</td><td>bundled files, your files, and SMILES within a narrow scope</td></tr>
+<tr><td><code>{id}.name</code></td><td>the curated <code>asset:molecules/</code> <strong>filename</strong></td><td>bundled molecules only</td></tr>
+</tbody>
+</table>
+</div>
+<p>The systematic name is read straight from the record, which makes it authoritative and
+complete — stereodescriptors included, since that is most of what makes a real name
+hard. PubChem writes those with markup (<code>(8&lt;I&gt;R&lt;/I&gt;,9&lt;I&gt;S&lt;/I&gt;)-…</code>), so the tags are
+stripped before anything reaches the screen. For a SMILES string there is no record, so
+the name is generated; outside a narrow scope the generator declines, and then there is
+simply no <code>iupac</code> entity rather than a guess.</p>
+<p>The everyday name is stranger, and worth explaining because the obvious approach fails.
+<strong>Nothing inside a record carries it.</strong> The title line is the bare compound id, and
+PubChem’s <code>PUBCHEM_IUPAC_TRADITIONAL_NAME</code> field — which looks exactly like the field
+for it — is semi-systematic as often as not:</p>
+<pre><code>caffeine       -&gt; caffeine                          ✓
+dopamine       -&gt; 4-(2-aminoethyl)pyrocatechol      ✗
+serotonin      -&gt; 3-(2-aminoethyl)-1H-indol-5-ol    ✗
+testosterone   -&gt; (8R,9S,10R,13S,14S,17S)-17-hyd…   ✗
+</code></pre>
+<p>No length or shape rule separates the two, and a common name is a fact about <em>usage</em>
+rather than structure, so it cannot be computed at all. The one place Manic genuinely
+holds it is the library’s own filenames — every file under <code>asset:molecules/</code> was
+fetched by resolving a common name to a compound id, so the slug <em>is</em> the name. That is
+why <code>{id}.name</code> exists for <code>asset:molecules/dopamine-2d.sdf</code> and not for your own file:
+anyone’s <code>thing-2d.sdf</code> could be called anything.</p>
+<p>Long names wrap rather than running off the canvas — 25 of the bundled molecules have
+systematic names over 100 characters, and oxytocin’s is 306.</p>
+<h3 id="functional-groups-are-addressable"><a class="header" href="#functional-groups-are-addressable">Functional groups are addressable</a></h3>
+<p>A structure is also tagged by the <strong>functional groups</strong> in it, perceived from the structure itself:</p>
+<pre><code class="language-manic">structure(asp, "CC(=O)Oc1ccccc1C(=O)O", (400, 360), 62);
+
+color(asp.carboxyl, crimson);    // the acid: C, =O, OH, and the bonds between them
+color(asp.ester, indigo);        // the acetyl group, including its linking O
+color(asp.aromatic, crimson);    // the whole benzene ring
+</code></pre>
+<p>This is the same mechanism as the element tags (<code>{id}.O</code>, <code>{id}.N</code>) pointed at a
+different fact about an atom — so <strong>every core verb already works on it</strong>. Nothing
+chemistry-specific was added to make <code>pulse(glc.hydroxyl)</code> or
+<code>framebox(box, asp.aromatic)</code> work.</p>
+<p>The twenty groups:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th></th><th></th><th></th><th></th></tr>
+</thead>
+<tbody>
+<tr><td><code>hydroxyl</code></td><td><code>carbonyl</code></td><td><code>carboxyl</code></td><td><code>aldehyde</code></td></tr>
+<tr><td><code>ketone</code></td><td><code>ester</code></td><td><code>amide</code></td><td><code>primary_amine</code></td></tr>
+<tr><td><code>secondary_amine</code></td><td><code>tertiary_amine</code></td><td><code>nitro</code></td><td><code>nitrile</code></td></tr>
+<tr><td><code>thiol</code></td><td><code>sulfide</code></td><td><code>sulfoxide</code></td><td><code>sulfone</code></td></tr>
+<tr><td><code>halogen</code></td><td><code>ether</code></td><td><code>epoxide</code></td><td><code>aromatic</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Four things worth knowing about how they behave:</p>
+<p><strong>A tag covers the bonds, not only the letters.</strong> Colouring a carboxyl that left its
+C=O line black would not be what you asked for, so a bond with both ends inside the
+group carries the tag too.</p>
+<p><strong>Every repeat shares one tag.</strong> Open-chain glucose has five hydroxyls, and
+<code>color(glc.hydroxyl, indigo)</code> colours all five — which is what the singular reads as.</p>
+<p><strong>Groups overlap on purpose.</strong> Acetic acid reports <code>carboxyl</code>, and also <code>carbonyl</code> and
+<code>hydroxyl</code>, because each of those is true of it and a lesson might point at any one.
+Deciding a carboxyl is “not really” a carbonyl would be the engine inventing chemistry.
+An ester, on the other hand, reports <code>ester</code> and <em>not</em> <code>carboxyl</code> — there is no free
+acid in it.</p>
+<p><strong>A file and a string give the same answer.</strong> That takes a little work behind the
+scenes: PubChem writes benzene in <strong>Kekulé</strong> form, with alternating single and double
+bonds and no aromatic flag anywhere, so aromaticity is perceived (Hückel) rather than
+taken on trust. Without that, <code>asp.aromatic</code> would find a ring in
+<code>CC(=O)Oc1ccccc1C(=O)O</code> and miss the identical ring in <code>aspirin-2d.sdf</code>.</p>
+<p>A group that is not present is simply not tagged, and addressing it is an error that
+names the id — <code>butane.hydroxyl</code> does not silently match nothing.</p>
 <h2 id="addressing-the-chemistry"><a class="header" href="#addressing-the-chemistry">Addressing the chemistry</a></h2>
 <p>Every piece is a plain tagged entity, so the core kit does the presentation:</p>
 <div class="table-wrapper">

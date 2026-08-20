@@ -1,0 +1,173 @@
+// A titration, with the curve solved rather than drawn
+//
+// 25.0 mL of 0.100 M hydrochloric acid, titrated with 0.100 M sodium hydroxide, phenolphthalein
+// indicator. The shape every chemistry student is asked to memorise — flat, then a cliff, then flat
+// again — and the point of animating it is that the cliff arrives *while you are watching the
+// burette*, which is the part a printed curve cannot say.
+//
+// NOTHING here is a new builtin. The apparatus is rectangles and a polygon, the drops are circles,
+// the curve is `plot`, and the choreography is `draw` / `shift` / `recolor` / `fade` from the core
+// kit. That is the test this scene is meant to pass: real chemistry teaching out of vocabulary that
+// already exists.
+//
+// The curve is not a drawn S-shape. It is the exact solution of the charge balance
+//
+//     [H+] - Kw/[H+] = (Ca·Va - Cb·Vb) / (Va + Vb)
+//
+// rearranged to a quadratic and solved, so pH = 7.00 at 25.0 mL FALLS OUT of the arithmetic instead
+// of being placed by hand. Change a concentration and the equivalence point moves on its own.
+
+title("a titration, solved not drawn");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the chemistry, as three reusable fields ──
+//
+// `field` inlines into any formula, so the same expression could feed a plot, a surface or a shader
+// and provably be the same chemistry. Written in three steps because that is how the derivation
+// reads, not because the engine needs it.
+
+// excess strong acid (positive) or strong base (negative), diluted by the total volume
+field(excess, "0.1*(25-x)/(25+x)");
+
+// [H+] is the positive root of [H+]^2 - excess*[H+] - Kw = 0, with Kw = 1.0e-14. It is written
+// TWICE, and the reason is arithmetic rather than chemistry: formulas evaluate in f32, and the two
+// algebraically identical forms behave very differently there.
+//
+//   acid side (excess > 0):  (excess + sqrt(excess^2 + 4Kw)) / 2      — adds, so nothing cancels
+//   base side (excess < 0):  2Kw / (sqrt(excess^2 + 4Kw) - excess)    — the conjugate form
+//
+// Use the first form past the equivalence point and it subtracts two nearly equal numbers: 4e-14 is
+// eight orders below excess^2, vanishes in f32, and [H+] collapses to zero — log(0) is -inf and the
+// whole upper branch silently disappears. The conjugate form divides instead of subtracting, so it
+// holds. Checked against a f64 evaluation across 0-50 mL: both branches agree to 0.0000 pH, and
+// both give exactly 7.000 at 25.0 mL, which is why they meet rather than merely nearly meet.
+field(hacid, "(excess(x,0) + sqrt(excess(x,0)*excess(x,0) + 0.00000000000004))/2");
+field(hbase, "0.00000000000002/(sqrt(excess(x,0)*excess(x,0) + 0.00000000000004) - excess(x,0))");
+
+// ── the axes ──
+
+coords(ax, (500, 610), (0, 50), (0, 14), 14, 28, 1, 5, 1);
+hidden(ax);
+
+// The axis names are placed by hand rather than passed to `coords`, which puts them at the axis
+// END — on top of the arrow tip and the last tick numbers.
+text(xname, (860, 668), "NaOH added / mL");
+size(xname, 16); color(xname, dim); hidden(xname);
+text(yname, (474, 196), "pH");
+size(yname, 16); color(yname, dim); hidden(yname);
+
+// the two halves of one curve, split at the equivalence point so the indicator can turn there
+// pH = -log10[H+], and log10 is ln/ln(10)
+plot(before, (500, 610), 14, 28, "-log(hacid(x,0))/2.302585", (0, 25));
+plot(after, (500, 610), 14, 28, "-log(hbase(x,0))/2.302585", (25, 50));
+color(before, ink);
+color(after, ink);
+stroke(before, 3);
+stroke(after, 3);
+untraced(before);
+untraced(after);
+
+// ── the apparatus, out of primitives ──
+
+// the burette: a tube, its tap, and the tip the drops leave from
+rect(tube, (180, 300), 26, 280);
+outlined(tube);
+outline(tube, dim);
+stroke(tube, 2);
+hidden(tube);
+
+rect(titrant, (180, 300), 18, 272);
+color(titrant, indigo);
+opacity(titrant, 0.30);
+hidden(titrant);
+
+rect(tap, (180, 452), 44, 12);
+color(tap, dim);
+hidden(tap);
+
+polygon(tip, (180, 464), (186, 472), (180, 486), (174, 472));
+color(tip, dim);
+hidden(tip);
+
+// the flask, and what is in it
+polygon(flask, (134, 642), (172, 556), (188, 556), (226, 642));
+outlined(flask);
+outline(flask, dim);
+stroke(flask, 2);
+hidden(flask);
+
+// the solution: colourless while there is acid left, pink once there is not
+polygon(soln, (140, 640), (167, 598), (193, 598), (220, 640));
+color(soln, dim);
+opacity(soln, 0.22);
+hidden(soln);
+
+text(caption, (196, 690), "0.100 M NaOH into 25.0 mL");
+size(caption, 15);
+color(caption, dim);
+hidden(caption);
+
+// four drops, reused by falling and fading. Declared up top because a constructor is build-time.
+for i in 1..5 {
+  circle(d{i}, (180, 492), 4);
+  color(d{i}, indigo);
+  hidden(d{i});
+}
+
+// ── the equivalence point, revealed only after the curve has been through it ──
+
+dot(eq, (850, 414), 6);
+color(eq, crimson);
+hidden(eq);
+
+text(eqlab, (960, 392), "25.0 mL, pH 7.00");
+size(eqlab, 18);
+color(eqlab, crimson);
+hidden(eqlab);
+
+text(eqwhy, (1002, 418), "both branches solve to 7.00");
+size(eqwhy, 15);
+color(eqwhy, dim);
+hidden(eqwhy);
+
+// ── ACT 1: set the bench up ──
+
+wait(0.4);
+par { show(tube, 0.5); show(tap, 0.5); show(tip, 0.4); }
+par { show(titrant, 0.5); show(flask, 0.5); show(soln, 0.5); }
+par { show(ax, 0.7); show(xname, 0.5); show(yname, 0.5); show(caption, 0.5); }
+wait(0.6);
+
+// ── ACT 2: the flat part. Drops fall, and almost nothing happens to the pH. ──
+//
+// This is the half of a titration that surprises people: a quarter of the base is in and the pH has
+// moved by less than one unit, because a strong acid buffers itself by sheer excess.
+
+par {
+  draw(before, 3.4);
+  stagger(0.55) {
+    par { show(d1, 0.1); shift(d1, (0, 64), 0.5); fade(d1, 0.15); }
+    par { show(d2, 0.1); shift(d2, (0, 64), 0.5); fade(d2, 0.15); }
+    par { show(d3, 0.1); shift(d3, (0, 64), 0.5); fade(d3, 0.15); }
+    par { show(d4, 0.1); shift(d4, (0, 64), 0.5); fade(d4, 0.15); }
+  }
+}
+
+// ── ACT 3: the endpoint. One drop, and the indicator turns. ──
+
+par { recolor(soln, crimson, 0.45); pulse(soln); }
+par { show(eq, 0.4); show(eqlab, 0.4); }
+wait(0.9);
+show(eqwhy, 0.5);
+wait(1.0);
+
+// ── ACT 4: past it, and flat again ──
+
+draw(after, 2.6);
+wait(2.6);

@@ -1,0 +1,119 @@
+// A mechanism, with the curly arrows aimed at real atoms
+//
+// Hydroxide and bromoethane: the SN2 substitution every organic course opens with. What makes it a
+// mechanism rather than an equation is the two curly arrows — one showing a pair of electrons
+// arriving to make a bond, one showing a pair leaving with the bromide.
+//
+// The thing worth noticing about the source is where the arrows are aimed. They are not drawn at
+// coordinates worked out by hand:
+//
+//     arrow(att, nuc.a0, sub.a1, 62);   // from the hydroxide oxygen, to the carbon
+//     arrow(go,  sub.b1,  sub.a2, 26);  // from the C-Br BOND, to the bromine
+//
+// `nuc.a0` is an atom, `sub.b1` is a bond, and both resolve to wherever the structure kit computed
+// them. Change `unit` from 90 to 120 and every arrow follows the molecule, because an arrow anchored
+// to a thing stays anchored to it. That is the whole reason this scene needs no new vocabulary:
+// `arrow` already bows into an arc, and it now takes an entity where it used to insist on a point.
+//
+// A skeletal carbon is a bare vertex with no letter, so it used to have no entity to aim at — which
+// is exactly the atom a mechanism arrow points to. Unlettered atoms now carry an invisible anchor
+// for this, addressable as `{id}.a{i}` like any other.
+
+title("SN2: where the electrons go");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the reactants ──
+//
+// Bromoethane's atoms come out as a0 (the far carbon), a1 (the one bearing bromine) and a2 (the
+// bromine); its bonds as b0 (C-C) and b1 (C-Br).
+
+structure(sub, "CCBr", (400, 290), 90);
+structure(nuc, "[OH-]", (210, 440), 90);
+hidden(sub);
+hidden(nuc);
+
+// The hydroxide sits BELOW AND LEFT of the carbon while the bromine is above and right of it: the
+// nucleophile comes in on the opposite side from the leaving group, which is what "backside attack"
+// means and is not an accident of the layout.
+text(nlab, (210, 492), "nucleophile");
+size(nlab, 16); color(nlab, indigo); hidden(nlab);
+text(llab, (584, 224), "leaving group");
+size(llab, 16); color(llab, crimson); hidden(llab);
+
+// ── the two arrows, anchored to atoms and bonds ──
+
+arrow(att, nuc.a0, sub.a1, 62);
+color(att, indigo);
+stroke(att, 2.5);
+untraced(att);
+
+arrow(go, sub.b1, sub.a2, 26);
+color(go, crimson);
+stroke(go, 2.5);
+untraced(go);
+
+text(alab, (250, 356), "a pair arrives");
+size(alab, 15); color(alab, indigo); hidden(alab);
+text(glab, (566, 296), "a pair leaves");
+size(glab, 15); color(glab, crimson); hidden(glab);
+
+// ── the reaction arrow ──
+
+arrow(rx, (612, 330), (740, 330));
+color(rx, ink);
+stroke(rx, 3);
+untraced(rx);
+
+// ── the products ──
+
+structure(pro, "CCO", (900, 290), 90);
+structure(lea, "[Br-]", (1122, 440), 90);
+hidden(pro);
+hidden(lea);
+
+text(plab, (900, 200), "ethanol");
+size(plab, 16); color(plab, dim); hidden(plab);
+text(blab, (1122, 492), "bromide");
+size(blab, 16); color(blab, dim); hidden(blab);
+
+// ── the reading of it ──
+
+text(sum, (640, 646), "one bond made, one bond broken — and the charge left with the bromide");
+size(sum, 19); color(sum, ink); hidden(sum);
+
+// ── ACT 1: the reactants, and which end is which ──
+
+wait(0.4);
+par { show(sub, 0.7); show(nuc, 0.7); }
+par { show(nlab, 0.4); show(llab, 0.4); }
+wait(0.7);
+
+// ── ACT 2: the arrow that makes the bond ──
+
+par { draw(att, 0.9); show(alab, 0.4); }
+par { recolor(nuc.O, indigo, 0.5); pulse(nuc.O); }
+wait(0.9);
+
+// ── ACT 3: and the arrow that breaks one ──
+
+par { draw(go, 0.7); show(glab, 0.4); }
+par { recolor(sub.Br, crimson, 0.5); pulse(sub.Br); }
+wait(1.1);
+
+// ── ACT 4: what comes out ──
+
+draw(rx, 0.6);
+par { show(pro, 0.7); show(plab, 0.4); }
+par { show(lea, 0.6); show(blab, 0.4); }
+// the charge is on the bromide now, which is the bookkeeping the arrows were doing
+recolor(lea.Br, crimson, 0.5);
+pulse(lea.Br);
+wait(0.8);
+show(sum, 0.6);
+wait(3.0);

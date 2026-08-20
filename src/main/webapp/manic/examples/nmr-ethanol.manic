@@ -1,0 +1,289 @@
+// Ethanol, ¹H NMR — a spectrometer sweeping, in hertz
+//
+// One pen, moving left to right, and everything else follows it: the ink appears under the nib, the
+// frequency readout runs, the camera pushes in on whichever protons the pen has just reached, and
+// their colour arrives on the molecule at the moment their peak does. Nothing is cross-cut — it is
+// one continuous sweep, which is what a spectrometer actually does.
+//
+// NOTHING here simulates NMR. The trace is a sum of Lorentzian line shapes at literature chemical
+// shifts, which is what a spectrometer's output IS, so the curve is computed and the integration
+// ratio falls out of the peak areas rather than being asserted. Everything else is `molecule3`,
+// `plot`, `parameter` + `bind`, `orbit3` and core verbs.
+//
+// THE WHOLE RIG HANGS OFF ONE NUMBER. `parameter(sw, …)` is the sweep position, and `bind` wires it
+// to the ink (`trace`), the δ readout and the Hz readout. Animating `sw` moves all of them together
+// and in step, so the number on screen is always the frequency the pen is actually over — not a
+// caption timed to look right.
+//
+//   bind(sw, trace, trace, "y/5")        the ink follows the pen
+//   bind(sw, dread, value, "5-y")        δ, counting down the reversed axis
+//   bind(sw, hread, value, "(5-y)*400")  and the same position in hertz, at 400 MHz
+//
+// A binding formula receives the parameter as **y**, not x — it is evaluated as `node.eval(0, p)`.
+// Using `x` silently freezes the readout at its initial value, which is a good hour lost.
+//
+// Values (CDCl₃, literature):
+//   CH₃  δ 1.22, triplet,  J = 7.0 Hz, 3H
+//   CH₂  δ 3.70, quartet,  J = 7.0 Hz, 2H
+//   OH   δ 2.60, singlet,               1H  — this one genuinely moves. The hydroxyl shift depends on
+//                                            concentration, temperature and how dry the solvent is,
+//                                            because the proton is exchanging; quoted values run
+//                                            from about 1.5 to 5. That is the chemistry, not sloppy
+//                                            data.
+//
+// THE AXIS RUNS BACKWARDS on purpose: an NMR spectrum puts δ = 0 on the RIGHT. The plots are written
+// in `u = 5 − δ` and the ticks are labelled by hand with the ppm they stand for.
+
+title("ethanol proton NMR");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 32), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the molecule, in its own viewport panel ──
+
+camera3((0, -9.5, 3), (0, 0, 0), 38, perspective, (300, 330), 500, 470);
+molecule3(mol, "asset:molecules/ethanol.sdf", (0, 0, 0), 1.7, "style=ball spin=16 axis=z");
+
+// Which hydrogen is which, read off the file's own bond block: a0 is the oxygen, a1 the CH₂ carbon,
+// a2 the CH₃ carbon — so a3/a4 are the CH₂ protons, a5/a6/a7 the CH₃ protons, a8 the hydroxyl.
+text(mlab, (300, 616), "ethanol · CH₃CH₂OH");
+size(mlab, 21); color(mlab, fg); hidden(mlab);
+
+// ── the instrument readout: the number that runs ──
+
+text(field, (1062, 96), "400 MHz");
+size(field, 16); color(field, dim); hidden(field);
+
+counter(dread, (1062, 138), 5, 2, "δ ", " ppm");
+size(dread, 25); color(dread, fg); hidden(dread);
+
+counter(hread, (1062, 190), 2000, 0, "", " Hz");
+size(hread, 34); color(hread, cyan); hidden(hread);
+
+// ── the spectrum ──
+
+field(spec, "3/(1+((x-3.78)/0.035)^2) + 1/(1+((x-2.40)/0.035)^2) + 2/(1+((x-1.30)/0.035)^2)");
+
+coords(ax, (672, 580), (0, 5), (0, 3.4), 110, 92, 1);
+hidden(ax);
+xtick(t0, ax, 0, "5"); xtick(t1, ax, 1, "4"); xtick(t2, ax, 2, "3");
+xtick(t3, ax, 3, "2"); xtick(t4, ax, 4, "1"); xtick(t5, ax, 5, "0");
+for i in 0..6 { hidden(t{i}); }
+
+text(axlab, (947, 636), "δ / ppm");
+size(axlab, 17); color(axlab, dim); hidden(axlab);
+
+plot(trace, (672, 580), 110, 92, "spec(x,0)", (0, 5));
+color(trace, cyan);
+stroke(trace, 3);
+untraced(trace);
+
+// the pen: a nib riding the trace, and the drop line beneath it
+curvedot(nib, trace, 0);
+color(nib, gold);
+size(nib, 7);
+hidden(nib);
+
+// A faint full-height sweep bar, so the pen has a leading edge to travel on. It is a `rect` and not
+// a `line` on purpose: a line keeps its END point inside the shape and only its START in `pos`, so
+// shifting one stretches it into a diagonal rather than sliding it across. A rect is centred on
+// `pos` and moves rigidly.
+rect(bar, (672, 421), 2, 318);
+color(bar, dim);
+opacity(bar, 0.30);
+hidden(bar);
+
+// ── the driver, and everything wired to it ──
+
+parameter(sw, (1062, 700), 0, 0, 5, "sweep", 2);
+hidden(sw);
+bind(sw, trace, trace, "y/5");
+bind(sw, dread, value, "5-y");
+bind(sw, hread, value, "(5-y)*400");
+
+// ── assignments, revealed as the pen reaches each one ──
+
+text(lch2, (815, 366), "CH₂");
+size(lch2, 20); color(lch2, gold); hidden(lch2);
+text(sch2, (815, 390), "δ 3.70 · 2H");
+size(sch2, 14); color(sch2, dim); hidden(sch2);
+
+text(loh, (936, 458), "OH");
+size(loh, 20); color(loh, crimson); hidden(loh);
+text(soh, (936, 482), "δ 2.60 · 1H");
+size(soh, 14); color(soh, dim); hidden(soh);
+
+text(lch3, (1088, 274), "CH₃");
+size(lch3, 20); color(lch3, cyan); hidden(lch3);
+text(sch3, (1088, 298), "δ 1.22 · 3H");
+size(sch3, 14); color(sch3, dim); hidden(sch3);
+
+text(integ, (947, 224), "areas 3 : 2 : 1 — which is how many protons");
+size(integ, 18); color(integ, fg); hidden(integ);
+
+// ── and then, inside one peak ──
+
+// Written in `v = Hz + 16` so the frame's ORIGIN sits at the left edge. Centring the origin on the
+// multiplet puts the y-axis straight through the middle of it, which is unreadable — and a Hz-offset
+// axis has no business having a y-axis in the middle anyway.
+field(quartet, "1/(1+((x-5.5)/1.1)^2) + 3/(1+((x-12.5)/1.1)^2) + 3/(1+((x-19.5)/1.1)^2) + 1/(1+((x-26.5)/1.1)^2)");
+
+// `step` is 7 — the coupling constant itself — so the ticks ARE the spacing being measured, and the
+// four lines fall halfway between them. Left to auto-number, 33 integers arrive as one grey smear.
+coords(zax, (711, 556), (0, 32), (0, 3.6), 15, 74, 1, 7, 0);
+hidden(zax);
+xtick(z1, zax, 2, "-14"); xtick(z2, zax, 9, "-7"); xtick(z3, zax, 16, "0");
+xtick(z4, zax, 23, "+7"); xtick(z5, zax, 30, "+14");
+for i in 1..6 { hidden(z{i}); }
+plot(zq, (711, 556), 15, 74, "quartet(x,0)", (0, 32));
+color(zq, gold); stroke(zq, 3); untraced(zq);
+
+curvedot(znib, zq, 0);
+color(znib, cyan);
+hidden(znib);
+
+text(zlab, (951, 616), "Hz from the centre of the CH₂ peak");
+size(zlab, 16); color(zlab, dim); hidden(zlab);
+
+// a second pen, in hertz, because that is the unit the splitting lives in
+parameter(zsw, (1062, 700), 0, 0, 32, "hz", 1);
+hidden(zsw);
+counter(zread, (1062, 190), -16, 1, "", " Hz");
+size(zread, 34); color(zread, gold); hidden(zread);
+bind(zsw, zq, trace, "y/32");
+bind(zsw, zread, value, "y-16");
+
+// the coupling constant, measured between the two inner lines
+line(jbar, (899, 300), (1004, 300));
+color(jbar, fg); stroke(jbar, 2); untraced(jbar);
+text(jlab, (951, 274), "J = 7.0 Hz");
+size(jlab, 21); color(jlab, fg); hidden(jlab);
+text(zwhy, (951, 224), "one peak — four lines");
+size(zwhy, 21); color(zwhy, gold); hidden(zwhy);
+
+// ── the coda ──
+
+text(k1, (300, 604), "δ 3.70 is 1480 Hz at 400 MHz");
+size(k1, 19); color(k1, cyan); hidden(k1);
+text(k2, (300, 632), "and 222 Hz at 60 MHz");
+size(k2, 19); color(k2, dim); hidden(k2);
+text(k3, (300, 672), "J stays 7.0 Hz at both");
+size(k3, 20); color(k3, gold); hidden(k3);
+text(k4, (300, 700), "which is why high field resolves");
+size(k4, 15); color(k4, dim); hidden(k4);
+
+// ═══ ACT 1: the molecule, turning ═══
+
+wait(0.5);
+show(mlab, 0.7);
+wait(1.0);
+
+// ═══ ACT 2: the instrument comes up ═══
+
+par { show(ax, 0.7); show(axlab, 0.5); show(field, 0.5); }
+par { show(t0, 0.3); show(t1, 0.3); show(t2, 0.3); show(t3, 0.3); show(t4, 0.3); show(t5, 0.3); }
+par { show(dread, 0.5); show(hread, 0.5); }
+par { show(bar, 0.4); show(nib, 0.4); }
+wait(0.6);
+
+// ═══ ACT 3: the sweep ═══
+//
+// Broken into four legs so the pen can be met at each peak. The legs are proportional to the gaps
+// between the peaks, so the pen travels at a CONSTANT rate the whole way across — a spectrometer
+// does not slow down for the interesting parts.
+//
+// 5 ppm over 7.0 s = 1.4 s per ppm. Peaks sit at u = 1.30, 2.40, 3.78.
+
+// leg 1 → the CH₂ peak at u 1.30
+par {
+  to(sw, value, 1.30, 1.82); to(nib, x, 1.30, 1.82);
+  shift(bar, (143, 0), 1.82);
+}
+// the pen is on it: the CH₂ protons take the pen's colour, and the camera goes to look
+par {
+  recolor(mol.a3, gold, 0.5); recolor(mol.a4, gold, 0.5);
+  orbit3(24, 20, 7.9, 0.9);
+  show(lch2, 0.4); show(sch2, 0.4);
+}
+wait(0.5);
+
+// leg 2 → the hydroxyl at u 2.40
+par {
+  to(sw, value, 2.40, 1.54); to(nib, x, 2.40, 1.54);
+  shift(bar, (121, 0), 1.54);
+  orbit3(-8, 16, 8.8, 1.4);
+}
+par {
+  recolor(mol.a8, crimson, 0.5);
+  orbit3(-34, 26, 7.9, 0.9);
+  show(loh, 0.4); show(soh, 0.4);
+}
+wait(0.5);
+
+// leg 3 → the methyl at u 3.78, the tallest peak
+par {
+  to(sw, value, 3.78, 1.93); to(nib, x, 3.78, 1.93);
+  shift(bar, (152, 0), 1.93);
+  orbit3(6, 18, 9.0, 1.8);
+}
+par {
+  recolor(mol.a5, cyan, 0.5); recolor(mol.a6, cyan, 0.5); recolor(mol.a7, cyan, 0.5);
+  orbit3(40, 24, 7.8, 0.9);
+  show(lch3, 0.4); show(sch3, 0.4);
+}
+wait(0.5);
+
+// leg 4 → run out to δ 0, and pull back to see the whole molecule
+par {
+  to(sw, value, 5, 1.71); to(nib, x, 5, 1.71);
+  shift(bar, (134, 0), 1.71);
+  orbit3(0, 18, 9.6, 1.7);
+}
+show(integ, 0.6);
+wait(2.0);
+
+// ═══ ACT 4: go back to the CH₂ peak, and go inside it ═══
+//
+// The pen runs back to the peak it started with, and then the scale changes underneath it: at 0–5
+// ppm a 7 Hz splitting is 0.0175 ppm, two pixels. It was never one line.
+
+// The pen rewinds, and `sw` rewinds with it: the readout counts back UP and the ink retracts,
+// because the number on screen has to keep meaning the pen's position. Letting the pen travel while
+// the readout sat at 0 Hz would break the one promise the scene makes.
+par { fade(integ, 0.4); to(sw, value, 1.30, 1.1); to(nib, x, 1.30, 1.1); shift(bar, (-407, 0), 1.1); }
+par { pulse(nib); orbit3(24, 20, 7.8, 1.0); }
+wait(0.5);
+
+par {
+  fade(trace, 0.5); fade(ax, 0.5); fade(axlab, 0.4); fade(bar, 0.4);
+  fade(nib, 0.4); fade(hread, 0.4); fade(dread, 0.4);
+  fade(lch3, 0.4); fade(sch3, 0.4); fade(loh, 0.4); fade(soh, 0.4);
+  fade(lch2, 0.4); fade(sch2, 0.4);
+}
+par { fade(t0, 0.3); fade(t1, 0.3); fade(t2, 0.3); fade(t3, 0.3); fade(t4, 0.3); fade(t5, 0.3); }
+
+// ═══ ACT 5: the same pen, now measured in hertz ═══
+
+par { show(zax, 0.6); show(zlab, 0.5); show(zwhy, 0.5); }
+par { show(z1, 0.3); show(z2, 0.3); show(z3, 0.3); show(z4, 0.3); show(z5, 0.3); }
+par { show(znib, 0.4); show(zread, 0.5); }
+// the second sweep: 32 Hz, end to end, and the four lines arrive under the nib
+par { to(zsw, value, 32, 3.4); to(znib, x, 32, 3.4); }
+wait(0.4);
+par { draw(jbar, 0.5); show(jlab, 0.5); }
+par { pulse(jlab); orbit3(-18, 22, 8.0, 1.2); }
+wait(1.8);
+
+// ═══ ACT 6: why the unit matters ═══
+
+par { fade(mlab, 0.4); show(k1, 0.6); }
+show(k2, 0.5);
+wait(0.7);
+par { show(k3, 0.6); pulse(jlab); }
+show(k4, 0.5);
+par { orbit3(0, 16, 10.0, 2.4); }
+wait(3.0);

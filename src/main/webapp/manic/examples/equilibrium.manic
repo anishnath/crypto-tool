@@ -1,0 +1,170 @@
+// Dynamic equilibrium — why "nothing is happening" is the wrong reading
+//
+// A reversible first-order reaction, A ⇌ B, with kf = 0.9 and kr = 0.3 per second. Two views of the
+// same run, side by side, because the misconception lives in the gap between them:
+//
+//   LEFT   the concentrations, which flatten out and stop moving
+//   RIGHT  the two rates, which meet — at a value that is EQUAL and NOT ZERO
+//
+// A still picture of the left-hand plot says "the reaction stopped". The right-hand plot says it did
+// not: both directions are still running, at 0.225 mol dm⁻³ s⁻¹ each, and cancelling. That is the
+// whole idea of dynamic equilibrium and it is very hard to say in a static diagram, because the
+// evidence for it is precisely the thing a flat line hides.
+//
+// Then the second act: 0.50 M of A is added at t = 6 s. The rates jump apart, the system relaxes,
+// and it settles at a NEW position with the SAME ratio — [B]/[A] = 3.00 either side. Le Chatelier is
+// not a rule to memorise here; it is what the arithmetic does.
+//
+// NO NEW VOCABULARY. Four `field`s hold the closed-form solutions, `plot` draws them, and the
+// choreography is `draw` / `show` / `pulse` from the core kit. Every number on screen comes out of
+//
+//     [A](t) = A_eq + ([A]₀ − A_eq)·exp(−(kf + kr)·t)
+//
+// which is the exact solution of d[A]/dt = −kf[A] + kr[B] with [A] + [B] fixed. Nothing is placed by
+// eye: change kf or kr and both plots, both equilibrium positions and the ratio all move together.
+
+title("dynamic equilibrium: equal, not zero");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the chemistry, as closed forms ──
+//
+// kf = 0.9, kr = 0.3, so K = kf/kr = 3 and the relaxation rate is kf + kr = 1.2 per second.
+// Phase 1 starts from pure A at 1.00 M, so A_eq = 1.00 × kr/(kf+kr) = 0.25.
+field(a1, "0.25 + 0.75*exp(-1.2*x)");
+field(b1, "0.75 - 0.75*exp(-1.2*x)");
+// Phase 2: 0.50 M of A added at t = 6, so the total is 1.50 M and A_eq = 1.50 × 0.25 = 0.375.
+// [A] restarts from 0.75 (the 0.25 it had reached, plus the 0.50 added).
+field(a2, "0.375 + 0.375*exp(-1.2*(x-6))");
+field(b2, "1.125 - 0.375*exp(-1.2*(x-6))");
+
+// ── LEFT: concentrations ──
+
+coords(cc, (110, 600), (0, 14), (0, 1.25), 36, 300, 1);
+hidden(cc);
+// Explicit labels: the auto-numbering rounds to two significant figures, and a tick at 0.25 that
+// prints "0.2" is worse than no tick at all — these are numbers the viewer is meant to read off.
+ytick(cy1, cc, 0.25, "0.25");
+ytick(cy2, cc, 0.75, "0.75");
+ytick(cy3, cc, 1.125, "1.125");
+for i in 1..4 { hidden(cy{i}); }
+
+text(clab, (300, 208), "concentration / mol dm⁻³");
+size(clab, 17); color(clab, dim); hidden(clab);
+
+plot(ca1, (110, 600), 36, 300, "a1(x,0)", (0, 6));
+plot(cb1, (110, 600), 36, 300, "b1(x,0)", (0, 6));
+plot(ca2, (110, 600), 36, 300, "a2(x,0)", (6, 14));
+plot(cb2, (110, 600), 36, 300, "b2(x,0)", (6, 14));
+for i in 1..3 {
+  color(ca{i}, indigo); stroke(ca{i}, 3); untraced(ca{i});
+  color(cb{i}, crimson); stroke(cb{i}, 3); untraced(cb{i});
+}
+
+text(alab, (578, 512), "[A]");
+size(alab, 19); color(alab, indigo); hidden(alab);
+text(blab, (578, 252), "[B]");
+size(blab, 19); color(blab, crimson); hidden(blab);
+
+// ── RIGHT: the rates, which is where the misconception dies ──
+//
+// Written as k × concentration rather than pre-multiplied, so the source says what a rate IS.
+
+coords(rc, (700, 600), (0, 14), (0, 0.75), 36, 440, 1);
+hidden(rc);
+ytick(ry, rc, 0.225, "0.225");
+hidden(ry);
+
+text(rlab, (900, 252), "rate / mol dm⁻³ s⁻¹");
+size(rlab, 17); color(rlab, dim); hidden(rlab);
+
+plot(rf1, (700, 600), 36, 440, "0.9*a1(x,0)", (0, 6));
+plot(rr1, (700, 600), 36, 440, "0.3*b1(x,0)", (0, 6));
+plot(rf2, (700, 600), 36, 440, "0.9*a2(x,0)", (6, 14));
+plot(rr2, (700, 600), 36, 440, "0.3*b2(x,0)", (6, 14));
+for i in 1..3 {
+  color(rf{i}, indigo); stroke(rf{i}, 3); untraced(rf{i});
+  color(rr{i}, crimson); stroke(rr{i}, 3); untraced(rr{i});
+}
+
+text(flab, (812, 322), "forward, kf[A]");
+size(flab, 17); color(flab, indigo); hidden(flab);
+text(vlab, (812, 566), "reverse, kr[B]");
+size(vlab, 17); color(vlab, crimson); hidden(vlab);
+
+// the point of the whole scene
+dot(meet, (916, 501), 6);
+color(meet, ink);
+hidden(meet);
+text(key, (1040, 470), "equal — and not zero");
+size(key, 19); color(key, ink); hidden(key);
+text(key2, (1078, 496), "both directions still running");
+size(key2, 15); color(key2, dim); hidden(key2);
+
+// ── the disturbance at t = 6 s ──
+//
+// [A] jumps instantly, so it is a vertical line rather than part of a curve. Endpoints are the two
+// plots' own coordinates: t=6 is x = 110 + 6·36 = 326 on the left and 700 + 6·36 = 916 on the right.
+
+line(jumpc, (326, 525), (326, 375));
+color(jumpc, indigo);
+stroke(jumpc, 2);
+untraced(jumpc);
+
+line(jumpr, (916, 501), (916, 303));
+color(jumpr, indigo);
+stroke(jumpr, 2);
+untraced(jumpr);
+
+text(add, (392, 356), "+0.50 M of A");
+size(add, 16); color(add, indigo); hidden(add);
+
+// ── and the reading of it ──
+
+text(ratio, (640, 688), "[B]/[A] = 3.00 either side — the position moved, the ratio did not");
+size(ratio, 18); color(ratio, ink); hidden(ratio);
+
+// ── ACT 1: two empty axes ──
+
+wait(0.4);
+par { show(cc, 0.6); show(rc, 0.6); }
+par { show(clab, 0.4); show(rlab, 0.4); }
+par { show(cy1, 0.3); show(cy2, 0.3); show(cy3, 0.3); show(ry, 0.3); }
+wait(0.5);
+
+// ── ACT 2: the approach. Both views at once, because they are one run. ──
+
+par {
+  draw(ca1, 2.6); draw(cb1, 2.6);
+  draw(rf1, 2.6); draw(rr1, 2.6);
+}
+par { show(alab, 0.4); show(blab, 0.4); show(flab, 0.4); show(vlab, 0.4); }
+wait(0.7);
+
+// ── ACT 3: the reading a flat line hides ──
+
+par { show(meet, 0.4); pulse(meet); }
+show(key, 0.5);
+show(key2, 0.4);
+wait(2.2);
+
+// ── ACT 4: disturb it ──
+
+par { fade(key, 0.4); fade(key2, 0.4); }
+par { draw(jumpc, 0.4); draw(jumpr, 0.4); show(add, 0.4); }
+wait(0.5);
+
+// ── ACT 5: it settles somewhere new, at the same ratio ──
+
+par {
+  draw(ca2, 2.4); draw(cb2, 2.4);
+  draw(rf2, 2.4); draw(rr2, 2.4);
+}
+wait(0.6);
+show(ratio, 0.6);
+wait(3.0);
