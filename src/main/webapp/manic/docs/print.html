@@ -37,7 +37,7 @@
             const path_to_root = "";
             const default_light_theme = "navy";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8f1d47f8.js";
+            window.path_to_searchindex_js = "searchindex-31b9aac3.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b41398ea.js"></script>
@@ -8773,13 +8773,13 @@ pulse(net.output);                 // flash the prediction
 <li><a href="#statistics--probability">Statistics &amp; probability</a> — 14 examples</li>
 <li><a href="#machine-learning">Machine learning</a> — 9 examples</li>
 <li><a href="#physics--simulations">Physics — simulations</a> — 59 examples</li>
-<li><a href="#chemistry--real-molecules">Chemistry — real molecules</a> — 9 examples</li>
+<li><a href="#chemistry--real-molecules">Chemistry — real molecules</a> — 19 examples</li>
 <li><a href="#circuits--schematics-that-work">Circuits — schematics that work</a> — 3 examples</li>
 <li><a href="#optics--light-as-geometry">Optics — light as geometry</a> — 14 examples</li>
 <li><a href="#vectors-fields--coordinates">Vectors, fields &amp; coordinates</a> — 5 examples</li>
 <li><a href="#geometry-olympiad">Geometry (olympiad)</a> — 11 examples</li>
 <li><a href="#transforms--morphing">Transforms &amp; morphing</a> — 15 examples</li>
-<li><a href="#text--ui">Text &amp; UI</a> — 8 examples</li>
+<li><a href="#text--ui">Text &amp; UI</a> — 9 examples</li>
 <li><a href="#generative--recursive">Generative &amp; recursive</a> — 84 examples</li>
 <li><a href="#creator-formats--responsive-social-video">Creator formats — responsive social video</a> — 32 examples</li>
 <li><a href="#race-charts--paste-a-table-get-a-race-1">Race charts — paste a table, get a race</a> — 5 examples</li>
@@ -19801,6 +19801,1441 @@ wait(3.2);
 </code></pre>
 <div class="manic-video"><iframe src="https://www.youtube.com/embed/GDHGxHnHm14" title="Real Molecules, Real Geometry — Bond Order, Shape & Space-Filling from PubChem Files — manic" allowfullscreen loading="lazy"></iframe></div>
 
+<h2 id="chemistry-cinema"><a class="header" href="#chemistry-cinema">chemistry-cinema</a></h2>
+<p><strong>The whole kit, in one run, explained by motion.</strong> Ten ideas in the order they build on each
+other, each with a chapter title naming what is on screen — and that is the only prose in it. The
+rest of what is written is what chemistry writes down anyway: an element symbol, a wavelength, a
+coefficient, a voltage, a wavenumber. It
+opens already drawn, on caffeine from its real 2-D record, so the first frame is one worth seeing
+before anything is pressed. Then an SN2 with curly arrows anchored to actual atoms; an electron
+falling between computed levels and the colour that falls out of λ = hc/ΔE; water’s three modes and
+carbon dioxide’s silent one; 72 hard discs reacting only when a collision clears the barrier;
+coefficients landing one at a time; a crystal coming apart at its corners into hydration shells
+that face the right way; electrons sent round a wire at a computed current; a bond turning against
+the energy it costs — and back to the molecule it opened on. Nothing in it is only a picture.</p>
+<pre><code class="language-manic">// Chemistry, without a word of it
+//
+// Eleven ideas in one run, in the order they build on each other. Each act carries a chapter title
+// saying what is on screen, and that is the only prose in the film: everything else written down is
+// what chemistry writes down anyway — an element symbol, a wavelength, a coefficient, a voltage, a
+// wavenumber. The explaining is done by motion, which is the point of the whole kit, since every one
+// of these is a thing a still picture cannot say.
+//
+//   0  A MOLECULE caffeine, from its real record, standing there before anything moves
+//   1  LEWIS      the electron bookkeeping of NO₃⁻, worked — and a double bond that will not settle
+//   2  MECHANISM  SN2 — curly arrows aimed at actual atoms, one bond made and one broken
+//   3  LIGHT      an electron falls between computed levels; the photon's colour comes from λ = hc/ΔE
+//   4  MATTER     a molecule's real geometry, and the modes it vibrates in
+//   5  SILENCE    the same for CO₂ — one mode moves no dipole, and its peak is simply absent
+//   6  COLLISION  a gas reacts only when a collision clears the barrier; the tail does the work
+//   7  BALANCE    the coefficients that conserve every atom, landing one at a time
+//   8  SOLUTION   a lattice comes apart at its corners, into hydration shells that face the right way
+//   9  CURRENT    the same electrons, made to go round a wire instead
+//  10  ROTATION   a bond turns, and the energy it costs is a curve it rides
+//
+// It opens on a drawn molecule rather than on black: the first frame is a frame someone might see
+// before they press anything.
+//
+// Nothing here is drawn by hand. The skeletal formula is a real 2-D record, the curly arrows are
+// anchored to the atoms and bonds they point at, the levels are −13.606/n², the modes are eigenvectors of a
+// mass-weighted Hessian, the reaction is 72 hard discs meeting above an activation energy, the
+// coefficients are the null space of the atom matrix, the Lewis structure is counted out from the
+// formula, the dissolution order is coordination number,
+// the cell's polarity and voltage are its own electrode potentials, and the torsion profile is a
+// rigid scan of butane's real geometry. Change any number in the source and the film changes with
+// it, because there is nothing in it that is only a picture.
+
+title("chemistry, without a word of it");
+canvas("16:9");
+template("black");
+bloom(0.38, 0.72, 16);
+
+text(brand, (640, 26), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the chapter titles: each one names what is on screen, and they are the only prose here ──
+
+text(t0, (640, 82), "01 · a molecule");
+size(t0, 21);
+color(t0, fg);
+
+text(tl, (640, 82), "02 · counting the electrons");
+size(tl, 21);
+color(tl, fg);
+hidden(tl);
+
+text(t1, (640, 82), "03 · substitution, SN2");
+size(t1, 21);
+color(t1, fg);
+hidden(t1);
+
+text(t2, (640, 82), "04 · levels, and the colour of light");
+size(t2, 21);
+color(t2, fg);
+hidden(t2);
+
+text(t3, (640, 82), "05 · how a molecule vibrates");
+size(t3, 21);
+color(t3, fg);
+hidden(t3);
+
+text(t4, (640, 82), "06 · the mode with no peak");
+size(t4, 21);
+color(t4, fg);
+hidden(t4);
+
+text(t5, (640, 82), "07 · collision, and activation energy");
+size(t5, 21);
+color(t5, fg);
+hidden(t5);
+
+text(t6, (640, 82), "08 · balancing an equation");
+size(t6, 21);
+color(t6, fg);
+hidden(t6);
+
+text(t7, (640, 82), "09 · why a salt dissolves");
+size(t7, 21);
+color(t7, fg);
+hidden(t7);
+
+text(t8, (640, 82), "10 · a galvanic cell");
+size(t8, 21);
+color(t8, fg);
+hidden(t8);
+
+text(t9, (640, 82), "11 · turning a single bond");
+size(t9, 21);
+color(t9, fg);
+hidden(t9);
+// ── 0 · A MOLECULE — on screen from the first frame ─────────────────────────
+
+structure(caf, "asset:molecules/caffeine-2d.sdf", (640, 368), 116);
+color(caf.bonds, fg);
+
+// ── 1 · LEWIS — the electron bookkeeping, worked from the formula ───────────
+
+lewis(lw, "NO3-", (640, 350), 150, 34);
+hidden(lw);
+
+// ── 2 · MECHANISM ────────────────────────────────────────────────────────────
+//
+// Bromoethane and hydroxide. The nucleophile sits below and left of the carbon while the bromine is
+// above and right of it — backside attack, which is geometry rather than layout.
+
+structure(sub, "CCBr", (400, 300), 88);
+structure(nuc, "[OH-]", (214, 452), 88);
+arrow(att, nuc.a0, sub.a1, 62);
+color(att, cyan);
+stroke(att, 3);
+untraced(att);
+arrow(go, sub.b1, sub.a2, 40);
+color(go, coral);
+stroke(go, 3);
+untraced(go);
+arrow(rxn, (620, 340), (752, 340));
+color(rxn, fg);
+stroke(rxn, 3);
+untraced(rxn);
+structure(pro, "CCO", (912, 300), 88);
+structure(lea, "[Br-]", (1128, 452), 88);
+hidden(sub);
+hidden(nuc);
+hidden(pro);
+hidden(lea);
+
+// ── 2 · LIGHT ────────────────────────────────────────────────────────────────
+
+levels(lv, (330, 350), 250, 320, 6);
+emission(spec, lv, (930, 330), 520, 104);
+hidden(lv);
+hidden(spec);
+
+// ── 3 · MATTER ───────────────────────────────────────────────────────────────
+
+vibration(h2o, "asset:molecules/water.sdf", (390, 350), 150, 22);
+irspectrum(irw, h2o, (950, 340), 470, 150, 15);
+hidden(h2o);
+hidden(irw);
+hidden(h2o.readout);
+
+// ── 4 · SILENCE ──────────────────────────────────────────────────────────────
+
+vibration(co2, "asset:molecules/carbon-dioxide.sdf", (390, 350), 150, 22);
+irspectrum(irc, co2, (950, 340), 470, 150, 15);
+hidden(co2);
+hidden(irc);
+hidden(co2.readout);
+
+// ── 5 · COLLISION ────────────────────────────────────────────────────────────
+
+gas(gs, (400, 372), 430, 330, 72, "temperature=1.6 radius=7 steps=400 seed=5");
+species(gs, A, 0.5, cyan);
+species(gs, B, 0.5, magenta);
+species(gs, C, gold);
+rule(gs, "A + B -&gt; C + C when energy &gt; 3.2");
+speeds(gs, (960, 268), 440, 130, 12, 13);
+timegraph(gs, (960, 520), 96);
+hidden(gs.box);
+hidden(gs.particles);
+hidden(gs.speeds.axis);
+hidden(gs.speeds.bars);
+untraced(gs.speeds.mb);
+hidden(gs.time.frame);
+hidden(gs.time.title);
+hidden(gs.time.sweep);
+untraced(gs.time.c0);
+untraced(gs.time.c1);
+color(gs.time.c1, gold);
+
+// ── 6 · BALANCE ──────────────────────────────────────────────────────────────
+
+balance(rx, (640, 288), "Fe + O2 -&gt; Fe2O3", 54);
+tally(rx, (640, 470), 250, 42, 24);
+hidden(rx);
+hidden(rx.tally);
+
+// ── 7 · SOLUTION ─────────────────────────────────────────────────────────────
+
+lattice(salt, "NaCl", (600, 322), 6, 5, 50);
+hidden(salt);
+hidden(salt.captions);
+
+// ── 8 · CURRENT ──────────────────────────────────────────────────────────────
+
+cell(cl, "Zn|Cu", (640, 300), 640, 280, "resistance=10 carriers=12");
+hidden(cl);
+hidden(cl.captions);
+
+// ── 9 · ROTATION ─────────────────────────────────────────────────────────────
+
+newman(nm, "asset:molecules/butane.sdf", (330, 350), 150, 18);
+profile(pf, nm, (900, 350), 480, 190);
+hidden(nm);
+hidden(pf);
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  the run
+// ═══════════════════════════════════════════════════════════════════════════
+
+// 0 · A MOLECULE — already there; the heteroatoms are what the rest of it hangs off
+wait(1.4);
+par { pulse(caf.O); pulse(caf.N); }
+wait(1.0);
+par { recolor(caf.O, coral, 0.6); recolor(caf.N, cyan, 0.6); }
+wait(1.6);
+
+// 1 · LEWIS — count, connect, complete, and then the bond that will not stay still
+par { fade(caf, 0.7); fade(t0, 0.5); }
+par { show(lw, 0.5); show(tl, 0.5); }
+octet(lw, 5.5);
+wait(0.6);
+resonate(lw, 5.0, 2);
+wait(1.0);
+
+// 2 · MECHANISM — a bond made, a bond broken, and the charge leaving with the bromide
+par { fade(lw, 0.6); fade(tl, 0.4); }
+par { show(sub, 0.7); show(nuc, 0.7); show(t1, 0.5); }
+wait(0.6);
+par { draw(att, 0.9); pulse(nuc.O); }
+wait(0.5);
+par { draw(go, 0.8); pulse(sub.Br); }
+wait(0.9);
+draw(rxn, 0.6);
+par { show(pro, 0.7); show(lea, 0.7); }
+par { recolor(lea.Br, coral, 0.5); pulse(lea.Br); }
+wait(1.6);
+
+// 2 · LIGHT — the ladder, then the falls and the colours they make
+par { fade(sub, 0.5); fade(nuc, 0.5); fade(pro, 0.5); fade(lea, 0.5); fade(att, 0.4); fade(go, 0.4); fade(rxn, 0.4); fade(t1, 0.4); }
+par { show(lv, 0.8); show(t2, 0.5); }
+wait(0.5);
+show(spec, 0.7);
+wait(0.4);
+drop(lv, 3, 2, 1.6);
+wait(0.3);
+drop(lv, 4, 2, 1.4);
+wait(0.3);
+drop(lv, 6, 2, 1.4);
+wait(0.4);
+drop(lv, 2, 1, 1.8);
+wait(1.2);
+
+// 3 · MATTER — a molecule, and the three ways it can move
+par { fade(lv, 0.6); fade(spec, 0.6); fade(t2, 0.4); }
+par { show(h2o, 0.7); show(t3, 0.5); }
+wait(0.4);
+vibrate(h2o, 1, 1.8);
+par { show(irw, 0.7); vibrate(h2o, 2, 1.6); }
+vibrate(h2o, 3, 1.6);
+wait(1.4);
+
+// 4 · SILENCE — the same again, and the mode that leaves no peak
+par { fade(h2o, 0.5); fade(irw, 0.5); fade(t3, 0.4); }
+par { show(co2, 0.6); show(t4, 0.5); }
+wait(0.3);
+vibrate(co2, 1, 1.4);
+par { show(irc, 0.6); vibrate(co2, 4, 1.4); }
+wait(0.8);
+par { pulse(irc.silent); }
+vibrate(co2, 3, 2.6);
+wait(1.4);
+
+// 5 · COLLISION — molecules meet, and only the hard meetings count
+par { fade(co2, 0.5); fade(irc, 0.5); fade(co2.readout, 0.4); fade(t4, 0.4); }
+par { show(gs.box, 0.5); show(gs.particles, 0.6); show(t5, 0.5); }
+wait(0.3);
+par {
+  run(gs, 9);
+  draw(gs.time.c0, 9);
+  draw(gs.time.c1, 9);
+  seq {
+    show(gs.speeds.axis, 0.4);
+    show(gs.speeds.bars, 0.5);
+    wait(1.0);
+    draw(gs.speeds.mb, 1.2);
+    wait(0.8);
+    show(gs.time.frame, 0.4);
+  }
+}
+wait(1.2);
+
+// 6 · BALANCE — atoms are conserved, and here is what that costs
+par { fade(gs.box, 0.5); fade(gs.particles, 0.5); fade(gs.speeds, 0.5); fade(gs.time, 0.5); fade(t5, 0.4); }
+par { show(rx, 0.6); show(t6, 0.5); }
+wait(0.4);
+show(rx.tally, 0.5);
+wait(1.0);
+solve(rx, 2.8);
+wait(1.6);
+
+// 7 · SOLUTION — a solid comes apart, corner first, and the water turns round
+par { fade(rx, 0.5); fade(rx.tally, 0.5); fade(t6, 0.4); }
+par { show(salt, 0.7); show(t7, 0.5); }
+wait(0.8);
+dissolve(salt, 7, 8);
+wait(1.6);
+
+// 8 · CURRENT — the same electrons, sent round a wire
+par { fade(salt, 0.7); fade(t7, 0.4); }
+par { show(cl, 0.8); show(t8, 0.5); }
+wait(0.8);
+discharge(cl, 6, 30);
+wait(1.4);
+
+// 9 · ROTATION — a bond turns, and rides the energy it costs
+par { fade(cl, 0.6); fade(t8, 0.4); }
+par { show(nm, 0.6); show(t9, 0.5); }
+wait(0.4);
+show(pf, 0.7);
+wait(0.8);
+twist(nm, 120, 1.3);
+twist(nm, 60, 1.1);
+twist(nm, 0, 1.4);
+wait(0.8);
+twist(nm, 300, 1.3);
+twist(nm, 180, 1.3);
+wait(1.4);
+
+// coda — the molecule it opened on, with everything it is made of now lit
+par { fade(nm, 0.6); fade(pf, 0.6); fade(t9, 0.4); }
+par { show(caf, 0.9); show(t0, 0.6); }
+wait(0.5);
+par { pulse(caf.O); pulse(caf.N); }
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cg8ZgXGoGdk" title="Chemistry, Without a Word of It — Ten Ideas, Pure Animation, Every Number Computed — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="lewis-structures"><a class="header" href="#lewis-structures">lewis-structures</a></h2>
+<p><strong>The bookkeeping, worked rather than copied.</strong> From a formula and nothing else: count the
+valence electrons, pick the central atom, spend two on every bond, complete the octets from the
+outside in, and — if the middle atom is still short — take a lone pair off a neighbour and make it
+a second bond. The formal charges then fall out, and they have to sum to the ion’s charge or the
+structure is refused. Two steps are why it is animated: the pair that SWINGS IN to finish
+carbon’s octet in CO₂ is a move rather than a picture, and resonance is a claim no single drawing
+can make — nitrate’s double bond is not on one oxygen, it is on all three at once, so it keeps
+moving while the lone pairs and charges follow it. Where it declines it declines for chemical
+reasons: nitric oxide has an odd number of valence electrons and cannot be drawn with every
+electron paired.</p>
+<pre><code class="language-manic">// Lewis structures — the bookkeeping, worked rather than copied
+//
+// It opens on four of them already drawn, because that is what the idea looks like: a single bond, a
+// double, a triple, and an ion carrying a charge. Each one is labelled with its own formula by the
+// builtin — that much is computable — and with its NAME by this scene, because "water" is a fact
+// about usage rather than about the molecule. Every one is DERIVED from its formula rather than
+// looked up — count the valence electrons, pick the central atom, spend two on every bond, complete
+// the octets from the outside in, and if the middle atom is still short, take a lone pair off a
+// neighbour and make it a second bond. The formal charges then fall out, and they have to sum to the
+// ion's charge or the structure is refused.
+//
+// The middle act is the working itself, in the order a course teaches it, and the last is the claim
+// no single drawing can make: nitrate's double bond is not on one oxygen, it is on all three at
+// once, so it keeps moving while the lone pairs and the charges follow it.
+//
+// Change a formula in the source and its whole diagram changes — the letters, the lines, the dots
+// and the charges are all one calculation.
+
+title("lewis structures");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 26), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+// ── the title, and four examples standing there from the first frame ─────────
+
+text(head, (640, 74), "Lewis Structures");
+size(head, 34);
+bold(head);
+color(head, fg);
+
+lewis(wat, "H2O", (300, 262), 92, 28);
+lewis(cdi, "CO2", (960, 262), 96, 28);
+lewis(hcn, "HCN", (300, 560), 96, 28);
+lewis(amm, "NH4+", (960, 556), 84, 28);
+
+text(l1, (300, 352), "water — one pair per bond, two left over");
+size(l1, 16);
+color(l1, dim);
+
+text(l2, (960, 352), "carbon dioxide — two pairs per bond, where an octet needs it");
+size(l2, 16);
+color(l2, dim);
+
+text(l3, (300, 666), "hydrogen cyanide — three pairs, when that is what it takes");
+size(l3, 16);
+color(l3, dim);
+
+text(l4, (960, 666), "ammonium — and the charge is what the counting leaves over");
+size(l4, 16);
+color(l4, dim);
+
+// ── the working, on the one where a pair has to become a bond ──
+
+lewis(big, "CO2", (640, 320), 165, 38);
+hidden(big);
+
+text(why, (640, 500), "carbon is short of an octet, so a pair swings in — twice");
+size(why, 20);
+color(why, gold);
+hidden(why);
+
+text(why2, (640, 540), "carbon dioxide:  count · connect · complete · then check the charges");
+size(why2, 18);
+color(why2, dim);
+hidden(why2);
+
+// ── and the one no single drawing can say ──
+
+lewis(nit, "NO3-", (410, 350), 145, 34);
+hidden(nit);
+
+text(res, (940, 306), "nitrate: the double bond is not on one oxygen —");
+size(res, 20);
+color(res, fg);
+hidden(res);
+
+text(res2, (940, 342), "it is on all three at once, and the");
+size(res2, 20);
+color(res2, fg);
+hidden(res2);
+
+text(res3, (940, 378), "charges move with it");
+size(res3, 20);
+color(res3, coral);
+hidden(res3);
+
+// ── the beats ──
+
+// 1 · the four examples are already on screen; let them be read, then point at the dots
+wait(2.2);
+par { pulse(wat.pairs); pulse(cdi.pairs); }
+wait(0.6);
+par { pulse(hcn.pairs); pulse(amm.charges); }
+wait(2.0);
+
+// 2 · the working, on carbon dioxide
+par {
+  fade(wat, 0.6); fade(cdi, 0.6); fade(hcn, 0.6); fade(amm, 0.6);
+  fade(l1, 0.5); fade(l2, 0.5); fade(l3, 0.5); fade(l4, 0.5);
+}
+par { show(big, 0.5); show(why2, 0.5); }
+octet(big, 6.5);
+wait(0.4);
+show(why, 0.5);
+wait(2.2);
+
+// 3 · resonance, where the answer will not hold still
+par { fade(big, 0.5); fade(why, 0.4); fade(why2, 0.4); }
+show(nit, 0.6);
+octet(nit, 5.5);
+wait(0.5);
+par { show(res, 0.4); show(res2, 0.4); }
+wait(0.7);
+show(res3, 0.4);
+resonate(nit, 7.5, 3);
+wait(2.4);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/UPhSRgAC5QM" title="Count, Connect, Complete — Lewis Structures Worked From the Formula, and Resonance in Motion — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="hydrogen-spectrum"><a class="header" href="#hydrogen-spectrum">hydrogen-spectrum</a></h2>
+<p><strong>Four coloured lines, and every one of them computed.</strong> The rungs are placed at Eₙ = −13.606/n² eV
+(which is why they crowd towards zero), a drop from n to m releases exactly that difference, and
+λ = hc/ΔE turns it into a wavelength — then each spectral line’s COLOUR is computed from its own
+wavelength, so Balmer α is red because 656 nm is red rather than because red was chosen. The last
+beat is the transition with no line at all: 2 → 1 is the biggest jump in the diagram, and its 10.2 eV
+photon lands at 121 nm, which is ultraviolet. One electron only, on purpose — the Rydberg formula is
+exact for hydrogen and wrong for anything with two electrons to repel each other.</p>
+<pre><code class="language-manic">// The hydrogen spectrum — the colour is the arithmetic
+//
+// Four coloured lines is all a hydrogen discharge tube gives you, and every one of them is on
+// screen for a computed reason. The levels are E_n = -13.606/n² eV, so the rungs are placed at
+// their energies (which is why they crowd towards zero); a jump from n to m releases exactly that
+// energy difference; and λ = hc/ΔE turns it into a wavelength. The COLOUR of each spectral line is
+// then computed from its own wavelength — nothing is chosen, so Balmer alpha is red because 656 nm
+// is red.
+//
+// The last beat is the one a spectrum can't show: the 2 → 1 drop releases 10.2 eV at 121 nm, which
+// is ultraviolet. It is the biggest jump in the diagram and it leaves no line at all, because the
+// eye's range is a fact about the eye rather than about hydrogen.
+
+title("the hydrogen spectrum");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 28), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 66), "four lines, and every one of them computed");
+size(head, 27);
+bold(head);
+color(head, fg);
+hidden(head);
+
+levels(lv, (300, 350), 250, 320, 6);
+hidden(lv);
+
+emission(sp, lv, (930, 300), 500, 96);
+hidden(sp);
+
+text(rule, (930, 470), "λ = hc/ΔE — the colour is the energy, converted");
+size(rule, 18);
+color(rule, fg);
+hidden(rule);
+
+text(uv, (930, 512), "n = 2 → 1 is the biggest jump of all, and leaves no line:");
+size(uv, 18);
+color(uv, coral);
+hidden(uv);
+
+text(uv2, (930, 540), "10.2 eV is 121 nm, and 121 nm is ultraviolet");
+size(uv2, 18);
+color(uv2, coral);
+hidden(uv2);
+
+text(foot, (640, 690), "one electron only — the Rydberg formula is exact for hydrogen and wrong for anything with two");
+size(foot, 15);
+color(foot, dim);
+hidden(foot);
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+par { show(lv, 0.7); show(foot, 0.4); }
+wait(0.5);
+show(sp, 0.6);
+wait(0.4);
+
+drop(lv, 3, 2, 1.8);
+wait(0.5);
+drop(lv, 4, 2, 1.6);
+wait(0.4);
+drop(lv, 5, 2, 1.5);
+wait(0.4);
+drop(lv, 6, 2, 1.5);
+wait(0.5);
+show(rule, 0.5);
+wait(2.0);
+
+par { show(uv, 0.5); show(uv2, 0.5); }
+drop(lv, 2, 1, 2.2);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Xu5Ujv6Lqq4" title="Four Lines, All Computed — the Hydrogen Spectrum From E = −13.6/n² — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="galvanic-cell"><a class="header" href="#galvanic-cell">galvanic-cell</a></h2>
+<p><strong>The cell decides its own polarity.</strong> Give it two metals and the more positive standard reduction
+potential becomes the cathode — so <code>cell(c, "Cu|Zn")</code> draws exactly the same cell, and both read
++1.10 V. From that one decision: E°cell = +0.34 − (−0.76), the half-equations the right way round,
+and Ohm’s law across the 10 Ω resistor giving 0.110 A. The electrons and the salt-bridge ions move
+at a rate set by that current, and the two counters are the exam question — after half an hour,
+Q = It = 198 C, and Faraday turns that into the 67 mg of zinc the anode has lost. Change the
+resistance in the source and every number moves.</p>
+<pre><code class="language-manic">// A galvanic cell — which way round, how many volts, and what it costs the zinc
+//
+// The cell is not told which electrode is which. Give it two metals and the more positive standard
+// reduction potential is the one that gets reduced, so copper becomes the cathode and zinc the
+// anode — `cell(c, "Cu|Zn")` would draw exactly the same cell. From that one decision everything
+// else follows: E°cell = +0.34 − (−0.76) = 1.10 V, the half-equations are written the right way
+// round, and Ohm's law across the 10 Ω external resistor sets the current at 0.110 A.
+//
+// The electrons and the salt-bridge ions move at a rate set by that current, and the two counters
+// are the exam question: after half an hour, Q = It = 198 C, and Faraday's law turns that into the
+// zinc the anode has lost, m = MQ/nF = 67 mg. Change the resistance in the source and every one of
+// those numbers moves.
+
+title("a galvanic cell, solved");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 28), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 68), "the cell decides its own polarity");
+size(head, 28);
+bold(head);
+color(head, ink);
+hidden(head);
+
+cell(c, "Zn|Cu", (640, 288), 660, 280, "resistance=10 carriers=10");
+hidden(c);
+hidden(c.captions);
+
+text(why, (640, 640), "zinc is the more negative half-cell, so zinc is oxidised — that is the whole decision");
+size(why, 18);
+color(why, ink);
+hidden(why);
+
+text(law, (640, 674), "Q = It after half an hour, and m = MQ/nF is what the anode lost");
+size(law, 18);
+color(law, indigo);
+hidden(law);
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+par { show(c, 0.8); show(c.captions, 0.8); }
+wait(0.8);
+show(why, 0.5);
+wait(1.6);
+show(law, 0.5);
+discharge(c, 6, 30);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/cE-KkU95GpM" title="The Cell Decides Its Own Polarity — 1.10 V, 198 C and 67 mg of Zinc — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="dissolving-salt"><a class="header" href="#dissolving-salt">dissolving-salt</a></h2>
+<p><strong>Why salt dissolves, and why the corners go first.</strong> Two computed things carry the lesson: the
+ORDER, from each ion’s coordination number (a corner has two neighbours holding it, an edge three,
+the middle four), so the crystal erodes inwards the way a real one does; and the ORIENTATION, from
+the sign of each charge — water turns its oxygen towards Na⁺ and its hydrogens towards Cl⁻, so the
+two kinds of hydration shell face opposite ways for a reason you can read off the screen. And the
+arithmetic underneath: +787 kJ/mol to pull the lattice apart, −770 back from hydrating the ions, so
+dissolving salt is very slightly ENDOTHERMIC and what drives it is entropy.</p>
+<pre><code class="language-manic">// Why salt dissolves — and why the corners go first
+//
+// Two things on screen are computed rather than choreographed, and they are the two things the
+// lesson is about.
+//
+// The ORDER. Every ion's coordination number is counted from the lattice: a corner has two
+// neighbours holding it, an edge three, an ion in the middle four. `dissolve` takes them in that
+// order, so the crystal erodes inwards from its corners — which is what a crystal does, and why a
+// cube of salt rounds off as it goes.
+//
+// The ORIENTATION. Water is a dipole, so it turns its oxygen towards a positive ion and its
+// hydrogens towards a negative one. Each hydration shell here is built from the sign of the charge
+// it is surrounding, so the sodium shells and the chloride shells face opposite ways — which is the
+// picture of why water, specifically, is good at this.
+//
+// And the arithmetic underneath: pulling the lattice apart costs +787 kJ/mol, hydrating the two
+// ions pays back −770, so dissolving salt is very slightly ENDOTHERMIC. It happens anyway, and what
+// drives it is entropy. That surprises people, which is exactly why the numbers are on screen.
+
+title("why salt dissolves");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 28), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 66), "a crystal comes apart where it is least held");
+size(head, 27);
+bold(head);
+color(head, fg);
+hidden(head);
+
+lattice(x, "NaCl", (430, 306), 6, 5, 48);
+hidden(x);
+hidden(x.captions);
+
+text(coord, (1010, 232), "coordination:");
+size(coord, 20);
+color(coord, fg);
+hidden(coord);
+
+text(coord2, (1010, 270), "corner 2   ·   edge 3   ·   inside 4");
+size(coord2, 19);
+color(coord2, cyan);
+hidden(coord2);
+
+text(dip, (1010, 336), "water is a dipole, so it turns round:");
+size(dip, 19);
+color(dip, fg);
+hidden(dip);
+
+text(dip2, (1010, 370), "oxygen towards Na⁺, hydrogens towards Cl⁻");
+size(dip2, 19);
+color(dip2, magenta);
+hidden(dip2);
+
+text(ent, (1010, 436), "and it is barely downhill at all —");
+size(ent, 19);
+color(ent, fg);
+hidden(ent);
+
+text(ent2, (1010, 470), "what drives it is entropy, not energy");
+size(ent2, 19);
+color(ent2, gold);
+hidden(ent2);
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+show(x, 0.8);
+wait(0.6);
+par { show(coord, 0.4); show(coord2, 0.5); }
+wait(1.2);
+par { show(dip, 0.4); show(dip2, 0.5); }
+wait(0.6);
+par { show(x.captions, 0.4); dissolve(x, 7, 8); }
+wait(0.6);
+par { show(ent, 0.4); show(ent2, 0.5); }
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/r2xyVNy1F38" title="Why the Corners Go First — Salt Dissolving, Ordered by Coordination — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="butane-conformers"><a class="header" href="#butane-conformers">butane-conformers</a></h2>
+<p><strong>A single bond turns — but not for free.</strong> The bond is chosen for you (the one with the most on
+both sides, which for butane is the middle C–C), and the whole energy profile is computed by
+rotating the real geometry degree by degree: a threefold torsional term for the intrinsic
+preference for staggered, plus Lennard-Jones repulsion between the atoms on opposite sides, which
+is what makes two methyls mind each other far more than two hydrogens do. Out comes the textbook
+curve — staggered wells, anti lowest, the methyls eclipsing worst — and the projection and the
+marker are one calculation, so the molecule and the graph can never disagree. It is a rigid scan,
+so the peaks read high: the order and the shape are what to take from it.</p>
+<pre><code class="language-manic">// Butane's conformers — a Newman projection with the energy it costs
+//
+// The bond is not chosen by hand: `newman` looks for the single bond with the most on both sides,
+// which for butane is the middle C–C. Then it computes the whole profile by ROTATING the real
+// geometry degree by degree and scoring each arrangement — a threefold torsional term for the
+// intrinsic preference for staggered, plus Lennard-Jones repulsion between the atoms on opposite
+// sides, which is what makes two methyl groups mind each other far more than two hydrogens do.
+//
+// Out of that comes the curve every course draws: staggered wells at 60°, 180° and 300°, the anti
+// conformer lowest, eclipsed peaks between them, and the worst arrangement at 0° where the two
+// methyls are on top of each other. The projection and the marker are one calculation, so the
+// molecule and the graph can never disagree.
+//
+// It is a rigid scan — the bond turns and nothing else moves — so the peaks come out high: a real
+// butane widens its bond angles a little to relieve the syn contact, which is why the measured
+// barrier is 19–21 kJ/mol and this one is in the fifties. The order and the shape are what to read.
+
+title("butane: the cost of turning a bond");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 28), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 66), "a single bond turns — but not for free");
+size(head, 27);
+bold(head);
+color(head, fg);
+hidden(head);
+
+newman(nm, "asset:molecules/butane.sdf", (300, 330), 150, 18);
+hidden(nm);
+
+profile(pf, nm, (880, 330), 500, 200);
+hidden(pf);
+
+text(foot, (640, 686), "rigid scan: the peaks come out high because a real molecule widens its angles to relieve them");
+size(foot, 15);
+color(foot, dim);
+hidden(foot);
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+show(nm, 0.7);
+wait(0.6);
+par { show(pf, 0.7); show(foot, 0.4); }
+wait(1.2);
+
+twist(nm, 120, 1.6);
+wait(1.0);
+twist(nm, 60, 1.4);
+wait(1.2);
+twist(nm, 0, 1.6);
+wait(1.6);
+twist(nm, 300, 1.6);
+wait(1.0);
+twist(nm, 180, 1.6);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/YTvfMFYxTTA" title="A Single Bond Turns, But Not For Free — Butane's Torsional Profile, Computed — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="ir-modes"><a class="header" href="#ir-modes">ir-modes</a></h2>
+<p><strong>A mode is its motion — and some motions are invisible.</strong> <code>vibration</code> reads the real 3-D
+geometry, builds a harmonic force field of bond, angle and out-of-plane springs and
+diagonalises the mass-weighted Hessian, so what you watch are the actual eigenvectors: water’s
+three modes (3N−6), carbon dioxide’s four (3N−5, two of them a degenerate bend). The
+wavenumbers land near the measured ones because the masses and force constants are real —
+H–Cl at 2886 cm⁻¹ against a measured 2886, CO₂’s asymmetric stretch at 2374 against 2349. Then
+the point: a vibration absorbs infrared only if it changes the dipole moment, and CO₂’s
+symmetric stretch does not — both oxygens move out together, the bond dipoles stay equal and
+opposite, and the spectrum has no peak there however hard the bond is vibrating. The scene
+animates that silent mode against its own gap in the spectrum. The cancellation is computed from
+the mode’s displacements, not asserted.</p>
+<pre><code class="language-manic">// Infrared: a mode is its motion, and some motions are invisible
+//
+// Nothing here is drawn by hand or looked up. `vibration` reads the real 3-D geometry out of the
+// structure file, builds a harmonic force field of bond, angle and out-of-plane springs with
+// tabulated force constants, and diagonalises the mass-weighted Hessian. What comes back is the
+// textbook set of modes — 3N−6 of them, or 3N−5 when the molecule is a straight line — each with a
+// wavenumber and its own eigenvector, which is what `vibrate` animates.
+//
+// The numbers land where a spectroscopy table says they should, because the masses and the force
+// constants are real: H–Cl comes out at 2886 cm⁻¹ against a measured 2886, and carbon dioxide's
+// asymmetric stretch at 2374 against 2349. It is a harmonic model, so treat a wavenumber as good to
+// within a hundred or so — anharmonicity, Fermi resonance and overtones are all outside it.
+//
+// The point of the scene is the mode that ISN'T there. A vibration absorbs infrared only if it
+// changes the molecule's dipole moment, and carbon dioxide's symmetric stretch does not: both
+// oxygens move out together, the two bond dipoles stay equal and opposite, and the spectrum has no
+// peak however hard the bond is vibrating. That cancellation is computed — the intensity is
+// |Σ qᵢ·dᵢ|² over the mode's own displacements — so the silent mode is silent for the reason a
+// chemist would give, not because a table said so.
+
+title("infrared: the mode that isn't there");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 28), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 66), "a vibration is only visible if the dipole moves");
+size(head, 28);
+bold(head);
+color(head, fg);
+hidden(head);
+
+// ── water: three modes, all of them active ──
+
+vibration(h2o, "asset:molecules/water.sdf", (330, 330), 130, 22);
+hidden(h2o);
+
+irspectrum(ws, h2o, (930, 320), 540, 170, 15);
+hidden(ws);
+
+text(wlab, (330, 150), "water — bent, so 3N−6 = 3 modes");
+size(wlab, 20);
+color(wlab, fg);
+hidden(wlab);
+
+text(wsay, (900, 520), "three modes, three peaks — every one moves the dipole");
+size(wsay, 18);
+color(wsay, fg);
+hidden(wsay);
+
+// ── carbon dioxide: four modes, and one of them is silent ──
+
+vibration(co2, "asset:molecules/carbon-dioxide.sdf", (330, 330), 130, 22);
+hidden(co2);
+
+irspectrum(cs, co2, (930, 320), 540, 170, 15);
+hidden(cs);
+
+text(clab, (330, 150), "carbon dioxide — linear, so 3N−5 = 4 modes");
+size(clab, 20);
+color(clab, fg);
+hidden(clab);
+
+text(csay, (900, 520), "four modes — and only three peaks");
+size(csay, 19);
+color(csay, fg);
+hidden(csay);
+
+text(cwhy, (900, 556), "the symmetric stretch moves both oxygens out together —");
+size(cwhy, 17);
+color(cwhy, coral);
+hidden(cwhy);
+
+text(cwhy2, (900, 582), "the bond dipoles stay equal and opposite, so nothing absorbs");
+size(cwhy2, 17);
+color(cwhy2, coral);
+hidden(cwhy2);
+
+text(foot, (640, 690), "harmonic model, tabulated force constants — a wavenumber is good to about a hundred");
+size(foot, 15);
+color(foot, dim);
+hidden(foot);
+
+// ── ACT 1: water, mode by mode ──
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+par { show(h2o, 0.6); show(wlab, 0.4); }
+wait(0.4);
+
+vibrate(h2o, 1, 2.4);        // the scissor bend
+wait(0.4);
+vibrate(h2o, 2, 2.4);        // symmetric stretch
+wait(0.4);
+vibrate(h2o, 3, 2.4);        // asymmetric stretch
+wait(0.5);
+
+par { show(ws, 0.7); show(foot, 0.4); }
+wait(0.5);
+show(wsay, 0.5);
+wait(2.4);
+
+// ── ACT 2: carbon dioxide, where one mode goes missing ──
+
+par { fade(h2o, 0.5); fade(ws, 0.5); fade(wlab, 0.4); fade(wsay, 0.4); }
+par { show(co2, 0.6); show(clab, 0.4); }
+wait(0.4);
+
+vibrate(co2, 1, 2.2);        // bend
+wait(0.3);
+vibrate(co2, 4, 2.2);        // asymmetric stretch
+wait(0.4);
+
+show(cs, 0.7);
+wait(0.6);
+show(csay, 0.5);
+wait(1.6);
+
+// the one with no peak — animate it against its own gap in the spectrum
+par { show(cwhy, 0.5); pulse(cs.silent); }
+vibrate(co2, 3, 3.2);        // the symmetric stretch: nothing absorbs
+show(cwhy2, 0.5);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/17Cxdua2s9s" title="The Mode That Isn't There — Normal Modes, and Why CO₂'s Symmetric Stretch Is Silent — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="limiting-reagent"><a class="header" href="#limiting-reagent">limiting-reagent</a></h2>
+<p><strong>The one that runs out is not the one you have least of.</strong> 10.0 g of iron and 5.0 g of oxygen:
+there is less oxygen by mass and fewer MOLES of oxygen too, and iron is still what runs out
+first — because the comparison that decides it is not the amount but the amount DIVIDED BY THE
+COEFFICIENT (0.0448 batches against 0.0521). Every number is computed: <code>balance</code> solves the
+coefficients, <code>supply</code> converts grams to moles with the standard atomic weights — the ones you
+weigh with, not the monoisotopic masses a mass spectrum uses — and <code>react</code> grows the bars, names
+the loser and counts the yields up. It closes on the check any stoichiometry answer has to pass:
+15.00 g in, 14.30 g of oxide plus 0.70 g of unused oxygen out. Change 10 g to 20 g in the source
+and the bars, the winner and every mass move on their own.</p>
+<pre><code class="language-manic">// The limiting reagent — the one that runs out is not the one you have least of
+//
+// 10.0 g of iron and 5.0 g of oxygen. There is less oxygen by mass, and there are fewer MOLES of
+// oxygen too (0.156 against 0.179) — and iron is still what runs out first. That is the whole
+// lesson, and it is the reason the question is worth asking at all: the comparison that decides it
+// is not the amount, it is the amount DIVIDED BY THE COEFFICIENT.
+//
+//     Fe:  0.1791 mol / 4 = 0.0448 batches   ← runs out first
+//     O2:  0.1563 mol / 3 = 0.0521 batches
+//
+// Every number here is computed. `balance` solves the coefficients (as the null space of the atom
+// matrix), `supply` converts grams to moles with the STANDARD atomic weights — the ones you weigh
+// with, not the monoisotopic masses a mass spectrum uses, which differ by more than rounding —
+// and `limiting` + `react` do the comparison and count the answer up. Change 10 g to 20 g in the
+// source and the bars, the winner and every mass on screen move on their own.
+//
+// The last line is the check any stoichiometry answer has to pass: 15.00 g of reagents in, and
+// 14.30 g of oxide plus 0.70 g of unused oxygen out. Nothing was created, and nothing was lost —
+// which is the same claim the balanced equation was making, now in grams.
+
+title("the limiting reagent");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 74), "which one runs out first?");
+size(head, 30);
+bold(head);
+color(head, ink);
+hidden(head);
+
+// ── the reaction, balanced first because the coefficients are the whole point ──
+
+balance(rx, (640, 168), "Fe + O2 -&gt; Fe2O3", 44);
+hidden(rx);
+
+supply(rx, "Fe=10g O2=5g");
+
+text(given, (640, 246), "10.0 g of iron, 5.0 g of oxygen");
+size(given, 22);
+color(given, ink);
+hidden(given);
+
+text(guess, (640, 290), "there is less oxygen — by mass AND by moles. So oxygen runs out?");
+size(guess, 19);
+color(guess, dim);
+hidden(guess);
+
+// ── the comparison that actually decides it ──
+
+limiting(rx, (640, 470), 660, 52, 21);
+hidden(rx.limit);
+
+text(why, (640, 692), "moles ÷ coefficient — four irons are needed per batch, and only three oxygens");
+size(why, 19);
+color(why, indigo);
+hidden(why);
+
+text(check, (640, 692), "15.00 g in, 15.00 g out — the balanced equation, now in grams");
+size(check, 19);
+color(check, ink);
+hidden(check);
+
+// ── the beats ──
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+show(rx, 0.5);
+wait(0.4);
+solve(rx, 1.8);
+wait(0.6);
+
+show(given, 0.5);
+wait(0.8);
+show(guess, 0.5);
+wait(2.2);
+
+// the bars settle the question
+par { fade(guess, 0.4); show(rx.limit, 0.5); }
+react(rx, 3.4);
+wait(0.4);
+show(why, 0.6);
+wait(2.6);
+
+// and the answer checks itself
+fade(why, 0.4);
+show(check, 0.6);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/6bhEfeqrm7E" title="The One That Runs Out Is Not the One You Have Least Of — Limiting Reagent, Computed — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="balancing"><a class="header" href="#balancing">balancing</a></h2>
+<p><strong>Conservation, worked rather than asserted.</strong> <code>balance</code> reads the skeleton equation, counts the
+atoms in every formula and solves the coefficients; <code>tally</code> keeps score element by element;
+<code>solve</code> writes the coefficients in one at a time and the counts follow, so a half-finished state
+is a real one — a species with no coefficient yet counts as one of itself, exactly the arithmetic
+a student is doing mid-question. The coefficients are not guessed: one column per species and one
+row per element gives a matrix whose NULL SPACE is precisely the set of balanced equations, found
+by exact rational elimination (no floating point — the answer is an integer vector) and reduced to
+the smallest whole numbers, which is why 4/3/2 comes out and not 8/6/4. The animation is
+<code>rewrite</code>, so each coefficient slides in beside a formula that stays exactly where it is. Then the
+reason a solver earns its place: 2 KMnO₄ + 3 H₂SO₄ + 5 H₂C₂O₄ → K₂SO₄ + 2 MnSO₄ + 10 CO₂ + 8 H₂O,
+which nobody balances by inspection.</p>
+<pre><code class="language-manic">// Balancing an equation — conservation, worked rather than asserted
+//
+// Nothing here is placed by hand. `balance` reads the skeleton equation, counts the atoms in each
+// formula, and solves for the coefficients; `tally` keeps score element by element; `solve` writes
+// the coefficients in one at a time, and every count on the board updates as it goes. The half-done
+// states are real half-done states — a species without its coefficient yet counts as one of itself,
+// which is exactly the arithmetic a student is doing mid-question.
+//
+// The coefficients are not guessed and not searched for. One column per species and one row per
+// element gives a matrix whose NULL SPACE is precisely the set of balanced equations:
+//
+//     Fe + O2 -&gt; Fe2O3        Fe [ 1  0 -2 ]  (4, 3, 2)ᵀ = 0
+//                             O  [ 0  2 -3 ]
+//
+// so balancing is exact rational elimination — no floating point anywhere, because the answer is an
+// integer vector and a float could only ever say "about 4". The result is then reduced to the
+// SMALLEST whole numbers, which is why 4/3/2 comes out rather than 8/6/4.
+//
+// The animation is `rewrite`: each coefficient slides in beside a formula that stays exactly where
+// it is, because equal glyphs keep their identity across a rewrite. The equation is never retyped
+// and never re-laid-out — which is the difference between watching an equation get balanced and
+// watching one picture get replaced by another.
+//
+// The second half is the reason a solver earns its place: nobody balances permanganate against
+// oxalic acid by inspection.
+
+title("balancing: conservation as arithmetic");
+canvas("16:9");
+template("paper");
+
+text(brand, (640, 30), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 74), "an equation is a claim about atoms");
+size(head, 30);
+bold(head);
+color(head, ink);
+hidden(head);
+
+// ── ACT 1–3: the one everybody meets first ──
+
+balance(rx, (640, 210), "Fe + O2 -&gt; Fe2O3", 54);
+hidden(rx);
+
+tally(rx, (392, 452), 250, 40, 24);
+hidden(rx.tally);
+
+text(tallywhy, (392, 566), "atoms in, atoms out");
+size(tallywhy, 17);
+color(tallywhy, dim);
+hidden(tallywhy);
+
+text(notyet, (640, 320), "iron and oxygen do not balance — so this is not an equation yet");
+size(notyet, 19);
+color(notyet, crimson);
+hidden(notyet);
+
+// the working, written out: the coefficients ARE the null space of the atom matrix
+equation(mx, (912, 452), `\begin{bmatrix}1 &amp; 0 &amp; -2\\ 0 &amp; 2 &amp; -3\end{bmatrix}\begin{pmatrix}4\\3\\2\end{pmatrix}=\begin{pmatrix}0\\0\end{pmatrix}`, 34);
+color(mx, indigo);
+hidden(mx);
+
+text(mxwhy, (912, 566), "one row per element — the coefficients are its null space");
+size(mxwhy, 16);
+color(mxwhy, dim);
+hidden(mxwhy);
+
+text(done1, (640, 320), "every atom accounted for — and these are the smallest whole numbers");
+size(done1, 19);
+color(done1, ink);
+hidden(done1);
+
+// ── ACT 4: the one nobody balances by eye ──
+
+balance(ox, (640, 214), "KMnO4 + H2SO4 + H2C2O4 -&gt; K2SO4 + MnSO4 + CO2 + H2O", 32);
+hidden(ox);
+
+tally(ox, (392, 466), 250, 34, 22);
+hidden(ox.tally);
+
+text(oxlab, (640, 300), "the permanganate–oxalate titration, seven species and six elements");
+size(oxlab, 18);
+color(oxlab, dim);
+hidden(oxlab);
+
+text(oxwhy, (912, 466), "By inspection this takes a page.\nAs a null space it is one answer,\nand it is exact.");
+size(oxwhy, 19);
+color(oxwhy, ink);
+hidden(oxwhy);
+
+text(close, (640, 640), "conservation is not a rule you apply — it is the equation that has to hold");
+size(close, 20);
+color(close, ink);
+hidden(close);
+
+// ── the beats ──
+
+wait(0.4);
+show(head, 0.6);
+wait(0.3);
+show(rx, 0.6);
+wait(0.5);
+par { show(rx.tally, 0.5); show(tallywhy, 0.4); }
+wait(0.8);
+show(notyet, 0.5);
+wait(1.8);
+
+// the coefficients go in, one at a time, and the tally follows them
+fade(notyet, 0.4);
+solve(rx, 3.0);
+wait(0.6);
+show(done1, 0.5);
+wait(1.6);
+
+// and where those numbers came from
+par { show(mx, 0.6); show(mxwhy, 0.4); }
+wait(3.0);
+
+// ── the hard one ──
+
+par {
+  fade(rx, 0.5);
+  fade(rx.tally, 0.5);
+  fade(done1, 0.4);
+  fade(mx, 0.4);
+  fade(mxwhy, 0.4);
+  fade(tallywhy, 0.4);
+}
+par { show(ox, 0.6); show(oxlab, 0.4); }
+wait(0.6);
+par { show(ox.tally, 0.5); show(oxwhy, 0.5); }
+wait(1.0);
+solve(ox, 4.2);
+wait(0.8);
+show(close, 0.6);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/Qk80aD79Hcw" title="4 Fe + 3 O₂ → 2 Fe₂O₃ — Balancing as the Null Space of the Atom Matrix — manic" allowfullscreen loading="lazy"></iframe></div>
+
+<h2 id="collision-theory"><a class="header" href="#collision-theory">collision-theory</a></h2>
+<p><strong>Why warming it up speeds it up — measured, not asserted.</strong> The same mixture over the same
+barrier at two temperatures, and every number on screen comes off one trajectory: <code>gas</code> bounces
+72 hard discs elastically, <code>rule(cold, "A + B -&gt; C + C when energy &gt; 3.2")</code> says what happens
+when two of them meet hard enough, and that is the whole model. The histogram is a MEASUREMENT —
+<code>speeds</code> bins the gas’s own speeds while it runs and the gold line over it is the exact
+Maxwell–Boltzmann curve for that temperature, so they agree because they are the same gas. The
+threshold is in the same unit as the temperature, which makes Ea/kT the Boltzmann exponent: 4% of
+collisions clear the barrier at kT = 1.0 and 28% at kT = 2.5, and for 2-D hard discs that
+fraction is exp(-Ea/kT) exactly — reproduced by the sim rather than imposed on it. The cold
+gas’s tail cannot reach the line; the hot one spills past it. Nothing in the primitive knows the
+word chemistry: the same <code>rule</code> with no <code>when</code> clause is an epidemic (<code>"S + I -&gt; I"</code>).</p>
+<pre><code class="language-manic">// Collision theory — why warming it up speeds it up
+//
+// Two runs of the SAME mixture over the SAME barrier, at two temperatures. Nothing on screen is
+// choreographed: `gas` integrates 72 hard discs, `rule` says what happens when two of them meet
+// hard enough, and everything else — how often that happens, how fast the product appears, what
+// shape the speeds take — is measured off that one trajectory.
+//
+//     rule(cold, "A + B -&gt; C + C when energy &gt; 3.2")
+//
+// The threshold is the relative kinetic energy along the line of centres, in the same unit as
+// `temperature`, so Ea/kT is exactly the Boltzmann exponent. For 2-D hard discs the fraction of
+// collisions that clear a barrier is exp(-Ea/kT) — and the engine reproduces that to within two
+// percentage points across four (T, Ea) pairs, which is what
+// `the_fraction_of_collisions_over_the_barrier_is_the_boltzmann_factor` measures. So:
+//
+//     kT = 1.0   exp(-3.2/1.0) =  4% of collisions react
+//     kT = 2.5   exp(-3.2/2.5) = 28% of collisions react
+//
+// 2.5x the temperature, and 7x the fraction over the barrier — plus faster molecules colliding
+// more often on top of that. That double effect is the whole lesson, and here it is arithmetic
+// rather than assertion.
+//
+// The histogram is a MEASUREMENT: `speeds` bins the gas's own speeds every few frames while it
+// runs, and the gold line over it is the exact Maxwell-Boltzmann curve for that temperature, on the
+// same scale. They agree because they are the same gas. (Each panel is normalised to its own peak,
+// so read the SHAPE and where the tail reaches, not bar height between panels.)
+//
+// Both panels share one speed axis (`vmax` on `speeds`), so the cold gas visibly cannot reach where
+// the hot one lives.
+
+title("collision theory: the barrier and the tail");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 28), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 62), "A + B → C, over a barrier");
+size(head, 30);
+bold(head);
+color(head, fg);
+hidden(head);
+
+text(sub, (640, 96), "same mixture, same barrier, two temperatures");
+size(sub, 19);
+color(sub, fg);
+hidden(sub);
+
+// ── the two gases ──
+//
+// Identical in every respect but kT. Same seed, so they even start from the same arrangement — the
+// only difference between the two runs is how hard the discs are moving.
+
+gas(cold, (348, 404), 460, 344, 72, "temperature=1.0 radius=7 steps=400 seed=5");
+species(cold, A, 0.5, cyan);
+species(cold, B, 0.5, magenta);
+species(cold, C, gold);
+rule(cold, "A + B -&gt; C + C when energy &gt; 3.2");
+speeds(cold, (930, 300), 460, 150, 12, 13, 5.2);
+
+gas(hot, (348, 404), 460, 344, 72, "temperature=2.5 radius=7 steps=400 seed=5");
+species(hot, A, 0.5, cyan);
+species(hot, B, 0.5, magenta);
+species(hot, C, gold);
+rule(hot, "A + B -&gt; C + C when energy &gt; 3.2");
+speeds(hot, (930, 300), 460, 150, 12, 13, 5.2);
+
+// Hide the parts, not the whole gas: `draw` animates a trace, not opacity, so a curve that is
+// meant to be DRAWN must stay visible and untraced rather than hidden.
+hidden(cold.box);
+hidden(cold.particles);
+hidden(cold.speeds.axis);
+hidden(cold.speeds.bars);
+untraced(cold.speeds.mb);
+
+hidden(hot.box);
+hidden(hot.particles);
+hidden(hot.speeds.axis);
+hidden(hot.speeds.bars);
+untraced(hot.speeds.mb);
+
+// ── the barrier, on the speed axis ──
+//
+// The panel runs 0 to 5.2 in sim speed units across 460 px from x = 700. A lone disc hitting a
+// still partner head-on carries E = m*v^2/4, so v = 2*sqrt(Ea/m) = 3.58 is the speed that clears
+// 3.2 by itself: x = 700 + 460*3.58/5.2 = 1016. That is what the line marks — one particular way to
+// pay the barrier, and the honest label for it.
+
+line(bar, (1016, 375), (1016, 228));
+color(bar, gold);
+stroke(bar, 2);
+untraced(bar);
+
+text(barlab, (1074, 214), "Eₐ = 3.2 kT");
+size(barlab, 17);
+color(barlab, gold);
+hidden(barlab);
+
+text(barwhy, (1118, 246), "clears Eₐ alone");
+size(barwhy, 14);
+color(barwhy, fg);
+hidden(barwhy);
+
+text(spdlab, (930, 398), "speed  →   (measured bars, Maxwell–Boltzmann line)");
+size(spdlab, 16);
+color(spdlab, fg);
+hidden(spdlab);
+
+// ── the two reaction curves ──
+//
+// `timegraph` is the generic sim view, and a gas's state variables are its populations — so this is
+// the reactant falling and the product rising, with no chemistry-specific vocabulary. Drawn with
+// `draw` over the run's own duration, so the curve arrives exactly as the collisions happen.
+
+timegraph(cold, (818, 570), 96);
+timegraph(hot, (1046, 570), 96);
+hidden(cold.time.frame);
+hidden(cold.time.title);
+hidden(cold.time.sweep);
+hidden(hot.time.frame);
+hidden(hot.time.title);
+hidden(hot.time.sweep);
+color(cold.time.c1, gold);
+color(hot.time.c1, gold);
+untraced(cold.time.c0);
+untraced(cold.time.c1);
+untraced(hot.time.c0);
+untraced(hot.time.c1);
+
+text(coldlab, (818, 458), "kT = 1.0");
+size(coldlab, 16);
+color(coldlab, cyan);
+hidden(coldlab);
+
+text(hotlab, (1046, 458), "kT = 2.5");
+size(hotlab, 16);
+color(hotlab, magenta);
+hidden(hotlab);
+
+text(mix, (348, 598), "36 A + 36 B, elastic discs");
+size(mix, 16);
+color(mix, fg);
+hidden(mix);
+
+// ── the readings, one per act ──
+
+text(read1, (348, 636), "4% of collisions clear Eₐ");
+size(read1, 22);
+color(read1, cyan);
+hidden(read1);
+
+text(read2, (348, 636), "28% of collisions clear Eₐ");
+size(read2, 22);
+color(read2, magenta);
+hidden(read2);
+
+equation(bolt, (176, 168), `f=e^{-E_\mathrm{a}/kT}`, 26);
+color(bolt, fg);
+hidden(bolt);
+
+text(point, (640, 690), "2.5× the temperature — 7× the fraction over the barrier, and more collisions besides");
+size(point, 17);
+color(point, fg);
+hidden(point);
+
+// ── ACT 1: a box of moving discs ──
+
+wait(0.4);
+par { show(head, 0.6); show(sub, 0.5); }
+wait(0.4);
+par { show(cold.box, 0.5); show(mix, 0.4); }
+show(cold.particles, 0.6);
+wait(0.4);
+
+// ── ACT 2: the cold run. The histogram builds itself while the discs move. ──
+
+par {
+  run(cold, 9);
+  draw(cold.time.c0, 9);
+  draw(cold.time.c1, 9);
+  seq {
+    show(cold.speeds.axis, 0.4);
+    par { show(cold.speeds.bars, 0.5); show(spdlab, 0.4); }
+    wait(1.2);
+    draw(cold.speeds.mb, 1.2);
+    wait(0.6);
+    par { draw(bar, 0.5); show(barlab, 0.4); }
+    show(barwhy, 0.4);
+    wait(0.8);
+    par { show(cold.time.frame, 0.4); show(coldlab, 0.4); }
+    wait(1.0);
+    par { show(read1, 0.5); show(bolt, 0.5); }
+  }
+}
+wait(1.4);
+
+// ── ACT 3: same barrier, hotter gas. Only kT changed. ──
+
+par { fade(cold.particles, 0.5); fade(cold.speeds.bars, 0.4); fade(cold.speeds.mb, 0.4); fade(read1, 0.4); }
+par { show(hot.particles, 0.5); show(hot.speeds.bars, 0.4); }
+wait(0.3);
+
+par {
+  run(hot, 9);
+  draw(hot.time.c0, 9);
+  draw(hot.time.c1, 9);
+  seq {
+    draw(hot.speeds.mb, 1.0);
+    wait(0.6);
+    par { show(hot.time.frame, 0.4); show(hotlab, 0.4); }
+    wait(1.2);
+    show(read2, 0.5);
+  }
+}
+wait(0.8);
+
+// ── ACT 4: the two curves, side by side ──
+
+par { pulse(cold.time.c1); pulse(hot.time.c1); }
+show(point, 0.6);
+wait(3.0);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/LZdNi-UAWIM" title="Why Heat Speeds It Up — a Barrier, a Tail, and the Boltzmann Factor Measured — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="nmr-ethanol"><a class="header" href="#nmr-ethanol">nmr-ethanol</a></h2>
 <p><strong>A spectrometer sweeping, in hertz.</strong> One pen moves left to right and everything follows it:
 the ink appears under the nib, the frequency readout runs, the camera pushes in on whichever
@@ -25342,6 +26777,319 @@ step("settle") {
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="text--ui"><a class="header" href="#text--ui">Text &amp; UI</a></h1>
 <p>Each block is the whole file — copy it into <code>x.manic</code> and run <code>manic x.manic</code> (live) or <code>--record out</code> (video).</p>
+<h2 id="text-guide"><a class="header" href="#text-guide">text-guide</a></h2>
+<p><strong>How text works, demonstrated.</strong> The one primitive every scene uses, and the one with the most
+behaviour behind it: what a bare label does, what happens to a line too long for where it sits
+(it wraps to the room it has — it is never clipped), how <code>align</code> pins an edge, what <code>leading</code>
+does to line height, the two different ways to run text downwards (<code>rot</code> turns the line and takes
+the letters with it; <code>vertical</code> stacks them upright), why <code>caption</code> exists beside <code>text</code> at all
+— one entity per word, so <code>karaoke</code> can time them — and how <code>hue</code> colours a label, or a caption
+one word at a time. Each section shows the call beside the result, so the guide is its own worked
+example.</p>
+<pre><code class="language-manic">// How text works — a guide you can watch
+//
+// Text is the one primitive every scene uses, and the one with the most behaviour hiding behind it.
+// This is that behaviour, demonstrated: what a bare `text` does, what happens to a line too long for
+// where it sits, how to pin an edge, how to set line height, the two different ways to run text
+// downwards, and why `caption` exists beside `text` at all.
+//
+// Each section shows the call and the result side by side, so the guide is also its own worked
+// example — read the source next to the frame it produces.
+
+title("how text works");
+canvas("16:9");
+template("black");
+
+text(brand, (640, 26), "maniclang.com");
+display(brand);
+size(brand, 15);
+color(brand, dim);
+
+text(head, (640, 74), "How text works");
+size(head, 34);
+bold(head);
+color(head, fg);
+
+// ── 1 · the default ──
+
+text(s1, (640, 150), "1 · a bare label is one line, centred on its point");
+size(s1, 20);
+color(s1, gold);
+hidden(s1);
+
+text(c1, (640, 200), "text(hello, (640, 300), \"one line\", 30)");
+size(c1, 19);
+color(c1, dim);
+hidden(c1);
+
+text(hello, (640, 300), "one line");
+size(hello, 30);
+color(hello, fg);
+hidden(hello);
+
+dot(anchor1, (640, 300), 4);
+color(anchor1, coral);
+hidden(anchor1);
+
+// ── 2 · too long for its room ──
+
+text(s2, (640, 150), "2 · a line too long for its room wraps — it is never clipped");
+size(s2, 20);
+color(s2, gold);
+hidden(s2);
+
+text(c2, (640, 200), "no wrap set: the renderer uses the room the point actually has");
+size(c2, 19);
+color(c2, dim);
+hidden(c2);
+
+text(longone, (400, 320), "This label sits left of centre, so it can only use twice its distance to the near edge — and that is exactly what it wraps to.");
+size(longone, 21);
+color(longone, cyan);
+hidden(longone);
+
+rect(room, (400, 320), 760, 130);
+outlined(room);
+outline(room, dim);
+stroke(room, 1);
+hidden(room);
+
+text(c2b, (640, 470), "wrap(id, 300) chooses a narrower column than the frame allows");
+size(c2b, 19);
+color(c2b, dim);
+hidden(c2b);
+
+text(narrow, (980, 340), "A column you chose yourself, three hundred pixels wide.");
+size(narrow, 19);
+color(narrow, magenta);
+wrap(narrow, 300);
+hidden(narrow);
+
+// ── 3 · which edge is pinned ──
+
+text(s3, (640, 150), "3 · align pins an edge to the point");
+size(s3, 20);
+color(s3, gold);
+hidden(s3);
+
+line(rule3, (640, 230), (640, 560));
+color(rule3, dim);
+stroke(rule3, 1);
+untraced(rule3);
+
+text(al, (640, 270), "align(id, left)\nboth lines start here");
+size(al, 21);
+color(al, cyan);
+align(al, left);
+hidden(al);
+
+text(ac, (640, 390), "align(id, center)\nthe default");
+size(ac, 21);
+color(ac, fg);
+hidden(ac);
+
+text(ar, (640, 510), "align(id, right)\nboth lines end here");
+size(ar, 21);
+color(ar, coral);
+align(ar, right);
+hidden(ar);
+
+// ── 4 · line height ──
+
+text(s4, (640, 150), "4 · leading is line height, as a multiple of the size");
+size(s4, 20);
+color(s4, gold);
+hidden(s4);
+
+text(l1, (300, 380), "leading\n1.0\ntight");
+size(l1, 22);
+color(l1, cyan);
+leading(l1, 1.0);
+hidden(l1);
+
+text(l2, (640, 380), "default\n1.4\nprose");
+size(l2, 22);
+color(l2, fg);
+hidden(l2);
+
+text(l3, (980, 380), "leading\n2.2\nairy");
+size(l3, 22);
+color(l3, magenta);
+leading(l3, 2.2);
+hidden(l3);
+
+// ── 5 · downwards, two different ways ──
+
+text(s5, (640, 150), "5 · downwards: rotate the line, or stack the letters");
+size(s5, 20);
+color(s5, gold);
+hidden(s5);
+
+text(c5a, (300, 250), "rot(id, -90)");
+size(c5a, 19);
+color(c5a, dim);
+hidden(c5a);
+
+text(rotated, (300, 420), "ROTATED", 34);
+color(rotated, cyan);
+rot(rotated, -90);
+hidden(rotated);
+
+text(c5b, (640, 250), "rot(id, 90)");
+size(c5b, 19);
+color(c5b, dim);
+hidden(c5b);
+
+text(rotated2, (640, 420), "ROTATED", 34);
+color(rotated2, teal);
+rot(rotated2, 90);
+hidden(rotated2);
+
+text(c5c, (980, 250), "vertical(id)");
+size(c5c, 19);
+color(c5c, dim);
+hidden(c5c);
+
+text(stacked, (980, 420), "UPRIGHT", 34);
+color(stacked, gold);
+vertical(stacked);
+hidden(stacked);
+
+text(s5b, (640, 610), "the letters turn with the line, or stay the right way up — that is the whole difference");
+size(s5b, 17);
+color(s5b, fg);
+hidden(s5b);
+
+// ── 6 · caption is text per word ──
+
+text(s6, (640, 150), "6 · caption makes one entity PER WORD, so words can be timed");
+size(s6, 20);
+color(s6, gold);
+hidden(s6);
+
+text(c6, (640, 210), "text(id, …) is one entity   ·   caption(id, …) is {id}.w0, {id}.w1, …");
+size(c6, 19);
+color(c6, dim);
+hidden(c6);
+
+text(oneunit, (640, 320), "one entity, moves and fades as a whole");
+size(oneunit, 22);
+color(oneunit, cyan);
+hidden(oneunit);
+
+caption(perword, "one entity per word so each can be timed", (640, 440), 22, gold);
+hidden(perword);
+
+text(s6b, (640, 560), "which is what karaoke and wordpop need — and why a caption cannot wrap");
+size(s6b, 17);
+color(s6b, fg);
+hidden(s6b);
+
+// ── 7 · colour by hue, and per word ──
+
+text(s7, (640, 150), "7 · hue colours text by angle — and a caption word by word");
+size(s7, 20);
+color(s7, gold);
+hidden(s7);
+
+text(c7, (640, 210), "hue(id, degrees, [saturation], [lightness])   ·   to(id, hue, 320, 2) cycles it");
+size(c7, 19);
+color(c7, dim);
+hidden(c7);
+
+text(h1, (330, 300), "hue(h1, 200)", 26);
+hue(h1, 200);
+hidden(h1);
+
+text(h2, (950, 300), "hue(h2, 40, 0.9, 0.55)", 26);
+hue(h2, 40, 0.9, 0.55);
+hidden(h2);
+
+caption(spectrum, "one hue per word across a caption", (640, 420), 26, fg);
+for i in 0..6 { hue(spectrum.w{i}, i*54, 0.95, 0.62); }
+hidden(spectrum);
+
+text(s7b, (640, 530), "a caption is words, so each word can take its own colour");
+size(s7b, 17);
+color(s7b, fg);
+hidden(s7b);
+
+text(s7c, (640, 585), "gradients are shapes-and-strokes only — text is tinted, not filled");
+size(s7c, 18);
+color(s7c, dim);
+hidden(s7c);
+
+// ═══════════════════════════════════════════════════════════════════
+//  the run
+// ═══════════════════════════════════════════════════════════════════
+
+wait(0.6);
+
+// 1 · the default
+par { show(s1, 0.5); show(c1, 0.4); }
+par { show(hello, 0.5); show(anchor1, 0.3); }
+wait(2.4);
+
+// 2 · overflow
+par { fade(s1, 0.4); fade(c1, 0.4); fade(hello, 0.4); fade(anchor1, 0.3); }
+par { show(s2, 0.5); show(c2, 0.4); }
+par { show(room, 0.5); show(longone, 0.6); }
+wait(2.6);
+par { show(c2b, 0.4); show(narrow, 0.6); }
+wait(2.6);
+
+// 3 · alignment
+par { fade(s2, 0.4); fade(c2, 0.4); fade(c2b, 0.4); fade(room, 0.4); fade(longone, 0.4); fade(narrow, 0.4); }
+show(s3, 0.5);
+draw(rule3, 0.6);
+show(al, 0.5);
+show(ac, 0.5);
+show(ar, 0.5);
+wait(2.6);
+
+// 4 · leading
+par { fade(s3, 0.4); fade(rule3, 0.4); fade(al, 0.4); fade(ac, 0.4); fade(ar, 0.4); }
+show(s4, 0.5);
+par { show(l1, 0.5); show(l2, 0.5); show(l3, 0.5); }
+wait(2.6);
+
+// 5 · downwards
+par { fade(s4, 0.4); fade(l1, 0.4); fade(l2, 0.4); fade(l3, 0.4); }
+show(s5, 0.5);
+par { show(c5a, 0.4); show(rotated, 0.5); }
+par { show(c5b, 0.4); show(rotated2, 0.5); }
+par { show(c5c, 0.4); show(stacked, 0.5); }
+wait(0.6);
+show(s5b, 0.5);
+wait(2.6);
+
+// 6 · caption
+par {
+  fade(s5, 0.4); fade(c5a, 0.4); fade(c5b, 0.4); fade(c5c, 0.4);
+  fade(rotated, 0.4); fade(rotated2, 0.4); fade(stacked, 0.4); fade(s5b, 0.4);
+}
+par { show(s6, 0.5); show(c6, 0.4); }
+par { show(oneunit, 0.5); pulse(oneunit); }
+wait(0.8);
+show(perword, 0.4);
+karaoke(perword, 3.2);
+wait(0.4);
+show(s6b, 0.5);
+wait(2.4);
+
+// 7 · hue
+par { fade(s6, 0.4); fade(c6, 0.4); fade(oneunit, 0.4); fade(perword, 0.4); fade(s6b, 0.4); }
+par { show(s7, 0.5); show(c7, 0.4); }
+par { show(h1, 0.5); show(h2, 0.5); }
+wait(0.5);
+show(spectrum, 0.5);
+wait(0.6);
+par { show(s7b, 0.4); show(s7c, 0.4); }
+to(h1, hue, 320, 2.4);
+wait(2.6);
+</code></pre>
+<div class="manic-video"><iframe src="https://www.youtube.com/embed/QkvBR8cdQqU" title="How Text Works — Wrapping, Alignment, Leading, Vertical, Caption vs Text — manic" allowfullscreen loading="lazy"></iframe></div>
+
 <h2 id="typewriter"><a class="header" href="#typewriter">typewriter</a></h2>
 <p>Text revealed character by character.</p>
 <pre><code class="language-manic">// Typewriter — text revealed letter by letter (Manim's AddTextLetterByLetter),
@@ -46948,7 +48696,7 @@ it never exposes render-host or provisioning endpoints.</p>
 semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/blob/main/API.md">platform API contract</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- GENERATED by scripts/gen-api.py; do not edit by hand. -->
 <h1 id="manic-api-reference"><a class="header" href="#manic-api-reference">Manic API reference</a></h1>
-<p>The complete index of every Manic builtin — <strong>461 builtins across 19 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
+<p>The complete index of every Manic builtin — <strong>490 builtins across 19 kits</strong>. Each entry shows its signature, whether it sets things up or animates them, and what it does. Every name listed here is one the editor knows too, so autocomplete and highlighting always match this page.</p>
 <h2 id="reading-a-signature"><a class="header" href="#reading-a-signature">Reading a signature</a></h2>
 <ul>
 <li><code>new id</code> is the name created by a constructor.</li>
@@ -46998,7 +48746,10 @@ semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/
 <tr><td><code>color(id: id or tag, color: colour)</code></td><td>constructor / setup</td><td>set fill/stroke colour</td></tr>
 <tr><td><code>outline(id: id or tag, color: colour)</code></td><td>constructor / setup</td><td>set outline colour</td></tr>
 <tr><td><code>size(id: id or tag, size: number)</code></td><td>constructor / setup</td><td>set text size</td></tr>
-<tr><td><code>wrap(id: id or tag, width: number)</code></td><td>constructor / setup</td><td>wrap a text/caption/$…$ label to a width (px), breaking at word boundaries; inline math stays atomic</td></tr>
+<tr><td><code>wrap(id: id or tag, width: number)</code></td><td>constructor / setup</td><td>wrap a text/caption/$…$ label to a width (px), breaking at word boundaries; inline math stays atomic. Text that would leave the canvas wraps to the room it has WITHOUT this - nothing is silently clipped - so <code>wrap</code> is for choosing a narrower column than the frame allows</td></tr>
+<tr><td><code>align(id: id or tag, edge: id or tag)</code></td><td>constructor / setup</td><td>which edge of a text block is pinned to its point: <code>left</code>, <code>center</code> (the default) or <code>right</code>. Applies to a wrapped block, to hand-broken <code>\n</code> lines, and to an equation image; a right-aligned label keeps its right edge as the text changes length, which is what a column of numbers wants</td></tr>
+<tr><td><code>leading(id: id or tag, factor: number)</code></td><td>constructor / setup</td><td>line height as a multiple of the font size (default 1.4). Tighten it for a stacked column or a title that should read as one block, open it out for a paragraph</td></tr>
+<tr><td><code>vertical(id: id or tag, [leading: number])</code></td><td>constructor / setup</td><td>stack a text label’s glyphs into a column, each one UPRIGHT - the poster/spine reading. Not the same as <code>rot(id, 90)</code>, which turns the whole line on its side and takes the letters with it. Optional line height (default 1.0, tighter than prose because single capitals otherwise read as a list). Spaces become gaps in the column, combining marks stay on their letter, and applying it twice changes nothing. Inline math is refused - a formula cannot be stacked letter by letter</td></tr>
 <tr><td><code>stroke(id: id or tag, width: number)</code></td><td>constructor / setup</td><td>set stroke width</td></tr>
 <tr><td><code>dashed(id: id or tag, [dash: number], [gap: number])</code></td><td>constructor / setup</td><td>use a repeating dash/gap stroke on a path-like entity</td></tr>
 <tr><td><code>gradient(…)</code></td><td>constructor / setup</td><td>multi-stop gradient on the primary paint: gradient(id, c1, c2, …, [mode]) — along a path stroke by arc length, a linear (angle°) / radial fill, or a computed “speed”/“curvature” quantity on strokes</td></tr>
@@ -47427,6 +49178,28 @@ semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/
 <tbody>
 <tr><td><code>structure(id: new id, source: string, [center: (x, y)], [unit: number], [spec: string])</code></td><td>constructor / setup</td><td>a SKELETAL STRUCTURAL FORMULA — the flat drawing a chemist puts on paper — from an MDL structure file’s 2-D depiction coordinates. Every convention is derived from the file, not authored: a carbon is a bare VERTEX, hydrogens on carbon vanish, a heteroatom is lettered with its hydrogens folded in (an oxygen with one explicit H becomes <code>OH</code>, a nitrogen with two becomes <code>NH2</code>), a double bond’s second line leans toward the CROWDED side — which inside a ring is the ring centre, and falls out of the neighbours’ own coordinates without detecting rings — and a bond is a wedge or a hash where the molfile’s fourth bond column records stereochemistry. Bonds stop short of a letter so no line runs under text. <code>unit</code> is PIXELS PER BOND (default 64; a 2-D record is laid out on a 1.0-per-bond grid, so this is literally how big a bond should be). <code>spec</code> takes <code>carbons=1</code> (letter every carbon too — the explicit style a first lesson uses), <code>hydrogens=1</code> (draw them as their own vertices instead of folding them in), <code>labels=text|latex</code> (<code>latex</code> TYPESETS the label so a subscript is a real subscript — NH₂ rather than NH2 — and a charge is raised; costs one rasterised image per DISTINCT label, so a molecule with six hydroxyls costs one), <code>color=</code>, <code>record=</code>. Entities: bonds <code>{id}.b{k}</code> (the FILE’s numbering, so it has gaps where C–H bonds were skipped — address <code>{id}.bonds</code> instead), labels <code>{id}.a{i}</code>, tagged {id} + <code>{id}.bonds</code> / <code>{id}.labels</code> / <code>{id}.multibonds</code> / <code>{id}.wedges</code> / <code>{id}.hashes</code>, and every label also by its element (<code>{id}.O</code>, <code>{id}.N</code>) — <strong>and by FUNCTIONAL GROUP</strong>: <code>{id}.carboxyl</code>, <code>{id}.ester</code>, <code>{id}.hydroxyl</code>, <code>{id}.aromatic</code> and the rest of <code>hydroxyl</code> / <code>carbonyl</code> / <code>carboxyl</code> / <code>aldehyde</code> / <code>ketone</code> / <code>ester</code> / <code>amide</code> / <code>primary_amine</code> / <code>secondary_amine</code> / <code>tertiary_amine</code> / <code>nitro</code> / <code>nitrile</code> / <code>thiol</code> / <code>sulfide</code> / <code>sulfoxide</code> / <code>sulfone</code> / <code>halogen</code> / <code>ether</code> / <code>epoxide</code> / <code>aromatic</code>, detected from the structure itself, so <code>color(asp.carboxyl, crimson)</code> addresses the CHEMISTRY rather than a list of indices. A tag covers the group’s labels AND the bonds inside it, every repeat of a group shares one tag (a sugar’s five hydroxyls colour together), and groups OVERLAP on purpose — a carboxyl is also a carbonyl and a hydroxyl, all three being true of it. Works identically from a file or a SMILES string. NAMES: <code>{id}.name</code> (the everyday word, from the curated <code>asset:molecules/</code> filename) and <code>{id}.iupac</code> (the systematic name, from the record or generated) are HIDDEN captions under the drawing — <code>show(caf.name); show(caf.iupac);</code> is the nomenclature lesson. A SMILES string or your own file gets <code>{id}.iupac</code> at best and no <code>{id}.name</code>; long names wrap. The captions are tagged <code>{id}.names</code> and NOT <code>{id}</code>, so <code>show({id})</code> does not reveal them. EVERY atom is addressable as <code>{id}.a{i}</code> even when it carries no letter — a skeletal carbon gets an invisible anchor — so <code>arrow(a, nuc.a0, sub.a1, 62)</code> aims a curly arrow at a carbocation, and <code>{id}.b{k}</code> resolves to a bond’s midpoint. A structure that COULD NOT EXIST is refused rather than drawn — five bonds on a carbon lays out cleanly, so only a valence check catches it; the rule is charge-aware, so <code>[N+](C)(C)(C)C</code> is fine and <code>O(C)(C)C</code> is not. names wrap. These are 2-D entities, so <code>framebox</code> and <code>brace</code> work on them (unlike <code>molecule3</code>), and <code>untraced</code> + <code>stagger { draw({id}.bonds) }</code> writes the formula on bond by bond. <strong>Needs the 2-D record</strong> — a 3-D conformer flattened is a tangle of crossing bonds, so one is refused with the <code>record_type=2d</code> fix named. Bundled as <code>asset:molecules/&lt;name&gt;-2d.sdf</code>. <code>source</code> ALSO takes a <strong>SMILES string</strong> in place of a path — <code>structure(e, "CCO")</code> is ethanol — and then the coordinates are COMPUTED, not read: a chain zig-zags at the tetrahedral angle, a ring closes as a regular polygon, a fused ring reflects across the bond it shares, a substituent points radially out of its ring, and an aromatic ring is Kekulé-ised so the alternating double bonds are real bonds. A string is read as SMILES when it does not look like a file (no <code>asset:</code>, no <code>/</code>, no <code>.sdf</code>/<code>.mol</code>), so the two forms never collide. The layout is CHECKED before it is drawn — overlapping atoms, crossing bonds or a stretched bond are REFUSED with the 2-D-file fix named, rather than drawn as a tangle, because a plausible-but-wrong formula is worse than none. Chains, single rings and outward-growing FUSED systems are reliable, and that covers a steroid’s four rings, a substituted phenanthroline and the aromatics; a BRIDGED or caged skeleton (morphine) is what gets refused. SMILES atoms are numbered in WRITTEN order, so <code>CC(=O)O</code> puts its hydroxyl oxygen last and <code>{id}.a4</code> addresses it</td></tr>
 <tr><td><code>molecule3(id: new id, path: string, [center: (x, y, z)], [scale: number], [style: id or tag], [record: number])</code></td><td>constructor / setup</td><td>a REAL MOLECULE from an MDL structure file — <code>.sdf</code> (what a PubChem “Download → SDF” gives you) or <code>.mol</code>, as an <code>asset:</code> URI or a path. Nothing about the shape is authored: the atom coordinates are the file’s, in Ångströms, so a bond angle on screen is the one someone computed. Atoms are spheres coloured by the CPK/Jmol convention and sized by covalent radius; bonds are sticks, with a double bond drawn as two parallel lines and a triple as three. <code>center</code> defaults to the origin and the molecule is centred on its own centroid; <code>scale</code> is world units per Ångström (default 1, which puts a small molecule at the few-units scale the rest of the 3D kit works at); <code>style</code> is ball (default), spacefill (full radii, no bonds — the shape the molecule presents to the world) or wireframe (bonds only); <code>record</code> picks one molecule out of a multi-record SDF, counting from 1. Atoms are <code>{id}.a{i}</code> and bonds <code>{id}.b{k}</code> (<code>{id}.b{k}.{n}</code> for each line of a multiple bond), tagged {id} + <code>{id}.atoms</code> / <code>{id}.bonds</code> / <code>{id}.multibonds</code> — and every atom is ALSO tagged by its element (<code>{id}.O</code>, <code>{id}.C</code>), so <code>color(caf.N, cyan)</code> addresses the chemistry rather than an index. Bundled: water, methane, ammonia, benzene, carbon-dioxide under <code>asset:molecules/</code>. A V3000 file is refused with the way to convert it</td></tr>
+<tr><td><code>balance(id: new id, center: (x, y), equation: string, [size: number])</code></td><td>constructor / setup</td><td>solve a chemical equation’s coefficients and draw the SKELETON: balance(rx, (x,y), “Fe + O2 -&gt; Fe2O3”). One column per species and one row per element makes a matrix whose null space IS the set of balanced equations, so the coefficients are found by exact rational elimination (never floating point) and reduced to the smallest whole numbers - 4 Fe + 3 O2 -&gt; 2 Fe2O3. Formulae read as written, with nested groups Ca(OH)2 / Al2(SO4)3 and hydrates CuSO4.5H2O, and every symbol is checked against the periodic table (Co is cobalt, CO is carbon monoxide). An equation that cannot balance says which: an element that only appears on one side, two reactions written as one, or something on the wrong side of the arrow. The equation is an ordinary LaTeX image at {id}; <code>solve(id)</code> writes the coefficients in</td></tr>
+<tr><td><code>tally(id: id or tag, center: (x, y), [width: number], [row: number], [size: number])</code></td><td>constructor / setup</td><td>the conservation table beside a <code>balance</code>: one row per element, atoms on the left against atoms on the right, red while they disagree and lime when they match. Counts are live counters that <code>solve</code> updates at every step, so a half-finished balance shows exactly the mismatch a student would be looking at. Draws {id}.tally.e{k} + {id}.tally.l{k}/{id}.tally.r{k}, all tagged {id}.tally</td></tr>
+<tr><td><code>solve(id: id or tag, [dur: number])</code></td><td>state-changing verb</td><td>write a <code>balance</code>’s coefficients in, one at a time, with the tally keeping score. Each step is a <code>rewrite</code>, so a coefficient slides in beside a formula that stays exactly where it is - the equation is never retyped or re-laid-out. <code>dur</code> is the total for all the steps (default 2.4). An equation that needs no coefficients still plays; it simply has nothing to add</td></tr>
+<tr><td><code>lewis(id: new id, formula: string, center: (x, y), [unit: number], [size: number])</code></td><td>constructor / setup</td><td>a Lewis structure WORKED from a formula: lewis(x, “NO3-”) counts the valence electrons, picks the central atom (least electronegative that can hold more than one bond), spends two on each bond, completes the octets from the outside in, promotes a lone pair to a pi bond while the centre is short (or while it tidies the formal charges, where period 3+ may expand), and computes the formal charges - which must sum to the ion’s charge or it refuses. Charges beyond +-1 want a separator: “SO4 2-” or “CO3^2-”, since NO3- is nitrate rather than NO with three minuses. Electron-deficient centres stay deficient (BF3/BeCl2/AlCl3 keep single bonds and no charges, because a halogen does not pi-donate) while carbon still insists on its octet (CO is a triple bond with C- and O+). Oxyacids put their hydrogens on oxygen and complete those oxygens before the centre, so H2SO4 comes out neutral with two S=O. Declines what it cannot honestly draw: an ODD electron count (NO, NO2 - radicals), transition metals (no group number to count), and any skeleton needing TWO central atoms (C2H6, H2O2, CH3OH - a formula cannot say H-O-O-H rather than H2O-O). Draws {id}.a{i} letters + {id}.bonds lines (one per pair, so a double is two lines) + {id}.pairs dots + {id}.charges + an {id}.count electron total + {id}.formula, which labels the structure with what it is OF (NO3- prints as NO3- with the digit down and the charge up). The NAME is not the kit’s to give: <code>nitrate</code> is a fact about usage, so a scene says that</td></tr>
+<tr><td><code>octet(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>play the working of a <code>lewis</code> structure in the order it is taught: the electron count, then the sigma bonds one at a time, then the lone pairs from the outside in, then the pair that SWINGS IN to finish the centre’s octet, then the formal charges that fall out of it. The step that needs the animation is the fourth one</td></tr>
+<tr><td><code>resonate(id: id or tag, [dur: number], [cycles: number])</code></td><td>animation verb</td><td>move a <code>lewis</code> structure’s extra bonds round its equivalent neighbours - the double bond hopping between the three oxygens of nitrate, or the two of ozone - with the lone pairs and formal charges following it, because they are the same bookkeeping. The claim being made is that the molecule is NONE of the drawings and the average of all of them, which is only sayable in motion. Refuses when there is only one arrangement</td></tr>
+<tr><td><code>levels(id: new id, center: (x, y), [w: number], [h: number], [nmax: number], [Z: number])</code></td><td>constructor / setup</td><td>the energy-level diagram of a ONE-ELECTRON atom (H, He+, Li2+ …): E_n = -13.606 Z^2/n^2 eV, so the rungs are placed at their energies and crowd towards zero as n grows. Every transition’s photon is computed with lambda = hc/dE. Restricted to one electron on purpose - the Rydberg formula is exact there and simply wrong for anything with electron-electron repulsion. Draws {id}.n{k} rungs (tagged {id}.rungs) + labels + {id}.electron + {id}.photon + {id}.readout</td></tr>
+<tr><td><code>emission(id: new id, levels: id or tag, center: (x, y), [w: number], [h: number], [from: number])</code></td><td>constructor / setup</td><td>the emission spectrum those levels produce: one line per VISIBLE transition, standing at its own wavelength, and COLOURED FROM that wavelength rather than chosen - so hydrogen’s Balmer alpha is red at 656 nm because the arithmetic put it there. Ultraviolet and infrared transitions are computed but not drawn, because they are not colours. Draws {id}.strip + {id}.line{k} (tagged {id}.lines) + wavelength labels</td></tr>
+<tr><td><code>drop(id: id or tag, from: number, to: number, [dur: number])</code></td><td>animation verb</td><td>an electron falls from one level to another and emits the photon that energy difference is worth: the electron slides down the diagram, a photon of the computed COLOUR flies off, the matching spectral line flares, and the readout gives n, the energy in eV and the wavelength in nm. Emission only - the second level must be the lower one</td></tr>
+<tr><td><code>cell(id: new id, metals: string, center: (x, y), [w: number], [h: number], [spec: string])</code></td><td>constructor / setup</td><td>a galvanic cell that works out its own polarity: give it two metals (“Zn|Cu”) and the more positive standard reduction potential becomes the CATHODE, so “Zn|Cu” and “Cu|Zn” are the same cell and both read +1.10 V. E(cell) = E(cathode) - E(anode), I = E/R across the external resistor, and the half-equations are written from the same decision. <code>spec</code> is a “key=value” string: resistance (ohms, default 10), carriers (electrons drawn, default 8). Draws beakers, electrodes, salt bridge, wire, a voltmeter reading the computed EMF, plus {id}.electrons and {id}.ions; the two counter captions carry {id}.captions rather than {id}, so show(id) is the bench alone</td></tr>
+<tr><td><code>discharge(id: id or tag, [dur: number], [minutes: number])</code></td><td>animation verb</td><td>let a <code>cell</code> run: electrons cross the wire and ions cross the salt bridge at a rate set by the current, while the readouts count the charge (Q = It) and the anode’s mass loss (Faraday: m = MQ/nF). <code>minutes</code> is how long the cell is being run for, not how long the shot is - a Daniell cell through 10 ohms for half an hour is 198 C and 67 mg of zinc, and that is what it says rather than an exaggerated electrode</td></tr>
+<tr><td><code>lattice(id: new id, formula: string, center: (x, y), [cols: number], [rows: number], [unit: number])</code></td><td>constructor / setup</td><td>an ionic lattice as an alternating grid, sized by real ionic radii (chloride really is much bigger than sodium). 1:1 salts only, since that is what a checkerboard keeps honest. Counts each ion’s COORDINATION - 2 at a corner, 3 on an edge, 4 inside - which is the order <code>dissolve</code> uses. Where a data book has the numbers it also prints the energy account: lattice enthalpy against the hydration enthalpies, and the small positive dH that explains why dissolving salt is entropy-driven. Draws {id}.i{k} ions (tagged {id}.ions) + labels + waiting {id}.water; the spoken-word readout carries {id}.captions rather than {id}, so show(id) is the crystal alone</td></tr>
+<tr><td><code>dissolve(id: id or tag, [dur: number], [count: number])</code></td><td>animation verb</td><td>the crystal comes apart, CORNERS FIRST - ions leave in order of how few neighbours hold them, which is why a crystal erodes inwards. Each one leaves inside a hydration shell whose water molecules are turned by the sign of its charge: oxygen towards a cation, hydrogens towards an anion. <code>count</code> is how many ions leave</td></tr>
+<tr><td><code>newman(id: new id, source: string, center: (x, y), [unit: number], [labels: number])</code></td><td>constructor / setup</td><td>a Newman projection down a molecule’s central rotatable bond (chosen for you: the single bond with the most on both sides), with its torsional energy profile COMPUTED - the real geometry is rotated degree by degree and scored with a threefold torsional term plus Lennard-Jones repulsion across the bond. Butane comes out with staggered wells, anti lowest and the methyls eclipsing worst. It is a RIGID scan, so peaks come out high (butane’s syn barrier lands in the fifties against a measured 19-21) - the order and the shape are the lesson. Draws {id}.circle + {id}.front + {id}.back arms + {id}.readout</td></tr>
+<tr><td><code>profile(id: new id, torsion: id or tag, center: (x, y), [w: number], [h: number])</code></td><td>constructor / setup</td><td>the energy-against-dihedral curve for a <code>newman</code>, in kJ/mol above the lowest conformer, with a marker that rides it while <code>twist</code> turns the bond. Ticks every 60 degrees, which is where staggered and eclipsed alternate</td></tr>
+<tr><td><code>twist(id: id or tag, angle: number, [dur: number])</code></td><td>state-changing verb</td><td>turn a <code>newman</code> to a dihedral angle, the short way round, with the profile marker climbing or falling to the energy that arrangement costs. The readout names it the way a chemist does - anti, gauche, eclipsed - and gives the energy. State carries forward, so a chain of twists walks the curve</td></tr>
+<tr><td><code>vibration(id: new id, source: string, center: (x, y), [unit: number], [labels: number])</code></td><td>constructor / setup</td><td>a molecule drawn flat with its NORMAL MODES computed from real geometry: masses from the periodic table, a harmonic force field of bond, angle and out-of-plane springs with tabulated force constants, and the eigenvectors of the mass-weighted Hessian. Gives the textbook set - 3N-6 modes, or 3N-5 when the molecule is linear - with wavenumbers in cm^-1 that land near the measured ones (H-Cl 2886, CO2 asymmetric stretch 2374 against 2349). Needs the 3-D record, not a flat depiction, because the shape is the physics. Draws {id}.b{k} bonds + {id}.a{i} atoms (tagged {id}.atoms) + {id}.l{i} labels + a {id}.readout that <code>vibrate</code> fills in</td></tr>
+<tr><td><code>vibrate(id: id or tag, mode: number, [dur: number], [amp: number], [cycles: number])</code></td><td>animation verb</td><td>animate one normal mode of a <code>vibration</code>, numbered from the lowest wavenumber up. The atoms move along the mode’s own eigenvector, so a symmetric stretch really is symmetric; <code>amp</code> scales the displacement (0.28 of a bond by default) and <code>cycles</code> sets how many oscillations fit in <code>dur</code>. Sets {id}.readout to the wavenumber, whether it is a stretch or a bend (decided by what the motion does to bond lengths against bond angles), and whether it is infrared active</td></tr>
+<tr><td><code>irspectrum(id: new id, molecule: id or tag, center: (x, y), [w: number], [h: number], [size: number])</code></td><td>constructor / setup</td><td>the infrared spectrum a molecule’s modes imply, drawn high wavenumber to low as a spectrum is: a Lorentzian band per ACTIVE mode with its wavenumber labelled, and a coral marker where a SILENT one would have been. A mode is active only if it changes the dipole moment - carbon dioxide’s symmetric stretch does not, so it has no peak however hard the bond is vibrating, and that cancellation is computed from the mode’s own displacements rather than asserted. Draws {id}.axis + {id}.curve + {id}.peaks + {id}.silent</td></tr>
+<tr><td><code>supply(id: id or tag, amounts: string)</code></td><td>constructor / setup</td><td>what you are GIVEN of each reactant, for a <code>balance</code>: supply(rx, “Fe=10g O2=5g”). Values are grams unless written <code>mol</code> (<code>Fe=0.18mol</code>), converted with STANDARD atomic weights - the ones you weigh with, not the monoisotopic masses a mass spectrum uses. Every reactant needs an amount, because the question is which of them runs out first. Solving it is one line: batches = moles / coefficient, and the smallest wins - which is why the limiting reagent is so often NOT the one you have least of</td></tr>
+<tr><td><code>limiting(id: id or tag, center: (x, y), [width: number], [row: number], [size: number])</code></td><td>constructor / setup</td><td>the limiting-reagent view for a <code>balance</code> that has a <code>supply</code>: one bar per reactant showing how far the reaction could get on that reactant alone (moles / coefficient), the shortest marked <code>runs out first</code>, then what comes out - each product’s mass, the excess left standing, and a mass-in against mass-out check that has to agree. Everything starts blank and arrives during <code>react</code>. Draws {id}.limit.b{k} bars + {id}.limit.n{k} / .y{p} / .spare / .in / .out counters, tagged {id}.limit</td></tr>
+<tr><td><code>react(id: id or tag, [dur: number])</code></td><td>animation verb</td><td>run the supplied amounts through a balanced equation: the bars grow to how far each reactant alone could take it, the shortest is named as the limiting reagent, and the yields, the leftover and the mass check count up. Needs <code>supply</code> and <code>limiting</code> first</td></tr>
 </tbody>
 </table>
 </div>
@@ -47507,6 +49280,10 @@ semantics, see the repository’s <a href="https://github.com/maniclang-x/manic/
 <tr><td><code>collideblocks(id: new id, [center: (x, y)], [m1: number], [m2: number], [restitution: number], [unit: number])</code></td><td>constructor / setup</td><td>two blocks collide on a frictionless track with elastic walls (restitution e)</td></tr>
 <tr><td><code>bulletblock(id: new id, [center: (x, y)], [bulletmass: number], [speed: number], [blockmass: number], [unit: number])</code></td><td>constructor / setup</td><td>a bullet fired into a block embeds (perfectly inelastic — most kinetic energy lost)</td></tr>
 <tr><td><code>newtonscradle(id: new id, [center: (x, y)], [balls: number], [pulled: number])</code></td><td>constructor / setup</td><td>Newton’s cradle — pull N balls, N swing out (event-driven elastic collisions)</td></tr>
+<tr><td><code>gas(id: new id, [center: (x, y)], [w: number], [h: number], [count: number], [spec: string])</code></td><td>constructor / setup</td><td>N hard discs bouncing elastically in a box — a general particle gas, not a chemistry builtin. Speeds are drawn from the 2-D Maxwell-Boltzmann distribution (or <code>start=equal</code>, to watch collisions PRODUCE that distribution), and energy is conserved by the bounces. <code>spec</code> is a “key=value” string: temperature (kT, the energy unit), radius (px), mass, scale (px per length unit - the density/liveliness knob), dt, steps (frames of trajectory), seed, start=maxwell|equal. Lays out {id}.box + {id}.p{i}, tagged {id} and {id}.particles; animate with run(id, secs). Add <code>species</code> to label populations and <code>rule</code> to make collisions change them; <code>timegraph(id, ...)</code> then draws the populations over time</td></tr>
+<tr><td><code>species(id: id or tag, name: new id, [weight: number], [colour: colour])</code></td><td>constructor / setup</td><td>label a sub-population of a <code>gas</code>: <code>species(g, A, 0.5, cyan)</code> starts half the particles as A. Weights are relative, and a weight of 0 (or the short form <code>species(g, C, gold)</code>) is a population that starts EMPTY - a product waiting to be made. Colouring the species colours its particles, so the mix is readable at t=0</td></tr>
+<tr><td><code>rule(id: id or tag, rule: string)</code></td><td>constructor / setup</td><td>a collision-triggered transition in a <code>gas</code>, written the way it goes on a board: rule(g, “A + B -&gt; C + C when energy &gt; 3”). The threshold is the relative kinetic energy along the line of centres in the SAME unit as temperature, so Ea/kT is the Boltzmann exponent - raise the temperature and more collisions clear the barrier, on their own. Drop the <code>when</code> clause and every meeting counts, which is how the same mechanism becomes an infection (“S + I -&gt; I”) or a chain reaction. One product name is short for both participants becoming it; products need no prior <code>species</code> declaration</td></tr>
+<tr><td><code>speeds(id: id or tag, center: (x, y), [w: number], [h: number], [bins: number], [smooth: number], [vmax: number])</code></td><td>constructor / setup</td><td>a LIVE histogram of a gas’s own speeds, with the exact Maxwell-Boltzmann prediction drawn over it on the same scale. The bars are ordinary rectangles that run(id) grows and shrinks from the same trajectory that moves the particles, so the distribution is MEASURED, not illustrated - start the gas with <code>start=equal</code> and watch collisions build the bell out of a single spike. <code>smooth</code> is how many frames each bar averages (default 9, a stated running average over a noisy small sample), and <code>vmax</code> sets the top of the speed axis explicitly (default 3.3 sigma) so two gases at different temperatures can share one axis. Draws {id}.speeds.axis + {id}.speeds.b{k} (tagged {id}.speeds.bars) + {id}.speeds.mb, all tagged {id}.speeds</td></tr>
 <tr><td><code>dominos(id: new id, [center: (x, y)], [count: number], [height: number], [thickness: number], [spacing: number], [unit: number], [transfer: number], [push: number])</code></td><td>constructor / setup</td><td>a row of dominos toppling as a wave — rigid slabs pivoting on their base edge; lengths in MILLIMETRES (height 45, thickness 7.5438, spacing 9.38 are real domino numbers), <code>unit</code> = px per mm, <code>transfer</code> = 0-1 fraction of angular speed handed on at each impact, <code>push</code> = the first domino’s nudge (rad/s). The wave speed is not a parameter: it emerges from spacing/height/thickness/transfer, so wide spacing kills the chain. Lays out {id}.ground + {id}.d{i}, tagged {id}; animate with run(id)</td></tr>
 <tr><td><code>dominopath(id: new id, center: (x, y), sx: number, sy: number, x(t): string, y(t): string, [count: number], [tdomain: (x, y)], [height: number], [thickness: number], [unit: number], [transfer: number], [push: number])</code></td><td>constructor / setup</td><td>dominos standing along ANY parametric curve, toppling as a wave that follows the shape - seen from ABOVE, so a standing domino is a short bar and a fallen one is a long bar lying forward (footprint = thickness<em>cos + height</em>sin). Curve written like <code>param</code>: x(t)/y(t) through (cx,cy) + sx/sy over <code>tdomain</code> (default (0,tau)) - a spiral, heart or lissajous becomes a domino run. <code>count</code> SETS the spacing (equal arc length), so more dominos = tighter gaps = slower wave; overlapping or unreachable spacing is a clear error. Same slab physics as <code>dominos</code>. Lays out {id}.path + {id}.d{i}, tagged {id}; stagger a show over {id}.d{i} to place them one by one, then run(id)</td></tr>
 <tr><td><code>stringwave(id: new id, [center: (x, y)], [width: number], [amp: number], [pluck: number])</code></td><td>constructor / setup</td><td>a wave on a plucked string (N masses on springs, fixed ends) — the wave equation</td></tr>

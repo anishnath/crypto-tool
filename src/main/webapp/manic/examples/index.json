@@ -1,5 +1,5 @@
 {
-  "count": 435,
+  "count": 446,
   "categories": [
     {
       "slug": "algorithms",
@@ -906,6 +906,66 @@
           "desc": "Five things a structure file can teach, in one scene and with no coordinate in the script: four molecules with four geometries (bent, pyramidal, tetrahedral, linear); the bond-order ladder, where a C-C, a C=C and a C\u2261C visibly tighten left to right because the files simply disagree about how far apart two carbons sit; salt against water, where the ionic pair has NO bond in its file and so no stick on the screen; caffeine in all four viewer styles; and cholesterol beside paclitaxel at 74 and 113 atoms."
         },
         {
+          "name": "chemistry-cinema",
+          "file": "chemistry-cinema.manic",
+          "title": "Chemistry cinema",
+          "desc": "**The whole kit, in one run, explained by motion.** Ten ideas in the order they build on each other, each with a chapter title naming what is on screen \u2014 and that is the only prose in it."
+        },
+        {
+          "name": "lewis-structures",
+          "file": "lewis-structures.manic",
+          "title": "Lewis structures",
+          "desc": "**The bookkeeping, worked rather than copied.** From a formula and nothing else: count the valence electrons, pick the central atom, spend two on every bond, complete the octets from the outside in, and \u2014 if the middle atom is still short \u2014 take a lone pair off a neighbour and make it a second bond."
+        },
+        {
+          "name": "hydrogen-spectrum",
+          "file": "hydrogen-spectrum.manic",
+          "title": "Hydrogen spectrum",
+          "desc": "**Four coloured lines, and every one of them computed.** The rungs are placed at E\u2099 = \u221213.606/n\u00b2 eV (which is why they crowd towards zero), a drop from n to m releases exactly that difference, and \u03bb = hc/\u0394E turns it into a wavelength \u2014 then each spectral line's COLOUR is computed from its own wavelength, so Balmer \u03b1 is red because 656 nm is red rather than because red was chosen."
+        },
+        {
+          "name": "galvanic-cell",
+          "file": "galvanic-cell.manic",
+          "title": "Galvanic cell",
+          "desc": "**The cell decides its own polarity.** Give it two metals and the more positive standard reduction potential becomes the cathode \u2014 so cell(c, \"Cu|Zn\") draws exactly the same cell, and both read +1.10 V."
+        },
+        {
+          "name": "dissolving-salt",
+          "file": "dissolving-salt.manic",
+          "title": "Dissolving salt",
+          "desc": "**Why salt dissolves, and why the corners go first.** Two computed things carry the lesson: the ORDER, from each ion's coordination number (a corner has two neighbours holding it, an edge three, the middle four), so the crystal erodes inwards the way a real one does; and the ORIENTATION, from the sign of each charge \u2014 water turns its oxygen towards Na\u207a and its hydrogens towards Cl\u207b, so the two kinds of hydration shell face opposite ways for a reason you can read off the screen."
+        },
+        {
+          "name": "butane-conformers",
+          "file": "butane-conformers.manic",
+          "title": "Butane conformers",
+          "desc": "**A single bond turns \u2014 but not for free.** The bond is chosen for you (the one with the most on both sides, which for butane is the middle C\u2013C), and the whole energy profile is computed by rotating the real geometry degree by degree: a threefold torsional term for the intrinsic preference for staggered, plus Lennard-Jones repulsion between the atoms on opposite sides, which is what makes two methyls mind each other far more than two hydrogens do."
+        },
+        {
+          "name": "ir-modes",
+          "file": "ir-modes.manic",
+          "title": "Ir modes",
+          "desc": "**A mode is its motion \u2014 and some motions are invisible.** vibration reads the real 3-D geometry, builds a harmonic force field of bond, angle and out-of-plane springs and diagonalises the mass-weighted Hessian, so what you watch are the actual eigenvectors: water's three modes (3N\u22126), carbon dioxide's four (3N\u22125, two of them a degenerate bend)."
+        },
+        {
+          "name": "limiting-reagent",
+          "file": "limiting-reagent.manic",
+          "title": "Limiting reagent",
+          "desc": "**The one that runs out is not the one you have least of.** 10.0 g of iron and 5.0 g of oxygen: there is less oxygen by mass and fewer MOLES of oxygen too, and iron is still what runs out first \u2014 because the comparison that decides it is not the amount but the amount DIVIDED BY THE COEFFICIENT (0.0448 batches against 0.0521)."
+        },
+        {
+          "name": "balancing",
+          "file": "balancing.manic",
+          "title": "Balancing",
+          "desc": "**Conservation, worked rather than asserted.** balance reads the skeleton equation, counts the atoms in every formula and solves the coefficients; tally keeps score element by element; solve writes the coefficients in one at a time and the counts follow, so a half-finished state is a real one \u2014 a species with no coefficient yet counts as one of itself, exactly the arithmetic a student is doing mid-question."
+        },
+        {
+          "name": "collision-theory",
+          "file": "collision-theory.manic",
+          "title": "Collision theory",
+          "desc": "**Why warming it up speeds it up \u2014 measured, not asserted.** The same mixture over the same barrier at two temperatures, and every number on screen comes off one trajectory: gas bounces 72 hard discs elastically, rule(cold, \"A + B -> C + C when energy > 3.2\") says what happens when two of them meet hard enough, and that is the whole model."
+        },
+        {
           "name": "nmr-ethanol",
           "file": "nmr-ethanol.manic",
           "title": "Nmr ethanol",
@@ -1277,6 +1337,12 @@
       "slug": "text",
       "title": "Text & UI",
       "examples": [
+        {
+          "name": "text-guide",
+          "file": "text-guide.manic",
+          "title": "Text guide",
+          "desc": "**How text works, demonstrated.** The one primitive every scene uses, and the one with the most behaviour behind it: what a bare label does, what happens to a line too long for where it sits (it wraps to the room it has \u2014 it is never clipped), how align pins an edge, what leading does to line height, the two different ways to run text downwards (rot turns the line and takes the letters with it; vertical stacks them upright), why caption exists beside text at all \u2014 one entity per word, so karaoke can time them \u2014 and how hue colours a label, or a caption one word at a time."
+        },
         {
           "name": "typewriter",
           "file": "typewriter.manic",
