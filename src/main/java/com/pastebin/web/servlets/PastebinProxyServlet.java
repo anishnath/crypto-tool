@@ -102,6 +102,11 @@ public class PastebinProxyServlet extends HttpServlet {
      */
     private boolean checkRateLimit(HttpServletRequest req, HttpServletResponse resp, boolean isWrite) throws IOException {
         String ip = getClientIp(req);
+        System.out.println("[PastebinProxy] " + req.getMethod() + " " + req.getRequestURI()
+                + " ip=" + ip
+                + " remoteAddr=" + req.getRemoteAddr()
+                + " xff=" + req.getHeader("X-Forwarded-For")
+                + " cf=" + req.getHeader("CF-Connecting-IP"));
         Bucket bucket = isWrite ? resolveWriteBucket(ip) : resolveReadBucket(ip);
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
         if (!probe.isConsumed()) {
