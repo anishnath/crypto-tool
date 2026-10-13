@@ -88,9 +88,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="https://in.linkedin.com/in/anishnath" target="_blank" rel="noopener" class="nav-link">
-                    <span>💼</span>
-                    <span>LinkedIn</span>
+                <a href="<%=request.getContextPath()%>/gpu" class="nav-link">
+                    <span>🖥️</span>
+                    <span>RentGPU</span>
                 </a>
             </li>
         </ul>
@@ -220,9 +220,9 @@
                 <span class="drawer-link-icon">📚</span>
                 <span>Tutorials</span>
             </a>
-            <a href="https://in.linkedin.com/in/anishnath" target="_blank" rel="noopener" class="drawer-link">
-                <span class="drawer-link-icon">💼</span>
-                <span>LinkedIn</span>
+            <a href="<%=request.getContextPath()%>/gpu" class="drawer-link">
+                <span class="drawer-link-icon">🖥️</span>
+                <span>RentGPU</span>
             </a>
             <a href="<%=request.getContextPath()%>/jsonparser.jsp" class="drawer-link">
                 <span class="drawer-link-icon">📝</span>

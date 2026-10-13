@@ -28,7 +28,7 @@
               <a class="nav-link" target="_blank" href="https://procmail.xyz">Temp Email</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/anishnath">Hire Me!</a>
+              <a class="nav-link" href="gpu">RentGPU</a>
             </li>
             <li class="nav-item d-flex align-items-center ml-lg-2">
               <a class="btn btn-warning btn-sm d-inline-flex align-items-center" href="https://buymeacoffee.com/8gwifi.org" target="_blank" rel="noopener" aria-label="Buy me a coffee">

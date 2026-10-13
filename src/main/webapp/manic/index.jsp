@@ -47,6 +47,7 @@
             <jsp:param name="toolImage" value="manic-og.png" />
         <jsp:param name="toolFeatures" value="Live semantic highlighting,Inline error checking with one-click fixes,Context-aware autocomplete,Multiple files in your workspace,Render your animation to MP4,Read the full language docs" />
     </jsp:include>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"manic","alternateName":"manic language","applicationCategory":"MultimediaApplication","operatingSystem":"Web, macOS, Linux, Windows","description":"manic is a tiny animation language that turns a few lines of code into educational videos.","url":"https://maniclang.com/","sameAs":["https://maniclang.com/","https://docs.maniclang.com/"],"image":"https://maniclang.com/manic-logo.png","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
     <link rel="icon" type="image/svg+xml" href="<%=ctx%>/manic/favicon.svg">
     <link rel="icon" type="image/png" sizes="32x32" href="<%=ctx%>/manic/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="<%=ctx%>/manic/favicon-16.png">
@@ -79,6 +80,7 @@
         <button type="button" id="autofix-btn" class="mp-btn" title="Auto-fix — correct mechanical slips and remove stray tokens (undoable)">🔧 Auto-fix</button>
         <button type="button" id="btn-share" class="mp-btn" title="Copy a link to the file open in the editor">🔗 Share</button>
         <a id="docs-link" class="mp-link" href="<%=ctx%>/manic/docs/index.html" target="_blank" rel="noopener">Docs ↗</a>
+        <a class="mp-link" href="https://maniclang.com/" target="_blank" rel="noopener" title="manic — the animation language (maniclang.com)">maniclang.com ↗</a>
         <button id="help-btn" class="mp-btn mp-icon-btn" title="What is manic? — show the welcome">?</button>
         <button id="theme-btn" class="mp-btn mp-icon-btn" title="Toggle theme">◐</button>
         <% if (navLoggedIn) { %>
@@ -174,6 +176,7 @@
                 <button class="mp-btn primary" id="welcome-start">Start writing</button>
                 <button class="mp-btn" id="welcome-examples">Browse examples</button>
                 <a class="mp-link" href="<%=ctx%>/manic/docs/index.html" target="_blank" rel="noopener">Read the docs ↗</a>
+                <a class="mp-link" href="https://maniclang.com/" target="_blank" rel="noopener" title="manic language home">maniclang.com ↗</a>
             </div>
         </div>
     </div>

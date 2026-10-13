@@ -1,7 +1,7 @@
 {
   "version": "1.13",
   "lastUpdated": "2026-06-30T00:00:00.000Z",
-  "totalTools": 454,
+  "totalTools": 455,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -2679,6 +2679,13 @@
       "category": "Security & PKI",
       "keywords": "sign csr security & pki",
       "description": "Sign CSR - Free online security & pki tool"
+    },
+    {
+      "name": "Cloud GPU Prices",
+      "url": "gpu",
+      "category": "DevOps & Infrastructure",
+      "keywords": "gpu prices cloud gpu h100 a100 rtx 4090 price per hour rent gpu devops & infrastructure",
+      "description": "Cloud GPU Prices - Live H100, A100 and RTX 4090 prices per GPU-hour across GPU clouds"
     },
     {
       "name": "SSH Key Generator",
