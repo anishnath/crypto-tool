@@ -259,6 +259,25 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>GpuPricesFunctionality</servlet-name>
+		<servlet-class>z.y.x.Network.GpuPricesFunctionality</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuPricesFunctionality</servlet-name>
+		<url-pattern>/GpuPricesFunctionality</url-pattern>
+	</servlet-mapping>
+
+	<!-- Clean URL: /gpu serves gpu-prices.jsp (same root dir, so relative assets resolve) -->
+	<servlet>
+		<servlet-name>GpuPricesPage</servlet-name>
+		<jsp-file>/gpu-prices.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuPricesPage</servlet-name>
+		<url-pattern>/gpu</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>SSHFunctionality</servlet-name>
 		<servlet-class>z.y.x.Security.SSHFunctionality</servlet-class>
 	</servlet>
