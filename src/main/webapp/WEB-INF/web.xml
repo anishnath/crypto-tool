@@ -277,6 +277,48 @@
 		<url-pattern>/gpu</url-pattern>
 	</servlet-mapping>
 
+	<!-- GridPup service pages under /gpu (training, benchmark, LLM APIs, open models) -->
+	<servlet>
+		<servlet-name>GpuTrainingPage</servlet-name>
+		<jsp-file>/gpu-training.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuTrainingPage</servlet-name>
+		<url-pattern>/gpu/training</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GpuModelBenchmarkPage</servlet-name>
+		<jsp-file>/gpu-model-benchmark.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuModelBenchmarkPage</servlet-name>
+		<url-pattern>/gpu/model-benchmark</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GpuLlmServicesPage</servlet-name>
+		<jsp-file>/gpu-llm-services.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuLlmServicesPage</servlet-name>
+		<url-pattern>/gpu/llm-services</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GpuModelsPage</servlet-name>
+		<jsp-file>/gpu-models.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuModelsPage</servlet-name>
+		<url-pattern>/gpu/models</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GpuAiPlaygroundPage</servlet-name>
+		<jsp-file>/gpu-ai-playground.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuAiPlaygroundPage</servlet-name>
+		<url-pattern>/gpu/ai-playground</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>SSHFunctionality</servlet-name>
 		<servlet-class>z.y.x.Security.SSHFunctionality</servlet-class>
