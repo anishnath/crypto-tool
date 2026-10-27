@@ -261,7 +261,7 @@
             </div>
         </div>
     </header>
-    <%@ include file="/WEB-INF/gpu/gpu-hub-nav.inc.jsp" %>
+    <%@ include file="/gpu/gpu-hub-nav.inc.jsp" %>
 
     <!-- Top Ad Slot -->
     <section class="tool-description-section">
