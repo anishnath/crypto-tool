@@ -1433,6 +1433,26 @@
   </url>
 
   <url>
+    <loc>https://8gwifi.org/gpu/training</loc>
+  </url>
+
+  <url>
+    <loc>https://8gwifi.org/gpu/model-benchmark</loc>
+  </url>
+
+  <url>
+    <loc>https://8gwifi.org/gpu/llm-services</loc>
+  </url>
+
+  <url>
+    <loc>https://8gwifi.org/gpu/models</loc>
+  </url>
+
+  <url>
+    <loc>https://8gwifi.org/gpu/ai-playground</loc>
+  </url>
+
+  <url>
     <loc>https://8gwifi.org/ntrufunctions.jsp</loc>
   </url>
 

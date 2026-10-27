@@ -1,7 +1,7 @@
 {
   "version": "1.13",
   "lastUpdated": "2026-06-30T00:00:00.000Z",
-  "totalTools": 455,
+  "totalTools": 460,
   "categories": [
     "Biology",
     "Blockchain & Crypto",
@@ -2686,6 +2686,41 @@
       "category": "DevOps & Infrastructure",
       "keywords": "gpu prices cloud gpu h100 a100 rtx 4090 price per hour rent gpu devops & infrastructure",
       "description": "Cloud GPU Prices - Live H100, A100 and RTX 4090 prices per GPU-hour across GPU clouds"
+    },
+    {
+      "name": "Train AI Model on Cloud GPU",
+      "url": "gpu/training",
+      "category": "DevOps & Infrastructure",
+      "keywords": "train ai model cloud gpu fine-tune llm pytorch h100 a100 rtx 4090 training cost devops & infrastructure",
+      "description": "Train AI Model on Cloud GPU - Train or fine-tune models on H100, A100 or RTX 4090 from your browser"
+    },
+    {
+      "name": "LLM Benchmark on GPUs",
+      "url": "gpu/model-benchmark",
+      "category": "DevOps & Infrastructure",
+      "keywords": "llm benchmark tokens per second gpu benchmark vllm h100 a100 rtx 5090 time to first token devops & infrastructure",
+      "description": "LLM Benchmark on GPUs - Tokens per second and users per GPU on H100, A100, RTX 5090 and L40S"
+    },
+    {
+      "name": "Deploy LLM as API and Latency Test",
+      "url": "gpu/llm-services",
+      "category": "DevOps & Infrastructure",
+      "keywords": "deploy llm api host llama qwen whisper vllm openai compatible llm latency test time to first token devops & infrastructure",
+      "description": "Deploy LLM as API - Host open models on the cheapest GPU and test LLM endpoint latency"
+    },
+    {
+      "name": "LLM GPU Requirements",
+      "url": "gpu/models",
+      "category": "DevOps & Infrastructure",
+      "keywords": "llm gpu requirements vram needed llama qwen gpt-oss deepseek whisper flux cheapest gpu devops & infrastructure",
+      "description": "LLM GPU Requirements - GPU memory open models need and the cheapest cloud GPU for each"
+    },
+    {
+      "name": "AI Playground and AI Tools",
+      "url": "gpu/ai-playground",
+      "category": "DevOps & Infrastructure",
+      "keywords": "llm playground ai playground compare ai models chatgpt claude gemini ai image generator text to video remove background audio to text subtitle generator text to speech devops & infrastructure",
+      "description": "AI Playground - Compare LLMs side by side and use 16 AI tools for images, video, audio and text"
     },
     {
       "name": "SSH Key Generator",

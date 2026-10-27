@@ -45,6 +45,7 @@
 %>
 <%
     String cacheVersion = String.valueOf(System.currentTimeMillis());
+    String hubPage = "prices";
     JsonObject data = GpuPricesFunctionality.snapshot();
     JsonArray items = data == null ? new JsonArray() : data.getAsJsonArray("items");
     JsonObject clouds = data == null ? null : data.getAsJsonObject("clouds");
@@ -260,6 +261,7 @@
             </div>
         </div>
     </header>
+    <%@ include file="/WEB-INF/gpu/gpu-hub-nav.inc.jsp" %>
 
     <!-- Top Ad Slot -->
     <section class="tool-description-section">
@@ -392,6 +394,8 @@
             </ul>
             <h3>Why prices differ between clouds</h3>
             <p>Marketplace clouds rent spare machines from many hosts, so prices are low but vary by host and reliability. Managed clouds run their own data centers and charge more for fixed capacity and support. Storage and data transfer are billed separately on most clouds.</p>
+            <h3>Training, benchmarking and deploying</h3>
+            <p>Once you know the GPU, you can <a href="<%=request.getContextPath()%>/gpu/training">train or fine-tune a model on it from your browser</a>, <a href="<%=request.getContextPath()%>/gpu/model-benchmark">benchmark an LLM's tokens per second on real GPUs</a>, <a href="<%=request.getContextPath()%>/gpu/models">check how much GPU memory an open model needs</a>, <a href="<%=request.getContextPath()%>/gpu/llm-services">deploy it as an API and test its latency</a>, or <a href="<%=request.getContextPath()%>/gpu/ai-playground">compare LLMs side by side in the AI Playground</a>.</p>
             <h3>Where the data comes from</h3>
             <p>Prices are collected every few minutes by <a href="<%= gridpup("/") %>" target="_blank" rel="noopener">GridPup</a>, which compares GPU clouds and lets you rent from them in one place. Open a GPU to see each listing, its location and price history, or <a href="<%= gridpup("/compare") %>" target="_blank" rel="noopener">compare GPUs side by side</a>.</p>
         </div>

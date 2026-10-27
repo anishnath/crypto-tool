@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,6 +86,65 @@ public class GpuPricesFunctionality extends HttpServlet {
             }
             return cached;
         }
+    }
+
+    private static final long MODELS_TTL_MS = 60 * 60 * 1000L;   // the model catalog changes daily
+    private static final Map<String, Object[]> MODELS = new ConcurrentHashMap<>();   // task -> {items, fetchedAt, nextTry}
+
+    /**
+     * The most downloaded open models GridPup can deploy for a Hugging Face task (e.g. "text-generation"):
+     * id, size, GPU memory needed and the cheapest machine that runs it now. Empty if GridPup never answered.
+     */
+    public static JsonArray models(String task) {
+        long now = System.currentTimeMillis();
+        Object[] c = MODELS.get(task);
+        if (c != null && (now - (Long) c[1] < MODELS_TTL_MS || now < (Long) c[2])) {
+            return (JsonArray) c[0];
+        }
+        synchronized (MODELS) {
+            c = MODELS.get(task);
+            if (c != null && (now - (Long) c[1] < MODELS_TTL_MS || now < (Long) c[2])) {
+                return (JsonArray) c[0];
+            }
+            try {
+                JsonArray items = get("/models?deployable=true&sort=downloads&task=" + task)
+                        .getAsJsonObject().getAsJsonArray("items");
+                MODELS.put(task, new Object[]{items, now, 0L});
+                return items;
+            } catch (Exception e) {
+                LOG.log(Level.WARNING, "GridPup model API failed: " + e.getMessage());
+                JsonArray old = c == null ? new JsonArray() : (JsonArray) c[0];
+                MODELS.put(task, new Object[]{old, c == null ? 0L : (Long) c[1], now + RETRY_MS});
+                return old;
+            }
+        }
+    }
+
+    /** The priced GPU with GridPup id {@code modelId} (e.g. "nvidia-h100"), or null. */
+    public static JsonObject gpu(JsonObject data, String modelId) {
+        if (data == null) {
+            return null;
+        }
+        for (JsonElement e : data.getAsJsonArray("items")) {
+            JsonObject o = e.getAsJsonObject();
+            if (modelId.equals(o.get("model_id").getAsString())) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    /** Name for headings: "Nvidia H100" -> "NVIDIA H100", "RTX 4090" -> "NVIDIA RTX 4090". */
+    public static String fullName(JsonObject gpu) {
+        String name = gpu.get("display_name").getAsString();
+        JsonElement v = gpu.get("vendor");
+        if (name.startsWith("Nvidia ")) {
+            return "NVIDIA " + name.substring("Nvidia ".length());
+        }
+        if (v != null && !v.isJsonNull() && "nvidia".equals(v.getAsString()) && !name.toUpperCase().startsWith("NVIDIA")) {
+            return "NVIDIA " + name;
+        }
+        return name;
     }
 
     /** Only the fields the page shows. */
