@@ -48,7 +48,7 @@
         <jsp:param name="faq4q" value="Where does this data come from?" />
         <jsp:param name="faq4a" value="From GridPup (gridpup.com), which reads open models from Hugging Face, works out the GPU memory each needs, and matches it with live GPU offers from cloud providers. Open a model on GridPup to see every GPU that fits and deploy it as an API." />
     </jsp:include>
-    <%@ include file="/WEB-INF/gpu/gpu-hub-head.inc.jsp" %>
+    <%@ include file="/gpu/gpu-hub-head.inc.jsp" %>
 </head>
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>

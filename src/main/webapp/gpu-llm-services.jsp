@@ -47,7 +47,7 @@
         <jsp:param name="faq5q" value="Which models can I deploy?" />
         <jsp:param name="faq5a" value="Thousands of open models from Hugging Face: chat models (Llama, Qwen, Gemma, Mistral, gpt-oss, DeepSeek), vision models, speech to text (Whisper), image generation (Stable Diffusion, FLUX) and embeddings. Licence-gated models such as Llama need approval on Hugging Face first." />
     </jsp:include>
-    <%@ include file="/WEB-INF/gpu/gpu-hub-head.inc.jsp" %>
+    <%@ include file="/gpu/gpu-hub-head.inc.jsp" %>
 </head>
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>

@@ -62,7 +62,7 @@
         <jsp:param name="faq4q" value="Do I need an account?" />
         <jsp:param name="faq4a" value="You can open the Playground and every tool without one. You sign in when you send your first request, and add funds when your balance runs out." />
     </jsp:include>
-    <%@ include file="/WEB-INF/gpu/gpu-hub-head.inc.jsp" %>
+    <%@ include file="/gpu/gpu-hub-head.inc.jsp" %>
 </head>
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>

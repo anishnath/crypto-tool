@@ -50,7 +50,7 @@
         <jsp:param name="faq5q" value="How much does a benchmark cost?" />
         <jsp:param name="faq5a" value="Plans start at $49 a month for 20 benchmark runs; Tier 2 is $249 a month for 100 runs and every GPU up to H200 and B200. A run is one model tested on one GPU. If a test fails on GridPup's side it does not use your runs." />
     </jsp:include>
-    <%@ include file="/WEB-INF/gpu/gpu-hub-head.inc.jsp" %>
+    <%@ include file="/gpu/gpu-hub-head.inc.jsp" %>
 </head>
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>

@@ -59,7 +59,7 @@
         <jsp:param name="faq5q" value="Do I need a cloud account or my own GPU?" />
         <jsp:param name="faq5a" value="No. GridPup finds a verified machine with the GPU you pick, sets it up, runs your code and shuts it down. You can write code without an account; you sign in and add credit when you want to run it." />
     </jsp:include>
-    <%@ include file="/WEB-INF/gpu/gpu-hub-head.inc.jsp" %>
+    <%@ include file="/gpu/gpu-hub-head.inc.jsp" %>
 </head>
 <body>
     <%@ include file="modern/components/nav-header.jsp" %>
