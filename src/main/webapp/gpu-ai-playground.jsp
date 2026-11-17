@@ -111,6 +111,7 @@
 
         <h2 class="gh-h2">Run your own model instead</h2>
         <div class="gh-grid">
+            <div class="gh-card"><h3><a href="<%=request.getContextPath()%>/gpu/ai-agents">Let an AI agent do the whole job</a></h3><p>Job search, marketing, short videos, slide decks and web pages, each carried through from start to finish.</p></div>
             <div class="gh-card"><h3><a href="<%=request.getContextPath()%>/gpu/llm-services">Deploy an open LLM as an API</a></h3><p>Host Llama, Qwen, gpt-oss or Whisper on the cheapest GPU that fits, behind your own https API.</p></div>
             <div class="gh-card"><h3><a href="<%=request.getContextPath()%>/gpu/models">Check what a model needs</a></h3><p>GPU memory and the cheapest machine for popular open models, live.</p></div>
             <div class="gh-card"><h3><a href="<%=request.getContextPath()%>/gpu/model-benchmark">Benchmark it on real GPUs</a></h3><p>Tokens per second and users per GPU before you deploy.</p></div>

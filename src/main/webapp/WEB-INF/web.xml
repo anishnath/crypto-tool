@@ -318,6 +318,14 @@
 		<servlet-name>GpuAiPlaygroundPage</servlet-name>
 		<url-pattern>/gpu/ai-playground</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>GpuAiAgentsPage</servlet-name>
+		<jsp-file>/gpu-ai-agents.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GpuAiAgentsPage</servlet-name>
+		<url-pattern>/gpu/ai-agents</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>SSHFunctionality</servlet-name>

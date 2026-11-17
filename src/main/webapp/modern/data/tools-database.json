@@ -2723,6 +2723,13 @@
       "description": "AI Playground - Compare LLMs side by side and use 16 AI tools for images, video, audio and text"
     },
     {
+      "name": "AI Agents: Job Search, Marketing, Video, Slides, Websites",
+      "url": "gpu/ai-agents",
+      "category": "DevOps & Infrastructure",
+      "keywords": "ai agents ai job search agent resume job match ai marketing agent website audit ai short video maker ai presentation maker slide deck ai website builder screenshot to code devops & infrastructure",
+      "description": "AI Agents - Job search, marketing, short video, presentation and website builder agents, pay per run"
+    },
+    {
       "name": "SSH Key Generator",
       "url": "sshfunctions.jsp",
       "category": "Security & PKI",

@@ -1,5 +1,5 @@
 <%-- Links between the /gpu pages. Static include; the including page sets String hubPage
-     ("prices", "training", "model-benchmark", "ai-playground", "llm-services" or "models"). --%>
+     ("prices", "training", "model-benchmark", "ai-playground", "ai-agents", "llm-services" or "models"). --%>
 <style>
     .gh-nav{max-width:1200px;margin:0 auto;padding:0.6rem 1rem 0;display:flex;gap:0.4rem;flex-wrap:wrap}
     .gh-nav a{padding:0.35rem 0.75rem;border:1px solid var(--border);border-radius:9999px;font-size:0.8125rem;font-weight:600;color:var(--text-secondary);text-decoration:none;background:var(--bg-primary)}
@@ -14,6 +14,7 @@
         {"training", "/gpu/training", "Train a model"},
         {"model-benchmark", "/gpu/model-benchmark", "LLM benchmark"},
         {"ai-playground", "/gpu/ai-playground", "AI Playground"},
+        {"ai-agents", "/gpu/ai-agents", "AI agents"},
         {"llm-services", "/gpu/llm-services", "LLM APIs and hosting"},
         {"models", "/gpu/models", "Open models"},
     };
